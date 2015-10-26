@@ -1,0 +1,11 @@
+^src/.+\.o$
+^src/.+\.so$
+\.swp$
+^\.agignore$
+^\.editorconfig$
+^.travis.yml$
+^README\.md$
+^NEWS\.md$
+^TODO\.md$
+man-roxygen
+^appveyor\.yml$

@@ -1,0 +1,48 @@
+---
+title: "Migrating from BatchJobs/BatchExperiments"
+author: "Michel Lang"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r,include=FALSE}
+library(batchtools)
+options(batchtools.progress = FALSE)
+```
+
+## Notable internal changes
+
+* `batchtools` does not use a SQL data base anymore.
+  Instead all the information is stored directly in the registry using [data.tables](https://cran.r-project.org/package=data.table).
+* Nodes do not have to access the registry. `submitJobs()` stores an object of type `JobDescription` on the file system.
+  This object holds all the information necessary to execute the job or chunk of jobs via `doJobs()`.
+  Each job stores its status updates, log files and results on the file system and `syncRegistry()` can be used on the master to update the registry.
+
+
+## Notable interface changes
+
+* `batchtools` remembers the last created or loaded Registry and makes it the default.
+  This way, you do not need to pass the registry around that much.
+  If you need to work with multiple registries simultaneously on the other hand, you can still do so by explicitly passing the registry.
+* The template file format has changed:
+    - The scheduler should directly execute the command `Rscript -e 'batchtools::doJob(<filename>)'`.
+      There is no intermediate source file like in BatchJobs.
+    - Besides the resources, all information stored in the object `JobDescription` can be access while brewing the template.
+      Some variable names have changed and need to be adapted.
+* Most functions now return a `data.table` which is keyed with the `job.id`. This way, return values can be joined together easily and efficient.
+  Furthermore, you can use these tables to subset ids.
+
+```{r}
+library(batchtools)
+reg = makeTempRegistry(make.default = TRUE)
+batchMap(function(x, y) x + y, x = 1:5, y = 1)
+ids = findJobs(x > 3)
+
+# pass ids around ...
+getJobDefs(ids, pars.as.cols = TRUE)
+# ... or join the tables:
+getJobDefs(pars.as.cols = TRUE)[ids]
+```

@@ -1,0 +1,84 @@
+#!/bin/bash
+<%
+## Set sane defaults
+resources$modules = resources$modules %??% character(0L)
+resources$nodes = resources$nodes %??% 1L
+resources$parcpus = resources$parcpus %??% 1L
+resources$R = resources$R
+
+## Check variables
+resources$walltime = asInt(resources$walltime, lower = 60L, upper = 3600L * 672L)
+resources$memory = asInt(resources$memory, lower = 100L, upper = 64L * 1024L)
+resources$nodes = asInt(resources$nodes, lower = 1L)
+resources$parcpus = asInt(resources$parcpus, lower = 1L)
+assertCharacter(resources$modules, any.missing = FALSE)
+assertChoice(resources$R, choices = c("R-3.1.2-gcc-4.8.2-base", "R-3.2.2-gcc-4.8.2-base"))
+
+## first string of queue, selected by walltime
+walltimes = 3600L * c(1L, 8L, 48L, 672L)
+queue = c("short", "med", "long", "ultralong")[which(resources$walltime <= walltimes)[1L]]
+
+if (resources$nodes == 1L)  {
+  cmd = "Rscript"
+  vmem = resources$memory
+} else {
+  cmd = "mpirun -np 1 Rscript"
+  ## for MPI jobs at most 4 jobs get scheduled on the cores of one node
+  vmem = 4L * resources$memory
+}
+
+if (vmem <= 15000L) {
+  queue = sprintf("%s_eth", queue)
+} else if (vmem <= 61440L) {
+  queue = sprintf("%s_quad", queue)
+} else {
+  stop("You are requesting too much memory, there is no queue for this!")
+}
+
+if (queue == "ultralong_quad")
+  stop("No 'ultralong_quad' queue available. Reduce memory or walltime.")
+
+modules = switch(resources$R,
+  "R-3.1.2-gcc-4.8.2-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.2", "gotoblas/shared/64/1.26", "R/3.1.2-gcc48"),
+  "R-3.2.2-gcc-4.8.2-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.5", "gotoblas/shared/64/1.26", "R/3.2.2-gcc48")
+)
+
+if(resources$nodes == 1L)
+  modules = modules[-1L]
+modules = paste0(union(modules, resources$modules), collapse = " ")
+
+## very ugly hack because we cannot log to data (nobackup) filesystem on lido,
+## only home fs is available
+## unfortunately there seems to be no generic solution
+## does log path start with /data/?
+log.file = log.file
+if (length(grep("^/data/", log.file)) > 0) {
+  ## strip that
+  log.file = substr(log.file, 7L, nchar(log.file))
+  ## find next forward slash
+  i = regexpr("/", log.file)
+  if (i != -1) {
+    ## this must be "user": e.g. /data/bischl/...
+    user = substr(log.file, 1, i-1)
+    ## put together
+    log.file = sprintf("/home/%s/nobackup%s", user, substr(log.file, i, nchar(log.file)))
+  }
+}
+-%>
+
+#PBS -N <%= job.hash %>
+#PBS -o <%= log.file %>
+#PBS -l walltime=<%= resources$walltime %>,nodes=<%= resources$nodes %>,vmem=<%= vmem %>M
+#PBS -q <%= queue %>
+#PBS -j oe
+
+## setup modules
+source /sysdata/shared/sfw/Modules/default/init/bash
+module add <%= modules %>
+
+## create our own temp dir and clean it up later, lido does not do this automatically
+mkdir /scratch/${USER}-${PBS_JOBID}
+export TMPDIR=/scratch/${USER}-${PBS_JOBID}
+## run R
+<%= cmd %> -e 'batchtools::doJobs("<%= uri %>")'
+rm -rf /scratch/${USER}-${PBS_JOBID}

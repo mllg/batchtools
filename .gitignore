@@ -1,0 +1,5 @@
+.DS_Store
+man
+inst/doc
+src/*.so
+src/*.o

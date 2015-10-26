@@ -1,0 +1,25 @@
+Package: batchtools
+Title: Tools for computation on batch systems
+Version: 0.1
+Author: Michel Lang <michellang@gmail.com>
+Maintainer: Michel Lang <michellang@gmail.com>
+Description: As a successor of the packages BatchJobs and BatchExperiments,
+    batchtools provides a parallel implementation of Map for high performance
+    computing systems managed by schedulers like SLURM, Torque, or SGE.
+    Moreover, the package provides an abstraction mechanism to define
+    large-scale computer experiments in a well-organized and reproducible way.
+License: GPL-2
+Depends:
+    data.table (>= 1.9.6)
+Imports:
+    checkmate (>= 1.6.3),
+    brew,
+    digest,
+    parallel,
+    progress,
+    stringi
+Suggests:
+    testthat (>= 0.11.0),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -1,0 +1,22 @@
+context("ExperimentRegistry")
+
+test_that("makeExperimentRegistry", {
+  reg = makeTempExperimentRegistry(FALSE)
+  expect_is(reg, "Registry")
+  expect_is(reg, "ExperimentRegistry")
+  expect_true(is.environment(reg))
+  expect_directory(reg$file.dir, access = "rw")
+  expect_directory(reg$work.dir, access = "r")
+  expect_directory(file.path(reg$file.dir, c("jobs", "results", "updates", "logs")))
+  expect_file(file.path(reg$file.dir, "registry.rds"))
+  expect_character(reg$packages, any.missing = FALSE)
+  expect_character(reg$namespaces, any.missing = FALSE)
+  expect_int(reg$seed, na.ok = FALSE)
+  expect_true(reg$writeable)
+  expect_false(reg$debug)
+  expect_is(reg$cluster.functions, "ClusterFunctions")
+  expect_list(reg$default.resources, names = "strict")
+  checkTables(reg, any.missing = FALSE, nrows = 0L)
+
+  expect_output(print(reg), "Experiment Registry")
+})
