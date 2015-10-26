@@ -86,13 +86,12 @@ clearDefaultRegistry = function() {
 #' # Change default packages
 #' reg$packages = c("MASS")
 #' saveRegistry(reg = reg)
-makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = getOption("batchtools.conf.file"), packages = character(0L), namespaces = character(0L), seed = NULL, make.default = TRUE) {
+makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"), packages = character(0L), namespaces = character(0L), seed = NULL, make.default = TRUE) {
   assertString(file.dir)
   assertPathForOutput(file.dir, overwrite = FALSE)
   assertString(work.dir)
   assertDirectory(work.dir, access = "r")
-  if (!is.null(conf.file))
-    assertFile(conf.file, access = "r")
+  assertString(conf.file)
   assertCharacter(packages, any.missing = FALSE)
   assertCharacter(namespaces, any.missing = FALSE)
   assertFlag(make.default)
@@ -143,8 +142,10 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = g
     resources      = list(),
     key = "resource.id")
 
-  if (!is.null(conf.file))
+  if (file.exists(conf.file)) {
+    info("Sourcing configuration file '%s' ...", conf.file)
     sys.source(conf.file, envir = reg, keep.source = FALSE)
+  }
   parent.env(reg) = emptyenv()
 
   setattr(reg, "class", "Registry")

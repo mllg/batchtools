@@ -9,3 +9,35 @@ As a successor of the packages BatchJobs and BatchExperiments, batchtools provid
 Moreover, the package provides an abstraction mechanism to define large-scale computer experiments in a well-organized and reproducible way.
 
 The development is still in alpha phase.
+
+## Configuration
+
+If no configuration is provided, `batchtools` runs in an interactive (sequential) mode.
+You can change this by adapting the registry:
+```{r}
+library(batchtools)
+
+# create an interactive registry
+reg = makeRegistry(file.dir = "test")
+
+# switch to SLURM cluster functions
+reg$cluster.functions = makeClusterFunctionsSLURM("~/slurm.tmpl")
+
+# set default resources for this systems
+reg$default.resources = list(walltime = 60 * 60, memory = 1024)
+
+# make these choices permanent for this registry
+saveRegistry(reg)
+```
+Instead of calling the constructor for the `ClusterFunctions` yourself in every session, you can also source a configuration file.
+To do so, create the file `.batchtools.conf.r` where you set everything accordingly:
+```{r}
+cluster.functions = makeClusterFunctionsSLURM("~/slurm.tmpl")
+default.resources = list(walltime = 60 * 60, memory = 1024)
+```
+Now cluster functions are automatically set if you create a registry:
+```{r}
+reg = makeRegistry(file.dir = "test")
+
+```
+Note that the default location of the configuration file can also be set via the option `batchtools.conf.file`.

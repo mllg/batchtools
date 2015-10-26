@@ -16,8 +16,9 @@ getDefaultRegistry()
 clearDefaultRegistry()
 
 makeRegistry(file.dir = "registry", work.dir = getwd(),
-  conf.file = getOption("batchtools.conf.file"), packages = character(0L),
-  namespaces = character(0L), seed = NULL, make.default = TRUE)
+  conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"),
+  packages = character(0L), namespaces = character(0L), seed = NULL,
+  make.default = TRUE)
 
 makeTempRegistry(make.default = FALSE,
   temp.dir = getOption("batchtools.temp.dir", tempdir()), ...)
