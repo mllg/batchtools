@@ -35,6 +35,8 @@
 #' @import data.table
 #' @import stringi
 #' @importFrom progress progress_bar
+#' @importFrom stats runif
+#' @importFrom utils capture.output head tail
 NULL
 
 batchtools = new.env(parent = emptyenv())

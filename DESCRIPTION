@@ -17,7 +17,9 @@ Imports:
     digest,
     parallel,
     progress,
-    stringi
+    stats,
+    stringi,
+    utils
 Suggests:
     testthat (>= 0.11.0),
     knitr,
