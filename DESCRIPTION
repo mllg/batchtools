@@ -12,8 +12,8 @@ License: GPL-2
 Depends:
     data.table (>= 1.9.6)
 Imports:
-    checkmate (>= 1.6.3),
     brew,
+    checkmate (>= 1.6.3),
     digest,
     parallel,
     progress,

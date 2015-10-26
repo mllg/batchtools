@@ -1,0 +1,18 @@
+language: r
+warnings_are_errors: true
+
+r_github_packages:
+  - jimhester/covr
+
+r_binary_packages:
+  - data.table
+  - brew
+  - checkmate
+  - digest
+  - stringi
+  - testthat
+  - knitr
+  - rmarkdown
+
+after_success:
+  - Rscript -e 'library(covr); coveralls()'
