@@ -23,8 +23,8 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
   assertSubset(names(algo.designs), reg$algorithms)
   repls = asCount(repls)
 
+  rows = function(x) if(nrow(x) > 0L) apply(x, 1L, as.list) else list(list())
   maxId = function(ids) if (length(ids) == 0L) 0L else max(ids)
-  combine = function(i, j) list(prob.name = pn, prob.pars = as.list(pd[i]), algo.name = an, algo.pars = as.list(ad[j]))
   all.ids = integer(0L)
   def.id = NULL
 
@@ -41,7 +41,8 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
       n.jobs = n.pd * n.ad * repls
       info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
 
-      tab = data.table(pars = .mapply(combine, CJ(i = seq_len(n.pd), j = seq_len(n.ad)), MoreArgs = list()))
+      tab = CJ(i = seq_len(n.pd), j = seq_len(n.ad))[, c("i", "j", "prob.name", "prob.pars", "algo.name", "algo.pars") := list(NULL, NULL, pn, rows(pd[i]), an, rows(ad[j]))]
+      tab = data.table(pars = apply(tab, 1, c))
       tab$pars.hash = vcapply(tab$pars, digest::digest)
       tab = merge(reg$defs[, !"pars", with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 

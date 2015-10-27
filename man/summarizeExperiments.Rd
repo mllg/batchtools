@@ -23,7 +23,7 @@ Split the resulting table by these columns of \code{\link{getJobDefs}}.}
 Registry. If not explictitly passed, uses the last created registry.}
 }
 \value{
-[\code{\link[base]{data.table}}] of frequencies in the respective groups.
+[\code{\link[data.table]{data.table}}] of frequencies in the respective groups.
 }
 \description{
 Returns a frequency table of defined experiments.
