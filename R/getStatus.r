@@ -33,7 +33,7 @@ getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
 
 #' @export
 print.Status = function(x, ...) {
-  fmt = sprintf("%%-9s: %%%ii (%%5.1f%%%%)", nchar(x$defined))
+  fmt = sprintf("%%-11s: %%%ii (%%5.1f%%%%)", nchar(x$defined))
   pr = function(label, h) catf(fmt, label, h, h / x$defined * 100)
 
   catf("Status for %i jobs:", x$defined)
