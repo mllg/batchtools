@@ -124,4 +124,7 @@ test_that("findExperiments", {
 
   tab = findExperiments(reg = reg, algo.pars = sq == 2)
   expect_data_table(tab, nrow = 30, ncol = 1, key = "job.id")
+
+  tab = findExperiments(reg = reg, repls = 1:2)
+  expect_data_table(tab, nrow = 18, ncol = 1, key = "job.id")
 })

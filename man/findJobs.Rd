@@ -3,6 +3,7 @@
 \name{findJobs}
 \alias{findDone}
 \alias{findError}
+\alias{findExperiments}
 \alias{findExpired}
 \alias{findJobs}
 \alias{findNotDone}
@@ -14,6 +15,9 @@
 \title{Find and filter jobs}
 \usage{
 findJobs(expr, ids = NULL, reg = getDefaultRegistry())
+
+findExperiments(prob.name, algo.name, prob.pars, algo.pars, repls = NULL,
+  ids = NULL, reg = getDefaultRegistry())
 
 findSubmitted(ids = NULL, reg = getDefaultRegistry())
 
@@ -35,7 +39,7 @@ findExpired(ids = NULL, reg = getDefaultRegistry())
 }
 \arguments{
 \item{expr}{[\code{expression}]\cr
-All jobs for which the expression evaluates to \code{TRUE} are selected.}
+Predicate expression evaluated in the job parameters.}
 
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})
@@ -47,6 +51,21 @@ If not set, defaults to all jobs.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explictitly passed, uses the last created registry.}
+
+\item{prob.name}{[\code{character(1)}]\cr
+Whitelist of problem names.}
+
+\item{algo.name}{[\code{character(1)}]\cr
+Whitelist of algorithm names.}
+
+\item{prob.pars}{[\code{expression}]\cr
+Predicate expression evaluated in the problem parameters.}
+
+\item{algo.pars}{[\code{expression}]\cr
+Predicate expression evaluated in the algorithm parameters.}
+
+\item{repls}{[\code{integer}]\cr
+Whitelist of replication numbers.}
 }
 \value{
 [\code{data.table}]. Matching job ids are stored in the column \dQuote{job.id}.

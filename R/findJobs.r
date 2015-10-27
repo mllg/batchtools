@@ -89,7 +89,7 @@
 #' or, if you are really just interested in the status, use \code{\link{getStatus}}.
 #'
 #' @param expr [\code{expression}]\cr
-#'   All jobs for which the expression evaluates to \code{TRUE} are selected.
+#'   Predicate expression evaluated in the job parameters.
 #' @templateVar ids.default all
 #' @template ids
 #' @template reg
@@ -123,8 +123,20 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   reg$status[ids][reg$defs, on = "def.id", nomatch = 0L][vlapply(pars, fun), "job.id", with = FALSE]
 }
 
+#' @export
+#' @rdname findJobs
+#' @param prob.name [\code{character(1)}]\cr
+#'   Whitelist of problem names.
+#' @param algo.name [\code{character(1)}]\cr
+#'   Whitelist of algorithm names.
+#' @param prob.pars [\code{expression}]\cr
+#'   Predicate expression evaluated in the problem parameters.
+#' @param algo.pars [\code{expression}]\cr
+#'   Predicate expression evaluated in the algorithm parameters.
+#' @param repls [\code{integer}]\cr
+#'   Whitelist of replication numbers.
 findExperiments = function(prob.name, algo.name, prob.pars, algo.pars, repls = NULL, ids = NULL, reg = getDefaultRegistry()) {
-  assertRegistry(reg)
+  assertExperimentRegistry(reg)
   syncRegistry(reg)
   ee = parent.frame()
   pars = repl = NULL
