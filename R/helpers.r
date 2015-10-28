@@ -38,7 +38,6 @@ npath = function(...) {
 }
 
 getRandomString = function() {
-  # TODO: better check for collisions
   digest::digest(list(runif(1L), Sys.time()))
 }
 

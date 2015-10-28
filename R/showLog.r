@@ -13,7 +13,7 @@ showLog = function(id, reg = getDefaultRegistry()) {
   id = asIds(reg, id, n = 1L)
   lines = readLog(id, reg = reg)
 
-  log.file = file.path(tempdir(), sprintf("%i.log", id))
+  log.file = file.path(tempdir(), sprintf("%i.log", id$job.id))
   writeLines(text = lines, con = log.file)
   file.show(log.file, delete.file = TRUE)
 }
@@ -25,6 +25,6 @@ readLog = function(id, reg = getDefaultRegistry()) {
     stopf("Log file for job with id %i not found", x$job.id)
 
   lines = readLines(log.file)
-  pattern = sprintf("\\[job\\((chunk|%i)\\):", id)
+  pattern = sprintf("\\[job\\((chunk|%i)\\):", x$job.id)
   lines[!stri_startswith_fixed(lines, "[job") | stri_detect_regex(lines, pattern)]
 }

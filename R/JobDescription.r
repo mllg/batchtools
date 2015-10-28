@@ -38,7 +38,7 @@ makeJobDescription = function(ids = NULL, resources = list(), reg = getDefaultRe
 
 #' @export
 makeJobDescription.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  ids = asIds(reg, ids)
+  ids = asIds(reg, ids, default = .findAll(reg = reg))
 
   jd            = new.env(parent = emptyenv())
   jd$file.dir   = reg$file.dir

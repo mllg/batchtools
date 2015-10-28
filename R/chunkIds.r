@@ -1,13 +1,12 @@
 #' @title Chunk Jobs for Sequential Execution
 #'
 #' @description
-#' Groups jobs into chunks which will be executed sequentially on the nodes.
-#' Useful if you have a large number of fast jobs or just to combine multiple
-#' jobs to reach a desired runtime.
+#' Partition jobs into \dQuote{chunks} which will be executed together on the nodes.
 #'
-#' Chunks are submitted via \code{\link{submitJobs}} by simply providing passing
-#' job ids as a table with an extra column \dQuote{chunk}.
-#' All jobs with the same chunk number will be grouped together.
+#' Chunks are submitted via \code{\link{submitJobs}} by simply providing
+#' job ids as a table with an additional column \dQuote{chunk}.
+#' All jobs with the same chunk number will be grouped together on one node as a single
+#' computational job.
 #'
 #' @templateVar ids.default all
 #' @template ids

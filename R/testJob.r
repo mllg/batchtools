@@ -21,5 +21,5 @@ testJob = function(id, reg = getDefaultRegistry()) {
   id = asIds(reg, id, n = 1L)
   cache = Cache(reg$file.dir)
   jd = makeJobDescription(id, reg = reg)
-  execJob(jd = jd, i = 1L, cache = cache)
+  execJob(jd = jd, i = id, cache = cache)
 }

@@ -2,14 +2,14 @@ execJob = function(jd, i, cache) {
   UseMethod("execJob")
 }
 
-execJob.JobDescription = function(jd, i, cache) {
-  j = jd$defs[i]
+execJob.JobDescription = function(jd, id, cache) {
+  j = jd$defs[.(id)]
   fun = cache("user.function")
   withSeed(getSeed(jd$seed, j$job.id), do.call(fun, c(j$pars[[1L]], cache("more.args"))))
 }
 
-execJob.ExperimentDescription = function(jd, i, cache) {
-  j = jd$defs[i]
+execJob.ExperimentDescription = function(jd, id, cache) {
+  j = jd$defs[.(id)]
   pars = j$pars[[1L]]
   job = c(mget(c("file.dir", "job.hash", "resources"), jd),
           list(job.id = j$job.id, problem = pars$prob.name, algorithm = pars$algo.name))

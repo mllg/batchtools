@@ -19,3 +19,13 @@ test_that("makeJobDescription", {
 
   expect_output(j, "Collection")
 })
+
+test_that("makeJobDescription.ExperimentDescription", {
+  reg = makeTempExperimentRegistry(FALSE)
+  addProblem(reg = reg, "p1", fun = function(...) list(...))
+  addAlgorithm(reg = reg, "a1", fun = function(problem, ...) length(problem))
+  ids = addExperiments(list(p1 = data.table(i = 1:3)), list(a1 = data.table()), reg = reg)
+
+  jd = makeJobDescription(ids, resources = list(foo = 42), reg = reg)
+  expect_is(jd, "ExperimentDescription")
+})
