@@ -47,21 +47,23 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @template ids
 #' @param fun [\code{function}]\cr
 #'   Function to apply to each result.
+#' @param ... [\code{ANY}]\cr
+#'   Additional arguments passed to to function \code{fun}.
 #' @template reg
 #' @return [\code{\link[data.table]{data.table}}]. Results are stored in column \dQuote{result}.
 #' @seealso \code{\link{reduceResults}}.
 #' @family Results
 #' @export
-reduceResultsList = function(ids = NULL, fun = NULL, reg = getDefaultRegistry()) {
+reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
   ids = asIds(reg, ids, default = .findDone(reg = reg))
 
   if (is.null(fun)) {
-    getResult = readRDS
+    getResult = function(fn, ...) readRDS(file = fn)
   } else {
     fun = match.fun(fun)
-    getResult = function(fn) fun(readRDS(fn))
+    getResult = function(fn, ...) fun(readRDS(fn), ...)
   }
 
   fns = file.path(reg$file.dir, "results", sprintf("%i.rds", ids$job.id))
@@ -72,7 +74,7 @@ reduceResultsList = function(ids = NULL, fun = NULL, reg = getDefaultRegistry())
   results = vector("list", n)
   pb = makeProgressBar(total = n, format = "Submit [:bar] :percent eta: :eta")
   for (i in which(file.exists(fns))) {
-    results[[i]] = getResult(fns[i])
+    results[[i]] = getResult(fns[i], ...)
     pb$tick()
   }
   return(results)
@@ -84,11 +86,11 @@ reduceResultsList = function(ids = NULL, fun = NULL, reg = getDefaultRegistry())
 #'   to a \code{\link[data.table]{data.table}}.
 #' @export
 #' @rdname reduceResultsList
-reduceResultsDataTable = function(ids = NULL, fun = NULL, fill = FALSE, reg = getDefaultRegistry()) {
+reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   ids = asIds(reg, ids, default = .findDone(reg = reg))
   assertFlag(fill)
-  results = reduceResultsList(ids = ids, fun = fun, reg = reg)
+  results = reduceResultsList(ids = ids, fun = fun, ..., reg = reg)
   if (!all(vlapply(results, is.list)))
     results = lapply(results, as.list)
   cbind(ids, rbindlist(results, fill = fill))

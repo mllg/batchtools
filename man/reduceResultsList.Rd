@@ -5,9 +5,9 @@
 \alias{reduceResultsList}
 \title{Aggregate Results}
 \usage{
-reduceResultsList(ids = NULL, fun = NULL, reg = getDefaultRegistry())
+reduceResultsList(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry())
 
-reduceResultsDataTable(ids = NULL, fun = NULL, fill = FALSE,
+reduceResultsDataTable(ids = NULL, fun = NULL, ..., fill = FALSE,
   reg = getDefaultRegistry())
 }
 \arguments{
@@ -21,6 +21,9 @@ If not set, defaults to result of \code{\link{findDone}}.}
 
 \item{fun}{[\code{function}]\cr
 Function to apply to each result.}
+
+\item{...}{[\code{ANY}]\cr
+Additional arguments passed to to function \code{fun}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explictitly passed, uses the last created registry.}

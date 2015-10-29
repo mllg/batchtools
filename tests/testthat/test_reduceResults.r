@@ -26,11 +26,13 @@ test_that("reduceResults with no results reg", {
 test_that("reduceResults", {
   expect_equal(reduceResults(fun = function(res, aggr) c(aggr, res$a), init = integer(0), reg = reg), 1:3)
   expect_equal(reduceResults(ids = 1, fun = c, reg = reg), list(a = 1, b = 4))
+  expect_equal(reduceResults(fun = function(res, aggr, extra.arg) aggr + res$a + extra.arg, init = 0, extra.arg = 1, reg = reg), sum(1:3 + 1))
 })
 
 test_that("reduceResultsList", {
   expect_equal(reduceResultsList(reg = reg), Map(fun, a = 1:3, b = 4:2))
   expect_equal(reduceResultsList(reg = reg, fun = function(x) x$a), as.list(1:3))
+  expect_equal(reduceResultsList(reg = reg, fun = function(x, y) x$a + y, y = 1), as.list(1:3 + 1))
 })
 
 test_that("reduceResultsDataTable", {
@@ -46,6 +48,10 @@ test_that("reduceResultsDataTable", {
   tab = reduceResultsDataTable(reg = reg, fun = function(x) x$a)
   expect_data_table(tab, nrow = 3, ncol = 2, key = "job.id")
   expect_equal(tab$V1, 1:3)
+
+  tab = reduceResultsDataTable(reg = reg, fun = function(x, y) x$a + y, y = 1)
+  expect_data_table(tab, nrow = 3, ncol = 2, key = "job.id")
+  expect_equal(tab$V1, 1:3 + 1L)
 })
 
 test_that("loadResult", {
