@@ -33,9 +33,14 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   if (length(drop) > 0L)
     ids[, drop := NULL, with = FALSE]
 
-  on.sys = .findOnSystem(reg, ids)
-  if (nrow(on.sys) > 0L)
-    stopf("Some jobs are already on the system, e.g. %s", paste0(head(on.sys$job.id), collapse = ", "))
+  on.sys = .findOnSystem(reg = reg)
+  if (nrow(on.sys[ids, nomatch = 0L]) > 0L)
+    stopf("Some jobs are already on the system, e.g. %s", paste0(head(on.sys[ids, nomatch = 0L]$job.id, 1L), collapse = ", "))
+  max.concurrent.jobs = NA_integer_
+  if (!is.null(reg$max.concurrent.jobs)) {
+    if (on.sys + length(chunks) > reg$max.concurrent.jobs)
+      max.concurrent.jobs = reg$max.concurrent.jobs
+  }
 
   if (is.null(ids$chunk)) {
     ids$chunk = seq_row(ids)
@@ -71,6 +76,13 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     jd = makeJobDescription(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
       write(jd, file = jd$uri, wait = TRUE)
+
+    if (!is.na(max.concurrent.jobs)) {
+      while (nrow(.findOnSystem(reg = reg)) >= max.concurrent.jobs) {
+        Sys.sleep(5)
+        pb$tick(0)
+      }
+    }
 
     repeat {
       submit = reg$cluster.functions$submitJob(reg = reg, jd = jd)

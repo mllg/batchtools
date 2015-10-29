@@ -90,6 +90,7 @@ Save the registry to the file system? Default is \code{TRUE}.}
     \item{debug}{Flag to turn additional debug functionality on.}
     \item{cluster.functions}{Usually set in your \code{conf.file}. Set via a call to \code{\link{makeClusterFunctions}}. See example.}
     \item{default.resources}{Usually set in your \code{conf.file}. Named list of default resources.}
+    \item{max.concurrent.jobs}{Usually set in your \code{conf.file}. Maximum number of concurrent jobs for a single user on the system. \code{\link{submitJobs}} will try to respect this setting.}
     \item{defs}{Table with job definitions. Also see \code{\link{getJobDefs}}.}
     \item{status}{Table holding information about the computational status. Also see \code{\link{getJobStatus}}.}
     \item{resources}{Table holding information about the computational resources used for the job. Also see \code{\link{getJobResources}}.}
