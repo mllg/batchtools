@@ -41,7 +41,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
 
     on.sys = .findOnSystem(reg, ids)
     if (nrow(on.sys) == 0L)
-      return(nrow(.findError(reg, ids)) == 0L)
+      return(nrow(.findNotDone(reg, ids)) == 0L)
 
     if (now() > timeout)
       return(FALSE)
