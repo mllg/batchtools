@@ -24,9 +24,11 @@ test_that("reduceResults with no results reg", {
 })
 
 test_that("reduceResults", {
-  expect_equal(reduceResults(fun = function(res, aggr) c(aggr, res$a), init = integer(0), reg = reg), 1:3)
+  expect_equal(reduceResults(fun = function(aggr, res, ...) c(aggr, res$a), init = integer(0), reg = reg), 1:3)
   expect_equal(reduceResults(ids = 1, fun = c, reg = reg), list(a = 1, b = 4))
-  expect_equal(reduceResults(fun = function(res, aggr, extra.arg) aggr + res$a + extra.arg, init = 0, extra.arg = 1, reg = reg), sum(1:3 + 1))
+  expect_equal(reduceResults(ids = 1, fun = c, list(c = 1), reg = reg)$c, 1)
+  expect_equal(reduceResults(fun = function(aggr, res, extra.arg, ...) aggr + res$a + extra.arg, init = 0, extra.arg = 1, reg = reg), sum(1:3 + 1))
+  expect_equal(reduceResults(fun = function(job, aggr, res) c(aggr, job$defs$job.id), init = integer(0), ids = 2:3, reg = reg), 2:3)
 })
 
 test_that("reduceResultsList", {

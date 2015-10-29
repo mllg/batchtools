@@ -3,8 +3,11 @@
 #' @templateVar ids.default findDone
 #' @template ids
 #' @param fun [\code{function}]\cr
-#'   A function to reduce the results. The current result will be passed unnamed
-#'   as first argument. See \code{\link[base]{Reduce}} for some examples.
+#'   A function to reduce the results. The result of previous iterations (or
+#'   the \code{init}) will be passed as first argument, the result of of the i-th
+#'   iteration as second. See \code{\link[base]{Reduce}} for some examples.
+#'   If the function has the formal argument \dQuote{job}, the job description is
+#'   passed.
 #' @param init [\code{ANY}]\cr
 #'   Initial element, as used in \code{\link[base]{Reduce}}.
 #'   Default is the first result.
@@ -34,9 +37,16 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
   }
 
   pb = makeProgressBar(total = length(fns), format = "Reduce [:bar] :percent eta: :eta")
-  for (i in seq_along(fns)) {
-    init = forceAndCall(2L, fun, readRDS(fns[i]), init, ...)
-    pb$tick()
+  if ("job" %in% names(formals(fun))) {
+    for (i in seq_along(fns)) {
+      init = forceAndCall(3L, fun, init, readRDS(fns[i]), job = makeJobDescription(ids[i], reg = reg), ...)
+      pb$tick()
+    }
+  } else {
+    for (i in seq_along(fns)) {
+      init = forceAndCall(2L, fun, init, readRDS(fns[i]), ...)
+      pb$tick()
+    }
   }
   return(init)
 }
@@ -46,11 +56,14 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @templateVar ids.default findDone
 #' @template ids
 #' @param fun [\code{function}]\cr
-#'   Function to apply to each result.
+#'   Function to apply to each result. The results are passed unnamed as first
+#'   argument.
 #' @param ... [\code{ANY}]\cr
 #'   Additional arguments passed to to function \code{fun}.
 #' @template reg
-#' @return [\code{\link[data.table]{data.table}}]. Results are stored in column \dQuote{result}.
+#' @return \code{reduceResultsList} returns a list, \code{reduceResultsDataTable}
+#'   returns a \code{\link[data.table]{data.table}} with
+#'   columns \dQuote{job.id} and \dQuote{result}.
 #' @seealso \code{\link{reduceResults}}.
 #' @family Results
 #' @export

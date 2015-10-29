@@ -1,10 +1,10 @@
 #' @title Computational Jobs
 #'
 #' @description
-#' \code{makeJobDescription} takes multiple ids and creates an object of class \dQuote{JobDescription}
-#' which holds all necessary information for the calculation with \code{\link{doJobs}}.
-#'
-#' A job is an environment with the following variables:
+#' \code{makeJobDescription} takes multiple ids and creates an object of class
+#' \dQuote{JobDescription} which holds all necessary information for the
+#' calculation with \code{\link{doJobs}}. It is implemented as an environment
+#' with the following variables:
 #' \describe{
 #'  \item{file.dir}{\code{file.dir} of the \link{Registry}.}
 #'  \item{work.dir:}{\code{work.dir} of the \link{Registry}.}
@@ -15,8 +15,9 @@
 #'  \item{uri}{Location of the job description file (saved with \code{link[base]{saveRDS}} on the file system.}
 #'  \item{defs}{\code{\link[data.table]{data.table}} holding individual job information.}
 #'}
-#' If your \link{ClusterFunctions} uses a template, \code{\link[brew]{brew}} will be executed
-#' in the job's environment. Thus all variables available inside the job can be used in the template.
+#' If your \link{ClusterFunctions} uses a template, \code{\link[brew]{brew}}
+#' will be executed in the job's environment. Thus all variables available
+#' inside the job can be used in the template.
 #'
 #' @templateVar ids.default all
 #' @template ids
@@ -24,7 +25,7 @@
 #'   Named list of resources. Default is \code{list()}.
 #' @template reg
 #' @return [\code{Job}]. See description.
-#' @aliases JobDescription
+#' @aliases JobDescription Job
 #' @export
 #' @examples
 #' reg = makeTempRegistry(make.default = FALSE)

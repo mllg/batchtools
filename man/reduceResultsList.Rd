@@ -20,7 +20,8 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to result of \code{\link{findDone}}.}
 
 \item{fun}{[\code{function}]\cr
-Function to apply to each result.}
+Function to apply to each result. The results are passed unnamed as first
+argument.}
 
 \item{...}{[\code{ANY}]\cr
 Additional arguments passed to to function \code{fun}.}
@@ -34,7 +35,9 @@ In \code{reduceResultsDataTable}: This flag is passed down to
 to a \code{\link[data.table]{data.table}}.}
 }
 \value{
-[\code{\link[data.table]{data.table}}]. Results are stored in column \dQuote{result}.
+\code{reduceResultsList} returns a list, \code{reduceResultsDataTable}
+  returns a \code{\link[data.table]{data.table}} with
+  columns \dQuote{job.id} and \dQuote{result}.
 }
 \description{
 Aggregate Results
