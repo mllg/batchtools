@@ -15,10 +15,17 @@ pass any other table here, e.g. the return of \code{\link{getJobInfo}}.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to result of \code{\link{findNotSubmitted}}.}
 
-\item{resources}{[\code{list}]\cr
-Required resources for all batch jobs. The elements of this list
-(e.g. something like \dQuote{walltime} or \dQuote{nodes} depend on by your template job file.
-Defaults can be set in the \code{\link{Registry}} via \code{default.resources}.}
+\item{resources}{[\code{named list}]\cr
+  Computational  resources for the batch jobs. The elements of this list
+  (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on by
+  your template file, with the exception of \code{ncpus}: This setting is
+  used to determine the number of CPUs to use on a node to execute jobs in a
+  chunk in parallel using \code{\link[parallel]{mclapply}}. If not set,
+  \code{ncpus} defaults to 1 (sequential execution).
+
+  Defaults can be set in the \code{\link{Registry}} via
+  \code{default.resources}. Settings in \code{resources} overrule those in
+  \code{default.resources}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explictitly passed, uses the last created registry.}
@@ -27,7 +34,8 @@ Registry. If not explictitly passed, uses the last created registry.}
 [\code{\link{data.table}}]. Table with columns \dQuote{job.id} and \dQuote{chunk}.
 }
 \description{
-Submits all jobs to the batch system using the resources provided via \code{resources}.
+Submits all jobs to the batch system using the resources provided via
+\code{resources}.
 
 If an additional column \dQuote{chunk} is present in the table \code{ids},
 the jobs will be grouped accordingly. See \code{\link{chunkIds}} for more
