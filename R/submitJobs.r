@@ -36,11 +36,6 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   on.sys = .findOnSystem(reg = reg)
   if (nrow(on.sys[ids, nomatch = 0L]) > 0L)
     stopf("Some jobs are already on the system, e.g. %s", paste0(head(on.sys[ids, nomatch = 0L]$job.id, 1L), collapse = ", "))
-  max.concurrent.jobs = NA_integer_
-  if (!is.null(reg$max.concurrent.jobs)) {
-    if (on.sys + length(chunks) > reg$max.concurrent.jobs)
-      max.concurrent.jobs = reg$max.concurrent.jobs
-  }
 
   if (is.null(ids$chunk)) {
     ids$chunk = seq_row(ids)
@@ -51,6 +46,12 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   }
   chunk = NULL
   setkeyv(ids, "chunk")
+
+  max.concurrent.jobs = NA_integer_
+  if (!is.null(reg$max.concurrent.jobs)) {
+    if (on.sys + length(chunks) > reg$max.concurrent.jobs)
+      max.concurrent.jobs = reg$max.concurrent.jobs
+  }
 
   resources = insert(reg$default.resources, resources)
   resources = resources[order(names2(resources))]
