@@ -49,7 +49,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   max.concurrent.jobs = NA_integer_
   if (!is.null(reg$max.concurrent.jobs)) {
-    if (on.sys + length(chunks) > reg$max.concurrent.jobs)
+    if (nrow(on.sys) + length(chunks) > reg$max.concurrent.jobs)
       max.concurrent.jobs = reg$max.concurrent.jobs
   }
 
