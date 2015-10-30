@@ -6,9 +6,9 @@
 #'
 #' @param name [\code{character(1)}]\cr
 #'   Name of cluster functions.
-#' @param submitJob [\code{function(reg, jd, ...)}]\cr
+#' @param submitJob [\code{function(reg, jc, ...)}]\cr
 #'   Function to submit new jobs. Must return a \code{\link{SubmitJobResult}} object.
-#'   The arguments are \code{reg} (\code{\link{Registry}}) and \code{jobs} (\code{\link{JobDescription}}).
+#'   The arguments are \code{reg} (\code{\link{Registry}}) and \code{jobs} (\code{\link{JobCollection}}).
 #'   Set \code{submitJob} to \code{NULL} if killing jobs is not supported.
 #' @param killJob [\code{function(reg, batch.id)}]\cr
 #'   Function to kill a job on the batch system. Make sure that you definitely kill the job! Return
@@ -33,7 +33,7 @@
 makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobs = NULL, array.envir.var = NA_character_, store.job = TRUE) {
   assertString(name)
   if (!is.null(submitJob))
-    assertFunction(submitJob, c("reg", "jd"))
+    assertFunction(submitJob, c("reg", "jc"))
   if (!is.null(killJob))
     assertFunction(killJob, c("reg", "batch.id"))
   if (!is.null(listJobs))
@@ -128,19 +128,19 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 #' @template reg
 #' @param template [\code{character(1)}]\cr
 #'   String with contents of the brew templated, as returned by \code{\link{cfReadBrewTemplate}}.
-#' @param jd [\code{\link{JobDescription})}]\cr
-#'   JobDescription holding all essential information. Will be used as environment to look
+#' @param jc [\code{\link{JobCollection})}]\cr
+#'   JobCollection holding all essential information. Will be used as environment to look
 #'   up variables.
 #' @return [\code{character(1)}]. File path to resulting template file.
 #' @family ClusterFunctionsHelper
 #' @export
-cfBrewTemplate = function(reg, template, jd) {
+cfBrewTemplate = function(reg, template, jc) {
   assertString(template, "r", na.ok = FALSE)
 
-  outfile = if (reg$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jd$job.hash)) else tempfile("job")
-  parent.env(jd) = .GlobalEnv
-  z = try(brew::brew(text = template, output = outfile, envir = jd), silent = TRUE)
-  parent.env(jd) = emptyenv()
+  outfile = if (reg$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
+  parent.env(jc) = .GlobalEnv
+  z = try(brew::brew(text = template, output = outfile, envir = jc), silent = TRUE)
+  parent.env(jc) = emptyenv()
   if (is.error(z))
     stopf("Error brewing template: %s", as.character(z))
   return(outfile)

@@ -1,28 +1,17 @@
-execJob = function(jd, i, cache) {
+execJob = function(job) {
   UseMethod("execJob")
 }
 
-execJob.JobDescription = function(jd, id, cache) {
-  j = jd$defs[.(id)]
-  fun = cache("user.function")
-  withSeed(getSeed(jd$seed, j$job.id), do.call(fun, c(j$pars[[1L]], cache("more.args"))))
+execJob.Job = function(job) {
+  withSeed(job$seed, do.call(job$fun, job$pars))
 }
 
-execJob.ExperimentDescription = function(jd, id, cache) {
-  subsetJD = function(jd, id) {
-    list2env(c(mget(setdiff(ls(jd), "defs"), jd), parent = emptyenv(), list(defs = jd$defs[.(id)])), parent = emptyenv())
-  }
+execJob.Experiment = function(job) {
+  catf("Generating problem instance for problem %s ...", job$problem$name)
+  wrapper = function(...) job$problem$fun(job = job, data = job$problem$data, ...)
+  withSeed(job$problem$seed, instance <- do.call(wrapper, job$pars$prob.pars))
 
-  j = jd$defs[.(id)]
-  pars = j$pars[[1L]]
-
-  catf("Generating problem instance for problem %s ...", pars$prob.name)
-  prob = cache("prob/problem", file.path("problems", pars$prob.name))
-  wrapper = function(...) prob$fun(job = subsetJD(jd, id), data = prob$data, ...)
-  withSeed(prob$seed, instance <- do.call(wrapper, pars$prob.pars))
-
-  catf("Applying algorithm %s on problem %s ...", pars$algo.name, pars$prob.name)
-  algo = cache(paste0("algo/", pars$algo.name), file.path("algorithms", pars$algo.name))
-  wrapper = function(...) algo$fun(job = subsetJD(jd, id), data = prob$data, problem = instance, ...)
-  withSeed(getSeed(jd$seed, j$job.id), do.call(wrapper, pars$algo.pars))
+  catf("Applying algorithm %s on problem %s ...", job$algorithm$name, job$problem$name)
+  wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, problem = instance, ...)
+  withSeed(job$seed, do.call(wrapper, job$pars$algo.pars))
 }

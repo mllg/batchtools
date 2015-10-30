@@ -19,7 +19,6 @@
 testJob = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   id = asIds(reg, id, n = 1L)
-  cache = Cache(reg$file.dir)
-  jd = makeJobDescription(id, reg = reg)
-  execJob(jd = jd, i = id, cache = cache)
+  job = makeJob(id, reg = reg)
+  execJob(job = job)
 }

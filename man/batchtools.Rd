@@ -14,7 +14,7 @@ For bug reports and feature requests please use the tracker:
 \describe{
   \item{\code{batchtools.compress}}{
     Compression to use in \code{\link[base]{saveRDS}} which is used to write the \code{\link{Registry}},
-    \code{\link{JobDescription}} jobs and result files. For very slow file systems, set to \dQuote{xz}
+    \code{\link{JobCollection}} jobs and result files. For very slow file systems, set to \dQuote{xz}
     to achieve less IO at the expense of more CPU cycles.
     Defaults to \code{TRUE} (\dQuote{gzip} compression).
   }

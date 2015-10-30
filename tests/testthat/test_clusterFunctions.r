@@ -46,13 +46,13 @@ test_that("brew", {
 
   reg = makeTempRegistry(FALSE)
   ids = batchMap(identity, 1:2, reg = reg)
-  jd = makeJobDescription(1, reg = reg)
+  jc = makeJobCollection(1, reg = reg)
   template = cfReadBrewTemplate(fn, comment.string = "###")
 
-  fn = cfBrewTemplate(template = template, jd = jd, reg = reg)
+  fn = cfBrewTemplate(template = template, jc = jc, reg = reg)
   brewed = readLines(fn)
   expect_equal(brewed[1], "!!!")
-  expect_equal(brewed[2], sprintf("foo=%s", jd$job.hash))
+  expect_equal(brewed[2], sprintf("foo=%s", jc$job.hash))
 })
 
 test_that("brew", {

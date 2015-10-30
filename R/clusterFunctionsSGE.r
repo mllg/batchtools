@@ -21,8 +21,8 @@ makeClusterFunctionsSGE = function(template) {
   list.jobs.cmd = c("qstat",  "-u $USER")
   template = cfReadBrewTemplate(template)
 
-  submitJob = function(reg, jd) {
-    outfile = cfBrewTemplate(reg, template, jd)
+  submitJob = function(reg, jc) {
+    outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("qsub", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
     if (res$exit.code > 0L) {

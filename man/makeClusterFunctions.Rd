@@ -12,9 +12,9 @@ makeClusterFunctions(name, submitJob, killJob = NULL, listJobs = NULL,
 \item{name}{[\code{character(1)}]\cr
 Name of cluster functions.}
 
-\item{submitJob}{[\code{function(reg, jd, ...)}]\cr
+\item{submitJob}{[\code{function(reg, jc, ...)}]\cr
 Function to submit new jobs. Must return a \code{\link{SubmitJobResult}} object.
-The arguments are \code{reg} (\code{\link{Registry}}) and \code{jobs} (\code{\link{JobDescription}}).
+The arguments are \code{reg} (\code{\link{Registry}}) and \code{jobs} (\code{\link{JobCollection}}).
 Set \code{submitJob} to \code{NULL} if killing jobs is not supported.}
 
 \item{killJob}{[\code{function(reg, batch.id)}]\cr

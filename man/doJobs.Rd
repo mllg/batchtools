@@ -4,12 +4,12 @@
 \alias{doJobs}
 \title{Execute jobs}
 \usage{
-doJobs(jd, con = stdout())
+doJobs(jc, con = stdout())
 }
 \arguments{
-\item{jd}{[\code{\link{JobDescription}}]\cr
-Either an object of class \dQuote{JobDescription} as returned by \code{\link{makeJobDescription}} or a
-string point to file containing a \dQuote{JobDescription} (saved with \code{\link[base]{saveRDS}}).}
+\item{jc}{[\code{\link{JobCollection}}]\cr
+Either an object of class \dQuote{JobCollection} as returned by \code{\link{makeJobCollection}} or a
+string point to file containing a \dQuote{JobCollection} (saved with \code{\link[base]{saveRDS}}).}
 
 \item{con}{[\code{\link[base]{connection}}]\cr
 A connection to redirect the output to.}

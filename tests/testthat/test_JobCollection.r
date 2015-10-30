@@ -1,11 +1,11 @@
-context("JobDescription")
+context("JobCollection")
 
-test_that("makeJobDescription", {
+test_that("makeJobCollection", {
   reg = makeTempRegistry(FALSE)
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, reg = reg, more.args = list(x = 1))
 
-  j = makeJobDescription(ids, resources = list(foo = 42), reg = reg)
+  j = makeJobCollection(ids, resources = list(foo = 42), reg = reg)
   expect_environment(j, c("file.dir", "job.hash", "defs", "log.file", "packages", "resources", "uri", "work.dir"))
 
   expect_directory(j$file.dir)
@@ -20,12 +20,12 @@ test_that("makeJobDescription", {
   expect_output(j, "Collection")
 })
 
-test_that("makeJobDescription.ExperimentDescription", {
+test_that("makeJobCollection.ExperimentCollection", {
   reg = makeTempExperimentRegistry(FALSE)
   addProblem(reg = reg, "p1", fun = function(...) list(...))
   addAlgorithm(reg = reg, "a1", fun = function(problem, ...) length(problem))
   ids = addExperiments(list(p1 = data.table(i = 1:3)), list(a1 = data.table()), reg = reg)
 
-  jd = makeJobDescription(ids, resources = list(foo = 42), reg = reg)
-  expect_is(jd, "ExperimentDescription")
+  jc = makeJobCollection(ids, resources = list(foo = 42), reg = reg)
+  expect_is(jc, "ExperimentCollection")
 })

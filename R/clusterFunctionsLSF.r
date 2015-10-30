@@ -26,8 +26,8 @@ makeClusterFunctionsLSF = function(template) {
   # or a non-existent job ID is entered.
   Sys.setenv(LSB_BJOBS_CONSISTENT_EXIT_CODE = "Y")
 
-  submitJob = function(reg, jd) {
-    outfile = cfBrewTemplate(reg, template, jd)
+  submitJob = function(reg, jc) {
+    outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("bsub", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
     if (res$exit.code > 0L) {

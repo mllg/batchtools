@@ -21,8 +21,8 @@ makeClusterFunctionsSLURM = function(template) {
   list.jobs.cmd = c("squeue", "-h", "-o %i", "-u $USER")
   template = cfReadBrewTemplate(template, "##")
 
-  submitJob = function(reg, jd) {
-    outfile = cfBrewTemplate(reg, template, jd)
+  submitJob = function(reg, jc) {
+    outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("sbatch", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"

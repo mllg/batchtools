@@ -4,7 +4,6 @@
 \alias{findDone}
 \alias{findError}
 \alias{findExperiments}
-\alias{findExpired}
 \alias{findJobs}
 \alias{findNotDone}
 \alias{findNotStarted}
@@ -34,8 +33,6 @@ findNotDone(ids = NULL, reg = getDefaultRegistry())
 findError(ids = NULL, reg = getDefaultRegistry())
 
 findOnSystem(ids = NULL, reg = getDefaultRegistry())
-
-findExpired(ids = NULL, reg = getDefaultRegistry())
 }
 \arguments{
 \item{expr}{[\code{expression}]\cr

@@ -19,8 +19,8 @@ makeClusterFunctionsTorque = function(template) {
   list.jobs.cmd = c("qselect", "-u $USER", "-s EHQRTW")
   template = cfReadBrewTemplate(template, "##")
 
-  submitJob = function(reg, jd) {
-    outfile = cfBrewTemplate(reg, template, jd)
+  submitJob = function(reg, jc) {
+    outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("qsub", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
     max.jobs.msg = "Maximum number of jobs already in queue"

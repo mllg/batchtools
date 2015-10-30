@@ -39,7 +39,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
   pb = makeProgressBar(total = length(fns), format = "Reduce [:bar] :percent eta: :eta")
   if ("job" %in% names(formals(fun))) {
     for (i in seq_along(fns)) {
-      init = forceAndCall(3L, fun, init, readRDS(fns[i]), job = makeJobDescription(ids[i], reg = reg), ...)
+      init = forceAndCall(3L, fun, init, readRDS(fns[i]), job = makeJobCollection(ids[i], reg = reg), ...)
       pb$tick()
     }
   } else {

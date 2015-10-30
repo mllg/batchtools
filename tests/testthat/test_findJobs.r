@@ -13,7 +13,6 @@ test_that("find[Status]", {
   expect_equal(findNotDone(reg = reg), none)
   expect_equal(findError(reg = reg), none)
   expect_equal(findOnSystem(reg = reg), none)
-  expect_equal(findExpired(reg = reg), none)
 
   fun = function(i) if (i == 3) stop(i) else i
   ids = batchMap(fun, i = 1:5, reg = reg)
@@ -27,7 +26,6 @@ test_that("find[Status]", {
   expect_equal(findNotDone(reg = reg), all)
   expect_equal(findError(reg = reg), none)
   expect_equal(findOnSystem(reg = reg), none)
-  expect_equal(findExpired(reg = reg), none)
 
   submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
   waitForJobs(reg = reg)
@@ -41,7 +39,6 @@ test_that("find[Status]", {
   expect_equal(findNotDone(reg = reg), all[3L])
   expect_equal(findError(reg = reg), all[3L])
   expect_equal(findOnSystem(reg = reg), none)
-  expect_equal(findExpired(reg = reg), none)
 })
 
 test_that("Subsetting", {
@@ -79,7 +76,6 @@ test_that("findOnSystem", {
     submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
     waitForJobs(reg = reg)
-    expect_equal(findExpired(reg = reg), data.table(job.id = integer(0L), key = "job.id"))
   }
 })
 
@@ -90,7 +86,6 @@ test_that("findExperiments", {
     submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
     waitForJobs(reg = reg)
-    expect_equal(findExpired(reg = reg), data.table(job.id = integer(0L), key = "job.id"))
   }
 })
 

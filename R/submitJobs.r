@@ -74,9 +74,9 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   pb = makeProgressBar(total = length(chunks), format = "Submit [:bar] :percent eta: :eta")
   for (ch in chunks) {
     ids.chunk = ids[chunk == ch, nomatch = 0L]
-    jd = makeJobDescription(ids.chunk, resources = resources, reg = reg)
+    jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
-      write(jd, file = jd$uri, wait = TRUE)
+      write(jc, file = jc$uri, wait = TRUE)
 
     if (!is.na(max.concurrent.jobs)) {
       while (nrow(.findOnSystem(reg = reg)) >= max.concurrent.jobs) {
@@ -86,10 +86,10 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     }
 
     repeat {
-      submit = reg$cluster.functions$submitJob(reg = reg, jd = jd)
+      submit = reg$cluster.functions$submitJob(reg = reg, jc = jc)
 
       if (submit$status == 0L) {
-        update[,  c("submitted", "batch.id", "job.hash") := list(now(), submit$batch.id, jd$job.hash)]
+        update[,  c("submitted", "batch.id", "job.hash") := list(now(), submit$batch.id, jc$job.hash)]
         reg$status[ids.chunk, names(update) := update]
         break
       } else if (submit$status > 0L && submit$status < 100L) {

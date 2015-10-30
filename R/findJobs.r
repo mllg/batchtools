@@ -69,17 +69,6 @@
     reg$status[ids][!is.na(submitted) & is.na(done) & batch.id %in% batch.ids, "job.id", with = FALSE]
 }
 
-.findExpired = function(reg, ids = NULL) {
-  if (is.null(reg$cluster.functions$listJobs))
-    return(data.table(job.id = integer(0L), key = "job.id"))
-  batch.ids = reg$cluster.functions$listJobs(reg)
-  submitted = done = batch.id = NULL
-  if (is.null(ids))
-    reg$status[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids, "job.id", with = FALSE]
-  else
-    reg$status[ids][!is.na(submitted) & is.na(done) & batch.id %in% batch.ids, "job.id", with = FALSE]
-}
-
 #' @title Find and filter jobs
 #'
 #' @description
@@ -236,12 +225,4 @@ findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
   .findOnSystem(reg, asIds(reg, ids))
-}
-
-#' @export
-#' @rdname findJobs
-findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
-  assertRegistry(reg)
-  syncRegistry(reg)
-  .findExpired(reg, asIds(reg, ids))
 }

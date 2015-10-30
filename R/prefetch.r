@@ -1,6 +1,7 @@
 Cache = function(file.dir) {
-  force(file.dir)
   cache = new.env(parent = emptyenv())
+  force(file.dir)
+  force(cache)
 
   function(id, uri = id) {
     if (is.null(cache[[id]]) || cache[[id]]$uri != uri) {
@@ -11,21 +12,21 @@ Cache = function(file.dir) {
   }
 }
 
-prefetch = function(jd, cache) {
+prefetch = function(jc, cache) {
   UseMethod("prefetch")
 }
 
-prefetch.JobDescription = function(jd, cache) {
+prefetch.JobCollection = function(jc, cache) {
   cache("user.fun")
   cache("more.args")
   invisible(TRUE)
 }
 
-prefetch.ExperimentDescription = function(jd, cache) {
-  problems = unique(vcapply(jd$defs$pars, "[[", "prob.name"))
+prefetch.ExperimentCollection = function(jc, cache) {
+  problems = unique(vcapply(jc$defs$pars, "[[", "prob.name"))
   if (length(problems) == 1L)
     cache("prob/problem", file.path("problems", problems))
-  algorithms = unique(vcapply(jd$defs$pars, "[[", "algo.name"))
+  algorithms = unique(vcapply(jc$defs$pars, "[[", "algo.name"))
   Map(cache, id = paste0("algo/", algorithms), uri = file.path("algorithms", algorithms))
   invisible(TRUE)
 }
