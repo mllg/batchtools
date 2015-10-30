@@ -9,3 +9,5 @@
 ^TODO\.md$
 man-roxygen
 ^appveyor\.yml$
+^.*\.Rproj$
+^\.Rproj\.user$
