@@ -1,5 +1,8 @@
 #' @title Map Operation for Batch Systems
 #'
+#' @description
+#' A parallel \code{\link[base]{Map}} for batch systems.
+#'
 #' @param fun [\code{function}]\cr
 #'   Function to map over \code{...}.
 #' @param ... [any]\cr

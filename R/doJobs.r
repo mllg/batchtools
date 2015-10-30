@@ -1,14 +1,20 @@
 #' @title Execute jobs
 #'
+#' @description
+#' Executes every job in a \code{\link{JobCollection}}.
+#' This function is intended to be called on the slave.
+#'
 #' @param jc [\code{\link{JobCollection}}]\cr
-#'   Either an object of class \dQuote{JobCollection} as returned by \code{\link{makeJobCollection}} or a
-#'   string point to file containing a \dQuote{JobCollection} (saved with \code{\link[base]{saveRDS}}).
+#'   Either an object of class \dQuote{JobCollection} as returned by
+#'   \code{\link{makeJobCollection}} or a string point to file containing a
+#'   \dQuote{JobCollection} (saved with \code{\link[base]{saveRDS}}).
 #' @param con [\code{\link[base]{connection}}]\cr
 #'   A connection to redirect the output to.
-#' @return [\code{data.table}]. Data table with updates on the computational status, i.e.
-#'   a table with the columns \dQuote{job.id}, \dQuote{started} (unix time stamp of job start),
-#'   \dQuote{done} (unix time stamp of job termination), \dQuote{error} (error message as string)
-#'   and \code{memory} (memory usage as double).
+#' @return [\code{data.table}]. Data table with updates on the computational
+#' status, i.e. a table with the columns \dQuote{job.id}, \dQuote{started}
+#' (unix time stamp of job start), \dQuote{done} (unix time stamp of job
+#' termination), \dQuote{error} (error message as string) and \code{memory}
+#' (memory usage as double).
 #' @export
 doJobs = function(jc, con = stdout()) {
   UseMethod("doJobs")

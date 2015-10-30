@@ -1,20 +1,24 @@
 #' Reduce Results
 #'
+#' @description
+#' A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects.
+#'
 #' @templateVar ids.default findDone
 #' @template ids
 #' @param fun [\code{function}]\cr
 #'   A function to reduce the results. The result of previous iterations (or
-#'   the \code{init}) will be passed as first argument, the result of of the i-th
-#'   iteration as second. See \code{\link[base]{Reduce}} for some examples.
-#'   If the function has the formal argument \dQuote{job}, the job description is
-#'   passed.
+#'   the \code{init}) will be passed as first argument, the result of of the
+#'   i-th iteration as second. See \code{\link[base]{Reduce}} for some
+#'   examples. If the function has the formal argument \dQuote{job}, the job
+#'   description is passed.
 #' @param init [\code{ANY}]\cr
 #'   Initial element, as used in \code{\link[base]{Reduce}}.
 #'   Default is the first result.
 #' @param ... [\code{ANY}]\cr
 #'   Additional arguments passed to to function \code{fun}.
-#' @return Aggregated results, return type depends on function. If \code{ids} is empty, \code{reduceResults}
-#'   returns \code{init} (if available) or \code{NULL} otherwise.
+#' @return Aggregated results, return type depends on function. If \code{ids}
+#' is empty, \code{reduceResults} returns \code{init} (if available) or
+#' \code{NULL} otherwise.
 #' @template reg
 #' @family Results
 #' @export
@@ -52,6 +56,9 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 }
 
 #' @title Aggregate Results
+#'
+#' @description
+#' Functions to conveniently fetch the results from a \code{\link{Registry}}.
 #'
 #' @templateVar ids.default findDone
 #' @template ids
@@ -111,11 +118,15 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
 
 #' @title Load the Result of a Single Job
 #'
+#' @description
+#' A function to simply load the results for a single job.
+#'
 #' @template id
 #' @param missing.val [\code{ANY}]\cr
 #'   Value to return if the result file is missing. Default is \code{NULL}.
 #' @template reg
-#' @return [\code{ANY}]. The saved result or \code{missing.val} if result file is not found.
+#' @return [\code{ANY}]. The saved result or \code{missing.val} if result file
+#'   is not found.
 #' @family Results
 #' @export
 loadResult = function(id, missing.val = NULL, reg = getDefaultRegistry()) {

@@ -1,5 +1,8 @@
 #' @title Wait for termination of jobs on the batch system
 #'
+#' @description
+#' This function can be used to synchronise the execution on batch systems.
+#'
 #' @templateVar ids.default all
 #' @template ids
 #' @param sleep [\code{numeric(1)}]\cr

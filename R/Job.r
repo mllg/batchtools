@@ -15,7 +15,7 @@
 #' Additionally, a regular \code{\link{Registry}} also has the slot
 #' \dQuote{fun} with the user function while an
 #' \code{\link{ExperimentRegistry}} has the slots \dQuote{problem} and
-#' \dQuote{algorithm} (see {\link{Problem} and \link{Algorithm}).
+#' \dQuote{algorithm} (see \link{Problem} and \link{Algorithm}).
 #'
 #' @template id
 #' @template reg
@@ -31,6 +31,7 @@ makeJob = function(id, reg = getDefaultRegistry()) {
   UseMethod("makeJob", object = reg)
 }
 
+#' @export
 makeJob.Registry = function(id, reg = getDefaultRegistry()) {
   id = asIds(reg, id, n = 1L)
   cache = Cache(reg$file.dir)
@@ -43,6 +44,7 @@ makeJob.Registry = function(id, reg = getDefaultRegistry()) {
   ), "Job")
 }
 
+#' @export
 makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
   id = asIds(reg, id, n = 1L)
   cache = Cache(reg$file.dir)
