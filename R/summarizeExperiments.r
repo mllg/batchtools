@@ -9,6 +9,7 @@
 #'   Split the resulting table by these columns of \code{\link{getJobDefs}}.
 #' @template reg
 #' @return [\code{\link[data.table]{data.table}}] of frequencies in the respective groups.
+#' @export
 summarizeExperiments = function(ids = NULL, by = c("problem", "algorithm"), reg = getDefaultRegistry()) {
   pars = !setequal(by, c("problem", "algorithm"))
   getJobDefs(ids = ids, pars.as.cols = pars, reg = reg)[, list(.count = .N), by = by]
