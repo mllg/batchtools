@@ -30,27 +30,26 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
 
   # anything to do at all?
   cf = reg$cluster.functions
-  if (is.null(cf$listJobs) || nrow(ids) == 0L)
+  n.jobs = nrow(ids)
+  if (is.null(cf$listJobs) || n.jobs == 0L)
     return(TRUE)
 
-  info("Waiting for %i jobs ...", nrow(ids))
+  info("Waiting for %i jobs ...", n.jobs)
   timeout = now() + timeout
 
-  n = length(nrow(ids))
-  pb = makeProgressBar(total = n, format = "Waiting [:bar] :percent eta: :eta")
+  pb = makeProgressBar(total = n.jobs, format = "Waiting [:bar] :percent eta: :eta")
   repeat {
-    if (stop.on.error && nrow(.findError(reg, ids)) > 0L)
+    if (stop.on.error && nrow(.findError(ids = ids, reg = reg)) > 0L)
       return(FALSE)
 
-    on.sys = .findOnSystem(reg, ids)
+    on.sys = .findOnSystem(ids = ids, reg = reg)
     if (nrow(on.sys) == 0L)
-      return(nrow(.findNotDone(reg, ids)) == 0L)
+      return(nrow(.findNotDone(ids = ids, reg = reg)) == 0L)
 
     if (now() > timeout)
       return(FALSE)
 
-    pb$tick(n - nrow(on.sys))
-    n = nrow(on.sys)
+    pb$tick(n.jobs - nrow(on.sys))
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg = reg))
   }
