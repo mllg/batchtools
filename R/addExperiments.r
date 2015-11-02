@@ -23,10 +23,17 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
   assertSubset(names(algo.designs), reg$algorithms)
   repls = asCount(repls)
 
-  rows = function(x) if(nrow(x) > 0L) apply(x, 1L, as.list) else list(list())
-  maxId = function(ids) if (length(ids) == 0L) 0L else max(ids)
+  max2 = function(ids) if (length(ids) == 0L) 0L else max(ids)
   all.ids = integer(0L)
   def.id = NULL
+  getPars = function(n.pd, pd, n.ad, ad) {
+    cj = CJ(i = seq_len(n.pd), j = seq_len(n.ad))
+    lapply(seq_row(cj), function(r) {
+      pp = if (nrow(pd) == 0L) list() else as.list(pd[cj[r]$i])
+      ap = if (nrow(ad) == 0L) list() else as.list(ad[cj[r]$j])
+      list(prob.name = pn, prob.pars = pp, algo.name = an, algo.pars = ap)
+    })
+  }
 
   for (i in seq_along(prob.designs)) {
     pn = names(prob.designs)[i]
@@ -41,20 +48,18 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
       n.jobs = n.pd * n.ad * repls
       info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
 
-      tab = CJ(i = seq_len(n.pd), j = seq_len(n.ad))[, c("i", "j", "prob.name", "prob.pars", "algo.name", "algo.pars") := list(NULL, NULL, pn, rows(pd[i]), an, rows(ad[j]))]
-      tab = data.table(pars = apply(tab, 1, c))
-      tab$pars.hash = vcapply(tab$pars, digest::digest)
+      tab = data.table(pars = getPars(n.pd, pd, n.ad, ad))[, "pars.hash" := vcapply(get("pars"), digest::digest)]
       tab = merge(reg$defs[, !"pars", with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 
       miss = tab[is.na(def.id), which = TRUE]
-      tab[miss, "def.id" := maxId(reg$defs$def.id) + seq_along(miss)]
+      tab[miss, "def.id" := max2(reg$defs$def.id) + seq_along(miss)]
       reg$defs = rbind(reg$defs, tab[miss])
 
       tab = CJ(def.id = tab$def.id, repl = seq_len(repls))
       tab = tab[!reg$status, on = c("def.id", "repl")]
       if (nrow(tab) < n.jobs)
         info("Skipping %i duplicated experiments ...", n.jobs - nrow(tab))
-      tab$job.id = maxId(reg$status$job.id) + seq_row(tab)
+      tab$job.id = max2(reg$status$job.id) + seq_row(tab)
       reg$status = rbind(reg$status, tab, fill = TRUE)
       all.ids = c(all.ids, tab$job.id)
     }

@@ -47,20 +47,15 @@ test_that("addAlgorithm", {
   checkTables(reg)
 })
 
-test_that("addExperiments", {
+test_that("addExperiments handles parameters correctly", {
   reg = makeTempExperimentRegistry(FALSE)
-  prob = addProblem(reg = reg, "p1", data = iris, fun = function(data) nrow(data), seed = 42)
-  prob = addProblem(reg = reg, "p2", data = iris, fun = function(data) nrow(data), seed = 42)
-  algo = addAlgorithm(reg = reg, "a1", fun = function(data, problem, sq) problem^sq)
-  prob.designs = list(p1 = data.table(), p2 = data.table(x = 1:2))
-  algo.designs = list(a1 = data.table(sq = 1:3))
-  repls = 10
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(x, y, ...) stopifnot(is.numeric(x) && is.character(y)), seed = 42)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(a, b, ...) { print(str(a)); stopifnot(is.list(a)) })
+  prob.designs = list(p1 = data.table(x = 1:2, y = letters[1:2]))
+  algo.designs = list(a1 = data.table(a = list(foo = 1, bar = iris)))
+  repls = 1
   ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
-
-  removeProblem("p1", reg = reg)
-
-  getJobInfo(reg = reg)
-
-  expect_equal(ids, data.table(job.id = 1:90, key = "job.id"))
-  checkTables(reg = reg)
+  submitJobs(reg = reg, ids = chunkIds(reg = reg))
+  waitForJobs(reg = reg)
+  expect_true(nrow(findError(reg = reg)) == 0)
 })
