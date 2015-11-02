@@ -30,12 +30,12 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
 
   for (i in seq_along(prob.designs)) {
     pn = names(prob.designs)[i]
-    pd = prob.designs[[i]]
+    pd = as.data.table(prob.designs[[i]])
     n.pd = max(nrow(pd), 1L)
 
     for (j in seq_along(algo.designs)) {
       an = names(algo.designs)[j]
-      ad = algo.designs[[j]]
+      ad = as.data.table(algo.designs[[j]])
       n.ad = max(nrow(ad), 1L)
 
       n.jobs = n.pd * n.ad * repls
