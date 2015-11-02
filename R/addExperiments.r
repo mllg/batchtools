@@ -26,13 +26,13 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
   max2 = function(ids) if (length(ids) == 0L) 0L else max(ids)
   all.ids = integer(0L)
   def.id = NULL
-  getPars = function(n.pd, pd, n.ad, ad) {
-    cj = CJ(i = seq_len(n.pd), j = seq_len(n.ad))
-    lapply(seq_row(cj), function(r) {
-      pp = if (nrow(pd) == 0L) list() else as.list(pd[cj[r]$i])
-      ap = if (nrow(ad) == 0L) list() else as.list(ad[cj[r]$j])
-      list(prob.name = pn, prob.pars = pp, algo.name = an, algo.pars = ap)
-    })
+  getPars = function(i, j) {
+    list(
+      prob.name = pn,
+      prob.pars = if (nrow(pd) > 0L) as.list(pd[i]) else list(),
+      algo.name = an,
+      algo.pars = if (nrow(ad) > 0L) as.list(ad[j]) else list()
+    )
   }
 
   for (i in seq_along(prob.designs)) {
@@ -48,7 +48,8 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
       n.jobs = n.pd * n.ad * repls
       info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
 
-      tab = data.table(pars = getPars(n.pd, pd, n.ad, ad))[, "pars.hash" := vcapply(get("pars"), digest::digest)]
+      tab = data.table(pars = .mapply(getPars, CJ(i = seq_len(n.pd), j = seq_len(n.ad)), list()))
+      tab[, "pars.hash" := vcapply(get("pars"), digest::digest)]
       tab = merge(reg$defs[, !"pars", with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 
       miss = tab[is.na(def.id), which = TRUE]
