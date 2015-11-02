@@ -79,7 +79,8 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
       write(jc, file = jc$uri, wait = TRUE)
 
     if (!is.na(max.concurrent.jobs)) {
-      while (nrow(.findOnSystem(reg = reg)) >= max.concurrent.jobs) {
+      # count chunks or job.id (unique works on the key of ids)
+      while (nrow(unique(ids[job.id %in% .findOnSystem(reg = reg)])) >= max.concurrent.jobs) {
         Sys.sleep(5)
         pb$tick(0)
       }
