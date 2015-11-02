@@ -12,7 +12,7 @@ resources$memory = asInt(resources$memory, lower = 100L, upper = 64L * 1024L)
 resources$nodes = asInt(resources$nodes, lower = 1L)
 resources$parcpus = asInt(resources$parcpus, lower = 1L)
 assertCharacter(resources$modules, any.missing = FALSE)
-assertChoice(resources$R, choices = c("R-3.1.2-gcc-4.8.2-base", "R-3.2.2-gcc-4.8.2-base"))
+assertChoice(resources$R, choices = c("R-3.1.2-gcc-4.8.2-base", "R-3.2.2-gcc-4.8.5-base"))
 
 ## first string of queue, selected by walltime
 walltimes = 3600L * c(1L, 8L, 48L, 672L)
@@ -40,7 +40,7 @@ if (queue == "ultralong_quad")
 
 modules = switch(resources$R,
   "R-3.1.2-gcc-4.8.2-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.2", "gotoblas/shared/64/1.26", "R/3.1.2-gcc48"),
-  "R-3.2.2-gcc-4.8.2-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.5", "gotoblas/shared/64/1.26", "R/3.2.2-gcc48")
+  "R-3.2.2-gcc-4.8.5-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.5", "gotoblas/shared/64/1.26", "R/3.2.2-gcc48")
 )
 
 if(resources$nodes == 1L)
