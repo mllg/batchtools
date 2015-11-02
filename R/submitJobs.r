@@ -80,7 +80,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
     if (!is.na(max.concurrent.jobs)) {
       # count chunks or job.id (unique works on the key of ids)
-      while (nrow(unique(ids[.findOnSystem(reg = reg), on = "job.id", nomatch = 0L])) >= max.concurrent.jobs) {
+      while (uniqueN(ids[.findOnSystem(reg = reg), on = "job.id", nomatch = 0L]) >= max.concurrent.jobs) {
         Sys.sleep(5)
         pb$tick(0)
       }
