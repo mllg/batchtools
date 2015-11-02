@@ -33,8 +33,8 @@ now = function() {
   as.integer(Sys.time())
 }
 
-npath = function(...) {
-  stri_replace_all_fixed(normalizePath(file.path(...), winslash = "/", mustWork = FALSE), "\\", "/")
+npath = function(file.dir, ...) {
+  stri_replace_all_fixed(file.path(normalizePath(file.dir, winslash = "/", mustWork = FALSE), ...), "\\", "/")
 }
 
 getRandomString = function() {
