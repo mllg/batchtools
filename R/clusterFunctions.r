@@ -206,14 +206,21 @@ cfKillBatchJob = function(cmd, batch.id, max.tries = 3L) {
         batch.id, paste0(res$output, collapse = "\n"))
 }
 
-runOSCommand = function(sys.cmd, sys.args = character(0L), stop.on.exit.code = TRUE, debug = FALSE) {
+runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost", stop.on.exit.code = TRUE, debug = FALSE) {
   assertCharacter(sys.cmd, any.missing = FALSE, len = 1L)
   assertCharacter(sys.args, any.missing = FALSE)
+  assertString(nodename)
   assertFlag(stop.on.exit.code)
   assertFlag(debug)
 
+
+  if (nodename != "localhost") {
+    sys.args = c(nodename, sprintf("'%s'", paste0(c(sys.cmd, sys.args), collapse = " ")))
+    sys.cmd = "ssh"
+  }
+
   if (debug) {
-    catf("OS cmd: %s %s", sys.cmd, paste0(sys.args, collapse = " "))
+    info("OS cmd: %s %s", sys.cmd, paste0(sys.args, collapse = " "))
   }
 
   if (nzchar(Sys.which(sys.cmd)) > 0L) {

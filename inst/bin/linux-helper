@@ -1,0 +1,110 @@
+#!/bin/bash
+
+## linux-helper: Helper for the multicore and SSH cluster functions of the BatchJobs R
+##   package.
+##
+## Requires the following Unix command line utilities:
+##
+##  * grep, wc, ps, kill, uptime, echo, cat, possibly setsid
+##
+## The following commands are implemented. First argument is always the command name.
+## For other arguments see below. Each command returns a character vector.
+## 
+## number-of-cpus
+##  Return the number of PEs on worker.
+##
+## start-job RHOME NICE ROPTIONS RFILE OUTFILE
+##   Start an R CMD BATCH process running $RFILE and log
+##   the output in $OUTFILE. 
+##   RHOME is the path to the R installation.
+##   Returns: PID of sh process which spawned R. We use that as batch.job.id. 
+##
+## kill-job PID
+##   Kill the R job with PPID $PID. The PPID is the PID of 
+##   the sh process returned by start-job.
+##   First a TERM is sent, then 1 sec delay, then KILL. 
+## 
+##  status FILEDIR
+##   Return 4 numbers:
+##    - load average of last 1 min, as given by e.g. uptime
+##    - number of R processes by _all_ users
+##    - number of R processes by _all_ users which have a load of >= 50%
+##    - number of R processes by current user 
+##      which match $FILEDIR/jobs in the cmd call of R
+##
+##  list-jobs FILEDIR
+##   Return the PPIDs of running R jobs operating on $FILEDIR/jobs.
+
+### efficient [ -n `which [prog]` ]
+command_exists () {
+    hash "$1" 2> /dev/null;
+}
+
+CMD="$1"; shift
+export LC_ALL=C ### Avoid any localization issues.
+shopt -s nocasematch ### Case insensitive regular expressions
+
+case $CMD in
+    number-of-cpus)
+        if [[ `uname` =~ "Linux" ]]; then
+          cat /proc/cpuinfo | grep '^processor' | wc -l
+        else  
+          sysctl -n hw.ncpu ## darwin
+        fi  
+        ;;
+    start-job)
+        RCMD="R"
+        if [ -n "$1" ]; then
+            RCMD="${1}/bin/R"
+        fi
+        # only use setsid on linux, not on darwin (not available there)
+ 		if [[ `uname` =~ "Linux" ]] && command_exists setsid; then
+            RCMD="setsid $RCMD"
+        fi          
+        if [ -n "$2" ] && command_exists nice; then
+            RCMD="nice -n ${2} $RCMD"
+        fi
+        shift 2
+        # nothing should be on all 3 streams except maybe a segfault. throw away. 
+        # see comment also in cfLocal
+        # we use setsid to start the process in a different session. other ctrl+C in the master
+        # session leads to killing of child processes in multicore mode as the SIGINT is passed down
+        # $@ 
+        ${RCMD} CMD BATCH $@ \
+            > /dev/null 2> /dev/null < /dev/null &
+        echo $!
+        ;;
+    kill-job)
+        RPPID=$1 
+        # find R process whose ppid is the batch.job.id, i.e. the one of the sh process
+        # we must list all processes (without terminal) for SSH
+        RPID=$(ps -e -o pid= -o ppid= | awk -v j=$RPPID '$2 == j {print $1}')
+        kill -TERM $RPID > /dev/null 2> /dev/null
+        sleep 1
+        kill -KILL $RPID > /dev/null 2> /dev/null
+        exit 0
+        ;;
+    status)
+        # remove everyting till load average(s):
+        # then delete commas
+        LOAD=$(uptime | awk '{gsub(/.*:/,""); {gsub(/,/,"")}; print $1}')
+        JOBDIR="$1/jobs"
+        # print 3 columns for all processes       
+        # use ww for unlimited width in ps for command output
+        # we count all R procs, all R50, and all where JOBDIR was in the call args
+        ps -e -ww -o pcpu= -o ucomm= -o command= | \
+        awk -v j=$JOBDIR -v sysload=$LOAD '
+          BEGIN {rprocs=0;rprocs_50=0;njobs=0} 
+          $2 != "R" {next} 
+          {rprocs++} 
+          $1 > 50.0 {rprocs_50++} 
+          $0 ~ j {njobs++} 
+          END {print sysload " " rprocs " " rprocs_50 " " njobs}'
+        ;;
+    list-jobs)
+        JOBDIR="$1/jobs"
+        ps -e -ww -o ppid= -o ucomm= -o command= | \
+        awk -v j=$JOBDIR '$2 == "R" && $0 ~ j { print $1 }'
+        ;;
+    *)
+esac
