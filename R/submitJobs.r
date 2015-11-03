@@ -66,12 +66,12 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   on.exit(saveRegistry(reg))
 
-  wait = 1
+  wait = 2
   info("Submitting %i jobs in %i chunks using cluster functions '%s' ...", nrow(ids), length(chunks), reg$cluster.functions$name)
   update = data.table(submitted = NA_integer_, started = NA_integer_, done = NA_integer_, error = NA_character_,
     memory = NA_real_, resource.id = res.id, batch.id = NA_character_, job.hash = NA_character_)
 
-  pb = makeProgressBar(total = length(chunks), format = "Submit [:bar] :percent eta: :eta")
+  pb = makeProgressBar(total = length(chunks), format = ":status [:bar] :percent eta: :eta", tokens = list(status = "Submitting"))
   for (ch in chunks) {
     ids.chunk = ids[chunk == ch, nomatch = 0L]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
@@ -81,8 +81,8 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     if (!is.na(max.concurrent.jobs)) {
       # count chunks or job.id (unique works on the key of ids)
       while (uniqueN(ids[.findOnSystem(reg = reg), on = "job.id", nomatch = 0L]) >= max.concurrent.jobs) {
+        pb$tick(0, tokens = list(status = "Waiting "))
         Sys.sleep(5)
-        pb$tick(0)
       }
     }
 
@@ -95,14 +95,14 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
         break
       } else if (submit$status > 0L && submit$status < 100L) {
         # temp error
-        retries = retries + 1L
+        pb$tick(0L, tokens = list(status = submit$msg))
         Sys.sleep(wait)
       } else if (submit$status > 100L && submit$status <= 200L) {
         # fatal error
         stopf("Fatal error occurred: %i. %s", submit$status, submit$msg)
       }
     }
-    pb$tick()
+    pb$tick(tokens = list(status = "Submitting "))
   }
 
   ### return ids (on.exit handler kicks now in to submit the remaining messages)

@@ -53,10 +53,10 @@ write = function(object, file, wait = FALSE) {
   invisible(TRUE)
 }
 
-makeProgressBar = function(...) {
+makeProgressBar = function(..., tokens = list()) {
   if (getOption("batchtools.verbose", TRUE) && getOption("batchtools.progress", TRUE)) {
     pb = progress_bar$new(..., show_after = 1)
-    pb$tick(0L)
+    pb$tick(0L, tokens = tokens)
     return(pb)
   }
   list(tick = function(len = 1, tokens = list()) NULL, update = function(ratio, tokens) NULL)
