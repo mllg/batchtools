@@ -5,6 +5,6 @@ test_that("waitForJobs", {
   fun = function(x) if (x == 2) stop(x) else x
   ids = batchMap(reg = reg, fun, 1:2)
   submitJobs(reg = reg, ids = ids)
-  expect_true(waitForJobs(reg = reg, 1))
-  # expect_false(waitForJobs(reg = reg, 1:2))
+  expect_true(waitForJobs(ids = ids[1], reg = reg))
+  expect_false(waitForJobs(ids = ids, stop.on.error = TRUE, reg = reg))
 })

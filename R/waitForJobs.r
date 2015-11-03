@@ -28,6 +28,9 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   assertNumeric(timeout, len = 1L, lower = sleep)
   assertFlag(stop.on.error)
 
+  # an error?
+  if (stop.on.error && nrow(.findError(reg, ids)) > 0L)
+    return(FALSE)
   # anything to do at all?
   cf = reg$cluster.functions
   n.jobs = nrow(ids)
@@ -36,20 +39,21 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
 
   info("Waiting for %i jobs ...", n.jobs)
   timeout = now() + timeout
-
+  
   pb = makeProgressBar(total = n.jobs, format = "Waiting [:bar] :percent eta: :eta")
   repeat {
-    if (stop.on.error && nrow(.findError(ids = ids, reg = reg)) > 0L)
+    if (stop.on.error && nrow(.findError(reg, ids)) > 0L)
       return(FALSE)
 
-    on.sys = .findOnSystem(ids = ids, reg = reg)
+    on.sys = .findOnSystem(reg, ids)
     if (nrow(on.sys) == 0L)
-      return(nrow(.findNotDone(ids = ids, reg = reg)) == 0L)
+      return(nrow(.findNotDone(reg, ids)) == 0L)
 
     if (now() > timeout)
       return(FALSE)
-
+    
     pb$tick(n.jobs - nrow(on.sys))
+    n.jobs = nrow(on.sys)
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg = reg))
   }
