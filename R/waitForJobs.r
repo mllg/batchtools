@@ -22,15 +22,14 @@
 #' @export
 waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = FALSE)
-  syncRegistry(reg)
-  ids = asIds(reg, ids, default = .findNotDone(reg = reg))
   assertNumeric(sleep, len = 1L, lower = 0.2, finite = TRUE)
   assertNumeric(timeout, len = 1L, lower = sleep)
   assertFlag(stop.on.error)
 
+  syncRegistry(reg)
+  ids = asIds(reg, ids, default = .findNotDone(reg = reg))
   cf = reg$cluster.functions
-  n.jobs = nrow(ids)
-  ids = findNotDone(ids = ids, reg = reg)
+  n.jobs.total = n.jobs = nrow(ids)
   if (n.jobs == 0L || nrow(ids) == 0L)
     return(TRUE)
   if (is.null(cf$listJobs))
@@ -45,16 +44,22 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   repeat {
     # case 1: all are done -> nothing on system
     ids.nt = .findNotTerminated(ids = ids, reg = reg)
-    if (nrow(ids.nt) == 0L)
+    if (nrow(ids.nt) == 0L) {
+      pb$tick(n.jobs.total)
       return(nrow(.findError(ids = ids, reg = reg)) > 0L)
+    }
 
     # case 2: there are errors and stop.on.error is set
-    if (stop.on.error && nrow(.findError(ids = ids, reg = reg)) > 0L)
+    if (stop.on.error && nrow(.findError(ids = ids, reg = reg)) > 0L) {
+      pb$tick(n.jobs.total)
       return(FALSE)
+    }
 
     # case 3: we have reached a timeout
-    if (now() > timeout)
+    if (now() > timeout) {
+      pb$tick(n.jobs.total)
       return(FALSE)
+    }
 
     # case 4: jobs disappeared, we cannot find them on the system
     # heuristic:
@@ -63,18 +68,16 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     if (nrow(ids.disappeared) > 0L) {
       if (nrow(ids.nt[!.findOnSystem(ids = ids.nt, reg = reg)][ids.disappeared, nomatch = 0L]) > 0L) {
         warning("Some jobs disappeared from the system")
+        pb$tick(n.jobs.total)
         return(FALSE)
       }
     } else {
       ids.disappeared = ids[!.findOnSystem(ids = ids.nt, reg = reg)]
     }
 
-    # we can safely ignore terminated jobs in the next iteration
-    ids = .findNotTerminated(ids = ids, reg = reg)
-
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg = reg))
-    pb$tick(n.jobs - nrow(ids))
-    n.jobs = nrow(ids)
+    pb$tick(n.jobs - nrow(ids.nt))
+    n.jobs = nrow(ids.nt)
   }
 }
