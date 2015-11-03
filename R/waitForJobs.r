@@ -3,7 +3,7 @@
 #' @description
 #' This function can be used to synchronise the execution on batch systems.
 #'
-#' @templateVar ids.default all
+#' @templateVar ids.default findNotDone
 #' @template ids
 #' @param sleep [\code{numeric(1)}]\cr
 #'   Seconds to sleep between status updates. Default is \code{10}.
@@ -23,38 +23,58 @@
 waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
-  ids = asIds(reg, ids, default = .findOnSystem(reg))
+  ids = asIds(reg, ids, default = .findNotDone(reg = reg))
   assertNumeric(sleep, len = 1L, lower = 0.2, finite = TRUE)
   assertNumeric(timeout, len = 1L, lower = sleep)
   assertFlag(stop.on.error)
 
-  # an error?
-  if (stop.on.error && nrow(.findError(reg, ids)) > 0L)
-    return(FALSE)
-  # anything to do at all?
   cf = reg$cluster.functions
   n.jobs = nrow(ids)
-  if (is.null(cf$listJobs) || n.jobs == 0L)
+  ids = findNotDone(ids = ids, reg = reg)
+  if (n.jobs == 0L || nrow(ids) == 0L)
     return(TRUE)
+  if (is.null(cf$listJobs))
+    return(nrow(.findError(ids = ids, reg = reg)) == 0L)
 
   info("Waiting for %i jobs ...", n.jobs)
   timeout = now() + timeout
-  
+
   pb = makeProgressBar(total = n.jobs, format = "Waiting [:bar] :percent eta: :eta")
+  ids.disappeared = data.table(job.id = integer(0L), key = "job.id")
+
   repeat {
-    if (stop.on.error && nrow(.findError(reg, ids)) > 0L)
+    # case 1: all are done -> nothing on system
+    ids.nt = .findNotTerminated(ids = ids, reg = reg)
+    if (nrow(ids.nt) == 0L)
+      return(nrow(.findError(ids = ids, reg = reg)) > 0L)
+
+    # case 2: there are errors and stop.on.error is set
+    if (stop.on.error && nrow(.findError(ids = ids, reg = reg)) > 0L)
       return(FALSE)
 
-    on.sys = .findOnSystem(reg, ids)
-    if (nrow(on.sys) == 0L)
-      return(nrow(.findNotDone(reg, ids)) == 0L)
-
+    # case 3: we have reached a timeout
     if (now() > timeout)
       return(FALSE)
-    
-    pb$tick(n.jobs - nrow(on.sys))
-    n.jobs = nrow(on.sys)
+
+    # case 4: jobs disappeared, we cannot find them on the system
+    # heuristic:
+    #   job is not terminated, not on system and has not been on the system
+    #   in the previous iteration
+    if (nrow(ids.disappeared) > 0L) {
+      if (nrow(ids.nt[!.findOnSystem(ids = ids.nt, reg = reg)][ids.disappeared, nomatch = 0L]) > 0L) {
+        warning("Some jobs disappeared from the system")
+        return(FALSE)
+      }
+    } else {
+      ids.disappeared = ids[!.findOnSystem(ids = ids.nt, reg = reg)]
+    }
+
+    # we can safely ignore terminated jobs in the next iteration
+    ids = .findNotTerminated(ids = ids, reg = reg)
+
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg = reg))
+    pb$tick(n.jobs - nrow(ids))
+    n.jobs = nrow(ids)
   }
 }

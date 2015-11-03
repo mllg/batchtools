@@ -58,6 +58,22 @@
     reg$status[ids][!is.na(error), "job.id", with = FALSE]
 }
 
+.findTerminated = function(reg, ids = NULL) {
+  done = NULL
+  if (is.null(ids))
+    reg$status[!is.na(done), "job.id", with = FALSE]
+  else
+    reg$status[ids][!is.na(done), "job.id", with = FALSE]
+}
+
+.findNotTerminated = function(reg, ids = NULL) {
+  done = NULL
+  if (is.null(ids))
+    reg$status[is.na(done), "job.id", with = FALSE]
+  else
+    reg$status[ids][is.na(done), "job.id", with = FALSE]
+}
+
 .findOnSystem = function(reg, ids = NULL) {
   if (is.null(reg$cluster.functions$listJobs))
     return(data.table(job.id = integer(0L), key = "job.id"))
