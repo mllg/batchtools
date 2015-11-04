@@ -178,7 +178,7 @@ print.Registry = function(x, ...) {
 
 #' @export
 #' @rdname Registry
-loadRegistry = function(file.dir = "registry", conf.file = getOption("batchtools.conf.file"), make.default = TRUE) {
+loadRegistry = function(file.dir = "registry", conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"), make.default = TRUE) {
   readRegistry = function() {
     fns = file.path(file.dir, c("registry.new.rds", "registry.rds"))
     for (fn in fns) {
@@ -200,7 +200,8 @@ loadRegistry = function(file.dir = "registry", conf.file = getOption("batchtools
   }
 
   loadRegistryPackages(reg$packages, reg$namespaces)
-  if (!is.null(conf.file)) {
+  reg$cluster.functions = makeClusterFunctionsInteractive()
+  if (file.exists(conf.file)) {
     parent.env(reg) = .GlobalEnv
     sys.source(conf.file, envir = reg, keep.source = FALSE)
     parent.env(reg) = emptyenv()
