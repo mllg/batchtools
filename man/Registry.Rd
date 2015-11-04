@@ -24,7 +24,8 @@ makeTempRegistry(make.default = FALSE,
   temp.dir = getOption("batchtools.temp.dir", tempdir()), ...)
 
 loadRegistry(file.dir = "registry",
-  conf.file = getOption("batchtools.conf.file"), make.default = TRUE)
+  conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"),
+  make.default = TRUE)
 
 saveRegistry(reg = getDefaultRegistry())
 
