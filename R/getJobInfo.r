@@ -108,7 +108,7 @@ getJobPars = function(ids = NULL, prefix.pars = FALSE, reg = getDefaultRegistry(
   assertFlag(prefix.pars)
   ids = asIds(reg, ids, default = .findAll(reg))
 
-  tab = reg$status[ids][reg$defs, c("job.id", "pars"), nomatch = 0L, with = FALSE]
+  tab = reg$status[ids][reg$defs, c("job.id", "pars"), on = "def.id", nomatch = 0L, with = FALSE]
   parsAsCols(tab, TRUE, prefix.pars, reg = reg)
   tab[]
 }

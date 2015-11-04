@@ -54,6 +54,8 @@ test_that("getJobPars", {
   expect_null(tab$pars)
   expect_equal(tab$i, 1:4)
   expect_equal(tab$j, rep(1, 4))
+  tab = getJobPars(reg = reg, ids = 1:2)
+  expect_data_table(tab, nrow = 2, ncol = 3, key = "job.id")
   tab = getJobPars(reg = reg, prefix.pars = TRUE)
   expect_data_table(tab, nrow = 4, ncol = 3, key = "job.id")
   expect_equal(tab$par.i, 1:4)
