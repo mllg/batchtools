@@ -62,6 +62,19 @@ test_that("getJobPars", {
   expect_equal(tab$par.j, rep(1, 4))
 })
 
+test_that("getJobPars with repls", {
+  reg = makeTempExperimentRegistry()
+  prob = addProblem("prob", data = iris, fun = function(data, job) nrow(data), reg = reg)
+  algo = addAlgorithm("algo", fun = function(problem, i, ...) problem, reg = reg)
+  prob.designs = list(prob = data.table())
+  algo.designs = list(algo = data.table(i = 1:2))
+  addExperiments(prob.designs, algo.designs, repls = 3, reg = reg)
+  waitForJobs(reg = reg)
+  ids = chunkIds(chunk.size = 2, reg = reg)
+  submitJobs(ids, reg = reg)
+  expect_equal(nrow(getJobPars(reg = reg)), nrow(ids))
+})
+
 test_that("getJobInfo.ExperimentRegistry", {
   reg = makeTempExperimentRegistry(FALSE)
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(data) nrow(data), seed = 42)
