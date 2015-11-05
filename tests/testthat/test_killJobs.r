@@ -1,7 +1,6 @@
 context("killJobs")
 
 test_that("killJobs", {
-  skip_on_cran()
   reg = makeTempRegistry(make.default = FALSE)
   if (is.null(reg$cluster.functions$killJobs))
     skip("Test requires killJobs")

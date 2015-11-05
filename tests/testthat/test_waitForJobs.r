@@ -10,8 +10,6 @@ test_that("waitForJobs", {
 })
 
 test_that("waitForJobs: detection of expired jobs", {
-  skip_on_cran()
-
   reg = makeTempRegistry(make.default = FALSE)
   if (is.null(reg$cluster.functions$killJobs))
     skip("Test requires killJobs")

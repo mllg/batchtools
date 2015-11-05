@@ -3,7 +3,7 @@
 #' @description
 #' This function can be used to synchronise the execution on batch systems.
 #'
-#' @templateVar ids.default findNotDone
+#' @templateVar ids.default findSubmitted
 #' @template ids
 #' @param sleep [\code{numeric(1)}]\cr
 #'   Seconds to sleep between status updates. Default is \code{10}.
@@ -27,7 +27,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   assertFlag(stop.on.error)
 
   syncRegistry(reg)
-  ids = asIds(reg, ids, default = .findNotDone(reg = reg))
+  ids = asIds(reg, ids, default = .findSubmitted(reg = reg))
   cf = reg$cluster.functions
   n.jobs.total = n.jobs = nrow(ids)
 
