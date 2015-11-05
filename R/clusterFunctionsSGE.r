@@ -33,7 +33,7 @@ makeClusterFunctionsSGE = function(template) {
     }
   }
 
-  killJob = function(conf, reg, batch.id) {
+  killJob = function(reg, batch.id) {
     cfKillBatchJob("qdel", batch.id)
   }
 

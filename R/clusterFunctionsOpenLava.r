@@ -38,7 +38,7 @@ makeClusterFunctionsOpenLava = function(template) {
     }
   }
 
-  killJob = function(conf, reg, batch.id) {
+  killJob = function(reg, batch.id) {
     cfKillBatchJob("bkill", batch.id)
   }
 
