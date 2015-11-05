@@ -55,7 +55,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     ids.nt = .findNotTerminated(ids = ids, reg = reg)
     if (nrow(ids.nt) == 0L) {
       pb$tick(n.jobs.total)
-      return(nrow(.findError(ids = ids, reg = reg)) > 0L)
+      return(nrow(.findError(ids = ids, reg = reg)) == 0L)
     }
 
     # case 2: there are errors and stop.on.error is set
@@ -67,6 +67,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     # case 3: we have reached a timeout
     if (now() > timeout) {
       pb$tick(n.jobs.total)
+      warning("Timeout reached")
       return(FALSE)
     }
 

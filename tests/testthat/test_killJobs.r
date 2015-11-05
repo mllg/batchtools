@@ -1,11 +1,12 @@
 context("killJobs")
 
 test_that("killJobs", {
-  skip_on_os("windows")
   skip_on_cran()
+  reg = makeTempRegistry(make.default = FALSE)
+  if (is.null(reg$cluster.functions$killJobs))
+    skip("Test requires killJobs")
 
   reg = makeTempRegistry(FALSE)
-  reg$cluster.functions = makeClusterFunctionsMulticore(ncpus = 1L, max.load = 99, max.jobs = 99)
   ids = batchMap(Sys.sleep, time = 60, reg = reg)
   submitJobs(1, reg = reg)
   expect_equal(findOnSystem(1, reg = reg), findJobs(reg = reg))

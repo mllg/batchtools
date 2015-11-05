@@ -107,18 +107,3 @@ findWorker = function(workers, reg, tdiff) {
   rload = vnapply(workers, function(w) w$status$load / w$ncpus)
   Find(function(w) w$available == "avail", sample(workers, prob = 1 / (rload + 0.1)), nomatch = NULL)
 }
-
-if (FALSE) {
-  reg = makeTempRegistry(TRUE)
-  reg$cluster.functions = makeClusterFunctionsMulticore(ncpus = 2, max.jobs = 2, max.load = 1000)
-  reg$debug = TRUE
-  saveRegistry(reg)
-  batchMap(Sys.sleep, rep(60, 2))
-  submitJobs()
-  getStatus()
-
-  worker = makeWorker("localhost", ncpus = 0L)
-  listWorkerJobs(worker, reg)
-  updateWorker(worker, reg)
-  runOSCommand(worker$script, c("list-jobs", "do"), nodename = worker$nodename, debug = TRUE)
-}
