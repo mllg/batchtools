@@ -30,10 +30,19 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   ids = asIds(reg, ids, default = .findNotDone(reg = reg))
   cf = reg$cluster.functions
   n.jobs.total = n.jobs = nrow(ids)
-  if (n.jobs == 0L || nrow(ids) == 0L)
+
+  if (n.jobs == 0L || nrow(ids) == 0L) {
     return(TRUE)
-  if (is.null(cf$listJobs))
+  }
+
+  if (nrow(.findNotSubmitted(ids = ids, reg = reg)) > 0L) {
+    warning("Cannot wait for unsubmitted jobs. Removing from ids.")
+    ids = ids[.findSubmitted(ids = ids, reg = reg), nomatch = 0L]
+  }
+
+  if (is.null(cf$listJobs)) {
     return(nrow(.findError(ids = ids, reg = reg)) == 0L)
+  }
 
   info("Waiting for %i jobs ...", n.jobs)
   timeout = now() + timeout
@@ -42,7 +51,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   ids.disappeared = data.table(job.id = integer(0L), key = "job.id")
 
   repeat {
-    # case 1: all are done -> nothing on system
+    # case 1: all are terminated -> nothing on system
     ids.nt = .findNotTerminated(ids = ids, reg = reg)
     if (nrow(ids.nt) == 0L) {
       pb$tick(n.jobs.total)
