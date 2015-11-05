@@ -2,10 +2,9 @@ context("killJobs")
 
 test_that("killJobs", {
   reg = makeTempRegistry(make.default = FALSE)
-  if (is.null(reg$cluster.functions$killJobs))
+  if (is.null(reg$cluster.functions$killJob))
     skip("Test requires killJobs")
 
-  reg = makeTempRegistry(FALSE)
   ids = batchMap(Sys.sleep, time = 60, reg = reg)
   submitJobs(1, reg = reg)
   expect_equal(findOnSystem(1, reg = reg), findJobs(reg = reg))

@@ -40,7 +40,7 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   info("Killing %i real batch jobs ...", length(batch.ids))
 
   for (i in 1:3) {
-    ids[!get("killed"), "killed" := is.error(try(kill(reg, .BY), silent = TRUE)), by = "batch.id"]
+    ids[!ids$killed, "killed" := is.error(try(kill(reg, .BY), silent = TRUE)), by = "batch.id"]
     if (all(ids$killed))
       break
     Sys.sleep(2)
@@ -50,8 +50,8 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
     warning("Could not kill %i jobs", sum(!ids$killed))
 
   # reset killed jobs
-  killed = NULL
-  reg$status[ids[get("killed")], c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash") := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_)]
+  syncRegistry(reg = reg)
+  reg$status[ids[ids$killed], c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash") := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_)]
 
   saveRegistry(reg)
   ids[, c("job.id", "batch.id", "killed"), with = FALSE]

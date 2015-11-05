@@ -19,7 +19,7 @@
 ##   Returns: PID of sh process which spawned R. We use that as batch.id.
 ##
 ## kill-job PID
-##   Kill the R job with PPID $PID. The PPID is the PID of
+##   Kill the R job with PID $PID. The PID is the PID of
 ##   the sh process returned by start-job.
 ##   First a TERM is sent, then 1 sec delay, then KILL.
 ##
@@ -32,7 +32,7 @@
 ##      which match $FILEDIR/jobs in the cmd call of R
 ##
 ##  list-jobs FILEDIR
-##   Return the PPIDs of running R jobs operating on $FILEDIR/jobs.
+##   Return the PIDs of running R jobs operating on $FILEDIR/jobs.
 
 ### efficient [ -n `which [prog]` ]
 command_exists () {
@@ -53,21 +53,17 @@ case $CMD in
         ;;
     start-job)
         RCMD="Rscript"
- 		if command_exists setsid; then
-            RCMD="setsid $RCMD"
-        fi
+ 		# if command_exists setsid; then
+            # RCMD="setsid $RCMD"
+        # fi
 
         ${RCMD} -e "batchtools::doJobs('$1')" > "$2" 2>&1 &
         echo $!
         ;;
     kill-job)
-        RPPID=$1
-        # find R process whose ppid is the batch.job.id, i.e. the one of the sh process
-        # we must list all processes (without terminal) for SSH
-        RPID=$(ps -e -o pid= -o ppid= | awk -v j=$RPPID '$2 == j {print $1}')
-        kill -TERM $RPID > /dev/null 2> /dev/null
+        kill -TERM $1 > /dev/null 2> /dev/null
         sleep 1
-        kill -KILL $RPID > /dev/null 2> /dev/null
+        kill -KILL $1 > /dev/null 2> /dev/null
         exit 0
         ;;
     status)
@@ -89,7 +85,6 @@ case $CMD in
         ;;
     list-jobs)
         JOBDIR="$1/jobs"
-        # ps -e -ww -o ppid= -o ucomm= -o command= | awk -v j=$JOBDIR '$2 == "R" && $0 ~ j { print $1 }'
         ps -e -ww -o pid= -o ucomm= -o command= | awk -v j=$JOBDIR '$2 == "R" && $0 ~ j { print $1 }'
         ;;
     *)

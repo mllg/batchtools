@@ -11,12 +11,13 @@ test_that("waitForJobs", {
 
 test_that("waitForJobs: detection of expired jobs", {
   reg = makeTempRegistry(make.default = FALSE)
-  if (is.null(reg$cluster.functions$killJobs))
+  if (is.null(reg$cluster.functions$killJob))
     skip("Test requires killJobs")
 
   ids = batchMap(reg = reg, Sys.sleep, c(20, 20))
   submitJobs(ids, reg = reg)
   batch.ids = reg$status$batch.id
   reg$cluster.functions$killJob(reg, batch.ids[1])
-  expect_false(expect_warning(waitForJobs(ids, reg = reg)))
+  waitForJobs(1:2, reg = reg)
+  expect_warning(waitForJobs(ids, reg = reg, sleep = 1))
 })
