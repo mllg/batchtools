@@ -12,17 +12,16 @@ makeWorker(nodename, ncpus = 0L, max.jobs = NULL, max.load = NULL)
 Host name of node.}
 
 \item{ncpus}{[\code{integers(1)}]\cr
-Number of VPUs of worker.
-Default (0) means to query the worker via \code{\link{getWorkerNumberOfCPUs}}.}
+Number of VPUs of worker. Default (0) means to query the worker.}
 
 \item{max.jobs}{[\code{integer(1)}]\cr
 Maximal number of jobs that can run concurrently for the current registry.
 Default is \code{ncpus}.}
 
 \item{max.load}{[\code{numeric(1)}]\cr
-Load average (of the last 5 min) at which the worker is considered occupied,
-so that no job can be submitted.
-Default is \code{ncpus-1}.}
+Load average (of the last 5 min) at which the worker is considered
+occupied, so that no job can be submitted.
+Default is \code{ncpus}.}
 }
 \value{
 [\code{\link{Worker}}].

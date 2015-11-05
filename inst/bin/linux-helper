@@ -89,8 +89,8 @@ case $CMD in
         ;;
     list-jobs)
         JOBDIR="$1/jobs"
-        ps -e -ww -o ppid= -o ucomm= -o command= | \
-        awk -v j=$JOBDIR '$2 == "R" && $0 ~ j { print $1 }'
+        # ps -e -ww -o ppid= -o ucomm= -o command= | awk -v j=$JOBDIR '$2 == "R" && $0 ~ j { print $1 }'
+        ps -e -ww -o pid= -o ucomm= -o command= | awk -v j=$JOBDIR '$2 == "R" && $0 ~ j { print $1 }'
         ;;
     *)
 esac

@@ -108,7 +108,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = g
 
   reg = new.env()
 
-  reg$file.dir = file.dir
+  reg$file.dir = npath(file.dir)
   reg$work.dir = work.dir
   reg$packages = packages
   reg$namespaces = namespaces

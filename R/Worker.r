@@ -6,14 +6,13 @@
 #' @param nodename [\code{character(1)}]\cr
 #'   Host name of node.
 #' @param ncpus [\code{integers(1)}]\cr
-#'   Number of VPUs of worker.
-#'   Default (0) means to query the worker via \code{\link{getWorkerNumberOfCPUs}}.
+#'   Number of VPUs of worker. Default (0) means to query the worker.
 #' @param max.jobs [\code{integer(1)}]\cr
 #'   Maximal number of jobs that can run concurrently for the current registry.
 #'   Default is \code{ncpus}.
 #' @param max.load [\code{numeric(1)}]\cr
-#'   Load average (of the last 5 min) at which the worker is considered occupied,
-#'   so that no job can be submitted.
+#'   Load average (of the last 5 min) at which the worker is considered
+#'   occupied, so that no job can be submitted.
 #'   Default is \code{ncpus}.
 #' @name Worker
 #' @rdname Worker
@@ -27,15 +26,15 @@ makeWorker = function(nodename, ncpus = 0L, max.jobs = NULL, max.load = NULL) {
   worker$nodename = nodename
   worker$script = findHelperScriptLinux(nodename)
   worker$last.update = -Inf
-  worker$available = "A"
+  worker$available = "?"
   worker$status = NULL
   class(worker) = "Worker"
 
   if (ncpus == 0L)
     ncpus = getWorkerNumberOfCPUs(worker)
   worker$ncpus = ncpus
-  worker$max.jobs = asInt(max.jobs %??% ncpus)
-  worker$max.load = asInt(max.load %??% ncpus)
+  worker$max.jobs = max(asInt(max.jobs %??% ncpus), 1L)
+  worker$max.load = max(as.numeric(max.load %??% ncpus), 1)
 
   return(setClasses(worker, "Worker"))
 }
@@ -44,22 +43,22 @@ getWorkerNumberOfCPUs = function(worker) {
   as.integer(runWorkerCommand(worker, "number-of-cpus"))
 }
 
-getWorkerStatus = function(worker, file.dir) {
-  res = runWorkerCommand(worker, "status", file.dir)
+getWorkerStatus = function(worker, reg) {
+  res = runWorkerCommand(worker, "status", reg$file.dir, debug = reg$debug)
   res = as.numeric(stri_split_regex(res, "\\s+")[[1L]])
   setNames(as.list(res), c("load", "n.rprocs", "n.rprocs.50", "n.jobs"))
 }
 
-startWorkerJob = function(worker, job, outfile) {
-  runWorkerCommand(worker, "start-job", c(job, outfile))
+startWorkerJob = function(worker, reg, job, outfile) {
+  runWorkerCommand(worker, "start-job", c(job, outfile), debug = reg$debug)
 }
 
-killWorkerJob = function(worker, pid) {
-  runWorkerCommand(worker, "kill-job", pid)
+killWorkerJob = function(worker, reg, pid) {
+  runWorkerCommand(worker, "kill-job", pid, debug = reg$debug)
 }
 
-listWorkerJobs = function(worker, file.dir) {
-  stri_trim_both(runWorkerCommand(worker, "list-jobs", file.dir))
+listWorkerJobs = function(worker, reg) {
+  stri_trim_both(runWorkerCommand(worker, "list-jobs", reg$file.dir, debug = reg$debug))
 }
 
 findHelperScriptLinux = function(nodename) {
@@ -80,49 +79,46 @@ runWorkerCommand = function(worker, command, args = character(0L), debug = FALSE
 getWorkerSchedulerStatus = function(worker) {
   # we have already used up our maximal jobs on this node
   if (worker$status$n.jobs >= worker$max.jobs)
-    return("J")
+    return("max.jobs")
   # should not have too much load average
-  if (worker$status$load[1L] > worker$max.load)
-    return("L")
+  if (worker$status$load[1L] >= worker$max.load)
+    return("max.load")
   # there are already ncpus expensive R jobs running on the node
   if (worker$status$n.rprocs.50 >= worker$ncpus)
-    return("R")
+    return("max.r50")
   # should not have too many R sessions open
   if(worker$status$n.rprocs >= 3 * worker$ncpus)
-    return("r")
+    return("max.r")
   # else all clear, submit the job!
-  return("A")
+  return("avail")
 }
 
-updateWorker = function(worker, file.dir, tdiff) {
+updateWorker = function(worker, reg, tdiff = 0L) {
   time = now()
-  if (worker$available == "A" || time - worker$last.update >= tdiff) {
+  if (worker$available == "avail" || time - worker$last.update >= tdiff) {
     worker$last.update = time
-    worker$status = getWorkerStatus(worker, file.dir)
+    worker$status = getWorkerStatus(worker, reg)
     worker$available = getWorkerSchedulerStatus(worker)
   }
 }
 
-# find worker via isBusyWorker and update workers while looking
-# workers with a low load are more likely to be selected when there are
-# multiple workers available
-findWorker = function(workers, file.dir, tdiff) {
-  lapply(workers, updateWorker, file.dir = file.dir, tdiff = tdiff)
+findWorker = function(workers, reg, tdiff) {
+  lapply(workers, updateWorker, reg = reg, tdiff = tdiff)
   rload = vnapply(workers, function(w) w$status$load / w$ncpus)
-  Find(function(w) w$available == "A", sample(workers, prob = 1 / (rload + 0.1)), nomatch = NULL)
+  Find(function(w) w$available == "avail", sample(workers, prob = 1 / (rload + 0.1)), nomatch = NULL)
 }
 
 if (FALSE) {
   reg = makeTempRegistry(TRUE)
-  reg$cluster.functions = makeClusterFunctionsMulticore(1, ncpus = 2, max.load = 1000)
+  reg$cluster.functions = makeClusterFunctionsMulticore(ncpus = 2, max.jobs = 2, max.load = 1000)
   reg$debug = TRUE
   saveRegistry(reg)
-  batchMap(Sys.sleep, 1:10)
+  batchMap(Sys.sleep, rep(60, 2))
   submitJobs()
   getStatus()
 
   worker = makeWorker("localhost", ncpus = 0L)
-  outfile = jc$log.file
-  job = jc$uri
-  saveRDS(jc, file = job)
+  listWorkerJobs(worker, reg)
+  updateWorker(worker, reg)
+  runOSCommand(worker$script, c("list-jobs", "do"), nodename = worker$nodename, debug = TRUE)
 }

@@ -26,25 +26,26 @@ makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", paral
   worker = makeWorker("localhost", ncpus, max.jobs, max.load)
 
   submitJob = function(reg, jc) {
-    updateWorker(worker, reg$file.dir, tdiff = 0L)
-    s = worker$available
-    if (s != "A") {
-      makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = sprintf("Busy: %s", s))
-    } else {
-      pid = try(startWorkerJob(worker, jc$uri, jc$log.file))
-      if (is.error(pid))
+    updateWorker(worker, reg, tdiff = 0L)
+    if (worker$available == "avail") {
+      pid = try(startWorkerJob(worker, reg, jc$uri, jc$log.file))
+      if (is.error(pid)) {
         makeSubmitJobResult(status = 101L, batch.id = NA_character_, msg = "Submit failed.")
-      else
+      } else {
+        worker$available = "?"
         makeSubmitJobResult(status = 0L, batch.id = pid)
+      }
+    } else {
+      makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = sprintf("Busy: %s", worker$available))
     }
   }
 
   killJob = function(reg, batch.id) {
-    killWorkerJob(worker, batch.id)
+    killWorkerJob(worker, reg, batch.id)
   }
 
   listJobs = function(reg) {
-    listWorkerJobs(worker, reg$file.dir)
+    listWorkerJobs(worker, reg)
   }
 
   makeClusterFunctions(name = "Multicore", submitJob = submitJob, killJob = killJob,
