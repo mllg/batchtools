@@ -15,8 +15,8 @@ test_that("testJob", {
 
 test_that("testJob.ExperimentRegistry", {
   reg = makeTempExperimentRegistry(FALSE)
-  prob = addProblem(reg = reg, "p1", data = iris, fun = function(data, ...) nrow(data), seed = 42)
-  algo = addAlgorithm(reg = reg, "a1", fun = function(data, problem, sq, ...) problem^sq)
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data), seed = 42)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, sq, ...) problem^sq)
   ids = addExperiments(prob.designs = list(p1 = data.table()), algo.designs = list(a1 = data.table(sq = 1:3)), reg = reg)
 
   suppressAll(x <- testJob(id = 1, reg = reg))

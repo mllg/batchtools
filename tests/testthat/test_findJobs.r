@@ -80,20 +80,10 @@ test_that("findOnSystem", {
 })
 
 test_that("findExperiments", {
-  reg = makeTempRegistry(FALSE)
-  if (!is.null(reg$cluster.functions$listJobs)) {
-    ids = batchMap(reg = reg, Sys.sleep, c(20, 20))
-    submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
-    expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
-    waitForJobs(reg = reg)
-  }
-})
-
-test_that("findExperiments", {
   reg = makeTempExperimentRegistry(FALSE)
-  prob = addProblem(reg = reg, "p1", fun = function(n, ...) mean(runif(n)), seed = 42)
-  prob = addProblem(reg = reg, "p2", data = iris, fun = function(data) nrow(data))
-  algo = addAlgorithm(reg = reg, "a1", fun = function(data, problem, sq) problem^sq)
+  prob = addProblem(reg = reg, "p1", fun = function(job, data, n, ...) mean(runif(n)), seed = 42)
+  prob = addProblem(reg = reg, "p2", data = iris, fun = function(job, data) nrow(data))
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, sq) problem^sq)
   prob.designs = list(p1 = data.table(n = c(10, 20)), p2 = data.table())
   algo.designs = list(a1 = data.table(sq = 1:3))
   repls = 10

@@ -5,11 +5,10 @@ addAlgorithm = function(name, fun, reg = getDefaultRegistry())  {
   assertString(name)
   if (!stri_detect_regex(name, "^[[:alnum:]_.-]+$"))
     stopf("Illegal characters in problem name: %s", name)
-  if (!is.null(fun)) {
-    assertFunction(fun)
-    f = names(formals(fun))
-    if (!("..." %in% f || all(c("data", "problem") %in% f)))
-      stop("The algorithm function must have either '...' or both 'data' and 'problem' as formal arguments")
+  if (is.null(fun)) {
+    fun = function(job, data, problem, ...) problem
+  } else {
+    assertFunction(fun, args = c("job", "data", "problem"))
   }
 
   algo = setClasses(list(fun = fun, name = name), "Algorithm")

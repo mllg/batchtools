@@ -2,9 +2,9 @@ context("chunkIds")
 
 test_that("chunkIds", {
   reg = makeTempExperimentRegistry(FALSE)
-  prob = addProblem(reg = reg, "p1", data = iris, fun = function(data, ...) nrow(data), seed = 42)
-  prob = addProblem(reg = reg, "p2", data = iris, fun = function(data, ...) nrow(data), seed = 42)
-  algo = addAlgorithm(reg = reg, "a1", fun = function(data, problem, sq, ...) problem^sq)
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data), seed = 42)
+  prob = addProblem(reg = reg, "p2", data = iris, fun = function(job, data, ...) nrow(data), seed = 42)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, sq, ...) problem^sq)
   prob.designs = list(p1 = data.table(), p2 = data.table(x = 1:2))
   algo.designs = list(a1 = data.table(sq = 1:3))
   repls = 10

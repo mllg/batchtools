@@ -27,8 +27,8 @@ test_that("Job", {
 
 test_that("Experiment", {
   reg = makeTempExperimentRegistry(FALSE)
-  addProblem(reg = reg, "p1", fun = function(...) list(...))
-  addAlgorithm(reg = reg, "a1", fun = function(problem, ...) length(problem))
+  addProblem(reg = reg, "p1", fun = function(job, data, ...) list(data = data, ...))
+  addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, ...) length(problem))
   ids = addExperiments(list(p1 = data.table(i = 1:3)), list(a1 = data.table()), reg = reg)
 
   job = makeJob(1, reg = reg)

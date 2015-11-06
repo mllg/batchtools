@@ -28,7 +28,7 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   ids = reg$status[ids][is.na(done), c("job.id", "started", "batch.id"), with = FALSE]
   ids = ids[findOnSystem(ids = ids, reg = reg)]
   if (nrow(ids) == 0L)
-    return(data.table(job.id = integer(0L)))
+    return(data.table(job.id = integer(0L), batch.id = character(0L), killed = logical(0L)))
 
   info("Trying to kill %i jobs ...", nrow(ids))
 

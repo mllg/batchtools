@@ -84,7 +84,7 @@ getWorkerSchedulerStatus = function(worker) {
   if (worker$status$load[1L] >= worker$max.load)
     return("max.load")
   # there are already ncpus expensive R jobs running on the node
-  if (worker$status$n.rprocs.50 >= worker$ncpus)
+  if (worker$status$n.rprocs.50 >= 2*worker$ncpus)
     return("max.r50")
   # should not have too many R sessions open
   if(worker$status$n.rprocs >= 3 * worker$ncpus)

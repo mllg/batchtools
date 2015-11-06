@@ -43,10 +43,10 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
   assertString(name)
   if (!stri_detect_regex(name, "^[[:alnum:]_.-]+$"))
     stopf("Illegal characters in problem name: %s", name)
-  if (!is.null(fun)) {
-    assertFunction(fun)
-    if (!any(c("data", "...") %in% names(formals(fun))))
-      stop("The problem function must have '...' or 'data' as formal arguments")
+  if (is.null(fun)) {
+    fun = function(job, data, ...) data
+  } else {
+    assertFunction(fun, args = c("job", "data"))
   }
   if (!is.null(seed))
     seed = asCount(seed, positive = TRUE)

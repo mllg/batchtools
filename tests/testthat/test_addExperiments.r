@@ -2,7 +2,7 @@ context("addExperiments")
 
 test_that("addProblem", {
   reg = makeTempExperimentRegistry(FALSE)
-  prob = addProblem(reg = reg, "p1", data = iris, fun = function(...) nrow(data))
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
   expect_is(prob, "Problem")
   expect_equal(prob$data, iris)
   expect_equal(prob$name, "p1")
@@ -10,7 +10,7 @@ test_that("addProblem", {
   expect_null(prob$seed)
   expect_file(file.path(reg$file.dir, "problems", "p1.rds"))
 
-  prob = addProblem(reg = reg, "p2", fun = function(...) NULL, seed = 42)
+  prob = addProblem(reg = reg, "p2", fun = function(job, data) NULL, seed = 42)
   expect_is(prob, "Problem")
   expect_null(prob$data, NULL)
   expect_equal(prob$name, "p2")
@@ -18,7 +18,7 @@ test_that("addProblem", {
   expect_identical(prob$seed, 42L)
   expect_file(file.path(reg$file.dir, "problems", "p1.rds"))
 
-  algo = addAlgorithm(reg = reg, "a1", fun = function(...) NULL)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, ...) NULL)
   ids = addExperiments(list(p1 = data.table(), p2 = data.table()), algo.designs = list(a1 = data.table()), repls = 2, reg = reg)
 
   removeProblem(reg = reg, "p1")
@@ -30,14 +30,14 @@ test_that("addProblem", {
 
 test_that("addAlgorithm", {
   reg = makeTempExperimentRegistry(FALSE)
-  algo = addAlgorithm(reg = reg, "a1", fun = function(...) NULL)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, ...) NULL)
   expect_is(algo, "Algorithm")
   expect_equal(algo$name, "a1")
   expect_function(algo$fun)
   expect_file(file.path(reg$file.dir, "algorithms", "a1.rds"))
 
-  prob = addProblem(reg = reg, "p1", data = iris, fun = function(...) nrow(data))
-  algo = addAlgorithm(reg = reg, "a2", fun = function(...) NULL)
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) nrow(data))
+  algo = addAlgorithm(reg = reg, "a2", fun = function(job, data, problem) NULL)
   ids = addExperiments(list(p1 = data.table()), algo.designs = list(a1 = data.table(), a2 = data.table()), repls = 2, reg = reg)
 
   removeAlgorithm(reg = reg, "a1")
@@ -49,8 +49,8 @@ test_that("addAlgorithm", {
 
 test_that("addExperiments handles parameters correctly", {
   reg = makeTempExperimentRegistry(FALSE)
-  prob = addProblem(reg = reg, "p1", data = iris, fun = function(x, y, ...) stopifnot(is.numeric(x) && is.character(y)), seed = 42)
-  algo = addAlgorithm(reg = reg, "a1", fun = function(a, b, ...) { print(str(a)); stopifnot(is.list(a)) })
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, x, y, ...) stopifnot(is.numeric(x) && is.character(y)), seed = 42)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, a, b, ...) { print(str(a)); stopifnot(is.list(a)) })
   prob.designs = list(p1 = data.table(x = 1:2, y = letters[1:2]))
   algo.designs = list(a1 = data.table(a = list(foo = 1, bar = iris)))
   repls = 1

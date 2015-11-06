@@ -20,8 +20,8 @@ test_that("withSeed", {
 
 test_that("Problem and Algorithm seed", {
   reg = makeTempExperimentRegistry(FALSE, seed = 42L)
-  prob = addProblem(reg = reg, "p1", data = iris, fun = function(...) runif(1), seed = 1L)
-  algo = addAlgorithm(reg = reg, "a1", fun = function(problem, ...) list(problem = problem, res = runif(1)))
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) runif(1), seed = 1L)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, ...) list(problem = problem, res = runif(1)))
   prob.designs = list(p1 = data.table())
   algo.designs = list(a1 = data.table())
   repls = 3

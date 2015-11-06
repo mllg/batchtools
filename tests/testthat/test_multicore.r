@@ -2,6 +2,7 @@ context("cf multicore")
 
 test_that("cf multicore", {
   skip_on_os("windows")
+  skip("Not finished yet")
 
   reg = makeTempRegistry(make.default = FALSE)
   reg$cluster.functions = makeClusterFunctionsMulticore(ncpus = 1L, max.load = 99, max.jobs = 99)
