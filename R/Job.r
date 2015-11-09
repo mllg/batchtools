@@ -48,7 +48,7 @@ makeJob.Registry = function(id, reg = getDefaultRegistry()) {
 makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
   id = asIds(reg, id, n = 1L)
   cache = Cache(reg$file.dir)
-  pars = reg$status[list(id)][reg$defs, nomatch = 0L]$pars[[1L]]
+  pars = reg$status[list(id)][reg$defs, on = "def.id", nomatch = 0L]$pars[[1L]]
 
   setClasses(list(
     job.id    = id$job.id,
