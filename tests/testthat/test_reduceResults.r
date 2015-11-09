@@ -62,3 +62,17 @@ test_that("loadResult", {
   expect_null(loadResult(reg = reg, 4))
   expect_identical(loadResult(reg = reg, 4, missing.val = NA_real_), NA_real_)
 })
+
+test_that("multiRowResults", {
+  reg = makeTempRegistry(FALSE)
+  fun = function(a) data.table(y1 = rep(a, 3), y2 = rep(a/2, 3))
+  ids = batchMap(fun, a = c(10, 100), reg = reg)
+  submitJobs(reg = reg)
+  waitForJobs(reg = reg)
+  tab = reduceResultsDataTable(reg = reg)
+  tab.expect = data.table(job.id = rep(c(1, 2), each = 3)
+                          , y1 = rep(c(10, 100), each = 3)
+                          , y2 = rep(c(5, 50), each = 3)
+                          )
+  expect_equal(tab, tab.expect)
+})
