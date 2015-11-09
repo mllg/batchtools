@@ -17,7 +17,7 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.}
 
 \item{by}{[\code{character}]\cr
-Split the resulting table by these columns of \code{\link{getJobDefs}}.}
+Split the resulting table by columns of \code{\link{getJobPars}}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explictitly passed, uses the last created registry.}

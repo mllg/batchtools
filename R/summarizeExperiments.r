@@ -6,7 +6,7 @@
 #' @templateVar ids.default all
 #' @template ids
 #' @param by [\code{character}]\cr
-#'   Split the resulting table by these columns of \code{\link{getJobDefs}}.
+#'   Split the resulting table by columns of \code{\link{getJobPars}}.
 #' @template reg
 #' @return [\code{\link[data.table]{data.table}}] of frequencies in the respective groups.
 #' @export

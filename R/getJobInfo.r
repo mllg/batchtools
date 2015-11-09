@@ -2,8 +2,8 @@
 #'
 #' @description
 #' \code{getJobStatus} returns the internal table which stores information about the computational
-#' status of jobs, \code{getJobDefs} returns the internal table holding job definitions and
-#' \code{getJobResources} a table with the resources which were set while the jobs were submitted.
+#' status of jobs, \code{getJobResources} a table with the resources which were set to submit the jobs
+#' and \code{getJobPars} a table with the job parameters.
 #'
 #' \code{getJobInfo} returns all these tables joined.
 #'
@@ -38,7 +38,7 @@
 #'   \item{pars}{List of parameters/arguments for this job.}
 #'   \item{pars.hash}{MD5 hash of the job parameters.}
 #'   \item{problem}{Only for \code{\link{ExperimentRegistry}}: the problem identifier.}
-#'   \item{problem}{Only for \code{\link{ExperimentRegistry}}: the algorithm identifier.}
+#'   \item{algorithm}{Only for \code{\link{ExperimentRegistry}}: the algorithm identifier.}
 #' }
 #' @export
 #' @examples
@@ -71,13 +71,8 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   tab[, !c("def.id", "resource.id"), with = FALSE]
 }
 
-#' @export
-#' @rdname getJobInfo
 getJobDefs = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg = getDefaultRegistry()) {
-  assertRegistry(reg)
   ids = asIds(reg, ids, default = .findAll(reg))
-  assertFlag(pars.as.cols)
-  assertFlag(prefix.pars)
   tab = reg$status[ids][reg$defs, c("job.id", names(reg$defs)), on = "def.id", nomatch = 0L, with = FALSE]
   parsAsCols(tab, pars.as.cols, prefix.pars, reg = reg)
   tab[, !"def.id", with = FALSE]
@@ -103,7 +98,7 @@ getJobResources = function(ids = NULL, resources.as.cols = FALSE, reg = getDefau
 
 #' @export
 #' @rdname getJobInfo
-getJobPars = function(ids = NULL, prefix.pars = FALSE, reg = getDefaultRegistry()) {
+getJobPars = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   assertFlag(prefix.pars)
   ids = asIds(reg, ids, default = .findAll(reg))
