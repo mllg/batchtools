@@ -38,9 +38,9 @@
 #'
 #' # chunking for ExperimentRegistry
 #' reg = makeTempExperimentRegistry(make.default = FALSE)
-#' prob = addProblem(reg = reg, "prob1", data = iris, fun = function(data) nrow(data))
-#' prob = addProblem(reg = reg, "prob2", data = Titanic, fun = function(data) nrow(data))
-#' algo = addAlgorithm(reg = reg, "algo", fun = function(problem, i, ...) problem)
+#' prob = addProblem(reg = reg, "prob1", data = iris, fun = function(job, data) nrow(data))
+#' prob = addProblem(reg = reg, "prob2", data = Titanic, fun = function(job, data) nrow(data))
+#' algo = addAlgorithm(reg = reg, "algo", fun = function(job, data, problem, i, ...) problem)
 #' prob.designs = list(prob1 = data.table(), prob2 = data.table(x = 1:2))
 #' algo.designs = list(algo = data.table(i = 1:5))
 #' addExperiments(prob.designs, algo.designs, repls = 10, reg = reg)
