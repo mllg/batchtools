@@ -111,9 +111,13 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
   ids = asIds(reg, ids, default = .findDone(reg = reg))
   assertFlag(fill)
   results = reduceResultsList(ids = ids, fun = fun, ..., reg = reg)
-  if (!all(vlapply(results, is.list)))
-    results = lapply(results, as.list)
-  cbind(ids, rbindlist(results, fill = fill))
+  if (!all(vlapply(results, is.data.table)))
+    results = lapply(results, as.data.table)
+  results = rbindlist(results, fill = FALSE, idcol = "..id")
+  if (!identical(results$..id, seq_row(ids)))
+    stop("The function must return an object for each job which is convertible to a data.frame with one row")
+  results$..id = NULL
+  cbind(ids, results)
 }
 
 #' @title Load the Result of a Single Job
