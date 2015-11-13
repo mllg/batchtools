@@ -196,6 +196,7 @@ loadRegistry = function(file.dir = "registry", conf.file = getOption("batchtools
 
   if (npath(file.dir) != npath(reg$file.dir)) {
     warning("It seems like the host you've used to create the registry is different from current host. Enabling read-only mode.")
+    reg$file.dir = file.dir
     reg$writeable = FALSE
   }
 
@@ -208,7 +209,8 @@ loadRegistry = function(file.dir = "registry", conf.file = getOption("batchtools
   }
   if (make.default)
     batchtools$default.registry = reg
-  syncRegistry(reg = reg, save = TRUE)
+  if (reg$writeable)
+    syncRegistry(reg = reg)
   return(reg)
 }
 
@@ -216,9 +218,11 @@ loadRegistry = function(file.dir = "registry", conf.file = getOption("batchtools
 #' @export
 #' @template reg
 saveRegistry = function(reg = getDefaultRegistry()) {
-  fn = file.path(reg$file.dir, c("registry.new.rds", "registry.rds"))
-  write(reg, file = fn[1L], wait = TRUE)
-  file.rename(fn[1L], fn[2L])
+  if (reg$writeable) {
+    fn = file.path(reg$file.dir, c("registry.new.rds", "registry.rds"))
+    write(reg, file = fn[1L], wait = TRUE)
+    file.rename(fn[1L], fn[2L])
+  }
 }
 
 loadRegistryPackages = function(packages, namespaces) {
@@ -249,7 +253,12 @@ syncRegistry = function(reg = getDefaultRegistry(), save = TRUE) {
   if (length(fns) == 0L)
     return(invisible(TRUE))
 
-  info("Syncing %i files ...", length(fns))
+  if (reg$writeable) {
+    info("Syncing %i files ...", length(fns))
+  } else {
+    info("Skipping %i updates in read-only mode ...", length(fns))
+    return(invisible(TRUE))
+  }
 
   updates = lapply(fns, function(fn) {
     x = try(readRDS(fn), silent = TRUE)
