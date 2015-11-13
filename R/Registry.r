@@ -32,7 +32,9 @@ clearDefaultRegistry = function() {
 #'   Default is directory \dQuote{registry} in the current working directory.
 #' @param work.dir [\code{character(1)}]\cr
 #'   Working directory for R process when experiment is executed.
-#'   Default is the current working directory when registry is created.
+#'   For \code{makeRegistry}, this defaults to the current working directory.
+#'   \code{loadRegistry} uses the stored \code{work.dir}, but you may also explicitly provide one
+#'   yourself.
 #' @param conf.file [\code{character(1)}]\cr
 #'   Path to a configuration file which is sourced directly after the registry is created.
 #'   For example, you can set system-specific cluster functions in it.
@@ -177,8 +179,15 @@ print.Registry = function(x, ...) {
 }
 
 #' @export
+#' @param update.paths [\code{logical(1)}]\cr
+#'   If set to \code{TRUE}, the \code{file.dir} and \code{work.dir} will be updated in the registry. Note that this is
+#'   likely to break computation on the system, only do this if no jobs are currently running. Default is \code{FALSE}.
+#'   If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
+#'   registry in an read-only mode.
 #' @rdname Registry
-loadRegistry = function(file.dir = "registry", conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"), make.default = TRUE) {
+loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"),
+  make.default = TRUE, update.paths = FALSE) {
+
   readRegistry = function() {
     fns = file.path(file.dir, c("registry.new.rds", "registry.rds"))
     for (fn in fns) {
@@ -192,13 +201,22 @@ loadRegistry = function(file.dir = "registry", conf.file = getOption("batchtools
 
   assertString(file.dir)
   assertFlag(make.default)
+  assertFlag(update.paths)
+
   reg = readRegistry()
 
-  if (npath(file.dir) != npath(reg$file.dir)) {
-    warning("It seems like the host you've used to create the registry is different from current host. Enabling read-only mode.")
-    reg$file.dir = file.dir
-    reg$writeable = FALSE
+  if (update.paths) {
+    reg$file.dir = npath(file.dir)
+  } else if (npath(file.dir) != npath(reg$file.dir)) {
+      warning("The absolute path of the file.dir has changed. Enabling read-only mode for the registry.")
+      reg$file.dir = npath(file.dir)
+      reg$writeable = FALSE
   }
+
+  if (!is.null(work.dir))
+    reg$work.dir = npath(work.dir)
+  if (!dir.exists(reg$work.dir))
+    warningf("The work.dir '%s' does not exist, jobs might fail to run on this system.", reg$work.dir)
 
   loadRegistryPackages(reg$packages, reg$namespaces)
   reg$cluster.functions = makeClusterFunctionsInteractive()
@@ -209,8 +227,7 @@ loadRegistry = function(file.dir = "registry", conf.file = getOption("batchtools
   }
   if (make.default)
     batchtools$default.registry = reg
-  if (reg$writeable)
-    syncRegistry(reg = reg)
+  syncRegistry(reg = reg)
   return(reg)
 }
 

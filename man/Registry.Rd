@@ -23,9 +23,9 @@ makeRegistry(file.dir = "registry", work.dir = getwd(),
 makeTempRegistry(make.default = FALSE,
   temp.dir = getOption("batchtools.temp.dir", tempdir()), ...)
 
-loadRegistry(file.dir = "registry",
+loadRegistry(file.dir = "registry", work.dir = NULL,
   conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"),
-  make.default = TRUE)
+  make.default = TRUE, update.paths = FALSE)
 
 saveRegistry(reg = getDefaultRegistry())
 
@@ -38,7 +38,9 @@ Default is directory \dQuote{registry} in the current working directory.}
 
 \item{work.dir}{[\code{character(1)}]\cr
 Working directory for R process when experiment is executed.
-Default is the current working directory when registry is created.}
+For \code{makeRegistry}, this defaults to the current working directory.
+\code{loadRegistry} uses the stored \code{work.dir}, but you may also explicitly provide one
+yourself.}
 
 \item{conf.file}{[\code{character(1)}]\cr
 Path to a configuration file which is sourced directly after the registry is created.
@@ -73,6 +75,12 @@ Defaults to the value of the option \dQuote{batchtools.temp.dir} or (if unset) \
 
 \item{...}{[\code{ANY}]\cr
 Additional parameters passed to \code{makeRegistry}.}
+
+\item{update.paths}{[\code{logical(1)}]\cr
+If set to \code{TRUE}, the \code{file.dir} and \code{work.dir} will be updated in the registry.
+Note that this is likely to break computation on the system, only do this if no jobs are currently running.
+Default is \code{FALSE}. If the provided \code{file.dir} does not match the stored \code{file.dir},
+\code{loadRegistry} will return a registry in an read-only mode.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explictitly passed, uses the last created registry.}

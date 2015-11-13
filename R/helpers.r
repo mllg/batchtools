@@ -94,6 +94,10 @@ stopf = function (...) {
   stop(simpleError(sprintf(...), call = sys.call(sys.parent())))
 }
 
+warningf = function (...) {
+  warning(simpleWarning(sprintf(...), call = sys.call(sys.parent())))
+}
+
 `%nin%` = function(x, y) {
   !match(x, y, nomatch = 0L)
 }
