@@ -1,8 +1,7 @@
 #' @title Cluster Functions for Local Multicore Execution
 #'
 #' @description
-#' Jobs are spawned by starting multiple R sessions on the command line
-#' (similar like on true batch systems).
+#' Jobs are spawned by starting multiple R sessions on the command line.
 #'
 #' @param ncpus [\code{integer(1)}]\cr
 #'   Number of VPUs of worker.
@@ -22,7 +21,7 @@
 #' @export
 makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", parallel::detectCores()) - 1L, 1L), max.jobs, max.load) {
   if (.Platform$OS.type == "windows")
-    stop("clusterFunctionsMulticore do not work in Windows")
+    stop("clusterFunctionsMulticore not compatible with Windows")
   worker = makeWorker("localhost", ncpus, max.jobs, max.load)
 
   submitJob = function(reg, jc) {

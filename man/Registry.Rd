@@ -77,10 +77,10 @@ Defaults to the value of the option \dQuote{batchtools.temp.dir} or (if unset) \
 Additional parameters passed to \code{makeRegistry}.}
 
 \item{update.paths}{[\code{logical(1)}]\cr
-If set to \code{TRUE}, the \code{file.dir} and \code{work.dir} will be updated in the registry.
-Note that this is likely to break computation on the system, only do this if no jobs are currently running.
-Default is \code{FALSE}. If the provided \code{file.dir} does not match the stored \code{file.dir},
-\code{loadRegistry} will return a registry in an read-only mode.}
+If set to \code{TRUE}, the \code{file.dir} and \code{work.dir} will be updated in the registry. Note that this is
+likely to break computation on the system, only do this if no jobs are currently running. Default is \code{FALSE}.
+If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
+registry in an read-only mode.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explictitly passed, uses the last created registry.}

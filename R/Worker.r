@@ -102,7 +102,7 @@ updateWorker = function(worker, reg, tdiff = 0L) {
   }
 }
 
-findWorker = function(workers, reg, tdiff) {
+findWorker = function(workers, reg, tdiff = 0L) {
   lapply(workers, updateWorker, reg = reg, tdiff = tdiff)
   rload = vnapply(workers, function(w) w$status$load / w$ncpus)
   Find(function(w) w$available == "avail", sample(workers, prob = 1 / (rload + 0.1)), nomatch = NULL)
