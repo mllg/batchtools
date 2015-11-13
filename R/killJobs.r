@@ -40,14 +40,14 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   info("Killing %i real batch jobs ...", length(batch.ids))
 
   for (i in 1:3) {
-    ids[!ids$killed, "killed" := is.error(try(kill(reg, .BY), silent = TRUE)), by = "batch.id"]
+    ids[!ids$killed, "killed" := !is.error(try(kill(reg, .BY$batch.id), silent = TRUE)), by = "batch.id"]
     if (all(ids$killed))
       break
     Sys.sleep(2)
   }
 
   if (!all(ids$killed))
-    warning("Could not kill %i jobs", sum(!ids$killed))
+    warningf("Could not kill %i jobs", sum(!ids$killed))
 
   # reset killed jobs
   syncRegistry(reg = reg)

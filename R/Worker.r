@@ -40,25 +40,25 @@ makeWorker = function(nodename, ncpus = 0L, max.jobs = NULL, max.load = NULL) {
 }
 
 getWorkerNumberOfCPUs = function(worker) {
-  as.integer(runWorkerCommand(worker, "number-of-cpus"))
+  as.integer(runWorkerCommand(worker, "number-of-cpus")$output)
 }
 
 getWorkerStatus = function(worker, reg) {
-  res = runWorkerCommand(worker, "status", reg$file.dir, debug = reg$debug)
+  res = runWorkerCommand(worker, "status", reg$file.dir, debug = reg$debug)$output
   res = as.numeric(stri_split_regex(res, "\\s+")[[1L]])
   setNames(as.list(res), c("load", "n.rprocs", "n.rprocs.50", "n.jobs"))
 }
 
 startWorkerJob = function(worker, reg, job, outfile) {
-  runWorkerCommand(worker, "start-job", c(job, outfile), debug = reg$debug)
+  runWorkerCommand(worker, "start-job", c(job, outfile), debug = reg$debug)$output
 }
 
 killWorkerJob = function(worker, reg, pid) {
-  runWorkerCommand(worker, "kill-job", pid, debug = reg$debug)
+  runWorkerCommand(worker, "kill-job", pid, debug = reg$debug)$exit.code == 0L
 }
 
 listWorkerJobs = function(worker, reg) {
-  stri_trim_both(runWorkerCommand(worker, "list-jobs", reg$file.dir, debug = reg$debug))
+  stri_trim_both(runWorkerCommand(worker, "list-jobs", reg$file.dir, debug = reg$debug)$output)
 }
 
 findHelperScriptLinux = function(nodename) {
@@ -72,7 +72,7 @@ findHelperScriptLinux = function(nodename) {
 
 runWorkerCommand = function(worker, command, args = character(0L), debug = FALSE) {
   script.args = c(command, args)
-  runOSCommand(worker$script, script.args, nodename = worker$nodename, debug = debug)$output
+  runOSCommand(worker$script, script.args, nodename = worker$nodename, debug = debug)
 }
 
 # is a worker busy, see rules below
