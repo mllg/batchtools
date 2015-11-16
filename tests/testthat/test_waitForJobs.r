@@ -18,6 +18,5 @@ test_that("waitForJobs: detection of expired jobs", {
   submitJobs(ids, reg = reg)
   batch.ids = reg$status$batch.id
   reg$cluster.functions$killJob(reg, batch.ids[1])
-  waitForJobs(1:2, reg = reg)
   expect_warning(waitForJobs(ids, reg = reg, sleep = 1))
 })
