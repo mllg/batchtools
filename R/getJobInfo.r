@@ -29,7 +29,7 @@
 #'   \item{done}{Time the job terminated (successfully or with an error) as \code{\link[base]{POSIXct}}.}
 #'   \item{error}{Either \code{NA} if the job terminated successfully or the error message.}
 #'   \item{time.queued}{Time in seconds (as \code{\link[base]{difftime}}) the job was queued.}
-#'   \item{time.queued}{Time in seconds (as \code{\link[base]{difftime}}) the job was running.}
+#'   \item{time.running}{Time in seconds (as \code{\link[base]{difftime}}) the job was running.}
 #'   \item{memory}{Estimate of the memory usage.}
 #'   \item{batch.id}{Batch ID as reported by the scheduler.}
 #'   \item{job.hash}{Unique string identifying the job or chunk.}
@@ -67,7 +67,7 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   tab[, "started" := as.POSIXct(get("started"), origin = "1970-01-01")]
   tab[, "done" := as.POSIXct(get("done"), origin = "1970-01-01")]
   tab[, "time.queued" := as.difftime(get("started") - get("submitted"), units = "secs")]
-  tab[, "time.running" := as.difftime(get("started") - get("done"), units = "secs")]
+  tab[, "time.running" := as.difftime(get("done") - get("started"), units = "secs")]
   tab[, !c("def.id", "resource.id"), with = FALSE]
 }
 
