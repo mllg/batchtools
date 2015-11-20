@@ -1,9 +1,11 @@
-library(data.table)
-library(checkmate)
-library(stringi)
+library("data.table")
+library("checkmate")
+library("stringi")
+requireNamespace("withr")
 
-# Turn progress bars off
-options(batchtools.progress = FALSE)
+silent = function(expr) {
+  withr::with_options(list(batchtools.progress = FALSE), force(expr))
+}
 
 expect_data_table = function(tab, key = NULL, ...) {
   expect_is(tab, "data.table")

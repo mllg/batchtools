@@ -53,6 +53,7 @@ makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getD
   jc$namespaces = reg$namespaces
   jc$defs       = reg$status[ids][reg$defs, c("job.id", "pars"), on = "def.id", nomatch = 0L, with = FALSE]
   jc$resources  = resources
+  jc$compress   = getOption("batchtools.compress", TRUE)
 
   setClasses(jc, "JobCollection")
 }

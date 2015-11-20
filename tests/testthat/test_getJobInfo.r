@@ -32,8 +32,10 @@ test_that("getJobResources", {
   reg = makeTempRegistry(FALSE)
   fun = function(i, j) i + j
   ids = batchMap(fun, i = 1:4, j = rep(1, 4), reg = reg)
-  submitJobs(reg = reg, ids = chunkIds(ids, reg = reg), resources = list(my.walltime = 42L))
-  waitForJobs(reg = reg)
+  silent({
+    submitJobs(reg = reg, ids = chunkIds(ids, reg = reg), resources = list(my.walltime = 42L))
+    waitForJobs(reg = reg)
+  })
   tab = getJobResources(reg = reg)
   expect_data_table(tab, nrow = 4, ncol = 3, key = "job.id")
   expect_set_equal(tab$resources.hash[1], tab$resources.hash)
@@ -71,7 +73,10 @@ test_that("getJobPars with repls", {
   addExperiments(prob.designs, algo.designs, repls = 3, reg = reg)
   waitForJobs(reg = reg)
   ids = chunkIds(chunk.size = 2, reg = reg)
-  submitJobs(ids, reg = reg)
+  silent({
+    submitJobs(ids, reg = reg)
+    waitForJobs(reg = reg)
+  })
   expect_equal(nrow(getJobPars(reg = reg)), nrow(ids))
 })
 

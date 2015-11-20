@@ -5,8 +5,7 @@ test_that("submitJobs", {
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, reg = reg)
 
-  submitJobs(chunkIds(1:2, reg = reg), reg = reg)
-  waitForJobs(reg = reg)
+  silent(submitJobs(chunkIds(1:2, reg = reg), reg = reg))
   checkTables(reg)
 
   expect_integer(reg$status[1:2, resource.id], any.missing = FALSE)
@@ -17,8 +16,10 @@ test_that("submitJobs", {
   y = reg$default.resources
   expect_equal(x[order(names2(x))], y[order(names2(y))])
 
-  submitJobs(3, resources = list(walltime = 100, memory = 500), reg = reg)
-  waitForJobs(reg = reg)
+  silent({
+    submitJobs(3, resources = list(walltime = 100, memory = 500), reg = reg)
+    waitForJobs(reg = reg)
+  })
   res = reg$resources[2, resources][[1L]]
   expect_equal(res$walltime, 100)
   expect_equal(res$memory, 500)

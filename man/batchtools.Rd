@@ -22,10 +22,6 @@ For bug reports and feature requests please use the tracker:
     Default path to file which will be sourced while creating a \code{\link{Registry}}.
     Can be used to set system-wide \code{\link{ClusterFunctions}} or default resources.
   }
-  \item{\code{batchtools.ncpus}}{
-    Numbers of cores to use on the master node via \code{\link[parallel]{mclapply}}.
-    Defaults to one core, i.e. sequential execution.
-  }
   \item{\code{batchtools.temp.dir}}{
     Temporary directory to use in \code{\link{makeTempRegistry}}.
     On some cluster systems you might want to set this to a directory which is shared between nodes.

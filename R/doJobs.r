@@ -54,12 +54,12 @@ doJobs.JobCollection = function(jc, con = stdout()) {
       update$error = stri_trim_both(as.character(result$res))
     } else {
       catf("[job(%i): %s] Job terminated successfully", id, stamp(), con = con)
-      write(result$res, file = file.path(jc$file.dir, "results", sprintf("%i.rds", id)))
+      writeRDS(result$res, file = file.path(jc$file.dir, "results", sprintf("%i.rds", id)), compress = jc$compress)
     }
 
     if (write.update) {
       fn = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, id, 1L))
-      write(update, file = fn, wait = TRUE)
+      writeRDS(update, file = fn, wait = TRUE, compress = jc$compress)
     }
 
     return(update)
@@ -93,7 +93,7 @@ doJobs.JobCollection = function(jc, con = stdout()) {
     for (i in seq_len(n.jobs)) {
       updates[[i]] = as.data.table(doJob(jc$defs$job.id[i], write.update = FALSE, measure.memory = measure.memory))
       if (now() - last.update > update.interval) {
-        write(rbindlist(updates), file = fn, wait = TRUE)
+        writeRDS(rbindlist(updates), file = fn, wait = TRUE, compress = jc$compress)
         last.update = now()
         write.update = FALSE
       } else {
@@ -101,7 +101,7 @@ doJobs.JobCollection = function(jc, con = stdout()) {
       }
     }
     if (write.update)
-      write(rbindlist(updates), file = fn, wait = TRUE)
+      writeRDS(rbindlist(updates), file = fn, wait = TRUE, compress = jc$compress)
   }
 
   catf("[job(chunk): %s] Calculation finished ...", stamp(), con = con)

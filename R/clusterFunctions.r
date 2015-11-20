@@ -218,7 +218,7 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
     sys.cmd = "ssh"
   }
 
-  if (debug || TRUE) {
+  if (debug) {
     info("OS cmd: %s %s", sys.cmd, paste0(sys.args, collapse = " "))
   }
 

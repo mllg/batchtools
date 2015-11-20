@@ -42,9 +42,9 @@ batchMap = function(fun, ..., more.args = list(), reg = getDefaultRegistry()) {
 
   info("Adding %i jobs ...", n)
 
-  write(fun, file = file.path(reg$file.dir, "user.function.rds"))
+  writeRDS(fun, file = file.path(reg$file.dir, "user.function.rds"))
   if (length(more.args) > 0L)
-    write(more.args, file = file.path(reg$file.dir, "more.args.rds"))
+    writeRDS(more.args, file = file.path(reg$file.dir, "more.args.rds"))
   ids = seq_len(n)
 
   reg$defs = data.table(

@@ -237,7 +237,7 @@ loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = getO
 saveRegistry = function(reg = getDefaultRegistry()) {
   if (reg$writeable) {
     fn = file.path(reg$file.dir, c("registry.new.rds", "registry.rds"))
-    write(reg, file = fn[1L], wait = TRUE)
+    writeRDS(reg, file = fn[1L], wait = TRUE)
     file.rename(fn[1L], fn[2L])
   }
 }

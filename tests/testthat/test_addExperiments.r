@@ -55,7 +55,9 @@ test_that("addExperiments handles parameters correctly", {
   algo.designs = list(a1 = data.table(a = list(foo = 1, bar = iris)))
   repls = 1
   ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
-  submitJobs(reg = reg, ids = chunkIds(reg = reg))
-  waitForJobs(reg = reg)
+  silent({
+    submitJobs(reg = reg, ids = chunkIds(reg = reg))
+    waitForJobs(reg = reg)
+  })
   expect_true(nrow(findError(reg = reg)) == 0)
 })

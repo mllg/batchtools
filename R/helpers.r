@@ -46,8 +46,8 @@ insert = function(x, y) {
   x
 }
 
-write = function(object, file, wait = FALSE) {
-  saveRDS(object, file = file, compress = getOption("batchtools.compress", TRUE))
+writeRDS = function(object, file, wait = FALSE, compress = getOption("batchtools.compress", TRUE)) {
+  saveRDS(object, file = file, compress = compress)
   if (wait)
     while(!file.exists(file)) Sys.sleep(1)
   invisible(TRUE)

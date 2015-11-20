@@ -12,7 +12,7 @@ addAlgorithm = function(name, fun, reg = getDefaultRegistry())  {
   }
 
   algo = setClasses(list(fun = fun, name = name), "Algorithm")
-  write(algo, file = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", name)))
+  writeRDS(algo, file = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", name)))
   reg$algorithms = union(reg$algorithms, name)
   saveRegistry(reg)
   invisible(algo)

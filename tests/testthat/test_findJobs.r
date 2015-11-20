@@ -27,8 +27,10 @@ test_that("find[Status]", {
   expect_equal(findError(reg = reg), none)
   expect_equal(findOnSystem(reg = reg), none)
 
-  submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
-  waitForJobs(reg = reg)
+  silent({
+    submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
+    waitForJobs(reg = reg)
+  })
 
   expect_equal(findJobs(reg = reg), all)
   expect_equal(findSubmitted(reg = reg), all)
@@ -45,8 +47,10 @@ test_that("Subsetting", {
   reg = makeTempRegistry(FALSE)
   fun = function(i) if (i == 3) stop(i) else i
   ids = batchMap(fun, i = 1:5, reg = reg)
-  submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
-  waitForJobs(reg = reg)
+  silent({
+    submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
+    waitForJobs(reg = reg)
+  })
   all = reg$status[, "job.id", with = FALSE]
   none = data.table(job.id = integer(0L), key = "job.id")
 
@@ -72,10 +76,12 @@ test_that("findJobs", {
 test_that("findOnSystem", {
   reg = makeTempRegistry(FALSE)
   if (!is.null(reg$cluster.functions$listJobs)) {
-    ids = batchMap(reg = reg, Sys.sleep, c(20, 20))
-    submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
-    expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
-    waitForJobs(reg = reg)
+    silent({
+      ids = batchMap(reg = reg, Sys.sleep, c(20, 20))
+      submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
+      expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
+      waitForJobs(reg = reg)
+    })
   }
 })
 

@@ -5,7 +5,7 @@ getSeed = function(start.seed, id) {
     start.seed + id
 }
 
-withSeed = function(seed, expr) {
+with_seed = function(seed, expr) {
   if (!is.null(seed)) {
     if (!exists(".Random.seed", .GlobalEnv))
       set.seed(NULL)

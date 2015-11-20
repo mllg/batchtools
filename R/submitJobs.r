@@ -79,7 +79,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     ids.chunk = ids[chunk == ch, nomatch = 0L]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
-      write(jc, file = jc$uri, wait = TRUE)
+      writeRDS(jc, file = jc$uri, wait = TRUE)
 
     if (!is.na(max.concurrent.jobs)) {
       # count chunks or job.id (unique works on the key of ids)
