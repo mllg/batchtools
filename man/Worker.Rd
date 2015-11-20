@@ -5,7 +5,8 @@
 \alias{makeWorker}
 \title{Abstract base class constructor for general workers}
 \usage{
-makeWorker(nodename, ncpus = 0L, max.jobs = NULL, max.load = NULL)
+makeWorker(nodename, ncpus = 0L, max.jobs = NULL, max.load = NULL,
+  debug = FALSE)
 }
 \arguments{
 \item{nodename}{[\code{character(1)}]\cr
@@ -22,6 +23,9 @@ Default is \code{ncpus}.}
 Load average (of the last 5 min) at which the worker is considered
 occupied, so that no job can be submitted.
 Default is \code{ncpus}.}
+
+\item{debug}{[\code{logical(1)}]\cr
+Print some verbose info messages. Default is \code{FALSE}.}
 }
 \value{
 [\code{\link{Worker}}].

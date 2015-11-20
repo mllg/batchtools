@@ -25,13 +25,13 @@ makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", paral
   worker = makeWorker("localhost", ncpus, max.jobs, max.load)
 
   submitJob = function(reg, jc) {
-    updateWorker(worker, reg, tdiff = 0L)
+    updateWorker(worker, reg)
     if (worker$available == "avail") {
       pid = try(startWorkerJob(worker, reg, jc$uri, jc$log.file))
       if (is.error(pid)) {
         makeSubmitJobResult(status = 101L, batch.id = NA_character_, msg = "Submit failed.")
       } else {
-        worker$available = "?"
+        worker$available = "unknown"
         makeSubmitJobResult(status = 0L, batch.id = pid)
       }
     } else {

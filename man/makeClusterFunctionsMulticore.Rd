@@ -31,6 +31,7 @@ Default is inferred by \code{\link[parallel]{detectCores}}, cf. argument \code{n
 Jobs are spawned by starting multiple R sessions on the command line.
 }
 \seealso{
-Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}}
+Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
+  \code{\link{makeClusterFunctionsSSH}}
 }
 

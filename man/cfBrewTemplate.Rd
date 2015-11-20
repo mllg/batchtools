@@ -24,7 +24,7 @@ up variables.}
 This function is only intended for use in your own cluster functions implementation.
 
 Calls brew silently on your template, any error will lead to an exception. If debug mode is
-turned on, the file is stored at the same place as the corresponding R script in the
+enabled, the file is stored at the same place as the corresponding R script in the
 \dQuote{jobs}-subdir of your files directory, otherwise in the temp dir via
 \code{\link{tempfile}}.
 }
