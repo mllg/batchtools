@@ -115,7 +115,7 @@
 #' findSubmitted(reg = reg)
 #' findNotDone(reg = reg)
 findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
-  assertRegistry(reg)
+  assertRegistry(reg, strict = TRUE)
   syncRegistry(reg)
   if (missing(expr))
     return(asIds(reg, ids, default = .findAll(reg)))

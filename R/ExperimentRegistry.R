@@ -63,8 +63,8 @@ print.ExperimentRegistry = function(x, ...) {
   catf("  Seed: %i", x$seed)
 }
 
-assertExperimentRegistry = function(reg, writeable = FALSE) {
-  assertClass(reg, "ExperimentRegistry")
+assertExperimentRegistry = function(reg, writeable = FALSE, strict = FALSE) {
+  assertClass(reg, "ExperimentRegistry", ordered = strict)
   if (writeable & !reg$writeable)
     stop("Registry must be writeable")
   invisible(TRUE)

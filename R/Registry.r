@@ -254,8 +254,8 @@ loadRegistryPackages = function(packages, namespaces) {
   invisible(TRUE)
 }
 
-assertRegistry = function(reg, writeable = FALSE) {
-  assertClass(reg, "Registry")
+assertRegistry = function(reg, writeable = FALSE, strict = FALSE) {
+  assertClass(reg, "Registry", ordered = strict)
   if (writeable & !reg$writeable)
     stop("Registry must be writeable")
   invisible(TRUE)

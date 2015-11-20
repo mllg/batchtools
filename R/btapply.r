@@ -29,7 +29,7 @@
 btlapply = function(X, fun, ..., reg = makeTempRegistry(make.default = FALSE)) {
   assertVector(X)
   assertFunction(fun)
-  assertRegistry(reg, writeable = TRUE)
+  assertRegistry(reg, writeable = TRUE, strict = TRUE)
 
   ids = do.call(batchMap, list(X, fun = fun, reg = reg, more.args = list(...)))
   submitJobs(ids = ids, reg = reg)
@@ -42,7 +42,7 @@ btlapply = function(X, fun, ..., reg = makeTempRegistry(make.default = FALSE)) {
 btmapply = function(fun, ..., more.args = list(), reg = makeTempRegistry(make.default = FALSE)) {
   # TODO: use.names, simplify
   assertFunction(fun)
-  assertRegistry(reg, writeable = TRUE)
+  assertRegistry(reg, writeable = TRUE, strict = TRUE)
 
   ids = do.call(batchMap, list(..., fun = fun, reg = reg, more.args = more.args))
   submitJobs(ids = ids, reg = reg)

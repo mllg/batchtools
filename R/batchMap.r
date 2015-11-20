@@ -20,7 +20,7 @@
 #' print(ids)
 #' getJobInfo(reg = reg, pars.as.cols = TRUE)
 batchMap = function(fun, ..., more.args = list(), reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE)
+  assertRegistry(reg, writeable = TRUE, strict = TRUE)
   if (nrow(reg$defs) > 0L)
     stop("Registry must be empty")
   assertFunction(fun)
