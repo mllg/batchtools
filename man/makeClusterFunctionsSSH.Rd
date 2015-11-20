@@ -7,8 +7,8 @@
 makeClusterFunctionsSSH(workers)
 }
 \arguments{
-\item{hosts}{[\code{list} of \code{\link{Worker}}]\cr
-Each worker must be constructed with \code{\link{makeWorker}}.}
+\item{workers}{[\code{list} of \code{\link{Worker}}]\cr
+List of Workers as constructed with \code{\link{makeWorker}}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

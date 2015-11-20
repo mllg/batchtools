@@ -3,14 +3,15 @@
 #' @description
 #' Jobs are spawned by starting multiple R sessions via SSH.
 #'
+#' @param workers [\code{list} of \code{\link{Worker}}]\cr
+#'   List of Workers as constructed with \code{\link{makeWorker}}.
+#'
 #' @note
 #' If you use a custom \dQuote{.ssh/config} file, make sure your
 #' ProxyCommand passes \sQuote{-q} to ssh, otherwise each output will
 #' end with the message \dQuote{Killed by signal 1} and this will break
 #' the communication with the nodes.
 #'
-#' @param hosts [\code{list} of \code{\link{Worker}}]\cr
-#'   Each worker must be constructed with \code{\link{makeWorker}}.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family clusterFunctions
 #' @export
@@ -44,7 +45,7 @@ makeClusterFunctionsSSH = function(workers) {
 
   killJob = function(reg, batch.id) {
     parts = stri_split_fixed(batch.id, "#")[[1L]]
-    killWorkerJob(workers[[part[1L]]], reg, parts[2L])
+    killWorkerJob(workers[[parts[1L]]], reg, parts[2L])
   }
 
   listJobs = function(reg) {
