@@ -13,10 +13,13 @@
 #' @param resources [\code{named list}]\cr
 #'   Computational  resources for the batch jobs. The elements of this list
 #'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on by
-#'   your template file, with the exception of \code{ncpus}: This setting is
-#'   used to determine the number of CPUs to use on a node to execute jobs in a
-#'   chunk in parallel using \code{\link[parallel]{mclapply}}. If not set,
-#'   \code{ncpus} defaults to 1 (sequential execution).
+#'   your template file, with the exception of \code{ncpus} and \code{measure.memory}.
+#'   The setting \code{ncpus} is used to determine the number of CPUs to execute jobs in a
+#'   chunk in parallel using \code{\link[parallel]{mclapply}}. If not set, \code{ncpus}
+#'   defaults to 1 (sequential execution).
+#'   The second resource, \code{measure.memory}, can be set to \code{TRUE} to enable the measure of
+#'   memory requirements using \code{\link[base]{gc}}. But note that the reported values are quite
+#'   heuristic and may not reflect the real memory requirements.
 #'
 #'   Defaults can be set in the \code{\link{Registry}} via
 #'   \code{default.resources}. Settings in \code{resources} overrule those in

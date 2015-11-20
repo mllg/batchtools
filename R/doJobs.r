@@ -32,12 +32,19 @@ doJobs.JobCollection = function(jc, con = stdout()) {
     list(output = output, res = res)
   }
 
-  doJob = function(id, write.update = FALSE) {
+  doJob = function(id, write.update = FALSE, measure.memory = FALSE) {
     catf("[job(%i): %s] Starting job with job.id=%i", id, stamp(), id, con = con)
 
-    update = list(job.id = id, started = now(), done = NA_integer_, error = NA_character_)
-    result = capture(execJob(getJob(jc, id, cache)))
+    update = list(job.id = id, started = now(), done = NA_integer_, error = NA_character_, memory = NA_real_)
+    if (measure.memory) {
+      gc(reset = TRUE)
+      result = capture(execJob(getJob(jc, id, cache)))
+      update$memory = sum(gc()[, 6L])
+    } else {
+      result = capture(execJob(getJob(jc, id, cache)))
+    }
     update$done = now()
+
 
     if (length(result$output) > 0L)
       catf("[job(%i): %s] %s", id, stamp(), result$output, con = con)
@@ -71,17 +78,20 @@ doJobs.JobCollection = function(jc, con = stdout()) {
 
   cache = Cache(jc$file.dir)
   ncpus = jc$resources$ncpus %??% 1L
+  measure.memory = jc$resources$measure.memory %??% FALSE
+  if (measure.memory)
+    catf("[job(chunk): %s] Enabling memory measurement", stamp(), con = con)
 
   if (n.jobs > 1L && ncpus > 1L) {
     prefetch(jc, cache)
-    parallel::mclapply(jc$defs$job.id, doJob, mc.cores = ncpus, mc.preschedule = FALSE, write.update = TRUE)
+    parallel::mclapply(jc$defs$job.id, doJob, mc.cores = ncpus, mc.preschedule = FALSE, write.update = TRUE, measure.memory = measure.memory)
   } else {
     updates = vector("list", n.jobs)
     update.interval = 1800L
     last.update = now()
     fn = file.path(jc$file.dir, "updates", sprintf("%s.rds", jc$job.hash))
     for (i in seq_len(n.jobs)) {
-      updates[[i]] = as.data.table(doJob(jc$defs$job.id[i], write.update = FALSE))
+      updates[[i]] = as.data.table(doJob(jc$defs$job.id[i], write.update = FALSE, measure.memory = measure.memory))
       if (now() - last.update > update.interval) {
         write(rbindlist(updates), file = fn, wait = TRUE)
         last.update = now()

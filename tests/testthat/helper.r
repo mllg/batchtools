@@ -1,5 +1,6 @@
 library(data.table)
 library(checkmate)
+library(stringi)
 
 # Turn progress bars off
 options(batchtools.progress = FALSE)
