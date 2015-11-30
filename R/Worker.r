@@ -57,8 +57,9 @@ makeWorker = function(nodename, ncpus = 0L, max.jobs = NULL, max.load = NULL, de
 
 getWorkerStatus = function(worker, reg) {
   res = runWorkerCommand(worker, "status", reg$file.dir, debug = reg$debug)$output
-  res = as.numeric(stri_split_regex(res, "\\s+")[[1L]])
-  setNames(as.list(res), c("load", "n.rprocs", "n.rprocs.50", "n.jobs"))
+  res = as.list(as.numeric(stri_split_regex(res, "\\s+")[[1L]]))
+  names(res) = c("load", "n.rprocs", "n.rprocs.50", "n.jobs")
+  return(res)
 }
 
 startWorkerJob = function(worker, reg, job, outfile) {
