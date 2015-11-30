@@ -15,8 +15,13 @@ expect_data_table = function(tab, key = NULL, ...) {
 }
 
 checkTables = function(reg, ...) {
-  cols = c("def.id", "pars", "pars.hash")
-  types = c("integer", "list", "character")
+  if (class(reg)[1L] == "Registry") {
+    cols = c("def.id", "pars", "pars.hash")
+    types = c("integer", "list", "character")
+  } else {
+    cols = c("def.id", "pars", "problem", "algorithm", "pars.hash")
+    types = c("integer", "list", "factor", "factor", "character")
+  }
   expect_is(reg$defs, "data.table")
   expect_data_table(reg$defs, ncols = length(cols), ...)
   expect_set_equal(colnames(reg$defs), cols)

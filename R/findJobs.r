@@ -147,16 +147,18 @@ findExperiments = function(prob.name, algo.name, prob.pars, algo.pars, repls = N
   pars = repl = NULL
 
   ids = asIds(reg, ids, default = .findAll(reg))
-  tab = reg$status[ids][reg$defs, c("job.id", "pars", "repl"), on = "def.id", nomatch = 0L, with = FALSE]
+  tab = reg$status[ids][reg$defs, c("job.id", "pars", "problem", "algorithm", "repl"), on = "def.id", nomatch = 0L, with = FALSE]
 
   if (!missing(prob.name)) {
     assertCharacter(prob.name, any.missing = FALSE)
-    tab = tab[vcapply(pars, "[[", "prob.name") %in% prob.name]
+    problem = NULL
+    tab = tab[problem %in% prob.name]
   }
 
   if (!missing(algo.name)) {
     assertCharacter(algo.name, any.missing = FALSE)
-    tab = tab[vcapply(pars, "[[", "algo.name") %in% algo.name]
+    algorithm = NULL
+    tab = tab[algorithm %in% algo.name]
   }
 
   if (!missing(prob.pars)) {

@@ -53,7 +53,7 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
 
   prob = setClasses(list(name = name, seed = seed, data = data, fun = fun), "Problem")
   writeRDS(prob, file = file.path(reg$file.dir, "problems", sprintf("%s.rds", name)))
-  reg$problems = union(reg$problems, name)
+  levels(reg$defs$problem) = union(levels(reg$defs$problem), name)
   saveRegistry(reg)
   invisible(prob)
 }
@@ -63,18 +63,18 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
 removeProblem = function(name, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
   assertString(name)
-  assertSubset(name, reg$problems)
-  pars = NULL
+  assertSubset(name, levels(reg$defs$problem))
+  problem = NULL
 
   fns = file.path(reg$file.dir, "problems", sprintf("%s.rds", name))
-  def.ids = reg$defs[vcapply(pars, "[[", "prob.name") == name, "def.id", with = FALSE]
+  def.ids = reg$defs[problem == name, "def.id", with = FALSE]
   job.ids = reg$status[def.ids, "job.id", on = "def.id", nomatch = 0L, with = FALSE]
 
   info("Removing Problem '%s' and %i corresponding jobs ...", name, nrow(job.ids))
   file.remove(fns)
-  reg$problems = setdiff(reg$problems, name)
   reg$defs = reg$defs[!def.ids]
   reg$status = reg$status[!job.ids]
+  reg$defs$problem = droplevel(reg$defs$problem, name)
   saveRegistry(reg)
   invisible(TRUE)
 }

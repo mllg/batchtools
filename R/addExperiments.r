@@ -19,20 +19,20 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
   assertExperimentRegistry(reg, writeable = TRUE)
   assertList(prob.designs, types = "data.frame", names = "named")
   assertList(algo.designs, types = "data.frame", names = "named")
-  assertSubset(names(prob.designs), reg$problems)
-  assertSubset(names(algo.designs), reg$algorithms)
+  assertSubset(names(prob.designs), levels(reg$defs$problem))
+  assertSubset(names(algo.designs), levels(reg$defs$algorithm))
   repls = asCount(repls)
 
   max2 = function(ids) if (length(ids) == 0L) 0L else max(ids)
   all.ids = integer(0L)
   def.id = NULL
-  getPars = function(i, j) {
-    list(
-      prob.name = pn,
+  getPars = function(i, j) { list(
       prob.pars = if (nrow(pd) > 0L) as.list(pd[i]) else list(),
-      algo.name = an,
       algo.pars = if (nrow(ad) > 0L) as.list(ad[j]) else list()
     )
+  }
+  dig = function(...) {
+    digest::digest(list(...))
   }
 
   for (i in seq_along(prob.designs)) {
@@ -49,8 +49,9 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
       info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
 
       tab = data.table(pars = .mapply(getPars, CJ(i = seq_len(n.pd), j = seq_len(n.ad)), list()))
-      tab[, "pars.hash" := vcapply(get("pars"), digest::digest)]
-      tab = merge(reg$defs[, !"pars", with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
+      tab[, c("problem", "algorithm") := list(pn, an)]
+      tab[, "pars.hash" := unlist(map(dig, tab$pars, tab$problem, tab$algorithm))]
+      tab = merge(reg$defs[, !c("pars", "problem", "algorithm"), with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 
       miss = tab[is.na(def.id), which = TRUE]
       tab[miss, "def.id" := max2(reg$defs$def.id) + seq_along(miss)]

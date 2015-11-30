@@ -102,8 +102,9 @@ getJobPars = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg
   assertRegistry(reg)
   assertFlag(prefix.pars)
   ids = asIds(reg, ids, default = .findAll(reg))
+  def.cols = c("job.id", setdiff(names(reg$defs), c("def.id", "pars.hash")))
 
-  tab = reg$status[ids][reg$defs, c("job.id", "pars"), on = "def.id", nomatch = 0L, with = FALSE]
+  tab = reg$status[ids][reg$defs, def.cols, on = "def.id", nomatch = 0L, with = FALSE]
   parsAsCols(tab, TRUE, prefix.pars, reg = reg)
   tab[]
 }
@@ -127,16 +128,10 @@ parsAsCols.Registry = function(tab, pars.as.cols, prefix.pars, reg = getDefaultR
 parsAsCols.ExperimentRegistry = function(tab, pars.as.cols, prefix.pars, reg = getDefaultRegistry()) {
   if (pars.as.cols) {
     new.cols = rbindlist(lapply(tab$pars, unlist, recursive = FALSE), fill = TRUE)
-    tab[, c("problem", "algorithm") := list(new.cols$prob.name, new.cols$algo.name)]
-    new.cols[, c("prob.name", "algo.name") := NULL]
-
     pattern = "^(prob|algo).pars."
     replacement = if (prefix.pars) "$1.par." else ""
     setnames(new.cols, names(new.cols), stri_replace_all_regex(names(new.cols), pattern, replacement))
     tab[, names(new.cols) := new.cols]
     tab[, "pars" := NULL]
-  } else {
-    tab[, "problem" := vcapply(get("pars"), "[[", "prob.name")]
-    tab[, "algorithm" := vcapply(get("pars"), "[[", "algo.name")]
   }
 }

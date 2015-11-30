@@ -20,9 +20,11 @@ test_that("addProblem", {
 
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, ...) NULL)
   ids = addExperiments(list(p1 = data.table(), p2 = data.table()), algo.designs = list(a1 = data.table()), repls = 2, reg = reg)
+  expect_integer(ids$job.id, len = 4L)
 
   removeProblem(reg = reg, "p1")
-  expect_set_equal(reg$problems, "p2")
+  expect_integer(reg$status$job.id, len = 2L)
+  expect_set_equal(levels(reg$defs$problem), "p2")
   expect_false(file.exists(file.path(reg$file.dir, "problems", "p1.rds")))
   expect_set_equal(getJobDefs(reg = reg)$problem, "p2")
   checkTables(reg)
@@ -39,9 +41,11 @@ test_that("addAlgorithm", {
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) nrow(data))
   algo = addAlgorithm(reg = reg, "a2", fun = function(job, data, problem) NULL)
   ids = addExperiments(list(p1 = data.table()), algo.designs = list(a1 = data.table(), a2 = data.table()), repls = 2, reg = reg)
+  expect_integer(ids$job.id, len = 4L)
 
   removeAlgorithm(reg = reg, "a1")
-  expect_set_equal(reg$algorithms, "a2")
+  expect_integer(reg$status$job.id, len = 2L)
+  expect_set_equal(levels(reg$defs$algorithm), "a2")
   expect_false(file.exists(file.path(reg$file.dir, "algorithms", "a1.rds")))
   expect_set_equal(getJobDefs(reg = reg)$algorithm, "a2")
   checkTables(reg)

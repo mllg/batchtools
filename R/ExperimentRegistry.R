@@ -39,8 +39,8 @@ makeExperimentRegistry = function(...) {
   dir.create(file.path(reg$file.dir, "algorithms"))
 
   reg$status$repl = integer(0L)
-  reg$problems = character(0L)
-  reg$algorithms = character(0L)
+  reg$defs$problem = factor(character(0L))
+  reg$defs$algorithm = factor(character(0L))
 
   setattr(reg, "class", c("ExperimentRegistry", class(reg)))
   saveRegistry(reg)
@@ -57,7 +57,9 @@ makeTempExperimentRegistry = function(make.default = FALSE, temp.dir = getOption
 #' @export
 print.ExperimentRegistry = function(x, ...) {
   catf("Experiment Registry")
-  catf("  Number of jobs: %i", nrow(x$status))
+  catf("  Number of Jobs: %i", nrow(x$status))
+  catf("  Number of Problems: %i", nlevels(x$defs$problem))
+  catf("  Number of Algorithms: %i", nlevels(x$defs$algorithm))
   catf("  File dir: %s", x$file.dir)
   catf("  Work dir: %s", x$work.dir)
   catf("  Seed: %i", x$seed)

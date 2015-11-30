@@ -119,3 +119,14 @@ suppressAll = function (expr) {
     suppressWarnings(suppressMessages(suppressPackageStartupMessages(force(expr))))
   }))
 }
+
+droplevel = function(x, lvl) {
+  levels(x) = replace(levels(x), levels(x) == lvl, NA_character_)
+  x
+}
+
+map = function(f, ..., more.args = NULL) {
+  f = match.fun(f)
+  dots = list(...)
+  .mapply(f, dots, more.args)
+}

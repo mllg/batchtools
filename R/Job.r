@@ -48,15 +48,15 @@ makeJob.Registry = function(id, reg = getDefaultRegistry()) {
 makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
   id = asIds(reg, id, n = 1L)
   cache = Cache(reg$file.dir)
-  pars = reg$status[list(id)][reg$defs, on = "def.id", nomatch = 0L]$pars[[1L]]
+  def = reg$status[list(id)][reg$defs, on = "def.id", nomatch = 0L]
 
   setClasses(list(
     job.id    = id$job.id,
-    pars      = pars,
+    pars      = def$pars[[1L]],
     seed      = getSeed(reg$seed, id$job.id),
     resources = reg$status[list(id)][reg$resources, nomatch = 0L]$resources,
-    problem   = cache("prob/problem", file.path("problems", pars$prob.name)),
-    algorithm = cache(paste0("algo/", pars$algo.name), file.path("algorithms", pars$algo.name))
+    problem   = cache("prob/problem", file.path("problems", def$problem)),
+    algorithm = cache(paste0("algo/", def$algo.name), file.path("algorithms", def$algorithm))
   ), c("Experiment", "Job"))
 }
 
@@ -93,7 +93,7 @@ getJob.ExperimentCollection = function(jc, id, cache) {
     pars = j$pars[[1L]],
     seed = getSeed(jc$seed, j$job.id),
     resources = jc$resources,
-    problem = cache("prob/problem", file.path("problems", pars$prob.name)),
-    algorithm = cache(paste0("algo/", pars$algo.name), file.path("algorithms", pars$algo.name))
+    problem = cache("prob/problem", file.path("problems", j$problem)),
+    algorithm = cache(paste0("algo/", pars$algo.name), file.path("algorithms", j$algorithm))
   ), c("Experiment", "Job"))
 }

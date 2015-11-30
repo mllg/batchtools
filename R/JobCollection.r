@@ -41,6 +41,7 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
 #' @export
 makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   ids = asIds(reg, ids, default = .findAll(reg = reg))
+  def.cols = c("job.id", setdiff(names(reg$defs), c("def.id", "pars.hash")))
 
   jc            = new.env(parent = emptyenv())
   jc$file.dir   = reg$file.dir
@@ -51,7 +52,7 @@ makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getD
   jc$log.file   = npath(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
   jc$packages   = reg$packages
   jc$namespaces = reg$namespaces
-  jc$defs       = reg$status[ids][reg$defs, c("job.id", "pars"), on = "def.id", nomatch = 0L, with = FALSE]
+  jc$defs       = reg$status[ids][reg$defs, def.cols, on = "def.id", nomatch = 0L, with = FALSE]
   jc$resources  = resources
   jc$compress   = getOption("batchtools.compress", TRUE)
 
