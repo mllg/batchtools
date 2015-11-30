@@ -13,7 +13,7 @@ The development is still in alpha phase.
 ## Configuration
 
 If no configuration is provided, `batchtools` runs in an interactive (sequential) mode.
-You can change this by adapting the registry:
+You can change this by modifying the registry:
 ```{r}
 library(batchtools)
 
@@ -30,14 +30,13 @@ reg$default.resources = list(walltime = 60 * 60, memory = 1024)
 saveRegistry(reg)
 ```
 Instead of calling the constructor for the `ClusterFunctions` yourself in every session, you can also source a configuration file.
-To do so, create the file `.batchtools.conf.r` where you set everything accordingly:
+To do so, create the file `~/.batchtools.conf.r` where you set everything accordingly:
 ```{r}
 cluster.functions = makeClusterFunctionsSLURM("~/slurm.tmpl")
 default.resources = list(walltime = 60 * 60, memory = 1024)
 ```
-Now cluster functions are automatically set if you create a registry:
+This file is automatically sourced whenever you create a new registry:
 ```{r}
 reg = makeRegistry(file.dir = "test")
-
 ```
-Note that the default location of the configuration file can also be set via the option `batchtools.conf.file`.
+The default location of the configuration file can also be set via the option `batchtools.conf.file`.
