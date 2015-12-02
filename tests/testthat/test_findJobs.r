@@ -74,9 +74,9 @@ test_that("findJobs", {
 })
 
 test_that("findOnSystem", {
+  reg = makeTempRegistry(FALSE)
   if (is.null(reg$cluster.functions$listJobs))
     skip("Test requires listJobs")
-  reg = makeTempRegistry(FALSE)
   silent({
     ids = batchMap(reg = reg, Sys.sleep, c(20, 20))
     submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
