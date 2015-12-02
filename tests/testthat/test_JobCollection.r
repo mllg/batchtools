@@ -41,5 +41,5 @@ test_that("makeJobCollection.ExperimentCollection", {
   expect_factor(j$defs$problem)
   expect_factor(j$defs$algorithm)
 
-  expect_is(jc, "ExperimentCollection")
+  expect_is(j, "ExperimentCollection")
 })

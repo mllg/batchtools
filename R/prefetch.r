@@ -23,10 +23,10 @@ prefetch.JobCollection = function(jc, cache) {
 }
 
 prefetch.ExperimentCollection = function(jc, cache) {
-  problems = unique(vcapply(jc$defs$pars, "[[", "prob.name"))
+  problems = unique(jc$defs$problem)
   if (length(problems) == 1L)
     cache("prob/problem", file.path("problems", problems))
-  algorithms = unique(vcapply(jc$defs$pars, "[[", "algo.name"))
+  algorithms = unique(jc$defs$algorithm)
   Map(cache, id = paste0("algo/", algorithms), uri = file.path("algorithms", algorithms))
   invisible(TRUE)
 }

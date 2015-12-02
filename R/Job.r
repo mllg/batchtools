@@ -8,7 +8,7 @@
 #' is implemented as a list holding the following variables:
 #' \describe{
 #'  \item{job.id}{Job ID as integer.}
-#'  \item{pars}{Job parameters. For \code{\link{ExperimentRegistry}}, this is a list with named elements \dQuote{prob.name}, \dQuote{prob.pars}, \dQuote{algo.name} and \dQuote{algo.pars}.}
+#'  \item{pars}{Job parameters. For \code{\link{ExperimentRegistry}}, this is a list with named elements \dQuote{prob.pars} and \dQuote{algo.pars}.}
 #'  \item{seed}{Seed which is set via \code{\link{doJobs}}.}
 #'  \item{resources}{Computational resources which were set for this job.}
 #' }
@@ -56,7 +56,7 @@ makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
     seed      = getSeed(reg$seed, id$job.id),
     resources = reg$status[list(id)][reg$resources, nomatch = 0L]$resources,
     problem   = cache("prob/problem", file.path("problems", def$problem)),
-    algorithm = cache(paste0("algo/", def$algo.name), file.path("algorithms", def$algorithm))
+    algorithm = cache(paste0("algo/", def$algorithm), file.path("algorithms", def$algorithm))
   ), c("Experiment", "Job"))
 }
 
@@ -94,6 +94,6 @@ getJob.ExperimentCollection = function(jc, id, cache) {
     seed = getSeed(jc$seed, j$job.id),
     resources = jc$resources,
     problem = cache("prob/problem", file.path("problems", j$problem)),
-    algorithm = cache(paste0("algo/", pars$algo.name), file.path("algorithms", j$algorithm))
+    algorithm = cache(paste0("algo/", j$algorithm), file.path("algorithms", j$algorithm))
   ), c("Experiment", "Job"))
 }
