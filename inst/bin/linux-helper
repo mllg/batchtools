@@ -14,7 +14,7 @@
 ##  Return the number of PEs on worker.
 ##
 ## start-job NICE JOBFILE OUTFILE
-##   Start an Rscript process running doJobs on $JOBFILE and log
+##   Start an Rscript process running doJobCollection on $JOBFILE and log
 ##   the output in $OUTFILE.
 ##   Returns: PID of sh process which spawned R. We use that as batch.id.
 ##
@@ -57,7 +57,7 @@ case $CMD in
             # RCMD="setsid $RCMD"
         # fi
 
-        ${RCMD} -e "batchtools::doJobs('$1')" > "$2" 2>&1 &
+        ${RCMD} -e "batchtools::doJobCollection('$1')" > "$2" 2>&1 &
         echo $!
         ;;
     kill-job)

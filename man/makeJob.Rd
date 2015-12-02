@@ -19,21 +19,20 @@ Registry. If not explictitly passed, uses the last created registry.}
 [\code{Job}].
 }
 \description{
-\code{makeJob} takes a single job id and creates an object of class
-\dQuote{Job}. This job is passed to reduce functions like
-\code{\link{reduceResults}} or to \code{\link{Algorithm}} for an
-\code{\link{ExperimentRegistry}}. calculation with \code{\link{doJobs}}. It
-is implemented as a list holding the following variables:
+\code{makeJob} takes a single job id and creates an object of class \dQuote{Job}. This job is passed to reduce
+functions like \code{\link{reduceResults}}. Furthermore, it can be used for an \code{\link{ExperimentRegistry}} while
+in the user functions of each \code{\link{Problem}} and \code{\link{Algorithm}}. It is implemented as a list holding
+the following variables:
 \describe{
  \item{job.id}{Job ID as integer.}
- \item{pars}{Job parameters. For \code{\link{ExperimentRegistry}}, this is a list with named elements \dQuote{prob.pars} and \dQuote{algo.pars}.}
- \item{seed}{Seed which is set via \code{\link{doJobs}}.}
+ \item{pars}{Job parameters as named list. For \code{\link{ExperimentRegistry}}, the parameters are divided into the
+   sublists \dQuote{prob.pars} and \dQuote{algo.pars}.}
+ \item{seed}{Seed which is set via \code{\link{doJobCollection}}.}
  \item{resources}{Computational resources which were set for this job.}
 }
-Additionally, a regular \code{\link{Registry}} also has the slot
-\dQuote{fun} with the user function while an
-\code{\link{ExperimentRegistry}} has the slots \dQuote{problem} and
-\dQuote{algorithm} (see \link{Problem} and \link{Algorithm}).
+Additionally, a regular \code{\link{Registry}} also has the slot \dQuote{fun} with the user function while an
+\code{\link{ExperimentRegistry}} has the slots \dQuote{problem} and \dQuote{algorithm} (see \link{Problem} and
+\link{Algorithm}).
 }
 \examples{
 reg = makeTempRegistry(make.default = FALSE)

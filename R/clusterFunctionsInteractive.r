@@ -29,7 +29,7 @@ makeClusterFunctionsInteractive = function(write.logs = TRUE) {
     }
 
     # sink both output and message streams
-    doJobs(jc, con = fp)
+    doJobCollection(jc, con = fp)
 
     # return job result (always successful)
     makeSubmitJobResult(status = 0L, batch.id = "cfInteractive", msg = "")

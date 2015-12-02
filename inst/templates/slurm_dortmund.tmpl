@@ -32,5 +32,5 @@ if (resources$ntasks == 1L) {
 mkdir /tmp/${USER}-${SLURM_JOBID}
 export TMPDIR=/tmp/${USER}-${SLURM_JOBID}
 source /etc/profile
-<%= cmd %> -e 'batchtools::doJobs("<%= uri %>")'
+<%= cmd %> -e 'batchtools::doJobCollection("<%= uri %>")'
 rm -rf /tmp/${USER}-${SLURM_JOBID}

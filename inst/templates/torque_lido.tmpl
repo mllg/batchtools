@@ -80,5 +80,5 @@ module add <%= modules %>
 mkdir /scratch/${USER}-${PBS_JOBID}
 export TMPDIR=/scratch/${USER}-${PBS_JOBID}
 ## run R
-<%= cmd %> -e 'batchtools::doJobs("<%= uri %>")'
+<%= cmd %> -e 'batchtools::doJobCollection("<%= uri %>")'
 rm -rf /scratch/${USER}-${PBS_JOBID}

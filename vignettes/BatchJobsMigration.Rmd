@@ -18,7 +18,7 @@ options(batchtools.progress = FALSE)
 * `batchtools` does not use a SQL data base anymore.
   Instead all the information is stored directly in the registry using [data.tables](https://cran.r-project.org/package=data.table).
 * Nodes do not have to access the registry. `submitJobs()` stores an object of type `JobDescription` on the file system.
-  This object holds all the information necessary to execute the job or chunk of jobs via `doJobs()`.
+  This object holds all the information necessary to execute the job or chunk of jobs via `doJobCollection()`.
   Each job stores its status updates, log files and results on the file system and `syncRegistry()` can be used on the master to update the registry.
 
 
@@ -28,7 +28,7 @@ options(batchtools.progress = FALSE)
   This way, you do not need to pass the registry around that much.
   If you need to work with multiple registries simultaneously on the other hand, you can still do so by explicitly passing the registry.
 * The template file format has changed:
-    - The scheduler should directly execute the command `Rscript -e 'batchtools::doJob(<filename>)'`.
+    - The scheduler should directly execute the command `Rscript -e 'batchtools::doJobCollection(<filename>)'`.
       There is no intermediate source file like in BatchJobs.
     - Besides the resources, all information stored in the object `JobDescription` can be access while brewing the template.
       Some variable names have changed and need to be adapted.

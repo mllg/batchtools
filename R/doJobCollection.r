@@ -16,12 +16,12 @@
 #' termination), \dQuote{error} (error message as string) and \code{memory}
 #' (memory usage as double).
 #' @export
-doJobs = function(jc, con = stdout()) {
-  UseMethod("doJobs")
+doJobCollection = function(jc, con = stdout()) {
+  UseMethod("doJobCollection")
 }
 
 #' @export
-doJobs.JobCollection = function(jc, con = stdout()) {
+doJobCollection.JobCollection = function(jc, con = stdout()) {
   capture = function(expr) {
     output = character(0L)
     con = textConnection("output","w", local = TRUE)
@@ -109,6 +109,6 @@ doJobs.JobCollection = function(jc, con = stdout()) {
 }
 
 #' @export
-doJobs.character = function(jc, con = stdout()) {
-  doJobs(readRDS(jc), con = con)
+doJobCollection.character = function(jc, con = stdout()) {
+  doJobCollection(readRDS(jc), con = con)
 }
