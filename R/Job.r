@@ -87,7 +87,6 @@ getJob.JobCollection = function(jc, id, cache) {
 
 getJob.ExperimentCollection = function(jc, id, cache) {
   j = jc$defs[list(id)]
-  pars = j$pars[[1L]]
   setClasses(list(
     job.id = j$job.id,
     pars = j$pars[[1L]],
