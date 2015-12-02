@@ -26,7 +26,7 @@ Registry. If not explictitly passed, uses the last created registry.}
 is implemented as a list holding the following variables:
 \describe{
  \item{job.id}{Job ID as integer.}
- \item{pars}{Job parameters. For \code{\link{ExperimentRegistry}}, this is a list with named elements \dQuote{prob.name}, \dQuote{prob.pars}, \dQuote{algo.name} and \dQuote{algo.pars}.}
+ \item{pars}{Job parameters. For \code{\link{ExperimentRegistry}}, this is a list with named elements \dQuote{prob.pars} and \dQuote{algo.pars}.}
  \item{seed}{Seed which is set via \code{\link{doJobs}}.}
  \item{resources}{Computational resources which were set for this job.}
 }
