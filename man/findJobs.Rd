@@ -4,6 +4,7 @@
 \alias{findDone}
 \alias{findError}
 \alias{findExperiments}
+\alias{findExpired}
 \alias{findJobs}
 \alias{findNotDone}
 \alias{findNotStarted}
@@ -33,6 +34,8 @@ findNotDone(ids = NULL, reg = getDefaultRegistry())
 findError(ids = NULL, reg = getDefaultRegistry())
 
 findOnSystem(ids = NULL, reg = getDefaultRegistry())
+
+findExpired(ids = NULL, reg = getDefaultRegistry())
 }
 \arguments{
 \item{expr}{[\code{expression}]\cr
@@ -72,6 +75,7 @@ Use \code{findJobs} to query jobs for which a predicate expression, evaluated on
 The other functions can be used to query the computational status.
 Note that they do not synchronize the registry, thus you are advised to run \code{\link{syncRegistry}} yourself
 or, if you are really just interested in the status, use \code{\link{getStatus}}.
+Note that \code{findOnSystem} and \code{findExpired} are somewhat heuristic and may report misleading results, depending on the state of the system.
 }
 \examples{
 reg = makeTempRegistry(make.default = FALSE)
