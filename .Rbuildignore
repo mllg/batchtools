@@ -11,3 +11,5 @@ man-roxygen
 ^appveyor\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^inst/staticdocs
+^inst/web
