@@ -87,7 +87,7 @@ is.error = function(x) {
 }
 
 catf = function (..., con = stdout()) {
-  cat(sprintf(...), "\n", sep = "", file = con)
+  cat(paste0(sprintf(...), collapse = "\n"), "\n", sep = "", file = con)
 }
 
 stopf = function (...) {
