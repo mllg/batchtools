@@ -85,6 +85,17 @@
     reg$status[ids][!is.na(submitted) & is.na(done) & batch.id %in% batch.ids, "job.id", with = FALSE]
 }
 
+.findExpired = function(reg, ids = NULL) {
+  if (is.null(reg$cluster.functions$listJobs))
+    return(data.table(job.id = integer(0L), key = "job.id"))
+  batch.ids = reg$cluster.functions$listJobs(reg)
+  submitted = done = batch.id = NULL
+  if (is.null(ids))
+    reg$status[!is.na(submitted) & is.na(done) & !batch.id %in% batch.ids, "job.id", with = FALSE]
+  else
+    reg$status[ids][!is.na(submitted) & is.na(done) & !batch.id %in% batch.ids, "job.id", with = FALSE]
+}
+
 #' @title Find and filter jobs
 #'
 #' @description
@@ -92,6 +103,7 @@
 #' The other functions can be used to query the computational status.
 #' Note that they do not synchronize the registry, thus you are advised to run \code{\link{syncRegistry}} yourself
 #' or, if you are really just interested in the status, use \code{\link{getStatus}}.
+#' Note that \code{findOnSystem} and \code{findExpired} are somewhat heuristic and may report misleading results, depending on the state of the system.
 #'
 #' @param expr [\code{expression}]\cr
 #'   Predicate expression evaluated in the job parameters.
@@ -243,4 +255,12 @@ findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
   .findOnSystem(reg, asIds(reg, ids))
+}
+
+#' @export
+#' @rdname findJobs
+findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
+  assertRegistry(reg)
+  syncRegistry(reg)
+  .findExpired(reg, asIds(reg, ids))
 }
