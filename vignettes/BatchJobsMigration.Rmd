@@ -34,6 +34,9 @@ options(batchtools.progress = FALSE)
       Some variable names have changed and need to be adapted.
 * Most functions now return a `data.table` which is keyed with the `job.id`. This way, return values can be joined together easily and efficient.
   Furthermore, you can use these tables to subset ids.
+* Function `makeDesign` has been removed.
+  Hyperparameters can be defined by just passing a `data.frame` or `data.table` to `addExperiments`.
+  For exhaustive designs, use `expand.grid()` or `data.table::CJ`.
 
 ```{r}
 library(batchtools)
