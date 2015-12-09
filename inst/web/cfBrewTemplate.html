@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>cfBrewTemplate. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Cluster functions helper: Brew your template into a job description file</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>cfBrewTemplate(reg, template, jc)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explictitly passed, uses the last created registry.</dd>
+      <dt>template</dt>
+      <dd>[<code>character(1)</code>]
+String with contents of the brew templated, as returned by <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>.</dd>
+      <dt>jc</dt>
+      <dd>[<code><a href='makeJobCollection.html'>JobCollection</a>)</code>]
+JobCollection holding all essential information. Will be used as environment to look
+up variables.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>character(1)</code>]. File path to resulting template file.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>This function is only intended for use in your own cluster functions implementation.</p>
+  
+      <p>Calls brew silently on your template, any error will lead to an exception. If debug mode is
+enabled, the file is stored at the same place as the corresponding R script in the
+&#147;jobs&#148;-subdir of your files directory, otherwise in the temp dir via
+<code><a href='http://www.inside-r.org/r-doc/base/tempfile'>tempfile</a></code>.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>cfBrewTemplate</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+Other ClusterFunctionsHelper: <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
+  <code><a href='cfKillBatchJob.html'>cfKillBatchJob</a></code>,
+  <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
+  <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

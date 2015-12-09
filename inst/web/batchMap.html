@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>batchMap. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Map Operation for Batch Systems</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>batchMap(fun, ..., more.args&nbsp;=&nbsp;list(), reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>fun</dt>
+      <dd>[<code>function</code>]
+Function to map over <code>...</code>.</dd>
+      <dt>...</dt>
+      <dd>[any]
+Arguments to vectorize over (list or vector).</dd>
+      <dt>more.args</dt>
+      <dd>[<code>list</code>]
+A list of other arguments passed to <code>fun</code>.
+Default is an empty list.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explictitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>data.table</code>]. Generated job ids are stored in the column &#147;job.id&#148;.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>A parallel <code><a href='http://www.inside-r.org/r-doc/base/funprog'>Map</a></code> for batch systems.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>reg = makeTempRegistry()
+</div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<div class='input'>f = function(x, y) x^2 + y
+ids = batchMap(f, x = 1:10, more.args = list(y = 100), reg = reg)
+</div>
+<strong class='message'>Adding 10 jobs ...</strong>
+<div class='input'>print(ids)
+</div>
+<div class='output'>    job.id
+ 1:      1
+ 2:      2
+ 3:      3
+ 4:      4
+ 5:      5
+ 6:      6
+ 7:      7
+ 8:      8
+ 9:      9
+10:     10
+</div>
+<div class='input'>getJobInfo(reg = reg, pars.as.cols = TRUE)
+</div>
+<div class='output'>    job.id submitted started done error memory batch.id job.hash time.queued time.running resources.hash resources                        pars.hash  x
+ 1:      1      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA     NA secs      NA secs             NA      NULL c65172925509f53468c6cfbe141e1bc5  1
+ 2:      2      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA     NA secs      NA secs             NA      NULL fb2a30b2738ab2e3c40c3b462f284619  2
+ 3:      3      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA     NA secs      NA secs             NA      NULL 1a75172b7c64e5483f831ee4254b8f19  3
+ 4:      4      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA     NA secs      NA secs             NA      NULL 4491dac61890aaba67c0dfbaed95ae74  4
+ 5:      5      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA     NA secs      NA secs             NA      NULL 9d5f25bfc1a4a90a5f58f29a5ca94d36  5
+ 6:      6      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA     NA secs      NA secs             NA      NULL 2a5ad5a025d122e661f8bb190c984e9e  6
+ 7:      7      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA     NA secs      NA secs             NA      NULL 6fa5c050f9c1f1945fe76fd175c03801  7
+ 8:      8      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA     NA secs      NA secs             NA      NULL 5453ff0dc17f37aac673c1a430739aa9  8
+ 9:      9      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA     NA secs      NA secs             NA      NULL e76297f958d6bc89cdb6479f81f1fcaf  9
+10:     10      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA     NA secs      NA secs             NA      NULL 167e19dddbc553de47b4c576ff8390e1 10
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>batchMap</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

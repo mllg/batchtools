@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>makeJobCollection. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Collection of Computational Jobs</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>makeJobCollection(ids&nbsp;=&nbsp;NULL, resources&nbsp;=&nbsp;list(), reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>ids</dt>
+      <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
+with a column named &#147;job.id&#148;.
+This is usually the result of a <code><a href='findJobs.html'>findJobs</a></code> operation, but you may also
+pass any other table here, e.g. the return of <code><a href='getJobInfo.html'>getJobInfo</a></code>.
+Alternatively, you may also pass a vector of integerish job ids.
+If not set, defaults to all jobs.</dd>
+      <dt>resources</dt>
+      <dd>[<code>list</code>]
+Named list of resources. Default is <code>list()</code>.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explictitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>JobCollection</code>].
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p><code>makeJobCollection</code> takes multiple job ids and creates an object of class &#147;JobCollection&#148; which holds all
+necessary information for the calculation with <code><a href='doJobCollection.html'>doJobCollection</a></code>. It is implemented as an environment
+with the following variables:
+<dl>
+ <dt>file.dir</dt><dd><code>file.dir</code> of the <a href='Registry.html'>Registry</a>.</dd></p>
+  
+      <p><dt>work.dir:</dt><dd><code>work.dir</code> of the <a href='Registry.html'>Registry</a>.</dd></p>
+  
+      <p><dt>job.hash</dt><dd>Unique identifier of the job. Used to create names on the file system.</dd></p>
+  
+      <p><dt>log.file</dt><dd>Location of the designated log file for this job.</dd></p>
+  
+      <p><dt>packages</dt><dd>Vector of packages to load on the slaves, see <a href='Registry.html'>Registry</a>.</dd></p>
+  
+      <p><dt>resources:</dt><dd>Named list of of specified computational resources.</dd></p>
+  
+      <p><dt>uri</dt><dd>Location of the job description file (saved with <code>link[base]{saveRDS}</code> on the file system.</dd></p>
+  
+      <p><dt>defs</dt><dd><code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> holding individual job information. See examples.</dd></p>
+  
+      <p></dl></p>
+  
+      <p>If your <a href='makeClusterFunctions.html'>ClusterFunctions</a> uses a template, <code><a href='http://www.inside-r.org/packages/cran/brew/docs/brew'>brew</a></code> will be executed in the environment of such
+a collection. Thus all variables available inside the job can be used in the template.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>reg = makeTempRegistry(make.default = FALSE)
+</div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<div class='input'>batchMap(identity, 1:5, reg = reg)
+</div>
+<strong class='message'>Adding 5 jobs ...</strong>
+<div class='input'>coll = makeJobCollection(1:3, reg = reg)
+ls(coll)
+</div>
+<div class='output'> [1] &quot;compress&quot;   &quot;defs&quot;       &quot;file.dir&quot;   &quot;job.hash&quot;   &quot;log.file&quot;   &quot;namespaces&quot; &quot;packages&quot;   &quot;resources&quot;  &quot;seed&quot;       &quot;uri&quot;        &quot;work.dir&quot;  
+</div>
+<div class='input'>coll$defs
+</div>
+<div class='output'>   job.id   pars
+1:      1 &lt;list&gt;
+2:      2 &lt;list&gt;
+3:      3 &lt;list&gt;
+</div>
+<div class='input'>coll$defs$pars
+</div>
+<div class='output'>[[1]]
+[[1]][[1]]
+[1] 1
+
+
+[[2]]
+[[2]][[1]]
+[1] 2
+
+
+[[3]]
+[[3]][[1]]
+[1] 3
+
+
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>JobCollection</li><li>makeJobCollection</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

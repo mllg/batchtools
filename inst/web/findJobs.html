@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>findJobs. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Find and filter jobs</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>findJobs(expr, ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findExperiments(prob.name, algo.name, prob.pars, algo.pars, repls&nbsp;=&nbsp;NULL, ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findSubmitted(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findNotSubmitted(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findStarted(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findNotStarted(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findDone(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findNotDone(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findError(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findOnSystem(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>expr</dt>
+      <dd>[<code>expression</code>]
+Predicate expression evaluated in the job parameters.</dd>
+      <dt>ids</dt>
+      <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
+with a column named &#147;job.id&#148;.
+This is usually the result of a <code><a href='findJobs.html'>findJobs</a></code> operation, but you may also
+pass any other table here, e.g. the return of <code><a href='getJobInfo.html'>getJobInfo</a></code>.
+Alternatively, you may also pass a vector of integerish job ids.
+If not set, defaults to all jobs.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explictitly passed, uses the last created registry.</dd>
+      <dt>prob.name</dt>
+      <dd>[<code>character(1)</code>]
+Whitelist of problem names.</dd>
+      <dt>algo.name</dt>
+      <dd>[<code>character(1)</code>]
+Whitelist of algorithm names.</dd>
+      <dt>prob.pars</dt>
+      <dd>[<code>expression</code>]
+Predicate expression evaluated in the problem parameters.</dd>
+      <dt>algo.pars</dt>
+      <dd>[<code>expression</code>]
+Predicate expression evaluated in the algorithm parameters.</dd>
+      <dt>repls</dt>
+      <dd>[<code>integer</code>]
+Whitelist of replication numbers.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>data.table</code>]. Matching job ids are stored in the column &#147;job.id&#148;.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Use <code>findJobs</code> to query jobs for which a predicate expression, evaluated on the parameters, yields <code>TRUE</code>.
+The other functions can be used to query the computational status.
+Note that they do not synchronize the registry, thus you are advised to run <code><a href='Registry.html'>syncRegistry</a></code> yourself
+or, if you are really just interested in the status, use <code><a href='getStatus.html'>getStatus</a></code>.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>reg = makeTempRegistry(make.default = FALSE)
+</div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<div class='input'>batchMap(identity, i = 1:3, reg = reg)
+</div>
+<strong class='message'>Adding 3 jobs ...</strong>
+<div class='input'>ids = findNotSubmitted(reg = reg)
+
+# get all jobs:
+findJobs(reg = reg)
+</div>
+<div class='output'>   job.id
+1:      1
+2:      2
+3:      3
+</div>
+<div class='input'>
+# filter for jobs with parameter i &gt;= 2
+findJobs(i &gt;= 2, reg = reg)
+</div>
+<div class='output'>   job.id
+1:      2
+2:      3
+</div>
+<div class='input'>
+# filter on the computational status
+findSubmitted(reg = reg)
+</div>
+<div class='output'>Empty data.table (0 rows) of 1 col: job.id
+</div>
+
+<div class='input'>findNotDone(reg = reg)
+</div>
+<div class='output'>   job.id
+1:      1
+2:      2
+3:      3
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>findDone</li><li>findError</li><li>findExperiments</li><li>findJobs</li><li>findNotDone</li><li>findNotStarted</li><li>findNotSubmitted</li><li>findOnSystem</li><li>findStarted</li><li>findSubmitted</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

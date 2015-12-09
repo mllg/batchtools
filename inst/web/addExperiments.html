@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>addExperiments. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Add Experiemts to the Registry</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>addExperiments(prob.designs, algo.designs, repls&nbsp;=&nbsp;1L, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>prob.designs</dt>
+      <dd>[named list of <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> or <code>link[base]{data.frame}</code>]
+Named list of data frames. The name must match the problem name while the column names correspond to parameters
+of the problem.</dd>
+      <dt>algo.designs</dt>
+      <dd>[named list of <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> or <code>link[base]{data.frame}</code>]
+Named list of data frames. The name must match the algorithm name while the column names correspond to parameters
+of the algorithm.</dd>
+      <dt>repls</dt>
+      <dd>[<code>integer(1)</code>]
+Number of replications for each distinct experiment.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>]
+Registry. If not explictitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>data.table</code>]. Generated job ids are stored in the column &#147;job.id&#148;.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.
+Each element in the Cartesian product of problem designs and algorithm designs defines one computational job.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>addExperiments</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

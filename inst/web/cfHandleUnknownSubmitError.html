@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>cfHandleUnknownSubmitError. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Cluster functions helper: Handle an unknown error during job submission.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>cfHandleUnknownSubmitError(cmd, exit.code, output)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>cmd</dt>
+      <dd>[<code>character(1)</code>]
+OS command used to submit the job, e.g. qsub.</dd>
+      <dt>exit.code</dt>
+      <dd>[<code>integer(1)</code>]
+Exit code of the OS command, should not be 0.</dd>
+      <dt>output</dt>
+      <dd>[<code>character</code>]
+Output of the OS command, hopefully an informative error message.
+If these are multiple lines in a vector, they are automatically joined.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code><a href='makeSubmitJobResult.html'>SubmitJobResult</a></code>].
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>This function is only intended for use in your own cluster functions implementation.</p>
+  
+      <p>Simply constructs a <code><a href='makeSubmitJobResult.html'>SubmitJobResult</a></code> object with status code 101, NA as batch id and
+an informative error message containing the output of the OS command in <code>output</code>.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>cfHandleUnknownSubmitError</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
+  <code><a href='cfKillBatchJob.html'>cfKillBatchJob</a></code>,
+  <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
+  <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
