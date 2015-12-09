@@ -76,24 +76,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 
 
-<div id="notable-internal-changes" class="section level2">
-<h2>Notable internal changes</h2>
-<ul>
-<li><code>batchtools</code> does not use a SQL data base anymore. Instead all the information is stored directly in the registry using <a href="https://cran.r-project.org/package=data.table">data.tables</a>.</li>
-<li>Nodes do not have to access the registry. <code>submitJobs()</code> stores an object of type <code>JobDescription</code> on the file system. This object holds all the information necessary to execute the job or chunk of jobs via <code>doJobCollection()</code>. Each job stores its status updates, log files and results on the file system and <code>syncRegistry()</code> can be used on the master to update the registry.</li>
-</ul>
-</div>
 <div id="notable-interface-changes" class="section level2">
 <h2>Notable interface changes</h2>
 <ul>
-<li><code>batchtools</code> remembers the last created or loaded Registry and makes it the default. This way, you do not need to pass the registry around that much. If you need to work with multiple registries simultaneously on the other hand, you can still do so by explicitly passing the registry.</li>
+<li>The packages <a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> have been merged.</li>
+<li><code>batchtools</code> remembers the last created or loaded Registry and makes it the default. This way, you do not need to pass the registry around that much. If you need to work with multiple registries simultaneously on the other hand, you can still do so by explicitly passing a registry.</li>
 <li>The template file format has changed:
 <ul>
-<li>The scheduler should directly execute the command <code>Rscript -e 'batchtools::doJobCollection(&lt;filename&gt;)'</code>. There is no intermediate source file like in BatchJobs.</li>
-<li>Besides the resources, all information stored in the object <code>JobDescription</code> can be access while brewing the template. Some variable names have changed and need to be adapted.</li>
+<li>The scheduler should directly execute the command <code>Rscript -e 'batchtools::doJobCollection(&lt;filename&gt;)'</code>. There is no intermediate R source file like in BatchJobs.</li>
+<li>All information stored in the object <code>JobDescription</code> can be access while brewing the template. Some variable names have changed and need to be adapted though.</li>
 </ul></li>
-<li>Most functions now return a <code>data.table</code> which is keyed with the <code>job.id</code>. This way, return values can be joined together easily and efficient. Furthermore, you can use these tables to subset ids.</li>
-<li>Function <code>makeDesign</code> has been removed. Hyperparameters can be defined by just passing a <code>data.frame</code> or <code>data.table</code> to <code>addExperiments</code>. For exhaustive designs, use <code>expand.grid()</code> or <code>data.table::CJ</code>.</li>
+<li>Most functions now return a <a href="https://cran.r-project.org/package=data.table">data.table</a> which is keyed with the <code>job.id</code>. This way, return values can be joined together easily and efficient (see example below). Furthermore, you can use these tables to subset ids.</li>
+<li>The function <code>makeDesign</code> has been removed. Hyperparameters can be defined by just passing a <code>data.frame</code> or <code>data.table</code> to <a href="https://mllg.github.io/batchtools/addExperiments.html">addExperiments</a>. For exhaustive designs, use <code>expand.grid()</code> or <code>data.table::CJ</code>.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
 reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span class="dt">make.default =</span> <span class="ot">TRUE</span>)</code></pre></div>
@@ -101,23 +95,27 @@ reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span cla
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">batchMap</span>(function(x, y) x +<span class="st"> </span>y, <span class="dt">x =</span> <span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">y =</span> <span class="dv">1</span>)</code></pre></div>
 <pre><code>## Adding 5 jobs ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids =<span class="st"> </span><span class="kw">findJobs</span>(x &gt;<span class="st"> </span><span class="dv">3</span>)
-
-<span class="co"># pass ids around ...</span>
-<span class="kw">getJobStatus</span>(ids)</code></pre></div>
-<pre><code>##    job.id submitted started done error memory batch.id job.hash
-## 1:      4      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA
-## 2:      5      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA
-##    time.queued time.running
-## 1:     NA secs      NA secs
-## 2:     NA secs      NA secs</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># ... or join the tables:</span>
-<span class="kw">getJobStatus</span>()[ids]</code></pre></div>
-<pre><code>##    job.id submitted started done error memory batch.id job.hash
-## 1:      4      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA
-## 2:      5      &lt;NA&gt;    &lt;NA&gt; &lt;NA&gt;    NA     NA       NA       NA
-##    time.queued time.running
-## 1:     NA secs      NA secs
-## 2:     NA secs      NA secs</code></pre>
+<span class="kw">print</span>(ids)</code></pre></div>
+<pre><code>##    job.id
+## 1:      4
+## 2:      5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># pass ids around ...</span>
+<span class="kw">getJobPars</span>(ids)</code></pre></div>
+<pre><code>##    job.id x y
+## 1:      4 4 1
+## 2:      5 5 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># or subset in a second step</span>
+<span class="kw">getJobPars</span>()[ids]</code></pre></div>
+<pre><code>##    job.id x y
+## 1:      4 4 1
+## 2:      5 5 1</code></pre>
+</div>
+<div id="notable-internal-changes" class="section level2">
+<h2>Notable internal changes</h2>
+<ul>
+<li><code>batchtools</code> does not use a SQL data base anymore. Instead all the information is stored directly in the registry using <a href="https://cran.r-project.org/package=data.table">data.tables</a> acting as an in-memory database.</li>
+<li>Nodes do not have to access the registry. <a href="https://mllg.github.io/batchtools/submitJobs.html">submitJobs()</a> stores an object of type <a href="https://mllg.github.io/batchtools/JobDescription.html">JobDescription</a> on the file system. This object holds all the information necessary to execute the job or chunk of jobs via <a href="https://mllg.github.io/batchtools/doJobCollection.html">doJobCollection()</a>. Each job stores its status updates, log files and results on the file system and <a href="https://mllg.github.io/batchtools/syncRegistry.html">syncRegistry()</a> can be used on the master to update the registry.</li>
+</ul>
 </div>
 
 
