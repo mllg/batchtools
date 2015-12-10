@@ -1,10 +1,16 @@
 library("data.table")
 library("checkmate")
 library("stringi")
-requireNamespace("withr")
+
+with_options = function(opts, expr) {
+  prev = options(names(opts))
+  on.exit(do.call(options, prev))
+  do.call(options, opts)
+  force(expr)
+}
 
 silent = function(expr) {
-  withr::with_options(list(batchtools.progress = FALSE), force(expr))
+  with_options(list(batchtools.progress = FALSE), expr)
 }
 
 expect_data_table = function(tab, key = NULL, ...) {

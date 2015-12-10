@@ -16,7 +16,7 @@ test_that("compress option works", {
   })
   expect_true(file_compression(file.path(reg$file.dir, "results", "1.rds")) == "gzfile")
 
-  withr::with_options(list(batchtools.compress = "xz"), {
+  with_options(list(batchtools.compress = "xz"), {
     reg = makeTempRegistry(make.default = FALSE)
     expect_true(file_compression(file.path(reg$file.dir, "registry.rds")) == "xzfile")
     ids = batchMap(identity, 1, reg = reg)
