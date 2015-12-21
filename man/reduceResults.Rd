@@ -40,6 +40,14 @@ is empty, \code{reduceResults} returns \code{init} (if available) or
 \description{
 A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects.
 }
+\examples{
+reg = makeTempRegistry()
+batchMap(function(x) x^2, x = 1:10, reg = reg)
+submitJobs(reg = reg)
+waitForJobs(reg = reg)
+reduceResults(function(x, y) c(x, y), reg = reg)
+reduceResults(function(x, y) c(x, sqrt(y)), init = numeric(0), reg = reg)
+}
 \seealso{
 Other Results: \code{\link{loadResult}},
   \code{\link{reduceResultsList}}

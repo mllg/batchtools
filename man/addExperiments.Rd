@@ -29,4 +29,13 @@ Registry. If not explictitly passed, uses the last created registry.}
 Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.
 Each element in the Cartesian product of problem designs and algorithm designs defines one computational job.
 }
+\examples{
+reg = makeTempExperimentRegistry()
+addProblem(reg = reg, "p1",
+  fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
+addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) mean(instance))
+prob.designs = list(p1 = expand.grid(n = 100, mean = -3:3, sd = 1:5))
+algo.designs = list(a1 = data.table())
+addExperiments(reg = reg, prob.designs, algo.designs)
+}
 

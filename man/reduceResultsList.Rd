@@ -42,6 +42,13 @@ to a \code{\link[data.table]{data.table}}.}
 \description{
 Functions to conveniently fetch the results from a \code{\link{Registry}}.
 }
+\examples{
+reg = makeTempRegistry()
+batchMap(function(x) x^2, x = 1:10, reg = reg)
+submitJobs(reg = reg)
+waitForJobs(reg = reg)
+reduceResultsList(fun = sqrt, reg = reg)
+}
 \seealso{
 \code{\link{reduceResults}}.
 

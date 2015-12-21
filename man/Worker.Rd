@@ -33,4 +33,10 @@ Print some verbose info messages. Default is \code{FALSE}.}
 \description{
 Functions to construct local and remote workers.
 }
+\examples{
+\dontrun{
+# create a worker for the local machine and use 4 CPUs.
+makeWorker("localhost", ncpus = 4, max.jobs = 4)
+}
+}
 

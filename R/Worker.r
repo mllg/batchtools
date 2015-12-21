@@ -20,6 +20,11 @@
 #' @rdname Worker
 #' @return [\code{\link{Worker}}].
 #' @export
+#' @examples
+#' \dontrun{
+#' # create a worker for the local machine and use 4 CPUs.
+#' makeWorker("localhost", ncpus = 4, max.jobs = 4)
+#' }
 makeWorker = function(nodename, ncpus = 0L, max.jobs = NULL, max.load = NULL, debug = FALSE) {
   findHelperScriptLinux = function(nodename) {
     if (nodename == "localhost") {
