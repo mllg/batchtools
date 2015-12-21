@@ -1,0 +1,149 @@
+---
+title: "Example for the usage of different algorithms on different problems"
+output: html_document
+---
+
+# Intro
+
+We stick to a rather simple, but not unrealistic example to explain some further functionalities: Applying two classification learners to the famous iris data set (Anderson 1935), vary a few hyperparameters and evaluate the effect on the classification performance.
+
+First, We create a registry, the central meta-data object which records technical details and the setup of the experiments.
+We use an *ExperimentRegistry* where the job definition is split into creating problems and algorithms.
+See the paper on [BatchJobs and BatchExperiments](http://www.jstatsoft.org/article/view/v064i11) for a detailed explanation.
+Again, we use a temporary registry and make it the default registry.
+```{r, message = FALSE}
+library(batchtools)
+# reg = makeExperimentRegistry(file.dir = "iris_example")
+reg = makeTempExperimentRegistry(make.default = TRUE)
+```
+
+# Problems and algorithms
+
+By adding a problem to the registry, we can define the data on which certain computational jobs shall be done.
+This can be a matrix, data frame or array that always stays the same for all subsequent experiments or can be of a more dynamic nature, e.g., subsamples of a dataset or random numbers drawn from a probability distribution .
+Therefore the function `addProblem()` accepts static parts in its `data` argument, which is passed to the argument `fun` which generates a (possibly stochastic) problem instance.
+For `data`, any R object can be used.
+If only `data` is given, the generated instance is `data`.
+The argument ´fun´ has to be a function with the arguments ´data´ and ´job´ (and optionally other arbitrary parameters).
+The argument `job` is an object of type `Job` which holds additional information about the job (see, the manual page for a detailed listing).
+
+We want to split the iris data set into a training set and test set.
+We use subsampling for this example which just uses a random fraction of the observations as training set.
+We define a problem function which returns the indices of the respective training and test set for a split with `ratio`% of the observations being in the test set:
+```{r}
+subsample = function(data, job, ratio, ...) {
+  n = nrow(data)
+  train = sample(n, floor(n * ratio))
+  test = setdiff(seq(n), train)
+  list(test = test, train = train)
+}
+```
+`addProblem` files the problem to the file system and the problem gets recorded in the registry.
+```{r}
+data("iris", package = "datasets")
+addProblem(name = "iris", data = iris, fun = subsample, seed = 42)
+```
+The function call will be evaluated at a later stage on the workers.
+In this process, the `data` part will be loaded and passed to the function.
+Note that we set a problem seed to synchronize the experiments in the sense that the same resampled training and test sets are used for the algorithm comparison in each distinct replication.
+
+The algorithms for the jobs are added to the registry in a similar manner.
+When using `addAlgorithm()`, an identifying name, the registry and a function, that contains the algorithm to be applied on the problem, are required arguments.
+The function must have the arguments `job`, `data` and `problem`.
+Further arbitrary arguments (e.g., hyper-parameters or strategy parameters) may be defined analogously as for the function in `addProblem`.
+The objects passed to the function via `job` and `data` are here the same as above, while via `instance` the return value of the evaluated problem function is passed.
+The algorithm can return any R object which will automatically be stored the file system for later retrieval.
+Firstly, we create a classification tree learner:
+```{r}
+tree.wrapper = function(data, job, problem, minsplit, cp, ...) {
+  library("rpart")
+  mod = rpart(Species ~ ., data = data[problem$train, ], control = list(minsplit = minsplit, cp = cp), ...)
+  pred = predict(mod, newdata = data[problem$test, ], type = "class")
+  table(data$Species[problem$test], pred)
+}
+addAlgorithm(name = "tree", fun = tree.wrapper)
+```
+
+Secondly, a random forest of classification trees:
+```{r}
+forest.wrapper = function(data, job, problem, ...) {
+  library("randomForest")
+  mod = randomForest(Species ~ ., data = data,
+  subset = problem$train, ...)
+  pred = predict(mod, newdata = data[problem$test, ])
+  table(data$Species[problem$test], pred)
+}
+addAlgorithm(name = "forest", fun = forest.wrapper)
+```
+Both algorithms return a confusion matrix for the predictions on the test set, which will later be used to calculate the misclassification rate.
+
+Note that using the `...` argument in the wrapper definitions allows us to circumvent naming specific design parameters for now.
+This is an advantage if we later want to extend the set of algorithm parameters in the experiment.
+The algorithms get recorded in the registry and the corresponding functions are stored on the file system.
+
+
+# Creating jobs
+
+The creation of jobs is done by adding experiments to the registry.
+Each experiment requires a problem design and a algorithm design which must be passed as named lists to `addExperiment()`.
+The elements of the lists are named after the problem or algorithm they refer to and contain a data frame or data table, in which different values for the  arguments of the appropriate functions can be determined.
+The columns should have the same names as the arguments in order that each line defines a parameter set for the usage of the function.
+When the problem design and the algorithm design are combined in `addExperiments`, every combination of the parameter sets of the two designs defines a distinct job.
+How often each of these jobs should be computed can be determined with the argument `repls`.
+
+```{r}
+# problem design: try two values for the ratio parameter
+pdes = list(iris = data.frame(ratio = c(0.67, 0.9)))
+
+# algorithm design: try combinations of minsplit and cp exhaustively,
+# try different number of trees for the forest
+ades = list(
+  tree = expand.grid(minsplit = c(5, 10, 20), cp = c(0.01, 0.1)),
+  forest = data.frame(ntree = c(100, 500, 1000))
+)
+
+addExperiments(pdes, ades, repls = 5)
+```
+The jobs are now available in the registry with an individual ID for each.
+The function `summarizeExperiments()` returns a table which gives a quick overview over all defined experiments.
+
+```{r}
+summarizeExperiments()
+```
+
+Before submitting all jobs to the batch system, we encourage you to test each algorithm individually.
+Or sometimes you want to submit only a subset of experiments because the jobs vastly differ in runtime.
+Another reoccurring task is the collection of results for only a subset of experiments.
+For all these use cases, `findExperiments()` can be employed to conveniently select a particular subset of jobs.
+It returns the IDs of all experiments that match the given criteria.
+Your selection can depend on substring matches of problem or algorithm IDs using `prob.name` or `algo.name`, respectively.
+You can also pass R expressions, which will be evaluated in your problem parameter setting (`prob.pars`) or algorithm parameter setting (`algo.pars`).
+The expression is then expected to evaluate to a Boolean value.
+Furthermore, you can restrict the experiments to specific replication numbers.
+
+To illustrate `findExperiments()`, we will select two experiments, one with a decision tree and the other with a random forest and the parameter `ntree = 1000`.
+The selected experiment IDs are then passed to testJob.
+```{r}
+id1 = findExperiments(algo.name = "tree")[1]
+id2 = findExperiments(algo.name = "forest", algo.pars = (ntree == 1000))[1]
+testJob(id = id1)
+testJob(id = id2)
+```
+
+After the jobs are executed, we collect the results with `reduceResultsDataTable()` and directly extract the mean misclassification error:
+```{r}
+submitJobs()
+results = reduceResultsDataTable(fun = function(res) (list(mce = (sum(res) - sum(diag(res))) / sum(res))))
+```
+
+Next, we merge the results table with the table of job parameters:
+```{r}
+tab = merge(getJobPars(), results)
+print(head(tab))
+```
+
+We now use `data.table` to aggregate the results per group.
+If you prefer, you can also use `base::aggregate()` or function from the `dplyr` package.
+```{r}
+tab[ratio == 0.67, list(mmce = mean(mce)), by = c("algorithm", "minsplit", "cp", "ntree")]
+```
