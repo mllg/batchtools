@@ -2,6 +2,16 @@ language: r
 sudo: required
 warnings_are_errors: true
 
+before_install:
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install gcc-4.8
+  - sudo apt-get -qq install g++-4.8
+  - sudo apt-get install -qq gfortran-4.8
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+  - sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-4.8 90
+
 r_github_packages:
   - jimhester/covr
 
