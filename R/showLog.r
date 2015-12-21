@@ -18,11 +18,27 @@ showLog = function(id, reg = getDefaultRegistry()) {
   file.show(log.file, delete.file = TRUE)
 }
 
-readLog = function(id, reg = getDefaultRegistry()) {
+grepLogs = function(pattern, ids = NULL, reg = getDefaultRegistry()) {
+  assertRegistry(reg)
+  ids = asIds(reg, ids, default = .findSubmitted(reg = reg))
+  res = lapply(ids$job.id, function(id) {
+    lines = readLog(id, impute = NA_character_, reg = reg)
+    if (!testScalarNA(res) && any(stri_detect_regex(lines, pattern)))
+      return(lines)
+    return(NULL)
+  })
+  names(res) = ids$job.id
+  res[!vlapply(res, is.null)]
+}
+
+readLog = function(id, impute = NULL, reg = getDefaultRegistry()) {
   x = reg$status[id, c("job.id", "done", "job.hash"), with = FALSE, nomatch = 0L]
   log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", x$job.hash))
-  if (is.na(x$done) || !file.exists(log.file))
-    stopf("Log file for job with id %i not found", x$job.id)
+  if (is.na(x$done) || !file.exists(log.file)) {
+    if (is.null(impute))
+      stopf("Log file for job with id %i not found", x$job.id)
+    return(impute)
+  }
 
   lines = readLines(log.file)
   pattern = sprintf("\\[job\\((chunk|%i)\\):", x$job.id)

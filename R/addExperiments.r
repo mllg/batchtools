@@ -15,6 +15,14 @@
 #' @template expreg
 #' @return [\code{data.table}]. Generated job ids are stored in the column \dQuote{job.id}.
 #' @export
+#' @examples
+#' reg = makeTempExperimentRegistry()
+#' addProblem(reg = reg, "p1",
+#'   fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
+#' addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) mean(instance))
+#' prob.designs = list(p1 = expand.grid(n = 100, mean = -3:3, sd = 1:5))
+#' algo.designs = list(a1 = data.table())
+#' addExperiments(reg = reg, prob.designs, algo.designs)
 addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
   assertList(prob.designs, types = "data.frame", names = "named")

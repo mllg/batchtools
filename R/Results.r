@@ -22,6 +22,13 @@
 #' @template reg
 #' @family Results
 #' @export
+#' @examples
+#' reg = makeTempRegistry()
+#' batchMap(function(x) x^2, x = 1:10, reg = reg)
+#' submitJobs(reg = reg)
+#' waitForJobs(reg = reg)
+#' reduceResults(function(x, y) c(x, y), reg = reg)
+#' reduceResults(function(x, y) c(x, sqrt(y)), init = numeric(0), reg = reg)
 reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
@@ -74,6 +81,12 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @seealso \code{\link{reduceResults}}.
 #' @family Results
 #' @export
+#' @examples
+#' reg = makeTempRegistry()
+#' batchMap(function(x) x^2, x = 1:10, reg = reg)
+#' submitJobs(reg = reg)
+#' waitForJobs(reg = reg)
+#' reduceResultsList(fun = sqrt, reg = reg)
 reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
