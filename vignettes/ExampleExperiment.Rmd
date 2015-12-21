@@ -71,11 +71,10 @@ addAlgorithm(name = "tree", fun = tree.wrapper)
 Secondly, a random forest of classification trees:
 ```{r}
 forest.wrapper = function(data, job, problem, ...) {
-  library("randomForest")
-  mod = randomForest(Species ~ ., data = data,
-  subset = problem$train, ...)
-  pred = predict(mod, newdata = data[problem$test, ])
-  table(data$Species[problem$test], pred)
+  library("ranger")
+  mod = ranger(Species ~ ., data = data[problem$train, ], write.forest = TRUE)
+  pred = predict(mod, data = data[problem$test, ])
+  table(data$Species[problem$test], pred$predictions)
 }
 addAlgorithm(name = "forest", fun = forest.wrapper)
 ```
