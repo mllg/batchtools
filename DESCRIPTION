@@ -26,8 +26,9 @@ Imports:
     stringi,
     utils
 Suggests:
-    testthat (>= 0.11.0),
     knitr,
-    rmarkdown
+    ranger,
+    rmarkdown,
+    testthat (>= 0.11.0)
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
