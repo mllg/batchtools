@@ -12,6 +12,6 @@ execJob.Experiment = function(job) {
   with_seed(job$problem$seed, instance <- do.call(wrapper, job$pars$prob.pars))
 
   catf("Applying algorithm %s on problem %s ...", job$algorithm$name, job$problem$name)
-  wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, problem = instance, ...)
+  wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, instance = instance, ...)
   with_seed(job$seed, do.call(wrapper, job$pars$algo.pars))
 }

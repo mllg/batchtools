@@ -21,7 +21,7 @@ test_that("with_seed", {
 test_that("Problem and Algorithm seed", {
   reg = makeTempExperimentRegistry(FALSE, seed = 42L)
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) runif(1), seed = 1L)
-  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, ...) list(problem = problem, res = runif(1)))
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) list(instance = instance, res = runif(1)))
   prob.designs = list(p1 = data.table())
   algo.designs = list(a1 = data.table())
   repls = 3
@@ -39,6 +39,6 @@ test_that("Problem and Algorithm seed", {
   silent({
     results = rbindlist(reduceResultsList(reg = reg))
   })
-  expect_true(all(results$problem == p))
+  expect_true(all(results$instance == p))
   expect_true(all(results$res == c(a1, a2, a3)))
 })
