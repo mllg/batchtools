@@ -6,9 +6,9 @@ addAlgorithm = function(name, fun, reg = getDefaultRegistry())  {
   if (!stri_detect_regex(name, "^[[:alnum:]_.-]+$"))
     stopf("Illegal characters in problem name: %s", name)
   if (is.null(fun)) {
-    fun = function(job, data, problem, ...) problem
+    fun = function(job, data, instance, ...) instance
   } else {
-    assertFunction(fun, args = c("job", "data", "problem"))
+    assertFunction(fun, args = c("job", "data", "instance"))
   }
 
   algo = setClasses(list(fun = fun, name = name), "Algorithm")

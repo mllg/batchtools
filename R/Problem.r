@@ -17,10 +17,9 @@
 #'   Static problem part. Default is \code{NULL}.
 #' @param fun [\code{function}]\cr
 #'   For \code{addProblem}, the stochastic problem part. The static part is passed to this function with name
-#'   \dQuote{data}, a reduced \code{\link{JobCollection}} with name \dQuote{job}.
+#'   \dQuote{data} and the \code{\link{Job}} is passed as \dQuote{job}.
 #'   For \code{addAlgorithm}, the algorithm function. The static part is passed as \dQuote{data}, the generated
-#'   problem instance is passed as \dQuote{problem} and a \code{\link{JobCollection}} as \dQuote{job}.
-#'   Use \code{...} if you want to ignore some of these arguments.
+#'   problem instance is passed as \dQuote{instance} and the \code{\link{Job}} as \dQuote{job}.
 #' @param seed [\code{integer(1)}]\cr
 #'   Start seed for this problem. This allows the \dQuote{synchronization} of a stochastic
 #'   problem across algorithms, so that different algorithms are evaluated on the same stochastic instance.

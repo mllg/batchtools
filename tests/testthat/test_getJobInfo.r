@@ -67,7 +67,7 @@ test_that("getJobPars", {
 test_that("getJobPars with repls", {
   reg = makeTempExperimentRegistry()
   prob = addProblem("prob", data = iris, fun = function(data, job) nrow(data), reg = reg)
-  algo = addAlgorithm("algo", fun = function(job, data, problem, i, ...) problem, reg = reg)
+  algo = addAlgorithm("algo", fun = function(job, data, instance, i, ...) instance, reg = reg)
   prob.designs = list(prob = data.table())
   algo.designs = list(algo = data.table(i = 1:2))
   addExperiments(prob.designs, algo.designs, repls = 3, reg = reg)
@@ -83,7 +83,7 @@ test_that("getJobPars with repls", {
 test_that("getJobInfo.ExperimentRegistry", {
   reg = makeTempExperimentRegistry(FALSE)
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) nrow(data), seed = 42)
-  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, sq) problem^sq)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq) instance^sq)
   ids = addExperiments(list(p1 = data.table(k = 1)), list(a1 = data.table(sq = 1:3)), reg = reg)
 
   tab = getJobInfo(reg = reg, pars.as.cols = FALSE)

@@ -40,7 +40,7 @@ jobs.
 reg = makeTempExperimentRegistry(make.default = FALSE)
 addProblem(reg = reg, "p1",
   fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
-addAlgorithm(reg = reg, "a1", fun = function(job, data, problem, ...) mean(problem))
+addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) mean(instance))
 addExperiments(reg = reg, list(p1 = CJ(n = 100, mean = -3:3, sd = 1:5)), list(a1 = data.table()))
 submitJobs(reg = reg)
 waitForJobs(reg = reg)
