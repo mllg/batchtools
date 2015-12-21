@@ -1,6 +1,10 @@
 ---
 title: "A short example for the usage of batchtools: Approximation of Pi"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example/BatchJobs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 To get a first insight into the usage of `batchtools`, we start with an exemplary Monte Carlo simulation to approximate $\pi$.
