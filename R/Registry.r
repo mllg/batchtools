@@ -8,6 +8,13 @@ getDefaultRegistry = function() {
 
 #' @export
 #' @rdname Registry
+setDefaultRegistry = function(reg) {
+  assertRegistry(reg)
+  batchtools$default.registry = reg
+}
+
+#' @export
+#' @rdname Registry
 clearDefaultRegistry = function() {
   batchtools$default.registry = NULL
   invisible(TRUE)
