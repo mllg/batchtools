@@ -1,6 +1,10 @@
 ---
 title: "Example for the usage of different algorithms on different problems"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example/BatchExperiments}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 # Intro
