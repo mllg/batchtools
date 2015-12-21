@@ -1,2 +1,3 @@
 man/
-inst/web
+inst/web/
+*.html

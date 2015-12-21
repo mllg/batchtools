@@ -8,10 +8,13 @@
 \alias{makeRegistry}
 \alias{makeTempRegistry}
 \alias{saveRegistry}
+\alias{setDefaultRegistry}
 \alias{syncRegistry}
 \title{Construct a Registry Object}
 \usage{
 getDefaultRegistry()
+
+setDefaultRegistry(reg)
 
 clearDefaultRegistry()
 
@@ -32,6 +35,9 @@ saveRegistry(reg = getDefaultRegistry())
 syncRegistry(reg = getDefaultRegistry(), save = TRUE)
 }
 \arguments{
+\item{reg}{[\code{\link{Registry}}]\cr
+Registry. If not explictitly passed, uses the last created registry.}
+
 \item{file.dir}{[\code{character(1)}]\cr
 Path where all files of the registry are saved.
 Default is directory \dQuote{registry} in the current working directory.}
@@ -81,9 +87,6 @@ If set to \code{TRUE}, the \code{file.dir} and \code{work.dir} will be updated i
 likely to break computation on the system, only do this if no jobs are currently running. Default is \code{FALSE}.
 If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
 registry in an read-only mode.}
-
-\item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
 
 \item{save}{[\code{logical(1)}]\cr
 Save the registry to the file system? Default is \code{TRUE}.}
