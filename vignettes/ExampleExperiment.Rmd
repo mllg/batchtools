@@ -59,22 +59,22 @@ The objects passed to the function via `job` and `data` are here the same as abo
 The algorithm can return any R object which will automatically be stored the file system for later retrieval.
 Firstly, we create a classification tree learner:
 ```{r}
-tree.wrapper = function(data, job, problem, minsplit, cp, ...) {
+tree.wrapper = function(data, job, instance, minsplit, cp, ...) {
   library("rpart")
-  mod = rpart(Species ~ ., data = data[problem$train, ], control = list(minsplit = minsplit, cp = cp), ...)
-  pred = predict(mod, newdata = data[problem$test, ], type = "class")
-  table(data$Species[problem$test], pred)
+  mod = rpart(Species ~ ., data = data[instance$train, ], control = list(minsplit = minsplit, cp = cp), ...)
+  pred = predict(mod, newdata = data[instance$test, ], type = "class")
+  table(data$Species[instance$test], pred)
 }
 addAlgorithm(name = "tree", fun = tree.wrapper)
 ```
 
 Secondly, a random forest of classification trees:
 ```{r}
-forest.wrapper = function(data, job, problem, ...) {
+forest.wrapper = function(data, job, instance, ...) {
   library("ranger")
-  mod = ranger(Species ~ ., data = data[problem$train, ], write.forest = TRUE)
-  pred = predict(mod, data = data[problem$test, ])
-  table(data$Species[problem$test], pred$predictions)
+  mod = ranger(Species ~ ., data = data[instance$train, ], write.forest = TRUE)
+  pred = predict(mod, data = data[instance$test, ])
+  table(data$Species[instance$test], pred$predictions)
 }
 addAlgorithm(name = "forest", fun = forest.wrapper)
 ```
