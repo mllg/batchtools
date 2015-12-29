@@ -1,0 +1,49 @@
+---
+title: "Error handling"
+---
+
+In any large scale experiment many things can and will go wrong. 
+The cluster might have an outage, jobs may run into resource limits or crash, subtile bugs in your code could be triggered or any other error condition might arise. 
+In these situations it is important to quickly determine what went wrong and to recompute only the minimal number of required jobs.
+
+Therefore, before you submit anything you should use `testJob()` to catch errors that are easy to spot because they are raised in many or all jobs. 
+This function runs the job without side effects in an independent R process on your local machine via R CMD BATCH exactly as on the slave, redirects the output of the process to your R console, loads the job result and returns it.
+
+By way of illustration here is a small example. 
+Ten jobs are created, two of which will throw an error.
+
+```{r, message = FALSE}
+library(batchtools)
+reg = makeTempRegistry(make.default = TRUE)
+
+flakeyFunction <- function(value) {
+  if (value %in% c(2, 9)) stop("Ooops.")
+  value^2
+}
+batchMap(flakeyFunction, 1:10)
+```
+
+```{r}
+testJob(id = 1)
+# testJob(id = 2)
+```
+
+In this case, testing the job with ID = 1 provides the appropriate result but testing the job with ID = 2 leads to an error.
+
+When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run `getStatus()` to display a summary of the current state of the system.
+
+
+```{r}
+submitJobs()
+getStatus()
+```
+
+The status message shows that two of the jobs could not be executed succesfully.
+To get the IDs of all jobs that failed due to an error we can use `findError()`. 
+If we want to peek into the R log file of a job to see more context for the error we can use `showLog()`.
+
+```{r}
+findError()
+showLog(id = 9)
+```
+

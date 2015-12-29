@@ -53,19 +53,19 @@ Note that we set a problem seed to synchronize the experiments in the sense that
 
 The algorithms for the jobs are added to the registry in a similar manner.
 When using `addAlgorithm()`, an identifying name, the registry and a function, that contains the algorithm to be applied on the problem, are required arguments.
-The function must have the arguments `job`, `data` and `problem`.
+The function must have the arguments `job`, `data` and `instance`.
 Further arbitrary arguments (e.g., hyper-parameters or strategy parameters) may be defined analogously as for the function in `addProblem`.
 The objects passed to the function via `job` and `data` are here the same as above, while via `instance` the return value of the evaluated problem function is passed.
-The algorithm can return any R object which will automatically be stored the file system for later retrieval.
-Firstly, we create a classification tree learner:
+The algorithm can return any R object which will automatically be stored in the file system for later retrieval.
+Firstly, we create a classification support vector machine:
 ```{r}
-tree.wrapper = function(data, job, instance, minsplit, cp, ...) {
-  library("rpart")
-  mod = rpart(Species ~ ., data = data[instance$train, ], control = list(minsplit = minsplit, cp = cp), ...)
+svm.wrapper = function(data, job, instance, ...) {
+  library("e1071")
+  mod = svm(Species ~ ., data = data[instance$train, ], ...)
   pred = predict(mod, newdata = data[instance$test, ], type = "class")
   table(data$Species[instance$test], pred)
 }
-addAlgorithm(name = "tree", fun = tree.wrapper)
+addAlgorithm(name = "svm", fun = svm.wrapper)
 ```
 
 Secondly, a random forest of classification trees:
@@ -98,10 +98,10 @@ How often each of these jobs should be computed can be determined with the argum
 # problem design: try two values for the ratio parameter
 pdes = list(iris = data.frame(ratio = c(0.67, 0.9)))
 
-# algorithm design: try combinations of minsplit and cp exhaustively,
+# algorithm design: try combinations of kernel and epsilon exhaustively,
 # try different number of trees for the forest
 ades = list(
-  tree = expand.grid(minsplit = c(5, 10, 20), cp = c(0.01, 0.1)),
+  svm = expand.grid(kernel = c("linear", "polynomial", "radial"), epsilon = c(0.01, 0.1)),
   forest = data.frame(ntree = c(100, 500, 1000))
 )
 
@@ -124,10 +124,10 @@ You can also pass R expressions, which will be evaluated in your problem paramet
 The expression is then expected to evaluate to a Boolean value.
 Furthermore, you can restrict the experiments to specific replication numbers.
 
-To illustrate `findExperiments()`, we will select two experiments, one with a decision tree and the other with a random forest and the parameter `ntree = 1000`.
+To illustrate `findExperiments()`, we will select two experiments, one with a support vector machine and the other with a random forest and the parameter `ntree = 1000`.
 The selected experiment IDs are then passed to testJob.
 ```{r}
-id1 = findExperiments(algo.name = "tree")[1]
+id1 = findExperiments(algo.name = "svm")[1]
 id2 = findExperiments(algo.name = "forest", algo.pars = (ntree == 1000))[1]
 testJob(id = id1)
 testJob(id = id2)
@@ -148,5 +148,5 @@ print(head(tab))
 We now use `data.table` to aggregate the results per group.
 If you prefer, you can also use `base::aggregate()` or function from the `dplyr` package.
 ```{r}
-tab[ratio == 0.67, list(mmce = mean(mce)), by = c("algorithm", "minsplit", "cp", "ntree")]
+tab[ratio == 0.67, list(mmce = mean(mce)), by = c("algorithm", "kernel", "epsilon", "ntree")]
 ```
