@@ -34,7 +34,7 @@ For an \code{\link{ExperimentRegistry}} on the other hand, you can use \code{gro
 to first partition the jobs into homogeneous groups and then chunk them (c.f. example).}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 [\code{\link[data.table]{data.table}}]. Table \code{ids} with additional column

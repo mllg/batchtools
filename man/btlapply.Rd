@@ -21,7 +21,7 @@ Function to apply.}
 Additional arguments passed to \code{fun} (\code{btlapply}) or vectors to map over (\code{btmapply}).}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the last created registry.}
 
 \item{more.args}{[\code{list}]\cr
 Additional arguments passed to \code{fun}.}

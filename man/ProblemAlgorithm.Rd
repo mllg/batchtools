@@ -30,7 +30,7 @@ For \code{addAlgorithm}, the algorithm function. The static part is passed as \d
 problem instance is passed as \dQuote{instance} and the \code{\link{Job}} as \dQuote{job}.}
 
 \item{reg}{[\code{\link{ExperimentRegistry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the last created registry.}
 
 \item{data}{[\code{ANY}]\cr
 Static problem part. Default is \code{NULL}.}

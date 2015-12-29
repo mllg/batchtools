@@ -8,7 +8,7 @@ cfBrewTemplate(reg, template, jc)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the last created registry.}
 
 \item{template}{[\code{character(1)}]\cr
 String with contents of the brew templated, as returned by \code{\link{cfReadBrewTemplate}}.}

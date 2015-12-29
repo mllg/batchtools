@@ -20,7 +20,7 @@ If not set, defaults to all jobs.}
 Split the resulting table by columns of \code{\link{getJobPars}}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 [\code{named list}] with elements \dQuote{table}
