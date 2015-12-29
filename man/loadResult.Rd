@@ -15,7 +15,7 @@ and exactly one row.}
 Value to return if the result file is missing. Default is \code{NULL}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 [\code{ANY}]. The saved result or \code{missing.val} if result file

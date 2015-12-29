@@ -39,7 +39,7 @@ Name of the environment variable set by the scheduler to identify IDs of job arr
 Store the job on the file system before submitting? Default is \code{TRUE}.}
 }
 \description{
-Use this function when you implement a backend for a batch system. You must define the functions
+Use this function when you implement a back-end for a batch system. You must define the functions
 specified in the arguments.
 }
 \seealso{

@@ -30,7 +30,7 @@ Immediately cancel if a job terminates with an error? Default is
 \code{FALSE}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated
@@ -38,6 +38,6 @@ successfully and \code{FALSE} if either the timeout is reached or at least
 one job terminated with an exception.
 }
 \description{
-This function can be used to synchronise the execution on batch systems.
+This function can be used to synchronize the execution on batch systems.
 }
 

@@ -9,7 +9,7 @@ makeSubmitJobResult(status, batch.id, msg)
 }
 \arguments{
 \item{status}{[\code{integer(1)}]\cr
-Launch status of job. 0 means success, codes bewteen 1 and 100 are temporary errors and any
+Launch status of job. 0 means success, codes between 1 and 100 are temporary errors and any
 error greater than 100 is a permanent failure.}
 
 \item{batch.id}{[\code{character(1)}]\cr

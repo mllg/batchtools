@@ -21,7 +21,7 @@ If not set, defaults to all jobs.}
 Named list of resources. Default is \code{list()}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 [\code{JobCollection}].

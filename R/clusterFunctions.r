@@ -1,7 +1,7 @@
 #' @title Create a ClusterFunctions object
 #'
 #' @description
-#' Use this function when you implement a backend for a batch system. You must define the functions
+#' Use this function when you implement a back-end for a batch system. You must define the functions
 #' specified in the arguments.
 #'
 #' @param name [\code{character(1)}]\cr
@@ -55,7 +55,7 @@ print.ClusterFunctions = function(x, ...) {
 #' Use this function in your implementation of \code{\link{makeClusterFunctions}} to create a return
 #' value for the \code{submitJob} function.
 #' @param status [\code{integer(1)}]\cr
-#'   Launch status of job. 0 means success, codes bewteen 1 and 100 are temporary errors and any
+#'   Launch status of job. 0 means success, codes between 1 and 100 are temporary errors and any
 #'   error greater than 100 is a permanent failure.
 #' @param batch.id [\code{character(1)}]\cr
 #'   Unique id of this job on batch system. Note that this is not the usual job id used in

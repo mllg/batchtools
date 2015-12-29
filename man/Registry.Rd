@@ -36,7 +36,7 @@ syncRegistry(reg = getDefaultRegistry(), save = TRUE)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the last created registry.}
 
 \item{file.dir}{[\code{character(1)}]\cr
 Path where all files of the registry are saved.

@@ -12,7 +12,7 @@ Single integer to specify the job or a \code{data.table} with column \code{job.i
 and exactly one row.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 [ANY]. Returns the result of the job if successful.

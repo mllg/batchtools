@@ -1,2 +1,2 @@
 #' @param reg [\code{\link{Registry}}]\cr
-#'   Registry. If not explictitly passed, uses the last created registry.
+#'   Registry. If not explicitly passed, uses the last created registry.

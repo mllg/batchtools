@@ -30,7 +30,7 @@ Default is the first result.}
 Additional arguments passed to to function \code{fun}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explictitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 Aggregated results, return type depends on function. If \code{ids}
