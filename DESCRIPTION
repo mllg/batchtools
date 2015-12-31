@@ -26,10 +26,10 @@ Imports:
     stringi,
     utils
 Suggests:
+    e1071,
     knitr,
     ranger,
     rmarkdown,
-    e1071,
     rpart,
     testthat (>= 0.11.0)
 VignetteBuilder: knitr
