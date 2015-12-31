@@ -1,5 +1,10 @@
 ---
 title: "Error handling"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example/ErrorHandling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 In any large scale experiment many things can and will go wrong. 
