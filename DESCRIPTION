@@ -26,6 +26,7 @@ Imports:
     stringi,
     utils
 Suggests:
+    e1071,
     knitr,
     ranger,
     rmarkdown,
