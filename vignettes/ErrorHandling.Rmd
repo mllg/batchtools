@@ -7,19 +7,19 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-In any large scale experiment many things can and will go wrong. 
-The cluster might have an outage, jobs may run into resource limits or crash, subtile bugs in your code could be triggered or any other error condition might arise. 
+In any large scale experiment many things can and will go wrong.
+The cluster might have an outage, jobs may run into resource limits or crash, subtile bugs in your code could be triggered or any other error condition might arise.
 In these situations it is important to quickly determine what went wrong and to recompute only the minimal number of required jobs.
 
-Therefore, before you submit anything you should use `testJob()` to catch errors that are easy to spot because they are raised in many or all jobs. 
+Therefore, before you submit anything you should use `testJob()` to catch errors that are easy to spot because they are raised in many or all jobs.
 This function runs the job without side effects in an independent R process on your local machine via R CMD BATCH exactly as on the slave, redirects the output of the process to your R console, loads the job result and returns it.
 
-By way of illustration here is a small example. 
+By way of illustration here is a small example.
 Ten jobs are created, two of which will throw an error.
 
 ```{r, message = FALSE}
 library(batchtools)
-reg = makeTempRegistry(make.default = TRUE)
+reg = makeTempRegistry(work.dir = "/tmp", make.default = TRUE)
 
 flakeyFunction <- function(value) {
   if (value %in% c(2, 9)) stop("Ooops.")
@@ -44,11 +44,14 @@ getStatus()
 ```
 
 The status message shows that two of the jobs could not be executed succesfully.
-To get the IDs of all jobs that failed due to an error we can use `findError()`. 
-If we want to peek into the R log file of a job to see more context for the error we can use `showLog()`.
-
+To get the IDs of all jobs that failed due to an error we can use `findError()`.
 ```{r}
 findError()
+```
+If we want to peek into the R log file of a job to see more context for the error we can use `showLog()`.
+```{r,eval=FALSE}
 showLog(id = 9)
 ```
-
+```{r,echo=FALSE}
+batchtools:::readLog(9)
+```

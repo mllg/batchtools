@@ -76,7 +76,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Therefore, before you submit anything you should use <code>testJob()</code> to catch errors that are easy to spot because they are raised in many or all jobs. This function runs the job without side effects in an independent R process on your local machine via R CMD BATCH exactly as on the slave, redirects the output of the process to your R console, loads the job result and returns it.</p>
 <p>By way of illustration here is a small example. Ten jobs are created, two of which will throw an error.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
-reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span class="dt">make.default =</span> <span class="ot">TRUE</span>)
+reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span class="dt">work.dir =</span> <span class="st">&quot;/tmp&quot;</span>, <span class="dt">make.default =</span> <span class="ot">TRUE</span>)
 
 flakeyFunction &lt;-<span class="st"> </span>function(value) {
   if (value %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">9</span>)) <span class="kw">stop</span>(<span class="st">&quot;Ooops.&quot;</span>)
@@ -98,12 +98,19 @@ flakeyFunction &lt;-<span class="st"> </span>function(value) {
 ##   System   :  0 (  0.0%)
 ##   Done     :  8 ( 80.0%)
 ##   Error    :  2 ( 20.0%)</code></pre>
-<p>The status message shows that two of the jobs could not be executed succesfully. To get the IDs of all jobs that failed due to an error we can use <code>findError()</code>. If we want to peek into the R log file of a job to see more context for the error we can use <code>showLog()</code>.</p>
+<p>The status message shows that two of the jobs could not be executed succesfully. To get the IDs of all jobs that failed due to an error we can use <code>findError()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">findError</span>()</code></pre></div>
 <pre><code>##    job.id
 ## 1:      2
 ## 2:      9</code></pre>
+<p>If we want to peek into the R log file of a job to see more context for the error we can use <code>showLog()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">showLog</span>(<span class="dt">id =</span> <span class="dv">9</span>)</code></pre></div>
+<pre><code>## [1] &quot;[job(chunk): 2016-01-02 01:55:28] Starting calculation of 1 jobs&quot;     
+## [2] &quot;[job(chunk): 2016-01-02 01:55:28] Setting working directory to '/tmp'&quot;
+## [3] &quot;[job(9): 2016-01-02 01:55:28] Starting job with job.id=9&quot;             
+## [4] &quot;[job(9): 2016-01-02 01:55:28] Error in (function (value)  : Ooops.&quot;   
+## [5] &quot;[job(9): 2016-01-02 01:55:28] Job terminated with an exception&quot;       
+## [6] &quot;[job(chunk): 2016-01-02 01:55:28] Calculation finished ...&quot;</code></pre>
 
 
 

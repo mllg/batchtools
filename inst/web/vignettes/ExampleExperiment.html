@@ -77,7 +77,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>We stick to a rather simple, but not unrealistic example to explain some further functionalities: Applying two classification learners to the famous iris data set (Anderson 1935), vary a few hyperparameters and evaluate the effect on the classification performance.</p>
 <p>First, We create a registry, the central meta-data object which records technical details and the setup of the experiments. We use an <em>ExperimentRegistry</em> where the job definition is split into creating problems and algorithms. See the paper on <a href="http://www.jstatsoft.org/article/view/v064i11">BatchJobs and BatchExperiments</a> for a detailed explanation. Again, we use a temporary registry and make it the default registry.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
-<span class="co"># reg = makeExperimentRegistry(file.dir = &quot;iris_example&quot;)</span>
 reg =<span class="st"> </span><span class="kw">makeTempExperimentRegistry</span>(<span class="dt">make.default =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
 <div id="problems-and-algorithms" class="section level1">
@@ -152,7 +151,7 @@ id2 =<span class="st"> </span><span class="kw">findExperiments</span>(<span clas
 <pre><code>##             
 ##              setosa versicolor virginica
 ##   setosa         17          0         0
-##   versicolor      0         15         3
+##   versicolor      0         16         2
 ##   virginica       0          0        15</code></pre>
 <p>After the jobs are executed, we collect the results with <code>reduceResultsDataTable()</code> and directly extract the mean misclassification error:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">submitJobs</span>()</code></pre></div>
@@ -179,8 +178,8 @@ id2 =<span class="st"> </span><span class="kw">findExperiments</span>(<span clas
 ## 5:       svm polynomial    0.10    NA 0.060
 ## 6:       svm     radial    0.10    NA 0.060
 ## 7:    forest         NA      NA   100 0.048
-## 8:    forest         NA      NA   500 0.048
-## 9:    forest         NA      NA  1000 0.052</code></pre>
+## 8:    forest         NA      NA   500 0.056
+## 9:    forest         NA      NA  1000 0.048</code></pre>
 </div>
 
 

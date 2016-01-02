@@ -118,30 +118,30 @@ ids = batchMap(identity, 1:25, reg = reg)
 print(ids)
 </div>
 <div class='output'>    job.id chunk
- 1:      1     3
- 2:      2     1
- 3:      3     3
+ 1:      1     2
+ 2:      2     3
+ 3:      3     1
  4:      4     1
- 5:      5     2
- 6:      6     2
- 7:      7     2
- 8:      8     2
+ 5:      5     3
+ 6:      6     1
+ 7:      7     3
+ 8:      8     1
  9:      9     3
-10:     10     3
-11:     11     1
+10:     10     2
+11:     11     2
 12:     12     1
-13:     13     3
-14:     14     1
-15:     15     1
-16:     16     1
-17:     17     1
-18:     18     1
-19:     19     2
-20:     20     2
-21:     21     3
-22:     22     2
-23:     23     3
-24:     24     2
+13:     13     1
+14:     14     2
+15:     15     3
+16:     16     3
+17:     17     2
+18:     18     2
+19:     19     1
+20:     20     1
+21:     21     2
+22:     22     1
+23:     23     2
+24:     24     3
 25:     25     3
     job.id chunk
 </div>
@@ -172,15 +172,15 @@ print(ids)
 <div class='output'>     job.id problem algorithm chunk
   1:      1   prob1      algo     1
   2:      2   prob1      algo     2
-  3:      3   prob1      algo     1
-  4:      4   prob1      algo     3
-  5:      5   prob1      algo     4
+  3:      3   prob1      algo     3
+  4:      4   prob1      algo     4
+  5:      5   prob1      algo     5
  ---                               
-146:    146   prob2      algo    15
-147:    147   prob2      algo    29
-148:    148   prob2      algo    25
-149:    149   prob2      algo    22
-150:    150   prob2      algo    19
+146:    146   prob2      algo    26
+147:    147   prob2      algo    27
+148:    148   prob2      algo    28
+149:    149   prob2      algo    26
+150:    150   prob2      algo    13
 </div>
 <div class='input'>dcast(ids, chunk ~ problem)
 </div>
