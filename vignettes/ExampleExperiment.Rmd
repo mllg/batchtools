@@ -15,10 +15,16 @@ First, We create a registry, the central meta-data object which records technica
 We use an *ExperimentRegistry* where the job definition is split into creating problems and algorithms.
 See the paper on [BatchJobs and BatchExperiments](http://www.jstatsoft.org/article/view/v064i11) for a detailed explanation.
 Again, we use a temporary registry and make it the default registry.
-```{r, message = FALSE}
+```{r, eval = FALSE, message = FALSE}
 library(batchtools)
-# reg = makeExperimentRegistry(file.dir = "iris_example")
 reg = makeTempExperimentRegistry(make.default = TRUE)
+```
+```{r, include = FALSE}
+library(batchtools)
+fd = file.path(dirname(tempdir()), "batchtools", "ExampleExperiment")
+unlink(fd, recursive = TRUE)
+dir.create(dirname(fd), recursive = TRUE, showWarnings = FALSE)
+reg = makeExperimentRegistry(file.dir = fd, seed = 1)
 ```
 
 # Problems and algorithms
