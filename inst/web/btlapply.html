@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>btlapply. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Synchronous Apply Functions</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>btlapply(X, fun, ..., reg&nbsp;=&nbsp;makeTempRegistry(make.default&nbsp;=&nbsp;FALSE))</div>
+<div>btmapply(fun, ..., more.args&nbsp;=&nbsp;list(), reg&nbsp;=&nbsp;makeTempRegistry(make.default = FALSE))</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>X</dt>
+      <dd>[<code><a href='http://www.inside-r.org/r-doc/base/vector'>vector</a></code>]
+Vector to apply over.</dd>
+      <dt>fun</dt>
+      <dd>[<code>function</code>]
+Function to apply.</dd>
+      <dt>...</dt>
+      <dd>[<code>ANY</code>]
+Additional arguments passed to <code>fun</code> (<code>btlapply</code>) or vectors to map over (<code>btmapply</code>).</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+      <dt>more.args</dt>
+      <dd>[<code>list</code>]
+Additional arguments passed to <code>fun</code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>list</code>] List with the results of the function call.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>This is a set of convenience functions as counterparts to the sequential
+apply functions in base R: <code>btlapply</code> for <code><a href='http://www.inside-r.org/r-doc/base/lapply'>lapply</a></code> and
+<code>btmapply</code> for <code>link[base]{mapply}</code>.
+Internally the jobs are created in a temporary registry (see <code><a href='Registry.html'>makeTempRegistry</a></code>
+and <code><a href='batchMap.html'>batchMap</a></code> is called on the input vector(s).
+After <code><a href='waitForJobs.html'>waitForJobs</a></code> terminated, the result is reduced into a list.
+Because the result is only returned as soon as all jobs are terminated,
+the execution is called synchronized (in contrast to the usual asynchronous execution on
+batch systems).</p>
+  
+      <p>Note that these functions are one suitable for short and fail-safe operations
+on batch system. If some jobs fail, you have to retrieve partial results from the
+temporary registry directory yourself.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>btlapply</li><li>btmapply</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>reduceResults. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Reduce Results</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>reduceResults(fun, ids&nbsp;=&nbsp;NULL, init, ..., reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>fun</dt>
+      <dd>[<code>function</code>]
+A function to reduce the results. The result of previous iterations (or
+the <code>init</code>) will be passed as first argument, the result of of the
+i-th iteration as second. See <code><a href='http://www.inside-r.org/r-doc/base/funprog'>Reduce</a></code> for some
+examples. If the function has the formal argument &#147;job&#148;, the job
+description is passed.</dd>
+      <dt>ids</dt>
+      <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
+with a column named &#147;job.id&#148;.
+This is usually the result of a <code><a href='findJobs.html'>findJobs</a></code> operation, but you may also
+pass any other table here, e.g. the return of <code><a href='getJobInfo.html'>getJobInfo</a></code>.
+Alternatively, you may also pass a vector of integerish job ids.
+If not set, defaults to result of <code><a href='findJobs.html'>findDone</a></code>.</dd>
+      <dt>init</dt>
+      <dd>[<code>ANY</code>]
+Initial element, as used in <code><a href='http://www.inside-r.org/r-doc/base/funprog'>Reduce</a></code>.
+Default is the first result.</dd>
+      <dt>...</dt>
+      <dd>[<code>ANY</code>]
+Additional arguments passed to to function <code>fun</code>.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+Aggregated results, return type depends on function. If <code>ids</code>
+is empty, <code>reduceResults</code> returns <code>init</code> (if available) or
+<code>NULL</code> otherwise.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>A version of <code><a href='http://www.inside-r.org/r-doc/base/funprog'>Reduce</a></code> for <code><a href='Registry.html'>Registry</a></code> objects.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>reg = makeTempRegistry()
+batchMap(function(x) x^2, x = 1:10, reg = reg)
+</div>
+<strong class='message'>Adding 10 jobs ...</strong>
+<div class='input'>submitJobs(reg = reg)
+</div>
+<strong class='message'>Submitting 10 jobs in 10 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<strong class='message'>Syncing 10 files ...</strong>
+<div class='input'>waitForJobs(reg = reg)
+</div>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'>reduceResults(function(x, y) c(x, y), reg = reg)
+</div>
+<div class='output'> [1]   1   4   9  16  25  36  49  64  81 100
+</div>
+<div class='input'>reduceResults(function(x, y) c(x, sqrt(y)), init = numeric(0), reg = reg)
+</div>
+<div class='output'> [1]  1  2  3  4  5  6  7  8  9 10
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>reduceResults</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+Other Results: <code><a href='loadResult.html'>loadResult</a></code>,
+  <code><a href='reduceResultsList.html'>reduceResultsList</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

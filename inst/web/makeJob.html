@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>makeJob. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Computational Jobs</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>makeJob(id, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>id</dt>
+      <dd>[<code>integer(1)</code> or <code>data.table</code>]
+Single integer to specify the job or a <code>data.table</code> with column <code>job.id</code>
+and exactly one row.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>Job</code>].
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p><code>makeJob</code> takes a single job id and creates an object of class &#147;Job&#148;. This job is passed to reduce
+functions like <code><a href='reduceResults.html'>reduceResults</a></code>. Furthermore, it can be used for an <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code> while
+in the user functions of each <code><a href='ProblemAlgorithm.html'>Problem</a></code> and <code><a href='ProblemAlgorithm.html'>Algorithm</a></code>. It is implemented as a list holding
+the following variables:
+<dl>
+ <dt>job.id</dt><dd>Job ID as integer.</dd></p>
+  
+      <p><dt>pars</dt><dd>Job parameters as named list. For <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>, the parameters are divided into the
+   sublists &#147;prob.pars&#148; and &#147;algo.pars&#148;.</dd></p>
+  
+      <p><dt>seed</dt><dd>Seed which is set via <code><a href='doJobCollection.html'>doJobCollection</a></code>.</dd></p>
+  
+      <p><dt>resources</dt><dd>Computational resources which were set for this job.</dd></p>
+  
+      <p></dl></p>
+  
+      <p>Additionally, a regular <code><a href='Registry.html'>Registry</a></code> also has the slot &#147;fun&#148; with the user function while an
+<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code> has the slots &#147;problem&#148; and &#147;algorithm&#148; (see <a href='ProblemAlgorithm.html'>Problem</a> and
+<a href='ProblemAlgorithm.html'>Algorithm</a>).</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>reg = makeTempRegistry(make.default = FALSE)
+batchMap(identity, 1:5, reg = reg)
+</div>
+<strong class='message'>Adding 5 jobs ...</strong>
+<div class='input'>job = makeJob(1, reg = reg)
+names(job)
+</div>
+<div class='output'>[1] &quot;job.id&quot;    &quot;pars&quot;      &quot;seed&quot;      &quot;resources&quot; &quot;fun&quot;      
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>Job</li><li>makeJob</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

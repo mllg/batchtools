@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>ExperimentRegistry. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Construct an Experiment Registry Object</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>makeExperimentRegistry(...)</div>
+<div>makeTempExperimentRegistry(make.default&nbsp;=&nbsp;FALSE, temp.dir&nbsp;=&nbsp;getOption("batchtools.temp.dir", tempdir()), ...)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>...</dt>
+      <dd>[<code>ANY</code>]
+Arguments passed to <code><a href='Registry.html'>Registry</a></code>.</dd>
+      <dt>make.default</dt>
+      <dd>[<code>logical(1)</code>]
+If set to <code>TRUE</code>, the created registry is saved inside the package
+namespace and acts as default registry. You might want to switch this
+off if you work with multiple registries simultaneously.
+Default is <code>TRUE</code>.</dd>
+      <dt>temp.dir</dt>
+      <dd>[<code>character(1)</code>]
+Path to temporary directory.
+Defaults to the value of the option &#147;batchtools.temp.dir&#148; or (if unset) <code><a href='http://www.inside-r.org/r-doc/base/tempfile'>tempdir</a></code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>ExperimentRegistry</code>].
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p><code>makeExperimentRegistry</code> constructs a special <code><a href='Registry.html'>Registry</a></code> which
+is suitable for the definition of large scale computer experiments.</p>
+  
+      <p>Each experiments consists of a <code><a href='ProblemAlgorithm.html'>Problem</a></code> and an <code><a href='ProblemAlgorithm.html'>Algorithm</a></code>.
+These can be parametrized with <code><a href='addExperiments.html'>addExperiments</a></code> to actually define computational
+jobs.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>reg = makeTempExperimentRegistry(make.default = FALSE)
+addProblem(reg = reg, &quot;p1&quot;,
+  fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
+addAlgorithm(reg = reg, &quot;a1&quot;, fun = function(job, data, instance, ...) mean(instance))
+addExperiments(reg = reg, list(p1 = CJ(n = 100, mean = -3:3, sd = 1:5)), list(a1 = data.table()))
+</div>
+<strong class='message'>Adding 35 experiments (&#39;p1&#39;[35] x &#39;a1&#39;[1] x repls[1]) ...</strong>
+<div class='input'>submitJobs(reg = reg)
+</div>
+<strong class='message'>Submitting 35 jobs in 35 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<strong class='message'>Syncing 35 files ...</strong>
+<div class='input'>waitForJobs(reg = reg)
+</div>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'>
+# Reduce the results
+reduceResults(reg = reg, fun = function(aggr, res, ...) c(aggr, res))
+</div>
+<div class='output'> [1] -3.11833697 -2.95972116 -2.71140470 -3.18811957 -2.42951040 -1.90135983 -2.11567554
+ [8] -1.36291143 -2.04347292 -2.18790142 -1.00511981 -1.26223190 -0.83325633 -0.69626152
+[15] -0.12674584 -0.01810700  0.01528785 -0.17885006  0.51540801 -0.32245541  0.88405834
+[22]  0.94049627  1.15330998  0.51044114  1.32782997  1.97659974  2.51232705  2.64537118
+[29]  1.76888860  1.57833998  2.99945317  3.34853688  3.14405445  2.28280908  3.03424465
+</div>
+<div class='input'>
+# Join info table with results
+ids = findDone(reg = reg)
+tab = getJobPars(reg = reg, ids = ids)
+res = reduceResultsDataTable(reg = reg, ids = ids)
+tab[res]
+</div>
+<div class='output'>    job.id problem algorithm   n mean sd          V1
+ 1:      1      p1        a1 100   -3  1 -3.11833697
+ 2:      2      p1        a1 100   -3  2 -2.95972116
+ 3:      3      p1        a1 100   -3  3 -2.71140470
+ 4:      4      p1        a1 100   -3  4 -3.18811957
+ 5:      5      p1        a1 100   -3  5 -2.42951040
+ 6:      6      p1        a1 100   -2  1 -1.90135983
+ 7:      7      p1        a1 100   -2  2 -2.11567554
+ 8:      8      p1        a1 100   -2  3 -1.36291143
+ 9:      9      p1        a1 100   -2  4 -2.04347292
+10:     10      p1        a1 100   -2  5 -2.18790142
+11:     11      p1        a1 100   -1  1 -1.00511981
+12:     12      p1        a1 100   -1  2 -1.26223190
+13:     13      p1        a1 100   -1  3 -0.83325633
+14:     14      p1        a1 100   -1  4 -0.69626152
+15:     15      p1        a1 100   -1  5 -0.12674584
+16:     16      p1        a1 100    0  1 -0.01810700
+17:     17      p1        a1 100    0  2  0.01528785
+18:     18      p1        a1 100    0  3 -0.17885006
+19:     19      p1        a1 100    0  4  0.51540801
+20:     20      p1        a1 100    0  5 -0.32245541
+21:     21      p1        a1 100    1  1  0.88405834
+22:     22      p1        a1 100    1  2  0.94049627
+23:     23      p1        a1 100    1  3  1.15330998
+24:     24      p1        a1 100    1  4  0.51044114
+25:     25      p1        a1 100    1  5  1.32782997
+26:     26      p1        a1 100    2  1  1.97659974
+27:     27      p1        a1 100    2  2  2.51232705
+28:     28      p1        a1 100    2  3  2.64537118
+29:     29      p1        a1 100    2  4  1.76888860
+30:     30      p1        a1 100    2  5  1.57833998
+31:     31      p1        a1 100    3  1  2.99945317
+32:     32      p1        a1 100    3  2  3.34853688
+33:     33      p1        a1 100    3  3  3.14405445
+34:     34      p1        a1 100    3  4  2.28280908
+35:     35      p1        a1 100    3  5  3.03424465
+    job.id problem algorithm   n mean sd          V1
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>ExperimentRegistry</li><li>makeExperimentRegistry</li><li>makeTempExperimentRegistry</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

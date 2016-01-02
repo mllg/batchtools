@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>chunkIds. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Chunk Jobs for Sequential Execution</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>chunkIds(ids&nbsp;=&nbsp;NULL, n.chunks&nbsp;=&nbsp;NULL, chunk.size&nbsp;=&nbsp;NULL, group.by&nbsp;=&nbsp;character(0L), reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>ids</dt>
+      <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
+with a column named &#147;job.id&#148;.
+This is usually the result of a <code><a href='findJobs.html'>findJobs</a></code> operation, but you may also
+pass any other table here, e.g. the return of <code><a href='getJobInfo.html'>getJobInfo</a></code>.
+Alternatively, you may also pass a vector of integerish job ids.
+If not set, defaults to all jobs.</dd>
+      <dt>n.chunks</dt>
+      <dd>[<code>integer(1)</code>]
+Requested number of chunks.
+If more chunks than elements in <code>ids</code> are requested, empty chunks are
+dropped. Cannot be used in combination with <code>chunks.size</code>.</dd>
+      <dt>chunk.size</dt>
+      <dd>[<code>integer(1)</code>]
+Requested number of elements in each chunk.
+Cannot be used in combination with <code>n.chunks</code>.
+If <code>ids</code> cannot be chunked evenly, some chunks will have less elements.</dd>
+      <dt>group.by</dt>
+      <dd>[<code>character(0)</code>]
+If <code>ids</code> is a <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> with additional columns (besides &#147;job.id&#148;),
+then the chunking is done in subgroups defined by the columns <code>group.by</code>.
+Usually not needed for a regular <code><a href='Registry.html'>Registry</a></code> as the jobs are likely homogeneous.
+For an <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code> on the other hand, you can use <code>group.by</code>
+to first partition the jobs into homogeneous groups and then chunk them (c.f. example).</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>]. Table <code>ids</code> with additional column
+  &#147;job.id&#148;.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Partition jobs into &#147;chunks&#148; which will be executed together on the nodes.</p>
+  
+      <p>Chunks are submitted via <code><a href='submitJobs.html'>submitJobs</a></code> by simply providing
+job ids as a table with an additional column &#147;chunk&#148;.
+All jobs with the same chunk number will be grouped together on one node as a single
+computational job.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># chunking for Registry
+reg = makeTempRegistry(make.default = FALSE)
+ids = batchMap(identity, 1:25, reg = reg)
+</div>
+<strong class='message'>Adding 25 jobs ...</strong>
+<div class='input'>ids = chunkIds(ids, chunk.size = 10, reg = reg)
+print(ids)
+</div>
+<div class='output'>    job.id chunk
+ 1:      1     3
+ 2:      2     1
+ 3:      3     3
+ 4:      4     1
+ 5:      5     2
+ 6:      6     2
+ 7:      7     2
+ 8:      8     2
+ 9:      9     3
+10:     10     3
+11:     11     1
+12:     12     1
+13:     13     3
+14:     14     1
+15:     15     1
+16:     16     1
+17:     17     1
+18:     18     1
+19:     19     2
+20:     20     2
+21:     21     3
+22:     22     2
+23:     23     3
+24:     24     2
+25:     25     3
+    job.id chunk
+</div>
+<div class='input'>print(table(ids$chunk))
+</div>
+<div class='output'>
+1 2 3 
+9 8 8 
+</div>
+<div class='input'>
+# chunking for ExperimentRegistry
+reg = makeTempExperimentRegistry(make.default = FALSE)
+prob = addProblem(reg = reg, &quot;prob1&quot;, data = iris, fun = function(job, data) nrow(data))
+prob = addProblem(reg = reg, &quot;prob2&quot;, data = Titanic, fun = function(job, data) nrow(data))
+algo = addAlgorithm(reg = reg, &quot;algo&quot;, fun = function(job, data, instance, i, ...) problem)
+prob.designs = list(prob1 = data.table(), prob2 = data.table(x = 1:2))
+algo.designs = list(algo = data.table(i = 1:5))
+addExperiments(prob.designs, algo.designs, repls = 10, reg = reg)
+</div>
+<strong class='message'>Adding 50 experiments (&#39;prob1&#39;[1] x &#39;algo&#39;[5] x repls[10]) ...</strong>
+<strong class='message'>Adding 100 experiments (&#39;prob2&#39;[2] x &#39;algo&#39;[5] x repls[10]) ...</strong>
+<div class='input'>
+# -&gt; group into chunks of 5 jobs, but do not mix problems
+ids = getJobInfo(reg = reg)[, .(job.id, problem, algorithm)]
+ids = chunkIds(ids, chunk.size = 5, group.by = &quot;problem&quot;, reg = reg)
+print(ids)
+</div>
+<div class='output'>     job.id problem algorithm chunk
+  1:      1   prob1      algo     1
+  2:      2   prob1      algo     2
+  3:      3   prob1      algo     1
+  4:      4   prob1      algo     3
+  5:      5   prob1      algo     4
+ ---                               
+146:    146   prob2      algo    15
+147:    147   prob2      algo    29
+148:    148   prob2      algo    25
+149:    149   prob2      algo    22
+150:    150   prob2      algo    19
+</div>
+<div class='input'>dcast(ids, chunk ~ problem)
+</div>
+<strong class='message'>Using &#39;chunk&#39; as value column. Use &#39;value.var&#39; to override</strong>
+<strong class='message'>Aggregate function missing, defaulting to &#39;length&#39;</strong>
+<div class='output'>    chunk prob1 prob2
+ 1:     1     5     0
+ 2:     2     5     0
+ 3:     3     5     0
+ 4:     4     5     0
+ 5:     5     5     0
+ 6:     6     5     0
+ 7:     7     5     0
+ 8:     8     5     0
+ 9:     9     5     0
+10:    10     5     0
+11:    11     0     5
+12:    12     0     5
+13:    13     0     5
+14:    14     0     5
+15:    15     0     5
+16:    16     0     5
+17:    17     0     5
+18:    18     0     5
+19:    19     0     5
+20:    20     0     5
+21:    21     0     5
+22:    22     0     5
+23:    23     0     5
+24:    24     0     5
+25:    25     0     5
+26:    26     0     5
+27:    27     0     5
+28:    28     0     5
+29:    29     0     5
+30:    30     0     5
+    chunk prob1 prob2
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>chunkIds</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
