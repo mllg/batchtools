@@ -13,8 +13,8 @@
 #'  \item{resources}{Computational resources which were set for this job.}
 #' }
 #' Additionally, a regular \code{\link{Registry}} also has the slot \dQuote{fun} with the user function while an
-#' \code{\link{ExperimentRegistry}} has the slots \dQuote{problem} and \dQuote{algorithm} (see \link{Problem} and
-#' \link{Algorithm}).
+#' \code{\link{ExperimentRegistry}} has the slots \dQuote{problem}, \dQuote{algorithm} and \dQuote{repl} (replication).
+#'
 #'
 #' @template id
 #' @template reg
@@ -36,9 +36,9 @@ makeJob.Registry = function(id, reg = getDefaultRegistry()) {
   cache = Cache(reg$file.dir)
   setClasses(list(
     job.id    = id$job.id,
-    pars      = c(reg$status[list(id)][reg$defs, nomatch = 0L]$pars[[1L]], cache("more.args")),
+    pars      = c(reg$status[id][reg$defs, nomatch = 0L]$pars[[1L]], cache("more.args")),
     seed      = getSeed(reg$seed, id$job.id),
-    resources = reg$status[list(id)][reg$resources, nomatch = 0L]$resources,
+    resources = reg$status[id][reg$resources, nomatch = 0L]$resources,
     fun       = cache("user.function")
   ), "Job")
 }
@@ -46,14 +46,16 @@ makeJob.Registry = function(id, reg = getDefaultRegistry()) {
 #' @export
 makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
   id = asIds(reg, id, n = 1L)
+  status = reg$status[id]
+  def = status[reg$defs, on = "def.id", nomatch = 0L]
   cache = Cache(reg$file.dir)
-  def = reg$status[list(id)][reg$defs, on = "def.id", nomatch = 0L]
 
   setClasses(list(
     job.id    = id$job.id,
     pars      = def$pars[[1L]],
+    repl      = status$repl,
     seed      = getSeed(reg$seed, id$job.id),
-    resources = reg$status[list(id)][reg$resources, nomatch = 0L]$resources,
+    resources = status[reg$resources, nomatch = 0L]$resources,
     problem   = cache("prob/problem", file.path("problems", def$problem)),
     algorithm = cache(paste0("algo/", def$algorithm), file.path("algorithms", def$algorithm))
   ), c("Experiment", "Job"))
@@ -92,6 +94,7 @@ getJob.ExperimentCollection = function(jc, id, cache) {
     seed = getSeed(jc$seed, j$job.id),
     resources = jc$resources,
     problem = cache("prob/problem", file.path("problems", j$problem)),
-    algorithm = cache(paste0("algo/", j$algorithm), file.path("algorithms", j$algorithm))
+    algorithm = cache(paste0("algo/", j$algorithm), file.path("algorithms", j$algorithm)),
+    repl = j$repl
   ), c("Experiment", "Job"))
 }
