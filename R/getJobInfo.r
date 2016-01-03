@@ -78,6 +78,7 @@ getJobDefs = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg
   tab[, !"def.id", with = FALSE]
 }
 
+
 #' @export
 #' @rdname getJobInfo
 getJobResources = function(ids = NULL, resources.as.cols = FALSE, reg = getDefaultRegistry()) {

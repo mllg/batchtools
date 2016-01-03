@@ -21,6 +21,16 @@
 #' one job terminated with an exception.
 #' @export
 waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
+  .findTerminated = function(reg, ids = NULL) {
+    done = NULL
+    reg$status[ids][!is.na(done), "job.id", with = FALSE]
+  }
+
+  .findNotTerminated = function(reg, ids = NULL) {
+    done = NULL
+    reg$status[ids][is.na(done), "job.id", with = FALSE]
+  }
+
   assertRegistry(reg, writeable = FALSE)
   assertNumeric(sleep, len = 1L, lower = 0.2, finite = TRUE)
   assertNumeric(timeout, len = 1L, lower = sleep)

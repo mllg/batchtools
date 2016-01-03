@@ -24,11 +24,6 @@ asIds = function(reg, ids = NULL, n = NULL, default = NULL, extra.cols = FALSE) 
   return(ids)
 }
 
-info = function(...) {
-  if (getOption("batchtools.verbose", TRUE))
-    message(sprintf(...))
-}
-
 now = function() {
   as.integer(Sys.time())
 }
@@ -86,16 +81,21 @@ is.error = function(x) {
   inherits(x, "try-error")
 }
 
+info = function(...) {
+  if (getOption("batchtools.verbose", TRUE))
+    message(sprintf(...))
+}
+
 catf = function (..., con = stdout()) {
   cat(paste0(sprintf(...), collapse = "\n"), "\n", sep = "", file = con)
 }
 
-stopf = function (...) {
-  stop(simpleError(sprintf(...), call = sys.call(sys.parent())))
-}
-
 warningf = function (...) {
   warning(simpleWarning(sprintf(...), call = sys.call(sys.parent())))
+}
+
+stopf = function (...) {
+  stop(simpleError(sprintf(...), call = sys.call(sys.parent())))
 }
 
 `%nin%` = function(x, y) {
@@ -118,6 +118,12 @@ suppressAll = function (expr) {
   invisible(capture.output({
     suppressWarnings(suppressMessages(suppressPackageStartupMessages(force(expr))))
   }))
+}
+
+addlevel = function(x, lvl) {
+  if (lvl %nin% levels(x))
+    levels(x) = c(levels(x), lvl)
+  x
 }
 
 droplevel = function(x, lvl) {

@@ -21,9 +21,7 @@
 #' @param group.by [\code{character(0)}]\cr
 #'   If \code{ids} is a \code{\link{data.frame}} with additional columns (besides \dQuote{job.id}),
 #'   then the chunking is done in subgroups defined by the columns \code{group.by}.
-#'   Usually not needed for a regular \code{\link{Registry}} as the jobs are likely homogeneous.
-#'   For an \code{\link{ExperimentRegistry}} on the other hand, you can use \code{group.by}
-#'   to first partition the jobs into homogeneous groups and then chunk them (c.f. example).
+#'   See example.
 #' @template reg
 #' @return [\code{\link[data.table]{data.table}}]. Table \code{ids} with additional column
 #'   \dQuote{job.id}.
@@ -77,7 +75,7 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
   }
 
   if (length(group.by) > 0L) {
-    if (!all(group.by %in% names(ids)))
+    if (any(group.by %nin% names(ids)))
       stop("All columns to group by must be provided in the 'ids' table")
     ids[, "chunk" := chunk(get("job.id"), n.chunks = n.chunks, chunk.size = chunk.size), by = group.by]
     ids[, "chunk" := .GRP, by = c(group.by, "chunk")]

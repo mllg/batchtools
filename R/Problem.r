@@ -52,7 +52,7 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
 
   prob = setClasses(list(name = name, seed = seed, data = data, fun = fun), "Problem")
   writeRDS(prob, file = file.path(reg$file.dir, "problems", sprintf("%s.rds", name)))
-  levels(reg$defs$problem) = union(levels(reg$defs$problem), name)
+  reg$defs$problem = addlevel(reg$defs$problem, name)
   saveRegistry(reg)
   invisible(prob)
 }

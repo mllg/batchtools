@@ -38,14 +38,33 @@ btlapply = function(X, fun, ..., reg = makeTempRegistry(make.default = FALSE)) {
 }
 
 #' @export
+#' @param simplify [\code{logical(1)}]\cr
+#'   Simplify the results using \code{\link[base]{simplify2array}}?
+#' @param use.names [\code{logical(1)}]\cr
+#'   Use names of the input to name the output?
 #' @rdname btlapply
-btmapply = function(fun, ..., more.args = list(), reg = makeTempRegistry(make.default = FALSE)) {
-  # TODO: use.names, simplify
+btmapply = function(fun, ..., more.args = list(), simplify = FALSE, use.names = TRUE, reg = makeTempRegistry(make.default = FALSE)) {
   assertFunction(fun)
+  assertFlag(simplify)
+  assertFlag(use.names)
   assertRegistry(reg, writeable = TRUE, strict = TRUE)
 
-  ids = do.call(batchMap, list(..., fun = fun, reg = reg, more.args = more.args))
+  dots = list(...)
+  ids = do.call(batchMap, c(dots, list(fun = fun, reg = reg, more.args = more.args)))
   submitJobs(ids = ids, reg = reg)
   waitForJobs(ids = ids, reg = reg)
-  reduceResultsList(ids = ids, reg = reg)
+  res = reduceResultsList(ids = ids, reg = reg)
+
+  if (use.names) {
+    if (use.names && length(dots)) {
+      if (is.null(names(dots[[1L]]))) {
+        if(is.character(dots[[1L]]))
+          names(res) <- dots[[1L]]
+      } else {
+        names(res) <- names(dots[[1L]])
+      }
+    }
+  }
+
+  if (simplify) simplify2array(res) else res
 }
