@@ -29,9 +29,7 @@ If \code{ids} cannot be chunked evenly, some chunks will have less elements.}
 \item{group.by}{[\code{character(0)}]\cr
 If \code{ids} is a \code{\link{data.frame}} with additional columns (besides \dQuote{job.id}),
 then the chunking is done in subgroups defined by the columns \code{group.by}.
-Usually not needed for a regular \code{\link{Registry}} as the jobs are likely homogeneous.
-For an \code{\link{ExperimentRegistry}} on the other hand, you can use \code{group.by}
-to first partition the jobs into homogeneous groups and then chunk them (c.f. example).}
+See example.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}

@@ -1,6 +1,6 @@
 if (getRversion() < "3.2.1") {
   lengths = function(x, use.names = TRUE) {
-    viapply(x, length, FUN.VALUE = NA_integer_, USE.NAMES = use.names)
+    vapply(x, length, FUN.VALUE = NA_integer_, USE.NAMES = use.names)
   }
 }
 
