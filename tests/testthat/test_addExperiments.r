@@ -63,5 +63,7 @@ test_that("addExperiments handles parameters correctly", {
     submitJobs(reg = reg, ids = chunkIds(reg = reg))
     waitForJobs(reg = reg)
   })
+  job = makeJob(reg = reg, 1)
+  readLog(reg = reg, 1)
   expect_true(nrow(findError(reg = reg)) == 0)
 })

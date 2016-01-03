@@ -36,11 +36,7 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
   UseMethod("makeJobCollection", reg)
 }
 
-#' @export
-makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  ids = asIds(reg, ids, default = .findAll(reg = reg))
-  def.cols = c("job.id", setdiff(names(reg$defs), c("def.id", "pars.hash")))
-
+createCollection = function(ids, resources = list(), reg = getDefaultRegistry()) {
   jc            = new.env(parent = emptyenv())
   jc$file.dir   = reg$file.dir
   jc$work.dir   = reg$work.dir
@@ -50,16 +46,28 @@ makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getD
   jc$log.file   = npath(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
   jc$packages   = reg$packages
   jc$namespaces = reg$namespaces
-  jc$defs       = reg$status[ids][reg$defs, def.cols, on = "def.id", nomatch = 0L, with = FALSE]
   jc$resources  = resources
   jc$compress   = getOption("batchtools.compress", TRUE)
+  return(jc)
+}
 
+#' @export
+makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
+  ids = asIds(reg, ids, default = .findAll(reg = reg))
+  def.cols = c("job.id", "pars")
+
+  jc = createCollection(ids, resources, reg)
+  jc$defs = reg$status[ids][reg$defs, def.cols, on = "def.id", nomatch = 0L, with = FALSE]
   setClasses(jc, "JobCollection")
 }
 
 #' @export
 makeJobCollection.ExperimentRegistry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  jc = NextMethod("makeJobCollection", object = reg)
+  ids = asIds(reg, ids, default = .findAll(reg = reg))
+  def.cols = c("job.id", "pars", "problem", "algorithm", "repl")
+
+  jc = createCollection(ids, resources, reg)
+  jc$defs = reg$status[ids][reg$defs, def.cols, on = "def.id", nomatch = 0L, with = FALSE]
   setClasses(jc, c("ExperimentCollection", "JobCollection"))
 }
 

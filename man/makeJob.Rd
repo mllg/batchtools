@@ -31,8 +31,7 @@ the following variables:
  \item{resources}{Computational resources which were set for this job.}
 }
 Additionally, a regular \code{\link{Registry}} also has the slot \dQuote{fun} with the user function while an
-\code{\link{ExperimentRegistry}} has the slots \dQuote{problem} and \dQuote{algorithm} (see \link{Problem} and
-\link{Algorithm}).
+\code{\link{ExperimentRegistry}} has the slots \dQuote{problem}, \dQuote{algorithm} and \dQuote{repl} (replication).
 }
 \examples{
 reg = makeTempRegistry(make.default = FALSE)
