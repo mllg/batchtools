@@ -43,7 +43,7 @@ testJob(id = 1)
 ```
 In this case, testing the job with ID = 1 provides the appropriate result but testing the job with ID = 2 leads to an error:
 ```{r}
-as.character(try(testJob(id = 1)))
+as.character(try(testJob(id = 2)))
 ```
 When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run `getStatus()` to display a summary of the current state of the system.
 ```{r}
