@@ -12,15 +12,24 @@ The cluster might have an outage, jobs may run into resource limits or crash, su
 In these situations it is important to quickly determine what went wrong and to recompute only the minimal number of required jobs.
 
 Therefore, before you submit anything you should use `testJob()` to catch errors that are easy to spot because they are raised in many or all jobs.
-This function runs the job without side effects in an independent R process on your local machine via R CMD BATCH exactly as on the slave, redirects the output of the process to your R console, loads the job result and returns it.
+If `fresh.session` is set, this function runs the job without side effects in an independent R process on your local machine via `Rscript` similar as on the slave, redirects the output of the process to your R console, loads the job result and returns it.
+If you do not set `fresh.session`, the job is executed is in the currently running R session, with the drawback that you might be unable to catch missing variable declarations or missing package dependencies.
 
 By way of illustration here is a small example.
-Ten jobs are created, two of which will throw an error.
-
-```{r, message = FALSE}
+First, we create a temporary registry.
+```{r, message = FALSE, eval = FALSE}
 library(batchtools)
 reg = makeTempRegistry(work.dir = "/tmp", make.default = TRUE)
-
+```
+```{r, include = FALSE}
+library(batchtools)
+fd = file.path(dirname(tempdir()), "batchtools", "ErrorHandling")
+unlink(fd, recursive = TRUE)
+dir.create(dirname(fd), recursive = TRUE, showWarnings = FALSE)
+reg = makeRegistry(file.dir = fd, seed = 1)
+```
+Ten jobs are created, two of them will throw an exception.
+```{r}
 flakeyFunction <- function(value) {
   if (value %in% c(2, 9)) stop("Ooops.")
   value^2
@@ -28,22 +37,20 @@ flakeyFunction <- function(value) {
 batchMap(flakeyFunction, 1:10)
 ```
 
+Now that the jobs are defined, we can test jobs independently:
 ```{r}
 testJob(id = 1)
-# testJob(id = 2)
 ```
-
-In this case, testing the job with ID = 1 provides the appropriate result but testing the job with ID = 2 leads to an error.
-
+In this case, testing the job with ID = 1 provides the appropriate result but testing the job with ID = 2 leads to an error:
+```{r}
+as.character(try(testJob(id = 1)))
+```
 When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run `getStatus()` to display a summary of the current state of the system.
-
-
 ```{r}
 submitJobs()
 getStatus()
 ```
-
-The status message shows that two of the jobs could not be executed succesfully.
+The status message shows that two of the jobs could not be executed successfully.
 To get the IDs of all jobs that failed due to an error we can use `findError()`.
 ```{r}
 findError()

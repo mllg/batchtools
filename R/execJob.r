@@ -1,11 +1,28 @@
+#' @title Execute a single job
+#'
+#' @description
+#' Executes a single job (as created by \code{\link{makeJob}}) and returns
+#' its result. Also works for Experiments.
+#'
+#' @param job [\code{\link{Job}}]\cr
+#'   Job to execute.
+#' @return [any]. Result of the job.
+#' @export
 execJob = function(job) {
   UseMethod("execJob")
 }
 
+#' @export
+execJob.character = function(job) {
+  execJob(readRDS(job))
+}
+
+#' @export
 execJob.Job = function(job) {
   with_seed(job$seed, do.call(job$fun, job$pars))
 }
 
+#' @export
 execJob.Experiment = function(job) {
   catf("Generating problem instance for problem %s ...", job$problem$name)
   if (is.null(job$problem$seed)) {
