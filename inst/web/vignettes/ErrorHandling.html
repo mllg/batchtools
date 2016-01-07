@@ -73,20 +73,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <p>In any large scale experiment many things can and will go wrong. The cluster might have an outage, jobs may run into resource limits or crash, subtile bugs in your code could be triggered or any other error condition might arise. In these situations it is important to quickly determine what went wrong and to recompute only the minimal number of required jobs.</p>
-<p>Therefore, before you submit anything you should use <code>testJob()</code> to catch errors that are easy to spot because they are raised in many or all jobs. This function runs the job without side effects in an independent R process on your local machine via R CMD BATCH exactly as on the slave, redirects the output of the process to your R console, loads the job result and returns it.</p>
-<p>By way of illustration here is a small example. Ten jobs are created, two of which will throw an error.</p>
+<p>Therefore, before you submit anything you should use <code>testJob()</code> to catch errors that are easy to spot because they are raised in many or all jobs. If <code>fresh.session</code> is set, this function runs the job without side effects in an independent R process on your local machine via <code>Rscript</code> similar as on the slave, redirects the output of the process to your R console, loads the job result and returns it. If you do not set <code>fresh.session</code>, the job is executed is in the currently running R session, with the drawback that you might be unable to catch missing variable declarations or missing package dependencies.</p>
+<p>By way of illustration here is a small example. First, we create a temporary registry.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
-reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span class="dt">work.dir =</span> <span class="st">&quot;/tmp&quot;</span>, <span class="dt">make.default =</span> <span class="ot">TRUE</span>)
-
-flakeyFunction &lt;-<span class="st"> </span>function(value) {
+reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span class="dt">work.dir =</span> <span class="st">&quot;/tmp&quot;</span>, <span class="dt">make.default =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Ten jobs are created, two of them will throw an exception.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">flakeyFunction &lt;-<span class="st"> </span>function(value) {
   if (value %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">9</span>)) <span class="kw">stop</span>(<span class="st">&quot;Ooops.&quot;</span>)
   value^<span class="dv">2</span>
 }
 <span class="kw">batchMap</span>(flakeyFunction, <span class="dv">1</span>:<span class="dv">10</span>)</code></pre></div>
+<pre><code>## Adding 10 jobs ...</code></pre>
+<p>Now that the jobs are defined, we can test jobs independently:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">testJob</span>(<span class="dt">id =</span> <span class="dv">1</span>)</code></pre></div>
 <pre><code>## [1] 1</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># testJob(id = 2)</span></code></pre></div>
-<p>In this case, testing the job with ID = 1 provides the appropriate result but testing the job with ID = 2 leads to an error.</p>
+<p>In this case, testing the job with ID = 1 provides the appropriate result but testing the job with ID = 2 leads to an error:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.character</span>(<span class="kw">try</span>(<span class="kw">testJob</span>(<span class="dt">id =</span> <span class="dv">1</span>)))</code></pre></div>
+<pre><code>## [1] &quot;1&quot;</code></pre>
 <p>When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run <code>getStatus()</code> to display a summary of the current state of the system.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">submitJobs</span>()</code></pre></div>
 <pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...
@@ -98,19 +101,19 @@ flakeyFunction &lt;-<span class="st"> </span>function(value) {
 ##   System   :  0 (  0.0%)
 ##   Done     :  8 ( 80.0%)
 ##   Error    :  2 ( 20.0%)</code></pre>
-<p>The status message shows that two of the jobs could not be executed succesfully. To get the IDs of all jobs that failed due to an error we can use <code>findError()</code>.</p>
+<p>The status message shows that two of the jobs could not be executed successfully. To get the IDs of all jobs that failed due to an error we can use <code>findError()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">findError</span>()</code></pre></div>
 <pre><code>##    job.id
 ## 1:      2
 ## 2:      9</code></pre>
 <p>If we want to peek into the R log file of a job to see more context for the error we can use <code>showLog()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">showLog</span>(<span class="dt">id =</span> <span class="dv">9</span>)</code></pre></div>
-<pre><code>## [1] &quot;[job(chunk): 2016-01-02 01:55:28] Starting calculation of 1 jobs&quot;     
-## [2] &quot;[job(chunk): 2016-01-02 01:55:28] Setting working directory to '/tmp'&quot;
-## [3] &quot;[job(9): 2016-01-02 01:55:28] Starting job with job.id=9&quot;             
-## [4] &quot;[job(9): 2016-01-02 01:55:28] Error in (function (value)  : Ooops.&quot;   
-## [5] &quot;[job(9): 2016-01-02 01:55:28] Job terminated with an exception&quot;       
-## [6] &quot;[job(chunk): 2016-01-02 01:55:28] Calculation finished ...&quot;</code></pre>
+<pre><code>## [1] &quot;[job(chunk): 2016-01-07 22:34:00] Starting calculation of 1 jobs&quot;                                            
+## [2] &quot;[job(chunk): 2016-01-07 22:34:00] Setting working directory to '/Users/michel/Projekte/batchtools/vignettes'&quot;
+## [3] &quot;[job(9): 2016-01-07 22:34:00] Starting job with job.id=9&quot;                                                    
+## [4] &quot;[job(9): 2016-01-07 22:34:00] Error in (function (value)  : Ooops.&quot;                                          
+## [5] &quot;[job(9): 2016-01-07 22:34:00] Job terminated with an exception&quot;                                              
+## [6] &quot;[job(chunk): 2016-01-07 22:34:00] Calculation finished ...&quot;</code></pre>
 
 
 

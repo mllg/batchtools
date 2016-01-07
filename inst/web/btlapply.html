@@ -53,7 +53,7 @@
   <div class="span8">
     <h2>Usage</h2>
     <pre><div>btlapply(X, fun, ..., reg&nbsp;=&nbsp;makeTempRegistry(make.default&nbsp;=&nbsp;FALSE))</div>
-<div>btmapply(fun, ..., more.args&nbsp;=&nbsp;list(), reg&nbsp;=&nbsp;makeTempRegistry(make.default = FALSE))</div></pre>
+<div>btmapply(fun, ..., more.args&nbsp;=&nbsp;list(), simplify&nbsp;=&nbsp;FALSE, use.names&nbsp;=&nbsp;TRUE, reg&nbsp;=&nbsp;makeTempRegistry(make.default&nbsp;=&nbsp;FALSE))</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -72,6 +72,12 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <dt>more.args</dt>
       <dd>[<code>list</code>]
 Additional arguments passed to <code>fun</code>.</dd>
+      <dt>simplify</dt>
+      <dd>[<code>logical(1)</code>]
+Simplify the results using <code><a href='http://www.inside-r.org/r-doc/base/lapply'>simplify2array</a></code>?</dd>
+      <dt>use.names</dt>
+      <dd>[<code>logical(1)</code>]
+Use names of the input to name the output?</dd>
     </dl>
     
     <div class="Value">

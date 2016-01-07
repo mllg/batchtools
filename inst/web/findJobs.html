@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>findJobs. batchtools 0.1</title>
+<title>findSubmitted. batchtools 0.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -52,9 +52,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>findJobs(expr, ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
-<div>findExperiments(prob.name, algo.name, prob.pars, algo.pars, repls&nbsp;=&nbsp;NULL, ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
-<div>findSubmitted(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+    <pre><div>findSubmitted(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findNotSubmitted(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findStarted(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findNotStarted(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
@@ -62,13 +60,12 @@
 <div>findNotDone(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findError(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findOnSystem(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
-<div>findExpired(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+<div>findExpired(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findJobs(expr, ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findExperiments(prob.name&nbsp;=&nbsp;NULL, algo.name&nbsp;=&nbsp;NULL, prob.pars, algo.pars, repls&nbsp;=&nbsp;NULL, ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>expr</dt>
-      <dd>[<code>expression</code>]
-Predicate expression evaluated in the job parameters.</dd>
       <dt>ids</dt>
       <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
 A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
@@ -80,12 +77,15 @@ If not set, defaults to all jobs.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
+      <dt>expr</dt>
+      <dd>[<code>expression</code>]
+Predicate expression evaluated in the job parameters.</dd>
       <dt>prob.name</dt>
-      <dd>[<code>character(1)</code>]
-Whitelist of problem names.</dd>
+      <dd>[<code>character</code>]
+Whitelist of problem names. If not provided, all problems are matched.</dd>
       <dt>algo.name</dt>
-      <dd>[<code>character(1)</code>]
-Whitelist of algorithm names.</dd>
+      <dd>[<code>character</code>]
+Whitelist of algorithm names. If not provided, all algorithms are matched.</dd>
       <dt>prob.pars</dt>
       <dd>[<code>expression</code>]
 Predicate expression evaluated in the problem parameters.</dd>
@@ -94,7 +94,7 @@ Predicate expression evaluated in the problem parameters.</dd>
 Predicate expression evaluated in the algorithm parameters.</dd>
       <dt>repls</dt>
       <dd>[<code>integer</code>]
-Whitelist of replication numbers.</dd>
+Whitelist of replication numbers. If not provided, all replications are matched.</dd>
     </dl>
     
     <div class="Value">

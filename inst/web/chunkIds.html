@@ -78,9 +78,7 @@ If <code>ids</code> cannot be chunked evenly, some chunks will have less element
       <dd>[<code>character(0)</code>]
 If <code>ids</code> is a <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> with additional columns (besides &#147;job.id&#148;),
 then the chunking is done in subgroups defined by the columns <code>group.by</code>.
-Usually not needed for a regular <code><a href='Registry.html'>Registry</a></code> as the jobs are likely homogeneous.
-For an <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code> on the other hand, you can use <code>group.by</code>
-to first partition the jobs into homogeneous groups and then chunk them (c.f. example).</dd>
+See example.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
@@ -120,28 +118,28 @@ print(ids)
 <div class='output'>    job.id chunk
  1:      1     2
  2:      2     3
- 3:      3     1
+ 3:      3     3
  4:      4     1
- 5:      5     3
- 6:      6     1
- 7:      7     3
+ 5:      5     1
+ 6:      6     2
+ 7:      7     1
  8:      8     1
- 9:      9     3
-10:     10     2
-11:     11     2
-12:     12     1
-13:     13     1
-14:     14     2
-15:     15     3
-16:     16     3
+ 9:      9     2
+10:     10     3
+11:     11     3
+12:     12     2
+13:     13     3
+14:     14     3
+15:     15     2
+16:     16     2
 17:     17     2
-18:     18     2
-19:     19     1
-20:     20     1
-21:     21     2
+18:     18     1
+19:     19     2
+20:     20     3
+21:     21     1
 22:     22     1
-23:     23     2
-24:     24     3
+23:     23     1
+24:     24     1
 25:     25     3
     job.id chunk
 </div>
@@ -172,15 +170,15 @@ print(ids)
 <div class='output'>     job.id problem algorithm chunk
   1:      1   prob1      algo     1
   2:      2   prob1      algo     2
-  3:      3   prob1      algo     3
-  4:      4   prob1      algo     4
-  5:      5   prob1      algo     5
+  3:      3   prob1      algo     1
+  4:      4   prob1      algo     3
+  5:      5   prob1      algo     4
  ---                               
-146:    146   prob2      algo    26
-147:    147   prob2      algo    27
-148:    148   prob2      algo    28
-149:    149   prob2      algo    26
-150:    150   prob2      algo    13
+146:    146   prob2      algo    29
+147:    147   prob2      algo    22
+148:    148   prob2      algo    23
+149:    149   prob2      algo    30
+150:    150   prob2      algo    30
 </div>
 <div class='input'>dcast(ids, chunk ~ problem)
 </div>

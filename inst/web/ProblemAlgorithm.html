@@ -80,12 +80,12 @@ Start seed for this problem. This allows the &#147;synchronization&#148; of a st
 problem across algorithms, so that different algorithms are evaluated on the same stochastic instance.
 If the problem seed is defined, the seeding mechanism works as follows:
 (1) Before the dynamic part of a problem is instantiated,
-the seed of the problem + replication number is set, so for the first
-replication the exact problem seed is used. (2) The stochastic part of the problem is
+the seed of the problem + [replication number] - 1 is set, i.e. the first
+replication uses the problem seed. (2) The stochastic part of the problem is
 instantiated. (3) From now on the usual experiment seed of the registry is used,
 see <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>.
-If <code>seed</code> is set to <code>NULL</code> (default) this extra problem seeding is switched off, meaning
-different algorithms see different stochastic versions of the same problem.</dd>
+If <code>seed</code> is set to <code>NULL</code> (default), the job seed is used to instantiate the problem and
+different algorithms see different stochastic instances of the same problem.</dd>
     </dl>
     
     <div class="Value">

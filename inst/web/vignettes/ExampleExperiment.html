@@ -139,6 +139,7 @@ ades =<span class="st"> </span><span class="kw">list</span>(
 id2 =<span class="st"> </span><span class="kw">findExperiments</span>(<span class="dt">algo.name =</span> <span class="st">&quot;forest&quot;</span>, <span class="dt">algo.pars =</span> (ntree ==<span class="st"> </span><span class="dv">1000</span>))[<span class="dv">1</span>]
 <span class="kw">testJob</span>(<span class="dt">id =</span> id1)</code></pre></div>
 <pre><code>## Generating problem instance for problem iris ...
+## Using problem seed 42 ...
 ## Applying algorithm svm on problem iris ...</code></pre>
 <pre><code>##             pred
 ##              setosa versicolor virginica
@@ -147,11 +148,12 @@ id2 =<span class="st"> </span><span class="kw">findExperiments</span>(<span clas
 ##   virginica       0          0        15</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">testJob</span>(<span class="dt">id =</span> id2)</code></pre></div>
 <pre><code>## Generating problem instance for problem iris ...
+## Using problem seed 42 ...
 ## Applying algorithm forest on problem iris ...</code></pre>
 <pre><code>##             
 ##              setosa versicolor virginica
 ##   setosa         17          0         0
-##   versicolor      0         16         2
+##   versicolor      0         15         3
 ##   virginica       0          0        15</code></pre>
 <p>After the jobs are executed, we collect the results with <code>reduceResultsDataTable()</code> and directly extract the mean misclassification error:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">submitJobs</span>()</code></pre></div>
@@ -163,22 +165,22 @@ id2 =<span class="st"> </span><span class="kw">findExperiments</span>(<span clas
 <span class="kw">print</span>(<span class="kw">head</span>(tab))</code></pre></div>
 <pre><code>##    job.id problem algorithm ratio     kernel epsilon ntree  mce
 ## 1:      1    iris       svm  0.67     linear    0.01    NA 0.04
-## 2:      2    iris       svm  0.67     linear    0.01    NA 0.04
-## 3:      3    iris       svm  0.67     linear    0.01    NA 0.04
+## 2:      2    iris       svm  0.67     linear    0.01    NA 0.00
+## 3:      3    iris       svm  0.67     linear    0.01    NA 0.06
 ## 4:      4    iris       svm  0.67     linear    0.01    NA 0.04
-## 5:      5    iris       svm  0.67     linear    0.01    NA 0.04
+## 5:      5    iris       svm  0.67     linear    0.01    NA 0.02
 ## 6:      6    iris       svm  0.67 polynomial    0.01    NA 0.06</code></pre>
 <p>We now use <code>data.table</code> to aggregate the results per group. If you prefer, you can also use <code>base::aggregate()</code> or function from the <code>dplyr</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tab[ratio ==<span class="st"> </span><span class="fl">0.67</span>, <span class="kw">list</span>(<span class="dt">mmce =</span> <span class="kw">mean</span>(mce)), by =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;algorithm&quot;</span>, <span class="st">&quot;kernel&quot;</span>, <span class="st">&quot;epsilon&quot;</span>, <span class="st">&quot;ntree&quot;</span>)]</code></pre></div>
 <pre><code>##    algorithm     kernel epsilon ntree  mmce
-## 1:       svm     linear    0.01    NA 0.040
-## 2:       svm polynomial    0.01    NA 0.060
-## 3:       svm     radial    0.01    NA 0.060
-## 4:       svm     linear    0.10    NA 0.040
-## 5:       svm polynomial    0.10    NA 0.060
-## 6:       svm     radial    0.10    NA 0.060
+## 1:       svm     linear    0.01    NA 0.032
+## 2:       svm polynomial    0.01    NA 0.088
+## 3:       svm     radial    0.01    NA 0.048
+## 4:       svm     linear    0.10    NA 0.032
+## 5:       svm polynomial    0.10    NA 0.088
+## 6:       svm     radial    0.10    NA 0.048
 ## 7:    forest         NA      NA   100 0.048
-## 8:    forest         NA      NA   500 0.056
+## 8:    forest         NA      NA   500 0.044
 ## 9:    forest         NA      NA  1000 0.048</code></pre>
 </div>
 
