@@ -116,8 +116,9 @@ setClasses = function(x, cl) {
 
 suppressAll = function (expr) {
   invisible(capture.output({
-    suppressWarnings(suppressMessages(suppressPackageStartupMessages(force(expr))))
+    suppressWarnings(suppressMessages(suppressPackageStartupMessages(x <- force(expr))))
   }))
+  return(x)
 }
 
 addlevel = function(x, lvl) {

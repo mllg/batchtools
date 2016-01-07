@@ -223,7 +223,7 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
   }
 
   if (nzchar(Sys.which(sys.cmd)) > 0L) {
-    res = system2(command = sys.cmd, args = sys.args, stdout = TRUE, stderr = TRUE, wait = TRUE)
+    res = suppressWarnings(system2(command = sys.cmd, args = sys.args, stdout = TRUE, stderr = TRUE, wait = TRUE))
     output = as.character(res)
     exit.code = attr(res, "status") %??% 0L
   } else {

@@ -15,7 +15,7 @@
 #' Additionally, a regular \code{\link{Registry}} also has the slot \dQuote{fun} with the user function while an
 #' \code{\link{ExperimentRegistry}} has the slots \dQuote{problem}, \dQuote{algorithm} and \dQuote{repl} (replication).
 #'
-#'
+#' Jobs can be executed with \code{\link{execJob}}.
 #' @template id
 #' @template reg
 #' @return [\code{Job}].
