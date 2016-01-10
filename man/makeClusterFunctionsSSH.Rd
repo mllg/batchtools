@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctionsSSH.r
 \name{makeClusterFunctionsSSH}
 \alias{makeClusterFunctionsSSH}
-\title{Cluster Functions for Remote SSH Execution}
+\title{ClusterFunctions for Remote SSH Execution}
 \usage{
 makeClusterFunctionsSSH(workers)
 }

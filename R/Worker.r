@@ -1,4 +1,4 @@
-#' @title Abstract base class constructor for general workers
+#' @title Worker Constructor
 #'
 #' @description
 #' Functions to construct local and remote workers.

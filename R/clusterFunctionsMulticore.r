@@ -1,4 +1,4 @@
-#' @title Cluster Functions for Local Multicore Execution
+#' @title ClusterFunctions for Local Multicore Execution
 #'
 #' @description
 #' Jobs are spawned by starting multiple R sessions on the command line.

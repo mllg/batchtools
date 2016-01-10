@@ -3,7 +3,7 @@
 \name{makeClusterFunctions}
 \alias{ClusterFunctions}
 \alias{makeClusterFunctions}
-\title{Create a ClusterFunctions object}
+\title{ClusterFunctions Constructor}
 \usage{
 makeClusterFunctions(name, submitJob, killJob = NULL, listJobs = NULL,
   array.envir.var = NA_character_, store.job = TRUE)

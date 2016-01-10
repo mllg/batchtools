@@ -4,7 +4,7 @@
 \alias{ExperimentRegistry}
 \alias{makeExperimentRegistry}
 \alias{makeTempExperimentRegistry}
-\title{Construct an Experiment Registry Object}
+\title{ExperimentRegistry Constructor}
 \usage{
 makeExperimentRegistry(...)
 

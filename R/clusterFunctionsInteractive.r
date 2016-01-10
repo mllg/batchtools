@@ -1,4 +1,4 @@
-#' Create cluster functions for sequential execution in same session.
+#' @title ClusterFunctions for Sequential Execution in the Running R Session
 #'
 #' @description
 #' All jobs executed under these cluster functions are executed

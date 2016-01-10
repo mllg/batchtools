@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctionsInteractive.r
 \name{makeClusterFunctionsInteractive}
 \alias{makeClusterFunctionsInteractive}
-\title{Create cluster functions for sequential execution in same session.}
+\title{ClusterFunctions for Sequential Execution in the Running R Session}
 \usage{
 makeClusterFunctionsInteractive(write.logs = TRUE)
 }

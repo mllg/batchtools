@@ -1,4 +1,4 @@
-#' @title Submit jobs or chunks of jobs to batch system via cluster function.
+#' @title Submit jobs to the Batch Systems
 #'
 #' @description
 #' Submits all jobs to the batch system using the resources provided via

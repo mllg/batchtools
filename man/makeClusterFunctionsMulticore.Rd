@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctionsMulticore.r
 \name{makeClusterFunctionsMulticore}
 \alias{makeClusterFunctionsMulticore}
-\title{Cluster Functions for Local Multicore Execution}
+\title{ClusterFunctions for Local Multicore Execution}
 \usage{
 makeClusterFunctionsMulticore(ncpus = max(getOption("mc.cores",
   parallel::detectCores()) - 1L, 1L), max.jobs, max.load)

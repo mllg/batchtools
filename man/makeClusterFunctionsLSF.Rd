@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctionsLSF.r
 \name{makeClusterFunctionsLSF}
 \alias{makeClusterFunctionsLSF}
-\title{Cluster Functions for LSF}
+\title{ClusterFunctions for LSF Systems}
 \usage{
 makeClusterFunctionsLSF(template)
 }

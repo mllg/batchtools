@@ -1,4 +1,4 @@
-#' @title Cluster Functions for SLURM
+#' @title ClusterFunctions for SLURM Systems
 #'
 #' @description
 #' Job files are created based on the brew template \code{template.file}. This

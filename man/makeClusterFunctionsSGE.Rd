@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctionsSGE.r
 \name{makeClusterFunctionsSGE}
 \alias{makeClusterFunctionsSGE}
-\title{Cluster Functions for SGE}
+\title{ClusterFunctions for SGE Systems}
 \usage{
 makeClusterFunctionsSGE(template)
 }

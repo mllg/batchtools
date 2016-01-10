@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctionsSLURM.r
 \name{makeClusterFunctionsSLURM}
 \alias{makeClusterFunctionsSLURM}
-\title{Cluster Functions for SLURM}
+\title{ClusterFunctions for SLURM Systems}
 \usage{
 makeClusterFunctionsSLURM(template)
 }

@@ -162,7 +162,7 @@ findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 
-#' @title Find and filter jobs
+#' @title Find and Filter Jobs
 #'
 #' @description
 #' Use \code{findJobs} to query jobs for which a predicate expression, evaluated on the parameters, yields \code{TRUE}.

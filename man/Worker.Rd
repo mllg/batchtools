@@ -3,7 +3,7 @@
 \name{Worker}
 \alias{Worker}
 \alias{makeWorker}
-\title{Abstract base class constructor for general workers}
+\title{Worker Constructor}
 \usage{
 makeWorker(nodename, ncpus = 0L, max.jobs = NULL, max.load = NULL,
   debug = FALSE)

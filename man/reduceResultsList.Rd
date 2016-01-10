@@ -3,7 +3,7 @@
 \name{reduceResultsList}
 \alias{reduceResultsDataTable}
 \alias{reduceResultsList}
-\title{Aggregate Results}
+\title{Apply functions on Results}
 \usage{
 reduceResultsList(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry())
 
@@ -20,8 +20,8 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to result of \code{\link{findDone}}.}
 
 \item{fun}{[\code{function}]\cr
-Function to apply to each result. The results are passed unnamed as first
-argument.}
+Function to apply to each result. The result is passed unnamed as first
+argument. If \code{NULL}, the identity is used.}
 
 \item{...}{[\code{ANY}]\cr
 Additional arguments passed to to function \code{fun}.}
@@ -37,10 +37,11 @@ to a \code{\link[data.table]{data.table}}.}
 \value{
 \code{reduceResultsList} returns a list, \code{reduceResultsDataTable}
   returns a \code{\link[data.table]{data.table}} with
-  columns \dQuote{job.id} and \dQuote{result}.
+  columns \dQuote{job.id} and additional result columns as returned by (see \code{\link[data.table]{rbindlist}}).
 }
 \description{
-Functions to conveniently fetch the results from a \code{\link{Registry}}.
+Functions to apply collecting functions on the results
+of your \code{\link{Registry}}.
 }
 \examples{
 reg = makeTempRegistry()

@@ -1,4 +1,4 @@
-#' @title Execute jobs
+#' @title Execute Jobs of a JobCollection
 #'
 #' @description
 #' Executes every job in a \code{\link{JobCollection}}.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/waitForJobs.r
 \name{waitForJobs}
 \alias{waitForJobs}
-\title{Wait for termination of jobs on the batch system}
+\title{Wait for Termination of Jobs}
 \usage{
 waitForJobs(ids = NULL, sleep = 10, timeout = 604800,
   stop.on.error = FALSE, reg = getDefaultRegistry())

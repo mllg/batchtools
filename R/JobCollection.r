@@ -1,4 +1,4 @@
-#' @title Collection of Computational Jobs
+#' @title JobCollection Constructor
 #'
 #' @description
 #' \code{makeJobCollection} takes multiple job ids and creates an object of class \dQuote{JobCollection} which holds all

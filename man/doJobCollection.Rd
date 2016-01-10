@@ -2,7 +2,7 @@
 % Please edit documentation in R/doJobCollection.r
 \name{doJobCollection}
 \alias{doJobCollection}
-\title{Execute jobs}
+\title{Execute Jobs of a JobCollection}
 \usage{
 doJobCollection(jc, con = stdout())
 }

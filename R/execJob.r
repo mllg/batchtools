@@ -1,4 +1,4 @@
-#' @title Execute a single job
+#' @title Execute Single Jobs
 #'
 #' @description
 #' Executes a single job (as created by \code{\link{makeJob}}) and returns
