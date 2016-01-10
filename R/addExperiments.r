@@ -4,10 +4,10 @@
 #' Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.
 #' Each element in the Cartesian product of problem designs and algorithm designs defines one computational job.
 #'
-#' @param prob.designs [named list of \code{\link[data.table]{data.table}} or \code{link[base]{data.frame}}]\cr
+#' @param prob.designs [named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 #'   Named list of data frames. The name must match the problem name while the column names correspond to parameters
 #'   of the problem.
-#' @param algo.designs [named list of \code{\link[data.table]{data.table}} or \code{link[base]{data.frame}}]\cr
+#' @param algo.designs [named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 #'   Named list of data frames. The name must match the algorithm name while the column names correspond to parameters
 #'   of the algorithm.
 #' @param repls [\code{integer(1)}]\cr

@@ -11,7 +11,7 @@ In any large scale experiment many things can and will go wrong.
 The cluster might have an outage, jobs may run into resource limits or crash, subtile bugs in your code could be triggered or any other error condition might arise.
 In these situations it is important to quickly determine what went wrong and to recompute only the minimal number of required jobs.
 
-Therefore, before you submit anything you should use `testJob()` to catch errors that are easy to spot because they are raised in many or all jobs.
+Therefore, before you submit anything you should use [`testJob()`](https://mllg.github.io/batchtools/testJob.html) to catch errors that are easy to spot because they are raised in many or all jobs.
 If `fresh.session` is set, this function runs the job without side effects in an independent R process on your local machine via `Rscript` similar as on the slave, redirects the output of the process to your R console, loads the job result and returns it.
 If you do not set `fresh.session`, the job is executed is in the currently running R session, with the drawback that you might be unable to catch missing variable declarations or missing package dependencies.
 
@@ -45,17 +45,17 @@ In this case, testing the job with ID = 1 provides the appropriate result but te
 ```{r}
 as.character(try(testJob(id = 2)))
 ```
-When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run `getStatus()` to display a summary of the current state of the system.
+When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run [`getStatus()`](https://mllg.github.io/batchtools/getStatus.html) to display a summary of the current state of the system.
 ```{r}
 submitJobs()
 getStatus()
 ```
 The status message shows that two of the jobs could not be executed successfully.
-To get the IDs of all jobs that failed due to an error we can use `findError()`.
+To get the IDs of all jobs that failed due to an error we can use [`findError()`](https://mllg.github.io/batchtools/findJobs.html).
 ```{r}
 findError()
 ```
-If we want to peek into the R log file of a job to see more context for the error we can use `showLog()`.
+If we want to peek into the R log file of a job to see more context for the error we can use [`showLog()`](https://mllg.github.io/batchtools/showLog.html).
 ```{r,eval=FALSE}
 showLog(id = 9)
 ```
