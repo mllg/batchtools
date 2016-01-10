@@ -2,7 +2,7 @@
 % Please edit documentation in R/submitJobs.r
 \name{submitJobs}
 \alias{submitJobs}
-\title{Submit jobs or chunks of jobs to batch system via cluster function.}
+\title{Submit jobs to the Batch Systems}
 \usage{
 submitJobs(ids = NULL, resources = list(), reg = getDefaultRegistry())
 }

@@ -1,4 +1,4 @@
-#' @title Cluster Functions for Remote SSH Execution
+#' @title ClusterFunctions for Remote SSH Execution
 #'
 #' @description
 #' Jobs are spawned by starting multiple R sessions via SSH.

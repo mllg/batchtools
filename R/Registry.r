@@ -20,7 +20,7 @@ clearDefaultRegistry = function() {
   invisible(TRUE)
 }
 
-#' @title Construct a Registry Object
+#' @title Registry Constructor
 #'
 #' @description
 #' \code{makeRegistry} constructs the inter-communication object for all functions in \code{batchtools}.

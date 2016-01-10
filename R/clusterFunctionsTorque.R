@@ -1,4 +1,4 @@
-#' @title Cluster Functions for Torque
+#' @title ClusterFunctions for OpenPBS/Torque Systems
 #'
 #' @description
 #' Job files are created based on the brew template \code{template.file}. This file is processed

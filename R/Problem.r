@@ -1,4 +1,4 @@
-#' @title Define Problems and Algorithms
+#' @title Define Problems and Algorithms for Experiments
 #'
 #' @description
 #' Problems may consist of up to two parts. A static, immutable part (\code{data} in \code{addProblem})

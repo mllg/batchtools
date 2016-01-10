@@ -1,4 +1,4 @@
-#' @title Add Experiemts to the Registry
+#' @title Add Experiments to the Registry
 #'
 #' @description
 #' Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.

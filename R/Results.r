@@ -62,22 +62,23 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
   return(init)
 }
 
-#' @title Aggregate Results
+#' @title Apply functions on Results
 #'
 #' @description
-#' Functions to conveniently fetch the results from a \code{\link{Registry}}.
+#' Functions to apply collecting functions on the results
+#' of your \code{\link{Registry}}.
 #'
 #' @templateVar ids.default findDone
 #' @template ids
 #' @param fun [\code{function}]\cr
-#'   Function to apply to each result. The results are passed unnamed as first
-#'   argument.
+#'   Function to apply to each result. The result is passed unnamed as first
+#'   argument. If \code{NULL}, the identity is used.
 #' @param ... [\code{ANY}]\cr
 #'   Additional arguments passed to to function \code{fun}.
 #' @template reg
 #' @return \code{reduceResultsList} returns a list, \code{reduceResultsDataTable}
 #'   returns a \code{\link[data.table]{data.table}} with
-#'   columns \dQuote{job.id} and \dQuote{result}.
+#'   columns \dQuote{job.id} and additional result columns as returned by (see \code{\link[data.table]{rbindlist}}).
 #' @seealso \code{\link{reduceResults}}.
 #' @family Results
 #' @export
@@ -93,7 +94,7 @@ reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegist
   ids = asIds(reg, ids, default = .findDone(reg = reg))
 
   if (is.null(fun)) {
-    getResult = function(fn, ...) readRDS(file = fn)
+    getResult = function(fn, ...) readRDS(fn)
   } else {
     fun = match.fun(fun)
     getResult = function(fn, ...) fun(readRDS(fn), ...)
@@ -126,7 +127,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
   results = reduceResultsList(ids = ids, fun = fun, ..., reg = reg)
   if (!all(vlapply(results, is.data.table)))
     results = lapply(results, as.data.table)
-  results = rbindlist(results, fill = FALSE, idcol = "..id")
+  results = rbindlist(results, fill = fill, idcol = "..id")
   if (!identical(results$..id, seq_row(ids)))
     stop("The function must return an object for each job which is convertible to a data.frame with one row")
   results$..id = NULL

@@ -1,4 +1,4 @@
-#' @title Create a ClusterFunctions object
+#' @title ClusterFunctions Constructor
 #'
 #' @description
 #' Use this function when you implement a back-end for a batch system. You must define the functions

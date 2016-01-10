@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctionsOpenLava.r
 \name{makeClusterFunctionsOpenLava}
 \alias{makeClusterFunctionsOpenLava}
-\title{Cluster Functions for OpenLava}
+\title{ClusterFunctions for OpenLava}
 \usage{
 makeClusterFunctionsOpenLava(template)
 }

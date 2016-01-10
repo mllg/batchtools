@@ -12,7 +12,7 @@
 \alias{findOnSystem}
 \alias{findStarted}
 \alias{findSubmitted}
-\title{Find and filter jobs}
+\title{Find and Filter Jobs}
 \usage{
 findSubmitted(ids = NULL, reg = getDefaultRegistry())
 

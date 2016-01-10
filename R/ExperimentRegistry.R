@@ -1,4 +1,4 @@
-#' @title Construct an Experiment Registry Object
+#' @title ExperimentRegistry Constructor
 #'
 #' @description
 #' \code{makeExperimentRegistry} constructs a special \code{\link{Registry}} which

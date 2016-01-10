@@ -2,7 +2,7 @@
 % Please edit documentation in R/execJob.r
 \name{execJob}
 \alias{execJob}
-\title{Execute a single job}
+\title{Execute Single Jobs}
 \usage{
 execJob(job)
 }

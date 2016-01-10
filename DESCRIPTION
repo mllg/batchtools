@@ -15,11 +15,12 @@ BugReports: https://github.com/mllg/batchtools/issues
 NeedsCompilation: yes
 ByteCompile: yes
 Depends:
+    R (>= 3.0.0),
     data.table (>= 1.9.6)
 Imports:
     brew,
     checkmate (>= 1.6.3),
-    digest,
+    digest (>= 0.6.9),
     parallel,
     progress,
     stats,

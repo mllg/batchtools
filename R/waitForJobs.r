@@ -1,4 +1,4 @@
-#' @title Wait for termination of jobs on the batch system
+#' @title Wait for Termination of Jobs
 #'
 #' @description
 #' This function can be used to synchronize the execution on batch systems.

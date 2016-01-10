@@ -10,7 +10,7 @@
 \alias{saveRegistry}
 \alias{setDefaultRegistry}
 \alias{syncRegistry}
-\title{Construct a Registry Object}
+\title{Registry Constructor}
 \usage{
 getDefaultRegistry()
 

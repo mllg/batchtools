@@ -1,4 +1,4 @@
-#' @title Cluster Functions for LSF
+#' @title ClusterFunctions for LSF Systems
 #'
 #' @description
 #' Job files are created based on the brew template \code{template.file}. This

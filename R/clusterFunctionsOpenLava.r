@@ -1,4 +1,4 @@
-#' @title Cluster Functions for OpenLava
+#' @title ClusterFunctions for OpenLava
 #'
 #' @description
 #' Job files are created based on the brew template \code{template}. This

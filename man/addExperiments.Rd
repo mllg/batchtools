@@ -2,7 +2,7 @@
 % Please edit documentation in R/addExperiments.r
 \name{addExperiments}
 \alias{addExperiments}
-\title{Add Experiemts to the Registry}
+\title{Add Experiments to the Registry}
 \usage{
 addExperiments(prob.designs, algo.designs, repls = 1L,
   reg = getDefaultRegistry())

@@ -8,7 +8,7 @@
 \alias{addProblem}
 \alias{removeAlgorithm}
 \alias{removeProblem}
-\title{Define Problems and Algorithms}
+\title{Define Problems and Algorithms for Experiments}
 \usage{
 addAlgorithm(name, fun, reg = getDefaultRegistry())
 

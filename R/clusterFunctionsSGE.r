@@ -1,4 +1,4 @@
-#' @title Cluster Functions for SGE
+#' @title ClusterFunctions for SGE Systems
 #'
 #' @description
 #' Job files are created based on the brew template \code{template}. This

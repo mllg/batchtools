@@ -54,7 +54,7 @@ ids = chunkIds(ids, chunk.size = 10, reg = reg)
 print(ids)
 print(table(ids$chunk))
 
-# chunking for ExperimentRegistry
+# Creating chunks for an ExperimentRegistry
 reg = makeTempExperimentRegistry(make.default = FALSE)
 prob = addProblem(reg = reg, "prob1", data = iris, fun = function(job, data) nrow(data))
 prob = addProblem(reg = reg, "prob2", data = Titanic, fun = function(job, data) nrow(data))

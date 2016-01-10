@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctionsTorque.R
 \name{makeClusterFunctionsTorque}
 \alias{makeClusterFunctionsTorque}
-\title{Cluster Functions for Torque}
+\title{ClusterFunctions for OpenPBS/Torque Systems}
 \usage{
 makeClusterFunctionsTorque(template)
 }

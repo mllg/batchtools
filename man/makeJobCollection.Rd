@@ -3,7 +3,7 @@
 \name{makeJobCollection}
 \alias{JobCollection}
 \alias{makeJobCollection}
-\title{Collection of Computational Jobs}
+\title{JobCollection Constructor}
 \usage{
 makeJobCollection(ids = NULL, resources = list(),
   reg = getDefaultRegistry())
