@@ -8,11 +8,11 @@ addExperiments(prob.designs, algo.designs, repls = 1L,
   reg = getDefaultRegistry())
 }
 \arguments{
-\item{prob.designs}{[named list of \code{\link[data.table]{data.table}} or \code{link[base]{data.frame}}]\cr
+\item{prob.designs}{[named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 Named list of data frames. The name must match the problem name while the column names correspond to parameters
 of the problem.}
 
-\item{algo.designs}{[named list of \code{\link[data.table]{data.table}} or \code{link[base]{data.frame}}]\cr
+\item{algo.designs}{[named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 Named list of data frames. The name must match the algorithm name while the column names correspond to parameters
 of the algorithm.}
 
