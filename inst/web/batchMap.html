@@ -89,7 +89,9 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeTempRegistry()
-f = function(x, y) x^2 + y
+</div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<div class='input'>f = function(x, y) x^2 + y
 ids = batchMap(f, x = 1:10, more.args = list(y = 100), reg = reg)
 </div>
 <strong class='message'>Adding 10 jobs ...</strong>
@@ -147,7 +149,7 @@ ids = batchMap(f, x = 1:10, more.args = list(y = 100), reg = reg)
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

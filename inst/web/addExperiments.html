@@ -47,7 +47,7 @@
         
       </header>
       
-      <h1>Add Experiemts to the Registry</h1>
+      <h1>Add Experiments to the Registry</h1>
 
 <div class="row">
   <div class="span8">
@@ -57,11 +57,11 @@
     <h2>Arguments</h2>
     <dl>
       <dt>prob.designs</dt>
-      <dd>[named list of <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> or <code>link[base]{data.frame}</code>]
+      <dd>[named list of <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> or <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code>]
 Named list of data frames. The name must match the problem name while the column names correspond to parameters
 of the problem.</dd>
       <dt>algo.designs</dt>
-      <dd>[named list of <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> or <code>link[base]{data.frame}</code>]
+      <dd>[named list of <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> or <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code>]
 Named list of data frames. The name must match the algorithm name while the column names correspond to parameters
 of the algorithm.</dd>
       <dt>repls</dt>
@@ -91,7 +91,9 @@ Each element in the Cartesian product of problem designs and algorithm designs d
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeTempExperimentRegistry()
-addProblem(reg = reg, &quot;p1&quot;,
+</div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<div class='input'>addProblem(reg = reg, &quot;p1&quot;,
   fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
 addAlgorithm(reg = reg, &quot;a1&quot;, fun = function(job, data, instance, ...) mean(instance))
 prob.designs = list(p1 = expand.grid(n = 100, mean = -3:3, sd = 1:5))
@@ -114,7 +116,7 @@ addExperiments(reg = reg, prob.designs, algo.designs)
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

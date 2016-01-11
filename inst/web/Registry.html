@@ -47,7 +47,7 @@
         
       </header>
       
-      <h1>Construct a Registry Object</h1>
+      <h1>Registry Constructor</h1>
 
 <div class="row">
   <div class="span8">
@@ -175,13 +175,15 @@ The base dir can be set via the option &#147;batchtools.temp.dir&#148; and defau
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeTempRegistry(make.default = FALSE)
-print(reg)
+</div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<div class='input'>print(reg)
 </div>
 <div class='output'>Job Registry
   Number of Jobs: 0
-  File dir: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/Rtmpj7BMPH/registry87c87e624461
-  Work dir: /Users/michel/Projekte/batchtools
-  Seed: 776079326
+  File dir: /tmp/Rtmp9ooYAj/registry1fa27b1ec23b
+  Work dir: /home/lang/Projekte/batchtools
+  Seed: 624156284
 </div>
 <div class='input'>
 #&#39; Set debug mode
@@ -211,7 +213,7 @@ saveRegistry(reg = reg)
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

@@ -109,38 +109,40 @@ computational job.</p>
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'># chunking for Registry
 reg = makeTempRegistry(make.default = FALSE)
-ids = batchMap(identity, 1:25, reg = reg)
+</div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<div class='input'>ids = batchMap(identity, 1:25, reg = reg)
 </div>
 <strong class='message'>Adding 25 jobs ...</strong>
 <div class='input'>ids = chunkIds(ids, chunk.size = 10, reg = reg)
 print(ids)
 </div>
 <div class='output'>    job.id chunk
- 1:      1     2
+ 1:      1     1
  2:      2     3
- 3:      3     3
- 4:      4     1
- 5:      5     1
- 6:      6     2
+ 3:      3     2
+ 4:      4     2
+ 5:      5     2
+ 6:      6     3
  7:      7     1
  8:      8     1
- 9:      9     2
-10:     10     3
-11:     11     3
+ 9:      9     1
+10:     10     2
+11:     11     1
 12:     12     2
 13:     13     3
 14:     14     3
-15:     15     2
-16:     16     2
-17:     17     2
-18:     18     1
-19:     19     2
-20:     20     3
-21:     21     1
-22:     22     1
-23:     23     1
+15:     15     1
+16:     16     3
+17:     17     3
+18:     18     3
+19:     19     1
+20:     20     2
+21:     21     3
+22:     22     2
+23:     23     2
 24:     24     1
-25:     25     3
+25:     25     1
     job.id chunk
 </div>
 <div class='input'>print(table(ids$chunk))
@@ -150,9 +152,11 @@ print(ids)
 9 8 8 
 </div>
 <div class='input'>
-# chunking for ExperimentRegistry
+# Creating chunks for an ExperimentRegistry
 reg = makeTempExperimentRegistry(make.default = FALSE)
-prob = addProblem(reg = reg, &quot;prob1&quot;, data = iris, fun = function(job, data) nrow(data))
+</div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<div class='input'>prob = addProblem(reg = reg, &quot;prob1&quot;, data = iris, fun = function(job, data) nrow(data))
 prob = addProblem(reg = reg, &quot;prob2&quot;, data = Titanic, fun = function(job, data) nrow(data))
 algo = addAlgorithm(reg = reg, &quot;algo&quot;, fun = function(job, data, instance, i, ...) problem)
 prob.designs = list(prob1 = data.table(), prob2 = data.table(x = 1:2))
@@ -170,15 +174,15 @@ print(ids)
 <div class='output'>     job.id problem algorithm chunk
   1:      1   prob1      algo     1
   2:      2   prob1      algo     2
-  3:      3   prob1      algo     1
-  4:      4   prob1      algo     3
-  5:      5   prob1      algo     4
+  3:      3   prob1      algo     3
+  4:      4   prob1      algo     4
+  5:      5   prob1      algo     5
  ---                               
-146:    146   prob2      algo    29
-147:    147   prob2      algo    22
-148:    148   prob2      algo    23
-149:    149   prob2      algo    30
-150:    150   prob2      algo    30
+146:    146   prob2      algo    22
+147:    147   prob2      algo    13
+148:    148   prob2      algo    17
+149:    149   prob2      algo    29
+150:    150   prob2      algo    22
 </div>
 <div class='input'>dcast(ids, chunk ~ problem)
 </div>
@@ -232,7 +236,7 @@ print(ids)
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

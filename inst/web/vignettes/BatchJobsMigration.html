@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="date" content="2016-01-07" />
+<meta name="date" content="2016-01-11" />
 
 <title>Migrating from BatchJobs/BatchExperiments</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <div id="header">
 <h1 class="title">Migrating from BatchJobs/BatchExperiments</h1>
-<h4 class="date"><em>2016-01-07</em></h4>
+<h4 class="date"><em>2016-01-11</em></h4>
 </div>
 
 
@@ -89,8 +89,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>The function <code>makeDesign</code> has been removed. Hyperparameters can be defined by just passing a <code>data.frame</code> or <code>data.table</code> to <a href="https://mllg.github.io/batchtools/addExperiments.html">addExperiments</a>. For exhaustive designs, use <code>expand.grid()</code> or <code>data.table::CJ</code>.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
-reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span class="dt">make.default =</span> <span class="ot">TRUE</span>)
-<span class="kw">batchMap</span>(function(x, y) x +<span class="st"> </span>y, <span class="dt">x =</span> <span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">y =</span> <span class="dv">1</span>)</code></pre></div>
+reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span class="dt">make.default =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Sourcing configuration file '~/.batchtools.conf.r' ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">batchMap</span>(function(x, y) x +<span class="st"> </span>y, <span class="dt">x =</span> <span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">y =</span> <span class="dv">1</span>)</code></pre></div>
 <pre><code>## Adding 5 jobs ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids =<span class="st"> </span><span class="kw">findJobs</span>(x &gt;<span class="st"> </span><span class="dv">3</span>)
 <span class="kw">print</span>(ids)</code></pre></div>

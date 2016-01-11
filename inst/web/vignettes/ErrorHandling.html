@@ -73,7 +73,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <p>In any large scale experiment many things can and will go wrong. The cluster might have an outage, jobs may run into resource limits or crash, subtile bugs in your code could be triggered or any other error condition might arise. In these situations it is important to quickly determine what went wrong and to recompute only the minimal number of required jobs.</p>
-<p>Therefore, before you submit anything you should use <code>testJob()</code> to catch errors that are easy to spot because they are raised in many or all jobs. If <code>fresh.session</code> is set, this function runs the job without side effects in an independent R process on your local machine via <code>Rscript</code> similar as on the slave, redirects the output of the process to your R console, loads the job result and returns it. If you do not set <code>fresh.session</code>, the job is executed is in the currently running R session, with the drawback that you might be unable to catch missing variable declarations or missing package dependencies.</p>
+<p>Therefore, before you submit anything you should use <a href="https://mllg.github.io/batchtools/testJob.html"><code>testJob()</code></a> to catch errors that are easy to spot because they are raised in many or all jobs. If <code>fresh.session</code> is set, this function runs the job without side effects in an independent R process on your local machine via <code>Rscript</code> similar as on the slave, redirects the output of the process to your R console, loads the job result and returns it. If you do not set <code>fresh.session</code>, the job is executed is in the currently running R session, with the drawback that you might be unable to catch missing variable declarations or missing package dependencies.</p>
 <p>By way of illustration here is a small example. First, we create a temporary registry.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
 reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span class="dt">work.dir =</span> <span class="st">&quot;/tmp&quot;</span>, <span class="dt">make.default =</span> <span class="ot">TRUE</span>)</code></pre></div>
@@ -88,12 +88,12 @@ reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span cla
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">testJob</span>(<span class="dt">id =</span> <span class="dv">1</span>)</code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <p>In this case, testing the job with ID = 1 provides the appropriate result but testing the job with ID = 2 leads to an error:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.character</span>(<span class="kw">try</span>(<span class="kw">testJob</span>(<span class="dt">id =</span> <span class="dv">1</span>)))</code></pre></div>
-<pre><code>## [1] &quot;1&quot;</code></pre>
-<p>When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run <code>getStatus()</code> to display a summary of the current state of the system.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.character</span>(<span class="kw">try</span>(<span class="kw">testJob</span>(<span class="dt">id =</span> <span class="dv">2</span>)))</code></pre></div>
+<pre><code>## [1] &quot;Error in (function (value)  : Ooops.\n&quot;</code></pre>
+<p>When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run <a href="https://mllg.github.io/batchtools/getStatus.html"><code>getStatus()</code></a> to display a summary of the current state of the system.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">submitJobs</span>()</code></pre></div>
-<pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...
-## Syncing 10 files ...</code></pre>
+<pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
+<pre><code>## Syncing 10 files ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getStatus</span>()</code></pre></div>
 <pre><code>## Status for 10 jobs:
 ##   Submitted: 10 (100.0%)
@@ -101,19 +101,19 @@ reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span cla
 ##   System   :  0 (  0.0%)
 ##   Done     :  8 ( 80.0%)
 ##   Error    :  2 ( 20.0%)</code></pre>
-<p>The status message shows that two of the jobs could not be executed successfully. To get the IDs of all jobs that failed due to an error we can use <code>findError()</code>.</p>
+<p>The status message shows that two of the jobs could not be executed successfully. To get the IDs of all jobs that failed due to an error we can use <a href="https://mllg.github.io/batchtools/findJobs.html"><code>findError()</code></a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">findError</span>()</code></pre></div>
 <pre><code>##    job.id
 ## 1:      2
 ## 2:      9</code></pre>
-<p>If we want to peek into the R log file of a job to see more context for the error we can use <code>showLog()</code>.</p>
+<p>If we want to peek into the R log file of a job to see more context for the error we can use <a href="https://mllg.github.io/batchtools/showLog.html"><code>showLog()</code></a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">showLog</span>(<span class="dt">id =</span> <span class="dv">9</span>)</code></pre></div>
-<pre><code>## [1] &quot;[job(chunk): 2016-01-07 22:34:00] Starting calculation of 1 jobs&quot;                                            
-## [2] &quot;[job(chunk): 2016-01-07 22:34:00] Setting working directory to '/Users/michel/Projekte/batchtools/vignettes'&quot;
-## [3] &quot;[job(9): 2016-01-07 22:34:00] Starting job with job.id=9&quot;                                                    
-## [4] &quot;[job(9): 2016-01-07 22:34:00] Error in (function (value)  : Ooops.&quot;                                          
-## [5] &quot;[job(9): 2016-01-07 22:34:00] Job terminated with an exception&quot;                                              
-## [6] &quot;[job(chunk): 2016-01-07 22:34:00] Calculation finished ...&quot;</code></pre>
+<pre><code>## [1] &quot;[job(chunk): 2016-01-11 12:11:25] Starting calculation of 1 jobs&quot;                                         
+## [2] &quot;[job(chunk): 2016-01-11 12:11:25] Setting working directory to '/home/lang/Projekte/batchtools/vignettes'&quot;
+## [3] &quot;[job(9): 2016-01-11 12:11:25] Starting job with job.id=9&quot;                                                 
+## [4] &quot;[job(9): 2016-01-11 12:11:25] Error in (function (value)  : Ooops.&quot;                                       
+## [5] &quot;[job(9): 2016-01-11 12:11:25] Job terminated with an exception&quot;                                           
+## [6] &quot;[job(chunk): 2016-01-11 12:11:25] Calculation finished ...&quot;</code></pre>
 
 
 

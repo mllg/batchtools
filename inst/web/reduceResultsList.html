@@ -47,7 +47,7 @@
         
       </header>
       
-      <h1>Aggregate Results</h1>
+      <h1>Apply functions on Results</h1>
 
 <div class="row">
   <div class="span8">
@@ -67,8 +67,8 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to result of <code><a href='findJobs.html'>findDone</a></code>.</dd>
       <dt>fun</dt>
       <dd>[<code>function</code>]
-Function to apply to each result. The results are passed unnamed as first
-argument.</dd>
+Function to apply to each result. The result is passed unnamed as first
+argument. If <code>NULL</code>, the identity is used.</dd>
       <dt>...</dt>
       <dd>[<code>ANY</code>]
 Additional arguments passed to to function <code>fun</code>.</dd>
@@ -88,7 +88,7 @@ to a <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.t
       <p><dl>
 <code>reduceResultsList</code> returns a list, <code>reduceResultsDataTable</code>
   returns a <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> with
-  columns &#147;job.id&#148; and &#147;result&#148;.
+  columns &#147;job.id&#148; and additional result columns as returned by (see <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/rbindlist'>rbindlist</a></code>).
 </dl></p>
   
     </div>
@@ -96,13 +96,16 @@ to a <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.t
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Functions to conveniently fetch the results from a <code><a href='Registry.html'>Registry</a></code>.</p>
+      <p>Functions to apply collecting functions on the results
+of your <code><a href='Registry.html'>Registry</a></code>.</p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeTempRegistry()
-batchMap(function(x) x^2, x = 1:10, reg = reg)
+</div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<div class='input'>batchMap(function(x) x^2, x = 1:10, reg = reg)
 </div>
 <strong class='message'>Adding 10 jobs ...</strong>
 <div class='input'>submitJobs(reg = reg)
@@ -168,7 +171,7 @@ Other Results: <code><a href='loadResult.html'>loadResult</a></code>,
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

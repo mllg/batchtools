@@ -107,10 +107,16 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
     <ul class="index">
         
       <li>
-        <code><a href="ProblemAlgorithm.html">addAlgorithm</a></code>(Algorithm, Problem, ProblemAlgorithm, addProblem, removeAlgorithm, removeProblem)<br />Define Problems and Algorithms</li>
+        <code><a href="ExperimentRegistry.html">ExperimentRegistry</a></code>(makeExperimentRegistry, makeTempExperimentRegistry)<br />ExperimentRegistry Constructor</li>
             
       <li>
-        <code><a href="addExperiments.html">addExperiments</a></code><br />Add Experiemts to the Registry</li>
+        <code><a href="Worker.html">Worker</a></code>(makeWorker)<br />Worker Constructor</li>
+            
+      <li>
+        <code><a href="ProblemAlgorithm.html">addAlgorithm</a></code>(Algorithm, Problem, ProblemAlgorithm, addProblem, removeAlgorithm, removeProblem)<br />Define Problems and Algorithms for Experiments</li>
+            
+      <li>
+        <code><a href="addExperiments.html">addExperiments</a></code><br />Add Experiments to the Registry</li>
             
       <li>
         <code><a href="batchMap.html">batchMap</a></code><br />Map Operation for Batch Systems</li>
@@ -137,19 +143,16 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="chunkIds.html">chunkIds</a></code><br />Chunk Jobs for Sequential Execution</li>
             
       <li>
-        <code><a href="doJobCollection.html">doJobCollection</a></code><br />Execute jobs</li>
+        <code><a href="doJobCollection.html">doJobCollection</a></code><br />Execute Jobs of a JobCollection</li>
             
       <li>
-        <code><a href="execJob.html">execJob</a></code><br />Execute a single job</li>
+        <code><a href="execJob.html">execJob</a></code><br />Execute Single Jobs</li>
             
       <li>
-        <code><a href="ExperimentRegistry.html">ExperimentRegistry</a></code>(makeExperimentRegistry, makeTempExperimentRegistry)<br />Construct an Experiment Registry Object</li>
+        <code><a href="findJobs.html">findSubmitted</a></code>(findDone, findError, findExperiments, findExpired, findJobs, findNotDone, findNotStarted, findNotSubmitted, findOnSystem, findStarted)<br />Find and Filter Jobs</li>
             
       <li>
-        <code><a href="findJobs.html">findSubmitted</a></code>(findDone, findError, findExperiments, findExpired, findJobs, findNotDone, findNotStarted, findNotSubmitted, findOnSystem, findStarted)<br />Find and filter jobs</li>
-            
-      <li>
-        <code><a href="Registry.html">getDefaultRegistry</a></code>(Registry, clearDefaultRegistry, loadRegistry, makeRegistry, makeTempRegistry, saveRegistry, setDefaultRegistry, syncRegistry)<br />Construct a Registry Object</li>
+        <code><a href="Registry.html">getDefaultRegistry</a></code>(Registry, clearDefaultRegistry, loadRegistry, makeRegistry, makeTempRegistry, saveRegistry, setDefaultRegistry, syncRegistry)<br />Registry Constructor</li>
             
       <li>
         <code><a href="getJobInfo.html">getJobInfo</a></code>(getJobPars, getJobResources, getJobStatus)<br />Query Job Information</li>
@@ -164,37 +167,37 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="loadResult.html">loadResult</a></code><br />Load the Result of a Single Job</li>
             
       <li>
-        <code><a href="makeClusterFunctions.html">makeClusterFunctions</a></code>(ClusterFunctions)<br />Create a ClusterFunctions object</li>
+        <code><a href="makeClusterFunctions.html">makeClusterFunctions</a></code>(ClusterFunctions)<br />ClusterFunctions Constructor</li>
             
       <li>
-        <code><a href="makeClusterFunctionsInteractive.html">makeClusterFunctionsInteractive</a></code><br />Create cluster functions for sequential execution in same session.</li>
+        <code><a href="makeClusterFunctionsInteractive.html">makeClusterFunctionsInteractive</a></code><br />ClusterFunctions for Sequential Execution in the Running R Session</li>
             
       <li>
-        <code><a href="makeClusterFunctionsLSF.html">makeClusterFunctionsLSF</a></code><br />Cluster Functions for LSF</li>
+        <code><a href="makeClusterFunctionsLSF.html">makeClusterFunctionsLSF</a></code><br />ClusterFunctions for LSF Systems</li>
             
       <li>
-        <code><a href="makeClusterFunctionsMulticore.html">makeClusterFunctionsMulticore</a></code><br />Cluster Functions for Local Multicore Execution</li>
+        <code><a href="makeClusterFunctionsMulticore.html">makeClusterFunctionsMulticore</a></code><br />ClusterFunctions for Local Multicore Execution</li>
             
       <li>
-        <code><a href="makeClusterFunctionsOpenLava.html">makeClusterFunctionsOpenLava</a></code><br />Cluster Functions for OpenLava</li>
+        <code><a href="makeClusterFunctionsOpenLava.html">makeClusterFunctionsOpenLava</a></code><br />ClusterFunctions for OpenLava</li>
             
       <li>
-        <code><a href="makeClusterFunctionsSGE.html">makeClusterFunctionsSGE</a></code><br />Cluster Functions for SGE</li>
+        <code><a href="makeClusterFunctionsSGE.html">makeClusterFunctionsSGE</a></code><br />ClusterFunctions for SGE Systems</li>
             
       <li>
-        <code><a href="makeClusterFunctionsSLURM.html">makeClusterFunctionsSLURM</a></code><br />Cluster Functions for SLURM</li>
+        <code><a href="makeClusterFunctionsSLURM.html">makeClusterFunctionsSLURM</a></code><br />ClusterFunctions for SLURM Systems</li>
             
       <li>
-        <code><a href="makeClusterFunctionsSSH.html">makeClusterFunctionsSSH</a></code><br />Cluster Functions for Remote SSH Execution</li>
+        <code><a href="makeClusterFunctionsSSH.html">makeClusterFunctionsSSH</a></code><br />ClusterFunctions for Remote SSH Execution</li>
             
       <li>
-        <code><a href="makeClusterFunctionsTorque.html">makeClusterFunctionsTorque</a></code><br />Cluster Functions for Torque</li>
+        <code><a href="makeClusterFunctionsTorque.html">makeClusterFunctionsTorque</a></code><br />ClusterFunctions for OpenPBS/Torque Systems</li>
             
       <li>
         <code><a href="makeJob.html">makeJob</a></code>(Job)<br />Computational Jobs</li>
             
       <li>
-        <code><a href="makeJobCollection.html">makeJobCollection</a></code>(JobCollection)<br />Collection of Computational Jobs</li>
+        <code><a href="makeJobCollection.html">makeJobCollection</a></code>(JobCollection)<br />JobCollection Constructor</li>
             
       <li>
         <code><a href="makeSubmitJobResult.html">makeSubmitJobResult</a></code>(SubmitJobResult)<br />Create a SubmitJobResult object</li>
@@ -203,13 +206,13 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="reduceResults.html">reduceResults</a></code><br />Reduce Results</li>
             
       <li>
-        <code><a href="reduceResultsList.html">reduceResultsList</a></code>(reduceResultsDataTable)<br />Aggregate Results</li>
+        <code><a href="reduceResultsList.html">reduceResultsList</a></code>(reduceResultsDataTable)<br />Apply functions on Results</li>
             
       <li>
         <code><a href="showLog.html">showLog</a></code><br />Inspect Log Files</li>
             
       <li>
-        <code><a href="submitJobs.html">submitJobs</a></code><br />Submit jobs or chunks of jobs to batch system via cluster function.</li>
+        <code><a href="submitJobs.html">submitJobs</a></code><br />Submit jobs to the Batch Systems</li>
             
       <li>
         <code><a href="summarizeExperiments.html">summarizeExperiments</a></code><br />Quick Summary over Experiments</li>
@@ -218,10 +221,7 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="testJob.html">testJob</a></code><br />Run Jobs Interactively</li>
             
       <li>
-        <code><a href="waitForJobs.html">waitForJobs</a></code><br />Wait for termination of jobs on the batch system</li>
-            
-      <li>
-        <code><a href="Worker.html">Worker</a></code>(makeWorker)<br />Abstract base class constructor for general workers</li>
+        <code><a href="waitForJobs.html">waitForJobs</a></code><br />Wait for Termination of Jobs</li>
     
     </ul>
   </div>
@@ -251,7 +251,7 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
       </footer>
     </div>
   </body>
