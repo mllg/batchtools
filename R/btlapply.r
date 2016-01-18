@@ -59,9 +59,9 @@ btmapply = function(fun, ..., more.args = list(), simplify = FALSE, use.names = 
     if (use.names && length(dots)) {
       if (is.null(names(dots[[1L]]))) {
         if(is.character(dots[[1L]]))
-          names(res) <- dots[[1L]]
+          names(res) = dots[[1L]]
       } else {
-        names(res) <- names(dots[[1L]])
+        names(res) = names(dots[[1L]])
       }
     }
   }
