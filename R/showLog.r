@@ -34,7 +34,7 @@ grepLogs = function(pattern, ids = NULL, reg = getDefaultRegistry()) {
 readLog = function(id, impute = NULL, reg = getDefaultRegistry()) {
   x = reg$status[id, c("job.id", "done", "job.hash"), with = FALSE, nomatch = 0L]
   log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", x$job.hash))
-  if (is.na(x$done) || !file.exists(log.file)) {
+  if (!file.exists(log.file)) {
     if (is.null(impute))
       stopf("Log file for job with id %i not found", x$job.id)
     return(impute)
