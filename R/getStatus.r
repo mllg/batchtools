@@ -8,16 +8,17 @@
 #' @template reg
 #' @return [\code{\link[data.table]{data.table}}] with class \dQuote{Status} to
 #'   trigger a nice print function.
-#' @useDynLib batchtools count_not_missing
 #' @export
 getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
-  count = function(x) {
-    .Call("count_not_missing", x, PACKAGE = "batchtools")
-  }
   assertRegistry(reg)
   syncRegistry(reg)
   ids = asIds(reg, ids, default = .findAll(reg))
 
+  stats = getStatusSummary(ids, TRUE, reg = reg)
+  setClasses(stats, c("Status", class(stats)))
+}
+
+getStatusSummary = function(ids, on.sys = FALSE, reg = getDefaultRegistry()) {
   stats = reg$status[ids][, list(
     defined   = .N,
     submitted = count(get("submitted")),
@@ -26,9 +27,9 @@ getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
     error     = count(get("error"))
   )]
   stats$done = stats$done - stats$error
-  stats$on.sys = nrow(.findOnSystem(reg, ids))
-
-  setClasses(stats, c("Status", class(stats)))
+  if (on.sys)
+    stats$on.sys = nrow(.findOnSystem(reg, ids))
+  return(stats)
 }
 
 #' @export
