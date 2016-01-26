@@ -41,13 +41,13 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   cf = reg$cluster.functions
   n.jobs.total = n.jobs = nrow(ids)
 
-  if (n.jobs == 0L || nrow(ids) == 0L) {
-    return(TRUE)
-  }
-
   if (nrow(.findNotSubmitted(ids = ids, reg = reg)) > 0L) {
     warning("Cannot wait for unsubmitted jobs. Removing from ids.")
     ids = ids[.findSubmitted(ids = ids, reg = reg), nomatch = 0L]
+  }
+
+  if (n.jobs == 0L || nrow(ids) == 0L) {
+    return(TRUE)
   }
 
   if (is.null(cf$listJobs)) {
@@ -57,7 +57,8 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   info("Waiting for %i jobs ...", n.jobs)
   timeout = now() + timeout
 
-  pb = makeProgressBar(total = n.jobs, format = "Waiting [:bar] :percent eta: :eta")
+  pb = makeProgressBar(total = n.jobs, format = "Waiting (R::running D::done E::error) [:bar] :percent eta: :eta",
+    tokens = list(running = "?", done = "?", error = "?"))
   ids.disappeared = data.table(job.id = integer(0L), key = "job.id")
 
   repeat {
@@ -85,19 +86,23 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     # heuristic:
     #   job is not terminated, not on system and has not been on the system
     #   in the previous iteration
+    ids.on.sys = .findOnSystem(ids = ids.nt, reg = reg)
     if (nrow(ids.disappeared) > 0L) {
-      if (nrow(ids.nt[!.findOnSystem(ids = ids.nt, reg = reg)][ids.disappeared, nomatch = 0L]) > 0L) {
+      if (nrow(ids.nt[!ids.on.sys][ids.disappeared, nomatch = 0L]) > 0L) {
         warning("Some jobs disappeared from the system")
         pb$tick(n.jobs.total)
         return(FALSE)
       }
     } else {
-      ids.disappeared = ids[!.findOnSystem(ids = ids.nt, reg = reg)]
+      ids.disappeared = ids[!ids.on.sys]
     }
+
+    stats = as.list(getStatusSummary(ids, FALSE, reg = reg)[, c("done", "error"), with = FALSE])
+    stats$running = nrow(ids.on.sys)
+    pb$tick(n.jobs - nrow(ids.nt), tokens = stats)
+    n.jobs = nrow(ids.nt) # FIXME: remover after progress is updated
 
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg = reg))
-    pb$tick(n.jobs - nrow(ids.nt))
-    n.jobs = nrow(ids.nt)
   }
 }

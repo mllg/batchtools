@@ -137,3 +137,8 @@ map = function(f, ..., more.args = NULL) {
   dots = list(...)
   .mapply(f, dots, more.args)
 }
+
+#' @useDynLib batchtools count_not_missing
+count = function(x) {
+  .Call(count_not_missing, x)
+}

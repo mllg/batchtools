@@ -41,7 +41,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     stopf("Some jobs are already on the system, e.g. %s", paste0(head(on.sys[ids, nomatch = 0L]$job.id, 1L), collapse = ", "))
 
   if (is.null(ids$chunk)) {
-    chunks = seq_row(ids)
+    chunks = ids$chunk = seq_row(ids)
   } else {
     assertInteger(ids$chunk, any.missing = FALSE)
     chunks = sort(unique(ids$chunk))
