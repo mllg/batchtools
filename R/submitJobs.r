@@ -32,6 +32,8 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   syncRegistry(reg)
   assertList(resources, names = "strict")
   ids = asIds(reg, ids, default = .findNotSubmitted(reg), extra.cols = TRUE)
+  if (nrow(ids) == 0L)
+    return(data.table(id = integer(0L), key = "id"))
   drop = setdiff(names(ids), c("job.id", "chunk", "group"))
   if (length(drop) > 0L)
     ids[, drop := NULL, with = FALSE]

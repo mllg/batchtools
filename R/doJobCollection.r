@@ -22,51 +22,7 @@ doJobCollection = function(jc, con = stdout()) {
 
 #' @export
 doJobCollection.JobCollection = function(jc, con = stdout()) {
-  capture = function(expr) {
-    output = character(0L)
-    con = textConnection("output","w", local = TRUE)
-    sink(file = con)
-    sink(file = con, type = "message")
-    on.exit({ sink(type = "message"); sink(); close(con) })
-    res = try(eval(expr, parent.frame()))
-    list(output = output, res = res)
-  }
-
-  doJob = function(id, write.update = FALSE, measure.memory = FALSE) {
-    catf("[job(%i): %s] Starting job with job.id=%i", id, stamp(), id, con = con)
-
-    update = list(job.id = id, started = now(), done = NA_integer_, error = NA_character_, memory = NA_real_)
-    if (measure.memory) {
-      gc(reset = TRUE)
-      result = capture(execJob(getJob(jc, id, cache)))
-      update$memory = sum(gc()[, 6L])
-    } else {
-      result = capture(execJob(getJob(jc, id, cache)))
-    }
-    update$done = now()
-
-
-    if (length(result$output) > 0L)
-      catf("[job(%i): %s] %s", id, stamp(), result$output, con = con)
-
-    if (is.error(result$res)) {
-      catf("[job(%i): %s] Job terminated with an exception", id, stamp(), con = con)
-      update$error = stri_trim_both(as.character(result$res))
-    } else {
-      catf("[job(%i): %s] Job terminated successfully", id, stamp(), con = con)
-      writeRDS(result$res, file = file.path(jc$file.dir, "results", sprintf("%i.rds", id)), compress = jc$compress)
-    }
-
-    if (write.update) {
-      fn = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, id, 1L))
-      writeRDS(update, file = fn, wait = TRUE, compress = jc$compress)
-    }
-
-    return(update)
-  }
-
   loadRegistryPackages(jc$packages, jc$namespaces)
-  stamp = function() strftime(Sys.time())
   n.jobs = nrow(jc$defs)
 
   catf("[job(chunk): %s] Starting calculation of %i jobs", stamp(), n.jobs, con = con)
@@ -84,14 +40,14 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
 
   if (n.jobs > 1L && ncpus > 1L) {
     prefetch(jc, cache)
-    parallel::mclapply(jc$defs$job.id, doJob, mc.cores = ncpus, mc.preschedule = FALSE, write.update = TRUE, measure.memory = measure.memory)
+    parallel::mclapply(jc$defs$job.id, doJob, jc = jc, cache = cache, write.update = TRUE, measure.memory = measure.memory, con = con, mc.cores = ncpus, mc.preschedule = FALSE)
   } else {
     updates = vector("list", n.jobs)
     update.interval = 1800L
     last.update = now()
     fn = file.path(jc$file.dir, "updates", sprintf("%s.rds", jc$job.hash))
     for (i in seq_len(n.jobs)) {
-      updates[[i]] = as.data.table(doJob(jc$defs$job.id[i], write.update = FALSE, measure.memory = measure.memory))
+      updates[[i]] = as.data.table(doJob(jc$defs$job.id[i], jc, cache, write.update = FALSE, measure.memory = measure.memory, con = con))
       if (now() - last.update > update.interval) {
         writeRDS(rbindlist(updates), file = fn, wait = TRUE, compress = jc$compress)
         last.update = now()
@@ -111,4 +67,51 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
 #' @export
 doJobCollection.character = function(jc, con = stdout()) {
   doJobCollection(readRDS(jc), con = con)
+}
+
+stamp = function() {
+  strftime(Sys.time())
+}
+
+doJob = function(id, jc, cache, write.update = FALSE, measure.memory = FALSE, con = con) {
+  capture = function(expr) {
+    output = character(0L)
+    con = textConnection("output","w", local = TRUE)
+    sink(file = con)
+    sink(file = con, type = "message")
+    on.exit({ sink(type = "message"); sink(); close(con) })
+    res = try(eval(expr, parent.frame()))
+    list(output = output, res = res)
+  }
+
+  catf("[job(%i): %s] Starting job with job.id=%i", id, stamp(), id, con = con)
+
+  update = list(job.id = id, started = now(), done = NA_integer_, error = NA_character_, memory = NA_real_)
+  if (measure.memory) {
+    gc(reset = TRUE)
+    result = capture(execJob(getJob(jc, id, cache)))
+    update$memory = sum(gc()[, 6L])
+  } else {
+    result = capture(execJob(getJob(jc, id, cache)))
+  }
+  update$done = now()
+
+
+  if (length(result$output) > 0L)
+    catf("[job(%i): %s] %s", id, stamp(), result$output, con = con)
+
+  if (is.error(result$res)) {
+    catf("[job(%i): %s] Job terminated with an exception", id, stamp(), con = con)
+    update$error = stri_trim_both(as.character(result$res))
+  } else {
+    catf("[job(%i): %s] Job terminated successfully", id, stamp(), con = con)
+    writeRDS(result$res, file = file.path(jc$file.dir, "results", sprintf("%i.rds", id)), compress = jc$compress)
+  }
+
+  if (write.update) {
+    fn = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, id, 1L))
+    writeRDS(update, file = fn, wait = TRUE, compress = jc$compress)
+  }
+
+  return(update)
 }
