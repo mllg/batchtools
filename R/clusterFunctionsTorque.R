@@ -16,7 +16,7 @@
 #' @family ClusterFunctions
 #' @export
 makeClusterFunctionsTorque = function(template) {
-  list.jobs.cmd = c("qselect", "-u $USER", "-s EHQRTW")
+  list.jobs.cmd = c("qselect", "-u $USER")
   template = cfReadBrewTemplate(template, "##")
 
   submitJob = function(reg, jc) {
@@ -39,11 +39,19 @@ makeClusterFunctionsTorque = function(template) {
     cfKillBatchJob("qdel", batch.id)
   }
 
-  listJobs = function(reg) {
-    batch.ids = runOSCommand(list.jobs.cmd[1L], list.jobs.cmd[-1L], debug = reg$debug)$output
+  listJobs = function(reg, cmd) {
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L], debug = reg$debug)$output
     unique(stri_replace_all_regex(batch.ids, "\\[[0-9]+\\]", "[]"))
   }
 
-  makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob, listJobs = listJobs,
-    array.envir.var = "PBS_ARRAYID", store.job = TRUE)
+  listJobsQueued = function(reg) {
+    listJobs(reg, c(list.jobs.cmd, "-s QW"))
+  }
+
+  listJobsRunning = function(reg) {
+    listJobs(reg, c(list.jobs.cmd, "EHRT"))
+  }
+
+  makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
+    listJobsQueued = listJobsQueued, array.envir.var = "PBS_ARRAYID", store.job = TRUE)
 }

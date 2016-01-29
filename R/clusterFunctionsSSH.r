@@ -48,10 +48,10 @@ makeClusterFunctionsSSH = function(workers) {
     killWorkerJob(workers[[parts[1L]]], reg, parts[2L])
   }
 
-  listJobs = function(reg) {
+  listJobsRunning = function(reg) {
     unlist(lapply(workers, listWorkerJobs, reg = reg), use.names = FALSE)
   }
 
   makeClusterFunctions(name = "SSH", submitJob = submitJob, killJob = killJob,
-    listJobs = listJobs, store.job = TRUE)
+    listJobsRunning = listJobsRunning, store.job = TRUE)
 }

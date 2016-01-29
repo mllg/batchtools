@@ -43,10 +43,10 @@ makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", paral
     killWorkerJob(worker, reg, batch.id)
   }
 
-  listJobs = function(reg) {
+  listJobsRunning = function(reg) {
     listWorkerJobs(worker, reg)
   }
 
   makeClusterFunctions(name = "Multicore", submitJob = submitJob, killJob = killJob,
-    listJobs = listJobs, store.job = TRUE)
+    listJobsRunning = listJobsRunning, store.job = TRUE)
 }

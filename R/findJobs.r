@@ -131,9 +131,9 @@ findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 .findOnSystem = function(reg, ids = NULL) {
-  if (is.null(reg$cluster.functions$listJobs))
+  batch.ids = getBatchIds(reg)
+  if (length(batch.ids) == 0L)
     return(data.table(job.id = integer(0L), key = "job.id"))
-  batch.ids = reg$cluster.functions$listJobs(reg)
   submitted = done = batch.id = NULL
   if (is.null(ids))
     reg$status[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids, "job.id", with = FALSE]
@@ -151,14 +151,12 @@ findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 .findExpired = function(reg, ids = NULL) {
-  if (is.null(reg$cluster.functions$listJobs))
-    return(data.table(job.id = integer(0L), key = "job.id"))
-  batch.ids = reg$cluster.functions$listJobs(reg)
+  batch.ids = getBatchIds(reg)
   submitted = done = batch.id = NULL
   if (is.null(ids))
-    reg$status[!is.na(submitted) & is.na(done) & !batch.id %in% batch.ids, "job.id", with = FALSE]
+    reg$status[!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids, "job.id", with = FALSE]
   else
-    reg$status[ids][!is.na(submitted) & is.na(done) & !batch.id %in% batch.ids, "job.id", with = FALSE]
+    reg$status[ids][!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids, "job.id", with = FALSE]
 }
 
 

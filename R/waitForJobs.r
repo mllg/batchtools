@@ -21,10 +21,6 @@
 #' one job terminated with an exception.
 #' @export
 waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
-  # .findTerminated = function(reg, ids = NULL) {
-  #   done = NULL
-  #   reg$status[ids][!is.na(done), "job.id", with = FALSE]
-  # }
   .findNotTerminated = function(reg, ids = NULL) {
     done = NULL
     reg$status[ids][is.na(done), "job.id", with = FALSE]
@@ -37,10 +33,9 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
 
   syncRegistry(reg)
   ids = asIds(reg, ids, default = .findSubmitted(reg = reg))
-  cf = reg$cluster.functions
   n.jobs.total = n.jobs = nrow(ids)
 
-  if (nrow(.findNotSubmitted(ids = ids, reg = reg)) > 0L) {
+if (nrow(.findNotSubmitted(ids = ids, reg = reg)) > 0L) {
     warning("Cannot wait for unsubmitted jobs. Removing from ids.")
     ids = ids[.findSubmitted(ids = ids, reg = reg), nomatch = 0L]
   }
@@ -49,7 +44,8 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     return(TRUE)
   }
 
-  if (is.null(cf$listJobs)) {
+  ids.on.sys = .findOnSystem(ids, reg = reg)
+  if (nrow(ids.on.sys) == 0L) {
     return(nrow(.findError(ids = ids, reg = reg)) == 0L)
   }
 
@@ -85,7 +81,6 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     # heuristic:
     #   job is not terminated, not on system and has not been on the system
     #   in the previous iteration
-    ids.on.sys = .findOnSystem(ids = ids.nt, reg = reg)
     if (nrow(ids.disappeared) > 0L) {
       if (nrow(ids.nt[!ids.on.sys][ids.disappeared, nomatch = 0L]) > 0L) {
         warning("Some jobs disappeared from the system")
@@ -103,5 +98,6 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
 
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg = reg))
+    ids.on.sys = .findOnSystem(ids = ids.nt, reg = reg)
   }
 }

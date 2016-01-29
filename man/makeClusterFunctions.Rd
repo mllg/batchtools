@@ -5,8 +5,9 @@
 \alias{makeClusterFunctions}
 \title{ClusterFunctions Constructor}
 \usage{
-makeClusterFunctions(name, submitJob, killJob = NULL, listJobs = NULL,
-  array.envir.var = NA_character_, store.job = TRUE)
+makeClusterFunctions(name, submitJob, killJob = NULL, listJobsQueued = NULL,
+  listJobsRunning = NULL, array.envir.var = NA_character_,
+  store.job = TRUE)
 }
 \arguments{
 \item{name}{[\code{character(1)}]\cr
@@ -23,13 +24,21 @@ value is currently ignored. Must have the arguments \code{reg} (\code{\link{Regi
 \code{batch.id} (\code{character(1)}, returned by \code{submitJob}).
 Set \code{killJob} to \code{NULL} if killing jobs cannot be supported.}
 
-\item{listJobs}{[\code{function(reg)}]\cr
-List all jobs on the batch system for the current user and registry. This includes queued,
-running, held, idle, etc. jobs. Must return an integer vector of batch ids, same format as they
+\item{listJobsQueued}{[\code{function(reg)}]\cr
+List all queued jobs on the batch system for the current user and registry.
+Must return an character vector of batch ids, same format as they
 are produced by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.
 all for the current user instead of all for the current registry), but you have to include all
 relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
-Set \code{listJobs} to \code{NULL} if listing jobs cannot be supported.}
+Set \code{listJobsQueued} to \code{NULL} if listing queued jobs is not supported.}
+
+\item{listJobsRunning}{[\code{function(reg)}]\cr
+List all running jobs on the batch system for the current user and registry. This includes
+running, held, idle, etc. jobs. Must return an character vector of batch ids, same format as they
+are produced by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.
+all for the current user instead of all for the current registry), but you have to include all
+relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
+Set \code{listJobsRunning} to \code{NULL} if listing jobs is not supported.}
 
 \item{array.envir.var}{[\code{character(1)}]\cr
 Name of the environment variable set by the scheduler to identify IDs of job arrays. Default is

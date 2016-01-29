@@ -1,11 +1,21 @@
 context("clusterFunctions")
 
 test_that("clusterFunctions constructor", {
+  check = function(cf) {
+    expect_is(cf, "ClusterFunctions")
+    expect_set_equal(names(cf), c("name", "submitJob", "killJob", "listJobsQueued", "listJobsRunning", "array.envir.var", "store.job"))
+    expect_output(cf, "ClusterFunctions for mode")
+  }
   reg = makeTempRegistry(FALSE)
-  cf = reg$cluster.functions
-  expect_is(cf, "ClusterFunctions")
-  expect_set_equal(names(cf), c("name", "submitJob", "killJob", "listJobs", "array.envir.var", "store.job"))
-  expect_output(cf, "ClusterFunctions for mode")
+  check(reg$cluster.functions)
+  check(makeClusterFunctionsInteractive())
+  check(makeClusterFunctionsMulticore(max.jobs = 1, max.load = 1))
+  check(makeClusterFunctionsSSH(workers = list(makeWorker(nodename = "localhost", ncpus = 1L))))
+  check(makeClusterFunctionsSGE(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools"))) # FIXME
+  check(makeClusterFunctionsTorque(system.file(file.path("templates", "torque_lido.tmpl"), package = "batchtools")))
+  check(makeClusterFunctionsSLURM(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools")))
+  check(makeClusterFunctionsOpenLava(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools"))) # FIXME
+  check(makeClusterFunctionsLSF(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools"))) # FIXME
 })
 
 

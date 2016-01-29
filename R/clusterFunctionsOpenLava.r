@@ -38,20 +38,28 @@ makeClusterFunctionsOpenLava = function(template) {
     }
   }
 
-  killJob = function(reg, batch.id) {
-    cfKillBatchJob("bkill", batch.id)
-  }
-
-  listJobs = function(reg) {
-    res = runOSCommand(list.jobs.cmd[1L], list.jobs.cmd[-1L], stop.on.exit.code = FALSE, debug = reg$debug)$output
+  listJobs = function(reg, cmd) {
+    res = runOSCommand(cmd[1L], cmd[-1L], stop.on.exit.code = FALSE, debug = reg$debug)$output
     if (res$exit.code == 255L && stri_detect_fixed(res$output, "No unfinished job found"))
       return(character(0L))
     if (res$exit.code > 0L)
-      stopf("Command '%s' produced exit code: %i; output: %s", paste0(list.jobs.cmd, collapse = " "), res$exit.code, res$output)
+      stopf("Command '%s' produced exit code: %i; output: %s", paste0(cmd, collapse = " "), res$exit.code, res$output)
 
     stri_extract_first_regex(tail(res$output, -1L), "\\d+")
   }
 
-  makeClusterFunctions(name = "OpenLava", submitJob = submitJob, killJob = killJob, listJobs = listJobs,
-    array.envir.var = "LSB_JOBINDEX", store.job = TRUE)
+  listJobsQueued = function(reg) {
+    listJobs(reg, c(list.jobs.cmd, "-p"))
+  }
+
+  listJobsRunning = function(reg) {
+    listJobs(reg, c(list.jobs.cmd, "-r"))
+  }
+
+  killJob = function(reg, batch.id) {
+    cfKillBatchJob("bkill", batch.id)
+  }
+
+  makeClusterFunctions(name = "OpenLava", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
+    listJobsRunning = listJobsRunning, array.envir.var = "LSB_JOBINDEX", store.job = TRUE)
 }
