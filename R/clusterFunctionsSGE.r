@@ -33,15 +33,23 @@ makeClusterFunctionsSGE = function(template) {
     }
   }
 
+  listJobs = function(reg, cmd) {
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L], debug = reg$debug)$output
+    stri_extract_first_regex(tail(batch.ids, -2L), "\\d+")
+  }
+
+  listJobsQueued = function(reg) {
+    listJobs(reg, c(list.jobs.cmd, "-s p"))
+  }
+
+  listJobsRunning = function(reg) {
+    listJobs(reg, c(list.jobs.cmd, "-s rs"))
+  }
+
   killJob = function(reg, batch.id) {
     cfKillBatchJob("qdel", batch.id)
   }
 
-  listJobs = function(reg) {
-    batch.ids = runOSCommand(list.jobs.cmd[1L], list.jobs.cmd[-1L], debug = reg$debug)$output
-    stri_extract_first_regex(tail(batch.ids, -2L), "\\d+")
-  }
-
-  makeClusterFunctions(name = "SGE", submitJob = submitJob, killJob = killJob, listJobs = listJobs,
-    array.envir.var = "SGE_TASK_ID", store.job = TRUE)
+  makeClusterFunctions(name = "SGE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
+    listJobsRunning = listJobsRunning, array.envir.var = "SGE_TASK_ID", store.job = TRUE)
 }

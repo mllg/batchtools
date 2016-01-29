@@ -41,15 +41,23 @@ makeClusterFunctionsSLURM = function(template) {
     }
   }
 
+  listJobs = function(reg, cmd) {
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L], debug = reg$debug)$output
+    stri_extract_first_regex(batch.ids, "[0-9]+")
+  }
+
+  listJobsQueued = function(reg) {
+    listJobs(reg, c(list.jobs.cmd, "-t PD"))
+  }
+
+  listJobsRunning = function(reg) {
+    listJobs(reg, c(list.jobs.cmd, "-t R,S,CG"))
+  }
+
   killJob = function(reg, batch.id) {
     cfKillBatchJob("scancel", batch.id)
   }
 
-  listJobs = function(reg) {
-    batch.ids = runOSCommand(list.jobs.cmd[1L], list.jobs.cmd[-1L], debug = reg$debug)$output
-    stri_extract_first_regex(batch.ids, "[0-9]+")
-  }
-
-  makeClusterFunctions(name = "SLURM", submitJob = submitJob, killJob = killJob, listJobs = listJobs,
-    array.envir.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE)
+  makeClusterFunctions(name = "SLURM", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
+    listJobsQueued = listJobsQueued, array.envir.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE)
 }

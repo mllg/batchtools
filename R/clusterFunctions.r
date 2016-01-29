@@ -15,13 +15,20 @@
 #'   value is currently ignored. Must have the arguments \code{reg} (\code{\link{Registry}}) and
 #'   \code{batch.id} (\code{character(1)}, returned by \code{submitJob}).
 #'   Set \code{killJob} to \code{NULL} if killing jobs cannot be supported.
-#' @param listJobs [\code{function(reg)}]\cr
-#'   List all jobs on the batch system for the current user and registry. This includes queued,
-#'   running, held, idle, etc. jobs. Must return an integer vector of batch ids, same format as they
+#' @param listJobsQueued [\code{function(reg)}]\cr
+#'   List all queued jobs on the batch system for the current user and registry.
+#'   Must return an character vector of batch ids, same format as they
 #'   are produced by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.
 #'   all for the current user instead of all for the current registry), but you have to include all
 #'   relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
-#'   Set \code{listJobs} to \code{NULL} if listing jobs cannot be supported.
+#'   Set \code{listJobsQueued} to \code{NULL} if listing queued jobs is not supported.
+#' @param listJobsRunning [\code{function(reg)}]\cr
+#'   List all running jobs on the batch system for the current user and registry. This includes
+#'   running, held, idle, etc. jobs. Must return an character vector of batch ids, same format as they
+#'   are produced by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.
+#'   all for the current user instead of all for the current registry), but you have to include all
+#'   relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
+#'   Set \code{listJobsRunning} to \code{NULL} if listing jobs is not supported.
 #' @param array.envir.var [\code{character(1)}]\cr
 #'   Name of the environment variable set by the scheduler to identify IDs of job arrays. Default is
 #'   \code{NA} for no array support.
@@ -30,23 +37,36 @@
 #' @export
 #' @aliases ClusterFunctions
 #' @family ClusterFunctions
-makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobs = NULL, array.envir.var = NA_character_, store.job = TRUE) {
+makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, array.envir.var = NA_character_, store.job = TRUE) {
   assertString(name)
   if (!is.null(submitJob))
     assertFunction(submitJob, c("reg", "jc"))
   if (!is.null(killJob))
     assertFunction(killJob, c("reg", "batch.id"))
-  if (!is.null(listJobs))
-    assertFunction(listJobs, "reg")
+  if (!is.null(listJobsQueued))
+    assertFunction(listJobsQueued, "reg")
+  if (!is.null(listJobsRunning))
+    assertFunction(listJobsRunning, "reg")
   assertString(array.envir.var, na.ok = TRUE)
   assertFlag(store.job)
 
-  setClasses(list(name = name, submitJob = submitJob, killJob = killJob, listJobs = listJobs, array.envir.var= array.envir.var, store.job = store.job), "ClusterFunctions")
+  setClasses(list(
+      name = name,
+      submitJob = submitJob,
+      listJobsQueued = listJobsQueued,
+      listJobsRunning = listJobsRunning,
+      killJob = killJob,
+      array.envir.var = array.envir.var,
+      store.job = store.job),
+    "ClusterFunctions")
 }
 
 #' @export
 print.ClusterFunctions = function(x, ...) {
   catf("ClusterFunctions for mode: %s", x$name)
+  catf("\tSupport for listing queued Jobs: %s", is.null(x$listJobsQueued))
+  catf("\tSupport for listing running Jobs: %s", is.null(x$listJobsRunning))
+  catf("\tSupport for killing Jobs: %s", is.null(x$killJobs))
 }
 
 #' @title Create a SubmitJobResult object
@@ -69,9 +89,9 @@ print.ClusterFunctions = function(x, ...) {
 #' @family ClusterFunctionsHelper
 #' @aliases SubmitJobResult
 #' @export
-makeSubmitJobResult = function(status, batch.id, msg) {
+makeSubmitJobResult = function(status, batch.id, msg = NA_character_) {
   status = asInt(status)
-  if (missing(msg)) {
+  if (testScalarNA(msg)) {
     msg = if (status == 0L)
       "OK"
     else if (status <= 100L)
@@ -204,6 +224,14 @@ cfKillBatchJob = function(cmd, batch.id, max.tries = 3L) {
   }
   stopf("Really tried to kill job, but could not do it. batch id is %s.\nMessage: %s",
         batch.id, paste0(res$output, collapse = "\n"))
+}
+
+getBatchIds = function(reg) {
+  cf = reg$cluster.functions
+  union(
+    if (!is.null(cf$listJobsQueued)) cf$listJobsQueued(reg) else character(0L),
+    if (!is.null(cf$listJobsRunning)) cf$listJobsRunning(reg) else character(0L)
+  )
 }
 
 runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost", stop.on.exit.code = TRUE, debug = FALSE) {
