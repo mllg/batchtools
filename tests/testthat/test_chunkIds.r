@@ -27,3 +27,12 @@ test_that("chunkIds", {
   expect_equal(as.numeric(tab[1, ]), rep(c(10, 0), c(3, 6)))
   expect_equal(as.numeric(tab[2, ]), rep(c(0, 10), c(3, 6)))
 })
+
+test_that("parallel execution works", {
+  reg = makeTempRegistry(FALSE)
+  fun = function(i) i^2
+  batchMap(fun, i = 1:12, reg = reg)
+  submitJobs(chunkIds(reg = reg), resources = list(ncpus = 2), reg = reg)
+  waitForJobs(reg = reg)
+  getStatus(reg = reg)
+})
