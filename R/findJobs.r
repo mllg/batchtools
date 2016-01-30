@@ -12,7 +12,6 @@ findSubmitted = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 .findSubmitted = function(reg, ids = NULL) {
-  submitted = NULL
   if (is.null(ids))
     reg$status[!is.na(submitted), "job.id", with = FALSE]
   else
@@ -29,7 +28,6 @@ findNotSubmitted = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 .findNotSubmitted = function(reg, ids = NULL) {
-  submitted = NULL
   if (is.null(ids))
     reg$status[is.na(submitted), "job.id", with = FALSE]
   else
@@ -46,7 +44,6 @@ findStarted = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 .findStarted = function(reg, ids = NULL) {
-  started = NULL
   if (is.null(ids))
     reg$status[!is.na(started), "job.id", with = FALSE]
   else
@@ -63,7 +60,6 @@ findNotStarted = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 .findNotStarted = function(reg, ids = NULL) {
-  started = NULL
   if (is.null(ids))
     reg$status[is.na(started), "job.id", with = FALSE]
   else
@@ -80,7 +76,6 @@ findDone = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 .findDone = function(reg, ids = NULL) {
-  done = error = NULL
   if (is.null(ids))
     reg$status[!is.na(done) & is.na(error), "job.id", with = FALSE]
   else
@@ -97,7 +92,6 @@ findNotDone = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 .findNotDone = function(reg, ids = NULL) {
-  done = error = NULL
   if (is.null(ids))
     reg$status[is.na(done) | !is.na(error), "job.id", with = FALSE]
   else
@@ -114,7 +108,6 @@ findError = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 .findError = function(reg, ids = NULL) {
-  error = NULL
   if (is.null(ids))
     reg$status[!is.na(error), "job.id", with = FALSE]
   else
@@ -123,22 +116,25 @@ findError = function(ids = NULL, reg = getDefaultRegistry()) {
 
 
 #' @export
+#' @param status [\code{character(1)}]\cr
+#'  If set to \dQuote{all} (default), \code{findOnSystem} finds all jobs on the system.
+#'  If set to \dQuote{queued} or \dQuote{running}, the result is restricted to queued
+#'  or running jobs, respectively.
 #' @rdname findJobs
-findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {
+findOnSystem = function(ids = NULL, status = "all", reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  .findOnSystem(reg, asIds(reg, ids))
+  assertChoice(status, choices = c("all", "queued", "running"))
+  .findOnSystem(reg, asIds(reg, ids), status)
 }
 
-.findOnSystem = function(reg, ids = NULL) {
-  batch.ids = getBatchIds(reg)
+.findOnSystem = function(reg, ids = NULL, status = "all", batch.ids = getBatchIds(reg, status = status)) {
   if (length(batch.ids) == 0L)
     return(data.table(job.id = integer(0L), key = "job.id"))
-  submitted = done = batch.id = NULL
   if (is.null(ids))
-    reg$status[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids, "job.id", with = FALSE]
+    reg$status[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids$batch.id, "job.id", with = FALSE]
   else
-    reg$status[ids][!is.na(submitted) & is.na(done) & batch.id %in% batch.ids, "job.id", with = FALSE]
+    reg$status[ids][!is.na(submitted) & is.na(done) & batch.id %in% batch.ids$batch.id, "job.id", with = FALSE]
 }
 
 
@@ -150,13 +146,11 @@ findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
   .findExpired(reg, asIds(reg, ids))
 }
 
-.findExpired = function(reg, ids = NULL) {
-  batch.ids = getBatchIds(reg)
-  submitted = done = batch.id = NULL
+.findExpired = function(reg, ids = NULL, batch.ids = getBatchIds(reg)) {
   if (is.null(ids))
-    reg$status[!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids, "job.id", with = FALSE]
+    reg$status[!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids$batch.id, "job.id", with = FALSE]
   else
-    reg$status[ids][!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids, "job.id", with = FALSE]
+    reg$status[ids][!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids$batch.id, "job.id", with = FALSE]
 }
 
 
@@ -200,7 +194,6 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   expr = substitute(expr)
   ee = parent.frame()
   fun = function(pars) eval(expr, pars, enclos = ee)
-  pars = NULL
   reg$status[ids][reg$defs, on = "def.id", nomatch = 0L][vlapply(pars, fun), "job.id", with = FALSE]
 }
 
@@ -227,25 +220,21 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
 
   if (!is.null(prob.name)) {
     assertCharacter(prob.name, any.missing = FALSE)
-    problem = NULL
     tab = tab[problem %in% prob.name]
   }
 
   if (!is.null(algo.name)) {
     assertCharacter(algo.name, any.missing = FALSE)
-    algorithm = NULL
     tab = tab[algorithm %in% algo.name]
   }
 
   if (!missing(prob.pars)) {
-    pars = NULL
     expr = substitute(prob.pars)
     fun = function(pars) eval(expr, pars$prob.pars, enclos = ee)
     tab = tab[vlapply(pars, fun)]
   }
 
   if (!missing(algo.pars)) {
-    pars = NULL
     expr = substitute(algo.pars)
     fun = function(pars) eval(expr, pars$algo.pars, enclos = ee)
     tab = tab[vlapply(pars, fun)]
@@ -253,7 +242,6 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
 
   if (!is.null(repls)) {
     repls = asInteger(repls, any.missing = FALSE)
-    repl = NULL
     tab = tab[repl %in% repls]
   }
 

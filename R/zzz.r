@@ -1,7 +1,3 @@
-#' The batchtools Package
-#'
-#' @name batchtools
-#' @docType package
 #' @description
 #' For bug reports and feature requests please use the tracker:
 #' \url{https://github.com/mllg/batchtools}.
@@ -33,6 +29,12 @@
 #' @importFrom progress progress_bar
 #' @importFrom stats runif
 #' @importFrom utils capture.output head tail
-NULL
+"_PACKAGE"
 
 batchtools = new.env(parent = emptyenv())
+
+# global variables frequently used with data.tables
+job.id = def.id = pars = NULL
+submitted = started = done = error = NULL
+batch.id = status = NULL
+problem = algorithm = repl = NULL

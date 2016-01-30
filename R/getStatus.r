@@ -14,21 +14,22 @@ getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   syncRegistry(reg)
   ids = asIds(reg, ids, default = .findAll(reg))
 
-  stats = getStatusSummary(ids, TRUE, reg = reg)
+  stats = .getStatus(ids, reg = reg)
   setClasses(stats, c("Status", class(stats)))
 }
 
-getStatusSummary = function(ids, on.sys = FALSE, reg = getDefaultRegistry()) {
+.getStatus = function(ids, batch.ids = getBatchIds(reg = reg), reg = getDefaultRegistry()) {
   stats = reg$status[ids][, list(
     defined   = .N,
-    submitted = count(get("submitted")),
-    started   = count(get("started")),
-    done      = count(get("done")),
-    error     = count(get("error"))
+    submitted = count(submitted),
+    started   = count(started),
+    done      = count(done),
+    error     = count(error),
+    queued    = sum(batch.id %in% batch.ids[status == "queued"]$batch.id),
+    running   = sum(batch.id %in% batch.ids[status == "running"]$batch.id)
   )]
   stats$done = stats$done - stats$error
-  if (on.sys)
-    stats$on.sys = nrow(.findOnSystem(reg, ids))
+  stats$on.sys = stats$queued + stats$running
   return(stats)
 }
 
@@ -39,8 +40,9 @@ print.Status = function(x, ...) {
 
   catf("Status for %i jobs:", x$defined)
   pr("  Submitted", x$submitted)
+  pr("  Queued", x$queued)
   pr("  Started", x$started)
-  pr("  System", x$on.sys)
+  pr("  Running", x$running)
   pr("  Done", x$done)
   pr("  Error", x$error)
 }

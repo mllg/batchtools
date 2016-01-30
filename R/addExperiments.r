@@ -33,7 +33,6 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
 
   max2 = function(ids) if (length(ids) == 0L) 0L else max(ids)
   all.ids = integer(0L)
-  def.id = NULL
   getPars = function(i, j) { list(
       prob.pars = if (nrow(pd) > 0L) as.list(pd[i]) else list(),
       algo.pars = if (nrow(ad) > 0L) as.list(ad[j]) else list()
