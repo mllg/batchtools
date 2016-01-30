@@ -24,7 +24,6 @@ removeAlgorithm = function(name, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
   assertString(name)
   assertSubset(name, levels(reg$defs$algorithm))
-  algorithm = NULL
 
   fns = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", name))
   def.ids = reg$defs[algorithm == name, "def.id", with = FALSE]

@@ -63,11 +63,11 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   syncRegistry(reg)
   ids = asIds(reg, ids, default = .findAll(reg))
   tab = reg$status[ids]
-  tab[, "submitted" := as.POSIXct(get("submitted"), origin = "1970-01-01")]
-  tab[, "started" := as.POSIXct(get("started"), origin = "1970-01-01")]
-  tab[, "done" := as.POSIXct(get("done"), origin = "1970-01-01")]
-  tab[, "time.queued" := as.difftime(get("started") - get("submitted"), units = "secs")]
-  tab[, "time.running" := as.difftime(get("done") - get("started"), units = "secs")]
+  tab[, "submitted" := as.POSIXct(submitted, origin = "1970-01-01")]
+  tab[, "started" := as.POSIXct(started, origin = "1970-01-01")]
+  tab[, "done" := as.POSIXct(done, origin = "1970-01-01")]
+  tab[, "time.queued" := as.difftime(started - submitted, units = "secs")]
+  tab[, "time.running" := as.difftime(done - started, units = "secs")]
   tab[, !c("def.id", "resource.id"), with = FALSE]
 }
 

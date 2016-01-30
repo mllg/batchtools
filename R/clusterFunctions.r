@@ -226,12 +226,23 @@ cfKillBatchJob = function(cmd, batch.id, max.tries = 3L) {
         batch.id, paste0(res$output, collapse = "\n"))
 }
 
-getBatchIds = function(reg) {
+getBatchIds = function(reg, status = "all") {
   cf = reg$cluster.functions
-  union(
-    if (!is.null(cf$listJobsQueued)) cf$listJobsQueued(reg) else character(0L),
-    if (!is.null(cf$listJobsRunning)) cf$listJobsRunning(reg) else character(0L)
-  )
+  tab = data.table(batch.id = character(0L), status = character(0L))
+
+  if (status %in% c("all", "running") && !is.null(cf$listJobsRunning)) {
+    x = cf$listJobsRunning(reg)
+    if (length(x) > 0L)
+      tab = rbind(tab, data.table(batch.id = unique(x), status = "running"))
+  }
+
+  if (status %in% c("all", "queued") && !is.null(cf$listJobsQueued)) {
+    x = setdiff(cf$listJobsQueued(reg), tab$batch.id)
+    if (length(x) > 0L)
+      tab = rbind(tab, data.table(batch.id = unique(x), status = "queued"))
+  }
+
+  tab[batch.id %in% reg$status$batch.id]
 }
 
 runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost", stop.on.exit.code = TRUE, debug = FALSE) {

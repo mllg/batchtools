@@ -63,7 +63,6 @@ removeProblem = function(name, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
   assertString(name)
   assertSubset(name, levels(reg$defs$problem))
-  problem = NULL
 
   fns = file.path(reg$file.dir, "problems", sprintf("%s.rds", name))
   def.ids = reg$defs[problem == name, "def.id", with = FALSE]

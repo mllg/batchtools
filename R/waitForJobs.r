@@ -21,51 +21,47 @@
 #' one job terminated with an exception.
 #' @export
 waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
+  assertRegistry(reg, writeable = FALSE)
+  assertNumeric(sleep, len = 1L, lower = 0.2, finite = TRUE)
+  assertNumeric(timeout, len = 1L, lower = sleep)
+  assertFlag(stop.on.error)
+  syncRegistry(reg)
+  ids = asIds(reg, ids, default = .findSubmitted(reg = reg))
+
   .findNotTerminated = function(reg, ids = NULL) {
     done = NULL
     reg$status[ids][is.na(done), "job.id", with = FALSE]
   }
 
-  assertRegistry(reg, writeable = FALSE)
-  assertNumeric(sleep, len = 1L, lower = 0.2, finite = TRUE)
-  assertNumeric(timeout, len = 1L, lower = sleep)
-  assertFlag(stop.on.error)
-
-  syncRegistry(reg)
-  ids = asIds(reg, ids, default = .findSubmitted(reg = reg))
-  n.jobs.total = n.jobs = nrow(ids)
-
-if (nrow(.findNotSubmitted(ids = ids, reg = reg)) > 0L) {
+  if (nrow(.findNotSubmitted(ids = ids, reg = reg)) > 0L) {
     warning("Cannot wait for unsubmitted jobs. Removing from ids.")
     ids = ids[.findSubmitted(ids = ids, reg = reg), nomatch = 0L]
   }
 
-  if (n.jobs == 0L || nrow(ids) == 0L) {
+  n.jobs.total = n.jobs = nrow(ids)
+  if (n.jobs == 0L)
     return(TRUE)
-  }
 
-  ids.on.sys = .findOnSystem(ids, reg = reg)
-  if (nrow(ids.on.sys) == 0L) {
-    return(nrow(.findError(ids = ids, reg = reg)) == 0L)
-  }
+  batch.ids = getBatchIds(reg)
+  if (nrow(batch.ids) == 0L)
+    return(nrow(.findError(reg, ids)) == 0L)
 
-  info("Waiting for %i jobs ...", n.jobs)
   timeout = now() + timeout
-
-  pb = makeProgressBar(total = n.jobs, format = "Waiting (R::running D::done E::error) [:bar] :percent eta: :eta",
-    tokens = list(running = "?", done = "?", error = "?"))
   ids.disappeared = data.table(job.id = integer(0L), key = "job.id")
 
+  pb = makeProgressBar(total = n.jobs.total, format = "Waiting (S::on.sys R::running D::done E::error) [:bar] :percent eta: :eta",
+    tokens = as.list(.getStatus(ids, batch.ids, reg = reg)))
+
   repeat {
-    # case 1: all are terminated -> nothing on system
-    ids.nt = .findNotTerminated(ids = ids, reg = reg)
+    # case 1: all jobs terminated -> nothing on system
+    ids.nt = .findNotTerminated(reg, ids)
     if (nrow(ids.nt) == 0L) {
       pb$tick(n.jobs.total)
-      return(nrow(.findError(ids = ids, reg = reg)) == 0L)
+      return(nrow(.findError(reg, ids)) == 0L)
     }
 
-    # case 2: there are errors and stop.on.error is set
-    if (stop.on.error && nrow(.findError(ids = ids, reg = reg)) > 0L) {
+    # case 2: there are errors and stop.on.error is TRUE
+    if (stop.on.error && nrow(.findError(reg, ids)) > 0L) {
       pb$tick(n.jobs.total)
       return(FALSE)
     }
@@ -81,23 +77,22 @@ if (nrow(.findNotSubmitted(ids = ids, reg = reg)) > 0L) {
     # heuristic:
     #   job is not terminated, not on system and has not been on the system
     #   in the previous iteration
+    ids.on.sys = .findOnSystem(reg, ids, batch.ids = batch.ids)
     if (nrow(ids.disappeared) > 0L) {
       if (nrow(ids.nt[!ids.on.sys][ids.disappeared, nomatch = 0L]) > 0L) {
         warning("Some jobs disappeared from the system")
         pb$tick(n.jobs.total)
         return(FALSE)
       }
-    } else {
-      ids.disappeared = ids[!ids.on.sys]
     }
+    ids.disappeared = ids[!ids.on.sys]
 
-    stats = as.list(getStatusSummary(ids, FALSE, reg = reg)[, c("done", "error"), with = FALSE])
-    stats$running = nrow(ids.on.sys)
-    pb$tick(n.jobs - nrow(ids.nt), tokens = stats)
+    stats = .getStatus(ids = ids, batch.ids = batch.ids, reg = reg)
+    pb$tick(n.jobs - nrow(ids.nt), tokens = as.list(stats))
     n.jobs = nrow(ids.nt) # FIXME: remover after progress is updated
 
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg = reg))
-    ids.on.sys = .findOnSystem(ids = ids.nt, reg = reg)
+    batch.ids = getBatchIds(reg)
   }
 }
