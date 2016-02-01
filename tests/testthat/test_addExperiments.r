@@ -67,3 +67,13 @@ test_that("addExperiments handles parameters correctly", {
   readLog(reg = reg, 1)
   expect_true(nrow(findError(reg = reg)) == 0)
 })
+
+test_that("benchmark of addExperiments", {
+  skip("This is a manual regression test")
+  reg = makeTempExperimentRegistry(FALSE)
+  addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
+  addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
+  addAlgorithm(reg = reg, "a2", fun = function(job, data, instance, ...) NULL)
+  st = system.time({addExperiments(list(p1 = data.table(x = 1:500)), algo.designs = list(a1 = data.table(y = 1:20), a2 = data.table(y = 1:20)), repls = 2, reg = reg)})
+  print(st)
+})
