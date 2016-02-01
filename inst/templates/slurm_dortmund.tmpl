@@ -1,14 +1,16 @@
 #!/bin/bash
 <%
 ## Set some sane defaults
-resources$ntasks = resources$ntasks %??% 1L
-resources$ncpus = resources$ncpus %??% 1L
+if (is.null(resources$ntasks))
+    resources$ntasks = 1L
+if (is.null(resources$ncpus))
+  resources$ncpus = 1L
 
 ## Check variables
-resources$walltime = asInt(resources$walltime, lower = 1L, upper = 172800L)
-resources$memory = asInt(resources$memory, lower = 100L, upper = 64000L)
-resources$ntasks = asInt(resources$ntasks, lower = 1L)
-resources$ncpus = asInt(resources$ncpus, lower = 1L)
+resources$walltime = checkmate::asInt(resources$walltime, lower = 1L, upper = 172800L)
+resources$memory = checkmate::asInt(resources$memory, lower = 100L, upper = 64000L)
+resources$ntasks = checkmate::asInt(resources$ntasks, lower = 1L)
+resources$ncpus = checkmate::asInt(resources$ncpus, lower = 1L)
 
 if (resources$ntasks == 1L) {
   cmd = "Rscript"

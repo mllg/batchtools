@@ -49,7 +49,7 @@ makeClusterFunctionsTorque = function(template) {
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c(list.jobs.cmd, "EHRT"))
+    listJobs(reg, c(list.jobs.cmd, "-s EHRT"))
   }
 
   makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,

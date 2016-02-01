@@ -159,8 +159,9 @@ cfBrewTemplate = function(reg, template, jc) {
 
   outfile = if (reg$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
   parent.env(jc) = .GlobalEnv
+  on.exit(parent.env(jc) <- emptyenv())
+
   z = try(brew::brew(text = template, output = outfile, envir = jc), silent = TRUE)
-  parent.env(jc) = as.environment("package:batchtools")
   if (is.error(z))
     stopf("Error brewing template: %s", as.character(z))
   return(outfile)
