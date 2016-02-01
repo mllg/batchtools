@@ -64,9 +64,9 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
 #' @export
 print.ClusterFunctions = function(x, ...) {
   catf("ClusterFunctions for mode: %s", x$name)
-  catf("\tSupport for listing queued Jobs: %s", is.null(x$listJobsQueued))
-  catf("\tSupport for listing running Jobs: %s", is.null(x$listJobsRunning))
-  catf("\tSupport for killing Jobs: %s", is.null(x$killJobs))
+  catf("\tSupport for listing queued Jobs: %s", !is.null(x$listJobsQueued))
+  catf("\tSupport for listing running Jobs: %s", !is.null(x$listJobsRunning))
+  catf("\tSupport for killing Jobs: %s", !is.null(x$killJob))
 }
 
 #' @title Create a SubmitJobResult object
