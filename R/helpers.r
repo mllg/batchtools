@@ -134,8 +134,7 @@ droplevel = function(x, lvl) {
 
 map = function(f, ..., more.args = NULL) {
   f = match.fun(f)
-  dots = list(...)
-  .mapply(f, dots, more.args)
+  .mapply(f, list(...), more.args)
 }
 
 #' @useDynLib batchtools count_not_missing

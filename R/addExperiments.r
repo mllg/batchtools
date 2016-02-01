@@ -38,9 +38,6 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
       algo.pars = if (nrow(ad) > 0L) as.list(ad[j]) else list()
     )
   }
-  dig = function(...) {
-    digest::digest(list(...))
-  }
 
   for (i in seq_along(prob.designs)) {
     pn = names(prob.designs)[i]
@@ -57,7 +54,7 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
 
       tab = data.table(pars = .mapply(getPars, CJ(i = seq_len(n.pd), j = seq_len(n.ad)), list()))
       tab[, c("problem", "algorithm") := list(pn, an)]
-      tab[, "pars.hash" := unlist(map(dig, tab$pars, tab$problem, tab$algorithm))]
+      tab[, "pars.hash" := digest::digest(as.list(.SD)), .SDcols = c("pars", "problem", "algorithm"), by = .I]
       tab = merge(reg$defs[, !c("pars", "problem", "algorithm"), with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 
       miss = tab[is.na(def.id), which = TRUE]
