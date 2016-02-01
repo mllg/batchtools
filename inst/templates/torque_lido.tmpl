@@ -1,18 +1,20 @@
 #!/bin/bash
 <%
 ## Set sane defaults
-resources$modules = resources$modules %??% character(0L)
-resources$nodes = resources$nodes %??% 1L
-resources$parcpus = resources$parcpus %??% 1L
-resources$R = resources$R
+if (is.null(resources$modules))
+  resources$modules = character(0L)
+if (is.null(resources$nodes))
+    resources$nodes = 1L
+if (is.null(resources$parcpus))
+    resources$parcpus = 1L
 
 ## Check variables
-resources$walltime = asInt(resources$walltime, lower = 60L, upper = 3600L * 672L)
-resources$memory = asInt(resources$memory, lower = 100L, upper = 64L * 1024L)
-resources$nodes = asInt(resources$nodes, lower = 1L)
-resources$parcpus = asInt(resources$parcpus, lower = 1L)
-assertCharacter(resources$modules, any.missing = FALSE)
-assertChoice(resources$R, choices = c("R-3.1.2-gcc-4.8.2-base", "R-3.2.2-gcc-4.8.5-base"))
+resources$walltime = checkmate::asInt(resources$walltime, lower = 60L, upper = 3600L * 672L)
+resources$memory = checkmate::asInt(resources$memory, lower = 100L, upper = 64L * 1024L)
+resources$nodes = checkmate::asInt(resources$nodes, lower = 1L)
+resources$parcpus = checkmate::asInt(resources$parcpus, lower = 1L)
+checkmate::assertCharacter(resources$modules, any.missing = FALSE)
+checkmate::assertChoice(resources$R, choices = c("R-3.1.2-gcc-4.8.2-base", "R-3.2.2-gcc-4.8.5-base"))
 
 ## first string of queue, selected by walltime
 walltimes = 3600L * c(1L, 8L, 48L, 672L)
@@ -52,14 +54,14 @@ modules = paste0(union(modules, resources$modules), collapse = " ")
 ## unfortunately there seems to be no generic solution
 ## does log path start with /data/?
 log.file = log.file
-if (length(grep("^/data/", log.file)) > 0) {
+if (length(grep("^/data/", log.file)) > 0L) {
   ## strip that
   log.file = substr(log.file, 7L, nchar(log.file))
   ## find next forward slash
   i = regexpr("/", log.file)
   if (i != -1) {
     ## this must be "user": e.g. /data/bischl/...
-    user = substr(log.file, 1, i-1)
+    user = substr(log.file, 1L, i-1L)
     ## put together
     log.file = sprintf("/home/%s/nobackup%s", user, substr(log.file, i, nchar(log.file)))
   }
