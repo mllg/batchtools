@@ -33,11 +33,6 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
 
   max2 = function(ids) if (length(ids) == 0L) 0L else max(ids)
   all.ids = integer(0L)
-  getPars = function(i, j) { list(
-      prob.pars = if (nrow(pd) > 0L) as.list(pd[i]) else list(),
-      algo.pars = if (nrow(ad) > 0L) as.list(ad[j]) else list()
-    )
-  }
 
   for (i in seq_along(prob.designs)) {
     pn = names(prob.designs)[i]
@@ -52,9 +47,13 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
       n.jobs = n.pd * n.ad * repls
       info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
 
-      tab = data.table(pars = .mapply(getPars, CJ(i = seq_len(n.pd), j = seq_len(n.ad)), list()))
-      tab[, c("problem", "algorithm") := list(pn, an)]
-      tab[, "pars.hash" := digest::digest(as.list(.SD)), .SDcols = c("pars", "problem", "algorithm"), by = .I]
+      idx = CJ(.i = seq_len(n.pd), .j = seq_len(n.ad))
+      pp = if (nrow(pd) > 0L) .mapply(list, pd[idx$.i], list()) else list(list())
+      ap = if (nrow(ad) > 0L) .mapply(list, ad[idx$.j], list()) else list(list())
+      tab = data.table(pars = Map(function(pp, ap) list(prob.pars = pp, algo.pars = ap), pp = pp, ap = ap))
+      tab$problem = pn
+      tab$algorithm = an
+      tab$pars.hash = unlist(.mapply(function(...) digest::digest(list(...)), tab, list()))
       tab = merge(reg$defs[, !c("pars", "problem", "algorithm"), with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 
       miss = tab[is.na(def.id), which = TRUE]
