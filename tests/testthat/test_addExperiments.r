@@ -19,7 +19,9 @@ test_that("addProblem", {
   expect_file(file.path(reg$file.dir, "problems", "p1.rds"))
 
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
-  ids = addExperiments(list(p1 = data.table(), p2 = data.table()), algo.designs = list(a1 = data.table()), repls = 2, reg = reg)
+  prob.designs = list(p1 = data.table(), p2 = data.table())
+  algo.designs = list(a1 = data.table())
+  ids = addExperiments(prob.designs, algo.designs, repls = 2, reg = reg)
   expect_integer(ids$job.id, len = 4L)
 
   removeProblem(reg = reg, "p1")
@@ -54,17 +56,15 @@ test_that("addAlgorithm", {
 test_that("addExperiments handles parameters correctly", {
   reg = makeTempExperimentRegistry(FALSE)
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, x, y, ...) stopifnot(is.numeric(x) && is.character(y)), seed = 42)
-  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, a, b, ...) { print(str(a)); stopifnot(is.list(a)) })
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, a, b, ...) { print(str(a)); assertList(a, len = 1, names = "named"); assertDataFrame(b); } )
   prob.designs = list(p1 = data.table(x = 1:2, y = letters[1:2]))
-  algo.designs = list(a1 = data.table(a = list(foo = 1, bar = iris)))
+  algo.designs = list(a1 = data.table(a = list(list(x = 1)), b = list(iris)))
   repls = 1
   ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
   silent({
     submitJobs(reg = reg, ids = chunkIds(reg = reg))
     waitForJobs(reg = reg)
   })
-  job = makeJob(reg = reg, 1)
-  readLog(reg = reg, 1)
   expect_true(nrow(findError(reg = reg)) == 0)
 })
 
@@ -74,6 +74,8 @@ test_that("benchmark of addExperiments", {
   addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
   addAlgorithm(reg = reg, "a2", fun = function(job, data, instance, ...) NULL)
-  st = system.time({addExperiments(list(p1 = data.table(x = 1:500)), algo.designs = list(a1 = data.table(y = 1:20), a2 = data.table(y = 1:20)), repls = 2, reg = reg)})
+  prob.designs = list(p1 = data.table(x = 1:500))
+  algo.designs = list(a1 = data.table(y = 1:20), a2 = data.table(y = 1:20))
+  st = system.time({addExperiments(prob.designs, algo.designs = algo.designs, repls = 2, reg = reg)})
   print(st)
 })
