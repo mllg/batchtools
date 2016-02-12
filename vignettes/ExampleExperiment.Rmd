@@ -77,10 +77,10 @@ addAlgorithm(name = "svm", fun = svm.wrapper)
 Secondly, a random forest of classification trees:
 ```{r}
 forest.wrapper = function(data, job, instance, ...) {
-  library("ranger")
-  mod = ranger(Species ~ ., data = data[instance$train, ], write.forest = TRUE)
+  library("randomForest")
+  mod = randomForest(Species ~ ., data = data[instance$train, ])
   pred = predict(mod, data = data[instance$test, ])
-  table(data$Species[instance$test], pred$predictions)
+  table(data$Species[instance$test], as.character(pred))
 }
 addAlgorithm(name = "forest", fun = forest.wrapper)
 ```
