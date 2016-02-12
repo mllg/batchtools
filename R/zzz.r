@@ -23,6 +23,7 @@
 #'     Verbosity. Set to \code{FALSE} to suppress info messages and progress bars.
 #'   }
 #' }
+#' @import backports
 #' @import checkmate
 #' @import data.table
 #' @import stringi
