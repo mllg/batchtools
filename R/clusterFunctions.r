@@ -155,7 +155,7 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 #' @family ClusterFunctionsHelper
 #' @export
 cfBrewTemplate = function(reg, template, jc) {
-  assertString(template, "r", na.ok = FALSE)
+  assertString(template, na.ok = FALSE)
 
   outfile = if (reg$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
   parent.env(jc) = .GlobalEnv
