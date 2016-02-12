@@ -17,6 +17,7 @@ r_github_packages:
   - mllg/backports
 
 r_binary_packages:
+  - devtools
   - data.table
   - brew
   - checkmate
