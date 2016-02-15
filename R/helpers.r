@@ -138,11 +138,6 @@ droplevel = function(x, lvl) {
   x
 }
 
-map = function(f, ..., more.args = NULL) {
-  f = match.fun(f)
-  .mapply(f, list(...), more.args)
-}
-
 #' @useDynLib batchtools count_not_missing
 count = function(x) {
   .Call(count_not_missing, x)

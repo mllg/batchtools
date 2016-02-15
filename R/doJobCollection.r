@@ -43,14 +43,13 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     parallel::mclapply(jc$defs$job.id, doJob, jc = jc, cache = cache, write.update = TRUE, measure.memory = measure.memory, con = con, mc.cores = ncpus, mc.preschedule = FALSE)
   } else {
     updates = vector("list", n.jobs)
-    update.interval = 1800L
-    last.update = now()
+    next.update = now() + as.integer(runif(1L, 300L, 1800L))
     fn = file.path(jc$file.dir, "updates", sprintf("%s.rds", jc$job.hash))
     for (i in seq_len(n.jobs)) {
       updates[[i]] = as.data.table(doJob(jc$defs$job.id[i], jc, cache, write.update = FALSE, measure.memory = measure.memory, con = con))
-      if (now() - last.update > update.interval) {
+      if (now() > next.update) {
         writeRDS(rbindlist(updates), file = fn, wait = TRUE, compress = jc$compress)
-        last.update = now()
+        next.update = now() + as.integer(runif(1L, 300L, 1800L))
         write.update = FALSE
       } else {
         write.update = TRUE

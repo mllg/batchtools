@@ -180,9 +180,9 @@ makeTempRegistry = function(make.default = FALSE, temp.dir = getOption("batchtoo
 print.Registry = function(x, ...) {
   catf("Job Registry")
   catf("  Number of Jobs: %i", nrow(x$status))
-  catf("  File dir: %s", x$file.dir)
-  catf("  Work dir: %s", x$work.dir)
-  catf("  Seed: %i", x$seed)
+  catf("  File dir      : %s", x$file.dir)
+  catf("  Work dir      : %s", x$work.dir)
+  catf("  Seed          : %i", x$seed)
 }
 
 #' @export

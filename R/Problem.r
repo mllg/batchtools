@@ -66,7 +66,7 @@ removeProblem = function(name, reg = getDefaultRegistry()) {
 
   fns = file.path(reg$file.dir, "problems", sprintf("%s.rds", name))
   def.ids = reg$defs[problem == name, "def.id", with = FALSE]
-  job.ids = reg$status[def.ids, "job.id", on = "def.id", nomatch = 0L, with = FALSE]
+  job.ids = inner_join(reg$status, def.ids)[, "job.id", with = FALSE]
 
   info("Removing Problem '%s' and %i corresponding jobs ...", name, nrow(job.ids))
   file.remove(fns)

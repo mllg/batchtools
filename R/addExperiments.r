@@ -48,9 +48,9 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
       info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
 
       idx = CJ(.i = seq_len(n.pd), .j = seq_len(n.ad))
-      pp = if (nrow(pd) > 0L) .mapply(list, pd[idx$.i], list()) else list(list())
-      ap = if (nrow(ad) > 0L) .mapply(list, ad[idx$.j], list()) else list(list())
-      tab = data.table(pars = Map(function(pp, ap) list(prob.pars = pp, algo.pars = ap), pp = pp, ap = ap))
+      tab = data.table(pars = Map(function(pp, ap) list(prob.pars = pp, algo.pars = ap),
+          pp = if (nrow(pd) > 0L) .mapply(list, pd[idx$.i], list()) else list(list()),
+          ap = if (nrow(ad) > 0L) .mapply(list, ad[idx$.j], list()) else list(list())))
       tab$problem = pn
       tab$algorithm = an
       tab$pars.hash = unlist(.mapply(function(...) digest::digest(list(...)), tab, list()))

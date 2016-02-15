@@ -59,16 +59,6 @@ makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
   ), c("Experiment", "Job"))
 }
 
-#' @export
-print.Job = function(x, ...) {
-  catf("Job with id %i", x$job.id)
-}
-
-#' @export
-print.Experiment = function(x, ...) {
-  catf("Experiment with id %i", x$job.id)
-}
-
 getJob = function(jc, id, cache) {
   UseMethod("getJob")
 }
@@ -95,4 +85,19 @@ getJob.ExperimentCollection = function(jc, id, cache) {
     algorithm = cache(paste0("algo/", j$algorithm), file.path("algorithms", j$algorithm)),
     repl = j$repl
   ), c("Experiment", "Job"))
+}
+
+#' @export
+print.Job = function(x, ...) {
+  catf("Job with id %i", x$job.id)
+  catf("  Parameters: %i", length(x$pars))
+  catf("  Seed      : %i", x$seed)
+}
+
+#' @export
+print.Experiment = function(x, ...) {
+  catf("Experiment with id %i", x$job.id)
+  catf("  Problem  : %s (%i parameters)", x$problem$name, length(x$pars$prob.pars))
+  catf("  Algorithm: %s (%i parameters)", x$algorithm$name, length(x$pars$algo.pars))
+  catf("  Seed     : %i", x$seed)
 }
