@@ -32,20 +32,20 @@ makeJob = function(id, reg = getDefaultRegistry()) {
 
 #' @export
 makeJob.Registry = function(id, reg = getDefaultRegistry()) {
-  joined = left_join(filter(reg$status, id), reg$defs)
+  joined = inner_join(filter(reg$status, id), reg$defs)
   cache = Cache(reg$file.dir)
   setClasses(list(
     job.id    = joined$job.id,
     pars      = c(joined$pars[[1L]], cache("more.args")),
     seed      = getSeed(reg$seed, joined$job.id),
-    resources = left_join(joined, reg$resources)$resources,
+    resources = inner_join(joined, reg$resources)$resources,
     fun       = cache("user.function")
   ), "Job")
 }
 
 #' @export
 makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
-  joined = left_join(filter(reg$status, id), reg$defs)
+  joined = inner_join(filter(reg$status, id), reg$defs)
   cache = Cache(reg$file.dir)
 
   setClasses(list(
@@ -53,7 +53,7 @@ makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
     pars      = joined$pars[[1L]],
     repl      = joined$repl,
     seed      = getSeed(reg$seed, joined$job.id),
-    resources = left_join(joined, reg$resources)$resources,
+    resources = inner_join(joined, reg$resources)$resources,
     problem   = cache("prob/problem", file.path("problems", joined$problem)),
     algorithm = cache(paste0("algo/", joined$algorithm), file.path("algorithms", joined$algorithm))
   ), c("Experiment", "Job"))
