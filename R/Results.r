@@ -32,7 +32,7 @@
 reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  ids = asIds(reg, ids, default = .findDone(reg = reg))
+  ids = asJobIds(reg, ids, default = .findDone(reg))
   fun = match.fun(fun)
 
   fns = sprintf("%i.rds", ids$job.id)
@@ -91,7 +91,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  ids = asIds(reg, ids, default = .findDone(reg = reg))
+  ids = asJobIds(reg, ids, default = .findDone(reg = reg))
 
   if (is.null(fun)) {
     getResult = function(fn, ...) readRDS(fn)
@@ -122,7 +122,7 @@ reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegist
 #' @rdname reduceResultsList
 reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  ids = asIds(reg, ids, default = .findDone(reg = reg))
+  ids = asJobIds(reg, ids, default = .findDone(reg = reg))
   assertFlag(fill)
   results = reduceResultsList(ids = ids, fun = fun, ..., reg = reg)
   if (!all(vlapply(results, is.data.table)))
@@ -149,7 +149,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
 #' @export
 loadResult = function(id, missing.val = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  id = asIds(reg, id, n = 1L)
+  id = assertJobIds(asJobIds(reg, id), single.id = TRUE)
   fn = file.path(reg$file.dir, "results", sprintf("%i.rds", id$job.id))
   if (!file.exists(fn))
     return(missing.val)

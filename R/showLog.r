@@ -10,7 +10,7 @@
 showLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  id = asIds(reg, id, n = 1L)
+  id = assertJobIds(asJobIds(reg, id), single.id = TRUE)
   lines = readLog(id, reg = reg)
 
   log.file = file.path(tempdir(), sprintf("%i.log", id$job.id))
@@ -20,7 +20,7 @@ showLog = function(id, reg = getDefaultRegistry()) {
 
 grepLogs = function(pattern, ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  ids = asIds(reg, ids, default = .findSubmitted(reg = reg))
+  ids = asJobIds(reg, ids, default = .findSubmitted(reg = reg))
   res = lapply(ids$job.id, function(id) {
     lines = readLog(id, impute = NA_character_, reg = reg)
     if (!testScalarNA(res) && any(stri_detect_regex(lines, pattern)))

@@ -1,14 +1,9 @@
-.findAll = function(reg) {
-  reg$status[, "job.id", with = FALSE]
-}
-
-
 #' @export
 #' @rdname findJobs
 findSubmitted = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  .findSubmitted(reg, asIds(reg, ids))
+  .findSubmitted(reg, ids)
 }
 
 .findSubmitted = function(reg, ids = NULL) {
@@ -21,7 +16,7 @@ findSubmitted = function(ids = NULL, reg = getDefaultRegistry()) {
 findNotSubmitted = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  .findNotSubmitted(reg, asIds(reg, ids))
+  .findNotSubmitted(reg, ids)
 }
 
 .findNotSubmitted = function(reg, ids = NULL) {
@@ -34,7 +29,7 @@ findNotSubmitted = function(ids = NULL, reg = getDefaultRegistry()) {
 findStarted = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  .findStarted(reg, asIds(reg, ids))
+  .findStarted(reg, ids)
 }
 
 .findStarted = function(reg, ids = NULL) {
@@ -47,7 +42,7 @@ findStarted = function(ids = NULL, reg = getDefaultRegistry()) {
 findNotStarted = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  .findNotStarted(reg, asIds(reg, ids))
+  .findNotStarted(reg, ids)
 }
 
 .findNotStarted = function(reg, ids = NULL) {
@@ -60,7 +55,7 @@ findNotStarted = function(ids = NULL, reg = getDefaultRegistry()) {
 findDone = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  .findDone(reg, asIds(reg, ids))
+  .findDone(reg, ids)
 }
 
 .findDone = function(reg, ids = NULL) {
@@ -73,7 +68,7 @@ findDone = function(ids = NULL, reg = getDefaultRegistry()) {
 findNotDone = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  .findNotDone(reg, asIds(reg, ids))
+  .findNotDone(reg, ids)
 }
 
 .findNotDone = function(reg, ids = NULL) {
@@ -86,7 +81,7 @@ findNotDone = function(ids = NULL, reg = getDefaultRegistry()) {
 findError = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  .findError(reg, asIds(reg, ids))
+  .findError(reg, ids)
 }
 
 .findError = function(reg, ids = NULL) {
@@ -104,7 +99,7 @@ findOnSystem = function(ids = NULL, status = "all", reg = getDefaultRegistry()) 
   assertRegistry(reg)
   syncRegistry(reg)
   assertChoice(status, choices = c("all", "queued", "running"))
-  .findOnSystem(reg, asIds(reg, ids), status)
+  .findOnSystem(reg, ids, status)
 }
 
 .findOnSystem = function(reg, ids = NULL, status = "all", batch.ids = getBatchIds(reg, status = status)) {
@@ -119,7 +114,7 @@ findOnSystem = function(ids = NULL, status = "all", reg = getDefaultRegistry()) 
 findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  .findExpired(reg, asIds(reg, ids))
+  .findExpired(reg, ids)
 }
 
 .findExpired = function(reg, ids = NULL, batch.ids = getBatchIds(reg)) {
@@ -161,12 +156,12 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, strict = TRUE)
   syncRegistry(reg)
   if (missing(expr))
-    return(asIds(reg, ids, default = .findAll(reg)))
+    return(filter(reg$status, ids)[, "job.id", with = FALSE])
 
   expr = substitute(expr)
   ee = parent.frame()
   fun = function(pars) eval(expr, pars, enclos = ee)
-  filter(reg$status, ids)[reg$defs, on = "def.id", nomatch = 0L][vlapply(pars, fun), "job.id", with = FALSE]
+  left_join(filter(reg$status, ids), reg$defs)[vlapply(pars, fun), "job.id", with = FALSE]
 }
 
 
@@ -187,7 +182,7 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
   syncRegistry(reg)
 
   ee = parent.frame()
-  tab = filter(reg$status, ids)[reg$defs, c("job.id", "pars", "problem", "algorithm", "repl"), on = "def.id", nomatch = 0L, with = FALSE]
+  tab = left_join(filter(reg$status, ids), reg$defs)[, c("job.id", "pars", "problem", "algorithm", "repl"), with = FALSE]
 
   if (!is.null(prob.name)) {
     assertCharacter(prob.name, any.missing = FALSE)
