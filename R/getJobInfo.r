@@ -61,8 +61,7 @@ getJobInfo = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, res
 getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  ids = asIds(reg, ids, default = .findAll(reg))
-  tab = reg$status[ids]
+  tab = filter(reg$status, ids)
   tab[, "submitted" := as.POSIXct(submitted, origin = "1970-01-01")]
   tab[, "started" := as.POSIXct(started, origin = "1970-01-01")]
   tab[, "done" := as.POSIXct(done, origin = "1970-01-01")]
@@ -72,8 +71,7 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 getJobDefs = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg = getDefaultRegistry()) {
-  ids = asIds(reg, ids, default = .findAll(reg))
-  tab = reg$status[ids][reg$defs, c("job.id", names(reg$defs)), on = "def.id", nomatch = 0L, with = FALSE]
+  tab = filter(reg$status, ids)[reg$defs, c("job.id", names(reg$defs)), on = "def.id", nomatch = 0L, with = FALSE]
   parsAsCols(tab, pars.as.cols, prefix.pars, reg = reg)
   tab[, !"def.id", with = FALSE]
 }
@@ -102,10 +100,9 @@ getJobResources = function(ids = NULL, resources.as.cols = FALSE, reg = getDefau
 getJobPars = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   assertFlag(prefix.pars)
-  ids = asIds(reg, ids, default = .findAll(reg))
   def.cols = c("job.id", setdiff(names(reg$defs), c("def.id", "pars.hash")))
 
-  tab = reg$status[ids][reg$defs, def.cols, on = "def.id", nomatch = 0L, with = FALSE]
+  tab = filter(reg$status, ids)[reg$defs, def.cols, on = "def.id", nomatch = 0L, with = FALSE]
   parsAsCols(tab, TRUE, prefix.pars, reg = reg)
   tab[]
 }
