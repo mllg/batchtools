@@ -4,14 +4,14 @@ filter = function(x, ids = NULL) {
   if (is.data.frame(ids)) {
     w = x[ids, on = key(x), nomatch = 0L, which = TRUE]
   } else if (qtest(ids, "x")) {
-    w = x[J(as.integer(ids)), nomatch = 0L, which = TRUE]
+    w = x[list(as.integer(ids)), nomatch = 0L, which = TRUE]
   } else {
     stop("Format of 'ids' not recognized. Must be a data frame with column 'job.id' or an integerish vector")
   }
   x[unique(w)]
 }
 
-left_join = function(x, y, on = key(y)) {
+inner_join = function(x, y, on = key(y)) {
   x[y, nomatch = 0, on = on]
 }
 
@@ -19,7 +19,7 @@ asJobIds = function(reg, ids = NULL, default = NULL, keep.extra = FALSE) {
   if (is.null(ids) && !is.null(default))
     return(default)
   res = filter(reg$status, ids)[, "job.id", with = FALSE]
-  if (keep.extra && is.data.frame(ids)) left_join(res, ids) else res
+  if (keep.extra && is.data.frame(ids)) inner_join(res, ids) else res
 }
 
 assertJobIds = function(ids, empty.ok = TRUE, single.id = FALSE) {

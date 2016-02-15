@@ -69,7 +69,7 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 getJobDefs = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg = getDefaultRegistry()) {
-  tab = left_join(filter(reg$status, ids), reg$defs)[, c("job.id", names(reg$defs)), with = FALSE]
+  tab = inner_join(filter(reg$status, ids), reg$defs)[, c("job.id", names(reg$defs)), with = FALSE]
   parsAsCols(tab, pars.as.cols, prefix.pars, reg = reg)
   tab[, !"def.id", with = FALSE]
 }
@@ -80,7 +80,7 @@ getJobDefs = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg
 getJobResources = function(ids = NULL, resources.as.cols = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   assertFlag(resources.as.cols)
-  tab = left_join(filter(reg$status, ids), reg$resources)[, c("job.id", names(reg$resources)), with = FALSE]
+  tab = inner_join(filter(reg$status, ids), reg$resources)[, c("job.id", names(reg$resources)), with = FALSE]
   if (resources.as.cols) {
     new.cols = rbindlist(tab$resources, fill = TRUE)
     if (nrow(new.cols) > 0L)
@@ -97,7 +97,7 @@ getJobPars = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg
   assertRegistry(reg)
   assertFlag(prefix.pars)
   def.cols = c("job.id", setdiff(names(reg$defs), c("def.id", "pars.hash")))
-  tab = left_join(filter(reg$status, ids), reg$defs)[, def.cols, with = FALSE]
+  tab = inner_join(filter(reg$status, ids), reg$defs)[, def.cols, with = FALSE]
   parsAsCols(tab, TRUE, prefix.pars, reg = reg)
   tab[]
 }

@@ -55,7 +55,7 @@ createCollection = function(ids, resources = list(), reg = getDefaultRegistry())
 makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   def.cols = c("job.id", "pars")
   jc = createCollection(ids, resources, reg)
-  jc$defs = left_join(filter(reg$status, ids), reg$defs)[, def.cols, with = FALSE]
+  jc$defs = inner_join(filter(reg$status, ids), reg$defs)[, def.cols, with = FALSE]
   setClasses(jc, "JobCollection")
 }
 
@@ -63,7 +63,7 @@ makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getD
 makeJobCollection.ExperimentRegistry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   def.cols = c("job.id", "pars", "problem", "algorithm", "repl")
   jc = createCollection(ids, resources, reg)
-  jc$defs = left_join(filter(reg$status, ids), reg$defs)[, def.cols, with = FALSE]
+  jc$defs = inner_join(filter(reg$status, ids), reg$defs)[, def.cols, with = FALSE]
   setClasses(jc, c("ExperimentCollection", "JobCollection"))
 }
 
