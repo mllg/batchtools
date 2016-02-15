@@ -31,7 +31,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   assertRegistry(reg, writeable = TRUE)
   syncRegistry(reg)
   assertList(resources, names = "strict")
-  ids = asIds(reg, ids, default = .findNotSubmitted(reg), extra.cols = TRUE)
+  ids = asJobIds(reg, ids, default = .findNotSubmitted(reg), keep.extra = TRUE)
   if (nrow(ids) == 0L)
     return(data.table(id = integer(0L), key = "id"))
   drop = setdiff(names(ids), c("job.id", "chunk", "group"))
@@ -49,7 +49,6 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     chunks = sort(unique(ids$chunk))
   }
   chunk = NULL
-  setkeyv(ids, "chunk")
 
   max.concurrent.jobs = NA_integer_
   if (!is.null(reg$max.concurrent.jobs)) {
@@ -77,7 +76,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   pb = makeProgressBar(total = length(chunks), format = ":status [:bar] :percent eta: :eta", tokens = list(status = "Submitting"))
   for (ch in chunks) {
-    ids.chunk = ids[chunk == ch, nomatch = 0L]
+    ids.chunk = ids[chunk == ch, nomatch = 0L, "job.id", with = FALSE]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
       writeRDS(jc, file = jc$uri, wait = TRUE)

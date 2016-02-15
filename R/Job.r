@@ -32,32 +32,30 @@ makeJob = function(id, reg = getDefaultRegistry()) {
 
 #' @export
 makeJob.Registry = function(id, reg = getDefaultRegistry()) {
-  id = asIds(reg, id, n = 1L)
+  joined = left_join(filter(reg$status, id), reg$defs)
   cache = Cache(reg$file.dir)
   setClasses(list(
-    job.id    = id$job.id,
-    pars      = c(reg$status[id][reg$defs, nomatch = 0L]$pars[[1L]], cache("more.args")),
-    seed      = getSeed(reg$seed, id$job.id),
-    resources = reg$status[id][reg$resources, nomatch = 0L]$resources,
+    job.id    = joined$job.id,
+    pars      = c(joined$pars[[1L]], cache("more.args")),
+    seed      = getSeed(reg$seed, joined$job.id),
+    resources = left_join(joined, reg$resources)$resources,
     fun       = cache("user.function")
   ), "Job")
 }
 
 #' @export
 makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
-  id = asIds(reg, id, n = 1L)
-  status = reg$status[id]
-  def = status[reg$defs, on = "def.id", nomatch = 0L]
+  joined = left_join(filter(reg$status, id), reg$defs)
   cache = Cache(reg$file.dir)
 
   setClasses(list(
-    job.id    = id$job.id,
-    pars      = def$pars[[1L]],
-    repl      = status$repl,
-    seed      = getSeed(reg$seed, id$job.id),
-    resources = status[reg$resources, nomatch = 0L]$resources,
-    problem   = cache("prob/problem", file.path("problems", def$problem)),
-    algorithm = cache(paste0("algo/", def$algorithm), file.path("algorithms", def$algorithm))
+    job.id    = joined$job.id,
+    pars      = joined$pars[[1L]],
+    repl      = joined$repl,
+    seed      = getSeed(reg$seed, joined$job.id),
+    resources = left_join(joined, reg$resources)$resources,
+    problem   = cache("prob/problem", file.path("problems", joined$problem)),
+    algorithm = cache(paste0("algo/", joined$algorithm), file.path("algorithms", joined$algorithm))
   ), c("Experiment", "Job"))
 }
 
@@ -76,7 +74,7 @@ getJob = function(jc, id, cache) {
 }
 
 getJob.JobCollection = function(jc, id, cache) {
-  j = jc$defs[list(id)]
+  j = filter(jc$defs, id)
   setClasses(list(
     job.id = j$job.id,
     pars = c(j$pars[[1L]], cache("more.args")),
@@ -87,7 +85,7 @@ getJob.JobCollection = function(jc, id, cache) {
 }
 
 getJob.ExperimentCollection = function(jc, id, cache) {
-  j = jc$defs[list(id)]
+  j = filter(jc$defs, id)
   setClasses(list(
     job.id = j$job.id,
     pars = j$pars[[1L]],

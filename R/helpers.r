@@ -3,36 +3,31 @@ filter = function(x, ids = NULL) {
     return(x)
   if (is.data.frame(ids)) {
     w = x[ids, on = key(x), nomatch = 0L, which = TRUE]
+  } else if (qtest(ids, "x")) {
+    w = x[J(as.integer(ids)), nomatch = 0L, which = TRUE]
   } else {
-    w = x[list(asInteger(ids)), nomatch = 0L, which = TRUE]
+    stop("Format of 'ids' not recognized. Must be a data frame with column 'job.id' or an integerish vector")
   }
   x[unique(w)]
 }
 
-asIds = function(reg, ids = NULL, n = NULL, default = NULL, extra.cols = FALSE) {
-  if (is.null(ids)) {
-    if (is.null(default))
-      return(NULL)
+left_join = function(x, y, on = key(y)) {
+  x[y, nomatch = 0, on = on]
+}
+
+asJobIds = function(reg, ids = NULL, default = NULL, keep.extra = FALSE) {
+  if (is.null(ids) && !is.null(default))
     return(default)
-  }
+  res = filter(reg$status, ids)[, "job.id", with = FALSE]
+  if (keep.extra && is.data.frame(ids)) left_join(res, ids) else res
+}
 
-  if (is.data.frame(ids)) {
-    assertInteger(ids$job.id, any.missing = FALSE, len = n)
-    if (!is.data.table(ids))
-      ids = as.data.table(ids)
-    if (!identical(key(ids), "job.id"))
-      setkeyv(ids, "job.id")
-    if (!extra.cols && ncol(ids) > 1L)
-      ids = ids[, "job.id", with = FALSE]
-  } else {
-    ids = data.table(job.id = asInteger(ids, any.missing = FALSE, len = n), key = "job.id")
-  }
-
-  i = ids[!reg$status, which = TRUE]
-  if (length(i) > 0L)
-    stopf("Illegal ids defined, e.g. %i", ids[i[1L]]$job.id)
-
-  return(ids)
+assertJobIds = function(ids, empty.ok = TRUE, single.id = FALSE) {
+  if (!empty.ok && nrow(ids) == 0L)
+    stop("You must provide at least 1 id")
+  if (single.id && nrow(ids) != 1L)
+    stopf("You must provide exactly 1 id (%i provided)", nrow(ids))
+  ids
 }
 
 now = function() {

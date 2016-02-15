@@ -51,8 +51,6 @@
 #' getJobInfo(reg = reg, pars.as.cols = TRUE)
 getJobInfo = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, resources.as.cols = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  ids = asIds(reg, ids, default = .findAll(reg))
-
   getJobStatus(ids, reg = reg)[getJobResources(ids, reg = reg)][getJobDefs(ids, pars.as.cols = pars.as.cols, prefix.pars = prefix.pars, reg = reg)]
 }
 
@@ -71,7 +69,7 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 getJobDefs = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg = getDefaultRegistry()) {
-  tab = filter(reg$status, ids)[reg$defs, c("job.id", names(reg$defs)), on = "def.id", nomatch = 0L, with = FALSE]
+  tab = left_join(filter(reg$status, ids), reg$defs)[, c("job.id", names(reg$defs)), with = FALSE]
   parsAsCols(tab, pars.as.cols, prefix.pars, reg = reg)
   tab[, !"def.id", with = FALSE]
 }
@@ -81,10 +79,8 @@ getJobDefs = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg
 #' @rdname getJobInfo
 getJobResources = function(ids = NULL, resources.as.cols = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  ids = asIds(reg, ids, default = .findAll(reg))
   assertFlag(resources.as.cols)
-
-  tab = merge(reg$status[ids, c("job.id", "resource.id"), with = FALSE], reg$resources, by = "resource.id", all.x = TRUE)
+  tab = left_join(filter(reg$status, ids), reg$resources)[, c("job.id", names(reg$resources)), with = FALSE]
   if (resources.as.cols) {
     new.cols = rbindlist(tab$resources, fill = TRUE)
     if (nrow(new.cols) > 0L)
@@ -101,8 +97,7 @@ getJobPars = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg
   assertRegistry(reg)
   assertFlag(prefix.pars)
   def.cols = c("job.id", setdiff(names(reg$defs), c("def.id", "pars.hash")))
-
-  tab = filter(reg$status, ids)[reg$defs, def.cols, on = "def.id", nomatch = 0L, with = FALSE]
+  tab = left_join(filter(reg$status, ids), reg$defs)[, def.cols, with = FALSE]
   parsAsCols(tab, TRUE, prefix.pars, reg = reg)
   tab[]
 }

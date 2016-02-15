@@ -58,7 +58,7 @@ test_that("Subsetting", {
   expect_equal(findDone(ids = 3, reg = reg), none)
   expect_equal(findError(ids = 1:2, reg = reg), none)
   expect_equal(findSubmitted(1:5, reg = reg), all)
-  expect_error(findSubmitted(6, reg = reg), "Illegal")
+  expect_data_table(findSubmitted(6, reg = reg), ncol = 1L, nrow = 0L)
 })
 
 test_that("findJobs", {

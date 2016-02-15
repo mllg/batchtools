@@ -28,7 +28,7 @@
 testJob = function(id, fresh.session = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   assertFlag(fresh.session)
-  id = asIds(reg, id, n = 1L)
+  id = assertJobIds(asJobIds(reg, id), single.id = TRUE)
   job = makeJob(id, reg = reg)
 
   if (fresh.session) {
