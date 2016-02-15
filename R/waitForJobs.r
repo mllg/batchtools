@@ -89,7 +89,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
 
     stats = .getStatus(ids = ids, batch.ids = batch.ids, reg = reg)
     pb$tick(n.jobs - nrow(ids.nt), tokens = as.list(stats))
-    n.jobs = nrow(ids.nt) # FIXME: remover after progress is updated
+    n.jobs = nrow(ids.nt) # FIXME: remove after progress is updated
 
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg = reg))
