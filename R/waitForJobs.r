@@ -30,7 +30,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
 
   .findNotTerminated = function(reg, ids = NULL) {
     done = NULL
-    reg$status[ids][is.na(done), "job.id", with = FALSE]
+    filter(reg$status, ids)[is.na(done), "job.id", with = FALSE]
   }
 
   if (nrow(.findNotSubmitted(ids = ids, reg = reg)) > 0L) {

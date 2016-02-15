@@ -1,3 +1,14 @@
+filter = function(x, ids = NULL) {
+  if (is.null(ids))
+    return(x)
+  if (is.data.frame(ids)) {
+    w = x[ids, on = key(x), nomatch = 0L, which = TRUE]
+  } else {
+    w = x[list(asInteger(ids)), nomatch = 0L, which = TRUE]
+  }
+  x[unique(w)]
+}
+
 asIds = function(reg, ids = NULL, n = NULL, default = NULL, extra.cols = FALSE) {
   if (is.null(ids)) {
     if (is.null(default))
