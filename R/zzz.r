@@ -26,6 +26,7 @@
 #' @import checkmate
 #' @import data.table
 #' @import stringi
+#' @import backports
 #' @importFrom progress progress_bar
 #' @importFrom stats runif
 #' @importFrom utils capture.output head tail
