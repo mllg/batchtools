@@ -18,6 +18,7 @@ Depends:
     R (>= 3.0.0),
     data.table (>= 1.9.6)
 Imports:
+    backports,
     brew,
     checkmate (>= 1.6.3),
     digest (>= 0.6.9),
