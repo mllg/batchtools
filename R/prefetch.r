@@ -27,6 +27,6 @@ prefetch.ExperimentCollection = function(jc, cache) {
   if (length(problems) == 1L)
     cache("prob/problem", file.path("problems", problems))
   algorithms = unique(jc$defs$algorithm)
-  Map(cache, id = paste0("algo/", algorithms), uri = file.path("algorithms", algorithms))
+  Map(cache, id = stri_join("algo/", algorithms), uri = file.path("algorithms", algorithms))
   invisible(TRUE)
 }

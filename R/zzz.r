@@ -34,6 +34,8 @@
 
 batchtools = new.env(parent = emptyenv())
 
+no.ids = data.table(job.id = integer(0L), key = "job.id")
+
 # global variables frequently used with data.tables
 job.id = def.id = pars = NULL
 submitted = started = done = error = NULL

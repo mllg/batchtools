@@ -115,7 +115,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = g
   dir.create(file.path(file.dir, "updates"))
   dir.create(file.path(file.dir, "logs"))
 
-  reg = new.env()
+  reg = new.env(parent = asNamespace("batchtools"))
 
   reg$file.dir = npath(file.dir)
   reg$work.dir = work.dir
@@ -156,7 +156,6 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = g
     info("Sourcing configuration file '%s' ...", conf.file)
     sys.source(conf.file, envir = reg, keep.source = FALSE)
   }
-  parent.env(reg) = emptyenv()
 
   setattr(reg, "class", "Registry")
   saveRegistry(reg)
@@ -252,11 +251,11 @@ saveRegistry = function(reg = getDefaultRegistry()) {
 loadRegistryPackages = function(packages, namespaces) {
   ok = vlapply(packages, require, character.only = TRUE)
   if (!all(ok))
-    stopf("Failed to load packages: %s", paste0(packages[!ok], collapse = ", "))
+    stopf("Failed to load packages: %s", stri_join(packages[!ok], collapse = ", "))
 
   ok = vlapply(namespaces, requireNamespace)
   if (!all(ok))
-    stopf("Failed to load namespaces: %s", paste0(namespaces[!ok], collapse = ", "))
+    stopf("Failed to load namespaces: %s", stri_join(namespaces[!ok], collapse = ", "))
 
   invisible(TRUE)
 }

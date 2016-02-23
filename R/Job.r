@@ -55,7 +55,7 @@ makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
     seed      = getSeed(reg$seed, joined$job.id),
     resources = inner_join(joined, reg$resources)$resources,
     problem   = cache("prob/problem", file.path("problems", joined$problem)),
-    algorithm = cache(paste0("algo/", joined$algorithm), file.path("algorithms", joined$algorithm))
+    algorithm = cache(stri_join("algo/", joined$algorithm), file.path("algorithms", joined$algorithm))
   ), c("Experiment", "Job"))
 }
 
@@ -82,7 +82,7 @@ getJob.ExperimentCollection = function(jc, id, cache) {
     seed = getSeed(jc$seed, j$job.id),
     resources = jc$resources,
     problem = cache("prob/problem", file.path("problems", j$problem)),
-    algorithm = cache(paste0("algo/", j$algorithm), file.path("algorithms", j$algorithm)),
+    algorithm = cache(stri_join("algo/", j$algorithm), file.path("algorithms", j$algorithm)),
     repl = j$repl
   ), c("Experiment", "Job"))
 }

@@ -93,7 +93,7 @@ info = function(...) {
 }
 
 catf = function (..., con = stdout()) {
-  cat(paste0(sprintf(...), collapse = "\n"), "\n", sep = "", file = con)
+  cat(stri_join(sprintf(...), collapse = "\n"), "\n", sep = "", file = con)
 }
 
 warningf = function (...) {

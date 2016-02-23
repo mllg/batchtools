@@ -5,24 +5,17 @@
 \title{ClusterFunctions for Local Multicore Execution}
 \usage{
 makeClusterFunctionsMulticore(ncpus = max(getOption("mc.cores",
-  parallel::detectCores()) - 1L, 1L), max.jobs, max.load)
+  parallel::detectCores()), 1L), max.load = Inf)
 }
 \arguments{
 \item{ncpus}{[\code{integer(1)}]\cr
 Number of VPUs of worker.
-Default is to use all cores but one, where total number of cores
-"available" is given by option \code{\link[base:options]{mc.cores}}
-and if that is not set it is inferred by
-\code{\link[parallel]{detectCores}}.}
-
-\item{max.jobs}{[\code{integer(1)}]\cr
-Maximal number of jobs that can run concurrently for the current registry.
-Default is \code{ncpus}.}
+Default is to use all cores but one, where total number of cores "available" is given by option \code{mc.cores}
+and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}.}
 
 \item{max.load}{[\code{numeric(1)}]\cr
 Load average (of the last 5 min) at which the worker is considered occupied,
-so that no job can be submitted.
-Default is inferred by \code{\link[parallel]{detectCores}}, cf. argument \code{ncpus}.}
+so that no job can be submitted. Default is \code{Inf}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

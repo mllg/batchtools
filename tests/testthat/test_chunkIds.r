@@ -31,8 +31,8 @@ test_that("chunkIds", {
 test_that("parallel execution works", {
   reg = makeTempRegistry(FALSE)
   fun = function(i) i^2
-  batchMap(fun, i = 1:12, reg = reg)
+  batchMap(fun, i = 1:4, reg = reg)
   submitJobs(chunkIds(reg = reg), resources = list(ncpus = 2), reg = reg)
   waitForJobs(reg = reg)
-  getStatus(reg = reg)
+  expect_true(nrow(findDone(reg = reg)) == 4)
 })

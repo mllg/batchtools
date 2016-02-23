@@ -104,7 +104,7 @@ findOnSystem = function(ids = NULL, status = "all", reg = getDefaultRegistry()) 
 
 .findOnSystem = function(reg, ids = NULL, status = "all", batch.ids = getBatchIds(reg, status = status)) {
   if (length(batch.ids) == 0L)
-    return(data.table(job.id = integer(0L), key = "job.id"))
+    return(copy(no.ids))
   filter(reg$status, ids)[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids$batch.id, "job.id", with = FALSE]
 }
 

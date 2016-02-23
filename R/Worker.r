@@ -7,13 +7,10 @@
 #'   Host name of node.
 #' @param ncpus [\code{integers(1)}]\cr
 #'   Number of VPUs of worker. Default (0) means to query the worker.
-#' @param max.jobs [\code{integer(1)}]\cr
-#'   Maximal number of jobs that can run concurrently for the current registry.
-#'   Default is \code{ncpus}.
 #' @param max.load [\code{numeric(1)}]\cr
 #'   Load average (of the last 5 min) at which the worker is considered
 #'   occupied, so that no job can be submitted.
-#'   Default is \code{ncpus}.
+#'   Default is \code{Inf}.
 #' @param debug [\code{logical(1)}]\cr
 #'   Print some verbose info messages. Default is \code{FALSE}.
 #' @name Worker
@@ -23,9 +20,9 @@
 #' @examples
 #' \dontrun{
 #' # create a worker for the local machine and use 4 CPUs.
-#' makeWorker("localhost", ncpus = 4, max.jobs = 4)
+#' makeWorker("localhost", ncpus = 4)
 #' }
-makeWorker = function(nodename, ncpus = 0L, max.jobs = NULL, max.load = NULL, debug = FALSE) {
+makeWorker = function(nodename, ncpus = 0L, max.load = Inf, debug = FALSE) {
   findHelperScriptLinux = function(nodename) {
     if (nodename == "localhost") {
       system.file("bin", "linux-helper", package = "batchtools")
@@ -36,10 +33,7 @@ makeWorker = function(nodename, ncpus = 0L, max.jobs = NULL, max.load = NULL, de
   }
 
   assertString(nodename)
-  if (!is.null(max.jobs))
-    assertIntegerish(max.jobs)
-  if (!is.null(max.load))
-    assertNumeric(max.load)
+  assertNumber(max.load, lower = 0)
   ncpus = asInt(ncpus)
   assertFlag(debug)
 
@@ -54,8 +48,7 @@ makeWorker = function(nodename, ncpus = 0L, max.jobs = NULL, max.load = NULL, de
   if (ncpus == 0L)
     ncpus = as.integer(runWorkerCommand(worker, "number-of-cpus", debug = debug)$output)
   worker$ncpus = ncpus
-  worker$max.jobs = max(as.integer(max.jobs %??% ncpus), 1L)
-  worker$max.load = max(max.load %??% ncpus, 1)
+  worker$max.load = max.load
 
   return(setClasses(worker, "Worker"))
 }
@@ -89,9 +82,7 @@ updateWorker = function(worker, reg) {
   if (worker$available != "avail") {
     worker$last.update = time
     worker$status = getWorkerStatus(worker, reg)
-    if (worker$status$n.jobs >= worker$max.jobs) {
-      worker$available = "max.jobs"
-    } else if (worker$status$load[1L] >= worker$max.load) {
+    if (worker$status$load[1L] >= worker$max.load) {
       worker$available = "max.load"
     } else {
       worker$available = "avail"

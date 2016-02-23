@@ -111,7 +111,7 @@ parsAsCols.Registry = function(tab, pars.as.cols, prefix.pars, reg = getDefaultR
     new.cols = rbindlist(tab$pars)
     if (nrow(new.cols) >= 1L) {
       if (prefix.pars)
-        setnames(new.cols, names(new.cols), paste0("par.", names(new.cols)))
+        setnames(new.cols, names(new.cols), stri_join("par.", names(new.cols)))
       tab[, names(new.cols) := new.cols]
     }
     tab[, "pars" := NULL, with = FALSE]
