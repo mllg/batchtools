@@ -132,7 +132,7 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
     lines = lines[!stri_startswith_fixed(lines, comment.string)]
   if (length(lines) == 0L)
     stopf("Error reading template '%s' or empty template", template)
-  paste0(lines, collapse = "\n")
+  stri_join(lines, collapse = "\n")
 }
 
 #' @title Cluster functions helper: Brew your template into a job description file
@@ -189,7 +189,7 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
   assertString(cmd)
   exit.code = asInt(exit.code)
   assertCharacter(output, any.missing = FALSE)
-  msg = sprintf("Command '%s' produced exit code %i. Output: '%s'", cmd, exit.code, paste0(output, collapse = "\n"))
+  msg = sprintf("Command '%s' produced exit code %i. Output: '%s'", cmd, exit.code, stri_join(output, collapse = "\n"))
   makeSubmitJobResult(status = 101L, batch.id = NA_character_, msg = msg)
 }
 
@@ -224,7 +224,7 @@ cfKillBatchJob = function(cmd, batch.id, max.tries = 3L) {
     Sys.sleep(1)
   }
   stopf("Really tried to kill job, but could not do it. batch id is %s.\nMessage: %s",
-        batch.id, paste0(res$output, collapse = "\n"))
+        batch.id, stri_join(res$output, collapse = "\n"))
 }
 
 getBatchIds = function(reg, status = "all") {
@@ -254,12 +254,12 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
   assertFlag(debug)
 
   if (nodename != "localhost") {
-    sys.args = c(nodename, shQuote(paste0(c(sys.cmd, sys.args), collapse = " ")))
+    sys.args = c(nodename, shQuote(stri_join(c(sys.cmd, sys.args), collapse = " ")))
     sys.cmd = "ssh"
   }
 
   if (debug) {
-    info("OS cmd: %s %s", sys.cmd, paste0(sys.args, collapse = " "))
+    info("OS cmd: %s %s", sys.cmd, stri_join(sys.args, collapse = " "))
   }
 
   if (nzchar(Sys.which(sys.cmd)) > 0L) {
@@ -272,8 +272,8 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
   }
 
   if (stop.on.exit.code && exit.code > 0L) {
-    output = if (length(output) == 0L) "" else paste0(output, collapse = "\n")
-    stopf("Command '%s %s' produced exit code: %i; output: %s", sys.cmd, paste0(sys.args, collapse = " "), exit.code, output)
+    output = if (length(output) == 0L) "" else stri_join(output, collapse = "\n")
+    stopf("Command '%s %s' produced exit code: %i; output: %s", sys.cmd, stri_join(sys.args, collapse = " "), exit.code, output)
   } else if (debug) {
     catf("OS result (exit code %i):", exit.code)
     print(output)

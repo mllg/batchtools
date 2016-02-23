@@ -47,7 +47,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     return(nrow(.findError(reg, ids)) == 0L)
 
   timeout = now() + timeout
-  ids.disappeared = data.table(job.id = integer(0L), key = "job.id")
+  ids.disappeared = copy(no.ids)
 
   pb = makeProgressBar(total = n.jobs.total, format = "Waiting (S::on.sys R::running D::done E::error) [:bar] :percent eta: :eta",
     tokens = as.list(.getStatus(ids, batch.ids, reg = reg)))

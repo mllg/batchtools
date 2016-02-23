@@ -33,7 +33,7 @@ makeClusterFunctionsLSF = function(template) {
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)
     } else {
-      batch.id = stri_extract_first_regex(paste0(res$output, collapse = " "), "\\d+")
+      batch.id = stri_extract_first_regex(stri_join(res$output, collapse = " "), "\\d+")
       makeSubmitJobResult(status = 0L, batch.id = batch.id)
     }
   }
@@ -47,7 +47,7 @@ makeClusterFunctionsLSF = function(template) {
     if (res$exit.code == 255L && stri_detect_fixed(res$output, "No unfinished job found"))
       return(character(0L))
     if (res$exit.code > 0L)
-      stopf("Command '%s' produced exit code: %i; output: %s", paste0(cmd, collapse = " "), res$exit.code, res$output)
+      stopf("Command '%s' produced exit code: %i; output: %s", stri_join(cmd, collapse = " "), res$exit.code, res$output)
 
     stri_extract_first_regex(tail(res$output, -1L), "\\d+")
   }

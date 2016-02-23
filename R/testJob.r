@@ -33,9 +33,9 @@ testJob = function(id, fresh.session = FALSE, reg = getDefaultRegistry()) {
 
   if (fresh.session) {
     fn = tempfile("testjob_")
-    fn.r   = paste0(fn, ".r")
-    fn.job = paste0(fn, ".job")
-    fn.res = paste0(fn, ".rds")
+    fn.r   = stri_join(fn, ".r")
+    fn.job = stri_join(fn, ".job")
+    fn.res = stri_join(fn, ".rds")
     fn.tmpl = system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE)
 
     writeRDS(job, file = fn.job)

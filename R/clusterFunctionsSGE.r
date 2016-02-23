@@ -28,7 +28,7 @@ makeClusterFunctionsSGE = function(template) {
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
     } else {
-      batch.id = stri_extract_first_regex(paste0(res$output, collapse = " "), "\\d+")
+      batch.id = stri_extract_first_regex(stri_join(res$output, collapse = " "), "\\d+")
       makeSubmitJobResult(status = 0L, batch.id = batch.id)
     }
   }

@@ -33,14 +33,14 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   assertList(resources, names = "strict")
   ids = asJobIds(reg, ids, default = .findNotSubmitted(reg), keep.extra = TRUE)
   if (nrow(ids) == 0L)
-    return(data.table(id = integer(0L), key = "id"))
+    return(copy(no.ids))
   drop = setdiff(names(ids), c("job.id", "chunk", "group"))
   if (length(drop) > 0L)
     ids[, drop := NULL, with = FALSE]
 
   on.sys = .findOnSystem(reg = reg)
   if (nrow(on.sys[ids, nomatch = 0L]) > 0L)
-    stopf("Some jobs are already on the system, e.g. %s", paste0(head(on.sys[ids, nomatch = 0L]$job.id, 1L), collapse = ", "))
+    stopf("Some jobs are already on the system, e.g. %s", stri_join(head(on.sys[ids, nomatch = 0L]$job.id, 1L), collapse = ", "))
 
   if (is.null(ids$chunk)) {
     chunks = ids$chunk = seq_row(ids)

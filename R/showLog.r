@@ -23,7 +23,7 @@ grepLogs = function(pattern, ids = NULL, reg = getDefaultRegistry()) {
   ids = asJobIds(reg, ids, default = .findSubmitted(reg = reg))
   res = lapply(ids$job.id, function(id) {
     lines = readLog(id, impute = NA_character_, reg = reg)
-    if (!testScalarNA(res) && any(stri_detect_regex(lines, pattern)))
+    if (!testScalarNA(lines) && any(stri_detect_regex(lines, pattern)))
       return(lines)
     return(NULL)
   })

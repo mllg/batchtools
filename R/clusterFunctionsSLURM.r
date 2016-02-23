@@ -27,7 +27,7 @@ makeClusterFunctionsSLURM = function(template) {
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
     temp.error = "Socket timed out on send/recv operation"
-    output = paste0(res$output, collapse = "\n")
+    output = stri_join(res$output, collapse = "\n")
 
     if (stri_detect_fixed(max.jobs.msg, output)) {
       makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = max.jobs.msg)

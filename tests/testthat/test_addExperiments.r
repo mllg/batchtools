@@ -76,6 +76,7 @@ test_that("benchmark of addExperiments", {
   addAlgorithm(reg = reg, "a2", fun = function(job, data, instance, ...) NULL)
   prob.designs = list(p1 = data.table(x = 1:500))
   algo.designs = list(a1 = data.table(y = 1:20), a2 = data.table(y = 1:20))
-  st = system.time({addExperiments(prob.designs, algo.designs = algo.designs, repls = 2, reg = reg)})
+  repls = 2
+  st = system.time({addExperiments(prob.designs, algo.designs = algo.designs, repls = repls, reg = reg)})
   print(st)
 })
