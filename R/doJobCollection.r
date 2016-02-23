@@ -68,10 +68,6 @@ doJobCollection.character = function(jc, con = stdout()) {
   doJobCollection(readRDS(jc), con = con)
 }
 
-stamp = function() {
-  strftime(Sys.time())
-}
-
 doJob = function(id, jc, cache, write.update = FALSE, measure.memory = FALSE, con = con) {
   capture = function(expr) {
     output = character(0L)

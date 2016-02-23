@@ -34,6 +34,10 @@ now = function() {
   as.integer(Sys.time())
 }
 
+stamp = function() {
+  strftime(Sys.time())
+}
+
 npath = function(file.dir, ...) {
   stri_replace_all_fixed(file.path(normalizePath(file.dir, winslash = "/", mustWork = FALSE), ...), "\\", "/")
 }
