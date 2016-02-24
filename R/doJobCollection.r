@@ -48,7 +48,7 @@ doJobCollection.JobCollection = function(jc) {
   count = 1L
   updates = data.table(job.id = integer(0L), started = integer(0L), done = integer(0L), error = character(0L), memory = double(0L))
   next.update = now() + as.integer(runif(1L, 300L, 1800L))
-  p = if (ncpus == 1L) Sequential$new() else Parallel$new(ncpus)
+  p = if (ncpus == 1L || .Platform$OS.type == "windows") Sequential$new() else Parallel$new(ncpus)
 
   for (i in seq_len(n.jobs)) {
     results = p$spawn(doJob(jc$defs$job.id[i], jc, cache, measure.memory = measure.memory))
