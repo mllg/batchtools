@@ -1,7 +1,6 @@
 context("cf multicore")
 
 test_that("cf multicore", {
-  skip("not now")
   skip_on_os("windows")
 
   reg = makeTempRegistry(make.default = FALSE)
