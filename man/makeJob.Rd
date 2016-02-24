@@ -5,12 +5,15 @@
 \alias{makeJob}
 \title{Computational Jobs}
 \usage{
-makeJob(id, reg = getDefaultRegistry())
+makeJob(id, cache = NULL, reg = getDefaultRegistry())
 }
 \arguments{
 \item{id}{[\code{integer(1)} or \code{data.table}]\cr
 Single integer to specify the job or a \code{data.table} with column \code{job.id}
 and exactly one row.}
+
+\item{cache}{[\code{Cache}]\cr
+Internal object used to retrieve objects from the file system.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}

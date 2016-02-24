@@ -12,18 +12,21 @@
 #' @template ids
 #' @param resources [\code{named list}]\cr
 #'   Computational  resources for the batch jobs. The elements of this list
-#'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on by
-#'   your template file, with the exception of \code{ncpus} and \code{measure.memory}.
-#'   The setting \code{ncpus} is used to determine the number of CPUs to execute jobs in a
-#'   chunk in parallel using \code{\link[parallel]{mclapply}}. If not set, \code{ncpus}
+#'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on
+#'   your template file.
+#'   The resources \code{chunk.ncpus} and \code{measure.memory} are reserved for internal functionality:
+#'   The setting \code{chunk.ncpus} is used to determine the number of CPUs to execute jobs in a
+#'   chunk in parallel using \code{\link[parallel]{mcparallel}}. If not set, \code{chunk.ncpus}
 #'   defaults to 1 (sequential execution).
 #'   The second resource, \code{measure.memory}, can be set to \code{TRUE} to enable the measure of
 #'   memory requirements using \code{\link[base]{gc}}. But note that the reported values are quite
-#'   heuristic and may not reflect the real memory requirements.
+#'   heuristic and may not reflect the real memory requirements. Furthermore, measuring memory with
+#'   \code{\link[base]{gc}} in parallel is impossible, thus this feature is disabled if \code{chunk.ncpus}
+#'   is greater than one.
 #'
-#'   Defaults can be set in the \code{\link{Registry}} via
-#'   \code{default.resources}. Settings in \code{resources} overrule those in
-#'   \code{default.resources}.
+#'   Defaults for all resources, the reserved as well as the those depending on your template, can be stored in the \code{\link{Registry}} in
+#'   \code{default.resources} (e.g., using a configuration file).
+#'   Individual settings set via \code{resources} \code{resources} overrule those in \code{default.resources}.
 #' @template reg
 #' @return [\code{\link{data.table}}]. Table with columns \dQuote{job.id} and \dQuote{chunk}.
 #' @export

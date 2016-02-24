@@ -32,7 +32,7 @@ test_that("parallel execution works", {
   reg = makeTempRegistry(FALSE)
   fun = function(i) i^2
   batchMap(fun, i = 1:4, reg = reg)
-  submitJobs(chunkIds(reg = reg), resources = list(ncpus = 2), reg = reg)
+  submitJobs(chunkIds(reg = reg), resources = list(chunk.ncpus = 2), reg = reg)
   waitForJobs(reg = reg)
   expect_true(nrow(findDone(reg = reg)) == 4)
 })

@@ -4,16 +4,13 @@
 \alias{doJobCollection}
 \title{Execute Jobs of a JobCollection}
 \usage{
-doJobCollection(jc, con = stdout())
+doJobCollection(jc)
 }
 \arguments{
 \item{jc}{[\code{\link{JobCollection}}]\cr
 Either an object of class \dQuote{JobCollection} as returned by
 \code{\link{makeJobCollection}} or a string point to file containing a
 \dQuote{JobCollection} (saved with \code{\link[base]{saveRDS}}).}
-
-\item{con}{[\code{\link[base]{connection}}]\cr
-A connection to redirect the output to.}
 }
 \value{
 [\code{data.table}]. Data table with updates on the computational
