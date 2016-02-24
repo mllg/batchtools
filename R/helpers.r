@@ -146,3 +146,18 @@ droplevel = function(x, lvl) {
 count = function(x) {
   .Call(count_not_missing, x)
 }
+
+capture = function(expr) {
+  output = character(0L)
+  con = textConnection("output","w", local = TRUE)
+  sink(file = con)
+  sink(file = con, type = "message")
+  on.exit({ sink(type = "message"); sink(); close(con) })
+  res = try(eval(expr, parent.frame()))
+  list(output = output, res = res)
+}
+
+
+filterNull = function(x) {
+  x[!vlapply(x, is.null)]
+}

@@ -27,6 +27,7 @@
 #' @import data.table
 #' @import stringi
 #' @import backports
+#' @import R6
 #' @importFrom progress progress_bar
 #' @importFrom stats runif
 #' @importFrom utils capture.output head tail

@@ -21,15 +21,8 @@ makeClusterFunctionsInteractive = function(write.logs = TRUE) {
   assertFlag(write.logs)
 
   submitJob = function(reg, jc) {
-    if (write.logs) {
-      fp = file(jc$log.file, open = "wt")
-      on.exit(close(fp))
-    } else {
-      fp = stdout()
-    }
-
-    # sink both output and message streams
-    doJobCollection(jc, con = fp)
+    out = capture(doJobCollection(jc))
+    writeLines(out$output, con = jc$log.file)
 
     # return job result (always successful)
     makeSubmitJobResult(status = 0L, batch.id = "cfInteractive", msg = "")

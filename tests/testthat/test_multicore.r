@@ -16,3 +16,12 @@ test_that("cf multicore", {
     expect_equal(findNotDone(reg = reg), findJobs(ids = 2, reg = reg))
   })
 })
+
+test_that("chunk parallelization works", {
+  skip("Manual test")
+
+  p = Parallel$new(4)
+  reg = makeTempRegistry(TRUE, packages = "rscimark")
+  batchMap(function(i) rscimark(), i = 1:8, reg = reg)
+  submitJobs(chunkIds(1:8), reg = reg)
+})

@@ -15,7 +15,7 @@ test_that("Job", {
   expect_function(job$fun)
 
   jc = makeJobCollection(reg = reg)
-  job = getJob(jc, 1, cache = Cache(reg$file.dir))
+  job = getJob(jc, 1)
   expect_is(job, "Job")
   expect_output(job, "Job with id")
   expect_identical(job$job.id, 1L)
@@ -43,7 +43,7 @@ test_that("Experiment", {
   expect_is(job$algorithm, "Algorithm")
 
   jc = makeJobCollection(reg = reg)
-  job = getJob(jc, 1, cache = Cache(reg$file.dir))
+  job = getJob(jc, 1)
   expect_is(job, "Experiment")
   expect_output(job, "Experiment with id")
   expect_identical(job$job.id, 1L)
