@@ -60,7 +60,7 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
 
   assertRegistry(reg)
   ids = asJobIds(reg, ids, keep.extra = TRUE)
-  assertCharacter(group.by, any.missing = FALSE)
+  assertCharacter(group.by, any.missing = FALSE, min.chars = 1L)
 
   x = is.null(n.chunks) + is.null(chunk.size)
   if (x == 0L) {

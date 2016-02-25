@@ -185,12 +185,12 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
   tab = inner_join(filter(reg$status, ids), reg$defs)[, c("job.id", "pars", "problem", "algorithm", "repl"), with = FALSE]
 
   if (!is.null(prob.name)) {
-    assertCharacter(prob.name, any.missing = FALSE)
+    assertCharacter(prob.name, any.missing = FALSE, min.chars = 1L)
     tab = tab[problem %in% prob.name]
   }
 
   if (!is.null(algo.name)) {
-    assertCharacter(algo.name, any.missing = FALSE)
+    assertCharacter(algo.name, any.missing = FALSE, min.chars = 1L)
     tab = tab[algorithm %in% algo.name]
   }
 

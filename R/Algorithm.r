@@ -2,7 +2,7 @@
 #' @export
 addAlgorithm = function(name, fun, reg = getDefaultRegistry())  {
   assertExperimentRegistry(reg, writeable = TRUE)
-  assertString(name)
+  assertString(name, min.chars = 1L)
   if (!stri_detect_regex(name, "^[[:alnum:]_.-]+$"))
     stopf("Illegal characters in problem name: %s", name)
   if (is.null(fun)) {
