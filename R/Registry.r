@@ -102,8 +102,8 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = g
   assertString(work.dir)
   assertDirectory(work.dir, access = "r")
   assertString(conf.file)
-  assertCharacter(packages, any.missing = FALSE)
-  assertCharacter(namespaces, any.missing = FALSE)
+  assertCharacter(packages, any.missing = FALSE, min.chars = 1L)
+  assertCharacter(namespaces, any.missing = FALSE, min.chars = 1L)
   assertFlag(make.default)
   seed = if (is.null(seed)) as.integer(runif(1L, 1, .Machine$integer.max / 2L)) else asCount(seed, positive = TRUE)
 

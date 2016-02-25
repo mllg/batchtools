@@ -38,7 +38,7 @@
 #' @aliases ClusterFunctions
 #' @family ClusterFunctions
 makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, array.envir.var = NA_character_, store.job = TRUE) {
-  assertString(name)
+  assertString(name, min.chars = 1L)
   if (!is.null(submitJob))
     assertFunction(submitJob, c("reg", "jc"))
   if (!is.null(killJob))
@@ -155,7 +155,7 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 #' @family ClusterFunctionsHelper
 #' @export
 cfBrewTemplate = function(reg, template, jc) {
-  assertString(template, na.ok = FALSE)
+  assertString(template)
 
   outfile = if (reg$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
   parent.env(jc) = .GlobalEnv
@@ -186,7 +186,7 @@ cfBrewTemplate = function(reg, template, jc) {
 #' @family ClusterFunctionsHelper
 #' @export
 cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
-  assertString(cmd)
+  assertString(cmd, min.chars = 1L)
   exit.code = asInt(exit.code)
   assertCharacter(output, any.missing = FALSE)
   msg = sprintf("Command '%s' produced exit code %i. Output: '%s'", cmd, exit.code, stri_join(output, collapse = "\n"))
@@ -213,8 +213,8 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 #' @family ClusterFunctionsHelper
 #' @export
 cfKillBatchJob = function(cmd, batch.id, max.tries = 3L) {
-  assertString(cmd)
-  assertString(batch.id)
+  assertString(cmd, min.chars = 1L)
+  assertString(batch.id, min.chars = 1L)
   max.tries = asCount(max.tries)
 
   for (tmp in seq_len(max.tries)) {
@@ -249,7 +249,7 @@ getBatchIds = function(reg, status = "all") {
 runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost", stop.on.exit.code = TRUE, debug = FALSE) {
   assertCharacter(sys.cmd, any.missing = FALSE, len = 1L)
   assertCharacter(sys.args, any.missing = FALSE)
-  assertString(nodename)
+  assertString(nodename, min.chars = 1L)
   assertFlag(stop.on.exit.code)
   assertFlag(debug)
 

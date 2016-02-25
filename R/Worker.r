@@ -32,7 +32,7 @@ makeWorker = function(nodename, ncpus = 0L, max.load = Inf, debug = FALSE) {
     }
   }
 
-  assertString(nodename)
+  assertString(nodename, min.chars = 1L)
   assertNumber(max.load, lower = 0)
   ncpus = asInt(ncpus)
   assertFlag(debug)
