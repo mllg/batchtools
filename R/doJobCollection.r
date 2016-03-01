@@ -27,11 +27,11 @@ doJobCollection.character = function(jc) {
 
 #' @export
 doJobCollection.JobCollection = function(jc) {
-  loadRegistryPackages(jc$packages, jc$namespaces)
   n.jobs = nrow(jc$defs)
   cache = Cache$new(jc$file.dir)
   ncpus = min(n.jobs, jc$resources$chunk.ncpus %??% 1L)
   measure.memory = (jc$resources$measure.memory %??% FALSE) && ncpus == 1L
+
 
   s = stamp()
   catf("[job(chunk): %s] Starting calculation of %i jobs", s, n.jobs)
@@ -39,6 +39,9 @@ doJobCollection.JobCollection = function(jc) {
   prev.wd = getwd()
   setwd(jc$work.dir)
   on.exit(setwd(prev.wd))
+
+  loadRegistryPackages(jc$packages, jc$namespaces)
+  loadExtraFiles(jc$extra.files)
 
   catf("[job(chunk): %s] Using %i cpus", s, ncpus)
   catf("[job(chunk): %s] Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"))

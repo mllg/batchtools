@@ -28,7 +28,7 @@ grepLogs = function(pattern, ids = NULL, reg = getDefaultRegistry()) {
     return(NULL)
   })
   names(res) = ids$job.id
-  res[!vlapply(res, is.null)]
+  filterNull(res)
 }
 
 readLog = function(id, impute = NULL, reg = getDefaultRegistry()) {
