@@ -49,6 +49,9 @@ testJob = function(id, fresh.session = FALSE, reg = getDefaultRegistry()) {
       stopf("testJob() failed for job with id=%i. To properly debug, re-run with fresh.session = FALSE", id$job.id)
     }
   } else {
+    # FIXME: switch WD ... use withr?
+    loadRegistryPackages(reg$packages, reg$namespaces)
+    loadExtraFiles(reg$extra.files)
     execJob(job = job)
   }
 }

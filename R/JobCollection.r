@@ -41,11 +41,12 @@ createCollection = function(ids, resources = list(), reg = getDefaultRegistry())
   jc$file.dir   = reg$file.dir
   jc$work.dir   = reg$work.dir
   jc$seed       = reg$seed
-  jc$job.hash   = getRandomString()
+  jc$job.hash   = digest::digest(list(runif(1L), Sys.time())) # random string
   jc$uri        = npath(reg$file.dir, "jobs", sprintf("%s.rds", jc$job.hash))
   jc$log.file   = npath(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
   jc$packages   = reg$packages
   jc$namespaces = reg$namespaces
+  jc$exta.files = reg$extra.files
   jc$resources  = resources
   jc$compress   = getOption("batchtools.compress", TRUE)
   return(jc)

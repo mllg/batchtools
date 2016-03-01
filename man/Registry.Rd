@@ -20,8 +20,8 @@ clearDefaultRegistry()
 
 makeRegistry(file.dir = "registry", work.dir = getwd(),
   conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"),
-  packages = character(0L), namespaces = character(0L), seed = NULL,
-  make.default = TRUE)
+  packages = character(0L), namespaces = character(0L),
+  extra.files = character(0L), seed = NULL, make.default = TRUE)
 
 makeTempRegistry(make.default = FALSE,
   temp.dir = getOption("batchtools.temp.dir", tempdir()), ...)
@@ -64,6 +64,10 @@ Default is \code{character(0)}.}
 Same as \code{packages}, but the packages will not be attached.
 Uses \code{\link[base]{requireNamespace}} internally.
 Default is \code{character(0)}.}
+
+\item{extra.files}{[\code{character}]\cr
+Additional files which will be sourced (file extension \dQuote{.R}) or loaded (file extensions \dQuote{.rds} and
+\dQuote{.RData}) on the slaves.}
 
 \item{seed}{[\code{integer(1)}]\cr
 Start seed for jobs. Each job uses the (\code{seed} + \code{job.id}) as seed.

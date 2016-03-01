@@ -1,3 +1,18 @@
+asJobIds = function(reg, ids = NULL, default = NULL, keep.extra = FALSE) {
+  if (is.null(ids) && !is.null(default))
+    return(default)
+  res = filter(reg$status, ids)[, "job.id", with = FALSE]
+  if (keep.extra && is.data.frame(ids)) inner_join(res, ids) else res
+}
+
+assertJobIds = function(ids, empty.ok = TRUE, single.id = FALSE) {
+  if (!empty.ok && nrow(ids) == 0L)
+    stop("You must provide at least 1 id")
+  if (single.id && nrow(ids) != 1L)
+    stopf("You must provide exactly 1 id (%i provided)", nrow(ids))
+  ids
+}
+
 filter = function(x, ids = NULL) {
   if (is.null(ids))
     return(x)
@@ -15,21 +30,6 @@ inner_join = function(x, y, on = key(y)) {
   x[y, nomatch = 0, on = on]
 }
 
-asJobIds = function(reg, ids = NULL, default = NULL, keep.extra = FALSE) {
-  if (is.null(ids) && !is.null(default))
-    return(default)
-  res = filter(reg$status, ids)[, "job.id", with = FALSE]
-  if (keep.extra && is.data.frame(ids)) inner_join(res, ids) else res
-}
-
-assertJobIds = function(ids, empty.ok = TRUE, single.id = FALSE) {
-  if (!empty.ok && nrow(ids) == 0L)
-    stop("You must provide at least 1 id")
-  if (single.id && nrow(ids) != 1L)
-    stopf("You must provide exactly 1 id (%i provided)", nrow(ids))
-  ids
-}
-
 now = function() {
   as.integer(Sys.time())
 }
@@ -42,13 +42,9 @@ npath = function(file.dir, ...) {
   stri_replace_all_fixed(file.path(normalizePath(file.dir, winslash = "/", mustWork = FALSE), ...), "\\", "/")
 }
 
-getRandomString = function() {
-  digest::digest(list(runif(1L), Sys.time()))
-}
-
 insert = function(x, y) {
   x[names2(y)] = y
-  x
+  x[order(names2(x))]
 }
 
 writeRDS = function(object, file, wait = FALSE, compress = getOption("batchtools.compress", TRUE)) {
@@ -160,4 +156,12 @@ capture = function(expr) {
 
 filterNull = function(x) {
   x[!vlapply(x, is.null)]
+}
+
+splitFilename = function(x) {
+  if (length(x) == 0L)
+    return(matrix(NA_character_, ncol = 2L, nrow = 0L, dimnames = list(NULL, c("name", "ext"))))
+  x = stri_match_last_regex(basename(x), "(.+)\\.([[:alnum:]]+)$")[, 2:3]
+  colnames(x) = c("name", "ext")
+  return(x)
 }

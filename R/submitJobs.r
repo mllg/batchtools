@@ -60,7 +60,6 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   }
 
   resources = insert(reg$default.resources, resources)
-  resources = resources[order(names2(resources))]
   res.hash = digest::digest(resources)
   resources.hash = NULL
   res.id = head(reg$resources[resources.hash == res.hash, "resource.id", with = FALSE]$resource.id, 1L)

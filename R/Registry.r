@@ -56,6 +56,9 @@ clearDefaultRegistry = function() {
 #'   Same as \code{packages}, but the packages will not be attached.
 #'   Uses \code{\link[base]{requireNamespace}} internally.
 #'   Default is \code{character(0)}.
+#' @param extra.files [\code{character}]\cr
+#'   Additional files which will be sourced (file extension \dQuote{.R}) or loaded (file extensions \dQuote{.rds} and
+#'   \dQuote{.RData}) on the slaves.
 #' @param seed [\code{integer(1)}]\cr
 #'   Start seed for jobs. Each job uses the (\code{seed} + \code{job.id}) as seed.
 #'   Default is a random number in the range [1, \code{.Machine$integer.max/2}].
@@ -96,7 +99,8 @@ clearDefaultRegistry = function() {
 #' # Change default packages
 #' reg$packages = c("MASS")
 #' saveRegistry(reg = reg)
-makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"), packages = character(0L), namespaces = character(0L), seed = NULL, make.default = TRUE) {
+makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"), packages = character(0L), namespaces = character(0L),
+  extra.files = character(0L), seed = NULL, make.default = TRUE) {
   assertString(file.dir)
   assertPathForOutput(file.dir, overwrite = FALSE)
   assertString(work.dir)
@@ -104,6 +108,9 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = g
   assertString(conf.file)
   assertCharacter(packages, any.missing = FALSE, min.chars = 1L)
   assertCharacter(namespaces, any.missing = FALSE, min.chars = 1L)
+  assertCharacter(extra.files, any.missing = FALSE, min.chars = 1L)
+  if (!all(stri_trans_tolower(splitFilename(extra.files)[, "ext"]) %in% c("r", "rds", "rdata")))
+    stop("All extra files must have one of the file extensions 'R', 'rds' or 'RData' (case insensitive)")
   assertFlag(make.default)
   seed = if (is.null(seed)) as.integer(runif(1L, 1, .Machine$integer.max / 2L)) else asCount(seed, positive = TRUE)
 
@@ -121,6 +128,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = g
   reg$work.dir = work.dir
   reg$packages = packages
   reg$namespaces = namespaces
+  reg$exta.files = extra.files
   reg$seed = seed
   reg$writeable = TRUE
   reg$debug = FALSE
@@ -257,6 +265,19 @@ loadRegistryPackages = function(packages, namespaces) {
   if (!all(ok))
     stopf("Failed to load namespaces: %s", stri_join(namespaces[!ok], collapse = ", "))
 
+  invisible(TRUE)
+}
+
+loadExtraFiles = function(files) {
+  if (length(files) > 0L) {
+    Map(function(fn, ext) {
+      switch(ext,
+        r = sys.source(fn, envir = .GlobalEnv),
+        rdata = load(fn, envir = .GlobalEnv),
+        stop("File extension (not yet) supported")
+      )
+    }, fn = files, ext = stri_trans_tolower(getFileExtenstion(files)))
+  }
   invisible(TRUE)
 }
 
