@@ -18,7 +18,7 @@
 makeClusterFunctionsSSH = function(workers) {
   force(workers)
   assertList(workers, types = "Worker")
-  if (.Platform$OS.type == "windows")
+  if (testOS("windows"))
     stop("clusterFunctionsSSH not compatible with Windows")
   nodenames = vcapply(workers, "[[", "nodename")
   if (anyDuplicated(nodenames))
@@ -27,29 +27,30 @@ makeClusterFunctionsSSH = function(workers) {
   rm(nodenames)
 
   submitJob = function(reg, jc) {
-    rload = vnapply(workers, function(w) w$status$load / w$ncpus)
-    worker = Find(function(w) w$available == "avail", sample(workers, prob = 1 / (rload + 0.1)), nomatch = NULL)
+    lapply(workers, function(w) w$update())
+    rload = vnapply(workers, function(w) w$load / w$ncpus)
+    worker = Find(function(w) w$status == "available", sample(workers, prob = 1 / (rload + 0.1)), nomatch = NULL)
 
-    if (!is.null(worker) && worker$available == "avail") {
-      pid = try(startWorkerJob(worker, reg, jc$uri, jc$log.file))
+    if (!is.null(worker) && worker$status == "available") {
+      pid = try(worker$start(reg, jc$uri, jc$log.file))
       if (is.error(pid)) {
         makeSubmitJobResult(status = 101L, batch.id = NA_character_, msg = "Submit failed.")
       } else {
-        worker$available = "unknown"
         makeSubmitJobResult(status = 0L, batch.id = sprintf("%s#%s", worker$nodename, pid))
       }
     } else {
-      makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = "Busy")
+      makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = sprintf("Busy: %s", worker$status))
     }
   }
 
   killJob = function(reg, batch.id) {
     parts = stri_split_fixed(batch.id, "#")[[1L]]
-    killWorkerJob(workers[[parts[1L]]], reg, parts[2L])
+    worker = workers[[parts[1L]]]
+    worker$kill(parts[2L])
   }
 
   listJobsRunning = function(reg) {
-    unlist(lapply(workers, listWorkerJobs, reg = reg), use.names = FALSE)
+    unlist(lapply(workers, function(w) w$list(reg)), use.names = FALSE)
   }
 
   makeClusterFunctions(name = "SSH", submitJob = submitJob, killJob = killJob,
