@@ -276,7 +276,7 @@ loadExtraFiles = function(files) {
         rdata = load(fn, envir = .GlobalEnv),
         stop("File extension (not yet) supported")
       )
-    }, fn = files, ext = stri_trans_tolower(getFileExtenstion(files)))
+    }, fn = files, ext = stri_trans_tolower(splitFilename(files)["ext"]))
   }
   invisible(TRUE)
 }

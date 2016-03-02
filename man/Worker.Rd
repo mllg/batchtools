@@ -12,7 +12,7 @@ Worker
 [\code{\link{Worker}}].
 }
 \description{
-\code{\link[R6]{R6class}} to create local and remote linux workers.
+\code{\link[R6]{R6Class}} to create local and remote linux workers.
 }
 \section{Fields}{
 
