@@ -10,7 +10,7 @@ test_that("clusterFunctions constructor", {
   check(reg$cluster.functions)
   check(makeClusterFunctionsInteractive())
   check(makeClusterFunctionsMulticore(ncpus = 1, max.load = 1))
-  check(makeClusterFunctionsSSH(workers = list(makeWorker(nodename = "localhost", ncpus = 1L))))
+  check(makeClusterFunctionsSSH(workers = list(Worker$new(nodename = "localhost", ncpus = 1L))))
   check(makeClusterFunctionsSGE(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools"))) # FIXME
   check(makeClusterFunctionsTorque(system.file(file.path("templates", "torque_lido.tmpl"), package = "batchtools")))
   check(makeClusterFunctionsSLURM(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools")))

@@ -5,7 +5,7 @@
 \title{ClusterFunctions for Local Multicore Execution}
 \usage{
 makeClusterFunctionsMulticore(ncpus = max(getOption("mc.cores",
-  parallel::detectCores()), 1L), max.load = Inf)
+  parallel::detectCores()), 1L), max.load = Inf, debug = FALSE)
 }
 \arguments{
 \item{ncpus}{[\code{integer(1)}]\cr
@@ -16,6 +16,9 @@ and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}
 \item{max.load}{[\code{numeric(1)}]\cr
 Load average (of the last 5 min) at which the worker is considered occupied,
 so that no job can be submitted. Default is \code{Inf}.}
+
+\item{debug}{[\code{logical(1)}]\cr
+Set to \code{TRUE} to get more messages for debugging.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
