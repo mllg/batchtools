@@ -28,9 +28,9 @@ doJobCollection.character = function(jc) {
 #' @export
 doJobCollection.JobCollection = function(jc) {
   n.jobs = nrow(jc$defs)
-  cache = Cache$new(jc$file.dir)
   ncpus = min(n.jobs, jc$resources$chunk.ncpus %??% 1L)
-  measure.memory = (jc$resources$measure.memory %??% FALSE) && ncpus == 1L
+  measure.memory = ncpus == 1L && (jc$resources$measure.memory %??% FALSE)
+  cache = Cache$new(jc$file.dir)
 
 
   s = stamp()
@@ -71,7 +71,7 @@ doJobCollection.JobCollection = function(jc) {
   results = p$collect()
   if (length(results) > 0L) {
     updates = rbind(updates, rbindlist(lapply(results, "[[", "update")))
-    cat(unlist(lapply(results, "[[", "output")), sep = "\n")
+    lapply(results, function(r) catf(r$output))
   }
   writeRDS(updates, file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count + 1L)), wait = TRUE, compress = jc$compress)
 

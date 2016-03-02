@@ -4,7 +4,7 @@
 #' Jobs are spawned by starting multiple R sessions via SSH.
 #'
 #' @param workers [\code{list} of \code{\link{Worker}}]\cr
-#'   List of Workers as constructed with \code{\link{makeWorker}}.
+#'   List of Workers as constructed with \code{\link{Worker}}.
 #'
 #' @note
 #' If you use a custom \dQuote{.ssh/config} file, make sure your

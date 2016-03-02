@@ -3,7 +3,7 @@
 #' @format An \code{\link{R6Class}} generator object
 #'
 #' @description
-#' \code{\link[R6]{R6class}} to create local and remote linux workers.
+#' \code{\link[R6]{R6Class}} to create local and remote linux workers.
 #'
 #' @field nodename Host name. Set via constructor.
 #' @field ncpus Number of VPUs of worker. Set via constructor.

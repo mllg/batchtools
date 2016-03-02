@@ -8,7 +8,7 @@ makeClusterFunctionsSSH(workers)
 }
 \arguments{
 \item{workers}{[\code{list} of \code{\link{Worker}}]\cr
-List of Workers as constructed with \code{\link{makeWorker}}.}
+List of Workers as constructed with \code{\link{Worker}}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
