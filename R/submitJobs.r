@@ -16,8 +16,7 @@
 #'   your template file.
 #'   The resources \code{chunk.ncpus} and \code{measure.memory} are reserved for internal functionality:
 #'   The setting \code{chunk.ncpus} is used to determine the number of CPUs to execute jobs in a
-#'   chunk in parallel using \code{\link[parallel]{mcparallel}}. If not set, \code{chunk.ncpus}
-#'   defaults to 1 (sequential execution).
+#'   chunk in parallel via \code{mcparallel}. If not set, \code{chunk.ncpus} defaults to 1 (sequential execution).
 #'   The second resource, \code{measure.memory}, can be set to \code{TRUE} to enable the measure of
 #'   memory requirements using \code{\link[base]{gc}}. But note that the reported values are quite
 #'   heuristic and may not reflect the real memory requirements. Furthermore, measuring memory with
