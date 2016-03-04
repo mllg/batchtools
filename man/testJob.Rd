@@ -40,6 +40,7 @@ testJob(1, reg = reg)
 }
 }
 \seealso{
-Other debug: \code{\link{killJobs}}, \code{\link{showLog}}
+Other debug: \code{\link{grepLogs}},
+  \code{\link{killJobs}}, \code{\link{showLog}}
 }
 

@@ -14,10 +14,8 @@ reduceResultsDataTable(ids = NULL, fun = NULL, ..., fill = FALSE,
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})
 with a column named \dQuote{job.id}.
-This is usually the result of a \code{\link{findJobs}} operation, but you may also
-pass any other table here, e.g. the return of \code{\link{getJobInfo}}.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to result of \code{\link{findDone}}.}
+If not set, defaults to the return value of \code{\link{findDone}}.}
 
 \item{fun}{[\code{function}]\cr
 Function to apply to each result. The result is passed unnamed as first

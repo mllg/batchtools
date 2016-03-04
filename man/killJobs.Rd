@@ -10,10 +10,8 @@ killJobs(ids = NULL, reg = getDefaultRegistry())
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})
 with a column named \dQuote{job.id}.
-This is usually the result of a \code{\link{findJobs}} operation, but you may also
-pass any other table here, e.g. the return of \code{\link{getJobInfo}}.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to result of \code{\link{findOnSystem}}.}
+If not set, defaults to the return value of \code{\link{findOnSystem}}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
@@ -31,6 +29,7 @@ batch jobs again. If this fails again for some jobs, the function gives up. Only
 killed are reset in the DB.
 }
 \seealso{
-Other debug: \code{\link{showLog}}, \code{\link{testJob}}
+Other debug: \code{\link{grepLogs}}, \code{\link{showLog}},
+  \code{\link{testJob}}
 }
 
