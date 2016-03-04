@@ -40,8 +40,7 @@ doJobCollection.JobCollection = function(jc) {
   setwd(jc$work.dir)
   on.exit(setwd(prev.wd))
 
-  loadRegistryPackages(jc$packages, jc$namespaces)
-  loadExtraFiles(jc$extra.files)
+  loadRegistryDependencies(jc, switch.wd = FALSE)
 
   catf("[job(chunk): %s] Using %i cpus", s, ncpus)
   catf("[job(chunk): %s] Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"))

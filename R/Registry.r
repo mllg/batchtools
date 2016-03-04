@@ -56,9 +56,12 @@ clearDefaultRegistry = function() {
 #'   Same as \code{packages}, but the packages will not be attached.
 #'   Uses \code{\link[base]{requireNamespace}} internally.
 #'   Default is \code{character(0)}.
-#' @param extra.files [\code{character}]\cr
-#'   Additional files which will be sourced (file extension \dQuote{.R}) or loaded (file extensions \dQuote{.rds} and
-#'   \dQuote{.RData}) on the slaves.
+#' @param source [\code{character}]\cr
+#'   Files which should be sourced on the slaves prior to executing a job.
+#'   Calls \code{\link[base]{sys.source}} using the \code{\link[base]{.GlobalEnv}}.
+#' @param load [\code{character}]\cr
+#'   Files which should be loaded on the slaves prior to executing a job.
+#'   Calls \code{\link[base]{load}} using the \code{\link[base]{.GlobalEnv}}.
 #' @param seed [\code{integer(1)}]\cr
 #'   Start seed for jobs. Each job uses the (\code{seed} + \code{job.id}) as seed.
 #'   Default is a random number in the range [1, \code{.Machine$integer.max/2}].
@@ -100,7 +103,7 @@ clearDefaultRegistry = function() {
 #' reg$packages = c("MASS")
 #' saveRegistry(reg = reg)
 makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"), packages = character(0L), namespaces = character(0L),
-  extra.files = character(0L), seed = NULL, make.default = TRUE) {
+  source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
   assertString(file.dir)
   assertPathForOutput(file.dir, overwrite = FALSE)
   assertString(work.dir)
@@ -108,13 +111,12 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = g
   assertString(conf.file)
   assertCharacter(packages, any.missing = FALSE, min.chars = 1L)
   assertCharacter(namespaces, any.missing = FALSE, min.chars = 1L)
-  assertCharacter(extra.files, any.missing = FALSE, min.chars = 1L)
-  if (!all(stri_trans_tolower(splitFilename(extra.files)[, "ext"]) %in% c("r", "rds", "rdata")))
-    stop("All extra files must have one of the file extensions 'R', 'rds' or 'RData' (case insensitive)")
+  assertCharacter(source, any.missing = FALSE, min.chars = 1L)
+  assertCharacter(load, any.missing = FALSE, min.chars = 1L)
   assertFlag(make.default)
   seed = if (is.null(seed)) as.integer(runif(1L, 1, .Machine$integer.max / 2L)) else asCount(seed, positive = TRUE)
 
-  loadRegistryPackages(packages, namespaces)
+  loadRegistryDependencies(list(work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
 
   dir.create(file.dir, recursive = TRUE)
   dir.create(file.path(file.dir, "jobs"))
@@ -128,7 +130,8 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = g
   reg$work.dir = work.dir
   reg$packages = packages
   reg$namespaces = namespaces
-  reg$exta.files = extra.files
+  reg$source = source
+  reg$load = load
   reg$seed = seed
   reg$writeable = TRUE
   reg$debug = FALSE
@@ -232,7 +235,7 @@ loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = getO
   if (!dir.exists(reg$work.dir))
     warningf("The work.dir '%s' does not exist, jobs might fail to run on this system.", reg$work.dir)
 
-  loadRegistryPackages(reg$packages, reg$namespaces)
+  loadRegistryDependencies(reg, switch.wd = TRUE)
   reg$cluster.functions = makeClusterFunctionsInteractive()
   if (file.exists(conf.file)) {
     parent.env(reg) = .GlobalEnv
@@ -256,28 +259,31 @@ saveRegistry = function(reg = getDefaultRegistry()) {
   }
 }
 
-loadRegistryPackages = function(packages, namespaces) {
-  ok = vlapply(packages, require, character.only = TRUE)
+loadRegistryDependencies = function(x, switch.wd = TRUE) {
+  ok = vlapply(x$packages, require, character.only = TRUE)
   if (!all(ok))
-    stopf("Failed to load packages: %s", stri_join(packages[!ok], collapse = ", "))
+    stopf("Failed to load packages: %s", stri_join(x$packages[!ok], collapse = ", "))
 
-  ok = vlapply(namespaces, requireNamespace)
+  ok = vlapply(x$namespaces, requireNamespace)
   if (!all(ok))
-    stopf("Failed to load namespaces: %s", stri_join(namespaces[!ok], collapse = ", "))
+    stopf("Failed to load namespaces: %s", stri_join(x$namespaces[!ok], collapse = ", "))
 
-  invisible(TRUE)
-}
-
-loadExtraFiles = function(files) {
-  if (length(files) > 0L) {
-    Map(function(fn, ext) {
-      switch(ext,
-        r = sys.source(fn, envir = .GlobalEnv),
-        rdata = load(fn, envir = .GlobalEnv),
-        stop("File extension (not yet) supported")
-      )
-    }, fn = files, ext = stri_trans_tolower(splitFilename(files)["ext"]))
+  if (switch.wd) {
+    wd = getwd()
+    on.exit(setwd(wd))
+    setwd(x$work.dir)
   }
+
+  if (length(x$source) > 0L) {
+    assertFile(x$source)
+    lapply(x$source, sys.source, envir = .GlobalEnv)
+  }
+
+  if (length(x$load) > 0L) {
+    assertFile(x$load)
+    lapply(x$load, load, envir = .GlobalEnv)
+  }
+
   invisible(TRUE)
 }
 
