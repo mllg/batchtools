@@ -17,10 +17,10 @@ grepLogs = function(ids = NULL, pattern, reg = getDefaultRegistry()) {
   if (!nzchar(pattern))
     return(ids)
 
-  found = lapply(ids$job.id, function(id) {
+  found = vlapply(ids$job.id, function(id) {
     lines = readLog(id, impute = NA_character_, reg = reg)
     !testScalarNA(lines) && any(stri_detect_regex(lines, pattern))
   })
 
-  ids[found, ]
+  ids[found, "job.id", with = FALSE]
 }
