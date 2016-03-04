@@ -90,7 +90,7 @@ findError = function(ids = NULL, reg = getDefaultRegistry()) {
 
 
 #' @export
-#' @param status [\code{character(1)}]\cr
+#' @param status [\code{character(1)}]\cr
 #'  If set to \dQuote{all} (default), \code{findOnSystem} finds all jobs on the system.
 #'  If set to \dQuote{queued} or \dQuote{running}, the result is restricted to queued
 #'  or running jobs, respectively.
