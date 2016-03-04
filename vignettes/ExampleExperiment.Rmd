@@ -34,7 +34,7 @@ This can be a matrix, data frame or array that always stays the same for all sub
 Therefore the function [`addProblem()`](https://mllg.github.io/batchtools/ProblemAlgorithm.html) accepts static parts in its `data` argument, which is passed to the argument `fun` which generates a (possibly stochastic) problem instance.
 For `data`, any R object can be used.
 If only `data` is given, the generated instance is `data`.
-The argument ´fun´ has to be a function with the arguments ´data´ and ´job´ (and optionally other arbitrary parameters).
+The argument `fun` has to be a function with the arguments `data` and `job` (and optionally other arbitrary parameters).
 The argument `job` is an object of type `Job` which holds additional information about the job (see, the manual page for a detailed listing).
 
 We want to split the iris data set into a training set and test set.
