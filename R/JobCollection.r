@@ -46,7 +46,8 @@ createCollection = function(ids, resources = list(), reg = getDefaultRegistry())
   jc$log.file   = npath(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
   jc$packages   = reg$packages
   jc$namespaces = reg$namespaces
-  jc$exta.files = reg$extra.files
+  jc$source     = reg$source
+  jc$load       = reg$load
   jc$resources  = resources
   jc$compress   = getOption("batchtools.compress", TRUE)
   return(jc)
