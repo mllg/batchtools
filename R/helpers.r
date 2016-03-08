@@ -14,16 +14,15 @@ assertJobIds = function(ids, empty.ok = TRUE, single.id = FALSE) {
 }
 
 filter = function(x, ids = NULL) {
+  # x = data.table(a = 1:10, b = rnorm(10), key = "a")
+  # w = x[list(c(1, 2, NA)), nomatch = 0L, which = TRUE]
   if (is.null(ids))
     return(x)
-  if (is.data.frame(ids)) {
-    w = x[ids, on = key(x), nomatch = 0L, which = TRUE]
-  } else if (qtest(ids, "x")) {
-    w = x[list(as.integer(ids)), nomatch = 0L, which = TRUE]
-  } else {
-    stop("Format of 'ids' not recognized. Must be a data frame with column 'job.id' or an integerish vector")
-  }
-  x[unique(w)]
+  if (is.data.frame(ids))
+    ids = ids$job.id
+  if (qtest(ids, "X"))
+    return(x[list(unique(as.integer(ids)))])
+  stop("Format of 'ids' not recognized. Must be a data frame with column 'job.id' or an integerish vector")
 }
 
 inner_join = function(x, y, on = key(y)) {
