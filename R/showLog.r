@@ -10,7 +10,9 @@
 showLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  id = assertJobIds(asJobIds(reg, id), single.id = TRUE)
+  id = asJobTable(reg, id)
+  if (nrow(id) != 1L)
+    stopf("You must provide exactly 1 id (%i provided)", nrow(id))
   lines = readLog(id, reg = reg)
 
   log.file = file.path(tempdir(), sprintf("%i.log", id$job.id))

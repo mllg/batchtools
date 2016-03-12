@@ -48,20 +48,20 @@ doJobCollection.JobCollection = function(jc) {
   prefetch(jc, cache)
 
   count = 1L
-  updates = data.table(job.id = integer(0L), started = integer(0L), done = integer(0L), error = character(0L), memory = double(0L))
+  updates = list()
   next.update = now() + as.integer(runif(1L, 300L, 1800L))
   p = if (ncpus == 1L || testOS("windows")) Sequential$new() else Parallel$new(ncpus)
 
   for (i in seq_len(n.jobs)) {
     results = p$spawn(doJob(jc$defs$job.id[i], jc, cache, measure.memory = measure.memory))
     if (length(results) > 0L) {
-      updates = rbind(updates, rbindlist(lapply(results, "[[", "update")))
-      cat(unlist(lapply(results, "[[", "output")), sep = "\n")
+      updates = c(updates, lapply(results, "[[", "update"))
+      lapply(results, function(r) catf(r$output))
     }
 
-    if (now() > next.update && nrow(updates) > 0L) {
-      writeRDS(updates, file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE, compress = jc$compress)
-      updates = list(job.id = integer(0L), started = integer(0L), done = integer(0L), error = character(0L), memory = double(0L))
+    if (length(updates) > 0L && now() > next.update) {
+      writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE, compress = jc$compress)
+      updates = list()
       count = count + 1L
       next.update = now() + as.integer(runif(1L, 300L, 1800L))
     }
@@ -69,10 +69,10 @@ doJobCollection.JobCollection = function(jc) {
 
   results = p$collect()
   if (length(results) > 0L) {
-    updates = rbind(updates, rbindlist(lapply(results, "[[", "update")))
+    updates = c(updates, lapply(results, "[[", "update"))
     lapply(results, function(r) catf(r$output))
   }
-  writeRDS(updates, file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count + 1L)), wait = TRUE, compress = jc$compress)
+  writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count + 1L)), wait = TRUE, compress = jc$compress)
 
   catf("[job(chunk): %s] Calculation finished ...", stamp())
   invisible(TRUE)

@@ -12,17 +12,19 @@ test_that("chunkIds", {
   ids = getJobDefs(reg = reg)[, c("job.id", "problem"), with = FALSE]
 
   res = chunkIds(ids, n.chunks = 1, reg = reg)
-  expect_data_table(res, ncol = 3L, any.missing = FALSE, key = "job.id")
-  expect_set_equal(names(res), c("job.id", "chunk", "problem"))
+  expect_data_table(res, ncol = 2L, any.missing = FALSE, key = "job.id")
+  expect_set_equal(names(res), c("job.id", "chunk"))
   expect_true(all(res$chunk == 1))
 
   res = chunkIds(ids, n.chunks = 1, group.by = "problem", reg = reg)
-  expect_data_table(res, ncol = 3L, any.missing = FALSE, key = "job.id")
-  expect_set_equal(names(res), c("job.id", "chunk", "problem"))
+  expect_data_table(res, ncol = 2L, any.missing = FALSE, key = "job.id")
+  expect_set_equal(names(res), c("job.id", "chunk"))
+  res = ids[res]
   expect_true(all(res[problem == "p1", chunk] == 1))
   expect_true(all(res[problem == "p2", chunk] == 2))
 
   res = chunkIds(ids, chunk.size = 10, group.by = "problem", reg = reg)
+  res = ids[res]
   tab = table(res$problem, res$chunk)
   expect_equal(as.numeric(tab[1, ]), rep(c(10, 0), c(3, 6)))
   expect_equal(as.numeric(tab[2, ]), rep(c(0, 10), c(3, 6)))
