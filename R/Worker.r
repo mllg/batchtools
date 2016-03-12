@@ -26,6 +26,7 @@
 #' Worker$new("localhost", ncpus = 4)
 #' }
 Worker = R6Class("Worker",
+  cloneable = FALSE,
   private = list(
     script = NULL,
     debug = NULL

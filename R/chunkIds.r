@@ -4,7 +4,7 @@
 #' Partition jobs into \dQuote{chunks} which will be executed together on the nodes.
 #'
 #' Chunks are submitted via \code{\link{submitJobs}} by simply providing
-#' job ids as a table with an additional column \dQuote{chunk}.
+#' a data frame with columns \dQuote{job.id} and \dQuote{chunk}.
 #' All jobs with the same chunk number will be grouped together on one node as a single
 #' computational job.
 #'
@@ -23,14 +23,13 @@
 #'   then the chunking is done in subgroups defined by the columns \code{group.by}.
 #'   See example.
 #' @template reg
-#' @return [\code{\link[data.table]{data.table}}]. Table \code{ids} with additional column
-#'   \dQuote{job.id}.
+#' @return [\code{\link[data.table]{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 #' @export
 #' @examples
 #' # chunking for Registry
 #' reg = makeTempRegistry(make.default = FALSE)
 #' ids = batchMap(identity, 1:25, reg = reg)
-#' ids = chunkIds(ids, chunk.size = 10, reg = reg)
+#' ids = ids[chunkIds(ids, chunk.size = 10, reg = reg)]
 #' print(ids)
 #' print(table(ids$chunk))
 #'
@@ -45,7 +44,7 @@
 #'
 #' # -> group into chunks of 5 jobs, but do not mix problems
 #' ids = getJobInfo(reg = reg)[, .(job.id, problem, algorithm)]
-#' ids = chunkIds(ids, chunk.size = 5, group.by = "problem", reg = reg)
+#' ids = ids[chunkIds(ids, chunk.size = 5, group.by = "problem", reg = reg)]
 #' print(ids)
 #' dcast(ids, chunk ~ problem)
 chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = character(0L), reg = getDefaultRegistry()) {
@@ -59,7 +58,7 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
   }
 
   assertRegistry(reg)
-  ids = asJobIds(reg, ids, keep.extra = TRUE)
+  ids = asJobTable(reg, ids, keep.extra = TRUE)
   assertCharacter(group.by, any.missing = FALSE, min.chars = 1L)
 
   x = is.null(n.chunks) + is.null(chunk.size)
@@ -82,5 +81,6 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
   } else {
     ids[, "chunk" := chunk(job.id, n.chunks = n.chunks, chunk.size = chunk.size)]
   }
-  return(ids[])
+
+  return(ids[, c("job.id", "chunk"), with = FALSE])
 }

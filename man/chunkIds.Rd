@@ -33,14 +33,13 @@ See example.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{\link[data.table]{data.table}}]. Table \code{ids} with additional column
-  \dQuote{job.id}.
+[\code{\link[data.table]{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 }
 \description{
 Partition jobs into \dQuote{chunks} which will be executed together on the nodes.
 
 Chunks are submitted via \code{\link{submitJobs}} by simply providing
-job ids as a table with an additional column \dQuote{chunk}.
+a data frame with columns \dQuote{job.id} and \dQuote{chunk}.
 All jobs with the same chunk number will be grouped together on one node as a single
 computational job.
 }
@@ -48,7 +47,7 @@ computational job.
 # chunking for Registry
 reg = makeTempRegistry(make.default = FALSE)
 ids = batchMap(identity, 1:25, reg = reg)
-ids = chunkIds(ids, chunk.size = 10, reg = reg)
+ids = ids[chunkIds(ids, chunk.size = 10, reg = reg)]
 print(ids)
 print(table(ids$chunk))
 
@@ -63,7 +62,7 @@ addExperiments(prob.designs, algo.designs, repls = 10, reg = reg)
 
 # -> group into chunks of 5 jobs, but do not mix problems
 ids = getJobInfo(reg = reg)[, .(job.id, problem, algorithm)]
-ids = chunkIds(ids, chunk.size = 5, group.by = "problem", reg = reg)
+ids = ids[chunkIds(ids, chunk.size = 5, group.by = "problem", reg = reg)]
 print(ids)
 dcast(ids, chunk ~ problem)
 }

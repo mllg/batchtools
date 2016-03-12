@@ -1,4 +1,5 @@
 Sequential = R6Class("Sequential",
+  cloneable = FALSE,
   public = list(
     spawn = function(expr) return(list(eval(expr))),
     collect = function() NULL
@@ -6,6 +7,7 @@ Sequential = R6Class("Sequential",
 )
 
 Parallel = R6Class("Parallel",
+  cloneable = FALSE,
   public = list(
     ncpus = NA_integer_,
 

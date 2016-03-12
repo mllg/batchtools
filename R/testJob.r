@@ -11,7 +11,7 @@
 #'  You will not be able to use debug tools like \code{\link[base]{traceback}}
 #'  or \code{\link[base]{browser}}.
 #'  If \code{fresh.session} is set to \code{FALSE} (default), \code{testJob} will
-#'  execute the job in the current R session and you are unable to spot
+#'  execute the job in the current R session, and you are unable to spot
 #'  missing variable declarations (possibly resolved in the global environment) as well
 #'  as forgotten package dependencies.
 #' @template reg
@@ -28,7 +28,9 @@
 testJob = function(id, fresh.session = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   assertFlag(fresh.session)
-  id = assertJobIds(asJobIds(reg, id), single.id = TRUE)
+  id = asJobTable(reg, id)
+  if (nrow(id) != 1L)
+    stopf("You must provide exactly 1 id (%i provided)", nrow(id))
   job = makeJob(id, reg = reg)
 
   if (fresh.session) {

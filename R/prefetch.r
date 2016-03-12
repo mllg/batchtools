@@ -1,4 +1,5 @@
 Cache = R6Class("Cache",
+  cloneable = FALSE,
   public = list(
     cache = list(),
     file.dir = NA_character_,
