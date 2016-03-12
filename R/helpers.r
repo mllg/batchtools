@@ -14,8 +14,6 @@ assertJobIds = function(ids, empty.ok = TRUE, single.id = FALSE) {
 }
 
 filter = function(x, ids = NULL) {
-  # x = data.table(a = 1:10, b = rnorm(10), key = "a")
-  # w = x[list(c(1, 2, NA)), nomatch = 0L, which = TRUE]
   if (is.null(ids))
     return(x)
   if (is.data.frame(ids))

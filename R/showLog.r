@@ -18,7 +18,7 @@ showLog = function(id, reg = getDefaultRegistry()) {
   file.show(log.file, delete.file = TRUE)
 }
 
-readLog = function(id, impute = NULL, reg = getDefaultRegistry()) {
+readLog = function(id, impute = NULL, reg = getDefaultRegistry(), read.fun = readLines) {
   x = reg$status[id, c("job.id", "done", "job.hash"), with = FALSE, nomatch = 0L]
   log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", x$job.hash))
   if (!file.exists(log.file)) {
@@ -27,7 +27,7 @@ readLog = function(id, impute = NULL, reg = getDefaultRegistry()) {
     return(impute)
   }
 
-  lines = readLines(log.file)
+  lines = read.fun(log.file)
   pattern = sprintf("\\[job\\((chunk|%i)\\):", x$job.id)
   lines[!stri_startswith_fixed(lines, "[job") | stri_detect_regex(lines, pattern)]
 }
