@@ -47,16 +47,12 @@ case $CMD in
     number-of-cpus)
         if [[ `uname` =~ "Linux" ]]; then
           cat /proc/cpuinfo | grep '^processor' | wc -l
-        else
-          sysctl -n hw.ncpu ## darwin
+        else ## darwin
+          sysctl -n hw.ncpu
         fi
         ;;
     start-job)
         RCMD="Rscript"
- 		# if command_exists setsid; then
-            # RCMD="setsid $RCMD"
-        # fi
-
         ${RCMD} -e "batchtools::doJobCollection('$1')" > "$2" 2>&1 &
         echo $!
         ;;
