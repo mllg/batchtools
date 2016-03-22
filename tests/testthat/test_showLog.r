@@ -3,8 +3,8 @@ context("showLog")
 test_that("showLog", {
   reg = makeTempRegistry(FALSE)
   batchMap(reg = reg, function(x) print("GREPME"), 1:2)
-  expect_error(showLog(id = 1, reg = reg), "not found")
-  expect_error(readLog(id = 1, reg = reg), "not found")
+  expect_error(showLog(id = 1, reg = reg), "not available")
+  expect_error(readLog(id = 1, reg = reg), "not available")
   ids = chunkIds(1:2, n.chunks = 1, reg = reg)
   silent({
     submitJobs(reg = reg, ids = ids)

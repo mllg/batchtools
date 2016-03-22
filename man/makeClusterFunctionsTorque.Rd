@@ -25,7 +25,8 @@ The template file can access all arguments passed to the \code{submitJob} functi
 handle the desired resource allocations.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsLSF}},
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+  \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsOpenLava}},
   \code{\link{makeClusterFunctionsSGE}},
   \code{\link{makeClusterFunctionsSLURM}},

@@ -19,17 +19,3 @@ showLog = function(id, reg = getDefaultRegistry()) {
   writeLines(text = lines, con = log.file)
   file.show(log.file, delete.file = TRUE)
 }
-
-readLog = function(id, impute = NULL, reg = getDefaultRegistry(), read.fun = readLines) {
-  x = reg$status[id, c("job.id", "done", "job.hash"), with = FALSE, nomatch = 0L]
-  log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", x$job.hash))
-  if (!file.exists(log.file)) {
-    if (is.null(impute))
-      stopf("Log file for job with id %i not found", x$job.id)
-    return(impute)
-  }
-
-  lines = read.fun(log.file)
-  pattern = sprintf("\\[job\\((chunk|%i)\\):", x$job.id)
-  lines[!stri_startswith_fixed(lines, "[job") | stri_detect_regex(lines, pattern)]
-}
