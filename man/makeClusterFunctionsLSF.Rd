@@ -27,7 +27,8 @@ job to choose a queue for the job and handle the desired resource
 allocations.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsOpenLava}},
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+  \code{\link{makeClusterFunctionsOpenLava}},
   \code{\link{makeClusterFunctionsSGE}},
   \code{\link{makeClusterFunctionsSLURM}},
   \code{\link{makeClusterFunctionsTorque}},

@@ -4,21 +4,21 @@
 \alias{cfKillBatchJob}
 \title{Cluster functions helper: Kill a batch job via OS command}
 \usage{
-cfKillBatchJob(cmd, batch.id, max.tries = 3L)
+cfKillBatchJob(cmd, args = character(0L), max.tries = 3L)
 }
 \arguments{
 \item{cmd}{[\code{character(1)}]\cr
 OS command, e.g. \dQuote{qdel}.}
 
-\item{batch.id}{[\code{character(1)}]\cr
-Id of the batch job on the batch system.}
+\item{args}{[\code{character}]\cr
+Arguments to \code{cmd}, including the batch id.}
 
 \item{max.tries}{[\code{integer(1)}]\cr
 Number of total times to try execute the OS command in cases of failures.
 Default is \code{3}.}
 }
 \value{
-Nothing.
+\code{TRUE} on success. An exception is raised otherwise.
 }
 \description{
 This function is only intended for use in your own cluster functions implementation.

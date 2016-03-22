@@ -32,7 +32,6 @@ doJobCollection.JobCollection = function(jc) {
   measure.memory = ncpus == 1L && (jc$resources$measure.memory %??% FALSE)
   cache = Cache$new(jc$file.dir)
 
-
   s = stamp()
   catf("[job(chunk): %s] Starting calculation of %i jobs", s, n.jobs)
   catf("[job(chunk): %s] Setting working directory to '%s'", s, jc$work.dir)
@@ -74,6 +73,6 @@ doJobCollection.JobCollection = function(jc) {
   }
   writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count + 1L)), wait = TRUE, compress = jc$compress)
 
-  catf("[job(chunk): %s] Calculation finished ...", stamp())
+  catf("[job(chunk): %s] Calculation finished!", stamp())
   invisible(TRUE)
 }

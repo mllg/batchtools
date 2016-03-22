@@ -29,6 +29,11 @@
 #'   all for the current user instead of all for the current registry), but you have to include all
 #'   relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
 #'   Set \code{listJobsRunning} to \code{NULL} if listing jobs is not supported.
+#' @param readLog [\code{function(reg, batch.id)}]\cr
+#'   Return the output of the job with the specified batch.id.
+#'   Should return a character vector where each line of the log is one element and should return \code{NULL} if the log file is unavailable.
+#'   Set \code{readLog} to \code{NULL} if this is not supported or your output is redirected to the standard log file location
+#'   (as set in the \code{\link{JobCollection}}.
 #' @param array.envir.var [\code{character(1)}]\cr
 #'   Name of the environment variable set by the scheduler to identify IDs of job arrays. Default is
 #'   \code{NA} for no array support.
@@ -37,7 +42,7 @@
 #' @export
 #' @aliases ClusterFunctions
 #' @family ClusterFunctions
-makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, array.envir.var = NA_character_, store.job = TRUE) {
+makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, readLog = NULL, array.envir.var = NA_character_, store.job = TRUE) {
   assertString(name, min.chars = 1L)
   if (!is.null(submitJob))
     assertFunction(submitJob, c("reg", "jc"))
@@ -47,15 +52,18 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
     assertFunction(listJobsQueued, "reg")
   if (!is.null(listJobsRunning))
     assertFunction(listJobsRunning, "reg")
+  if (!is.null(readLog))
+    assertFunction(readLog, c("reg", "batch.id"))
   assertString(array.envir.var, na.ok = TRUE)
   assertFlag(store.job)
 
   setClasses(list(
       name = name,
       submitJob = submitJob,
+      killJob = killJob,
       listJobsQueued = listJobsQueued,
       listJobsRunning = listJobsRunning,
-      killJob = killJob,
+      readLog = readLog,
       array.envir.var = array.envir.var,
       store.job = store.job),
     "ClusterFunctions")
@@ -64,9 +72,9 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
 #' @export
 print.ClusterFunctions = function(x, ...) {
   catf("ClusterFunctions for mode: %s", x$name)
-  catf("\tSupport for listing queued Jobs: %s", !is.null(x$listJobsQueued))
-  catf("\tSupport for listing running Jobs: %s", !is.null(x$listJobsRunning))
-  catf("\tSupport for killing Jobs: %s", !is.null(x$killJob))
+  catf("  List queued Jobs : %s", !is.null(x$listJobsQueued))
+  catf("  List running Jobs: %s", !is.null(x$listJobsRunning))
+  catf("  Kill Jobs        : %s", !is.null(x$killJob))
 }
 
 #' @title Create a SubmitJobResult object
@@ -204,27 +212,28 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 #'
 #' @param cmd [\code{character(1)}]\cr
 #'   OS command, e.g. \dQuote{qdel}.
-#' @param batch.id [\code{character(1)}]\cr
-#'   Id of the batch job on the batch system.
+#' @param args [\code{character}]\cr
+#'   Arguments to \code{cmd}, including the batch id.
 #' @param max.tries [\code{integer(1)}]\cr
 #'   Number of total times to try execute the OS command in cases of failures.
 #'   Default is \code{3}.
-#' @return Nothing.
+#' @return \code{TRUE} on success. An exception is raised otherwise.
 #' @family ClusterFunctionsHelper
 #' @export
-cfKillBatchJob = function(cmd, batch.id, max.tries = 3L) {
+cfKillBatchJob = function(cmd, args = character(0L), max.tries = 3L) {
   assertString(cmd, min.chars = 1L)
-  assertString(batch.id, min.chars = 1L)
+  assertCharacter(args, any.missing = FALSE)
   max.tries = asCount(max.tries)
 
   for (tmp in seq_len(max.tries)) {
-    res = runOSCommand(cmd, batch.id, stop.on.exit.code = FALSE)
+    res = runOSCommand(cmd, args, stop.on.exit.code = FALSE)
     if (res$exit.code == 0L)
-      return()
+      return(TRUE)
     Sys.sleep(1)
   }
-  stopf("Really tried to kill job, but could not do it. batch id is %s.\nMessage: %s",
-        batch.id, stri_join(res$output, collapse = "\n"))
+
+  stopf("Really tried to kill job, but failed %i times with '%s'.\nMessage: %s",
+    max.tries, stri_join(c(cmd, args), collapse = " "), stri_join(res$output, collapse = "\n"))
 }
 
 getBatchIds = function(reg, status = "all") {
