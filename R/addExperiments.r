@@ -69,6 +69,7 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
       all.ids = c(all.ids, tab$job.id)
     }
   }
+
   setkeyv(reg$defs, "def.id")
   setkeyv(reg$status, "job.id")
   saveRegistry(reg)

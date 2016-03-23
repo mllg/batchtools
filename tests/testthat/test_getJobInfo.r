@@ -26,6 +26,9 @@ test_that("getJobInfo.Registry", {
   expect_null(tab[["pars"]])
   expect_equal(tab$par.i, 1:4)
   expect_equal(tab$par.j, rep(1, 4))
+
+  # be sure that the original tables are untouched
+  checkTables(reg)
 })
 
 test_that("getJobResources", {
