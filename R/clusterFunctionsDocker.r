@@ -30,22 +30,29 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     assertIntegerish(jc$resources$ncpus, lower = 1L, any.missing = FALSE, .var.name = "resources$ncpus")
     assertIntegerish(jc$resources$memory, lower = 1L, any.missing = FALSE, .var.name = "resources$memory")
 
-    cmd = c("docker", docker.args, "run", "--detach=true", "--label=batchtools", image.args,
+    cmd = c("docker", docker.args, "run", "--detach=true", image.args,
       sprintf("-c %i", jc$resources$ncpus),
       sprintf("-m %im", jc$resources$memory),
-      sprintf("--name=%s_bt_%s", Sys.info()["user"], jc$job.hash),
+      sprintf("--label batchtools=%s", jc$job.hash),
+      sprintf("--name=%s_batchtools_%s", Sys.info()["user"], jc$job.hash),
       image, "Rscript", stri_join("-e", shQuote(sprintf("batchtools::doJobCollection('%s', '%s')", jc$uri, jc$log.file)), sep = " "))
     res = runOSCommand(cmd[1L], cmd[-1L], stop.on.exit.code = FALSE, debug = reg$debug)
 
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError(stri_join(cmd, collapse = " "), res$exit.code, res$output)
     } else {
+      if (length(res$output != 1L)) {
+        matches = which(stri_detect_regex(res$output, "^[[:alnum:]]{64}$"))
+        if (length(matches) != 1L)
+          stopf("Command '%s' did not return a long UUID identitfier", stri_join(cmd, collapse = " "))
+        res$output = res$output[matches]
+      }
       makeSubmitJobResult(status = 0L, batch.id = stri_sub(res$output, 1L, 12L))
     }
   }
 
   listJobsRunning = function(reg) {
-    res = runOSCommand("docker", c(docker.args, "ps", "--format={{.ID}}"), debug = reg$debug)
+    res = runOSCommand("docker", c(docker.args, "ps", "--format={{.ID}}", "--filter 'label=batchtools'"), debug = reg$debug)
     if (res$exit.code == 0L)
       return(res$output)
     stop("docker returned non-zero exit code")
