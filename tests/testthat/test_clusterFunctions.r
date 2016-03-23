@@ -3,7 +3,7 @@ context("clusterFunctions")
 test_that("clusterFunctions constructor", {
   check = function(cf) {
     expect_is(cf, "ClusterFunctions")
-    expect_set_equal(names(cf), c("name", "submitJob", "killJob", "listJobsQueued", "listJobsRunning", "array.envir.var", "store.job"))
+    expect_set_equal(names(cf), c("name", "submitJob", "killJob", "listJobsQueued", "listJobsRunning", "readLog", "array.envir.var", "store.job"))
     expect_output(cf, "ClusterFunctions for mode")
   }
   reg = makeTempRegistry(FALSE)

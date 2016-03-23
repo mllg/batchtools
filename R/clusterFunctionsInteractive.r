@@ -21,10 +21,7 @@ makeClusterFunctionsInteractive = function(write.logs = TRUE) {
   assertFlag(write.logs)
 
   submitJob = function(reg, jc) {
-    out = capture(doJobCollection(jc))
-    writeLines(out$output, con = jc$log.file)
-
-    # return job result (always successful)
+    doJobCollection(jc, con = jc$log.file)
     makeSubmitJobResult(status = 0L, batch.id = "cfInteractive", msg = "")
   }
 
