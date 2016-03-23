@@ -20,9 +20,10 @@ r_github_packages:
 
 before_install:
   - mkdir $HOME/bin
+  - export PATH=$HOME/bin:$PATH
   - ln -s $(which gcc-4.9) $HOME/bin/gcc
   - ln -s $(which g++-4.9) $HOME/bin/g++
-  - export PATH=$HOME/bin:$PATH
 
 after_success:
+  - rm $HOME/bin/*
   - Rscript -e 'covr::coveralls()'
