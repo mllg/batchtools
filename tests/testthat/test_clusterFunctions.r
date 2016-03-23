@@ -16,6 +16,7 @@ test_that("clusterFunctions constructor", {
   check(makeClusterFunctionsSLURM(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools")))
   check(makeClusterFunctionsOpenLava(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools"))) # FIXME
   check(makeClusterFunctionsLSF(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools"))) # FIXME
+  check(makeClusterFunctionsDocker("image")
 })
 
 

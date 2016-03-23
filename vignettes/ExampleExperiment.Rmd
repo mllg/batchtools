@@ -11,7 +11,7 @@ vignette: >
 
 We stick to a rather simple, but not unrealistic example to explain some further functionalities: Applying two classification learners to the famous iris data set (Anderson 1935), vary a few hyperparameters and evaluate the effect on the classification performance.
 
-First, We create a registry, the central meta-data object which records technical details and the setup of the experiments.
+First, we create a registry, the central meta-data object which records technical details and the setup of the experiments.
 We use an [*ExperimentRegistry*](https://mllg.github.io/batchtools/ExperimentRegistry.html) where the job definition is split into creating problems and algorithms.
 See the paper on [BatchJobs and BatchExperiments](http://www.jstatsoft.org/article/view/v064i11) for a detailed explanation.
 Again, we use a temporary registry and make it the default registry.
@@ -77,10 +77,10 @@ addAlgorithm(name = "svm", fun = svm.wrapper)
 Secondly, a random forest of classification trees:
 ```{r}
 forest.wrapper = function(data, job, instance, ...) {
-  library("randomForest")
-  mod = randomForest(Species ~ ., data = data[instance$train, ])
-  pred = predict(mod, newdata = data[instance$test, ])
-  table(data$Species[instance$test], as.character(pred))
+  library("ranger")
+  mod = ranger(Species ~ ., data = data[instance$train, ], write.forest = TRUE)
+  pred = predict(mod, data = data[instance$test, ])
+  table(data$Species[instance$test], pred$predictions)
 }
 addAlgorithm(name = "forest", fun = forest.wrapper)
 ```
@@ -156,3 +156,8 @@ If you prefer, you can also use `base::aggregate()` or function from the `dplyr`
 ```{r}
 tab[ratio == 0.67, list(mmce = mean(mce)), by = c("algorithm", "kernel", "epsilon", "ntree")]
 ```
+
+# batchmark
+
+Because benchmark studies are really common in machine learning, the [*mlr*](https://github.com/mlr-org/mlr) offers a function called `batchmark` for it which is described in detail in the [mlr tutorial](https://mlr-org.github.io/mlr-tutorial/release/html/benchmark_experiments/index.html).
+`batchtools` provides a function called `batchmark()`(https://mllg.github.io/batchtools/batchmark.html) to populate an [ExperimentRegistry](https://mllg.github.io/batchtools/ExperimentRegistry.html) with machine learning experiments.
