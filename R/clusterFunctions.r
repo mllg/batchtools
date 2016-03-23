@@ -29,11 +29,6 @@
 #'   all for the current user instead of all for the current registry), but you have to include all
 #'   relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
 #'   Set \code{listJobsRunning} to \code{NULL} if listing jobs is not supported.
-#' @param readLog [\code{function(reg, batch.id)}]\cr
-#'   Return the output of the job with the specified batch.id.
-#'   Should return a character vector where each line of the log is one element and should return \code{NULL} if the log file is unavailable.
-#'   Set \code{readLog} to \code{NULL} if this is not supported or your output is redirected to the standard log file location
-#'   (as set in the \code{\link{JobCollection}}.
 #' @param array.envir.var [\code{character(1)}]\cr
 #'   Name of the environment variable set by the scheduler to identify IDs of job arrays. Default is
 #'   \code{NA} for no array support.
@@ -42,7 +37,7 @@
 #' @export
 #' @aliases ClusterFunctions
 #' @family ClusterFunctions
-makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, readLog = NULL, array.envir.var = NA_character_, store.job = TRUE) {
+makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, array.envir.var = NA_character_, store.job = TRUE) {
   assertString(name, min.chars = 1L)
   if (!is.null(submitJob))
     assertFunction(submitJob, c("reg", "jc"))
@@ -52,8 +47,6 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
     assertFunction(listJobsQueued, "reg")
   if (!is.null(listJobsRunning))
     assertFunction(listJobsRunning, "reg")
-  if (!is.null(readLog))
-    assertFunction(readLog, c("reg", "batch.id"))
   assertString(array.envir.var, na.ok = TRUE)
   assertFlag(store.job)
 
@@ -63,7 +56,6 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
       killJob = killJob,
       listJobsQueued = listJobsQueued,
       listJobsRunning = listJobsRunning,
-      readLog = readLog,
       array.envir.var = array.envir.var,
       store.job = store.job),
     "ClusterFunctions")

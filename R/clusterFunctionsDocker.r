@@ -55,12 +55,5 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     cfKillBatchJob("docker", c(docker.args, "kill", batch.id))
   }
 
-  readLog = function(reg, batch.id) {
-    res = runOSCommand("docker", c(docker.args, "logs", batch.id))
-    if (res$exit.code == 0L)
-      return(res$output)
-    return(NULL)
-  }
-
-  makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning, readLog = readLog, store.job = TRUE)
+  makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning, store.job = TRUE)
 }

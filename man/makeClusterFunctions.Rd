@@ -6,7 +6,7 @@
 \title{ClusterFunctions Constructor}
 \usage{
 makeClusterFunctions(name, submitJob, killJob = NULL, listJobsQueued = NULL,
-  listJobsRunning = NULL, readLog = NULL, array.envir.var = NA_character_,
+  listJobsRunning = NULL, array.envir.var = NA_character_,
   store.job = TRUE)
 }
 \arguments{
@@ -39,12 +39,6 @@ are produced by \code{submitJob}. It does not matter if you return a few job ids
 all for the current user instead of all for the current registry), but you have to include all
 relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
 Set \code{listJobsRunning} to \code{NULL} if listing jobs is not supported.}
-
-\item{readLog}{[\code{function(reg, batch.id)}]\cr
-Return the output of the job with the specified batch.id.
-Should return a character vector where each line of the log is one element and should return \code{NULL} if the log file is unavailable.
-Set \code{readLog} to \code{NULL} if this is not supported or your output is redirected to the standard log file location
-(as set in the \code{\link{JobCollection}}.}
 
 \item{array.envir.var}{[\code{character(1)}]\cr
 Name of the environment variable set by the scheduler to identify IDs of job arrays. Default is
