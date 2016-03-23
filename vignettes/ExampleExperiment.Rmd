@@ -156,8 +156,3 @@ If you prefer, you can also use `base::aggregate()` or function from the `dplyr`
 ```{r}
 tab[ratio == 0.67, list(mmce = mean(mce)), by = c("algorithm", "kernel", "epsilon", "ntree")]
 ```
-
-# batchmark
-
-Because benchmark studies are really common in machine learning, the [*mlr*](https://github.com/mlr-org/mlr) offers a function called `batchmark` for it which is described in detail in the [mlr tutorial](https://mlr-org.github.io/mlr-tutorial/release/html/benchmark_experiments/index.html).
-`batchtools` provides a function called `batchmark()`(https://mllg.github.io/batchtools/batchmark.html) to populate an [ExperimentRegistry](https://mllg.github.io/batchtools/ExperimentRegistry.html) with machine learning experiments.

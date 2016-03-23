@@ -31,7 +31,6 @@ Imports:
 Suggests:
     e1071,
     knitr,
-    mlr,
     ranger,
     rmarkdown,
     rpart,
