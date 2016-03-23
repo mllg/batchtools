@@ -31,7 +31,8 @@ Imports:
 Suggests:
     e1071,
     knitr,
-    randomForest,
+    mlr,
+    ranger,
     rmarkdown,
     rpart,
     testthat (>= 0.11.0)
