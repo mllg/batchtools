@@ -30,7 +30,11 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     assertIntegerish(jc$resources$ncpus, lower = 1L, any.missing = FALSE, .var.name = "resources$ncpus")
     assertIntegerish(jc$resources$memory, lower = 1L, any.missing = FALSE, .var.name = "resources$memory")
 
-    cmd = c("docker", docker.args, "run", "--detach=true", image.args, sprintf("-m %iM", jc$resources$memory), sprintf("--name=%s", jc$job.hash), image, stri_join("Rscript -e", sprintf(shQuote("batchtools::doJobCollection('%s')"), jc$uri), sep = " "))
+    cmd = c("docker", docker.args, "run", "--detach=true", "--label=batchtools", image.args,
+      sprintf("-c %i", jc$resources$ncpus),
+      sprintf("-m %im", jc$resources$memory),
+      sprintf("--name=%s_bt_%s", Sys.info()["user"], jc$job.hash),
+      image, stri_join("Rscript -e", sprintf(shQuote("batchtools::doJobCollection('%s')"), jc$uri), sep = " "))
     res = runOSCommand(cmd[1L], cmd[-1L], stop.on.exit.code = FALSE, debug = reg$debug)
 
     if (res$exit.code > 0L) {
