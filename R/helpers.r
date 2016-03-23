@@ -9,7 +9,7 @@ asJobTable = function(reg, ids = NULL, default = NULL, keep.extra = FALSE) {
 
 filter = function(x, ids = NULL) {
   if (is.null(ids))
-    return(copy(x))
+    return(x)
   if (is.data.frame(ids))
     ids = ids$job.id
   if (qtest(ids, "X"))

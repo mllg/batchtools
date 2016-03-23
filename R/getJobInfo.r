@@ -59,13 +59,13 @@ getJobInfo = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, res
 getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  tab = filter(reg$status, ids)
+  tab = filter(reg$status, ids)[, !c("def.id", "resource.id"), with = FALSE]
   tab[, "submitted" := as.POSIXct(submitted, origin = "1970-01-01")]
   tab[, "started" := as.POSIXct(started, origin = "1970-01-01")]
   tab[, "done" := as.POSIXct(done, origin = "1970-01-01")]
   tab[, "time.queued" := as.difftime(started - submitted, units = "secs")]
   tab[, "time.running" := as.difftime(done - started, units = "secs")]
-  tab[, !c("def.id", "resource.id"), with = FALSE]
+  tab[]
 }
 
 getJobDefs = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg = getDefaultRegistry()) {
