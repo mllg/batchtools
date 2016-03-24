@@ -7,7 +7,7 @@
 ^README\.md$
 ^NEWS\.md$
 ^TODO\.md$
-man-roxygen
+^man-roxygen$
 ^appveyor\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
