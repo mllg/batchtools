@@ -58,5 +58,9 @@ checkTables = function(reg, ...) {
   expect_equal(key(reg$resources), "resource.id")
   expect_equal(uniqueN(reg$resources$resource.id), nrow(reg$resources))
 
+  if (class(reg)[1L] == "ExperimentRegistry") {
+    expect_integer(reg$status$repl, lower = 1L, any.missing = FALSE)
+  }
+
   expect_set_equal(reg$defs$def.id, reg$status$def.id)
 }

@@ -4,12 +4,6 @@
 #'
 #' @section Package options:
 #' \describe{
-#'   \item{\code{batchtools.compress}}{
-#'     Compression to use in \code{\link[base]{saveRDS}} which is used to write the \code{\link{Registry}},
-#'     \code{\link{JobCollection}} jobs and result files. For very slow file systems, set to \dQuote{xz}
-#'     to achieve less IO at the expense of more CPU cycles.
-#'     Defaults to \code{TRUE} (\dQuote{gzip} compression).
-#'   }
 #'   \item{\code{batchtools.conf.file}}{
 #'     Default path to file which will be sourced while creating a \code{\link{Registry}}.
 #'     Can be used to set system-wide \code{\link{ClusterFunctions}} or default resources.

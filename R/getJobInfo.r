@@ -51,7 +51,8 @@
 #' getJobInfo(reg = reg, pars.as.cols = TRUE)
 getJobInfo = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, resources.as.cols = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  getJobStatus(ids, reg = reg)[getJobResources(ids, reg = reg)][getJobDefs(ids, pars.as.cols = pars.as.cols, prefix.pars = prefix.pars, reg = reg)]
+  inner_join(inner_join(getJobStatus(ids, reg = reg), getJobDefs(ids, pars.as.cols = pars.as.cols, prefix.pars = prefix.pars, reg = reg)),
+    getJobResources(ids = ids, resources.as.cols = resources.as.cols, reg = reg))
 }
 
 #' @export
@@ -80,7 +81,7 @@ getJobDefs = function(ids = NULL, pars.as.cols = FALSE, prefix.pars = FALSE, reg
 getJobResources = function(ids = NULL, resources.as.cols = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   assertFlag(resources.as.cols)
-  tab = inner_join(filter(reg$status, ids), reg$resources)[, c("job.id", names(reg$resources)), with = FALSE]
+  tab = merge(filter(reg$status, ids), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", names(reg$resources)), with = FALSE]
   if (resources.as.cols) {
     new.cols = rbindlist(tab$resources, fill = TRUE)
     if (nrow(new.cols) > 0L)

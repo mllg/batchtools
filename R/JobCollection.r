@@ -49,7 +49,6 @@ createCollection = function(ids, resources = list(), reg = getDefaultRegistry())
   jc$source     = reg$source
   jc$load       = reg$load
   jc$resources  = resources
-  jc$compress   = getOption("batchtools.compress", TRUE)
   return(jc)
 }
 

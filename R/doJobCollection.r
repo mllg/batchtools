@@ -59,14 +59,15 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   p = if (ncpus == 1L || testOS("windows")) Sequential$new() else Parallel$new(ncpus)
 
   for (i in seq_len(n.jobs)) {
-    results = p$spawn(doJob(jc$defs$job.id[i], jc, cache, measure.memory = measure.memory))
+    job = getJob(jc, jc$defs$job.id[i], cache = cache)
+    results = p$spawn(doJob(job, measure.memory = measure.memory))
     if (length(results) > 0L) {
       updates = c(updates, lapply(results, "[[", "update"))
       lapply(results, function(r) catf(r$output, con = con))
     }
 
     if (length(updates) > 0L && now() > next.update) {
-      writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE, compress = jc$compress)
+      writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
       updates = list()
       count = count + 1L
       next.update = now() + as.integer(runif(1L, 300L, 1800L))
@@ -78,7 +79,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     updates = c(updates, lapply(results, "[[", "update"))
     lapply(results, function(r) catf(r$output, con = con))
   }
-  writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count + 1L)), wait = TRUE, compress = jc$compress)
+  writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count + 1L)), wait = TRUE)
 
   catf("[job(chunk): %s] Calculation finished!", stamp(), con = con)
   invisible(TRUE)
