@@ -51,6 +51,15 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     }
   }
 
+  housekeeping = function(reg, ...) {
+    cmd = c("docker", docker.args, "ps", "-a", "--format={{.ID}}", "--filter 'label=batchtools'", "--filter 'status=exited'")
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
+    batch.ids = batch.ids[batch.ids %in% reg$status$batch.id]
+
+    cmd = c("docker", docker.args, "rm", batch.ids)
+    runOSCommand(cmd[1L], cmd[-1L])
+  }
+
   listJobsRunning = function(reg) {
     res = runOSCommand("docker", c(docker.args, "ps", "--format={{.ID}}", "--filter 'label=batchtools'"), debug = reg$debug)
     if (res$exit.code == 0L)

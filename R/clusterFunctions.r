@@ -34,10 +34,13 @@
 #'   \code{NA} for no array support.
 #' @param store.job [\code{logical(1)}]\cr
 #'   Store the job on the file system before submitting? Default is \code{TRUE}.
+#' @param hooks [\code{list}]\cr
+#'   Experimental feature. Named list of functions which will we called on certain events like \dQuote{pre.submit},
+#'   \dQuote{post.submit}, \dQuote{pre.sync} or \dQuote{post.sync}.
 #' @export
 #' @aliases ClusterFunctions
 #' @family ClusterFunctions
-makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, array.envir.var = NA_character_, store.job = TRUE) {
+makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, array.envir.var = NA_character_, store.job = TRUE, hooks = list()) {
   assertString(name, min.chars = 1L)
   if (!is.null(submitJob))
     assertFunction(submitJob, c("reg", "jc"))
@@ -49,6 +52,7 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
     assertFunction(listJobsRunning, "reg")
   assertString(array.envir.var, na.ok = TRUE)
   assertFlag(store.job)
+  assertList(hooks, "function", names = "unique")
 
   setClasses(list(
       name = name,
@@ -57,7 +61,8 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
       listJobsQueued = listJobsQueued,
       listJobsRunning = listJobsRunning,
       array.envir.var = array.envir.var,
-      store.job = store.job),
+      store.job = store.job,
+      hooks = hooks),
     "ClusterFunctions")
 }
 
