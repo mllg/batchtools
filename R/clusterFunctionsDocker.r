@@ -54,10 +54,13 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
   housekeeping = function(reg, ...) {
     cmd = c("docker", docker.args, "ps", "-a", "--format={{.ID}}", "--filter 'label=batchtools'", "--filter 'status=exited'")
     batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
-    batch.ids = batch.ids[batch.ids %in% reg$status$batch.id]
+    batch.ids = intersect(batch.ids, reg$status$batch.id)
 
-    cmd = c("docker", docker.args, "rm", batch.ids)
-    runOSCommand(cmd[1L], cmd[-1L])
+    if (length(batch.ids) > 0L) {
+      cmd = c("docker", docker.args, "rm", batch.ids)
+      runOSCommand(cmd[1L], cmd[-1L])
+    }
+    invisible(TRUE)
   }
 
   listJobsRunning = function(reg) {
@@ -71,5 +74,6 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     cfKillBatchJob("docker", c(docker.args, "kill", batch.id))
   }
 
-  makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning, store.job = TRUE)
+  makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning, store.job = TRUE,
+    hooks = list(pre.submit = housekeeping, post.sync = housekeeping))
 }
