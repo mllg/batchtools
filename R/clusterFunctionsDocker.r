@@ -39,7 +39,10 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     res = runOSCommand(cmd[1L], cmd[-1L], stop.on.exit.code = FALSE, debug = reg$debug)
 
     if (res$exit.code > 0L) {
-      cfHandleUnknownSubmitError(stri_join(cmd, collapse = " "), res$exit.code, res$output)
+      no.res.msg = "no resources available to schedule container"
+      if (res$exit.code == 1L && any(stri_detect_fixed(res$output, no.res.msg)))
+        return(makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = no.res.msg))
+      return(cfHandleUnknownSubmitError(stri_join(cmd, collapse = " "), res$exit.code, res$output))
     } else {
       if (length(res$output != 1L)) {
         matches = which(stri_detect_regex(res$output, "^[[:alnum:]]{64}$"))
@@ -47,19 +50,15 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
           stopf("Command '%s' did not return a long UUID identitfier", stri_join(cmd, collapse = " "))
         res$output = res$output[matches]
       }
-      makeSubmitJobResult(status = 0L, batch.id = stri_sub(res$output, 1L, 12L))
+      return(makeSubmitJobResult(status = 0L, batch.id = stri_sub(res$output, 1L, 12L)))
     }
   }
 
   housekeeping = function(reg, ...) {
-    cmd = c("docker", docker.args, "ps", "-a", "--format={{.ID}}", "--filter 'label=batchtools'", "--filter 'status=exited'")
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
-    batch.ids = intersect(batch.ids, reg$status$batch.id)
-
-    if (length(batch.ids) > 0L) {
-      cmd = c("docker", docker.args, "rm", batch.ids)
-      runOSCommand(cmd[1L], cmd[-1L])
-    }
+    args = c(docker.args, "ps", "-a", "--format={{.ID}}", "--filter 'label=batchtools'", "--filter 'status=exited'")
+    batch.ids = intersect(runOSCommand("docker", args)$output, reg$status$batch.id)
+    if (length(batch.ids) > 0L)
+      runOSCommand("docker", c(docker.args, "rm", batch.ids))
     invisible(TRUE)
   }
 

@@ -12,10 +12,6 @@ For bug reports and feature requests please use the tracker:
 \section{Package options}{
 
 \describe{
-  \item{\code{batchtools.conf.file}}{
-    Default path to file which will be sourced while creating a \code{\link{Registry}}.
-    Can be used to set system-wide \code{\link{ClusterFunctions}} or default resources.
-  }
   \item{\code{batchtools.temp.dir}}{
     Temporary directory to use in \code{\link{makeTempRegistry}}.
     On some cluster systems you might want to set this to a directory which is shared between nodes.

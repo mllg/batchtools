@@ -28,7 +28,7 @@ batchMap = function(fun, ..., more.args = list(), reg = getDefaultRegistry()) {
 
   ddd = list(...)
   if (length(ddd) == 0L)
-    return(copy(no.ids))
+    return(data.table(job.id = integer(0L), key = "job.id"))
 
   n = unique(lengths(ddd))
   if(length(n) != 1L) {
@@ -39,7 +39,7 @@ batchMap = function(fun, ..., more.args = list(), reg = getDefaultRegistry()) {
     n = mn
   }
   if (n == 0L)
-    return(copy(no.ids))
+    return(data.table(job.id = integer(0L), key = "job.id"))
 
   info("Adding %i jobs ...", n)
 

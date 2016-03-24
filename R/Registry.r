@@ -47,7 +47,6 @@ clearDefaultRegistry = function() {
 #'   For example, you can set system-specific cluster functions in it.
 #'   The script is executed inside the registry environment, thus you can directly set
 #'   all slots, e.g. \dQuote{debug = TRUE} would overwrite the debug flag of the registry.
-#'   The default location of the configuration can be set via the option \dQuote{batchtools.conf.file}.
 #' @param packages [\code{character}]\cr
 #'   Packages that will always be loaded on each node.
 #'   Uses \code{\link[base]{require}} internally.
@@ -102,7 +101,7 @@ clearDefaultRegistry = function() {
 #' # Change default packages
 #' reg$packages = c("MASS")
 #' saveRegistry(reg = reg)
-makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"), packages = character(0L), namespaces = character(0L),
+makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "~/.batchtools.conf.r", packages = character(0L), namespaces = character(0L),
   source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
   assertString(file.dir)
   assertPathForOutput(file.dir, overwrite = FALSE)
@@ -183,6 +182,8 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = g
 #'   Additional parameters passed to \code{makeRegistry}.
 #' @rdname Registry
 makeTempRegistry = function(make.default = FALSE, temp.dir = getOption("batchtools.temp.dir", tempdir()), ...) {
+  if (!file.exists(temp.dir))
+    dir.create(temp.dir, recursive = TRUE)
   makeRegistry(file.dir = file.path(temp.dir, basename(tempfile("registry"))), make.default = make.default, ...)
 }
 
@@ -203,7 +204,7 @@ print.Registry = function(x, ...) {
 #'   If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
 #'   registry in an read-only mode.
 #' @rdname Registry
-loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"),
+loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = "~/.batchtools.conf.r",
   make.default = TRUE, update.paths = FALSE) {
 
   readRegistry = function() {

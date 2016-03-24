@@ -19,17 +19,16 @@ setDefaultRegistry(reg)
 clearDefaultRegistry()
 
 makeRegistry(file.dir = "registry", work.dir = getwd(),
-  conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"),
-  packages = character(0L), namespaces = character(0L),
-  source = character(0L), load = character(0L), seed = NULL,
-  make.default = TRUE)
+  conf.file = "~/.batchtools.conf.r", packages = character(0L),
+  namespaces = character(0L), source = character(0L),
+  load = character(0L), seed = NULL, make.default = TRUE)
 
 makeTempRegistry(make.default = FALSE,
   temp.dir = getOption("batchtools.temp.dir", tempdir()), ...)
 
 loadRegistry(file.dir = "registry", work.dir = NULL,
-  conf.file = getOption("batchtools.conf.file", "~/.batchtools.conf.r"),
-  make.default = TRUE, update.paths = FALSE)
+  conf.file = "~/.batchtools.conf.r", make.default = TRUE,
+  update.paths = FALSE)
 
 saveRegistry(reg = getDefaultRegistry())
 
@@ -53,8 +52,7 @@ yourself.}
 Path to a configuration file which is sourced directly after the registry is created.
 For example, you can set system-specific cluster functions in it.
 The script is executed inside the registry environment, thus you can directly set
-all slots, e.g. \dQuote{debug = TRUE} would overwrite the debug flag of the registry.
-The default location of the configuration can be set via the option \dQuote{batchtools.conf.file}.}
+all slots, e.g. \dQuote{debug = TRUE} would overwrite the debug flag of the registry.}
 
 \item{packages}{[\code{character}]\cr
 Packages that will always be loaded on each node.

@@ -28,7 +28,7 @@ getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
     running   = sum(batch.id %in% batch.ids[status == "running"]$batch.id)
   )]
   stats$done = stats$done - stats$error
-  stats$on.sys = stats$queued + stats$running
+  stats$system = stats$queued + stats$running
   return(stats)
 }
 
