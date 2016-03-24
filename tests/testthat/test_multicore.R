@@ -2,6 +2,7 @@ context("cf multicore")
 
 test_that("cf multicore", {
   skip_on_os("windows")
+  skip("does not work with R CMD check")
 
   reg = makeTempRegistry(make.default = FALSE)
   reg$cluster.functions = makeClusterFunctionsMulticore(ncpus = 99, max.load = Inf)
