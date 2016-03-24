@@ -38,8 +38,8 @@ insert = function(x, y) {
   x[order(names2(x))]
 }
 
-writeRDS = function(object, file, wait = FALSE, compress = getOption("batchtools.compress", TRUE)) {
-  saveRDS(object, file = file, compress = compress)
+writeRDS = function(object, file, wait = FALSE) {
+  saveRDS(object, file = file)
   if (wait)
     while(!file.exists(file)) Sys.sleep(1)
   invisible(TRUE)

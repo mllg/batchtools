@@ -1,3 +1,59 @@
+Job = R6Class("Job",
+  public = list(
+    initialize = function(cache, id, pars, seed, resources) {
+      self$cache = cache
+      self$id = id
+      self$job.pars = pars
+      self$seed = seed
+      self$resources = resources
+    },
+    id = NULL,
+    job.pars = NULL,
+    seed = NULL,
+    resources = NULL,
+    cache = NULL
+  ),
+  active = list(
+    pars = function() c(self$job.pars, self$cache$get("more.args")),
+    fun = function() self$cache$get("user.function")
+  ),
+  cloneable = FALSE
+)
+
+Experiment = R6Class("Experiment",
+  public = list(
+    initialize = function(cache, id, pars, repl, seed, resources, prob.name, algo.name) {
+      self$cache = cache
+      self$id = id
+      self$pars = pars
+      self$repl = repl
+      self$seed = seed
+      self$resources = resources
+      self$prob.name = prob.name
+      self$algo.name = algo.name
+    },
+    id = NULL,
+    pars = NULL,
+    repl = NULL,
+    seed = NULL,
+    resources = NULL,
+    cache = NULL,
+    prob.name = NULL,
+    algo.name = NULL
+  ),
+  active = list(
+    problem = function() self$cache$get(id = "..problem..", file.path("problems", self$prob.name)),
+    algorithm = function() self$cache$get(file.path("algorithms", self$algo.name)),
+    instance = function() {
+      p = self$problem
+      seed = if (is.null(p$seed)) self$seed else p$seed + self$repl - 1L
+      wrapper = function(...) p$fun(job = self, data = p$data, ...)
+      with_seed(seed, do.call(wrapper, self$pars$prob.pars))
+    }
+  ),
+  cloneable = FALSE
+)
+
 #' @title Computational Jobs
 #'
 #' @description
@@ -17,8 +73,6 @@
 #'
 #' Jobs can be executed with \code{\link{execJob}}.
 #' @template id
-#' @param cache [\code{Cache}]\cr
-#'  Internal object used to retrieve objects from the file system.
 #' @template reg
 #' @return [\code{Job}].
 #' @aliases Job
@@ -28,39 +82,22 @@
 #' batchMap(identity, 1:5, reg = reg)
 #' job = makeJob(1, reg = reg)
 #' names(job)
-makeJob = function(id, cache = NULL, reg = getDefaultRegistry()) {
+makeJob = function(id, reg = getDefaultRegistry()) {
   UseMethod("makeJob", object = reg)
 }
 
 #' @export
-makeJob.Registry = function(id, cache = NULL, reg = getDefaultRegistry()) {
-  if (is.null(cache))
-    cache = Cache$new(reg$file.dir)
-  joined = inner_join(filter(reg$status, id), reg$defs)
-  setClasses(list(
-    job.id    = joined$job.id,
-    pars      = c(joined$pars[[1L]], cache$get("more.args")),
-    seed      = getSeed(reg$seed, joined$job.id),
-    resources = inner_join(joined, reg$resources)$resources,
-    fun       = cache$get("user.function")
-  ), "Job")
+makeJob.Registry = function(id, reg = getDefaultRegistry()) {
+  row = inner_join(filter(reg$status, id), reg$defs)
+  Job$new(Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+    resources = inner_join(row, reg$resources)$resources)
 }
 
 #' @export
-makeJob.ExperimentRegistry = function(id, cache = NULL, reg = getDefaultRegistry()) {
-  if (is.null(cache))
-    cache = Cache$new(reg$file.dir)
-  joined = inner_join(filter(reg$status, id), reg$defs)
-
-  setClasses(list(
-    job.id    = joined$job.id,
-    pars      = joined$pars[[1L]],
-    repl      = joined$repl,
-    seed      = getSeed(reg$seed, joined$job.id),
-    resources = inner_join(joined, reg$resources)$resources,
-    problem   = cache$get("prob/problem", file.path("problems", joined$problem)),
-    algorithm = cache$get(stri_join("algo/", joined$algorithm), file.path("algorithms", joined$algorithm))
-  ), c("Experiment", "Job"))
+makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
+  row = inner_join(filter(reg$status, id), reg$defs)
+  Experiment$new(Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+    repl = row$repl, resources = inner_join(row, reg$resources)$resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
 getJob = function(jc, id, cache = NULL) {
@@ -68,44 +105,13 @@ getJob = function(jc, id, cache = NULL) {
 }
 
 getJob.JobCollection = function(jc, id, cache = NULL) {
-  if (is.null(cache))
-    cache = Cache$new(jc$file.dir)
-  j = filter(jc$defs, id)
-  setClasses(list(
-    job.id    = j$job.id,
-    pars      = c(j$pars[[1L]], cache$get("more.args")),
-    seed      = getSeed(jc$seed, j$job.id),
-    resources = jc$resources,
-    fun       = cache$get("user.function")
-  ), "Job")
+  row = filter(jc$defs, id)
+  Job$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
+    resources = jc$resources)
 }
 
 getJob.ExperimentCollection = function(jc, id, cache = NULL) {
-  if (is.null(cache))
-    cache = Cache$new(jc$file.dir)
-  j = filter(jc$defs, id)
-  setClasses(list(
-    job.id    = j$job.id,
-    pars      = j$pars[[1L]],
-    seed      = getSeed(jc$seed, j$job.id),
-    resources = jc$resources,
-    problem   = cache$get("prob/problem", file.path("problems", j$problem)),
-    algorithm = cache$get(stri_join("algo/", j$algorithm), file.path("algorithms", j$algorithm)),
-    repl      = j$repl
-  ), c("Experiment", "Job"))
-}
-
-#' @export
-print.Job = function(x, ...) {
-  catf("Job with id %i", x$job.id)
-  catf("  Parameters: %i", length(x$pars))
-  catf("  Seed      : %i", x$seed)
-}
-
-#' @export
-print.Experiment = function(x, ...) {
-  catf("Experiment with id %i", x$job.id)
-  catf("  Problem  : %s (%i parameters)", x$problem$name, length(x$pars$prob.pars))
-  catf("  Algorithm: %s (%i parameters)", x$algorithm$name, length(x$pars$algo.pars))
-  catf("  Seed     : %i", x$seed)
+  row = filter(jc$defs, id)
+  Experiment$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
+    repl = row$repl, resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm)
 }

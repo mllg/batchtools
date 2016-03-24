@@ -19,7 +19,7 @@ test_that("with_seed", {
 })
 
 test_that("Problem and Algorithm seed", {
-  reg = makeTempExperimentRegistry(FALSE, seed = 42L)
+  reg = makeTempExperimentRegistry(TRUE, seed = 42L) #FIXME
   addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) runif(1), seed = 1L)
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) list(instance = instance, res = runif(1)))
   addAlgorithm(reg = reg, "a2", fun = function(job, data, instance, ...) list(instance = instance, res = runif(1)))
@@ -27,6 +27,7 @@ test_that("Problem and Algorithm seed", {
   algo.designs = list(a1 = data.table(), a2 = data.table())
   repls = 3
   ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
+  getJobInfo()
 
   silent({
     submitJobs(chunkIds(ids, reg = reg), reg = reg)
