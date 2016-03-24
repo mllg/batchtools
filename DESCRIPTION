@@ -34,6 +34,6 @@ Suggests:
     ranger,
     rmarkdown,
     rpart,
-    testthat (>= 0.11.0)
+    testthat
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
