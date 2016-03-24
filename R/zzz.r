@@ -4,10 +4,6 @@
 #'
 #' @section Package options:
 #' \describe{
-#'   \item{\code{batchtools.conf.file}}{
-#'     Default path to file which will be sourced while creating a \code{\link{Registry}}.
-#'     Can be used to set system-wide \code{\link{ClusterFunctions}} or default resources.
-#'   }
 #'   \item{\code{batchtools.temp.dir}}{
 #'     Temporary directory to use in \code{\link{makeTempRegistry}}.
 #'     On some cluster systems you might want to set this to a directory which is shared between nodes.
@@ -29,10 +25,6 @@
 "_PACKAGE"
 
 batchtools = new.env(parent = emptyenv())
-
-no.ids = data.table(job.id = integer(0L), key = "job.id")
-
-# global variables frequently used with data.tables
 job.id = def.id = pars = NULL
 submitted = started = done = error = NULL
 batch.id = status = NULL

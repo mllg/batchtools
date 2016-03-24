@@ -19,7 +19,7 @@ test_that("getStatus", {
   expect_equal(stat$error, 1L)
   expect_equal(stat$queued, 0L)
   expect_equal(stat$running, 0L)
-  expect_equal(stat$on.sys, 0L)
+  expect_equal(stat$system, 0L)
 
   expect_output(print(stat), "Status for 10 jobs")
 })
