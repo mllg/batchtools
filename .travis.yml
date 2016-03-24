@@ -1,7 +1,9 @@
-language: R
+language: r
 sudo: false
 cache: packages
-warnings_are_errors: true
+r:
+   - release
+   - devel
 
 addons:
  apt:
@@ -11,12 +13,8 @@ addons:
    - gcc-4.9
    - g++-4.9
 
-env:
-  global:
-    - secure: "wSmgREsKfNZ9PDt2eiIY28gdMcH3F6qoL4G92DIVxqzTdsCsnnBWJx5e1HAYeSngqwgMZ3wxHI7XF3K3pOjs9Ug3xfuog9sNs+8fIul8m7DJ6YTtyuWqdHKtoyb38SWp8SC7O8AOcodKOYNb8EMjh8ybHqCPIRbFGbYCSng/QBmx8+WRHYftVUhm5vKAF648JLXCH+O0hdnbDWQnNapoyVIM3UaV3whfjEoikNLsVyjrJ0Hf4fqhjQVkGRUeY/5Z2VVzd2yrveU7HeBzMcnaD246bIdTcf+EN+E4zF53FGDTbWwKFVRYbepwjRchTkI4lnk1sfnfBrkENepIxhXlbjJf4YgTbaqhtcrVJb4oieXquuSu1R0DG3R1wJ5LjniQXNCYinIDE9NZsd0RCF1vTSOfOCb9/3ZSsUh4eBqUwZ3XarpwpgcvXd3WTzoH9URwsUZ4ZrXEdCZbyxYnR8MNzxxYM+gQxVPGuho1AqP6qr001r6qXOjLhn9Z+00lI61UJ97/HW/dmb9xg4+y1SInz7Eu3t+gdQ/qsg4EmV18geXJOhzhVbkB4MTC/2o1zycvCitKcCCx7wIXhC3DampcjpWAfafTw8cXVIcEVMkWxmYYGenIx3tLtFmBxQf803wfxz8kB4EIV0HSomFlrhJuGES29u29AGx4TiEkQJg9fpI="
-
-r_github_packages:
-  - jimhester/covr
+r_packages:
+  - covr
 
 before_install:
   - mkdir $HOME/bin
