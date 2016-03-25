@@ -62,8 +62,9 @@ Either an object of class &#147;JobCollection&#148; as returned by
 <code><a href='makeJobCollection.html'>makeJobCollection</a></code> or a string point to file containing a
 &#147;JobCollection&#148; (saved with <code><a href='http://www.inside-r.org/r-doc/base/readRDS'>saveRDS</a></code>).</dd>
       <dt>con</dt>
-      <dd>[<code><a href='http://www.inside-r.org/r-doc/base/connections'>connection</a></code>]
-A connection to redirect the output to.</dd>
+      <dd>[<code><a href='http://www.inside-r.org/r-doc/base/connections'>connection</a></code> | <code>character(1)</code>]
+A connection for the output. Defaults to <code><a href='http://www.inside-r.org/r-doc/base/showConnections'>stdout</a></code>.
+Alternatively the name of a file to write to.</dd>
     </dl>
     
     <div class="Value">

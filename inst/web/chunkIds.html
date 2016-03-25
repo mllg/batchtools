@@ -60,8 +60,6 @@
       <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
 A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
 with a column named &#147;job.id&#148;.
-This is usually the result of a <code><a href='findJobs.html'>findJobs</a></code> operation, but you may also
-pass any other table here, e.g. the return of <code><a href='getJobInfo.html'>getJobInfo</a></code>.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.</dd>
       <dt>n.chunks</dt>
@@ -88,8 +86,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>]. Table <code>ids</code> with additional column
-  &#147;job.id&#148;.
+[<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>] with columns &#147;job.id&#148; and &#147;chunk&#148;.
 </dl></p>
   
     </div>
@@ -100,7 +97,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <p>Partition jobs into &#147;chunks&#148; which will be executed together on the nodes.</p>
   
       <p>Chunks are submitted via <code><a href='submitJobs.html'>submitJobs</a></code> by simply providing
-job ids as a table with an additional column &#147;chunk&#148;.
+a data frame with columns &#147;job.id&#148; and &#147;chunk&#148;.
 All jobs with the same chunk number will be grouped together on one node as a single
 computational job.</p>
   
@@ -114,35 +111,35 @@ reg = makeTempRegistry(make.default = FALSE)
 <div class='input'>ids = batchMap(identity, 1:25, reg = reg)
 </div>
 <strong class='message'>Adding 25 jobs ...</strong>
-<div class='input'>ids = chunkIds(ids, chunk.size = 10, reg = reg)
+<div class='input'>ids = ids[chunkIds(ids, chunk.size = 10, reg = reg)]
 print(ids)
 </div>
 <div class='output'>    job.id chunk
- 1:      1     1
- 2:      2     3
- 3:      3     2
- 4:      4     2
- 5:      5     2
- 6:      6     3
- 7:      7     1
- 8:      8     1
+ 1:      1     3
+ 2:      2     2
+ 3:      3     1
+ 4:      4     1
+ 5:      5     1
+ 6:      6     2
+ 7:      7     2
+ 8:      8     3
  9:      9     1
 10:     10     2
-11:     11     1
-12:     12     2
+11:     11     3
+12:     12     3
 13:     13     3
 14:     14     3
 15:     15     1
-16:     16     3
-17:     17     3
-18:     18     3
-19:     19     1
+16:     16     1
+17:     17     1
+18:     18     1
+19:     19     2
 20:     20     2
 21:     21     3
 22:     22     2
-23:     23     2
-24:     24     1
-25:     25     1
+23:     23     1
+24:     24     3
+25:     25     2
     job.id chunk
 </div>
 <div class='input'>print(table(ids$chunk))
@@ -168,7 +165,7 @@ addExperiments(prob.designs, algo.designs, repls = 10, reg = reg)
 <div class='input'>
 # -&gt; group into chunks of 5 jobs, but do not mix problems
 ids = getJobInfo(reg = reg)[, .(job.id, problem, algorithm)]
-ids = chunkIds(ids, chunk.size = 5, group.by = &quot;problem&quot;, reg = reg)
+ids = ids[chunkIds(ids, chunk.size = 5, group.by = &quot;problem&quot;, reg = reg)]
 print(ids)
 </div>
 <div class='output'>     job.id problem algorithm chunk
@@ -178,11 +175,11 @@ print(ids)
   4:      4   prob1      algo     4
   5:      5   prob1      algo     5
  ---                               
-146:    146   prob2      algo    22
-147:    147   prob2      algo    13
-148:    148   prob2      algo    17
+146:    146   prob2      algo    23
+147:    147   prob2      algo    30
+148:    148   prob2      algo    19
 149:    149   prob2      algo    29
-150:    150   prob2      algo    22
+150:    150   prob2      algo    19
 </div>
 <div class='input'>dcast(ids, chunk ~ problem)
 </div>

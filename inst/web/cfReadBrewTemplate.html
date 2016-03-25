@@ -52,13 +52,18 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>cfReadBrewTemplate(template, comment.string&nbsp;=&nbsp;NA_character_)</div></pre>
+    <pre><div>cfReadBrewTemplate(template&nbsp;=&nbsp;NULL, text&nbsp;=&nbsp;NULL, comment.string&nbsp;=&nbsp;NA_character_)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>template</dt>
       <dd>[<code>character(1)</code>]
-Path to a brew template file that is used for the job description.</dd>
+Path to a brew template file that can be used for the job description.
+Mutually exclusive with argument <code>text</code>.</dd>
+      <dt>text</dt>
+      <dd>[<code>character(1)</code>]
+Single string holding the template to be used.
+Mutually exclusive with argument <code>template</code>.</dd>
       <dt>comment.string</dt>
       <dd>[<code>character(1)</code>]
 Ignore lines starting with this string.</dd>
@@ -76,10 +81,8 @@ Ignore lines starting with this string.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>This function is only intended for use in your own cluster functions implementation.</p>
-  
-      <p>Simply reads your template and returns it as a character vector. If you do this in the
-constructor of your cluster functions once, you can avoid this repeated file access later on.</p>
+      <p>This function is only intended for use in your own cluster functions implementation.
+Simply reads your template and returns it as a character vector.</p>
   
     </div>
       </div>

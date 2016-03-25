@@ -60,10 +60,8 @@
       <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
 A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
 with a column named &#147;job.id&#148;.
-This is usually the result of a <code><a href='findJobs.html'>findJobs</a></code> operation, but you may also
-pass any other table here, e.g. the return of <code><a href='getJobInfo.html'>getJobInfo</a></code>.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to result of <code><a href='findJobs.html'>findOnSystem</a></code>.</dd>
+If not set, defaults to the return value of <code><a href='findJobs.html'>findOnSystem</a></code>.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
@@ -101,7 +99,8 @@ killed are reset in the DB.</p>
       
     <h2>See also</h2>
     
-Other debug: <code><a href='showLog.html'>showLog</a></code>, <code><a href='testJob.html'>testJob</a></code>
+Other debug: <code><a href='grepLogs.html'>grepLogs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
+  <code><a href='testJob.html'>testJob</a></code>
 
         
   </div>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>showLog. batchtools 0.1</title>
+<title>batchtools-package. batchtools 0.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,53 +47,49 @@
         
       </header>
       
-      <h1>Inspect Log Files</h1>
+      <h1>Tools for computation on batch systems</h1>
 
 <div class="row">
   <div class="span8">
-    <h2>Usage</h2>
-    <pre><div>showLog(id, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
-    
-    <h2>Arguments</h2>
-    <dl>
-      <dt>id</dt>
-      <dd>[<code>integer(1)</code> or <code>data.table</code>]
-Single integer to specify the job or a <code>data.table</code> with column <code>job.id</code>
-and exactly one row.</dd>
-      <dt>reg</dt>
-      <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the last created registry.</dd>
-    </dl>
-    
-    <div class="Value">
-      <h2>Value</h2>
-
-      <p><dl>
-Nothing.
-</dl></p>
-  
-    </div>
-
+        
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Opens a pager to the stored log file. For customization, see <code><a href='http://www.inside-r.org/r-doc/base/file.show'>file.show</a></code>.</p>
+      <p>For bug reports and feature requests please use the tracker:
+<a href = 'https://github.com/mllg/batchtools'>https://github.com/mllg/batchtools</a>.</p>
+  
+    </div>
+
+    <div class="Package options">
+      <h2>Package options</h2>
+
+      <p></p>
+  
+      <p><dl>
+  <dt><code>batchtools.temp.dir</code></dt><dd>
+    Temporary directory to use in <code><a href='Registry.html'>makeTempRegistry</a></code>.
+    On some cluster systems you might want to set this to a directory which is shared between nodes.
+    Default is the system temp directory as returned by <code><a href='http://www.inside-r.org/r-doc/base/tempfile'>tempdir</a></code>.
+  </dd></p>
+  
+      <p><dt><code>batchtools.verbose</code></dt><dd>
+    Verbosity. Set to <code>FALSE</code> to suppress info messages and progress bars.
+  </dd></p>
+  
+      <p></dl></p>
+  
+      <p></p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>showLog</li>
+      <li>batchtools</li><li>batchtools-package</li>
     </ul>
     <ul>
       
     </ul> -->
       
-    <h2>See also</h2>
-    
-Other debug: <code><a href='grepLogs.html'>grepLogs</a></code>,
-  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='testJob.html'>testJob</a></code>
-
         
   </div>
 </div>

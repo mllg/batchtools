@@ -60,25 +60,26 @@
       <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
 A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
 with a column named &#147;job.id&#148;.
-This is usually the result of a <code><a href='findJobs.html'>findJobs</a></code> operation, but you may also
-pass any other table here, e.g. the return of <code><a href='getJobInfo.html'>getJobInfo</a></code>.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to result of <code><a href='findJobs.html'>findNotSubmitted</a></code>.</dd>
+If not set, defaults to the return value of <code><a href='findJobs.html'>findNotSubmitted</a></code>.</dd>
       <dt>resources</dt>
       <dd>[<code>named list</code>]
   Computational  resources for the batch jobs. The elements of this list
-  (e.g. something like &#147;walltime&#148; or &#147;nodes&#148;) depend on by
-  your template file, with the exception of <code>ncpus</code> and <code>measure.memory</code>.
-  The setting <code>ncpus</code> is used to determine the number of CPUs to execute jobs in a
-  chunk in parallel using <code><a href='http://www.inside-r.org/r-doc/parallel/mclapply'>mclapply</a></code>. If not set, <code>ncpus</code>
-  defaults to 1 (sequential execution).
-  The second resource, <code>measure.memory</code>, can be set to <code>TRUE</code> to enable the measure of
+  (e.g. something like &#147;walltime&#148; or &#147;nodes&#148;) depend on
+  your template file.
+  The resources <code>chunk.ncpus</code> and <code>measure.memory</code> are reserved for internal functionality:
+  The setting <code>chunk.ncpus</code> is used to determine the number of CPUs to execute jobs in a
+  chunk in parallel via <code><a href='http://www.inside-r.org/r-doc/parallel/mcparallel'>mcparallel</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/snow/docs/snow-internal'>sendCall</a></code> on Windows).
+  If not set, <code>chunk.ncpus</code> defaults to 1 (sequential execution).
+  The second reserved resource, <code>measure.memory</code>, can be set to <code>TRUE</code> to enable the measure of
   memory requirements using <code><a href='http://www.inside-r.org/r-doc/base/gc'>gc</a></code>. But note that the reported values are quite
-  heuristic and may not reflect the real memory requirements.
+  heuristic and may not reflect the real memory requirements. Furthermore, measuring memory with
+  <code><a href='http://www.inside-r.org/r-doc/base/gc'>gc</a></code> in parallel is impossible, thus this feature is disabled if <code>chunk.ncpus</code>
+  is greater than one.
 
-  Defaults can be set in the <code><a href='Registry.html'>Registry</a></code> via
-  <code>default.resources</code>. Settings in <code>resources</code> overrule those in
-  <code>default.resources</code>.</dd>
+  Defaults for all resources, the reserved as well as the those depending on your template, can be stored in the <code><a href='Registry.html'>Registry</a></code> in
+  <code>default.resources</code> (e.g., using a configuration file).
+  Individual settings set via <code>resources</code> <code>resources</code> overrule those in <code>default.resources</code>.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>

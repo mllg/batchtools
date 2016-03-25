@@ -52,13 +52,18 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeClusterFunctionsOpenLava(template)</div></pre>
+    <pre><div>makeClusterFunctionsOpenLava(template&nbsp;=&nbsp;NULL, text&nbsp;=&nbsp;NULL)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>template</dt>
       <dd>[<code>character(1)</code>]
-Path to a brew template file that is used for the job description.</dd>
+Path to a brew template file that can be used for the job description.
+Mutually exclusive with argument <code>text</code>.</dd>
+      <dt>text</dt>
+      <dd>[<code>character(1)</code>]
+Single string holding the template to be used.
+Mutually exclusive with argument <code>template</code>.</dd>
     </dl>
     
     <div class="Value">
@@ -97,7 +102,8 @@ allocations.</p>
       
     <h2>See also</h2>
     
-Other ClusterFunctions: <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
+Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+  <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
   <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
   <code><a href='makeClusterFunctionsSLURM.html'>makeClusterFunctionsSLURM</a></code>,
   <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code>,

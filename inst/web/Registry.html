@@ -55,9 +55,9 @@
     <pre><div>getDefaultRegistry()</div>
 <div>setDefaultRegistry(reg)</div>
 <div>clearDefaultRegistry()</div>
-<div>makeRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;getwd(), conf.file&nbsp;=&nbsp;getOption("batchtools.conf.file", "~/.batchtools.conf.r"), packages&nbsp;=&nbsp;character(0L), namespaces&nbsp;=&nbsp;character(0L), seed&nbsp;=&nbsp;NULL, make.default&nbsp;=&nbsp;TRUE)</div>
+<div>makeRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;getwd(), conf.file&nbsp;=&nbsp;"~/.batchtools.conf.r", packages&nbsp;=&nbsp;character(0L), namespaces&nbsp;=&nbsp;character(0L), source&nbsp;=&nbsp;character(0L), load&nbsp;=&nbsp;character(0L), seed&nbsp;=&nbsp;NULL, make.default&nbsp;=&nbsp;TRUE)</div>
 <div>makeTempRegistry(make.default&nbsp;=&nbsp;FALSE, temp.dir&nbsp;=&nbsp;getOption("batchtools.temp.dir", tempdir()), ...)</div>
-<div>loadRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;NULL, conf.file&nbsp;=&nbsp;getOption("batchtools.conf.file", "~/.batchtools.conf.r"), make.default&nbsp;=&nbsp;TRUE, update.paths&nbsp;=&nbsp;FALSE)</div>
+<div>loadRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;NULL, conf.file&nbsp;=&nbsp;"~/.batchtools.conf.r", make.default&nbsp;=&nbsp;TRUE, update.paths&nbsp;=&nbsp;FALSE)</div>
 <div>saveRegistry(reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>syncRegistry(reg&nbsp;=&nbsp;getDefaultRegistry(), save&nbsp;=&nbsp;TRUE)</div></pre>
     
@@ -81,8 +81,7 @@ yourself.</dd>
 Path to a configuration file which is sourced directly after the registry is created.
 For example, you can set system-specific cluster functions in it.
 The script is executed inside the registry environment, thus you can directly set
-all slots, e.g. &#147;debug = TRUE&#148; would overwrite the debug flag of the registry.
-The default location of the configuration can be set via the option &#147;batchtools.conf.file&#148;.</dd>
+all slots, e.g. &#147;debug = TRUE&#148; would overwrite the debug flag of the registry.</dd>
       <dt>packages</dt>
       <dd>[<code>character</code>]
 Packages that will always be loaded on each node.
@@ -93,6 +92,14 @@ Default is <code>character(0)</code>.</dd>
 Same as <code>packages</code>, but the packages will not be attached.
 Uses <code><a href='http://www.inside-r.org/r-doc/base/ns-load'>requireNamespace</a></code> internally.
 Default is <code>character(0)</code>.</dd>
+      <dt>source</dt>
+      <dd>[<code>character</code>]
+Files which should be sourced on the slaves prior to executing a job.
+Calls <code><a href='http://www.inside-r.org/r-doc/base/sys.source'>sys.source</a></code> using the <code><a href='http://www.inside-r.org/r-doc/base/environment'>.GlobalEnv</a></code>.</dd>
+      <dt>load</dt>
+      <dd>[<code>character</code>]
+Files which should be loaded on the slaves prior to executing a job.
+Calls <code><a href='http://www.inside-r.org/r-doc/base/load'>load</a></code> using the <code><a href='http://www.inside-r.org/r-doc/base/environment'>.GlobalEnv</a></code>.</dd>
       <dt>seed</dt>
       <dd>[<code>integer(1)</code>]
 Start seed for jobs. Each job uses the (<code>seed</code> + <code>job.id</code>) as seed.
@@ -180,10 +187,11 @@ The base dir can be set via the option &#147;batchtools.temp.dir&#148; and defau
 <div class='input'>print(reg)
 </div>
 <div class='output'>Job Registry
-  Number of Jobs: 0
-  File dir: /tmp/Rtmp9ooYAj/registry1fa27b1ec23b
-  Work dir: /home/lang/Projekte/batchtools
-  Seed: 624156284
+
+  Number of Jobs  : 0
+  File dir        : /tmp/RtmpKULo6v/registry24ea67291ef4
+  Work dir        : /home/michel/Projekte/batchtools
+  Seed            : 122510450
 </div>
 <div class='input'>
 #&#39; Set debug mode

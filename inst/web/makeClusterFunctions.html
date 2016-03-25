@@ -52,7 +52,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeClusterFunctions(name, submitJob, killJob&nbsp;=&nbsp;NULL, listJobs&nbsp;=&nbsp;NULL, array.envir.var&nbsp;=&nbsp;NA_character_, store.job&nbsp;=&nbsp;TRUE)</div></pre>
+    <pre><div>makeClusterFunctions(name, submitJob, killJob&nbsp;=&nbsp;NULL, listJobsQueued&nbsp;=&nbsp;NULL, listJobsRunning&nbsp;=&nbsp;NULL, array.envir.var&nbsp;=&nbsp;NA_character_, store.job&nbsp;=&nbsp;TRUE, hooks&nbsp;=&nbsp;list())</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -70,14 +70,22 @@ Function to kill a job on the batch system. Make sure that you definitely kill t
 value is currently ignored. Must have the arguments <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and
 <code>batch.id</code> (<code>character(1)</code>, returned by <code>submitJob</code>).
 Set <code>killJob</code> to <code>NULL</code> if killing jobs cannot be supported.</dd>
-      <dt>listJobs</dt>
+      <dt>listJobsQueued</dt>
       <dd>[<code>function(reg)</code>]
-List all jobs on the batch system for the current user and registry. This includes queued,
-running, held, idle, etc. jobs. Must return an integer vector of batch ids, same format as they
+List all queued jobs on the batch system for the current user and registry.
+Must return an character vector of batch ids, same format as they
 are produced by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.
 all for the current user instead of all for the current registry), but you have to include all
 relevant ones. Must have the argument are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>).
-Set <code>listJobs</code> to <code>NULL</code> if listing jobs cannot be supported.</dd>
+Set <code>listJobsQueued</code> to <code>NULL</code> if listing queued jobs is not supported.</dd>
+      <dt>listJobsRunning</dt>
+      <dd>[<code>function(reg)</code>]
+List all running jobs on the batch system for the current user and registry. This includes
+running, held, idle, etc. jobs. Must return an character vector of batch ids, same format as they
+are produced by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.
+all for the current user instead of all for the current registry), but you have to include all
+relevant ones. Must have the argument are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>).
+Set <code>listJobsRunning</code> to <code>NULL</code> if listing jobs is not supported.</dd>
       <dt>array.envir.var</dt>
       <dd>[<code>character(1)</code>]
 Name of the environment variable set by the scheduler to identify IDs of job arrays. Default is
@@ -85,6 +93,10 @@ Name of the environment variable set by the scheduler to identify IDs of job arr
       <dt>store.job</dt>
       <dd>[<code>logical(1)</code>]
 Store the job on the file system before submitting? Default is <code>TRUE</code>.</dd>
+      <dt>hooks</dt>
+      <dd>[<code>list</code>]
+Experimental feature. Named list of functions which will we called on certain events like &#147;pre.submit&#148;,
+&#147;post.submit&#148;, &#147;pre.sync&#148; or &#147;post.sync&#148;.</dd>
     </dl>
     
     <div class="Description">
@@ -105,7 +117,8 @@ specified in the arguments.</p>
       
     <h2>See also</h2>
     
-Other ClusterFunctions: <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
+Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+  <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
   <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
   <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
   <code><a href='makeClusterFunctionsSLURM.html'>makeClusterFunctionsSLURM</a></code>,

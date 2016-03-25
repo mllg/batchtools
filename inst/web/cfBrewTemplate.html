@@ -52,16 +52,16 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>cfBrewTemplate(reg, template, jc)</div></pre>
+    <pre><div>cfBrewTemplate(reg, text, jc)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
-      <dt>template</dt>
+      <dt>text</dt>
       <dd>[<code>character(1)</code>]
-String with contents of the brew templated, as returned by <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>.</dd>
+String ready to be brewed. See <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code> to read a template from the file system.</dd>
       <dt>jc</dt>
       <dd>[<code><a href='makeJobCollection.html'>JobCollection</a>)</code>]
 JobCollection holding all essential information. Will be used as environment to look

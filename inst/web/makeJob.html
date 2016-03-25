@@ -94,7 +94,12 @@ the following variables:
       <p></dl></p>
   
       <p>Additionally, a regular <code><a href='Registry.html'>Registry</a></code> also has the slot &#147;fun&#148; with the user function while an
-<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code> has the slots &#147;problem&#148;, &#147;algorithm&#148; and &#147;repl&#148; (replication).</p>
+<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code> has the slots &#147;prob.name&#148;, &#147;problem&#148;, &#147;algo.name&#148;, &#147;algorithm&#148;,
+&#147;repl&#148; (replication) and &#147;instance&#148;.</p>
+  
+      <p>Note that the slots &#147;pars&#148;, &#147;fun&#148;, &#147;algorithm&#148; and &#147;problem&#148; and &#147;instance&#148;
+are actually functions which load required files from the file system and construct the object on the first access.
+Each subsequent access returns a cached version from memory (except &#147;instance&#148; which is not cached).</p>
   
       <p>Jobs can be executed with <code><a href='execJob.html'>execJob</a></code>.</p>
   
@@ -110,7 +115,9 @@ the following variables:
 <div class='input'>job = makeJob(1, reg = reg)
 names(job)
 </div>
-<div class='output'>[1] &quot;job.id&quot;    &quot;pars&quot;      &quot;seed&quot;      &quot;resources&quot; &quot;fun&quot;      
+<div class='output'>[1] &quot;.__enclos_env__&quot; &quot;fun&quot;             &quot;pars&quot;            &quot;cache&quot;          
+[5] &quot;resources&quot;       &quot;seed&quot;            &quot;job.pars&quot;        &quot;id&quot;             
+[9] &quot;initialize&quot;     
 </div></pre>
   </div>
   <div class="span4">

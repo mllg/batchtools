@@ -63,8 +63,6 @@
       <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
 A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
 with a column named &#147;job.id&#148;.
-This is usually the result of a <code><a href='findJobs.html'>findJobs</a></code> operation, but you may also
-pass any other table here, e.g. the return of <code><a href='getJobInfo.html'>getJobInfo</a></code>.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.</dd>
       <dt>pars.as.cols</dt>
@@ -160,25 +158,25 @@ batchMap(f, x = c(-1, 0, 1), reg = reg)
 getJobInfo(reg = reg, pars.as.cols = TRUE)
 </div>
 <div class='output'>   job.id           submitted             started                done
-1:      1 2016-01-11 12:11:23 2016-01-11 12:11:23 2016-01-11 12:11:23
-2:      2 2016-01-11 12:11:23 2016-01-11 12:11:23 2016-01-11 12:11:23
-3:      3 2016-01-11 12:11:23 2016-01-11 12:11:23 2016-01-11 12:11:23
+1:      1 2016-03-25 18:25:50 2016-03-25 18:25:50 2016-03-25 18:25:50
+2:      2 2016-03-25 18:25:50 2016-03-25 18:25:50 2016-03-25 18:25:50
+3:      3 2016-03-25 18:25:50 2016-03-25 18:25:50 2016-03-25 18:25:50
                                      error memory      batch.id
 1: Error in (function (x)  : x must be &gt; 0     NA cfInteractive
 2:                                      NA     NA cfInteractive
 3:                                      NA     NA cfInteractive
                            job.hash time.queued time.running
-1: 07c42b893cb879c298d60f6c7174fbf2      0 secs       0 secs
-2: c35acad5f14feabddb3e28cd4340e290      0 secs       0 secs
-3: 3783abf68346bc59bf606613bc9a9c73      0 secs       0 secs
-                     resources.hash resources                        pars.hash
-1: ff0bca262d5f8ab9324471da0a0463d3    &lt;list&gt; 2527ed6f690f8f2fe000bbcdaed10e7a
-2: ff0bca262d5f8ab9324471da0a0463d3    &lt;list&gt; a3624e002d012627022b656227590880
-3: ff0bca262d5f8ab9324471da0a0463d3    &lt;list&gt; f90efcda6753da655ae611ffe2e3fb61
-    x
-1: -1
-2:  0
-3:  1
+1: 447736ee367d5054d7566e482f327ee7      0 secs       0 secs
+2: d810aa5044e3b4b65dfe153c419341df      0 secs       0 secs
+3: e0ac725165888edbf61077d09c734c81      0 secs       0 secs
+                          pars.hash  x                   resources.hash
+1: 2527ed6f690f8f2fe000bbcdaed10e7a -1 db41907f4f43686fe19edc3d7eb61082
+2: a3624e002d012627022b656227590880  0 db41907f4f43686fe19edc3d7eb61082
+3: f90efcda6753da655ae611ffe2e3fb61  1 db41907f4f43686fe19edc3d7eb61082
+   resources
+1:    &lt;list&gt;
+2:    &lt;list&gt;
+3:    &lt;list&gt;
 </div></pre>
   </div>
   <div class="span4">

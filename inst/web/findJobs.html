@@ -59,7 +59,7 @@
 <div>findDone(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findNotDone(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findError(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
-<div>findOnSystem(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findOnSystem(ids&nbsp;=&nbsp;NULL, status&nbsp;=&nbsp;"all", reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findExpired(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findJobs(expr, ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findExperiments(prob.name&nbsp;=&nbsp;NULL, algo.name&nbsp;=&nbsp;NULL, prob.pars, algo.pars, repls&nbsp;=&nbsp;NULL, ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
@@ -70,13 +70,16 @@
       <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
 A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
 with a column named &#147;job.id&#148;.
-This is usually the result of a <code><a href='findJobs.html'>findJobs</a></code> operation, but you may also
-pass any other table here, e.g. the return of <code><a href='getJobInfo.html'>getJobInfo</a></code>.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
+      <dt>status</dt>
+      <dd>[<code>character(1)</code>]
+If set to &#147;all&#148; (default), <code>findOnSystem</code> finds all jobs on the system.
+If set to &#147;queued&#148; or &#147;running&#148;, the result is restricted to queued
+or running jobs, respectively.</dd>
       <dt>expr</dt>
       <dd>[<code>expression</code>]
 Predicate expression evaluated in the job parameters.</dd>

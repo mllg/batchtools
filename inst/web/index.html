@@ -107,12 +107,6 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
     <ul class="index">
         
       <li>
-        <code><a href="ExperimentRegistry.html">ExperimentRegistry</a></code>(makeExperimentRegistry, makeTempExperimentRegistry)<br />ExperimentRegistry Constructor</li>
-            
-      <li>
-        <code><a href="Worker.html">Worker</a></code>(makeWorker)<br />Worker Constructor</li>
-            
-      <li>
         <code><a href="ProblemAlgorithm.html">addAlgorithm</a></code>(Algorithm, Problem, ProblemAlgorithm, addProblem, removeAlgorithm, removeProblem)<br />Define Problems and Algorithms for Experiments</li>
             
       <li>
@@ -122,7 +116,7 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="batchMap.html">batchMap</a></code><br />Map Operation for Batch Systems</li>
             
       <li>
-        <code><a href="batchtools.html">batchtools</a></code>(batchtools-package)<br />The batchtools Package</li>
+        <code><a href="batchtools-package.html">batchtools-package</a></code>(batchtools)<br />Tools for computation on batch systems</li>
             
       <li>
         <code><a href="btlapply.html">btlapply</a></code>(btmapply)<br />Synchronous Apply Functions</li>
@@ -149,6 +143,9 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="execJob.html">execJob</a></code><br />Execute Single Jobs</li>
             
       <li>
+        <code><a href="ExperimentRegistry.html">ExperimentRegistry</a></code>(makeExperimentRegistry, makeTempExperimentRegistry)<br />ExperimentRegistry Constructor</li>
+            
+      <li>
         <code><a href="findJobs.html">findSubmitted</a></code>(findDone, findError, findExperiments, findExpired, findJobs, findNotDone, findNotStarted, findNotSubmitted, findOnSystem, findStarted)<br />Find and Filter Jobs</li>
             
       <li>
@@ -161,6 +158,9 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="getStatus.html">getStatus</a></code><br />Summarize the Computational Status</li>
             
       <li>
+        <code><a href="grepLogs.html">grepLogs</a></code><br />Grep Log Files for a Pattern</li>
+            
+      <li>
         <code><a href="killJobs.html">killJobs</a></code><br />Kill Jobs</li>
             
       <li>
@@ -168,6 +168,9 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
             
       <li>
         <code><a href="makeClusterFunctions.html">makeClusterFunctions</a></code>(ClusterFunctions)<br />ClusterFunctions Constructor</li>
+            
+      <li>
+        <code><a href="makeClusterFunctionsDocker.html">makeClusterFunctionsDocker</a></code><br />ClusterFunctions for Docker</li>
             
       <li>
         <code><a href="makeClusterFunctionsInteractive.html">makeClusterFunctionsInteractive</a></code><br />ClusterFunctions for Sequential Execution in the Running R Session</li>
@@ -222,6 +225,9 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
             
       <li>
         <code><a href="waitForJobs.html">waitForJobs</a></code><br />Wait for Termination of Jobs</li>
+            
+      <li>
+        <code><a href="Worker.html">Worker</a></code><br />Create a Linux-Worker</li>
     
     </ul>
   </div>
@@ -238,8 +244,8 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
     <h2>Dependencies</h2>
     <ul>
       <li><strong>Depends</strong>: data.table</li>
-      <li><strong>Imports</strong>: brew, checkmate, digest, parallel, progress, stats, stringi, utils</li>
-      <li><strong>Suggests</strong>: e1071, knitr, ranger, rmarkdown, rpart, testthat</li>
+      <li><strong>Imports</strong>: backports, brew, checkmate, digest, progress, R6, stats, stringi, utils</li>
+      <li><strong>Suggests</strong>: e1071, knitr, parallel, ranger, rmarkdown, rpart, snow, testthat</li>
       
     </ul>
     <h2>Authors</h2>

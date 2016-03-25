@@ -52,16 +52,16 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>cfKillBatchJob(cmd, batch.id, max.tries&nbsp;=&nbsp;3L)</div></pre>
+    <pre><div>cfKillBatchJob(cmd, args&nbsp;=&nbsp;character(0L), max.tries&nbsp;=&nbsp;3L)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>cmd</dt>
       <dd>[<code>character(1)</code>]
 OS command, e.g. &#147;qdel&#148;.</dd>
-      <dt>batch.id</dt>
-      <dd>[<code>character(1)</code>]
-Id of the batch job on the batch system.</dd>
+      <dt>args</dt>
+      <dd>[<code>character</code>]
+Arguments to <code>cmd</code>, including the batch id.</dd>
       <dt>max.tries</dt>
       <dd>[<code>integer(1)</code>]
 Number of total times to try execute the OS command in cases of failures.
@@ -72,7 +72,7 @@ Default is <code>3</code>.</dd>
       <h2>Value</h2>
 
       <p><dl>
-Nothing.
+<code>TRUE</code> on success. An exception is raised otherwise.
 </dl></p>
   
     </div>

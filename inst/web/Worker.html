@@ -47,35 +47,20 @@
         
       </header>
       
-      <h1>Worker Constructor</h1>
+      <h1>Create a Linux-Worker</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeWorker(nodename, ncpus&nbsp;=&nbsp;0L, max.jobs&nbsp;=&nbsp;NULL, max.load&nbsp;=&nbsp;NULL, debug&nbsp;=&nbsp;FALSE)</div></pre>
-    
-    <h2>Arguments</h2>
-    <dl>
-      <dt>nodename</dt>
-      <dd>[<code>character(1)</code>]
-Host name of node.</dd>
-      <dt>ncpus</dt>
-      <dd>[<code>integers(1)</code>]
-Number of VPUs of worker. Default (0) means to query the worker.</dd>
-      <dt>max.jobs</dt>
-      <dd>[<code>integer(1)</code>]
-Maximal number of jobs that can run concurrently for the current registry.
-Default is <code>ncpus</code>.</dd>
-      <dt>max.load</dt>
-      <dd>[<code>numeric(1)</code>]
-Load average (of the last 5 min) at which the worker is considered
-occupied, so that no job can be submitted.
-Default is <code>ncpus</code>.</dd>
-      <dt>debug</dt>
-      <dd>[<code>logical(1)</code>]
-Print some verbose info messages. Default is <code>FALSE</code>.</dd>
-    </dl>
-    
+    <pre><div>Worker</div></pre>
+        
+    <div class="Format">
+      <h2>Format</h2>
+
+      <p>An <code><a href='http://www.inside-r.org/packages/cran/R6/docs/R6Class'>R6Class</a></code> generator object</p>
+  
+    </div>
+
     <div class="Value">
       <h2>Value</h2>
 
@@ -88,23 +73,65 @@ Print some verbose info messages. Default is <code>FALSE</code>.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Functions to construct local and remote workers.</p>
+      <p><code><a href='http://www.inside-r.org/packages/cran/R6/docs/R6Class'>R6Class</a></code> to create local and remote linux workers.</p>
+  
+    </div>
+
+    <div class="Fields">
+      <h2>Fields</h2>
+
+      <p></p>
+  
+      <p><dl>
+<dt><code>nodename</code></dt><dd>Host name. Set via constructor.</dd></p>
+  
+      <p><dt><code>ncpus</code></dt><dd>Number of VPUs of worker. Set via constructor.</dd></p>
+  
+      <p><dt><code>max.load</code></dt><dd>Maximum load average (of the last 5 min). Set via constructor.</dd></p>
+  
+      <p><dt><code>debug</code></dt><dd>Verbose output. Set via constructor.</dd></p>
+  
+      <p><dt><code>status</code></dt><dd>Status of the worker; one of &#147;unknown&#148;, &#147;available&#148;, &#147;max.cpus&#148; and &#147;max.load&#148;.</dd></p>
+  
+      <p></dl></p>
+  
+    </div>
+
+    <div class="Methods">
+      <h2>Methods</h2>
+
+      <p></p>
+  
+      <p><dl>
+ <dt><code>new(nodename, ncpus, max.load, debug)</code></dt><dd>Constructor.</dd></p>
+  
+      <p><dt><code>update(reg)</code></dt><dd>Update the worker status.</dd></p>
+  
+      <p><dt><code>list(reg)</code></dt><dd>List running jobs.</dd></p>
+  
+      <p><dt><code>start(reg, fn, outfile)</code></dt><dd>Start job collection in file &#147;fn&#148; and output to &#147;outfile&#148;.</dd></p>
+  
+      <p><dt><code>kill(reg, pid)</code></dt><dd>Kill job matching the process id.</dd></p>
+  
+      <p></dl></p>
+  
+      <p></p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>## Not run: 
 # # create a worker for the local machine and use 4 CPUs.
-# makeWorker(&quot;localhost&quot;, ncpus = 4, max.jobs = 4)
+# Worker$new(&quot;localhost&quot;, ncpus = 4)
 # ## End(Not run)
 </div></pre>
   </div>
   <div class="span4">
     <!-- <ul>
-      <li>Worker</li><li>makeWorker</li>
+      <li>Worker</li>
     </ul>
     <ul>
-      
+      <li>datasets</li>
     </ul> -->
       
         
