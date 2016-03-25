@@ -60,9 +60,9 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     p = Sequential$new()
   } else {
     if (testOS("windows"))
-      p = Parallel$new(ncpus)
-    else
       p = Snow$new(ncpus)
+    else
+      p = Parallel$new(ncpus)
   }
 
   for (i in seq_len(n.jobs)) {
