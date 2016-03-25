@@ -13,11 +13,11 @@ getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
 
-  stats = .getStatus(ids, reg = reg)
+  stats = getStatusTable(ids, reg = reg)
   setClasses(stats, c("Status", class(stats)))
 }
 
-.getStatus = function(ids, batch.ids = getBatchIds(reg = reg), reg = getDefaultRegistry()) {
+getStatusTable = function(ids, batch.ids = getBatchIds(reg = reg), reg = getDefaultRegistry()) {
   stats = filter(reg$status, ids)[, list(
     defined   = .N,
     submitted = count(submitted),

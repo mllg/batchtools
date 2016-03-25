@@ -50,7 +50,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   ids.disappeared = data.table(job.id = integer(0L), key = "job.id")
 
   pb = makeProgressBar(total = n.jobs.total, format = "Waiting (S::system R::running D::done E::error) [:bar] :percent eta: :eta",
-    tokens = as.list(.getStatus(ids, batch.ids, reg = reg)))
+    tokens = as.list(getStatusTable(ids, batch.ids, reg = reg)))
 
   repeat {
     # case 1: all jobs terminated -> nothing on system
@@ -87,7 +87,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     }
     ids.disappeared = ids[!ids.on.sys]
 
-    stats = .getStatus(ids = ids, batch.ids = batch.ids, reg = reg)
+    stats = getStatusTable(ids = ids, batch.ids = batch.ids, reg = reg)
     pb$tick(n.jobs - nrow(ids.nt), tokens = as.list(stats))
     n.jobs = nrow(ids.nt) # FIXME: remove after progress is updated
 
