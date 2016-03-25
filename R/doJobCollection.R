@@ -56,11 +56,18 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   count = 1L
   updates = list()
   next.update = now() + as.integer(runif(1L, 300L, 1800L))
-  p = if (ncpus == 1L || testOS("windows")) Sequential$new() else Parallel$new(ncpus)
+  if (ncpus == 1L) {
+    p = Sequential$new()
+  } else {
+    if (testOS("windows"))
+      p = Parallel$new(ncpus)
+    else
+      p = Snow$new(ncpus)
+  }
 
   for (i in seq_len(n.jobs)) {
     job = getJob(jc, jc$defs$job.id[i], cache = cache)
-    results = p$spawn(doJob(job, measure.memory = measure.memory))
+    results = p$spawn(doJob, job = job, measure.memory = measure.memory)
     if (length(results) > 0L) {
       updates = c(updates, lapply(results, "[[", "update"))
       lapply(results, function(r) catf(r$output, con = con))

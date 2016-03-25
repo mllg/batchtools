@@ -17,7 +17,6 @@
 #' @import data.table
 #' @import stringi
 #' @import backports
-#' @import parallel
 #' @importFrom R6 R6Class
 #' @importFrom progress progress_bar
 #' @importFrom stats runif

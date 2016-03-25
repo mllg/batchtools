@@ -16,8 +16,9 @@
 #'   your template file.
 #'   The resources \code{chunk.ncpus} and \code{measure.memory} are reserved for internal functionality:
 #'   The setting \code{chunk.ncpus} is used to determine the number of CPUs to execute jobs in a
-#'   chunk in parallel via \code{mcparallel}. If not set, \code{chunk.ncpus} defaults to 1 (sequential execution).
-#'   The second resource, \code{measure.memory}, can be set to \code{TRUE} to enable the measure of
+#'   chunk in parallel via \code{\link[parallel]{mcparallel}} (or \code{\link[snow]{sendCall}} on Windows).
+#'   If not set, \code{chunk.ncpus} defaults to 1 (sequential execution).
+#'   The second reserved resource, \code{measure.memory}, can be set to \code{TRUE} to enable the measure of
 #'   memory requirements using \code{\link[base]{gc}}. But note that the reported values are quite
 #'   heuristic and may not reflect the real memory requirements. Furthermore, measuring memory with
 #'   \code{\link[base]{gc}} in parallel is impossible, thus this feature is disabled if \code{chunk.ncpus}
@@ -59,6 +60,10 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   }
 
   resources = insert(reg$default.resources, resources)
+  if (!is.null(resources$chunk.ncpus))
+    assertCount(resources$chunk.ncpus, positive = TRUE)
+  if (!is.null(resources$measure.memory))
+    assertFlag(resources$measure.memory)
   res.hash = digest::digest(resources)
   resources.hash = NULL
   res.id = head(reg$resources[resources.hash == res.hash, "resource.id", with = FALSE]$resource.id, 1L)

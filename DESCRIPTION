@@ -22,7 +22,6 @@ Imports:
     brew,
     checkmate (>= 1.7.2),
     digest (>= 0.6.9),
-    parallel,
     progress,
     R6,
     stats,
@@ -31,9 +30,11 @@ Imports:
 Suggests:
     e1071,
     knitr,
+    parallel,
     ranger,
     rmarkdown,
     rpart,
+    snow,
     testthat
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
