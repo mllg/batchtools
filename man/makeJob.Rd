@@ -31,7 +31,12 @@ the following variables:
  \item{resources}{Computational resources which were set for this job.}
 }
 Additionally, a regular \code{\link{Registry}} also has the slot \dQuote{fun} with the user function while an
-\code{\link{ExperimentRegistry}} has the slots \dQuote{problem}, \dQuote{algorithm} and \dQuote{repl} (replication).
+\code{\link{ExperimentRegistry}} has the slots \dQuote{prob.name}, \dQuote{problem}, \dQuote{algo.name}, \dQuote{algorithm},
+\dQuote{repl} (replication) and \dQuote{instance}.
+
+Note that the slots \dQuote{pars}, \dQuote{fun}, \dQuote{algorithm} and \dQuote{problem} and \dQuote{instance}
+are actually functions which load required files from the file system and construct the object on the first access.
+Each subsequent access returns a cached version from memory (except \dQuote{instance} which is not cached).
 
 Jobs can be executed with \code{\link{execJob}}.
 }
