@@ -12,7 +12,7 @@ Parallel = R6Class("Parallel",
     ncpus = NULL,
 
     initialize = function(ncpus) {
-      requireNamespace("parallel")
+      loadNamespace("parallel")
       self$ncpus = ncpus
       # reg.finalizer(self, function(e) mccollect(wait = TRUE), onexit = TRUE)
     },
@@ -46,7 +46,7 @@ Snow = R6Class("ParallelSnow",
     avail = NULL,
 
     initialize = function(ncpus) {
-      requireNamespace("snow")
+      loadNamespace("snow")
       self$cl = snow::makeSOCKcluster(rep.int("localhost", ncpus))
       self$avail = rep.int(TRUE, ncpus)
       reg.finalizer(self, function(e) if (!is.null(e$cl)) snow::stopCluster(e$cl), onexit = TRUE)
