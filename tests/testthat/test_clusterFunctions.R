@@ -11,11 +11,13 @@ test_that("clusterFunctions constructor", {
   check(makeClusterFunctionsInteractive())
   check(makeClusterFunctionsMulticore(ncpus = 1, max.load = 1))
   check(makeClusterFunctionsSSH(workers = list(Worker$new(nodename = "localhost", ncpus = 1L))))
-  check(makeClusterFunctionsSGE(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools"))) # FIXME
+  check(makeClusterFunctionsSGE(text = "foo"))
+  check(makeClusterFunctionsTorque(text = "foo"))
+  check(makeClusterFunctionsSLURM(text = "foo"))
+  check(makeClusterFunctionsOpenLava(text = "foo"))
+  check(makeClusterFunctionsLSF(text = "foo"))
   check(makeClusterFunctionsTorque(system.file(file.path("templates", "torque_lido.tmpl"), package = "batchtools")))
   check(makeClusterFunctionsSLURM(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools")))
-  check(makeClusterFunctionsOpenLava(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools"))) # FIXME
-  check(makeClusterFunctionsLSF(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools"))) # FIXME
   check(makeClusterFunctionsDocker("image"))
 })
 
@@ -58,9 +60,9 @@ test_that("brew", {
   reg = makeTempRegistry(FALSE)
   ids = batchMap(identity, 1:2, reg = reg)
   jc = makeJobCollection(1, reg = reg)
-  template = cfReadBrewTemplate(fn, comment.string = "###")
+  text = cfReadBrewTemplate(fn, comment.string = "###")
 
-  fn = cfBrewTemplate(template = template, jc = jc, reg = reg)
+  fn = cfBrewTemplate(text = text, jc = jc, reg = reg)
   brewed = readLines(fn)
   expect_equal(brewed[1], "!!!")
   expect_equal(brewed[2], sprintf("foo=%s", jc$job.hash))

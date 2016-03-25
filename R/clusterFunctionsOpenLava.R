@@ -13,13 +13,12 @@
 #' job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
-#' @template template
+#' @template template_or_text
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsOpenLava = function(template) {
-  list.jobs.cmd = c("bjobs", "-u $USER", "-w")
-  template = cfReadBrewTemplate(template)
+makeClusterFunctionsOpenLava = function(template = NULL, text = NULL) {
+  template = cfReadBrewTemplate(template, text)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
   # when unfinished jobs are found, and 255 when no jobs are found,
@@ -27,7 +26,7 @@ makeClusterFunctionsOpenLava = function(template) {
   Sys.setenv(LSB_BJOBS_CONSISTENT_EXIT_CODE = "Y")
 
   submitJob = function(reg, jc) {
-    outfile = cfBrewTemplate(reg, template, jc)
+    outfile = cfBrewTemplate(reg, text, jc)
     res = runOSCommand("bsub", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
     if (res$exit.code > 0L) {
@@ -49,11 +48,11 @@ makeClusterFunctionsOpenLava = function(template) {
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c(list.jobs.cmd, "-p"))
+    listJobs(reg, c("bjobs", "-u $USER", "-w", "-p"))
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c(list.jobs.cmd, "-r"))
+    listJobs(reg, c("bjobs", "-u $USER", "-w", "-r"))
   }
 
   killJob = function(reg, batch.id) {

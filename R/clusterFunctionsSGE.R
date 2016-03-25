@@ -13,16 +13,15 @@
 #' job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
-#' @template template
+#' @template template_or_text
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSGE = function(template) {
-  list.jobs.cmd = c("qstat",  "-u $USER")
-  template = cfReadBrewTemplate(template)
+makeClusterFunctionsSGE = function(template = NULL, text = NULL) {
+  template = cfReadBrewTemplate(template, text)
 
   submitJob = function(reg, jc) {
-    outfile = cfBrewTemplate(reg, template, jc)
+    outfile = cfBrewTemplate(reg, text, jc)
     res = runOSCommand("qsub", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
     if (res$exit.code > 0L) {
@@ -39,11 +38,11 @@ makeClusterFunctionsSGE = function(template) {
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c(list.jobs.cmd, "-s p"))
+    listJobs(reg, c("qstat",  "-u $USER", "-s p"))
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c(list.jobs.cmd, "-s rs"))
+    listJobs(reg, c("qstat",  "-u $USER", "-s rs"))
   }
 
   killJob = function(reg, batch.id) {

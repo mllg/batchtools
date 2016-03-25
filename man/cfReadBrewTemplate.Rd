@@ -4,11 +4,17 @@
 \alias{cfReadBrewTemplate}
 \title{Cluster functions helper: Read in your brew template file}
 \usage{
-cfReadBrewTemplate(template, comment.string = NA_character_)
+cfReadBrewTemplate(template = NULL, text = NULL,
+  comment.string = NA_character_)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
-Path to a brew template file that is used for the job description.}
+Path to a brew template file that can be used for the job description.
+Mutually exclusive with argument \code{text}.}
+
+\item{text}{[\code{character(1)}]\cr
+Single string holding the template to be used.
+Mutually exclusive with argument \code{template}.}
 
 \item{comment.string}{[\code{character(1)}]\cr
 Ignore lines starting with this string.}
@@ -18,9 +24,7 @@ Ignore lines starting with this string.}
 }
 \description{
 This function is only intended for use in your own cluster functions implementation.
-
-Simply reads your template and returns it as a character vector. If you do this in the
-constructor of your cluster functions once, you can avoid this repeated file access later on.
+Simply reads your template and returns it as a character vector.
 }
 \seealso{
 Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
