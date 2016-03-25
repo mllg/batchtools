@@ -4,11 +4,16 @@
 \alias{makeClusterFunctionsLSF}
 \title{ClusterFunctions for LSF Systems}
 \usage{
-makeClusterFunctionsLSF(template)
+makeClusterFunctionsLSF(template = NULL, text = NULL)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
-Path to a brew template file that is used for the job description.}
+Path to a brew template file that can be used for the job description.
+Mutually exclusive with argument \code{text}.}
+
+\item{text}{[\code{character(1)}]\cr
+Single string holding the template to be used.
+Mutually exclusive with argument \code{template}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

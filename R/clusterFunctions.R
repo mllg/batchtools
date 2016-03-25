@@ -119,25 +119,30 @@ print.SubmitJobResult = function(x, ...) {
 #'
 #' @description
 #' This function is only intended for use in your own cluster functions implementation.
+#' Simply reads your template and returns it as a character vector.
 #'
-#' Simply reads your template and returns it as a character vector. If you do this in the
-#' constructor of your cluster functions once, you can avoid this repeated file access later on.
-#'
-#' @template template
+#' @template template_or_text
 #' @param comment.string [\code{character(1)}]\cr
 #'   Ignore lines starting with this string.
 #' @return [\code{character}].
 #' @family ClusterFunctionsHelper
 #' @export
-cfReadBrewTemplate = function(template, comment.string = NA_character_) {
-  assertFile(template, "r")
-  lines = stri_trim_both(readLines(template))
+cfReadBrewTemplate = function(template = NULL, text = NULL, comment.string = NA_character_) {
+  if (!xor(is.null(template), is.null(text)))
+    stop("Either 'template' or 'text' must be provided")
+
+  if (!is.null(text)) {
+    lines = stri_trim_both(stri_split_lines(text)[[1L]])
+  } else {
+    assertFile(template, "r")
+    lines = stri_trim_both(readLines(template))
+  }
   lines = lines[!stri_isempty(lines)]
   if (!is.na(comment.string))
     lines = lines[!stri_startswith_fixed(lines, comment.string)]
   if (length(lines) == 0L)
     stopf("Error reading template '%s' or empty template", template)
-  stri_join(lines, collapse = "\n")
+  return(stri_join(lines, collapse = "\n"))
 }
 
 #' @title Cluster functions helper: Brew your template into a job description file
@@ -151,22 +156,22 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 #' \code{\link{tempfile}}.
 #'
 #' @template reg
-#' @param template [\code{character(1)}]\cr
-#'   String with contents of the brew templated, as returned by \code{\link{cfReadBrewTemplate}}.
+#' @param text [\code{character(1)}]\cr
+#'   String ready to be brewed. See \code{\link{cfReadBrewTemplate}} to read a template from the file system.
 #' @param jc [\code{\link{JobCollection})}]\cr
 #'   JobCollection holding all essential information. Will be used as environment to look
 #'   up variables.
 #' @return [\code{character(1)}]. File path to resulting template file.
 #' @family ClusterFunctionsHelper
 #' @export
-cfBrewTemplate = function(reg, template, jc) {
-  assertString(template)
+cfBrewTemplate = function(reg, text, jc) {
+  assertString(text)
 
   outfile = if (reg$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
   parent.env(jc) = .GlobalEnv
   on.exit(parent.env(jc) <- emptyenv())
 
-  z = try(brew::brew(text = template, output = outfile, envir = jc), silent = TRUE)
+  z = try(brew::brew(text = text, output = outfile, envir = jc), silent = TRUE)
   if (is.error(z))
     stopf("Error brewing template: %s", as.character(z))
   return(outfile)

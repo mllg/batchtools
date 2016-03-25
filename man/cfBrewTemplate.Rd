@@ -4,14 +4,14 @@
 \alias{cfBrewTemplate}
 \title{Cluster functions helper: Brew your template into a job description file}
 \usage{
-cfBrewTemplate(reg, template, jc)
+cfBrewTemplate(reg, text, jc)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
 
-\item{template}{[\code{character(1)}]\cr
-String with contents of the brew templated, as returned by \code{\link{cfReadBrewTemplate}}.}
+\item{text}{[\code{character(1)}]\cr
+String ready to be brewed. See \code{\link{cfReadBrewTemplate}} to read a template from the file system.}
 
 \item{jc}{[\code{\link{JobCollection})}]\cr
 JobCollection holding all essential information. Will be used as environment to look

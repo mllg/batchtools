@@ -11,16 +11,15 @@
 #' \code{\link{ClusterFunctions}}. It is the template file's job to choose a queue for the job and
 #' handle the desired resource allocations.
 #'
-#' @template template
+#' @template template_or_text
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsTorque = function(template) {
-  list.jobs.cmd = c("qselect", "-u $USER")
-  template = cfReadBrewTemplate(template, "##")
+makeClusterFunctionsTorque = function(template = NULL, text = NULL) {
+  text = cfReadBrewTemplate(template, text, "##")
 
   submitJob = function(reg, jc) {
-    outfile = cfBrewTemplate(reg, template, jc)
+    outfile = cfBrewTemplate(reg, text, jc)
     res = runOSCommand("qsub", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
     max.jobs.msg = "Maximum number of jobs already in queue"
@@ -45,11 +44,11 @@ makeClusterFunctionsTorque = function(template) {
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c(list.jobs.cmd, "-s QW"))
+    listJobs(reg, c("qselect", "-u $USER", "-s QW"))
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c(list.jobs.cmd, "-s EHRT"))
+    listJobs(reg, c("qselect", "-u $USER", "-s EHRT"))
   }
 
   makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,

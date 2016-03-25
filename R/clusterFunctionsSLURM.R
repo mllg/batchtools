@@ -13,16 +13,15 @@
 #' job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
-#' @template template
+#' @template template_or_text
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSLURM = function(template) {
-  list.jobs.cmd = c("squeue", "-h", "-o %i", "-u $USER")
-  template = cfReadBrewTemplate(template, "##")
+makeClusterFunctionsSLURM = function(template = NULL, text = NULL) {
+  template = cfReadBrewTemplate(template, text, "##")
 
   submitJob = function(reg, jc) {
-    outfile = cfBrewTemplate(reg, template, jc)
+    outfile = cfBrewTemplate(reg, text, jc)
     res = runOSCommand("sbatch", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
@@ -47,11 +46,11 @@ makeClusterFunctionsSLURM = function(template) {
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c(list.jobs.cmd, "-t PD"))
+    listJobs(reg, c("squeue", "-h", "-o %i", "-u $USER", "-t PD"))
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c(list.jobs.cmd, "-t R,S,CG"))
+    listJobs(reg, c("squeue", "-h", "-o %i", "-u $USER", "-t R,S,CG"))
   }
 
   killJob = function(reg, batch.id) {
