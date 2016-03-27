@@ -18,7 +18,7 @@
 #' @family ClusterFunctions
 #' @export
 makeClusterFunctionsOpenLava = function(template = NULL, text = NULL) {
-  template = cfReadBrewTemplate(template, text)
+  text = cfReadBrewTemplate(template, text)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
   # when unfinished jobs are found, and 255 when no jobs are found,
