@@ -18,7 +18,7 @@
 #' @family ClusterFunctions
 #' @export
 makeClusterFunctionsSLURM = function(template = NULL, text = NULL) {
-  template = cfReadBrewTemplate(template, text, "##")
+  text = cfReadBrewTemplate(template, text, "##")
 
   submitJob = function(reg, jc) {
     outfile = cfBrewTemplate(reg, text, jc)
