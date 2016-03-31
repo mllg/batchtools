@@ -48,9 +48,9 @@ batchMap(fun = piApprox, n = rep(1e5, 10))
 ```
 The length of the vector or list defines how many different jobs are created, while the elements itself are used as arguments for the function.
 The function `batchMap(fun, ...)` works analogously to `Map(f, ...)` of the base package.
-An overview over the jobs and their IDs can be retrieved with [`getJobInfo()`](https://mllg.github.io/batchtools/getJobInfo.html) which returns a data frame with all relevant information:
+An overview over the jobs and their IDs can be retrieved with [`getJobTable()`](https://mllg.github.io/batchtools/getJobTable.html) which returns a data frame with all relevant information:
 ```{r}
-names(getJobInfo())
+names(getJobTable())
 ```
 Note that a unique job ID is assigned to each job.
 These IDs can be used to restrict operations to subsets of jobs.

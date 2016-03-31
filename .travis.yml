@@ -16,6 +16,9 @@ addons:
 r_packages:
   - covr
 
+r_github_packages:
+  - mllg/checkmate
+
 before_install:
   - mkdir $HOME/bin
   - export PATH=$HOME/bin:$PATH
