@@ -61,7 +61,7 @@ algo.designs = list(algo = data.table(i = 1:5))
 addExperiments(prob.designs, algo.designs, repls = 10, reg = reg)
 
 # -> group into chunks of 5 jobs, but do not mix problems
-ids = getJobInfo(reg = reg)[, .(job.id, problem, algorithm)]
+ids = getJobTable(reg = reg)[, .(job.id, problem, algorithm)]
 ids = ids[chunkIds(ids, chunk.size = 5, group.by = "problem", reg = reg)]
 print(ids)
 dcast(ids, chunk ~ problem)

@@ -27,7 +27,6 @@ test_that("Problem and Algorithm seed", {
   algo.designs = list(a1 = data.table(), a2 = data.table())
   repls = 3
   ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
-  getJobInfo()
 
   silent({
     submitJobs(chunkIds(ids, reg = reg), reg = reg)

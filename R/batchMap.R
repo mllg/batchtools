@@ -18,7 +18,7 @@
 #' f = function(x, y) x^2 + y
 #' ids = batchMap(f, x = 1:10, more.args = list(y = 100), reg = reg)
 #' print(ids)
-#' getJobInfo(reg = reg, pars.as.cols = TRUE)
+#' getJobTable(reg = reg, pars.as.cols = TRUE)
 batchMap = function(fun, ..., more.args = list(), reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, strict = TRUE)
   if (nrow(reg$defs) > 0L)
