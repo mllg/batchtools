@@ -86,7 +86,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     updates = c(updates, lapply(results, "[[", "update"))
     lapply(results, function(r) catf(r$output, con = con))
   }
-  writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count + 1L)), wait = TRUE)
+  writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
 
   catf("[job(chunk): %s] Calculation finished!", stamp(), con = con)
   invisible(TRUE)
