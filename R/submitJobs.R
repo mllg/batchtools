@@ -61,8 +61,10 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   resources = insert(reg$default.resources, resources)
 
-  assertCount(resources$chunk.ncpus, positive = TRUE, null.ok = TRUE)
-  assertFlag(resources$measure.memory, null.ok = TRUE)
+  if (!is.null(resources$chunk.ncpus))
+    assertCount(resources$chunk.ncpus, positive = TRUE)
+  if (!is.null(resources$measure.memory))
+    assertFlag(resources$measure.memory)
 
   res.hash = digest::digest(resources)
   resources.hash = NULL
