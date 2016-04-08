@@ -22,7 +22,7 @@ test_that("makeRegistry", {
   expect_int(reg$seed)
   expect_identical(reg$seed, 123L)
 
-  expect_output(reg, "Registry")
+  expect_output(print(reg), "Registry")
 })
 
 test_that("make.default does work", {

@@ -4,7 +4,7 @@ test_that("clusterFunctions constructor", {
   check = function(cf) {
     expect_is(cf, "ClusterFunctions")
     expect_set_equal(names(cf), c("name", "submitJob", "killJob", "listJobsQueued", "listJobsRunning", "array.envir.var", "store.job", "hooks"))
-    expect_output(cf, "ClusterFunctions for mode")
+    expect_output(print(cf), "ClusterFunctions for mode")
   }
   reg = makeTempRegistry(FALSE)
   check(reg$cluster.functions)
@@ -37,7 +37,7 @@ test_that("submitJobResult", {
   expect_is(x, "SubmitJobResult")
   expect_identical(x$msg, "ERROR")
 
-  expect_output(x, "submission result")
+  expect_output(print(x), "submission result")
 
   x = cfHandleUnknownSubmitError(cmd = "ls", exit.code = 42L, output = "answer to life")
   expect_is(x, "SubmitJobResult")

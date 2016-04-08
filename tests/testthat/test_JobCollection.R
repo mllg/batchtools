@@ -18,7 +18,7 @@ test_that("makeJobCollection", {
   expect_directory(jc$work.dir)
   expect_list(jc$defs$pars)
 
-  expect_output(jc, "Collection")
+  expect_output(print(jc), "Collection")
 })
 
 test_that("makeJobCollection.ExperimentCollection", {
