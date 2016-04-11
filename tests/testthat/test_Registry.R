@@ -27,6 +27,7 @@ test_that("makeRegistry", {
 
 test_that("make.default does work", {
   if (!interactive()) {
+    clearDefaultRegistry()
     expect_error(getDefaultRegistry(), "No default")
     reg = makeRegistry(file.dir = NA, make.default = TRUE, seed = 123)
     expect_equal(reg$seed, 123L)
