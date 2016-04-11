@@ -1,7 +1,7 @@
 context("measure memory")
 
 test_that("memory measurements work", {
-  reg = makeTempRegistry(make.default = FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   ids = batchMap(function(n) { m = matrix(runif(n), nrow = 10); m %*% t(m) }, n = c(100, 1e7), reg = reg)
   silent({
     submitJobs(1:2, reg = reg, resources = list(measure.memory = TRUE))

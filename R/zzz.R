@@ -4,11 +4,6 @@
 #'
 #' @section Package options:
 #' \describe{
-#'   \item{\code{batchtools.temp.dir}}{
-#'     Temporary directory to use in \code{\link{makeTempRegistry}}.
-#'     On some cluster systems you might want to set this to a directory which is shared between nodes.
-#'     Default is the system temp directory as returned by \code{\link[base]{tempdir}}.
-#'   }
 #'   \item{\code{batchtools.verbose}}{
 #'     Verbosity. Set to \code{FALSE} to suppress info messages and progress bars.
 #'   }

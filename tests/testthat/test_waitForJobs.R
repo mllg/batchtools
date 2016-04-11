@@ -1,7 +1,7 @@
 context("waitForJobs")
 
 test_that("waitForJobs", {
-  reg = makeTempRegistry(make.default = FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(x) if (x == 2) stop(x) else x
   ids = batchMap(reg = reg, fun, 1:2)
   silent({
@@ -12,7 +12,7 @@ test_that("waitForJobs", {
 })
 
 test_that("waitForJobs: detection of expired jobs", {
-  reg = makeTempRegistry(make.default = FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   if (is.null(reg$cluster.functions$killJob))
     skip("Test requires killJobs")
 

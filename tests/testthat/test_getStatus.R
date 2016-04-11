@@ -1,7 +1,7 @@
 context("getStatus")
 
 test_that("getStatus", {
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(i) if (i == 4) stop("4!") else i
   ids = batchMap(fun, i = 1:10, reg = reg)
   silent({

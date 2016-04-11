@@ -27,14 +27,14 @@
 #' @export
 #' @examples
 #' # chunking for Registry
-#' reg = makeTempRegistry(make.default = FALSE)
+#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
 #' ids = batchMap(identity, 1:25, reg = reg)
 #' ids = ids[chunkIds(ids, chunk.size = 10, reg = reg)]
 #' print(ids)
 #' print(table(ids$chunk))
 #'
 #' # Creating chunks for an ExperimentRegistry
-#' reg = makeTempExperimentRegistry(make.default = FALSE)
+#' reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #' prob = addProblem(reg = reg, "prob1", data = iris, fun = function(job, data) nrow(data))
 #' prob = addProblem(reg = reg, "prob2", data = Titanic, fun = function(job, data) nrow(data))
 #' algo = addAlgorithm(reg = reg, "algo", fun = function(job, data, instance, i, ...) problem)

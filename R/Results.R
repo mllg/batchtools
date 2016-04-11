@@ -23,7 +23,7 @@
 #' @family Results
 #' @export
 #' @examples
-#' reg = makeTempRegistry()
+#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(function(x) x^2, x = 1:10, reg = reg)
 #' submitJobs(reg = reg)
 #' waitForJobs(reg = reg)
@@ -83,7 +83,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @family Results
 #' @export
 #' @examples
-#' reg = makeTempRegistry()
+#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(function(x) x^2, x = 1:10, reg = reg)
 #' submitJobs(reg = reg)
 #' waitForJobs(reg = reg)

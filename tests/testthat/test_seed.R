@@ -19,7 +19,7 @@ test_that("with_seed", {
 })
 
 test_that("Problem and Algorithm seed", {
-  reg = makeTempExperimentRegistry(TRUE, seed = 42L) #FIXME
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE, seed = 42)
   addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) runif(1), seed = 1L)
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) list(instance = instance, res = runif(1)))
   addAlgorithm(reg = reg, "a2", fun = function(job, data, instance, ...) list(instance = instance, res = runif(1)))

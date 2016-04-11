@@ -17,7 +17,7 @@ See the paper on [BatchJobs and BatchExperiments](http://www.jstatsoft.org/artic
 Again, we use a temporary registry and make it the default registry.
 ```{r, eval = FALSE, message = FALSE}
 library(batchtools)
-reg = makeTempExperimentRegistry(make.default = TRUE)
+reg = makeExperimentRegistry(file.dir = NA)
 ```
 ```{r, include = FALSE}
 library(batchtools)

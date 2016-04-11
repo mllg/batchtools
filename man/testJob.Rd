@@ -32,7 +32,7 @@ Starts a single job in the current R session.
 Debugging tools like \code{\link[base]{traceback}} should work.
 }
 \examples{
-reg = makeTempRegistry(make.default = FALSE)
+reg = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(function(x) if (x == 2) xxx else x, 1:2, reg = reg)
 testJob(1, reg = reg)
 \dontrun{

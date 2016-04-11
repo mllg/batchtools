@@ -1,7 +1,7 @@
 context("ExperimentRegistry")
 
 test_that("makeExperimentRegistry", {
-  reg = makeTempExperimentRegistry(FALSE)
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   expect_is(reg, "Registry")
   expect_is(reg, "ExperimentRegistry")
   expect_true(is.environment(reg))

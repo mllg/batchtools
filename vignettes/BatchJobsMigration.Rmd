@@ -37,7 +37,7 @@ options(batchtools.progress = FALSE)
 
 ```{r}
 library(batchtools)
-reg = makeTempRegistry(make.default = TRUE)
+reg = makeRegistry(file.dir = NA)
 batchMap(function(x, y) x + y, x = 1:5, y = 1)
 ids = findJobs(x > 3)
 print(ids)

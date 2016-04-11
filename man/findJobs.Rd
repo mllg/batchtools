@@ -81,7 +81,7 @@ or, if you are really just interested in the status, use \code{\link{getStatus}}
 Note that \code{findOnSystem} and \code{findExpired} are somewhat heuristic and may report misleading results, depending on the state of the system.
 }
 \examples{
-reg = makeTempRegistry(make.default = FALSE)
+reg = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(identity, i = 1:3, reg = reg)
 ids = findNotSubmitted(reg = reg)
 

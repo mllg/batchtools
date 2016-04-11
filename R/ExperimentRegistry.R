@@ -16,7 +16,7 @@
 #' @rdname ExperimentRegistry
 #' @export
 #' @examples
-#' reg = makeTempExperimentRegistry(make.default = FALSE)
+#' reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #' addProblem(reg = reg, "p1",
 #'   fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
 #' addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) mean(instance))
@@ -45,15 +45,6 @@ makeExperimentRegistry = function(...) {
   setattr(reg, "class", c("ExperimentRegistry", class(reg)))
   saveRegistry(reg)
   return(reg)
-}
-
-#' @export
-#' @inheritParams Registry
-#' @rdname ExperimentRegistry
-makeTempExperimentRegistry = function(make.default = FALSE, temp.dir = getOption("batchtools.temp.dir", tempdir()), ...) {
-  if (!file.exists(temp.dir))
-    dir.create(temp.dir, recursive = TRUE)
-  makeExperimentRegistry(file.dir = file.path(temp.dir, basename(tempfile("registry"))), make.default = make.default, ...)
 }
 
 #' @export

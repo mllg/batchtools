@@ -16,7 +16,7 @@ They are created by using [`makeRegistry(file.dir)`](https://mllg.github.io/batc
 For our short example, we use a temporary registry which is stored in the temp directory of the system and gets automatically deleted if you close the R session.
 ```{r, eval = FALSE}
 library(batchtools)
-reg = makeTempRegistry(make.default = TRUE)
+reg = makeRegistry(file.dir = NA)
 ```
 ```{r, include = FALSE}
 library(batchtools)

@@ -6,7 +6,6 @@
 \alias{getDefaultRegistry}
 \alias{loadRegistry}
 \alias{makeRegistry}
-\alias{makeTempRegistry}
 \alias{saveRegistry}
 \alias{setDefaultRegistry}
 \alias{syncRegistry}
@@ -23,9 +22,6 @@ makeRegistry(file.dir = "registry", work.dir = getwd(),
   namespaces = character(0L), source = character(0L),
   load = character(0L), seed = NULL, make.default = TRUE)
 
-makeTempRegistry(make.default = FALSE,
-  temp.dir = getOption("batchtools.temp.dir", tempdir()), ...)
-
 loadRegistry(file.dir = "registry", work.dir = NULL,
   conf.file = "~/.batchtools.conf.r", make.default = TRUE,
   update.paths = FALSE)
@@ -39,8 +35,14 @@ syncRegistry(reg = getDefaultRegistry(), save = TRUE)
 Registry. If not explicitly passed, uses the last created registry.}
 
 \item{file.dir}{[\code{character(1)}]\cr
-Path where all files of the registry are saved.
-Default is directory \dQuote{registry} in the current working directory.}
+  Path where all files of the registry are saved.
+  Default is directory \dQuote{registry} in the current working directory.
+
+  If you pass \code{NA}, a temporary directory will be used.
+  This way, you can create disposable registries for \code{\link{btlapply}} or examples.
+  By default, the temporary directory \code{\link[base]{tempdir}()} will be used.
+  If you want to use another temp directory, e.g. a directory which is shared between nodes,
+  you can set it in your configuration via \code{temp.dir}.}
 
 \item{work.dir}{[\code{character(1)}]\cr
 Working directory for R process when experiment is executed.
@@ -82,13 +84,6 @@ namespace and acts as default registry. You might want to switch this
 off if you work with multiple registries simultaneously.
 Default is \code{TRUE}.}
 
-\item{temp.dir}{[\code{character(1)}]\cr
-Path to temporary directory.
-Defaults to the value of the option \dQuote{batchtools.temp.dir} or (if unset) \code{\link[base]{tempdir}}.}
-
-\item{...}{[\code{ANY}]\cr
-Additional parameters passed to \code{makeRegistry}.}
-
 \item{update.paths}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, the \code{file.dir} and \code{work.dir} will be updated in the registry. Note that this is
 likely to break computation on the system, only do this if no jobs are currently running. Default is \code{FALSE}.
@@ -120,15 +115,11 @@ Save the registry to the file system? Default is \code{TRUE}.}
 The registry created last is saved in the package namespace (unless \code{make.default} is set to
 \code{FALSE}) and can be retrieved via \code{getDefaultRegistry}.
 
-\code{makeTempRegistry} creates a temporary registry in the subdirectory of a temporary directory.
-Such disposable registries are mainly used in sequential apply functions like \code{\link{btlapply}}.
-The base dir can be set via the option \dQuote{batchtools.temp.dir} and defaults to \code{\link[base]{tempdir}}.
-
 \code{saveRegistry} serializes the registry to the file system and be be loaded with \code{loadRegistry} by specifying the \code{file.dir}.
 \code{syncRegisty} refreshes the registry by parsing update files from jobs.
 }
 \examples{
-reg = makeTempRegistry(make.default = FALSE)
+reg = makeRegistry(file.dir = NA, make.default = FALSE)
 print(reg)
 
 #' Set debug mode

@@ -139,7 +139,7 @@ findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
 #' @return [\code{data.table}]. Matching job ids are stored in the column \dQuote{job.id}.
 #' @export
 #' @examples
-#' reg = makeTempRegistry(make.default = FALSE)
+#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(identity, i = 1:3, reg = reg)
 #' ids = findNotSubmitted(reg = reg)
 #'

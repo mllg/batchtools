@@ -27,16 +27,18 @@ clearDefaultRegistry = function() {
 #' The registry created last is saved in the package namespace (unless \code{make.default} is set to
 #' \code{FALSE}) and can be retrieved via \code{getDefaultRegistry}.
 #'
-#' \code{makeTempRegistry} creates a temporary registry in the subdirectory of a temporary directory.
-#' Such disposable registries are mainly used in sequential apply functions like \code{\link{btlapply}}.
-#' The base dir can be set via the option \dQuote{batchtools.temp.dir} and defaults to \code{\link[base]{tempdir}}.
-#'
 #' \code{saveRegistry} serializes the registry to the file system and be be loaded with \code{loadRegistry} by specifying the \code{file.dir}.
 #' \code{syncRegisty} refreshes the registry by parsing update files from jobs.
 #'
 #' @param file.dir [\code{character(1)}]\cr
 #'   Path where all files of the registry are saved.
 #'   Default is directory \dQuote{registry} in the current working directory.
+#'
+#'   If you pass \code{NA}, a temporary directory will be used.
+#'   This way, you can create disposable registries for \code{\link{btlapply}} or examples.
+#'   By default, the temporary directory \code{\link[base]{tempdir}()} will be used.
+#'   If you want to use another temp directory, e.g. a directory which is shared between nodes,
+#'   you can set it in your configuration via \code{temp.dir}.
 #' @param work.dir [\code{character(1)}]\cr
 #'   Working directory for R process when experiment is executed.
 #'   For \code{makeRegistry}, this defaults to the current working directory.
@@ -89,7 +91,7 @@ clearDefaultRegistry = function() {
 #' @rdname Registry
 #' @export
 #' @examples
-#' reg = makeTempRegistry(make.default = FALSE)
+#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
 #' print(reg)
 #'
 #' #' Set debug mode
@@ -103,8 +105,9 @@ clearDefaultRegistry = function() {
 #' saveRegistry(reg = reg)
 makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "~/.batchtools.conf.r", packages = character(0L), namespaces = character(0L),
   source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
-  assertString(file.dir)
-  assertPathForOutput(file.dir, overwrite = FALSE)
+  assertString(file.dir, na.ok = TRUE)
+  if (!is.na(file.dir))
+    assertPathForOutput(file.dir, overwrite = FALSE)
   assertString(work.dir)
   assertDirectory(work.dir, access = "r")
   assertString(conf.file)
@@ -117,15 +120,9 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "
 
   loadRegistryDependencies(list(work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
 
-  dir.create(file.dir, recursive = TRUE)
-  dir.create(file.path(file.dir, "jobs"))
-  dir.create(file.path(file.dir, "results"))
-  dir.create(file.path(file.dir, "updates"))
-  dir.create(file.path(file.dir, "logs"))
-
   reg = new.env(parent = asNamespace("batchtools"))
 
-  reg$file.dir = npath(file.dir)
+  reg$file.dir = file.dir
   reg$work.dir = work.dir
   reg$packages = packages
   reg$namespaces = namespaces
@@ -165,26 +162,32 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "
   if (file.exists(conf.file)) {
     info("Sourcing configuration file '%s' ...", conf.file)
     sys.source(conf.file, envir = reg, keep.source = FALSE)
+
+    if (!is.null(reg$cluster.functions))
+      assertClass(reg$cluster.functions, "ClusterFunctions")
+    if (!is.null(reg$temp.dir))
+      assertString(reg$temp.dir)
+    if (!is.null(reg$default.resources))
+      assertList(reg$default.resources, names = "unique")
+    if (!is.null(reg$debug))
+      assertFlag(reg$debug)
   }
+
+  if (is.na(file.dir)) {
+    temp.dir = if (is.null(reg$temp.dir)) tempdir() else npath(reg$temp.dir)
+    reg$file.dir = tempfile("registry", tmpdir = temp.dir)
+  } else {
+    reg$file.dir = npath(file.dir)
+  }
+
+  for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs")))
+    dir.create(d, recursive = TRUE)
 
   setattr(reg, "class", "Registry")
   saveRegistry(reg)
   if (make.default)
     batchtools$default.registry = reg
   return(reg)
-}
-
-#' @export
-#' @param temp.dir [\code{character(1)}]\cr
-#'   Path to temporary directory.
-#'   Defaults to the value of the option \dQuote{batchtools.temp.dir} or (if unset) \code{\link[base]{tempdir}}.
-#' @param ... [\code{ANY}]\cr
-#'   Additional parameters passed to \code{makeRegistry}.
-#' @rdname Registry
-makeTempRegistry = function(make.default = FALSE, temp.dir = getOption("batchtools.temp.dir", tempdir()), ...) {
-  if (!file.exists(temp.dir))
-    dir.create(temp.dir, recursive = TRUE)
-  makeRegistry(file.dir = file.path(temp.dir, basename(tempfile("registry"))), make.default = make.default, ...)
 }
 
 #' @export

@@ -5,10 +5,10 @@
 \alias{btmapply}
 \title{Synchronous Apply Functions}
 \usage{
-btlapply(X, fun, ..., reg = makeTempRegistry(make.default = FALSE))
+btlapply(X, fun, ..., reg = makeRegistry(file.dir = NA))
 
 btmapply(fun, ..., more.args = list(), simplify = FALSE, use.names = TRUE,
-  reg = makeTempRegistry(make.default = FALSE))
+  reg = makeRegistry(file.dir = NA))
 }
 \arguments{
 \item{X}{[\code{\link[base]{vector}}]\cr
@@ -39,8 +39,8 @@ Use names of the input to name the output?}
 This is a set of convenience functions as counterparts to the sequential
 apply functions in base R: \code{btlapply} for \code{\link[base]{lapply}} and
 \code{btmapply} for \code{link[base]{mapply}}.
-Internally the jobs are created in a temporary registry (see \code{\link{makeTempRegistry}}
-and \code{\link{batchMap}} is called on the input vector(s).
+Internally the jobs are created in a temporary registry (see argument \code{file.dir} of
+\code{\link{makeRegistry}}) and \code{\link{batchMap}} is called on the input vector(s).
 After \code{\link{waitForJobs}} terminated, the result is reduced into a list.
 Because the result is only returned as soon as all jobs are terminated,
 the execution is called synchronized (in contrast to the usual asynchronous execution on

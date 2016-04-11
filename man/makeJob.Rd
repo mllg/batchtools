@@ -41,7 +41,7 @@ Each subsequent access returns a cached version from memory (except \dQuote{inst
 Jobs can be executed with \code{\link{execJob}}.
 }
 \examples{
-reg = makeTempRegistry(make.default = FALSE)
+reg = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(identity, 1:5, reg = reg)
 job = makeJob(1, reg = reg)
 names(job)

@@ -4,8 +4,8 @@
 #' This is a set of convenience functions as counterparts to the sequential
 #' apply functions in base R: \code{btlapply} for \code{\link[base]{lapply}} and
 #' \code{btmapply} for \code{link[base]{mapply}}.
-#' Internally the jobs are created in a temporary registry (see \code{\link{makeTempRegistry}}
-#' and \code{\link{batchMap}} is called on the input vector(s).
+#' Internally the jobs are created in a temporary registry (see argument \code{file.dir} of
+#' \code{\link{makeRegistry}}) and \code{\link{batchMap}} is called on the input vector(s).
 #' After \code{\link{waitForJobs}} terminated, the result is reduced into a list.
 #' Because the result is only returned as soon as all jobs are terminated,
 #' the execution is called synchronized (in contrast to the usual asynchronous execution on
@@ -26,7 +26,7 @@
 #' @template reg
 #' @return [\code{list}] List with the results of the function call.
 #' @export
-btlapply = function(X, fun, ..., reg = makeTempRegistry(make.default = FALSE)) {
+btlapply = function(X, fun, ..., reg = makeRegistry(file.dir = NA)) {
   assertVector(X)
   assertFunction(fun)
   assertRegistry(reg, writeable = TRUE, strict = TRUE)
@@ -43,7 +43,7 @@ btlapply = function(X, fun, ..., reg = makeTempRegistry(make.default = FALSE)) {
 #' @param use.names [\code{logical(1)}]\cr
 #'   Use names of the input to name the output?
 #' @rdname btlapply
-btmapply = function(fun, ..., more.args = list(), simplify = FALSE, use.names = TRUE, reg = makeTempRegistry(make.default = FALSE)) {
+btmapply = function(fun, ..., more.args = list(), simplify = FALSE, use.names = TRUE, reg = makeRegistry(file.dir = NA)) {
   assertFunction(fun)
   assertFlag(simplify)
   assertFlag(use.names)

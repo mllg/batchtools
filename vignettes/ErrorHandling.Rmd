@@ -19,7 +19,7 @@ By way of illustration here is a small example.
 First, we create a temporary registry.
 ```{r, message = FALSE, eval = FALSE}
 library(batchtools)
-reg = makeTempRegistry(work.dir = "/tmp", make.default = TRUE)
+reg = makeRegistry(file.dir = NA, work.dir = "/tmp")
 ```
 ```{r, include = FALSE}
 library(batchtools)

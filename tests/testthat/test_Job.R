@@ -1,7 +1,7 @@
 context("Job")
 
 test_that("Job", {
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, reg = reg, more.args = list(x = 1))
 
@@ -24,7 +24,7 @@ test_that("Job", {
 })
 
 test_that("Experiment", {
-  reg = makeTempExperimentRegistry(FALSE)
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   addProblem(reg = reg, "p1", fun = function(job, data, ...) list(data = data, ...))
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) length(instance))
   ids = addExperiments(list(p1 = data.table(i = 1:3)), list(a1 = data.table()), reg = reg)
