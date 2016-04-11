@@ -5,6 +5,10 @@ r:
    - release
    - devel
 
+env:
+  global:
+    secure: "0akMzIUmc1B17WVDZFzsKS4af5VMVro4Nje468xtSjnLSt3Uj80EsOTpbSm6JCFZrji6akL4bNl8Qi4VOutbY+uw13K6hJm2MmpKvogcpkzu/d4Vao1Xv80kJTw0A/rkMET48OeOooeR69Snoad22yP0D7jKokGfpq3Vmr2CGS2KBa8cPd4tGwLMmJuHd6T/3Wd/AVC97Xg/ZXBnFvYmdnHCQN2bNmt/n/wzLi0zsYtCpI42Cz8vJeq7dBmNSUQ3cMH0Rp+4SPncQwsJ490+5Kw5xi2bn1ugRRY3WIrI2pd9cWZLI0mSR8voyGtyHLZBskcJ+mY2obawHLJ0jQXceQidw/r+hmI93ra8vXQ2y+LTVC+mcwG9bg1m98g8DuLDq/Br+eYQ4H8VCxvQ4gdS5K/N6Ex7G93y1gBsanFgSuFTSGjXTXkh48pLRzPdSe7M2ruJdyz5eM+Cbd/tJNTsOzKYm7ojNr8D2sK/qAhYX6t1YKRHpLJxodv/1MwbbE46itl+x1a6KGKRWIqbggrkLi/0R0W5YeOPs4/f7IOeJD9Cdj+qhz7KiobSafRwbPFxzsz+z8+BK22TGKH2af4qUovBzP8ZcunbELWjgPQGL/VQXOswQwh7VhqBaBckhcMyum/CuvcILb/noU1sqmrTZ+lxOfx3uoik7nPyEnwxDhU="
+
 addons:
  apt:
    sources:
