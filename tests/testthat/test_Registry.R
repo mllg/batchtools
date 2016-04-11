@@ -1,7 +1,7 @@
 context("Registry")
 
 test_that("makeRegistry", {
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   expect_is(reg, "Registry")
   expect_true(is.environment(reg))
   expect_directory(reg$file.dir, access = "rw")
@@ -17,7 +17,7 @@ test_that("makeRegistry", {
   expect_list(reg$default.resources, names = "strict")
   checkTables(reg, any.missing = FALSE, nrows = 0L)
 
-  reg = makeTempRegistry(FALSE, packages = "checkmate", seed = 123)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE, packages = "checkmate", seed = 123)
   expect_equal(reg$packages, "checkmate")
   expect_int(reg$seed)
   expect_identical(reg$seed, 123L)
@@ -28,9 +28,9 @@ test_that("makeRegistry", {
 test_that("make.default does work", {
   if (!interactive()) {
     expect_error(getDefaultRegistry(), "No default")
-    reg = makeTempRegistry(TRUE, packages = "checkmate", seed = 123)
+    reg = makeRegistry(file.dir = NA, make.default = TRUE, seed = 123)
     expect_equal(reg$seed, 123L)
-    reg = makeTempRegistry(FALSE, seed = 124L)
+    reg = makeRegistry(file.dir = NA, make.default = FALSE, seed = 124)
     expect_equal(reg$seed, 124L)
     expect_equal(getDefaultRegistry()$seed, 123L)
 
@@ -51,13 +51,13 @@ test_that("extra files are loaded", {
   save(x_from_load, file = fn$load)
   rm(x_from_load)
 
-  reg = makeTempRegistry(FALSE, work.dir = wd, source = fn$source, load = fn$load)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE, work.dir = wd, source = fn$source, load = fn$load)
   expect_identical(get("x_from_source", .GlobalEnv), 123)
   expect_identical(get("x_from_load", .GlobalEnv), 321)
   rm("x_from_source", envir = .GlobalEnv)
   rm("x_from_load", envir = .GlobalEnv)
 
-  reg = makeTempRegistry(FALSE, work.dir = wd, source = basename(fn$source), load = file.path("subdir", basename(fn$load)))
+  reg = makeRegistry(file.dir = NA, make.default = FALSE, work.dir = wd, source = basename(fn$source), load = file.path("subdir", basename(fn$load)))
   expect_identical(get("x_from_source", .GlobalEnv), 123)
   expect_identical(get("x_from_load", .GlobalEnv), 321)
   rm("x_from_source", envir = .GlobalEnv)
@@ -65,7 +65,7 @@ test_that("extra files are loaded", {
 })
 
 test_that("loadRegistry", {
-  reg1 = makeTempRegistry(FALSE)
+  reg1 = makeRegistry(file.dir = NA, make.default = FALSE)
   fd = reg1$file.dir
   clearDefaultRegistry()
   reg2 = loadRegistry(fd, make.default = FALSE)

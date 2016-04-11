@@ -4,7 +4,7 @@ test_that("cf multicore", {
   skip_on_os("windows")
   skip("does not work with R CMD check")
 
-  reg = makeTempRegistry(make.default = FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   reg$cluster.functions = makeClusterFunctionsMulticore(ncpus = 99, max.load = Inf)
   ids = batchMap(Sys.sleep, time = c(10, 5), reg = reg)
   silent({
@@ -21,7 +21,7 @@ test_that("chunk parallelization works", {
   skip("Manual test")
 
   p = Parallel$new(4)
-  reg = makeTempRegistry(TRUE, packages = "rscimark")
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(function(i) rscimark(), i = 1:8, reg = reg)
   submitJobs(chunkIds(1:8), reg = reg)
 })

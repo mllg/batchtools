@@ -27,7 +27,7 @@ Registry. If not explicitly passed, uses the last created registry.}
 A parallel \code{\link[base]{Map}} for batch systems.
 }
 \examples{
-reg = makeTempRegistry()
+reg = makeRegistry(file.dir = NA, make.default = FALSE)
 f = function(x, y) x^2 + y
 ids = batchMap(f, x = 1:10, more.args = list(y = 100), reg = reg)
 print(ids)

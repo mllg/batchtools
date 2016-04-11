@@ -6,7 +6,7 @@ test_that("clusterFunctions constructor", {
     expect_set_equal(names(cf), c("name", "submitJob", "killJob", "listJobsQueued", "listJobsRunning", "array.envir.var", "store.job", "hooks"))
     expect_output(print(cf), "ClusterFunctions for mode")
   }
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   check(reg$cluster.functions)
   check(makeClusterFunctionsInteractive())
   check(makeClusterFunctionsMulticore(ncpus = 1, max.load = 1))
@@ -57,7 +57,7 @@ test_that("brew", {
   assertCharacter(res, len = 2)
   expect_equal(sum(stri_detect_fixed(res, "job.hash")), 1)
 
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   ids = batchMap(identity, 1:2, reg = reg)
   jc = makeJobCollection(1, reg = reg)
   text = cfReadBrewTemplate(fn, comment.string = "###")

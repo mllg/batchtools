@@ -1,7 +1,7 @@
 context("grepLogs")
 
 test_that("grepLogs", {
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   ids = batchMap(reg = reg, function(x) print(sprintf("FOOBAR: %s", paste(rep.int(LETTERS[x], 3), collapse = ""))), x = 1:4)
   ids$chunk = as.integer(c(1, 1, 2, 3))
   silent({

@@ -3,27 +3,13 @@
 \name{ExperimentRegistry}
 \alias{ExperimentRegistry}
 \alias{makeExperimentRegistry}
-\alias{makeTempExperimentRegistry}
 \title{ExperimentRegistry Constructor}
 \usage{
 makeExperimentRegistry(...)
-
-makeTempExperimentRegistry(make.default = FALSE,
-  temp.dir = getOption("batchtools.temp.dir", tempdir()), ...)
 }
 \arguments{
 \item{...}{[\code{ANY}]\cr
 Arguments passed to \code{\link{Registry}}.}
-
-\item{make.default}{[\code{logical(1)}]\cr
-If set to \code{TRUE}, the created registry is saved inside the package
-namespace and acts as default registry. You might want to switch this
-off if you work with multiple registries simultaneously.
-Default is \code{TRUE}.}
-
-\item{temp.dir}{[\code{character(1)}]\cr
-Path to temporary directory.
-Defaults to the value of the option \dQuote{batchtools.temp.dir} or (if unset) \code{\link[base]{tempdir}}.}
 }
 \value{
 [\code{ExperimentRegistry}].
@@ -37,7 +23,7 @@ These can be parametrized with \code{\link{addExperiments}} to actually define c
 jobs.
 }
 \examples{
-reg = makeTempExperimentRegistry(make.default = FALSE)
+reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 addProblem(reg = reg, "p1",
   fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
 addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) mean(instance))

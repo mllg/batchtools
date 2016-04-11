@@ -1,7 +1,7 @@
 context("Results")
 
 suppressMessages({
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(...) list(...)
   ids = batchMap(fun, a = 1:4, b = 4:1, reg = reg)
   silent({
@@ -12,7 +12,7 @@ suppressMessages({
 
 test_that("reduceResults with no results reg", {
   silent({
-    reg = makeTempRegistry(FALSE)
+    reg = makeRegistry(file.dir = NA, make.default = FALSE)
 
     expect_equal(reduceResults(fun = c, reg = reg), NULL)
     expect_equal(reduceResults(fun = c, reg = reg, init = 42), 42)
@@ -75,7 +75,7 @@ test_that("loadResult", {
 
 test_that("multiRowResults", {
   silent({
-    reg = makeTempRegistry(FALSE)
+    reg = makeRegistry(file.dir = NA, make.default = FALSE)
     fun = function(a) data.table(y1 = rep(a, 3), y2 = rep(a/2, 3))
     ids = batchMap(fun, a = c(10, 100), reg = reg)
     silent({

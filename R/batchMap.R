@@ -14,7 +14,7 @@
 #' @return [\code{data.table}]. Generated job ids are stored in the column \dQuote{job.id}.
 #' @export
 #' @examples
-#' reg = makeTempRegistry()
+#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
 #' f = function(x, y) x^2 + y
 #' ids = batchMap(f, x = 1:10, more.args = list(y = 100), reg = reg)
 #' print(ids)

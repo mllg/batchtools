@@ -16,7 +16,7 @@
 #' @return [\code{data.table}]. Generated job ids are stored in the column \dQuote{job.id}.
 #' @export
 #' @examples
-#' reg = makeTempExperimentRegistry()
+#' reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #' addProblem(reg = reg, "p1",
 #'   fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
 #' addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) mean(instance))

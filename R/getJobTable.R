@@ -41,7 +41,7 @@
 #' }
 #' @export
 #' @examples
-#' reg = makeTempRegistry(make.default = FALSE)
+#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
 #' f = function(x) if (x < 0) stop("x must be > 0") else sqrt(x)
 #' batchMap(f, x = c(-1, 0, 1), reg = reg)
 #' submitJobs(reg = reg)

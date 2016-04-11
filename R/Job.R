@@ -83,7 +83,7 @@ Experiment = R6Class("Experiment",
 #' @aliases Job
 #' @export
 #' @examples
-#' reg = makeTempRegistry(make.default = FALSE)
+#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(identity, 1:5, reg = reg)
 #' job = makeJob(1, reg = reg)
 #' names(job)

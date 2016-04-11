@@ -1,7 +1,7 @@
 context("showLog")
 
 test_that("showLog", {
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(reg = reg, function(x) print("GREPME"), 1:2)
   expect_error(showLog(id = 1, reg = reg), "not available")
   expect_error(readLog(id = 1, reg = reg), "not available")

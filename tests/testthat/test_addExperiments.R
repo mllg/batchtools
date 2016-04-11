@@ -1,7 +1,7 @@
 context("addExperiments")
 
 test_that("addProblem", {
-  reg = makeTempExperimentRegistry(FALSE)
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
   expect_is(prob, "Problem")
   expect_equal(prob$data, iris)
@@ -33,7 +33,7 @@ test_that("addProblem", {
 })
 
 test_that("addAlgorithm", {
-  reg = makeTempExperimentRegistry(FALSE)
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
   expect_is(algo, "Algorithm")
   expect_equal(algo$name, "a1")
@@ -54,7 +54,7 @@ test_that("addAlgorithm", {
 })
 
 test_that("addExperiments handles parameters correctly", {
-  reg = makeTempExperimentRegistry(FALSE)
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, x, y, ...) stopifnot(is.numeric(x) && is.character(y)), seed = 42)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, a, b, ...) { print(str(a)); assertList(a, len = 1, names = "named"); assertDataFrame(b); } )
   prob.designs = list(p1 = data.table(x = 1:2, y = letters[1:2]))
@@ -70,7 +70,7 @@ test_that("addExperiments handles parameters correctly", {
 
 test_that("benchmark of addExperiments", {
   skip("This is a manual regression test")
-  reg = makeTempExperimentRegistry(FALSE)
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
   addAlgorithm(reg = reg, "a2", fun = function(job, data, instance, ...) NULL)

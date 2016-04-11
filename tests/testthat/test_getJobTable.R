@@ -1,7 +1,7 @@
 context("getJobTable")
 
 test_that("getJobTable.Registry", {
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(i, j) i + j
   ids = batchMap(fun, i = 1:4, j = rep(1, 4), reg = reg)
 
@@ -32,7 +32,7 @@ test_that("getJobTable.Registry", {
 })
 
 test_that("getJobResources", {
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(i, j) i + j
   ids = batchMap(fun, i = 1:4, j = rep(1, 4), reg = reg)
   silent({
@@ -51,7 +51,7 @@ test_that("getJobResources", {
 })
 
 test_that("getJobPars", {
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(i, j) i + j
   ids = batchMap(fun, i = 1:4, j = rep(1, 4), reg = reg)
   tab = getJobPars(reg = reg, pars.as.cols = NULL)
@@ -68,7 +68,7 @@ test_that("getJobPars", {
 })
 
 test_that("getJobPars with repls", {
-  reg = makeTempExperimentRegistry()
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   prob = addProblem("prob", data = iris, fun = function(data, job) nrow(data), reg = reg)
   algo = addAlgorithm("algo", fun = function(job, data, instance, i, ...) instance, reg = reg)
   prob.designs = list(prob = data.table())
@@ -84,7 +84,7 @@ test_that("getJobPars with repls", {
 })
 
 test_that("getJobTable.ExperimentRegistry", {
-  reg = makeTempExperimentRegistry(FALSE)
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) nrow(data), seed = 42)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq) instance^sq)
   ids = addExperiments(list(p1 = data.table(k = 1)), list(a1 = data.table(sq = 1:3)), reg = reg)
@@ -112,7 +112,7 @@ test_that("getJobTable.ExperimentRegistry", {
 
 
 test_that("parsAsCols autodetection", {
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   input = list(1, NULL, iris, letters)
   batchMap(identity, x = input, reg = reg)
   tab = getJobPars(reg = reg, pars.as.cols = NULL)

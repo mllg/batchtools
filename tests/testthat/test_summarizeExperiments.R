@@ -1,7 +1,7 @@
 context("summarizeExperiments")
 
 test_that("summarizeExperiments", {
-  reg = makeTempExperimentRegistry(FALSE)
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) nrow(data), seed = 42)
   prob = addProblem(reg = reg, "p2", data = iris, fun = function(job, data) nrow(data), seed = 42)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq) instance^sq)

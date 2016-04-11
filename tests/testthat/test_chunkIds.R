@@ -1,7 +1,7 @@
 context("chunkIds")
 
 test_that("chunkIds", {
-  reg = makeTempExperimentRegistry(FALSE)
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data), seed = 42)
   prob = addProblem(reg = reg, "p2", data = iris, fun = function(job, data, ...) nrow(data), seed = 42)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq, ...) instance^sq)
@@ -31,7 +31,7 @@ test_that("chunkIds", {
 })
 
 test_that("parallel execution works", {
-  reg = makeTempRegistry(FALSE)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(i) i^2
   batchMap(fun, i = 1:4, reg = reg)
   jc = makeJobCollection(reg = reg)
