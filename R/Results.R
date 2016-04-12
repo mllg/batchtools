@@ -1,7 +1,8 @@
 #' Reduce Results
 #'
 #' @description
-#' A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects.
+#' A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects
+#' which iterates over finished jobs and aggregates them.
 #'
 #' @templateVar ids.default findDone
 #' @template ids
@@ -65,8 +66,8 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @title Apply functions on Results
 #'
 #' @description
-#' Functions to apply collecting functions on the results
-#' of your \code{\link{Registry}}.
+#' Applies a function on the results of your finished jobs and thereby collects
+#' them in a \code{\link[base]{list}} or \code{\link[data.table]{data.table}}.
 #'
 #' @templateVar ids.default findDone
 #' @template ids

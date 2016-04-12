@@ -1,19 +1,22 @@
 #' @title Submit jobs to the Batch Systems
 #'
 #' @description
-#' Submits all jobs to the batch system using the resources provided via
-#' \code{resources}.
+#' Submits all jobs defined with \code{\link{batchMap}} to the batch system.
 #'
 #' If an additional column \dQuote{chunk} is present in the table \code{ids},
 #' the jobs will be grouped accordingly. See \code{\link{chunkIds}} for more
 #' information.
 #'
+#' After submitting the jobs, you can use \code{\link{waitForJobs}} to wait for the
+#' termination of jobs or immediately call \code{\link{reduceResultsList}}/\code{\link{reduceResults}}
+#' to collect partial results.
+#' The progress can be monitored with \code{\link{getJobStatus}}.
+#'
 #' @templateVar ids.default findNotSubmitted
 #' @template ids
 #' @param resources [\code{named list}]\cr
 #'   Computational  resources for the batch jobs. The elements of this list
-#'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on
-#'   your template file.
+#'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file.
 #'   The resources \code{chunk.ncpus} and \code{measure.memory} are reserved for internal functionality:
 #'   The setting \code{chunk.ncpus} is used to determine the number of CPUs to execute jobs in a
 #'   chunk in parallel via \code{\link[parallel]{mcparallel}} (or \code{\link[snow]{sendCall}} on Windows).
@@ -77,7 +80,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   on.exit(saveRegistry(reg))
 
-  wait = 2
+  wait = 5
   info("Submitting %i jobs in %i chunks using cluster functions '%s' ...", nrow(ids), length(chunks), reg$cluster.functions$name)
   update = data.table(submitted = NA_integer_, started = NA_integer_, done = NA_integer_, error = NA_character_,
     memory = NA_real_, resource.id = res.id, batch.id = NA_character_, job.hash = NA_character_)

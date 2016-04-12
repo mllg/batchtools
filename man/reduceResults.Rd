@@ -36,7 +36,8 @@ is empty, \code{reduceResults} returns \code{init} (if available) or
 \code{NULL} otherwise.
 }
 \description{
-A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects.
+A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects
+which iterates over finished jobs and aggregates them.
 }
 \examples{
 reg = makeRegistry(file.dir = NA, make.default = FALSE)

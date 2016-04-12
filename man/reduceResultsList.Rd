@@ -38,8 +38,8 @@ to a \code{\link[data.table]{data.table}}.}
   columns \dQuote{job.id} and additional result columns as returned by (see \code{\link[data.table]{rbindlist}}).
 }
 \description{
-Functions to apply collecting functions on the results
-of your \code{\link{Registry}}.
+Applies a function on the results of your finished jobs and thereby collects
+them in a \code{\link[base]{list}} or \code{\link[data.table]{data.table}}.
 }
 \examples{
 reg = makeRegistry(file.dir = NA, make.default = FALSE)
