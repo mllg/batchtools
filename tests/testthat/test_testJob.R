@@ -16,6 +16,13 @@ test_that("testJob", {
 })
 
 test_that("testJob.ExperimentRegistry", {
+  suppressAll = function (expr) {
+    invisible(capture.output({
+      suppressWarnings(suppressMessages(suppressPackageStartupMessages(x <- force(expr))))
+    }))
+    return(x)
+  }
+
   reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data), seed = 42)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq, ...) instance^sq)
