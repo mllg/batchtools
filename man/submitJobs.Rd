@@ -15,8 +15,7 @@ If not set, defaults to the return value of \code{\link{findNotSubmitted}}.}
 
 \item{resources}{[\code{named list}]\cr
   Computational  resources for the batch jobs. The elements of this list
-  (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on
-  your template file.
+  (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file.
   The resources \code{chunk.ncpus} and \code{measure.memory} are reserved for internal functionality:
   The setting \code{chunk.ncpus} is used to determine the number of CPUs to execute jobs in a
   chunk in parallel via \code{\link[parallel]{mcparallel}} (or \code{\link[snow]{sendCall}} on Windows).
@@ -38,11 +37,15 @@ Registry. If not explicitly passed, uses the last created registry.}
 [\code{\link{data.table}}]. Table with columns \dQuote{job.id} and \dQuote{chunk}.
 }
 \description{
-Submits all jobs to the batch system using the resources provided via
-\code{resources}.
+Submits all jobs defined with \code{\link{batchMap}} to the batch system.
 
 If an additional column \dQuote{chunk} is present in the table \code{ids},
 the jobs will be grouped accordingly. See \code{\link{chunkIds}} for more
 information.
+
+After submitting the jobs, you can use \code{\link{waitForJobs}} to wait for the
+termination of jobs or immediately call \code{\link{reduceResultsList}}/\code{\link{reduceResults}}
+to collect partial results.
+The progress can be monitored with \code{\link{getJobStatus}}.
 }
 

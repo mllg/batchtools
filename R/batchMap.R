@@ -2,6 +2,11 @@
 #'
 #' @description
 #' A parallel \code{\link[base]{Map}} for batch systems.
+#' Note that this function only defines the jobs.
+#' The actual computation is started with \code{\link{submitJobs}} and results
+#' can be collected with \code{\link{reduceResultsList}}, \code{\link{reduceResults}} or
+#' \code{\link{loadResult}}.
+#' For a synchronous \code{\link[base]{Map}}-like execution see \code{\link{btmapply}}.
 #'
 #' @param fun [\code{function}]\cr
 #'   Function to map over \code{...}.
