@@ -58,7 +58,6 @@ Registry.}
   \item{batch.id}{Batch ID as reported by the scheduler.}
   \item{job.hash}{Unique string identifying the job or chunk.}
   \item{resources}{List of computational resources set for this job.}
-  \item{resource.hash}{MD5 hash of the resource list.}
   \item{pars}{List of parameters/arguments for this job.}
   \item{pars.hash}{MD5 hash of the job parameters.}
   \item{problem}{Only for \code{\link{ExperimentRegistry}}: the problem identifier.}

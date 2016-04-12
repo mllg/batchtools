@@ -10,10 +10,12 @@ asJobTable = function(reg, ids = NULL, default = NULL, keep.extra = FALSE) {
 filter = function(x, ids = NULL) {
   if (is.null(ids))
     return(x)
+  if (identical(key(ids), "job.id"))
+    return(x[unique(ids), nomatch = 0L])
   if (is.data.frame(ids))
     ids = ids$job.id
   if (qtest(ids, "X"))
-    return(x[list(unique(as.integer(ids)))])
+    return(x[list(unique(as.integer(ids))), nomatch = 0L])
   stop("Format of 'ids' not recognized. Must be a data frame with column 'job.id' or an integerish vector")
 }
 
@@ -109,13 +111,6 @@ names2 = function (x, missing.val = NA_character_) {
 setClasses = function(x, cl) {
   setattr(x, "class", cl)
   x
-}
-
-suppressAll = function (expr) {
-  invisible(capture.output({
-    suppressWarnings(suppressMessages(suppressPackageStartupMessages(x <- force(expr))))
-  }))
-  return(x)
 }
 
 addlevel = function(x, lvl) {
