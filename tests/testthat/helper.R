@@ -49,7 +49,7 @@ checkTables = function(reg, ...) {
   expect_equal(key(reg$status), "job.id")
   expect_equal(uniqueN(reg$status$job.id), nrow(reg$status))
 
-  cols = c("resource.id", "resources.hash", "resources")
+  cols = c("resource.id", "resource.hash", "resources")
   types = c("integer", "character", "list")
   expect_is(reg$resources, "data.table")
   expect_data_table(reg$resources, ncols = length(cols), ...)
