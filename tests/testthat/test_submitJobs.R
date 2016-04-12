@@ -5,15 +5,15 @@ test_that("submitJobs", {
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, reg = reg)
 
-  silent(submitJobs(chunkIds(1:2, reg = reg), reg = reg))
+  silent(submitJobs(chunkIds(1:2, reg = reg), resources = list(foo = "bar"), reg = reg))
   checkTables(reg)
 
-  expect_integer(reg$status[1:2, resource.id], any.missing = FALSE)
+  expect_factor(reg$status[1:2, resource.id], n.levels = 1, any.missing = FALSE)
   expect_character(reg$status[1:2, batch.id], any.missing = FALSE)
   expect_integer(reg$status[1:2, submitted], any.missing = FALSE)
   expect_true(is.na(reg$status[3, submitted]))
   x = reg$resources[1, resources][[1L]]
-  y = reg$default.resources
+  y = insert(reg$default.resources, list(foo = "bar"))
   expect_equal(x[order(names2(x))], y[order(names2(y))])
 
   silent({
