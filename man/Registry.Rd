@@ -8,8 +8,9 @@
 \alias{makeRegistry}
 \alias{saveRegistry}
 \alias{setDefaultRegistry}
+\alias{sweepRegistry}
 \alias{syncRegistry}
-\title{Registry Constructor}
+\title{Registry}
 \usage{
 getDefaultRegistry()
 
@@ -27,6 +28,8 @@ loadRegistry(file.dir = "registry", work.dir = NULL,
   update.paths = FALSE)
 
 saveRegistry(reg = getDefaultRegistry())
+
+sweepRegistry(reg = getDefaultRegistry())
 
 syncRegistry(reg = getDefaultRegistry(), save = TRUE)
 }
@@ -115,8 +118,16 @@ Save the registry to the file system? Default is \code{TRUE}.}
 The registry created last is saved in the package namespace (unless \code{make.default} is set to
 \code{FALSE}) and can be retrieved via \code{getDefaultRegistry}.
 
-\code{saveRegistry} serializes the registry to the file system and be be loaded with \code{loadRegistry} by specifying the \code{file.dir}.
-\code{syncRegisty} refreshes the registry by parsing update files from jobs.
+\code{saveRegistry} serializes the registry to the file system.
+\code{syncRegistry} refreshes the registry by parsing updates from remote jobs, merging job
+status information in the internal data base.
+Both functions are called internally whenever required.
+Therefore it should be safe to quit the R session at any time.
+Work can later be resumed by calling \code{loadRegistry} which de-serializes the registry from
+the file system.
+
+Canceled jobs and repeatedly submitted jobs leave in some cases stray files behind which can be
+swept using \code{sweepRegistry}.
 }
 \examples{
 reg = makeRegistry(file.dir = NA, make.default = FALSE)
