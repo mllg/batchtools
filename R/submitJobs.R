@@ -70,11 +70,11 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     assertFlag(resources$measure.memory)
 
   res.hash = digest::digest(resources)
-  resources.hash = NULL
-  res.id = head(reg$resources[resources.hash == res.hash, "resource.id", with = FALSE]$resource.id, 1L)
+  resource.hash = NULL
+  res.id = head(reg$resources[resource.hash == res.hash, "resource.id", with = FALSE]$resource.id, 1L)
   if (length(res.id) == 0L) {
     res.id = if (nrow(reg$resources) > 0L) max(reg$resources$resource.id) + 1L else 1L
-    reg$resources = rbind(reg$resources, data.table(resource.id = res.id, resources.hash = res.hash, resources = list(resources)))
+    reg$resources = rbind(reg$resources, data.table(resource.id = res.id, resource.hash = res.hash, resources = list(resources)))
     setkeyv(reg$resources, "resource.id")
   }
 

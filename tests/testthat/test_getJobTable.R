@@ -41,7 +41,7 @@ test_that("getJobResources", {
   })
   tab = getJobResources(reg = reg, resources.as.cols = FALSE)
   expect_data_table(tab, nrow = 4, ncols = 3, key = "job.id")
-  expect_set_equal(tab$resources.hash[1], tab$resources.hash)
+  expect_set_equal(tab$resource.hash[1], tab$resource.hash)
   expect_list(tab$resources)
   expect_true(all(vlapply(tab$resources, function(r) r$my.walltime == 42)))
 

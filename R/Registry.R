@@ -155,7 +155,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "
 
   reg$resources = data.table(
     resource.id    = integer(0L),
-    resources.hash = character(0L),
+    resource.hash  = character(0L),
     resources      = list(),
     key = "resource.id")
 
