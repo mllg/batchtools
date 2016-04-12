@@ -20,15 +20,23 @@ clearDefaultRegistry = function() {
   invisible(TRUE)
 }
 
-#' @title Registry Constructor
+#' @title Registry
 #'
 #' @description
 #' \code{makeRegistry} constructs the inter-communication object for all functions in \code{batchtools}.
 #' The registry created last is saved in the package namespace (unless \code{make.default} is set to
 #' \code{FALSE}) and can be retrieved via \code{getDefaultRegistry}.
 #'
-#' \code{saveRegistry} serializes the registry to the file system and be be loaded with \code{loadRegistry} by specifying the \code{file.dir}.
-#' \code{syncRegisty} refreshes the registry by parsing update files from jobs.
+#' \code{saveRegistry} serializes the registry to the file system.
+#' \code{syncRegistry} refreshes the registry by parsing updates from remote jobs, merging job
+#' status information in the internal data base.
+#' Both functions are called internally whenever required.
+#' Therefore it should be safe to quit the R session at any time.
+#' Work can later be resumed by calling \code{loadRegistry} which de-serializes the registry from
+#' the file system.
+#'
+#' Canceled jobs and repeatedly submitted jobs leave in some cases stray files behind which can be
+#' swept using \code{sweepRegistry}.
 #'
 #' @param file.dir [\code{character(1)}]\cr
 #'   Path where all files of the registry are saved.
@@ -261,6 +269,33 @@ saveRegistry = function(reg = getDefaultRegistry()) {
     writeRDS(reg, file = fn[1L], wait = TRUE)
     file.rename(fn[1L], fn[2L])
   }
+  invisible(TRUE)
+}
+
+#' @rdname Registry
+#' @export
+sweepRegistry = function(reg = getDefaultRegistry()) {
+  log.files = list.files(file.path(reg$file.dir, "logs"))
+  i = which(stri_replace_last_fixed(log.files, ".log", "") %nin% reg$status$job.hash)
+  if (length(i) > 0L) {
+    info("Removing %i obsolete log files", length(i))
+    file.remove(file.path(reg$file.dir, "logs", log.files[i]))
+  }
+
+  job.files = list.files(file.path(reg$file.dir, "jobs"))
+  on.sys = reg$status[.findOnSystem(reg = reg)]$job.hash
+  i = which(stri_replace_last_fixed(job.files, ".rds", "") %nin% on.sys)
+  if (length(i) > 0L) {
+    info("Removing %i obsolete job files", length(i))
+    file.remove(file.path(reg$file.dir, "jobs", job.files[i]))
+  }
+
+  i = which(reg$resources$resource.id %nin% reg$status$resource.id)
+  if (length(i) > 0L) {
+    info("Removing %i resource specifications", length(i))
+    reg$resources = reg$resources[-i]
+  }
+  saveRegistry(reg)
 }
 
 loadRegistryDependencies = function(x, switch.wd = TRUE) {
