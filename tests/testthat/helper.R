@@ -37,10 +37,10 @@ checkTables = function(reg, ...) {
 
   if (class(reg)[1L] == "Registry") {
     cols = c("job.id", "def.id", "submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash")
-    types = c("integer", "integer", "integer", "integer", "integer", "character", "numeric", "integer", "character", "character")
+    types = c("integer", "integer", "integer", "integer", "integer", "character", "numeric", "factor", "character", "character")
   } else {
     cols = c("job.id", "def.id", "submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash", "repl")
-    types = c("integer", "integer", "integer", "integer", "integer", "character", "numeric", "integer", "character", "character", "integer")
+    types = c("integer", "integer", "integer", "integer", "integer", "character", "numeric", "factor", "character", "character", "integer")
   }
   expect_is(reg$status, "data.table")
   expect_data_table(reg$status, ncols = length(cols), ...)
@@ -49,8 +49,8 @@ checkTables = function(reg, ...) {
   expect_equal(key(reg$status), "job.id")
   expect_equal(uniqueN(reg$status$job.id), nrow(reg$status))
 
-  cols = c("resource.id", "resource.hash", "resources")
-  types = c("integer", "character", "list")
+  cols = c("resource.id", "resources")
+  types = c("factor", "list")
   expect_is(reg$resources, "data.table")
   expect_data_table(reg$resources, ncols = length(cols), ...)
   expect_set_equal(colnames(reg$resources), cols)

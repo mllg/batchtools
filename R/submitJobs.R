@@ -54,7 +54,6 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     assertInteger(ids$chunk, any.missing = FALSE)
     chunks = sort(unique(ids$chunk))
   }
-  chunk = NULL
 
   max.concurrent.jobs = NA_integer_
   if (!is.null(reg$max.concurrent.jobs)) {
@@ -70,24 +69,20 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     assertFlag(resources$measure.memory)
 
   res.hash = digest::digest(resources)
-  resource.hash = NULL
-  res.id = head(reg$resources[resource.hash == res.hash, "resource.id", with = FALSE]$resource.id, 1L)
-  if (length(res.id) == 0L) {
-    res.id = if (nrow(reg$resources) > 0L) max(reg$resources$resource.id) + 1L else 1L
-    reg$resources = rbind(reg$resources, data.table(resource.id = res.id, resource.hash = res.hash, resources = list(resources)))
+  if (nrow(reg$resources[res.hash, nomatch = 0L]) == 0L) {
+    reg$resources = rbind(reg$resources, data.table(resource.id = res.hash, resources = list(resources)))
     setkeyv(reg$resources, "resource.id")
   }
-
   on.exit(saveRegistry(reg))
 
   wait = 5
   info("Submitting %i jobs in %i chunks using cluster functions '%s' ...", nrow(ids), length(chunks), reg$cluster.functions$name)
   update = data.table(submitted = NA_integer_, started = NA_integer_, done = NA_integer_, error = NA_character_,
-    memory = NA_real_, resource.id = res.id, batch.id = NA_character_, job.hash = NA_character_)
+    memory = NA_real_, resource.id = res.hash, batch.id = NA_character_, job.hash = NA_character_)
 
   pb = makeProgressBar(total = length(chunks), format = ":status [:bar] :percent eta: :eta", tokens = list(status = "Submitting"))
   for (ch in chunks) {
-    ids.chunk = ids[chunk == ch, nomatch = 0L, "job.id", with = FALSE]
+    ids.chunk = ids[ids$chunk == ch, nomatch = 0L, "job.id", with = FALSE]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
       writeRDS(jc, file = jc$uri, wait = TRUE)
