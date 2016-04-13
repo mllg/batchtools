@@ -24,7 +24,10 @@ doJobCollection = function(jc, con = stdout()) {
 
 #' @export
 doJobCollection.character = function(jc, con = stdout()) {
-  doJobCollection(readRDS(jc), con = con)
+  obj = readRDS(jc)
+  if (!obj$debug)
+    file.remove(jc)
+  doJobCollection.JobCollection(obj, con = con)
 }
 
 
