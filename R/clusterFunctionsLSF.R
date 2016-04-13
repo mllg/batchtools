@@ -26,6 +26,9 @@ makeClusterFunctionsLSF = function(template = NULL, text = NULL) {
   Sys.setenv(LSB_BJOBS_CONSISTENT_EXIT_CODE = "Y")
 
   submitJob = function(reg, jc) {
+    assertRegistry(reg, writeable = TRUE)
+    assertClass(jc, "JobCollection")
+
     outfile = cfBrewTemplate(reg, text, jc)
     res = runOSCommand("bsub", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
@@ -38,6 +41,8 @@ makeClusterFunctionsLSF = function(template = NULL, text = NULL) {
   }
 
   killJob = function(reg, batch.id) {
+    assertRegistry(reg, writeable = TRUE)
+    assertString(batch.id)
     cfKillBatchJob("bkill", batch.id)
   }
 
@@ -52,10 +57,12 @@ makeClusterFunctionsLSF = function(template = NULL, text = NULL) {
   }
 
   listJobsQueued = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
     listJobs(reg, c("bjobs", "-u $USER", "-w", "-p"))
   }
 
   listJobsRunning = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
     listJobs(reg, c("bjobs", "-u $USER", "-w", "-r"))
   }
 

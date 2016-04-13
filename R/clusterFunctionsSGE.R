@@ -21,6 +21,9 @@ makeClusterFunctionsSGE = function(template = NULL, text = NULL) {
   text = cfReadBrewTemplate(template, text)
 
   submitJob = function(reg, jc) {
+    assertRegistry(reg, writeable = TRUE)
+    assertClass(jc, "JobCollection")
+
     outfile = cfBrewTemplate(reg, text, jc)
     res = runOSCommand("qsub", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
@@ -38,14 +41,18 @@ makeClusterFunctionsSGE = function(template = NULL, text = NULL) {
   }
 
   listJobsQueued = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
     listJobs(reg, c("qstat",  "-u $USER", "-s p"))
   }
 
   listJobsRunning = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
     listJobs(reg, c("qstat",  "-u $USER", "-s rs"))
   }
 
   killJob = function(reg, batch.id) {
+    assertRegistry(reg, writeable = TRUE)
+    assertString(batch.id)
     cfKillBatchJob("qdel", batch.id)
   }
 

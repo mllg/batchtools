@@ -21,6 +21,9 @@ makeClusterFunctionsSLURM = function(template = NULL, text = NULL) {
   text = cfReadBrewTemplate(template, text, "##")
 
   submitJob = function(reg, jc) {
+    assertRegistry(reg, writeable = TRUE)
+    assertClass(jc, "JobCollection")
+
     outfile = cfBrewTemplate(reg, text, jc)
     res = runOSCommand("sbatch", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
@@ -46,14 +49,18 @@ makeClusterFunctionsSLURM = function(template = NULL, text = NULL) {
   }
 
   listJobsQueued = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
     listJobs(reg, c("squeue", "-h", "-o %i", "-u $USER", "-t PD"))
   }
 
   listJobsRunning = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
     listJobs(reg, c("squeue", "-h", "-o %i", "-u $USER", "-t R,S,CG"))
   }
 
   killJob = function(reg, batch.id) {
+    assertRegistry(reg, writeable = TRUE)
+    assertString(batch.id)
     cfKillBatchJob("scancel", batch.id)
   }
 

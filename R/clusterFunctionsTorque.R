@@ -19,6 +19,9 @@ makeClusterFunctionsTorque = function(template = NULL, text = NULL) {
   text = cfReadBrewTemplate(template, text, "##")
 
   submitJob = function(reg, jc) {
+    assertRegistry(reg, writeable = TRUE)
+    assertClass(jc, "JobCollection")
+
     outfile = cfBrewTemplate(reg, text, jc)
     res = runOSCommand("qsub", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
@@ -35,6 +38,8 @@ makeClusterFunctionsTorque = function(template = NULL, text = NULL) {
   }
 
   killJob = function(reg, batch.id) {
+    assertRegistry(reg, writeable = TRUE)
+    assertString(batch.id)
     cfKillBatchJob("qdel", batch.id)
   }
 
@@ -44,10 +49,12 @@ makeClusterFunctionsTorque = function(template = NULL, text = NULL) {
   }
 
   listJobsQueued = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
     listJobs(reg, c("qselect", "-u $USER", "-s QW"))
   }
 
   listJobsRunning = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
     listJobs(reg, c("qselect", "-u $USER", "-s EHRT"))
   }
 

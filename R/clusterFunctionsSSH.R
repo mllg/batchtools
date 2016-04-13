@@ -16,7 +16,6 @@
 #' @family clusterFunctions
 #' @export
 makeClusterFunctionsSSH = function(workers) {
-  force(workers)
   assertList(workers, types = "Worker")
   if (testOS("windows"))
     stop("clusterFunctionsSSH not compatible with Windows")
@@ -27,6 +26,9 @@ makeClusterFunctionsSSH = function(workers) {
   rm(nodenames)
 
   submitJob = function(reg, jc) {
+    assertRegistry(reg, writeable = TRUE)
+    assertClass(jc, "JobCollection")
+
     lapply(workers, function(w) w$update())
     rload = vnapply(workers, function(w) w$load / w$ncpus)
     worker = Find(function(w) w$status == "available", sample(workers, prob = 1 / (rload + 0.1)), nomatch = NULL)
@@ -44,12 +46,15 @@ makeClusterFunctionsSSH = function(workers) {
   }
 
   killJob = function(reg, batch.id) {
+    assertRegistry(reg, writeable = TRUE)
+    assertString(batch.id)
     parts = stri_split_fixed(batch.id, "#")[[1L]]
     worker = workers[[parts[1L]]]
     worker$kill(parts[2L])
   }
 
   listJobsRunning = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
     unlist(lapply(workers, function(w) w$list(reg)), use.names = FALSE)
   }
 

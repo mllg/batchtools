@@ -21,6 +21,9 @@ makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", paral
   worker = Worker$new(nodename = "localhost", ncpus = ncpus, max.load = max.load, debug = debug)
 
   submitJob = function(reg, jc) {
+    assertRegistry(reg, writeable = TRUE)
+    assertClass(jc, "JobCollection")
+
     worker$update(reg)
     if (worker$status == "available") {
       pid = try(worker$start(reg, jc$uri, jc$log.file))
@@ -35,10 +38,14 @@ makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", paral
   }
 
   killJob = function(reg, batch.id) {
+    assertRegistry(reg, writeable = TRUE)
+    assertString(batch.id)
+
     worker$kill(reg, batch.id)
   }
 
   listJobsRunning = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
     worker$list(reg)
   }
 
