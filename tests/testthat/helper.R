@@ -64,3 +64,7 @@ checkTables = function(reg, ...) {
 
   expect_set_equal(reg$defs$def.id, reg$status$def.id)
 }
+
+expect_copied = function(x, y) {
+  expect_false(data.table:::address(x) == data.table:::address(y))
+}

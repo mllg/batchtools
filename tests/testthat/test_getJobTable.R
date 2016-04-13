@@ -20,7 +20,9 @@ test_that("getJobTable.Registry", {
   expect_is(tab$started, "POSIXct")
   expect_is(tab$done, "POSIXct")
   expect_is(tab$time.queued, "difftime")
+  expect_numeric(tab$time.queued, lower = 0)
   expect_is(tab$time.running, "difftime")
+  expect_numeric(tab$time.running, lower = 0)
 
   tab = getJobTable(reg = reg, pars.as.cols = TRUE, prefix = TRUE)
   expect_null(tab[["pars"]])
@@ -29,18 +31,26 @@ test_that("getJobTable.Registry", {
 
   # be sure that the original tables are untouched
   checkTables(reg)
-})
 
-test_that("getJobResources", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
-  fun = function(i, j) i + j
-  ids = batchMap(fun, i = 1:4, j = rep(1, 4), reg = reg)
   silent({
     submitJobs(reg = reg, ids = chunkIds(ids, reg = reg), resources = list(my.walltime = 42L))
     waitForJobs(reg = reg)
   })
+
+  tab = getJobTable(reg = reg, pars.as.cols = TRUE)
+  expect_data_table(tab, key = "job.id")
+  expect_copied(tab, reg$status)
+  expect_is(tab$submitted, "POSIXct")
+  expect_is(tab$started, "POSIXct")
+  expect_is(tab$done, "POSIXct")
+  expect_is(tab$time.queued, "difftime")
+  expect_numeric(tab$time.queued, lower = 0)
+  expect_is(tab$time.running, "difftime")
+  expect_numeric(tab$time.running, lower = 0)
+
   tab = getJobResources(reg = reg, resources.as.cols = FALSE)
   expect_data_table(tab, nrow = 4, ncols = 2, key = "job.id")
+  expect_copied(tab, reg$resources)
   expect_set_equal(tab$resource.hash[1], tab$resource.hash)
   expect_list(tab$resources)
   expect_true(all(vlapply(tab$resources, function(r) r$my.walltime == 42)))
@@ -56,6 +66,7 @@ test_that("getJobPars", {
   ids = batchMap(fun, i = 1:4, j = rep(1, 4), reg = reg)
   tab = getJobPars(reg = reg, pars.as.cols = NULL)
   expect_data_table(tab, nrow = 4, ncol = 3, key = "job.id")
+  expect_copied(tab, reg$defs)
   expect_null(tab$pars)
   expect_equal(tab$i, 1:4)
   expect_equal(tab$j, rep(1, 4))
@@ -91,6 +102,7 @@ test_that("getJobTable.ExperimentRegistry", {
 
   tab = getJobTable(reg = reg, pars.as.cols = FALSE)
   expect_data_table(tab, nrows = 3, ncols = 16, key = "job.id")
+  expect_copied(tab, reg$status)
   expect_list(tab$pars)
   expect_equal(tab$pars[[1]], list(prob.pars = list(k = 1), algo.pars = list(sq = 1)))
   expect_equal(tab$pars[[2]], list(prob.pars = list(k = 1), algo.pars = list(sq = 2)))
