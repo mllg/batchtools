@@ -21,7 +21,8 @@ Nothing.
 Opens a pager to the stored log file. For customization, see \code{\link[base]{file.show}}.
 }
 \seealso{
-Other debug: \code{\link{grepLogs}},
-  \code{\link{killJobs}}, \code{\link{testJob}}
+Other debug: \code{\link{getErrorMessages}},
+  \code{\link{grepLogs}}, \code{\link{killJobs}},
+  \code{\link{testJob}}
 }
 

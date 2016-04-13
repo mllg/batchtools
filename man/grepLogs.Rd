@@ -26,7 +26,8 @@ Registry. If not explicitly passed, uses the last created registry.}
 Greps through log files and reports jobs with matches.
 }
 \seealso{
-Other debug: \code{\link{killJobs}}, \code{\link{showLog}},
+Other debug: \code{\link{getErrorMessages}},
+  \code{\link{killJobs}}, \code{\link{showLog}},
   \code{\link{testJob}}
 }
 

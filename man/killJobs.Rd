@@ -29,7 +29,8 @@ batch jobs again. If this fails again for some jobs, the function gives up. Only
 killed are reset in the DB.
 }
 \seealso{
-Other debug: \code{\link{grepLogs}}, \code{\link{showLog}},
+Other debug: \code{\link{getErrorMessages}},
+  \code{\link{grepLogs}}, \code{\link{showLog}},
   \code{\link{testJob}}
 }
 

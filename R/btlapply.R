@@ -9,11 +9,11 @@
 #' After \code{\link{waitForJobs}} terminated, the result is reduced into a list.
 #' Because the result is only returned as soon as all jobs are terminated,
 #' the execution is called synchronized (in contrast to the usual asynchronous execution on
-#' batch systems).
+#' classical batch systems).
 #'
 #' Note that these functions are one suitable for short and fail-safe operations
 #' on batch system. If some jobs fail, you have to retrieve partial results from the
-#' temporary registry directory yourself.
+#' registry directory yourself.
 #'
 #' @param X [\code{\link[base]{vector}}]\cr
 #'   Vector to apply over.
