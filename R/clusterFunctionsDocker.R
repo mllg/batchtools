@@ -27,6 +27,8 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
   assertCharacter(image.args, any.missing = FALSE)
 
   submitJob = function(reg, jc) {
+    assertRegistry(reg, writeable = TRUE)
+    assertClass(jc, "JobCollection")
     assertIntegerish(jc$resources$ncpus, lower = 1L, any.missing = FALSE, .var.name = "resources$ncpus")
     assertIntegerish(jc$resources$memory, lower = 1L, any.missing = FALSE, .var.name = "resources$memory")
 
@@ -62,15 +64,18 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     invisible(TRUE)
   }
 
+  killJob = function(reg, batch.id) {
+    assertRegistry(reg, writeable = TRUE)
+    assertString(batch.id)
+    cfKillBatchJob("docker", c(docker.args, "kill", batch.id))
+  }
+
   listJobsRunning = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
     res = runOSCommand("docker", c(docker.args, "ps", "--format={{.ID}}", "--filter 'label=batchtools'"), debug = reg$debug)
     if (res$exit.code == 0L)
       return(res$output)
     stop("docker returned non-zero exit code")
-  }
-
-  killJob = function(reg, batch.id) {
-    cfKillBatchJob("docker", c(docker.args, "kill", batch.id))
   }
 
   makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning, store.job = TRUE,

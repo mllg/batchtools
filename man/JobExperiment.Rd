@@ -17,7 +17,7 @@ and exactly one row.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{Job}].
+[\code{Job} | \code{Experiment}].
 }
 \description{
 Jobs and Experiments are abstract objects which hold all information necessary to execute a single computational
