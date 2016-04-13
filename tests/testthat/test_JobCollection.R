@@ -11,7 +11,7 @@ test_that("makeJobCollection", {
   expect_directory(jc$file.dir)
   expect_flag(jc$debug)
   expect_string(jc$job.hash)
-  expect_true(is.data.table(jc$defs))
+  expect_data_table(jc$defs, key = "job.id")
   expect_string(jc$log.file)
   expect_character(jc$packages, any.missing = FALSE)
   expect_list(jc$resources, names = "unique")
@@ -32,7 +32,7 @@ test_that("makeJobCollection.ExperimentCollection", {
 
   expect_directory(j$file.dir)
   expect_string(j$job.hash)
-  expect_true(is.data.table(j$defs))
+  expect_data_table(j$defs, key = "job.id")
   expect_string(j$log.file)
   expect_character(j$packages, any.missing = FALSE)
   expect_list(j$resources, names = "unique")
