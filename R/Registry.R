@@ -283,8 +283,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   }
 
   job.files = list.files(file.path(reg$file.dir, "jobs"))
-  on.sys = reg$status[.findOnSystem(reg = reg)]$job.hash
-  i = which(stri_replace_last_fixed(job.files, ".rds", "") %nin% on.sys)
+  i = which(stri_replace_last_fixed(job.files, ".rds", "") %nin% reg$status$job.hash)
   if (length(i) > 0L) {
     info("Removing %i obsolete job files", length(i))
     file.remove(file.path(reg$file.dir, "jobs", job.files[i]))
@@ -295,6 +294,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
     info("Removing %i resource specifications", length(i))
     reg$resources = reg$resources[-i]
   }
+
   saveRegistry(reg)
 }
 
