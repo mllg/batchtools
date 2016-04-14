@@ -213,6 +213,7 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 #' command returns an exit code > 0, the command is repeated after a 1 second sleep
 #' \code{max.tries-1} times. If the command failed in all tries, an exception is generated.
 #'
+#' @template reg
 #' @param cmd [\code{character(1)}]\cr
 #'   OS command, e.g. \dQuote{qdel}.
 #' @param args [\code{character}]\cr
@@ -223,13 +224,13 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 #' @return \code{TRUE} on success. An exception is raised otherwise.
 #' @family ClusterFunctionsHelper
 #' @export
-cfKillBatchJob = function(cmd, args = character(0L), max.tries = 3L) {
+cfKillJob = function(reg, cmd, args = character(0L), max.tries = 3L) {
   assertString(cmd, min.chars = 1L)
   assertCharacter(args, any.missing = FALSE)
   max.tries = asCount(max.tries)
 
   for (tmp in seq_len(max.tries)) {
-    res = runOSCommand(cmd, args, stop.on.exit.code = FALSE)
+    res = runOSCommand(cmd, args, stop.on.exit.code = FALSE, debug = reg$debug)
     if (res$exit.code == 0L)
       return(TRUE)
     Sys.sleep(1)

@@ -61,7 +61,7 @@ makeClusterFunctionsSLURM = function(template = NULL, text = NULL) {
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-    cfKillBatchJob("scancel", batch.id)
+    cfKillJob(reg, "scancel", batch.id)
   }
 
   makeClusterFunctions(name = "SLURM", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,

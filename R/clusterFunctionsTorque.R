@@ -40,7 +40,7 @@ makeClusterFunctionsTorque = function(template = NULL, text = NULL) {
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-    cfKillBatchJob("qdel", batch.id)
+    cfKillJob(reg, "qdel", batch.id)
   }
 
   listJobs = function(reg, cmd) {

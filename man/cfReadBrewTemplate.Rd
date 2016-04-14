@@ -29,7 +29,7 @@ Simply reads your template and returns it as a character vector.
 \seealso{
 Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
   \code{\link{cfHandleUnknownSubmitError}},
-  \code{\link{cfKillBatchJob}},
+  \code{\link{cfKillJob}},
   \code{\link{makeSubmitJobResult}}
 }
 

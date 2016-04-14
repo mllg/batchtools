@@ -43,7 +43,7 @@ makeClusterFunctionsLSF = function(template = NULL, text = NULL) {
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-    cfKillBatchJob("bkill", batch.id)
+    cfKillJob(reg, "bkill", batch.id)
   }
 
   listJobs = function(reg, cmd) {

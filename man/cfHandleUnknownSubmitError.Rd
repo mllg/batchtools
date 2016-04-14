@@ -28,7 +28,7 @@ an informative error message containing the output of the OS command in \code{ou
 }
 \seealso{
 Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
-  \code{\link{cfKillBatchJob}},
+  \code{\link{cfKillJob}},
   \code{\link{cfReadBrewTemplate}},
   \code{\link{makeSubmitJobResult}}
 }
