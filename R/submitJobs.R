@@ -97,10 +97,11 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
     repeat {
       runHook(reg, "pre.submit")
+      now = now()
       submit = reg$cluster.functions$submitJob(reg = reg, jc = jc)
 
       if (submit$status == 0L) {
-        update[,  c("submitted", "batch.id", "job.hash") := list(now(), submit$batch.id, jc$job.hash)]
+        update[,  c("submitted", "batch.id", "job.hash") := list(now, submit$batch.id, jc$job.hash)]
         reg$status[ids.chunk, names(update) := update]
         runHook(reg, "post.submit")
         break
