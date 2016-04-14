@@ -95,12 +95,13 @@ is empty, <code>reduceResults</code> returns <code>init</code> (if available) or
     <div class="Description">
       <h2>Description</h2>
 
-      <p>A version of <code><a href='http://www.inside-r.org/r-doc/base/funprog'>Reduce</a></code> for <code><a href='Registry.html'>Registry</a></code> objects.</p>
+      <p>A version of <code><a href='http://www.inside-r.org/r-doc/base/funprog'>Reduce</a></code> for <code><a href='Registry.html'>Registry</a></code> objects
+which iterates over finished jobs and aggregates them.</p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>reg = makeTempRegistry()
+    <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
 <strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
 <div class='input'>batchMap(function(x) x^2, x = 1:10, reg = reg)

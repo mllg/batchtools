@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>summarizeExperiments. batchtools 0.1</title>
+<title>cfKillJob. batchtools 0.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,37 +47,35 @@
         
       </header>
       
-      <h1>Quick Summary over Experiments</h1>
+      <h1>Cluster functions helper: Kill a batch job via OS command</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>summarizeExperiments(ids&nbsp;=&nbsp;NULL, by&nbsp;=&nbsp;c("problem", "algorithm"), reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    <pre><div>cfKillJob(reg, cmd, args&nbsp;=&nbsp;character(0L), max.tries&nbsp;=&nbsp;3L)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>ids</dt>
-      <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
-A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
-with a column named &#147;job.id&#148;.
-Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to all jobs.</dd>
-      <dt>by</dt>
-      <dd>[<code>character</code>]
-Split the resulting table by columns of <code><a href='getJobTable.html'>getJobPars</a></code>.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
+      <dt>cmd</dt>
+      <dd>[<code>character(1)</code>]
+OS command, e.g. &#147;qdel&#148;.</dd>
+      <dt>args</dt>
+      <dd>[<code>character</code>]
+Arguments to <code>cmd</code>, including the batch id.</dd>
+      <dt>max.tries</dt>
+      <dd>[<code>integer(1)</code>]
+Number of total times to try execute the OS command in cases of failures.
+Default is <code>3</code>.</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p><dl>
-[<code>named list</code>] with elements &#147;table&#148;
-(<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>] of frequencies), &#147;problems&#148;
-(<code>character</code> of problem names) and &#147;algorithms&#148;
-(<code>character</code> of algorithm names).
+<code>TRUE</code> on success. An exception is raised otherwise.
 </dl></p>
   
     </div>
@@ -85,18 +83,29 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Returns a frequency table of defined experiments.</p>
+      <p>This function is only intended for use in your own cluster functions implementation.</p>
+  
+      <p>Calls the OS command to kill a job via <code>system</code> like this: &#147;cmd batch.job.id&#148;. If the
+command returns an exit code > 0, the command is repeated after a 1 second sleep
+<code>max.tries-1</code> times. If the command failed in all tries, an exception is generated.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>summarizeExperiments</li>
+      <li>cfKillJob</li>
     </ul>
     <ul>
       
     </ul> -->
       
+    <h2>See also</h2>
+    
+Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
+  <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
+  <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
+  <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>
+
         
   </div>
 </div>

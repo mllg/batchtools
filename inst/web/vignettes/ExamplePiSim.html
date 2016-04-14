@@ -74,7 +74,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>To get a first insight into the usage of <code>batchtools</code>, we start with an exemplary Monte Carlo simulation to approximate <span class="math inline">\(\pi\)</span>. For background information, see <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">Wikipedia</a>.</p>
 <p>First, a so-called registry object has to be created, which defines a directory where all relevant information, files and results of the computational jobs will be stored. There are two different types of registry objects, which are basically the appropriate objects of the packages <code>BatchJobs</code> and <code>BatchExperiments</code>. They are created by using <a href="https://mllg.github.io/batchtools/Registry.html"><code>makeRegistry(file.dir)</code></a>, like in our following example, and by using <a href="https://mllg.github.io/batchtools/ExperimentRegistry.html"><code>makeExperimentRegistry(file.dir)</code></a>. For our short example, we use a temporary registry which is stored in the temp directory of the system and gets automatically deleted if you close the R session.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
-reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span class="dt">make.default =</span> <span class="ot">TRUE</span>)</code></pre></div>
+reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>)</code></pre></div>
 <p>A registry object can be reused later, e.g., when you login to the system again, by calling the function <code>loadRegistry(file.dir)</code>. When a registry object is created or loaded, it is stored for the active R session as the default. Therefore the argument <code>reg</code> will be ignored in functions calls of this example, assuming the correct registry is active. To get the current default registry, <code>getDefaultRegistry()</code> can be used. To switch to another registry, use <code>setDefaultRegistry()</code>.</p>
 <p>First, we create a function which samples <span class="math inline">\(n\)</span> points <span class="math inline">\((x_i, y_i)\)</span> whereas <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> are distributed uniformly, i.e. <span class="math inline">\(x_i, y_i \sim \mathcal{U}(0,1)\)</span>. Next, the distance to the origin <span class="math inline">\((0, 0)\)</span> is calculated and the fraction of points in the unit circle (<span class="math inline">\(d \leq 1\)</span>) is returned.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">piApprox =<span class="st"> </span>function(n) {
@@ -83,16 +83,16 @@ reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span cla
   <span class="dv">4</span> *<span class="st"> </span><span class="kw">mean</span>(d &lt;=<span class="st"> </span><span class="dv">1</span>)
 }
 <span class="kw">piApprox</span>(<span class="dv">1000</span>)</code></pre></div>
-<pre><code>## [1] 3.116</code></pre>
+<pre><code>## [1] 3.152</code></pre>
 <p>We now parallelize <code>piApprox()</code> with <code>batchtools</code>: We create 10 jobs, each doing a MC simulation with <span class="math inline">\(10^5\)</span> jobs. We use <a href="https://mllg.github.io/batchtools/batchMap.html"><code>batchMap()</code></a> to define the jobs (note that this does not yet start the calculation):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">batchMap</span>(<span class="dt">fun =</span> piApprox, <span class="dt">n =</span> <span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>))</code></pre></div>
 <pre><code>## Adding 10 jobs ...</code></pre>
-<p>The length of the vector or list defines how many different jobs are created, while the elements itself are used as arguments for the function. The function <code>batchMap(fun, ...)</code> works analogously to <code>Map(f, ...)</code> of the base package. An overview over the jobs and their IDs can be retrieved with <a href="https://mllg.github.io/batchtools/getJobInfo.html"><code>getJobInfo()</code></a> which returns a data frame with all relevant information:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(<span class="kw">getJobInfo</span>())</code></pre></div>
-<pre><code>##  [1] &quot;job.id&quot;         &quot;submitted&quot;      &quot;started&quot;        &quot;done&quot;          
-##  [5] &quot;error&quot;          &quot;memory&quot;         &quot;batch.id&quot;       &quot;job.hash&quot;      
-##  [9] &quot;time.queued&quot;    &quot;time.running&quot;   &quot;pars&quot;           &quot;pars.hash&quot;     
-## [13] &quot;resources.hash&quot; &quot;resources&quot;</code></pre>
+<p>The length of the vector or list defines how many different jobs are created, while the elements itself are used as arguments for the function. The function <code>batchMap(fun, ...)</code> works analogously to <code>Map(f, ...)</code> of the base package. An overview over the jobs and their IDs can be retrieved with <a href="https://mllg.github.io/batchtools/getJobTable.html"><code>getJobTable()</code></a> which returns a data frame with all relevant information:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(<span class="kw">getJobTable</span>())</code></pre></div>
+<pre><code>##  [1] &quot;job.id&quot;       &quot;submitted&quot;    &quot;started&quot;      &quot;done&quot;        
+##  [5] &quot;error&quot;        &quot;memory&quot;       &quot;batch.id&quot;     &quot;job.hash&quot;    
+##  [9] &quot;time.queued&quot;  &quot;time.running&quot; &quot;pars.hash&quot;    &quot;n&quot;           
+## [13] &quot;resources&quot;</code></pre>
 <p>Note that a unique job ID is assigned to each job. These IDs can be used to restrict operations to subsets of jobs. To actually start the calculation, call <a href="https://mllg.github.io/batchtools/submitJobs.html"><code>submitJobs()</code></a>. The registry and the selected job IDs can be taken as arguments as well as an arbitrary list of resource requirements, which are to be handled by the cluster back end.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">submitJobs</span>(<span class="dt">resources =</span> <span class="kw">list</span>(<span class="dt">walltime =</span> <span class="dv">3600</span>, <span class="dt">memory =</span> <span class="dv">1024</span>))</code></pre></div>
 <pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
@@ -118,7 +118,7 @@ reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span cla
 <pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
 <pre><code>## Syncing 10 files ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(<span class="kw">unlist</span>(res))</code></pre></div>
-<pre><code>## [1] 3.1413</code></pre>
+<pre><code>## [1] 3.14546</code></pre>
 <p><a href="https://mllg.github.io/batchtools/btlapply.html"><code>btlapply()</code></a> creates a temporary registry, calls <code>batchMap()</code>, wait for the jobs to terminate with <a href="https://mllg.github.io/batchtools/waitForJobs.html"><code>waitForJobs()</code></a> and then uses <a href="https://mllg.github.io/batchtools/reduceResultsList.html"><code>reduceResultsList()</code></a> to return the results.</p>
 
 

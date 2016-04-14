@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2016-03-25" />
+<meta name="date" content="2016-04-14" />
 
 <title>Migrating from BatchJobs/BatchExperiments</title>
 
@@ -68,34 +68,43 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title">Migrating from BatchJobs/BatchExperiments</h1>
-<h4 class="date"><em>2016-03-25</em></h4>
+<h4 class="date"><em>2016-04-14</em></h4>
 
 </div>
 
 
-<div id="notable-interface-changes" class="section level2">
-<h2>Notable interface changes</h2>
+<div id="migration-from-batchjobsbatchexperiments" class="section level1">
+<h1>Migration from BatchJobs/BatchExperiments</h1>
+<p>The packages <a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> have been merged for the following reasons:</p>
+<ul>
+<li>The packages are tightly connected which makes maintaining difficult, because the changes have to be synchronized and tested against the current CRAN versions for compatibility.</li>
+<li>BatchExperiments violates CRAN policies by calling internal functions of BatchJobs. The options to solve this are both subpar: (a) code duplication or (b) exporting many internal functions of BatchJobs.</li>
+<li>Ongoing troubles with the data base and the file system. Although we invested weeks to mitigate issues with locks of the SQLite data base or file system (staged queries, file system timeouts, …), BatchJobs is working unreliable on some systems, especially systems with a higher latency.</li>
+</ul>
+<p><a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> will of course remain on CRAN.</p>
+<div id="internal-changes" class="section level2">
+<h2>Internal changes</h2>
+<ul>
+<li><code>batchtools</code> does not use SQLite anymore. Instead, all the information is stored directly in the registry using <a href="https://cran.r-project.org/package=data.table">data.tables</a> acting as an in-memory database.</li>
+<li>Nodes do not have to access the registry. <a href="https://mllg.github.io/batchtools/submitJobs.html">submitJobs()</a> stores a temporary object of type <a href="https://mllg.github.io/batchtools/JobCollection.html">JobCollection</a> on the file system which holds all the information necessary to execute a chunk of jobs via <a href="https://mllg.github.io/batchtools/doJobCollection.html">doJobCollection()</a> on the node. This avoids file system locks because each node accesses only one file exclusively.</li>
+<li>Chunks can be parallelized on the node using <code>parallel</code> (linux/mac os) or <code>snow</code> (windows) by setting the resource <code>chunk.ncpus</code>. The parallelization is asynchronous and updates get written to the file system approximately every 5 seconds.</li>
+</ul>
+</div>
+<div id="interface-changes" class="section level2">
+<h2>Interface changes</h2>
 <div id="batchjobs" class="section level3">
 <h3>BatchJobs</h3>
 <ul>
-<li>The packages <a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> have been merged.</li>
-<li><code>batchtools</code> remembers the last created or loaded Registry and makes it the default. This way, you do not need to pass the registry around that much. If you need to work with multiple registries simultaneously on the other hand, you can still do so by explicitly passing a registry.</li>
+<li><code>batchtools</code> remembers the last created or loaded Registry and stores it as default registry. This way, you do not need to pass the registry around anymore. If you need to work with multiple registries simultaneously on the other hand, you can still do so by explicitly passing registries to the functions.</li>
 <li>The template file format has changed:
 <ul>
 <li>The scheduler should directly execute the command <code>Rscript -e 'batchtools::doJobCollection(&lt;filename&gt;)'</code>. There is no intermediate R source file like in BatchJobs.</li>
-<li>All information stored in the object <code>JobDescription</code> can be access while brewing the template. Some variable names have changed and need to be adapted though.</li>
+<li>All information stored in the object <code>JobCollection</code> can be accessed while brewing the template. Some variable names have changed and need to be adapted though. See the vignette on cluster functions.</li>
 </ul></li>
-<li>Most functions now return a <a href="https://cran.r-project.org/package=data.table">data.table</a> which is keyed with the <code>job.id</code>. This way, return values can be joined together easily and efficient (see example below). Furthermore, you can use these tables to subset ids.</li>
-</ul>
-</div>
-<div id="batchexperiments" class="section level3">
-<h3>BatchExperiments</h3>
-<ul>
-<li>The building blocks of a problem has been renamed from <code>static</code> and <code>dynamic</code> to the more intuitive <code>data</code> and <code>fun</code>. Thus, algorithm function should have the formal arguments <code>job</code>, <code>data</code> and <code>instance</code>.</li>
-<li>The function <code>makeDesign</code> has been removed. Hyperparameters can be defined by just passing a <code>data.frame</code> or <code>data.table</code> to <a href="https://mllg.github.io/batchtools/addExperiments.html">addExperiments</a>. For exhaustive designs, use <code>expand.grid()</code> or <code>data.table::CJ</code>.</li>
+<li>Most functions now return a <a href="https://cran.r-project.org/package=data.table">data.table</a> which is keyed with the <code>job.id</code>. This way, return values can be joined together easily and efficient (see example below). Furthermore, you can use these tables to subset ids (but you can still use integers if you want to).</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
-reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span class="dt">make.default =</span> <span class="ot">TRUE</span>)</code></pre></div>
+reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>)</code></pre></div>
 <pre><code>## Sourcing configuration file '~/.batchtools.conf.r' ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">batchMap</span>(function(x, y) x +<span class="st"> </span>y, <span class="dt">x =</span> <span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">y =</span> <span class="dv">1</span>)</code></pre></div>
 <pre><code>## Adding 5 jobs ...</code></pre>
@@ -115,14 +124,14 @@ reg =<span class="st"> </span><span class="kw">makeTempRegistry</span>(<span cla
 ## 1:      4 4 1
 ## 2:      5 5 1</code></pre>
 </div>
-</div>
-<div id="notable-internal-changes" class="section level2">
-<h2>Notable internal changes</h2>
+<div id="batchexperiments" class="section level3">
+<h3>BatchExperiments</h3>
 <ul>
-<li><code>batchtools</code> does not use SQLite anymore. Instead all the information is stored directly in the registry using <a href="https://cran.r-project.org/package=data.table">data.tables</a> acting as an in-memory database.</li>
-<li>Nodes do not have to access the registry. <a href="https://mllg.github.io/batchtools/submitJobs.html">submitJobs()</a> stores an object of type <a href="https://mllg.github.io/batchtools/JobDescription.html">JobDescription</a> on the file system. This object holds all the information necessary to execute the job or chunk of jobs via <a href="https://mllg.github.io/batchtools/doJobCollection.html">doJobCollection()</a>. Each job stores its status updates and results on the file system and <a href="https://mllg.github.io/batchtools/syncRegistry.html">syncRegistry()</a> can be used on the master to update the registry.</li>
-<li>Chunks can be parallelized using <code>parallel</code> (linux/mac os) or <code>snow</code> (windows) by setting the resource <code>chunk.ncpus</code>.</li>
+<li>The building blocks of a problem has been renamed from <code>static</code> and <code>dynamic</code> to the more intuitive <code>data</code> and <code>fun</code>. Thus, algorithm function should have the formal arguments <code>job</code>, <code>data</code> and <code>instance</code>.</li>
+<li>The function <code>makeDesign</code> has been removed. Hyperparameters can be defined by just passing a <code>data.frame</code> or <code>data.table</code> to <a href="https://mllg.github.io/batchtools/addExperiments.html">addExperiments</a>. For exhaustive designs, use <code>expand.grid()</code> or <code>data.table::CJ</code>.</li>
 </ul>
+</div>
+</div>
 </div>
 
 

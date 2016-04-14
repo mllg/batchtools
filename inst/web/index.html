@@ -107,6 +107,15 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
     <ul class="index">
         
       <li>
+        <code><a href="ExperimentRegistry.html">ExperimentRegistry</a></code>(makeExperimentRegistry)<br />ExperimentRegistry Constructor</li>
+            
+      <li>
+        <code><a href="Registry.html">Registry</a></code>(clearDefaultRegistry, getDefaultRegistry, loadRegistry, makeRegistry, saveRegistry, setDefaultRegistry, sweepRegistry, syncRegistry)<br />Registry</li>
+            
+      <li>
+        <code><a href="Worker.html">Worker</a></code><br />Create a Linux-Worker</li>
+            
+      <li>
         <code><a href="ProblemAlgorithm.html">addAlgorithm</a></code>(Algorithm, Problem, ProblemAlgorithm, addProblem, removeAlgorithm, removeProblem)<br />Define Problems and Algorithms for Experiments</li>
             
       <li>
@@ -128,7 +137,7 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="cfHandleUnknownSubmitError.html">cfHandleUnknownSubmitError</a></code><br />Cluster functions helper: Handle an unknown error during job submission.</li>
             
       <li>
-        <code><a href="cfKillBatchJob.html">cfKillBatchJob</a></code><br />Cluster functions helper: Kill a batch job via OS command</li>
+        <code><a href="cfKillJob.html">cfKillJob</a></code><br />Cluster functions helper: Kill a batch job via OS command</li>
             
       <li>
         <code><a href="cfReadBrewTemplate.html">cfReadBrewTemplate</a></code><br />Cluster functions helper: Read in your brew template file</li>
@@ -143,16 +152,13 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="execJob.html">execJob</a></code><br />Execute Single Jobs</li>
             
       <li>
-        <code><a href="ExperimentRegistry.html">ExperimentRegistry</a></code>(makeExperimentRegistry, makeTempExperimentRegistry)<br />ExperimentRegistry Constructor</li>
-            
-      <li>
         <code><a href="findJobs.html">findSubmitted</a></code>(findDone, findError, findExperiments, findExpired, findJobs, findNotDone, findNotStarted, findNotSubmitted, findOnSystem, findStarted)<br />Find and Filter Jobs</li>
             
       <li>
-        <code><a href="Registry.html">getDefaultRegistry</a></code>(Registry, clearDefaultRegistry, loadRegistry, makeRegistry, makeTempRegistry, saveRegistry, setDefaultRegistry, syncRegistry)<br />Registry Constructor</li>
+        <code><a href="getErrorMessages.html">getErrorMessages</a></code><br />Retrieve error messages</li>
             
       <li>
-        <code><a href="getJobInfo.html">getJobInfo</a></code>(getJobPars, getJobResources, getJobStatus)<br />Query Job Information</li>
+        <code><a href="getJobTable.html">getJobTable</a></code>(getJobDefs, getJobPars, getJobResources, getJobStatus)<br />Query Job Information</li>
             
       <li>
         <code><a href="getStatus.html">getStatus</a></code><br />Summarize the Computational Status</li>
@@ -197,7 +203,7 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="makeClusterFunctionsTorque.html">makeClusterFunctionsTorque</a></code><br />ClusterFunctions for OpenPBS/Torque Systems</li>
             
       <li>
-        <code><a href="makeJob.html">makeJob</a></code>(Job)<br />Computational Jobs</li>
+        <code><a href="JobExperiment.html">makeJob</a></code>(Experiment, Job)<br />Jobs and Experiments</li>
             
       <li>
         <code><a href="makeJobCollection.html">makeJobCollection</a></code>(JobCollection)<br />JobCollection Constructor</li>
@@ -225,9 +231,6 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
             
       <li>
         <code><a href="waitForJobs.html">waitForJobs</a></code><br />Wait for Termination of Jobs</li>
-            
-      <li>
-        <code><a href="Worker.html">Worker</a></code><br />Create a Linux-Worker</li>
     
     </ul>
   </div>
@@ -239,6 +242,7 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
       <li><a href="vignettes/ErrorHandling.html">Example/ErrorHandling</a></li>
       <li><a href="vignettes/ExampleExperiment.html">Example/BatchExperiments</a></li>
       <li><a href="vignettes/ExamplePiSim.html">Example/BatchJobs</a></li>
+      <li><a href="vignettes/Setup.html">Setup batchtools</a></li>
     </ul>
         
     <h2>Dependencies</h2>

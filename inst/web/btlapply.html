@@ -52,8 +52,8 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>btlapply(X, fun, ..., reg&nbsp;=&nbsp;makeTempRegistry(make.default&nbsp;=&nbsp;FALSE))</div>
-<div>btmapply(fun, ..., more.args&nbsp;=&nbsp;list(), simplify&nbsp;=&nbsp;FALSE, use.names&nbsp;=&nbsp;TRUE, reg&nbsp;=&nbsp;makeTempRegistry(make.default&nbsp;=&nbsp;FALSE))</div></pre>
+    <pre><div>btlapply(X, fun, ..., reg&nbsp;=&nbsp;makeRegistry(file.dir&nbsp;=&nbsp;NA))</div>
+<div>btmapply(fun, ..., more.args&nbsp;=&nbsp;list(), simplify&nbsp;=&nbsp;FALSE, use.names&nbsp;=&nbsp;TRUE, reg&nbsp;=&nbsp;makeRegistry(file.dir&nbsp;=&nbsp;NA))</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -95,16 +95,16 @@ Use names of the input to name the output?</dd>
       <p>This is a set of convenience functions as counterparts to the sequential
 apply functions in base R: <code>btlapply</code> for <code><a href='http://www.inside-r.org/r-doc/base/lapply'>lapply</a></code> and
 <code>btmapply</code> for <code>link[base]{mapply}</code>.
-Internally the jobs are created in a temporary registry (see <code><a href='Registry.html'>makeTempRegistry</a></code>
-and <code><a href='batchMap.html'>batchMap</a></code> is called on the input vector(s).
+Internally the jobs are created in a temporary registry (see argument <code>file.dir</code> of
+<code><a href='Registry.html'>makeRegistry</a></code>) and <code><a href='batchMap.html'>batchMap</a></code> is called on the input vector(s).
 After <code><a href='waitForJobs.html'>waitForJobs</a></code> terminated, the result is reduced into a list.
 Because the result is only returned as soon as all jobs are terminated,
 the execution is called synchronized (in contrast to the usual asynchronous execution on
-batch systems).</p>
+classical batch systems).</p>
   
       <p>Note that these functions are one suitable for short and fail-safe operations
 on batch system. If some jobs fail, you have to retrieve partial results from the
-temporary registry directory yourself.</p>
+registry directory yourself.</p>
   
     </div>
       </div>

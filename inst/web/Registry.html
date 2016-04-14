@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>getDefaultRegistry. batchtools 0.1</title>
+<title>Registry. batchtools 0.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,29 +47,32 @@
         
       </header>
       
-      <h1>Registry Constructor</h1>
+      <h1>Registry</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>getDefaultRegistry()</div>
+    <pre><div>makeRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;getwd(), conf.file&nbsp;=&nbsp;"~/.batchtools.conf.r", packages&nbsp;=&nbsp;character(0L), namespaces&nbsp;=&nbsp;character(0L), source&nbsp;=&nbsp;character(0L), load&nbsp;=&nbsp;character(0L), seed&nbsp;=&nbsp;NULL, make.default&nbsp;=&nbsp;TRUE)</div>
+<div>getDefaultRegistry()</div>
 <div>setDefaultRegistry(reg)</div>
 <div>clearDefaultRegistry()</div>
-<div>makeRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;getwd(), conf.file&nbsp;=&nbsp;"~/.batchtools.conf.r", packages&nbsp;=&nbsp;character(0L), namespaces&nbsp;=&nbsp;character(0L), source&nbsp;=&nbsp;character(0L), load&nbsp;=&nbsp;character(0L), seed&nbsp;=&nbsp;NULL, make.default&nbsp;=&nbsp;TRUE)</div>
-<div>makeTempRegistry(make.default&nbsp;=&nbsp;FALSE, temp.dir&nbsp;=&nbsp;getOption("batchtools.temp.dir", tempdir()), ...)</div>
 <div>loadRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;NULL, conf.file&nbsp;=&nbsp;"~/.batchtools.conf.r", make.default&nbsp;=&nbsp;TRUE, update.paths&nbsp;=&nbsp;FALSE)</div>
 <div>saveRegistry(reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>sweepRegistry(reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>syncRegistry(reg&nbsp;=&nbsp;getDefaultRegistry(), save&nbsp;=&nbsp;TRUE)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>reg</dt>
-      <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the last created registry.</dd>
       <dt>file.dir</dt>
       <dd>[<code>character(1)</code>]
-Path where all files of the registry are saved.
-Default is directory &#147;registry&#148; in the current working directory.</dd>
+  Path where all files of the registry are saved.
+  Default is directory &#147;registry&#148; in the current working directory.
+
+  If you pass <code>NA</code>, a temporary directory will be used.
+  This way, you can create disposable registries for <code><a href='btlapply.html'>btlapply</a></code> or examples.
+  By default, the temporary directory <code><a href='http://www.inside-r.org/r-doc/base/tempfile'>tempdir</a>()</code> will be used.
+  If you want to use another temp directory, e.g. a directory which is shared between nodes,
+  you can set it in your configuration via <code>temp.dir</code>.</dd>
       <dt>work.dir</dt>
       <dd>[<code>character(1)</code>]
 Working directory for R process when experiment is executed.
@@ -110,13 +113,9 @@ If set to <code>TRUE</code>, the created registry is saved inside the package
 namespace and acts as default registry. You might want to switch this
 off if you work with multiple registries simultaneously.
 Default is <code>TRUE</code>.</dd>
-      <dt>temp.dir</dt>
-      <dd>[<code>character(1)</code>]
-Path to temporary directory.
-Defaults to the value of the option &#147;batchtools.temp.dir&#148; or (if unset) <code><a href='http://www.inside-r.org/r-doc/base/tempfile'>tempdir</a></code>.</dd>
-      <dt>...</dt>
-      <dd>[<code>ANY</code>]
-Additional parameters passed to <code>makeRegistry</code>.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
       <dt>update.paths</dt>
       <dd>[<code>logical(1)</code>]
 If set to <code>TRUE</code>, the <code>file.dir</code> and <code>work.dir</code> will be updated in the registry. Note that this is
@@ -134,29 +133,31 @@ Save the registry to the file system? Default is <code>TRUE</code>.</dd>
       <p><dl>
 [<code>Registry</code>]. An environment with the following slots:
   <dl>
-    <dt>file.dir</dt><dd>File directory.</dd></p>
+    <dt><code>file.dir</code> [path]:</dt><dd>File directory.</dd></p>
   
-      <p><dt>work.dir</dt><dd>Working directory.</dd></p>
+      <p><dt><code>work.dir</code> [path]:</dt><dd>Working directory.</dd></p>
   
-      <p><dt>packages</dt><dd>Packages to load on the slaves.</dd></p>
+      <p><dt><code>temp.dir</code> [path]:</dt><dd>Temporary directory. Only used if <code>file.dir</code> is <code>NA</code>.</dd></p>
   
-      <p><dt>namespaces</dt><dd>Namespaces to load on the slaves.</dd></p>
+      <p><dt><code>packages</code> [character()]:</dt><dd>Packages to load on the slaves.</dd></p>
   
-      <p><dt>seed</dt><dd>Registry seed. Before each job is executed, the seed <code>seed + job.id</code> is set.</dd></p>
+      <p><dt><code>namespaces</code> [character()]:</dt><dd>Namespaces to load on the slaves.</dd></p>
   
-      <p><dt>debug</dt><dd>Flag to turn additional debug functionality on.</dd></p>
+      <p><dt><code>seed</code> [integer(1)]:</dt><dd>Registry seed. Before each job is executed, the seed <code>seed + job.id</code> is set.</dd></p>
   
-      <p><dt>cluster.functions</dt><dd>Usually set in your <code>conf.file</code>. Set via a call to <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>. See example.</dd></p>
+      <p><dt><code>debug</code> [logical(1)]:</dt><dd>Flag to turn additional debug functionality on.</dd></p>
   
-      <p><dt>default.resources</dt><dd>Usually set in your <code>conf.file</code>. Named list of default resources.</dd></p>
+      <p><dt><code>cluster.functions</code> [cluster.functions]:</dt><dd>Usually set in your <code>conf.file</code>. Set via a call to <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>. See example.</dd></p>
   
-      <p><dt>max.concurrent.jobs</dt><dd>Usually set in your <code>conf.file</code>. Maximum number of concurrent jobs for a single user on the system. <code><a href='submitJobs.html'>submitJobs</a></code> will try to respect this setting.</dd></p>
+      <p><dt><code>default.resources</code> [named list()]:</dt><dd>Usually set in your <code>conf.file</code>. Named list of default resources.</dd></p>
   
-      <p><dt>defs</dt><dd>Table with job definitions (i.e. parameters).</dd></p>
+      <p><dt><code>max.concurrent.jobs</code> [integer(1)]:</dt><dd>Usually set in your <code>conf.file</code>. Maximum number of concurrent jobs for a single user on the system. <code><a href='submitJobs.html'>submitJobs</a></code> will try to respect this setting.</dd></p>
   
-      <p><dt>status</dt><dd>Table holding information about the computational status. Also see <code><a href='getJobInfo.html'>getJobStatus</a></code>.</dd></p>
+      <p><dt><code>defs</code> [data.table]:</dt><dd>Table with job definitions (i.e. parameters).</dd></p>
   
-      <p><dt>resources</dt><dd>Table holding information about the computational resources used for the job. Also see <code><a href='getJobInfo.html'>getJobResources</a></code>.</dd></p>
+      <p><dt><code>status</code> [data.table]:</dt><dd>Table holding information about the computational status. Also see <code><a href='getJobTable.html'>getJobStatus</a></code>.</dd></p>
+  
+      <p><dt><code>resources</code> [data.table]:</dt><dd>Table holding information about the computational resources used for the job. Also see <code><a href='getJobTable.html'>getJobResources</a></code>.</dd></p>
   
       <p></dl></p>
   
@@ -171,27 +172,31 @@ Save the registry to the file system? Default is <code>TRUE</code>.</dd>
 The registry created last is saved in the package namespace (unless <code>make.default</code> is set to
 <code>FALSE</code>) and can be retrieved via <code>getDefaultRegistry</code>.</p>
   
-      <p><code>makeTempRegistry</code> creates a temporary registry in the subdirectory of a temporary directory.
-Such disposable registries are mainly used in sequential apply functions like <code><a href='btlapply.html'>btlapply</a></code>.
-The base dir can be set via the option &#147;batchtools.temp.dir&#148; and defaults to <code><a href='http://www.inside-r.org/r-doc/base/tempfile'>tempdir</a></code>.</p>
+      <p><code>saveRegistry</code> serializes the registry to the file system.
+<code>syncRegistry</code> refreshes the registry by parsing updates from remote jobs, merging job
+status information in the internal data base.
+Both functions are called internally whenever required.
+Therefore it should be safe to quit the R session at any time.
+Work can later be resumed by calling <code>loadRegistry</code> which de-serializes the registry from
+the file system.</p>
   
-      <p><code>saveRegistry</code> serializes the registry to the file system and be be loaded with <code>loadRegistry</code> by specifying the <code>file.dir</code>.
-<code>syncRegisty</code> refreshes the registry by parsing update files from jobs.</p>
+      <p>Canceled jobs and repeatedly submitted jobs leave in some cases stray files behind which can be
+swept using <code>sweepRegistry</code>.</p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>reg = makeTempRegistry(make.default = FALSE)
+    <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
 <strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
 <div class='input'>print(reg)
 </div>
 <div class='output'>Job Registry
-
+  ClusterFunctions: Interactive
   Number of Jobs  : 0
-  File dir        : /tmp/RtmpKULo6v/registry24ea67291ef4
-  Work dir        : /home/michel/Projekte/batchtools
-  Seed            : 122510450
+  File dir        : /scratch/registry40b72a874414
+  Work dir        : /home/lang/Projekte/batchtools
+  Seed            : 292544388
 </div>
 <div class='input'>
 #&#39; Set debug mode
@@ -203,13 +208,11 @@ reg$cluster.functions = makeClusterFunctionsInteractive()
 # Change default packages
 reg$packages = c(&quot;MASS&quot;)
 saveRegistry(reg = reg)
-</div>
-<div class='output'>[1] TRUE
 </div></pre>
   </div>
   <div class="span4">
     <!-- <ul>
-      <li>Registry</li><li>clearDefaultRegistry</li><li>getDefaultRegistry</li><li>loadRegistry</li><li>makeRegistry</li><li>makeTempRegistry</li><li>saveRegistry</li><li>setDefaultRegistry</li><li>syncRegistry</li>
+      <li>Registry</li><li>clearDefaultRegistry</li><li>getDefaultRegistry</li><li>loadRegistry</li><li>makeRegistry</li><li>saveRegistry</li><li>setDefaultRegistry</li><li>sweepRegistry</li><li>syncRegistry</li>
     </ul>
     <ul>
       

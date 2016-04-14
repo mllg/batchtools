@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>reduceResultsList. batchtools 0.1</title>
+<title>getErrorMessages. batchtools 0.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,13 +47,12 @@
         
       </header>
       
-      <h1>Apply functions on Results</h1>
+      <h1>Retrieve error messages</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>reduceResultsList(ids&nbsp;=&nbsp;NULL, fun&nbsp;=&nbsp;NULL, ..., reg&nbsp;=&nbsp;getDefaultRegistry())</div>
-<div>reduceResultsDataTable(ids&nbsp;=&nbsp;NULL, fun&nbsp;=&nbsp;NULL, ..., fill&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    <pre><div>getErrorMessages(ids&nbsp;=&nbsp;NULL, missing.as.error&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -62,31 +61,22 @@
 A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
 with a column named &#147;job.id&#148;.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to the return value of <code><a href='findJobs.html'>findDone</a></code>.</dd>
-      <dt>fun</dt>
-      <dd>[<code>function</code>]
-Function to apply to each result. The result is passed unnamed as first
-argument. If <code>NULL</code>, the identity is used.</dd>
-      <dt>...</dt>
-      <dd>[<code>ANY</code>]
-Additional arguments passed to to function <code>fun</code>.</dd>
+If not set, defaults to the return value of <code><a href='findJobs.html'>findError</a></code>.</dd>
+      <dt>missing.as.error</dt>
+      <dd>[<code>logical(1)</code>]
+Treat missing results as errors? If <code>TRUE</code>, an error message is imputed for jobs
+which are not terminated. Default is <code>FALSE</code></dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
-      <dt>fill</dt>
-      <dd>[<code>logical(1)</code>]
-In <code>reduceResultsDataTable</code>: This flag is passed down to
-<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/rbindlist'>rbindlist</a></code> which is used to convert the results
-to a <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>.</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p><dl>
-<code>reduceResultsList</code> returns a list, <code>reduceResultsDataTable</code>
-  returns a <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> with
-  columns &#147;job.id&#148; and additional result columns as returned by (see <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/rbindlist'>rbindlist</a></code>).
+[<code>data.table</code>]. Table with columns &#147;job.id&#148;, &#147;terminated&#148; (logical),
+  &#147;error&#148; (logical) and &#147;message&#148; (string).
 </dl></p>
   
     </div>
@@ -94,8 +84,8 @@ to a <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.t
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Applies a function on the results of your finished jobs and thereby collects
-them in a <code><a href='http://www.inside-r.org/r-doc/base/list'>list</a></code> or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>.</p>
+      <p>Extracts error messages from the internal data base and returns them in a compact table.
+For further investigation, see <code><a href='showLog.html'>showLog</a></code>.</p>
   
     </div>
     
@@ -103,54 +93,40 @@ them in a <code><a href='http://www.inside-r.org/r-doc/base/list'>list</a></code
     <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
 <strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
-<div class='input'>batchMap(function(x) x^2, x = 1:10, reg = reg)
+<div class='input'>fun = function(i) if (i == 3) stop(i) else i
+ids = batchMap(fun, i = 1:5, reg = reg)
 </div>
-<strong class='message'>Adding 10 jobs ...</strong>
-<div class='input'>submitJobs(reg = reg)
+<strong class='message'>Adding 5 jobs ...</strong>
+<div class='input'>submitJobs(1:4, reg = reg)
 </div>
-<strong class='message'>Submitting 10 jobs in 10 chunks using cluster functions &#39;Interactive&#39; ...</strong>
-<strong class='message'>Syncing 10 files ...</strong>
-<div class='input'>waitForJobs(reg = reg)
+<strong class='message'>Submitting 4 jobs in 4 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<strong class='message'>Syncing 4 files ...</strong>
+<div class='input'>waitForJobs(1:4, reg = reg)
 </div>
-<div class='output'>[1] TRUE
+<div class='output'>[1] FALSE
 </div>
-<div class='input'>reduceResultsList(fun = sqrt, reg = reg)
+<div class='input'>getErrorMessages(ids, reg = reg)
 </div>
-<div class='output'>[[1]]
-[1] 1
-
-[[2]]
-[1] 2
-
-[[3]]
-[1] 3
-
-[[4]]
-[1] 4
-
-[[5]]
-[1] 5
-
-[[6]]
-[1] 6
-
-[[7]]
-[1] 7
-
-[[8]]
-[1] 8
-
-[[9]]
-[1] 9
-
-[[10]]
-[1] 10
-
+<div class='output'>   job.id terminated error                     message
+1:      1       TRUE FALSE                          NA
+2:      2       TRUE FALSE                          NA
+3:      3       TRUE  TRUE Error in (function (i)  : 3
+4:      4       TRUE FALSE                          NA
+5:      5      FALSE FALSE                          NA
+</div>
+<div class='input'>getErrorMessages(ids, missing.as.error = TRUE, reg = reg)
+</div>
+<div class='output'>   job.id terminated error                     message
+1:      1       TRUE FALSE                          NA
+2:      2       TRUE FALSE                          NA
+3:      3       TRUE  TRUE Error in (function (i)  : 3
+4:      4       TRUE FALSE                          NA
+5:      5      FALSE  TRUE              Not terminated
 </div></pre>
   </div>
   <div class="span4">
     <!-- <ul>
-      <li>reduceResultsDataTable</li><li>reduceResultsList</li>
+      <li>getErrorMessages</li>
     </ul>
     <ul>
       
@@ -158,10 +134,9 @@ them in a <code><a href='http://www.inside-r.org/r-doc/base/list'>list</a></code
       
     <h2>See also</h2>
     
-<code><a href='reduceResults.html'>reduceResults</a></code>.
-
-Other Results: <code><a href='loadResult.html'>loadResult</a></code>,
-  <code><a href='reduceResults.html'>reduceResults</a></code>
+Other debug: <code><a href='grepLogs.html'>grepLogs</a></code>,
+  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
+  <code><a href='testJob.html'>testJob</a></code>
 
         
   </div>

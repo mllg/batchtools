@@ -93,7 +93,7 @@ Debugging tools like <code><a href='http://www.inside-r.org/r-doc/base/traceback
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>reg = makeTempRegistry(make.default = FALSE)
+    <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
 <strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
 <div class='input'>batchMap(function(x) if (x == 2) xxx else x, 1:2, reg = reg)
@@ -118,8 +118,9 @@ Debugging tools like <code><a href='http://www.inside-r.org/r-doc/base/traceback
       
     <h2>See also</h2>
     
-Other debug: <code><a href='grepLogs.html'>grepLogs</a></code>,
-  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>
+Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
+  <code><a href='grepLogs.html'>grepLogs</a></code>, <code><a href='killJobs.html'>killJobs</a></code>,
+  <code><a href='showLog.html'>showLog</a></code>
 
         
   </div>

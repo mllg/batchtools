@@ -10,8 +10,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
+<meta name="date" content="2016-04-14" />
 
-<title>Error handling</title>
+<title>Setup batchtools</title>
 
 
 
@@ -66,61 +67,54 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="fluid-row" id="header">
 
 
-<h1 class="title">Error handling</h1>
+<h1 class="title">Setup batchtools</h1>
+<h4 class="date"><em>2016-04-14</em></h4>
 
 </div>
 
 
-<p>In any large scale experiment many things can and will go wrong. The cluster might have an outage, jobs may run into resource limits or crash, subtile bugs in your code could be triggered or any other error condition might arise. In these situations it is important to quickly determine what went wrong and to recompute only the minimal number of required jobs.</p>
-<p>Therefore, before you submit anything you should use <a href="https://mllg.github.io/batchtools/testJob.html"><code>testJob()</code></a> to catch errors that are easy to spot because they are raised in many or all jobs. If <code>fresh.session</code> is set, this function runs the job without side effects in an independent R process on your local machine via <code>Rscript</code> similar as on the slave, redirects the output of the process to your R console, loads the job result and returns it. If you do not set <code>fresh.session</code>, the job is executed is in the currently running R session, with the drawback that you might be unable to catch missing variable declarations or missing package dependencies.</p>
-<p>By way of illustration here is a small example. First, we create a temporary registry.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
-reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>, <span class="dt">work.dir =</span> <span class="st">&quot;/tmp&quot;</span>)</code></pre></div>
-<p>Ten jobs are created, two of them will throw an exception.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">flakeyFunction &lt;-<span class="st"> </span>function(value) {
-  if (value %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">9</span>)) <span class="kw">stop</span>(<span class="st">&quot;Ooops.&quot;</span>)
-  value^<span class="dv">2</span>
-}
-<span class="kw">batchMap</span>(flakeyFunction, <span class="dv">1</span>:<span class="dv">10</span>)</code></pre></div>
-<pre><code>## Adding 10 jobs ...</code></pre>
-<p>Now that the jobs are defined, we can test jobs independently:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">testJob</span>(<span class="dt">id =</span> <span class="dv">1</span>)</code></pre></div>
-<pre><code>## [1] 1</code></pre>
-<p>In this case, testing the job with ID = 1 provides the appropriate result but testing the job with ID = 2 leads to an error:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.character</span>(<span class="kw">try</span>(<span class="kw">testJob</span>(<span class="dt">id =</span> <span class="dv">2</span>)))</code></pre></div>
-<pre><code>## [1] &quot;Error in (function (value)  : Ooops.\n&quot;</code></pre>
-<p>When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run <a href="https://mllg.github.io/batchtools/getStatus.html"><code>getStatus()</code></a> to display a summary of the current state of the system.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">submitJobs</span>()</code></pre></div>
-<pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
-<pre><code>## Syncing 10 files ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getStatus</span>()</code></pre></div>
-<pre><code>## Status for 10 jobs:
-##   Submitted: 10 (100.0%)
-##   Queued   :  0 (  0.0%)
-##   Started  : 10 (100.0%)
-##   Running  :  0 (  0.0%)
-##   Done     :  8 ( 80.0%)
-##   Error    :  2 ( 20.0%)</code></pre>
-<p>The status message shows that two of the jobs could not be executed successfully. To get the IDs of all jobs that failed due to an error we can use <a href="https://mllg.github.io/batchtools/findJobs.html"><code>findError()</code></a> and to retrieve the actual error message, we can use <a href="https://mllg.github.io/batchtools/getErrorMessages.html"><code>getErrorMessages()</code></a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">findError</span>()</code></pre></div>
-<pre><code>##    job.id
-## 1:      2
-## 2:      9</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getErrorMessages</span>()</code></pre></div>
-<pre><code>##    job.id terminated error                              message
-## 1:      2       TRUE  TRUE Error in (function (value)  : Ooops.
-## 2:      9       TRUE  TRUE Error in (function (value)  : Ooops.</code></pre>
-<p>If we want to peek into the R log file of a job to see more context for the error we can use <a href="https://mllg.github.io/batchtools/showLog.html"><code>showLog()</code></a> which opens a pager:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">showLog</span>(<span class="dt">id =</span> <span class="dv">9</span>)</code></pre></div>
-<pre><code>## [1] &quot;[job(chunk): 2016-04-14 15:18:08] Starting calculation of 1 jobs&quot;                                         
-## [2] &quot;[job(chunk): 2016-04-14 15:18:08] Setting working directory to '/home/lang/Projekte/batchtools/vignettes'&quot;
-## [3] &quot;[job(chunk): 2016-04-14 15:18:08] Using 1 cpus&quot;                                                           
-## [4] &quot;[job(chunk): 2016-04-14 15:18:08] Memory measurement disabled&quot;                                            
-## [5] &quot;[job(chunk): 2016-04-14 15:18:08] Prefetching objects&quot;                                                    
-## [6] &quot;[job(9): 2016-04-14 15:18:08] Starting job with job.id=9&quot;                                                 
-## [7] &quot;[job(9): 2016-04-14 15:18:08] Error in (function (value)  : Ooops.&quot;                                       
-## [8] &quot;[job(9): 2016-04-14 15:18:08] Job terminated with an exception&quot;                                           
-## [9] &quot;[job(chunk): 2016-04-14 15:18:08] Calculation finished!&quot;</code></pre>
+<div id="cluster-functions" class="section level1">
+<h1>Cluster Functions</h1>
+<p>The communication with the batch system is managed via the cluster functions. They are constructed with <a href="https://mllg.github.io/batchtools/makeClusterFunctions.html">makeClusterFunctions</a> where you must at least provide a function which submits a job to your system. The cluster function implementation is stored in your registry and defaults to interactive cluster functions:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>)</code></pre></div>
+<pre><code>## Sourcing configuration file '~/.batchtools.conf.r' ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(reg$cluster.functions)</code></pre></div>
+<pre><code>## ClusterFunctions for mode: Interactive
+##   List queued Jobs : FALSE
+##   List running Jobs: FALSE
+##   Kill Jobs        : FALSE</code></pre>
+<p>Besides a function to submit jobs, you may provide functions to list queued/running jobs and to kill jobs, all can be passed to the constructor <a href="https://mllg.github.io/batchtools/makeClusterFunctions.html">makeClusterFunctions</a>.</p>
+<p>Usually you do not have to start from scratch but can just use one of the cluster function implementations which ship with the package:</p>
+<ul>
+<li>DockerSwarm: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsDocker.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsDocker.R">implementation</a></li>
+<li>Load Sharing Facility (LSF): <a href="https://mllg.github.io/batchtools/makeClusterFunctionsLSF.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsLSF.R">implementation</a></li>
+<li>OpenLava: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsOpenLava.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsOpenLava.R">implementation</a></li>
+<li>Makeshift SSH cluster: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSSH.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSSH.R">implementation</a></li>
+<li>Sun Grid Engine (SGE): <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSGE.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSGE.R">implementation</a></li>
+<li>SLURM: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSLURM.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSLURM.R">implementation</a>, <a href="https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl">example template</a></li>
+<li>Torque/OpenPBS: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsTorque.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsTorque.R">implementation</a>, <a href="https://github.com/mllg/batchtools/blob/master/inst/templates/torque_lido.tmpl">example template</a></li>
+</ul>
+<p>For example, to use the package with the SLURM scheduler, you would call the respective constructor <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSLURM.html">makeClusterFunctionsSLURM</a> with the path to the template file. Here, we use a dummy template file for demonstration:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">path =<span class="st"> </span><span class="kw">tempfile</span>()
+<span class="kw">writeLines</span>(<span class="st">&quot;empty&quot;</span>, path)
+reg$cluster.functions =<span class="st"> </span><span class="kw">makeClusterFunctionsSLURM</span>(path)
+<span class="kw">print</span>(reg$cluster.functions)</code></pre></div>
+<pre><code>## ClusterFunctions for mode: SLURM
+##   List queued Jobs : TRUE
+##   List running Jobs: TRUE
+##   Kill Jobs        : TRUE</code></pre>
+<p>Most characteristics and specialities of cluster systems can be mapped to such a <a href="https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl">template file</a> which is parsed by the <a href="https://cran.r-project.org/web/packages/brew/">brew package</a>. If the flexibility which comes with templating is not sufficient for your system, you can still construct the cluster functions yourself by just adapting our <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSLURM.R">implementation</a>.</p>
+<p>To make your cluster function selection permanent for a specific system across R sessions, you can set up a configuration file which is described in the following.</p>
+</div>
+<div id="configuration-file" class="section level1">
+<h1>Configuration file</h1>
+<p>The configuration file, usually located in your home directory as <code>~/.batchtools.conf.r</code>, can be used to set system specific options. For example, to set the cluster function implementation (see next section), you would generate a file with the following content:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cluster.functions =<span class="st"> </span><span class="kw">makeClusterFunctionsInteractive</span>()</code></pre></div>
+<p>The configuration file is parsed when you create your <a href="https://mllg.github.io/batchtools/Registry.html">Registry</a>. It is sourced inside of your registry which has the advantage that you can (a) access all of the parameters which are passed to <a href="https://mllg.github.io/batchtools/Registry.html">makeRegistry</a> and (b) you can also directly change them. Lets say you always want your working directory be relative to your home directory and you always want to load the <code>checkmate</code> package on the nodes, you can just append these lines:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">work.dir =<span class="st"> &quot;~&quot;</span>
+packages =<span class="st"> </span><span class="kw">union</span>(packages, <span class="st">&quot;checkmate&quot;</span>)</code></pre></div>
+<p>Read the documentation on <a href="https://mllg.github.io/batchtools/Registry.html">Registry</a> for a complete list of supported configuration options.</p>
+</div>
 
 
 

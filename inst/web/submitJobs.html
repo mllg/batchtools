@@ -65,8 +65,7 @@ If not set, defaults to the return value of <code><a href='findJobs.html'>findNo
       <dt>resources</dt>
       <dd>[<code>named list</code>]
   Computational  resources for the batch jobs. The elements of this list
-  (e.g. something like &#147;walltime&#148; or &#147;nodes&#148;) depend on
-  your template file.
+  (e.g. something like &#147;walltime&#148; or &#147;nodes&#148;) depend on your template file.
   The resources <code>chunk.ncpus</code> and <code>measure.memory</code> are reserved for internal functionality:
   The setting <code>chunk.ncpus</code> is used to determine the number of CPUs to execute jobs in a
   chunk in parallel via <code><a href='http://www.inside-r.org/r-doc/parallel/mcparallel'>mcparallel</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/snow/docs/snow-internal'>sendCall</a></code> on Windows).
@@ -97,12 +96,16 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Submits all jobs to the batch system using the resources provided via
-<code>resources</code>.</p>
+      <p>Submits all jobs defined with <code><a href='batchMap.html'>batchMap</a></code> to the batch system.</p>
   
       <p>If an additional column &#147;chunk&#148; is present in the table <code>ids</code>,
 the jobs will be grouped accordingly. See <code><a href='chunkIds.html'>chunkIds</a></code> for more
 information.</p>
+  
+      <p>After submitting the jobs, you can use <code><a href='waitForJobs.html'>waitForJobs</a></code> to wait for the
+termination of jobs or immediately call <code><a href='reduceResultsList.html'>reduceResultsList</a></code>/<code><a href='reduceResults.html'>reduceResults</a></code>
+to collect partial results.
+The progress can be monitored with <code><a href='getJobTable.html'>getJobStatus</a></code>.</p>
   
     </div>
       </div>
