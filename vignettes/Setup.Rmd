@@ -1,0 +1,64 @@
+---
+title: "Setup batchtools"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Setup batchtools}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r,include=FALSE}
+library(batchtools)
+options(batchtools.progress = FALSE)
+```
+
+# Cluster Functions
+
+The communication with the batch system is managed via the cluster functions.
+They are constructed with [makeClusterFunctions](https://mllg.github.io/batchtools/makeClusterFunctions.html) where you must at least provide a function which submits a job to your system.
+The cluster function implementation is stored in your registry and defaults to interactive cluster functions:
+```{r}
+reg = makeRegistry(file.dir = NA)
+print(reg$cluster.functions)
+```
+Besides a function to submit jobs, you may provide functions to list queued/running jobs and to kill jobs, all can be passed to the constructor [makeClusterFunctions](https://mllg.github.io/batchtools/makeClusterFunctions.html).
+
+Usually you do not have to start from scratch but can just use one of the cluster function implementations which ship with the package:
+
+* DockerSwarm: [docs](https://mllg.github.io/batchtools/makeClusterFunctionsDocker.html), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsDocker.R)
+* Load Sharing Facility (LSF): [docs](https://mllg.github.io/batchtools/makeClusterFunctionsLSF.html), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsLSF.R)
+* OpenLava: [docs](https://mllg.github.io/batchtools/makeClusterFunctionsOpenLava.html), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsOpenLava.R)
+* Makeshift SSH cluster: [docs](https://mllg.github.io/batchtools/makeClusterFunctionsSSH.html), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSSH.R)
+* Sun Grid Engine (SGE): [docs](https://mllg.github.io/batchtools/makeClusterFunctionsSGE.html), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSGE.R)
+* SLURM: [docs](https://mllg.github.io/batchtools/makeClusterFunctionsSLURM.html), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSLURM.R), [example template](https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl)
+* Torque/OpenPBS: [docs](https://mllg.github.io/batchtools/makeClusterFunctionsTorque.html), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsTorque.R), [example template](https://github.com/mllg/batchtools/blob/master/inst/templates/torque_lido.tmpl)
+
+For example, to use the package with the SLURM scheduler, you would call the respective constructor [makeClusterFunctionsSLURM](https://mllg.github.io/batchtools/makeClusterFunctionsSLURM.html) with the path to the template file.
+Here, we use a dummy template file for demonstration:
+```{r}
+path = tempfile()
+writeLines("empty", path)
+reg$cluster.functions = makeClusterFunctionsSLURM(path)
+print(reg$cluster.functions)
+```
+Most characteristics and specialities of cluster systems can be mapped to such a [template file](https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl) which is parsed by the [brew package](https://cran.r-project.org/web/packages/brew/).
+If the flexibility which comes with templating is not sufficient for your system, you can still construct the cluster functions yourself by just adapting our [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSLURM.R).
+
+To make your cluster function selection permanent for a specific system across R sessions, you can set up a configuration file which is described in the following.
+
+
+# Configuration file
+
+The configuration file, usually located in your home directory as `~/.batchtools.conf.r`, can be used to set system specific options.
+For example, to set the cluster function implementation (see next section), you would generate a file with the following content:
+```{r,eval=FALSE}
+cluster.functions = makeClusterFunctionsInteractive()
+```
+The configuration file is parsed when you create your [Registry](https://mllg.github.io/batchtools/Registry.html).
+It is sourced inside of your registry which has the advantage that you can (a) access all of the parameters which are passed to [makeRegistry](https://mllg.github.io/batchtools/Registry.html) and (b) you can also directly change them.
+Lets say you always want your working directory be relative to your home directory and you always want to load the `checkmate` package on the nodes, you can just append these lines:
+```{r,eval=FALSE}
+work.dir = "~"
+packages = union(packages, "checkmate")
+```
+Read the documentation on [Registry](https://mllg.github.io/batchtools/Registry.html) for a complete list of supported configuration options.

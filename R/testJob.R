@@ -42,7 +42,7 @@ testJob = function(id, fresh.session = FALSE, reg = getDefaultRegistry()) {
 
     writeRDS(job, file = fn.job)
     brew::brew(file = fn.tmpl, output = fn.r, envir = list2env(list(job = fn.job, result = fn.res)))
-    res = runOSCommand("Rscript", fn.r, stop.on.exit.code = FALSE)
+    res = runOSCommand("Rscript", fn.r, stop.on.exit.code = FALSE, debug = reg$debug)
 
     if (res$exit.code == 0L) {
       writeLines(res$output)

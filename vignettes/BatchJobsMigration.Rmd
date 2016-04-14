@@ -12,29 +12,44 @@ library(batchtools)
 options(batchtools.progress = FALSE)
 ```
 
-## Notable interface changes
+# Migration from BatchJobs/BatchExperiments
+
+The packages [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) have been merged for the following reasons:
+
+* The packages are tightly connected which makes maintaining difficult, because the changes have to be synchronized and tested against the current CRAN versions for compatibility.
+* BatchExperiments violates CRAN policies by calling internal functions of BatchJobs.
+  The options to solve this are both subpar: (a) code duplication or (b) exporting many internal functions of BatchJobs.
+* Ongoing troubles with the data base and the file system.
+  Although we invested weeks to mitigate issues with locks of the SQLite data base or file system (staged queries, file system timeouts, ...), BatchJobs is working unreliable on some systems, especially systems with a higher latency.
+
+[BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) will of course remain on CRAN.
+
+
+## Internal changes
+
+* `batchtools` does not use SQLite anymore.
+  Instead, all the information is stored directly in the registry using [data.tables](https://cran.r-project.org/package=data.table) acting as an in-memory database.
+* Nodes do not have to access the registry. [submitJobs()](https://mllg.github.io/batchtools/submitJobs.html) stores a temporary object of type [JobCollection](https://mllg.github.io/batchtools/JobCollection.html) on the file system which holds all the information necessary to execute a chunk of jobs via [doJobCollection()](https://mllg.github.io/batchtools/doJobCollection.html) on the node.
+  This avoids file system locks because each node accesses only one file exclusively.
+* Chunks can be parallelized on the node using `parallel` (linux/mac os) or `snow` (windows) by setting the resource `chunk.ncpus`.
+  The parallelization is asynchronous and updates get written to the file system approximately every 5 seconds.
+
+
+## Interface changes
 
 ### BatchJobs
-* The packages [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) have been merged.
-* `batchtools` remembers the last created or loaded Registry and makes it the default.
-  This way, you do not need to pass the registry around that much.
-  If you need to work with multiple registries simultaneously on the other hand, you can still do so by explicitly passing a registry.
+* `batchtools` remembers the last created or loaded Registry and stores it as default registry.
+  This way, you do not need to pass the registry around anymore.
+  If you need to work with multiple registries simultaneously on the other hand, you can still do so by explicitly passing registries to the functions.
 * The template file format has changed:
     - The scheduler should directly execute the command `Rscript -e 'batchtools::doJobCollection(<filename>)'`.
       There is no intermediate R source file like in BatchJobs.
-    - All information stored in the object `JobDescription` can be access while brewing the template.
+    - All information stored in the object `JobCollection` can be accessed while brewing the template.
       Some variable names have changed and need to be adapted though.
+      See the vignette on cluster functions.
 * Most functions now return a [data.table](https://cran.r-project.org/package=data.table) which is keyed with the `job.id`.
   This way, return values can be joined together easily and efficient (see example below).
-  Furthermore, you can use these tables to subset ids.
-
-### BatchExperiments
-* The building blocks of a problem has been renamed from `static` and `dynamic` to the more intuitive `data` and `fun`.
-  Thus, algorithm function should have the formal arguments `job`, `data` and `instance`.
-* The function `makeDesign` has been removed.
-  Hyperparameters can be defined by just passing a `data.frame` or `data.table` to [addExperiments](https://mllg.github.io/batchtools/addExperiments.html).
-  For exhaustive designs, use `expand.grid()` or `data.table::CJ`.
-
+  Furthermore, you can use these tables to subset ids (but you can still use integers if you want to).
 ```{r}
 library(batchtools)
 reg = makeRegistry(file.dir = NA)
@@ -48,12 +63,10 @@ getJobPars(ids)
 getJobPars()[ids]
 ```
 
+### BatchExperiments
+* The building blocks of a problem has been renamed from `static` and `dynamic` to the more intuitive `data` and `fun`.
+  Thus, algorithm function should have the formal arguments `job`, `data` and `instance`.
+* The function `makeDesign` has been removed.
+  Hyperparameters can be defined by just passing a `data.frame` or `data.table` to [addExperiments](https://mllg.github.io/batchtools/addExperiments.html).
+  For exhaustive designs, use `expand.grid()` or `data.table::CJ`.
 
-## Notable internal changes
-
-* `batchtools` does not use SQLite anymore.
-  Instead all the information is stored directly in the registry using [data.tables](https://cran.r-project.org/package=data.table) acting as an in-memory database.
-* Nodes do not have to access the registry. [submitJobs()](https://mllg.github.io/batchtools/submitJobs.html) stores an object of type [JobDescription](https://mllg.github.io/batchtools/JobDescription.html) on the file system.
-  This object holds all the information necessary to execute the job or chunk of jobs via [doJobCollection()](https://mllg.github.io/batchtools/doJobCollection.html).
-  Each job stores its status updates and results on the file system and [syncRegistry()](https://mllg.github.io/batchtools/syncRegistry.html) can be used on the master to update the registry.
-* Chunks can be parallelized using `parallel` (linux/mac os) or `snow` (windows) by setting the resource `chunk.ncpus`.

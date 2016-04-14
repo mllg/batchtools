@@ -1,25 +1,3 @@
-#' @export
-#' @rdname Registry
-getDefaultRegistry = function() {
-  if (is.null(batchtools$default.registry))
-    stop("No default registry defined")
-  batchtools$default.registry
-}
-
-#' @export
-#' @rdname Registry
-setDefaultRegistry = function(reg) {
-  assertRegistry(reg)
-  batchtools$default.registry = reg
-}
-
-#' @export
-#' @rdname Registry
-clearDefaultRegistry = function() {
-  batchtools$default.registry = NULL
-  invisible(TRUE)
-}
-
 #' @title Registry
 #'
 #' @description
@@ -81,18 +59,19 @@ clearDefaultRegistry = function() {
 #'   Default is \code{TRUE}.
 #' @return [\code{Registry}]. An environment with the following slots:
 #'   \describe{
-#'     \item{file.dir}{File directory.}
-#'     \item{work.dir}{Working directory.}
-#'     \item{packages}{Packages to load on the slaves.}
-#'     \item{namespaces}{Namespaces to load on the slaves.}
-#'     \item{seed}{Registry seed. Before each job is executed, the seed \code{seed + job.id} is set.}
-#'     \item{debug}{Flag to turn additional debug functionality on.}
-#'     \item{cluster.functions}{Usually set in your \code{conf.file}. Set via a call to \code{\link{makeClusterFunctions}}. See example.}
-#'     \item{default.resources}{Usually set in your \code{conf.file}. Named list of default resources.}
-#'     \item{max.concurrent.jobs}{Usually set in your \code{conf.file}. Maximum number of concurrent jobs for a single user on the system. \code{\link{submitJobs}} will try to respect this setting.}
-#'     \item{defs}{Table with job definitions (i.e. parameters).}
-#'     \item{status}{Table holding information about the computational status. Also see \code{\link{getJobStatus}}.}
-#'     \item{resources}{Table holding information about the computational resources used for the job. Also see \code{\link{getJobResources}}.}
+#'     \item{\code{file.dir} [path]:}{File directory.}
+#'     \item{\code{work.dir} [path]:}{Working directory.}
+#'     \item{\code{temp.dir} [path]:}{Temporary directory. Only used if \code{file.dir} is \code{NA}.}
+#'     \item{\code{packages} [character()]:}{Packages to load on the slaves.}
+#'     \item{\code{namespaces} [character()]:}{Namespaces to load on the slaves.}
+#'     \item{\code{seed} [integer(1)]:}{Registry seed. Before each job is executed, the seed \code{seed + job.id} is set.}
+#'     \item{\code{debug} [logical(1)]:}{Flag to turn additional debug functionality on.}
+#'     \item{\code{cluster.functions} [cluster.functions]:}{Usually set in your \code{conf.file}. Set via a call to \code{\link{makeClusterFunctions}}. See example.}
+#'     \item{\code{default.resources} [named list()]:}{Usually set in your \code{conf.file}. Named list of default resources.}
+#'     \item{\code{max.concurrent.jobs} [integer(1)]:}{Usually set in your \code{conf.file}. Maximum number of concurrent jobs for a single user on the system. \code{\link{submitJobs}} will try to respect this setting.}
+#'     \item{\code{defs} [data.table]:}{Table with job definitions (i.e. parameters).}
+#'     \item{\code{status} [data.table]:}{Table holding information about the computational status. Also see \code{\link{getJobStatus}}.}
+#'     \item{\code{resources} [data.table]:}{Table holding information about the computational resources used for the job. Also see \code{\link{getJobResources}}.}
 #'   }
 #' @aliases Registry
 #' @name Registry
@@ -126,12 +105,11 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "
   assertFlag(make.default)
   seed = if (is.null(seed)) as.integer(runif(1L, 1, .Machine$integer.max / 2L)) else asCount(seed, positive = TRUE)
 
-  loadRegistryDependencies(list(work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
-
   reg = new.env(parent = asNamespace("batchtools"))
 
   reg$file.dir = file.dir
   reg$work.dir = work.dir
+  reg$temp.dir = tempdir()
   reg$packages = packages
   reg$namespaces = namespaces
   reg$source = source
@@ -172,17 +150,16 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "
 
     if (!is.null(reg$cluster.functions))
       assertClass(reg$cluster.functions, "ClusterFunctions")
-    if (!is.null(reg$temp.dir))
-      assertString(reg$temp.dir)
     if (!is.null(reg$default.resources))
       assertList(reg$default.resources, names = "unique")
     if (!is.null(reg$debug))
       assertFlag(reg$debug)
   }
 
+  loadRegistryDependencies(list(work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
+
   if (is.na(file.dir)) {
-    temp.dir = if (is.null(reg$temp.dir)) tempdir() else npath(reg$temp.dir)
-    reg$file.dir = tempfile("registry", tmpdir = temp.dir)
+    reg$file.dir = tempfile("registry", tmpdir = npath(reg$temp.dir))
   } else {
     reg$file.dir = npath(file.dir)
   }
@@ -195,6 +172,28 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "
   if (make.default)
     batchtools$default.registry = reg
   return(reg)
+}
+
+#' @export
+#' @rdname Registry
+getDefaultRegistry = function() {
+  if (is.null(batchtools$default.registry))
+    stop("No default registry defined")
+  batchtools$default.registry
+}
+
+#' @export
+#' @rdname Registry
+setDefaultRegistry = function(reg) {
+  assertRegistry(reg)
+  batchtools$default.registry = reg
+}
+
+#' @export
+#' @rdname Registry
+clearDefaultRegistry = function() {
+  batchtools$default.registry = NULL
+  invisible(TRUE)
 }
 
 #' @export
