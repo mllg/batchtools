@@ -58,9 +58,9 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
 
   housekeeping = function(reg, ...) {
     args = c(docker.args, "ps", "-a", "--format={{.ID}}", "--filter 'label=batchtools'", "--filter 'status=exited'")
-    batch.ids = intersect(runOSCommand("docker", args)$output, reg$status$batch.id)
+    batch.ids = intersect(runOSCommand("docker", args, debug = reg$debug)$output, reg$status$batch.id)
     if (length(batch.ids) > 0L)
-      runOSCommand("docker", c(docker.args, "rm", batch.ids))
+      runOSCommand("docker", c(docker.args, "rm", batch.ids), debug = reg$debug)
     invisible(TRUE)
   }
 

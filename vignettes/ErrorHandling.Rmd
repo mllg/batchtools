@@ -51,11 +51,12 @@ submitJobs()
 getStatus()
 ```
 The status message shows that two of the jobs could not be executed successfully.
-To get the IDs of all jobs that failed due to an error we can use [`findError()`](https://mllg.github.io/batchtools/findJobs.html).
+To get the IDs of all jobs that failed due to an error we can use [`findError()`](https://mllg.github.io/batchtools/findJobs.html) and to retrieve the actual error message, we can use [`getErrorMessages()`](https://mllg.github.io/batchtools/getErrorMessages.html).
 ```{r}
 findError()
+getErrorMessages()
 ```
-If we want to peek into the R log file of a job to see more context for the error we can use [`showLog()`](https://mllg.github.io/batchtools/showLog.html).
+If we want to peek into the R log file of a job to see more context for the error we can use [`showLog()`](https://mllg.github.io/batchtools/showLog.html) which opens a pager:
 ```{r,eval=FALSE}
 showLog(id = 9)
 ```
