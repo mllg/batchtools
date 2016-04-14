@@ -67,7 +67,7 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-    cfKillBatchJob("docker", c(docker.args, "kill", batch.id))
+    cfKillJob(reg, "docker", c(docker.args, "kill", batch.id))
   }
 
   listJobsRunning = function(reg) {

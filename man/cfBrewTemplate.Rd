@@ -30,7 +30,7 @@ enabled, the file is stored at the same place as the corresponding R script in t
 }
 \seealso{
 Other ClusterFunctionsHelper: \code{\link{cfHandleUnknownSubmitError}},
-  \code{\link{cfKillBatchJob}},
+  \code{\link{cfKillJob}},
   \code{\link{cfReadBrewTemplate}},
   \code{\link{makeSubmitJobResult}}
 }
