@@ -3,6 +3,7 @@
 \name{Registry}
 \alias{Registry}
 \alias{clearDefaultRegistry}
+\alias{clearRegistry}
 \alias{getDefaultRegistry}
 \alias{loadRegistry}
 \alias{makeRegistry}
@@ -30,6 +31,8 @@ loadRegistry(file.dir = "registry", work.dir = NULL,
 saveRegistry(reg = getDefaultRegistry())
 
 sweepRegistry(reg = getDefaultRegistry())
+
+clearRegistry(reg = getDefaultRegistry())
 
 syncRegistry(reg = getDefaultRegistry(), save = TRUE)
 }
@@ -129,6 +132,7 @@ the file system.
 
 Canceled jobs and repeatedly submitted jobs leave in some cases stray files behind which can be
 swept using \code{sweepRegistry}.
+\code{clearRegistry} completely erases all jobs from a registry, including log files and results.
 }
 \examples{
 reg = makeRegistry(file.dir = NA, make.default = FALSE)

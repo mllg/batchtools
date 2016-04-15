@@ -23,6 +23,10 @@ inner_join = function(x, y, on = key(y)) {
   x[y, nomatch = 0, on = on]
 }
 
+auto_increment = function(ids, n = 1L) {
+  if (length(ids) == 0L) seq_len(n) else max(ids) + seq_len(n)
+}
+
 now = function() {
   as.integer(Sys.time())
 }
@@ -143,3 +147,4 @@ capture = function(expr) {
 filterNull = function(x) {
   x[!vlapply(x, is.null)]
 }
+

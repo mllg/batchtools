@@ -92,7 +92,7 @@ getJobResources = function(ids = NULL, resources.as.cols = FALSE, prefix = FALSE
     tab[, "resources" := NULL]
   }
   setkeyv(tab, "job.id")
-  tab[, !"resource.id", with = FALSE]
+  tab[, !c("resource.id", "resource.hash"), with = FALSE]
 }
 
 #' @export
