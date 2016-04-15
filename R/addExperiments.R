@@ -31,7 +31,6 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
   assertSubset(names(algo.designs), levels(reg$defs$algorithm))
   repls = asCount(repls)
 
-  max2 = function(ids) if (length(ids) == 0L) 0L else max(ids)
   all.ids = integer(0L)
 
   for (i in seq_along(prob.designs)) {
@@ -57,14 +56,14 @@ addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefau
       tab = merge(reg$defs[, !c("pars", "problem", "algorithm"), with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 
       miss = tab[is.na(def.id), which = TRUE]
-      tab[miss, "def.id" := max2(reg$defs$def.id) + seq_along(miss)]
+      tab[miss, "def.id" := auto_increment(reg$defs$def.id, length(miss))]
       reg$defs = rbind(reg$defs, tab[miss])
 
       tab = CJ(def.id = tab$def.id, repl = seq_len(repls))
       tab = tab[!reg$status, on = c("def.id", "repl")]
       if (nrow(tab) < n.jobs)
         info("Skipping %i duplicated experiments ...", n.jobs - nrow(tab))
-      tab$job.id = max2(reg$status$job.id) + seq_row(tab)
+      tab$job.id = auto_increment(reg$status$job.id, nrow(tab))
       reg$status = rbind(reg$status, tab, fill = TRUE)
       all.ids = c(all.ids, tab$job.id)
     }

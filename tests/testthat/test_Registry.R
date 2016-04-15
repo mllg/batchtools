@@ -97,3 +97,25 @@ test_that("sweepRegistry", {
   expect_character(list.files(file.path(reg$file.dir, "logs")), len = 1L)
   expect_character(list.files(file.path(reg$file.dir, "jobs")), len = 0L)
 })
+
+test_that("clearRegistry", {
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg$foo = TRUE
+  batchMap(identity, 1:3, reg = reg)
+  silent({
+    submitJobs(chunkIds(reg =reg, n.chunks = 2), reg = reg)
+    waitForJobs(reg = reg)
+  })
+
+  clearRegistry(reg)
+  checkTables(reg, nrow = 0L)
+
+  expect_identical(list.files(file.path(reg$file.dir, "jobs")), character(0))
+  expect_identical(list.files(file.path(reg$file.dir, "logs")), character(0))
+  expect_identical(list.files(file.path(reg$file.dir, "results")), character(0))
+  expect_identical(list.files(file.path(reg$file.dir, "updates")), character(0))
+  expect_false(file.exists(file.path(reg$file.dir, "user.function.rds")))
+
+  expect_identical(batchMap(identity, 1:4, reg = reg), data.table(job.id = 1:4, key = "job.id"))
+  expect_true(reg$foo)
+})

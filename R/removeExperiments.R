@@ -11,6 +11,6 @@ removeExperiments = function(ids = integer(0L), reg = getDefaultRegistry()) {
     reg$defs = reg$defs[-i]
   }
 
-  saveRegistry(reg)
+  sweepRegistry(reg)
   return(ids)
 }

@@ -67,7 +67,7 @@ batchMap = function(fun, ..., more.args = list(), reg = getDefaultRegistry()) {
     done        = NA_integer_,
     error       = NA_character_,
     memory      = NA_real_,
-    resource.id = factor(NA_character_),
+    resource.id = NA_integer_,
     batch.id    = NA_character_,
     job.hash    = NA_character_,
     key = "job.id")

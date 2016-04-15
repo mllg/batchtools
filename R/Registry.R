@@ -15,6 +15,7 @@
 #'
 #' Canceled jobs and repeatedly submitted jobs leave in some cases stray files behind which can be
 #' swept using \code{sweepRegistry}.
+#' \code{clearRegistry} completely erases all jobs from a registry, including log files and results.
 #'
 #' @param file.dir [\code{character(1)}]\cr
 #'   Path where all files of the registry are saved.
@@ -134,13 +135,14 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "
     done        = integer(0L),
     error       = character(0L),
     memory      = double(0L),
-    resource.id = factor(ordered = FALSE),
+    resource.id = integer(0L),
     batch.id    = character(0L),
     job.hash    = character(0L),
     key = "job.id")
 
   reg$resources = data.table(
-    resource.id    = factor(ordered = FALSE),
+    resource.id    = integer(0L),
+    resource.hash  = character(0L),
     resources      = list(),
     key = "resource.id")
 
@@ -274,6 +276,13 @@ saveRegistry = function(reg = getDefaultRegistry()) {
 #' @rdname Registry
 #' @export
 sweepRegistry = function(reg = getDefaultRegistry()) {
+  result.files = list.files(file.path(reg$file.dir, "results"))
+  i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% .findDone(reg = reg)$job.id)
+  if (length(i) > 0L) {
+    info("Removing %i obsolete result files", length(i))
+    file.remove(file.path(reg$file.dir, "results", result.files))
+  }
+
   log.files = list.files(file.path(reg$file.dir, "logs"))
   i = which(stri_replace_last_fixed(log.files, ".log", "") %nin% reg$status$job.hash)
   if (length(i) > 0L) {
@@ -295,6 +304,23 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   }
 
   saveRegistry(reg)
+}
+
+
+#' @rdname Registry
+#' @export
+clearRegistry = function(reg = getDefaultRegistry()) {
+  syncRegistry(reg = reg)
+  info("Removing %i jobs", nrow(reg$status))
+  reg$status = reg$status[FALSE]
+  reg$defs = reg$defs[FALSE]
+  reg$resources = reg$resources[FALSE]
+  user.fun = file.path(reg$file.dir, "user.function.rds")
+  if (file.exists(user.fun)) {
+    info("Removing user function")
+    file.remove(user.fun)
+  }
+  sweepRegistry(reg = reg)
 }
 
 loadRegistryDependencies = function(x, switch.wd = TRUE) {

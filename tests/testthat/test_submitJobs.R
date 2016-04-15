@@ -8,7 +8,7 @@ test_that("submitJobs", {
   silent(submitJobs(chunkIds(1:2, reg = reg), resources = list(foo = "bar"), reg = reg))
   checkTables(reg)
 
-  expect_factor(reg$status[1:2, resource.id], n.levels = 1, any.missing = FALSE)
+  expect_integer(reg$status[1:2, resource.id], any.missing = FALSE)
   expect_character(reg$status[1:2, batch.id], any.missing = FALSE)
   expect_integer(reg$status[1:2, submitted], any.missing = FALSE)
   expect_true(is.na(reg$status[3, submitted]))
