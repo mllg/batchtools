@@ -28,8 +28,7 @@ Registry. If not explicitly passed, uses the last created registry.}
 [ANY]. Returns the result of the job if successful.
 }
 \description{
-Starts a single job in the current R session.
-Debugging tools like \code{\link[base]{traceback}} should work.
+Starts a single job on the local machine.
 }
 \examples{
 reg = makeRegistry(file.dir = NA, make.default = FALSE)

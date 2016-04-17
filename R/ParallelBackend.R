@@ -6,7 +6,7 @@ Sequential = R6Class("Sequential",
   )
 )
 
-Parallel = R6Class("Parallel",
+Multicore = R6Class("Multicore",
   cloneable = FALSE,
   public = list(
     ncpus = NULL,
@@ -39,7 +39,7 @@ Parallel = R6Class("Parallel",
   )
 )
 
-Snow = R6Class("ParallelSnow",
+Snow = R6Class("Snow",
   cloneable = FALSE,
   public = list(
     cl = NULL,

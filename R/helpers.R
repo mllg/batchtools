@@ -147,4 +147,3 @@ capture = function(expr) {
 filterNull = function(x) {
   x[!vlapply(x, is.null)]
 }
-

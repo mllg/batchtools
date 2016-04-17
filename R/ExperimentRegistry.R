@@ -8,13 +8,13 @@
 #' These can be parametrized with \code{\link{addExperiments}} to actually define computational
 #' jobs.
 #'
-#' @param  ... [\code{ANY}]\cr
-#'   Arguments passed to \code{\link{Registry}}.
+#' @inheritParams Registry
 #' @aliases ExperimentRegistry
 #' @return [\code{ExperimentRegistry}].
 #' @name ExperimentRegistry
 #' @rdname ExperimentRegistry
 #' @export
+#' @family Experiment
 #' @examples
 #' reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #' addProblem(reg = reg, "p1",
@@ -32,8 +32,11 @@
 #' tab = getJobPars(reg = reg, ids = ids)
 #' res = reduceResultsDataTable(reg = reg, ids = ids)
 #' tab[res]
-makeExperimentRegistry = function(...) {
-  reg = makeRegistry(...)
+makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "~/.batchtools.conf.r", packages = character(0L), namespaces = character(0L),
+  source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
+
+  reg = makeRegistry(file.dir = file.dir, work.dir = work.dir, conf.file = conf.file,
+    packages = packages, namespaces = namespaces, source = source, load = load, seed = seed, make.default = make.default)
 
   dir.create(file.path(reg$file.dir, "problems"))
   dir.create(file.path(reg$file.dir, "algorithms"))
@@ -50,16 +53,16 @@ makeExperimentRegistry = function(...) {
 #' @export
 print.ExperimentRegistry = function(x, ...) {
   catf("Experiment Registry")
-  catf("  Number of Jobs: %i", nrow(x$status))
-  catf("  Number of Problems: %i", nlevels(x$defs$problem))
-  catf("  Number of Algorithms: %i", nlevels(x$defs$algorithm))
-  catf("  File dir: %s", x$file.dir)
-  catf("  Work dir: %s", x$work.dir)
-  catf("  Seed: %i", x$seed)
+  catf("  File dir    : %s", x$file.dir)
+  catf("  Work dir    : %s", x$work.dir)
+  catf("  #-Jobs      : %i", nrow(x$status))
+  catf("  #-Problems  : %i", nlevels(x$defs$problem))
+  catf("  #-Algorithms: %i", nlevels(x$defs$algorithm))
+  catf("  Seed        : %i", x$seed)
 }
 
-assertExperimentRegistry = function(reg, writeable = FALSE, strict = FALSE) {
-  assertClass(reg, "ExperimentRegistry", ordered = strict)
+assertExperimentRegistry = function(reg, writeable = FALSE) {
+  assertClass(reg, "ExperimentRegistry")
   if (writeable & !reg$writeable)
     stop("Registry must be writeable")
   invisible(TRUE)

@@ -38,4 +38,9 @@ prob.designs = list(p1 = expand.grid(n = 100, mean = -3:3, sd = 1:5))
 algo.designs = list(a1 = data.table())
 addExperiments(reg = reg, prob.designs, algo.designs)
 }
+\seealso{
+Other Experiment: \code{\link{ExperimentRegistry}},
+  \code{\link{removeExperiments}},
+  \code{\link{summarizeExperiments}}
+}
 

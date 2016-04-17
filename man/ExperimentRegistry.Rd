@@ -5,11 +5,61 @@
 \alias{makeExperimentRegistry}
 \title{ExperimentRegistry Constructor}
 \usage{
-makeExperimentRegistry(...)
+makeExperimentRegistry(file.dir = "registry", work.dir = getwd(),
+  conf.file = "~/.batchtools.conf.r", packages = character(0L),
+  namespaces = character(0L), source = character(0L),
+  load = character(0L), seed = NULL, make.default = TRUE)
 }
 \arguments{
-\item{...}{[\code{ANY}]\cr
-Arguments passed to \code{\link{Registry}}.}
+\item{file.dir}{[\code{character(1)}]\cr
+  Path where all files of the registry are saved.
+  Default is directory \dQuote{registry} in the current working directory.
+
+  If you pass \code{NA}, a temporary directory will be used.
+  This way, you can create disposable registries for \code{\link{btlapply}} or examples.
+  By default, the temporary directory \code{\link[base]{tempdir}()} will be used.
+  If you want to use another temp directory, e.g. a directory which is shared between nodes,
+  you can set it in your configuration via \code{temp.dir}.}
+
+\item{work.dir}{[\code{character(1)}]\cr
+Working directory for R process when experiment is executed.
+For \code{makeRegistry}, this defaults to the current working directory.
+\code{loadRegistry} uses the stored \code{work.dir}, but you may also explicitly provide one
+yourself.}
+
+\item{conf.file}{[\code{character(1)}]\cr
+Path to a configuration file which is sourced directly after the registry is created.
+For example, you can set system-specific cluster functions in it.
+The script is executed inside the registry environment, thus you can directly set
+all slots, e.g. \dQuote{debug = TRUE} would overwrite the debug flag of the registry.}
+
+\item{packages}{[\code{character}]\cr
+Packages that will always be loaded on each node.
+Uses \code{\link[base]{require}} internally.
+Default is \code{character(0)}.}
+
+\item{namespaces}{[\code{character}]\cr
+Same as \code{packages}, but the packages will not be attached.
+Uses \code{\link[base]{requireNamespace}} internally.
+Default is \code{character(0)}.}
+
+\item{source}{[\code{character}]\cr
+Files which should be sourced on the slaves prior to executing a job.
+Calls \code{\link[base]{sys.source}} using the \code{\link[base]{.GlobalEnv}}.}
+
+\item{load}{[\code{character}]\cr
+Files which should be loaded on the slaves prior to executing a job.
+Calls \code{\link[base]{load}} using the \code{\link[base]{.GlobalEnv}}.}
+
+\item{seed}{[\code{integer(1)}]\cr
+Start seed for jobs. Each job uses the (\code{seed} + \code{job.id}) as seed.
+Default is a random number in the range [1, \code{.Machine$integer.max/2}].}
+
+\item{make.default}{[\code{logical(1)}]\cr
+If set to \code{TRUE}, the created registry is saved inside the package
+namespace and acts as default registry. You might want to switch this
+off if you work with multiple registries simultaneously.
+Default is \code{TRUE}.}
 }
 \value{
 [\code{ExperimentRegistry}].
@@ -39,5 +89,10 @@ ids = findDone(reg = reg)
 tab = getJobPars(reg = reg, ids = ids)
 res = reduceResultsDataTable(reg = reg, ids = ids)
 tab[res]
+}
+\seealso{
+Other Experiment: \code{\link{addExperiments}},
+  \code{\link{removeExperiments}},
+  \code{\link{summarizeExperiments}}
 }
 
