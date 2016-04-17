@@ -83,8 +83,8 @@ print.ClusterFunctions = function(x, ...) {
 #'   Launch status of job. 0 means success, codes between 1 and 100 are temporary errors and any
 #'   error greater than 100 is a permanent failure.
 #' @param batch.id [\code{character(1)}]\cr
-#'   Unique id of this job on batch system. Note that this is not the usual job id used in
-#'   BatchJobs! Must be globally unique so that the job can be terminated using just this
+#'   Unique id of this job on batch system. Note that this is not the usual job id.
+#'   Must be globally unique so that the job can be terminated using just this
 #'   information.
 #' @param msg [\code{character(1)}]\cr
 #'   Optional error message in case \code{status} is not equal to 0. Default is \dQuote{OK},
@@ -96,7 +96,7 @@ print.ClusterFunctions = function(x, ...) {
 #' @export
 makeSubmitJobResult = function(status, batch.id, msg = NA_character_) {
   status = asInt(status)
-  if (testScalarNA(msg)) {
+  if (is.na(msg)) {
     msg = if (status == 0L)
       "OK"
     else if (status <= 100L)
@@ -110,9 +110,9 @@ makeSubmitJobResult = function(status, batch.id, msg = NA_character_) {
 #' @export
 print.SubmitJobResult = function(x, ...) {
   cat("Job submission result:\n")
-  catf("  ID     : %s", x$batch.id)
-  catf("  Status : %i", x$status)
-  catf("  Msg    : %s", x$msg)
+  catf("  ID    : %s", x$batch.id)
+  catf("  Status: %i", x$status)
+  catf("  Msg   : %s", x$msg)
 }
 
 #' @title Cluster functions helper: Read in your brew template file
@@ -271,9 +271,8 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
     sys.cmd = "ssh"
   }
 
-  if (debug) {
+  if (debug)
     info("OS cmd: %s %s", sys.cmd, stri_join(sys.args, collapse = " "))
-  }
 
   if (nzchar(Sys.which(sys.cmd)) > 0L) {
     res = suppressWarnings(system2(command = sys.cmd, args = sys.args, stdout = TRUE, stderr = TRUE, wait = TRUE))

@@ -1,8 +1,7 @@
 #' @title Run Jobs Interactively
 #'
 #' @description
-#' Starts a single job in the current R session.
-#' Debugging tools like \code{\link[base]{traceback}} should work.
+#' Starts a single job on the local machine.
 #'
 #' @template id
 #' @param fresh.session [\code{logical(1)}]\cr

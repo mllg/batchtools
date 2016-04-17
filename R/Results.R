@@ -1,4 +1,4 @@
-#' Reduce Results
+#' @title Reduce Results
 #'
 #' @description
 #' A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects

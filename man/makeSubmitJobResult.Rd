@@ -13,8 +13,8 @@ Launch status of job. 0 means success, codes between 1 and 100 are temporary err
 error greater than 100 is a permanent failure.}
 
 \item{batch.id}{[\code{character(1)}]\cr
-Unique id of this job on batch system. Note that this is not the usual job id used in
-BatchJobs! Must be globally unique so that the job can be terminated using just this
+Unique id of this job on batch system. Note that this is not the usual job id.
+Must be globally unique so that the job can be terminated using just this
 information.}
 
 \item{msg}{[\code{character(1)}]\cr

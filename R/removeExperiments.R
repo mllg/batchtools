@@ -1,3 +1,14 @@
+#' @title Remove Experiments
+#'
+#' @description
+#' Remove Experiments from an \code{\link{ExperimentRegistry}}.
+#'
+#' @templateVar ids.default none
+#' @template ids
+#' @template expreg
+#' @return [\code{data.table}] of removed job ids.
+#' @export
+#' @family Experiment
 removeExperiments = function(ids = integer(0L), reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
   ids = asJobTable(reg, ids)

@@ -15,6 +15,7 @@
 #' @template expreg
 #' @return [\code{data.table}]. Generated job ids are stored in the column \dQuote{job.id}.
 #' @export
+#' @family Experiment
 #' @examples
 #' reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #' addProblem(reg = reg, "p1",

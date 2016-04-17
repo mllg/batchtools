@@ -1,11 +1,11 @@
-#' @title Execute Single Jobs
+#' @title Execute a Single Jobs
 #'
 #' @description
 #' Executes a single job (as created by \code{\link{makeJob}}) and returns
 #' its result. Also works for Experiments.
 #'
-#' @param job [\code{\link{Job}}]\cr
-#'   Job to execute.
+#' @param job [\code{\link{Job}} \code{\link{Experiment}}]\cr
+#'   Job/Experiment to execute.
 #' @return [any]. Result of the job.
 #' @export
 execJob = function(job) {

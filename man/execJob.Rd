@@ -2,13 +2,13 @@
 % Please edit documentation in R/execJob.R
 \name{execJob}
 \alias{execJob}
-\title{Execute Single Jobs}
+\title{Execute a Single Jobs}
 \usage{
 execJob(job)
 }
 \arguments{
-\item{job}{[\code{\link{Job}}]\cr
-Job to execute.}
+\item{job}{[\code{\link{Job}} \code{\link{Experiment}}]\cr
+Job/Experiment to execute.}
 }
 \value{
 [any]. Result of the job.

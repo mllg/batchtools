@@ -17,7 +17,7 @@ If not set, defaults to all jobs.}
 \item{by}{[\code{character}]\cr
 Split the resulting table by columns of \code{\link{getJobPars}}.}
 
-\item{reg}{[\code{\link{Registry}}]\cr
+\item{reg}{[\code{\link{ExperimentRegistry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
@@ -28,5 +28,10 @@ Registry. If not explicitly passed, uses the last created registry.}
 }
 \description{
 Returns a frequency table of defined experiments.
+}
+\seealso{
+Other Experiment: \code{\link{ExperimentRegistry}},
+  \code{\link{addExperiments}},
+  \code{\link{removeExperiments}}
 }
 

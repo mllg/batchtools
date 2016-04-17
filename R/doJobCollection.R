@@ -65,15 +65,15 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     if (testOS("windows"))
       p = Snow$new(ncpus)
     else
-      p = Parallel$new(ncpus)
+      p = Multicore$new(ncpus)
   }
 
   for (i in seq_len(n.jobs)) {
     job = getJob(jc, jc$defs$job.id[i], cache = cache)
-    results = p$spawn(doJob, job = job, measure.memory = measure.memory)
-    if (length(results) > 0L) {
-      updates = c(updates, lapply(results, "[[", "update"))
-      lapply(results, function(r) catf(r$output, con = con))
+    messages = p$spawn(doJob, job = job, measure.memory = measure.memory)
+    if (length(messages) > 0L) {
+      updates = c(updates, lapply(messages, "[[", "update"))
+      lapply(messages, function(r) catf(r$output, con = con))
     }
 
     if (length(updates) > 0L && now() > next.update) {
@@ -84,10 +84,10 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     }
   }
 
-  results = p$collect()
-  if (length(results) > 0L) {
-    updates = c(updates, lapply(results, "[[", "update"))
-    lapply(results, function(r) catf(r$output, con = con))
+  messages = p$collect()
+  if (length(messages) > 0L) {
+    updates = c(updates, lapply(messages, "[[", "update"))
+    lapply(messages, function(r) catf(r$output, con = con))
   }
   writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
 

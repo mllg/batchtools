@@ -7,12 +7,13 @@
 #' @template ids
 #' @param by [\code{character}]\cr
 #'   Split the resulting table by columns of \code{\link{getJobPars}}.
-#' @template reg
+#' @template expreg
 #' @return [\code{named list}] with elements \dQuote{table}
 #' (\code{\link[data.table]{data.table}}] of frequencies), \dQuote{problems}
 #' (\code{character} of problem names) and \dQuote{algorithms}
 #' (\code{character} of algorithm names).
 #' @export
+#' @family Experiment
 summarizeExperiments = function(ids = NULL, by = c("problem", "algorithm"), reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg)
   pars = !setequal(by, c("problem", "algorithm"))
