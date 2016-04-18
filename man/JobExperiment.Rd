@@ -6,12 +6,15 @@
 \alias{makeJob}
 \title{Jobs and Experiments}
 \usage{
-makeJob(id, reg = getDefaultRegistry())
+makeJob(id, cache = NULL, reg = getDefaultRegistry())
 }
 \arguments{
 \item{id}{[\code{integer(1)} or \code{data.table}]\cr
 Single integer to specify the job or a \code{data.table} with column \code{job.id}
 and exactly one row.}
+
+\item{cache}{[\code{Cache}]\cr
+Cache to retrieve files. Used internally.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
