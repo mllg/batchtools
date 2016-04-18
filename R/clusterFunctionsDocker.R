@@ -31,13 +31,14 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     assertClass(jc, "JobCollection")
     assertIntegerish(jc$resources$ncpus, lower = 1L, any.missing = FALSE, .var.name = "resources$ncpus")
     assertIntegerish(jc$resources$memory, lower = 1L, any.missing = FALSE, .var.name = "resources$memory")
+    timeout = if (is.null(jc$resources$walltime)) character(0L) else sprintf("timeout %i", asInt(jc$resources$walltime, lower = 0L))
 
     cmd = c("docker", docker.args, "run", "--detach=true", image.args,
       sprintf("-c %i", jc$resources$ncpus),
       sprintf("-m %im", jc$resources$memory),
       sprintf("--label batchtools=%s", jc$job.hash),
       sprintf("--name=%s_batchtools_%s", Sys.info()["user"], jc$job.hash),
-      image, "Rscript", stri_join("-e", shQuote(sprintf("batchtools::doJobCollection('%s', '%s')", jc$uri, jc$log.file)), sep = " "))
+      image, timeout, "Rscript", stri_join("-e", shQuote(sprintf("batchtools::doJobCollection('%s', '%s')", jc$uri, jc$log.file)), sep = " "))
     res = runOSCommand(cmd[1L], cmd[-1L], stop.on.exit.code = FALSE, debug = reg$debug)
 
     if (res$exit.code > 0L) {
