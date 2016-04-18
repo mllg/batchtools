@@ -259,6 +259,33 @@ getBatchIds = function(reg, status = "all") {
   tab[batch.id %in% reg$status$batch.id]
 }
 
+#' @title Run OS Commands on local or remote machines
+#'
+#' @description
+#' This is a helper function to run arbitrary OS commands on local or remote machines.
+#' The interface is similar to \code{\link[base]{system2}}, but it always returns the exit status
+#' and the output.
+#'
+#' @param sys.cmd [\code{character(1)}]\cr
+#'   Command to run.
+#' @param sys.args [\code{character()}]\cr
+#'   Arguments to \code{sys.cmd}.
+#' @param nodename [\code{character(1)}]\cr
+#'   Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
+#'   is not piped through SSH.
+#' @param stop.on.exit.code [\code{logical(1)}]\cr
+#'   Throw an error message if the exit code of \code{sys.cmd} is not \dQuote{0}?
+#' @param debug [\code{logical(1)}]\cr
+#'   If set to \code{TRUE}, prints the complete command, exit code and output.
+#' @return [\code{named list}] with \dQuote{exit.code} (integer) and \dQuote{output} (character).
+#' @export
+#' @family ClusterFunctions
+#' @examples
+#' \dontrun{
+#' runOSCommand("ls")
+#' runOSCommand("ls", "-al")
+#' runOSCommand("notfound", stop.on.exit.code = FALSE)
+#' }
 runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost", stop.on.exit.code = TRUE, debug = FALSE) {
   assertCharacter(sys.cmd, any.missing = FALSE, len = 1L)
   assertCharacter(sys.args, any.missing = FALSE)
@@ -269,6 +296,8 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
   if (nodename != "localhost") {
     sys.args = c(nodename, shQuote(stri_join(c(sys.cmd, sys.args), collapse = " ")))
     sys.cmd = "ssh"
+  } else if (length(sys.args) == 0L) {
+      sys.args = ""
   }
 
   if (debug)
