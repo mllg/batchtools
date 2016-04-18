@@ -1,4 +1,5 @@
 Experiment = R6Class("Experiment",
+  cloneable = FALSE,
   public = list(
     initialize = function(cache, id, pars, repl, seed, resources, prob.name, algo.name) {
       self$cache = cache
@@ -7,8 +8,8 @@ Experiment = R6Class("Experiment",
       self$repl = repl
       self$seed = seed
       self$resources = resources
-      self$prob.name = prob.name
-      self$algo.name = algo.name
+      self$prob.name = as.character(prob.name)
+      self$algo.name = as.character(algo.name)
     },
     id = NULL,
     pars = NULL,
@@ -28,6 +29,5 @@ Experiment = R6Class("Experiment",
       wrapper = function(...) p$fun(job = self, data = p$data, ...)
       with_seed(seed, do.call(wrapper, self$pars$prob.pars))
     }
-  ),
-  cloneable = FALSE
+  )
 )

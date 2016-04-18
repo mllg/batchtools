@@ -10,8 +10,9 @@
 #'   A function to reduce the results. The result of previous iterations (or
 #'   the \code{init}) will be passed as first argument, the result of of the
 #'   i-th iteration as second. See \code{\link[base]{Reduce}} for some
-#'   examples. If the function has the formal argument \dQuote{job}, the job
-#'   description is passed.
+#'   examples.
+#'   If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}}
+#'   is passed to the function.
 #' @param init [\code{ANY}]\cr
 #'   Initial element, as used in \code{\link[base]{Reduce}}.
 #'   Default is the first result.
@@ -51,7 +52,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
   pb = makeProgressBar(total = length(fns), format = "Reduce [:bar] :percent eta: :eta")
   if ("job" %in% names(formals(fun))) {
     for (i in seq_along(fns)) {
-      init = forceAndCall(3L, fun, init, readRDS(fns[i]), job = makeJobCollection(ids[i], reg = reg), ...)
+      init = forceAndCall(3L, fun, init, readRDS(fns[i]), job = makeJob(ids[i], reg = reg), ...)
       pb$tick()
     }
   } else {
@@ -74,6 +75,8 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @param fun [\code{function}]\cr
 #'   Function to apply to each result. The result is passed unnamed as first
 #'   argument. If \code{NULL}, the identity is used.
+#'   If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}}
+#'   is passed to the function.
 #' @param ... [\code{ANY}]\cr
 #'   Additional arguments passed to to function \code{fun}.
 #' @template reg
@@ -94,22 +97,26 @@ reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegist
   syncRegistry(reg)
   ids = asJobTable(reg, ids, default = .findDone(reg = reg))
 
-  if (is.null(fun)) {
-    getResult = function(fn, ...) readRDS(fn)
-  } else {
-    fun = match.fun(fun)
-    getResult = function(fn, ...) fun(readRDS(fn), ...)
-  }
-
   fns = file.path(reg$file.dir, "results", sprintf("%i.rds", ids$job.id))
   n = length(fns)
   if (n == 0L)
     return(list())
 
+  if (is.null(fun)) {
+    worker = function(..res, ..job, ...) ..res
+  } else {
+    fun = match.fun(fun)
+    if ("job" %in% names(formals(fun)))
+      worker = function(..res, ..job, ...) fun(..res, job = ..job, ...)
+    else
+      worker = function(..res, ..job, ...) fun(..res, ...)
+  }
+
   results = vector("list", n)
   pb = makeProgressBar(total = n, format = "Submit [:bar] :percent eta: :eta")
+  cache = Cache$new(reg$file.dir)
   for (i in which(file.exists(fns))) {
-    results[[i]] = getResult(fns[i], ...)
+    results[[i]] = worker(readRDS(fns[i]), makeJob(ids$job.id[i], cache = cache, reg = reg), ...)
     pb$tick()
   }
   return(results)

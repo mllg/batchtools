@@ -29,6 +29,8 @@
 #'
 #' Jobs and Experiments be executed with \code{\link{execJob}}.
 #' @template id
+#' @param cache [\code{Cache}]\cr
+#'  Cache to retrieve files. Used internally.
 #' @template reg
 #' @return [\code{Job} | \code{Experiment}].
 #' @aliases Job Experiment
@@ -39,21 +41,21 @@
 #' batchMap(identity, 1:5, reg = reg)
 #' job = makeJob(1, reg = reg)
 #' names(job)
-makeJob = function(id, reg = getDefaultRegistry()) {
+makeJob = function(id, cache = NULL, reg = getDefaultRegistry()) {
   UseMethod("makeJob", object = reg)
 }
 
 #' @export
-makeJob.Registry = function(id, reg = getDefaultRegistry()) {
+makeJob.Registry = function(id, cache = NULL, reg = getDefaultRegistry()) {
   row = inner_join(filter(reg$status, id), reg$defs)
-  Job$new(Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Job$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     resources = inner_join(row, reg$resources)$resources)
 }
 
 #' @export
-makeJob.ExperimentRegistry = function(id, reg = getDefaultRegistry()) {
+makeJob.ExperimentRegistry = function(id, cache = NULL, reg = getDefaultRegistry()) {
   row = inner_join(filter(reg$status, id), reg$defs)
-  Experiment$new(Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Experiment$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     repl = row$repl, resources = inner_join(row, reg$resources)$resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 

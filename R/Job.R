@@ -1,4 +1,5 @@
 Job = R6Class("Job",
+  cloneable = FALSE,
   public = list(
     initialize = function(cache, id, pars, seed, resources) {
       self$cache = cache
@@ -16,6 +17,5 @@ Job = R6Class("Job",
   active = list(
     pars = function() c(self$job.pars, self$cache$get("more.args")),
     fun = function() self$cache$get("user.function")
-  ),
-  cloneable = FALSE
+  )
 )

@@ -11,8 +11,9 @@ reduceResults(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 A function to reduce the results. The result of previous iterations (or
 the \code{init}) will be passed as first argument, the result of of the
 i-th iteration as second. See \code{\link[base]{Reduce}} for some
-examples. If the function has the formal argument \dQuote{job}, the job
-description is passed.}
+examples.
+If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}}
+is passed to the function.}
 
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})

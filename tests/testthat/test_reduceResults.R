@@ -10,6 +10,17 @@ suppressMessages({
   })
 })
 
+test_that("reduceResults", {
+  silent({
+    expect_equal(reduceResults(fun = function(aggr, res, ...) c(aggr, res$a), init = integer(0), reg = reg), 1:3)
+    expect_equal(reduceResults(ids = 1, fun = c, reg = reg), list(a = 1, b = 4))
+    expect_equal(reduceResults(ids = 1, fun = c, list(c = 1), reg = reg)$c, 1)
+    expect_equal(reduceResults(fun = function(aggr, res, extra.arg, ...) aggr + res$a + extra.arg, init = 0, extra.arg = 1, reg = reg), sum(1:3 + 1))
+    expect_equal(reduceResults(fun = function(job, aggr, res) c(aggr, job$id), init = integer(0), ids = 2:3, reg = reg), 2:3)
+    expect_list(reduceResults(fun = function(job, aggr, res) c(aggr, list(job)), init = list(), ids = 2:3, reg = reg), types = "Job", len = 2)
+  })
+})
+
 test_that("reduceResults with no results reg", {
   silent({
     reg = makeRegistry(file.dir = NA, make.default = FALSE)
@@ -27,21 +38,12 @@ test_that("reduceResults with no results reg", {
   })
 })
 
-test_that("reduceResults", {
-  silent({
-    expect_equal(reduceResults(fun = function(aggr, res, ...) c(aggr, res$a), init = integer(0), reg = reg), 1:3)
-    expect_equal(reduceResults(ids = 1, fun = c, reg = reg), list(a = 1, b = 4))
-    expect_equal(reduceResults(ids = 1, fun = c, list(c = 1), reg = reg)$c, 1)
-    expect_equal(reduceResults(fun = function(aggr, res, extra.arg, ...) aggr + res$a + extra.arg, init = 0, extra.arg = 1, reg = reg), sum(1:3 + 1))
-    expect_equal(reduceResults(fun = function(job, aggr, res) c(aggr, job$defs$job.id), init = integer(0), ids = 2:3, reg = reg), 2:3)
-  })
-})
-
 test_that("reduceResultsList", {
   silent({
     expect_equal(reduceResultsList(reg = reg), Map(fun, a = 1:3, b = 4:2))
     expect_equal(reduceResultsList(reg = reg, fun = function(x) x$a), as.list(1:3))
     expect_equal(reduceResultsList(reg = reg, fun = function(x, y) x$a + y, y = 1), as.list(1:3 + 1))
+    expect_list(reduceResultsList(reg = reg, fun = function(job, ...) job), types = "Job", len = 3)
   })
 })
 
@@ -83,5 +85,33 @@ test_that("multiRowResults", {
       waitForJobs(reg = reg)
     })
     expect_error(reduceResultsDataTable(reg = reg), "one row")
+  })
+})
+
+suppressMessages({
+  reg = makeExperimentRegistry(file.dir = NA, make.default = TRUE)
+  prob = addProblem(reg = reg, "p1", fun = function(job, data, ...) 2, seed = 42)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq) instance^sq)
+  ids = addExperiments(list(p1 = data.table()), list(a1 = data.table(sq = 1:3)), reg = reg)
+  silent({
+    submitJobs(ids = chunkIds(n.chunks = 1, reg = reg), reg = reg)
+    waitForJobs(reg = reg)
+  })
+})
+
+test_that("reduceResults/BatchExperiments", {
+  silent({
+    expect_equal(reduceResults(fun = function(aggr, res, ...) c(aggr, res), init = integer(0), reg = reg), 2^(1:3))
+    expect_equal(reduceResults(ids = 2:3, fun = function(aggr, job, res, ...) c(aggr, job$id), init = integer(0), reg = reg), 2:3)
+    expect_list(reduceResults(fun = function(job, aggr, res) c(aggr, list(job)), init = list(), ids = 2:3, reg = reg), types = "Experiment", len = 2)
+  })
+})
+
+test_that("reduceResultsList/BatchExperiments", {
+  silent({
+    expect_equal(reduceResultsList(reg = reg), as.list(2^(1:3)))
+    expect_equal(reduceResultsList(fun = function(job, ...) job$prob.name, reg = reg), as.list(rep("p1", 3)))
+    expect_equal(reduceResultsList(fun = function(job, ...) job$algo.name, reg = reg), as.list(rep("a1", 3)))
+    expect_equal(reduceResultsList(fun = function(job, ...) job$instance, reg = reg), as.list(rep(2, 3)))
   })
 })
