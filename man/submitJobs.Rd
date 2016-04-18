@@ -18,7 +18,7 @@ If not set, defaults to the return value of \code{\link{findNotSubmitted}}.}
   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file.
   The resources \code{chunk.ncpus} and \code{measure.memory} are reserved for internal functionality:
   The setting \code{chunk.ncpus} is used to determine the number of CPUs to execute jobs in a
-  chunk in parallel via \code{\link[parallel]{mcparallel}} (or \code{\link[snow]{sendCall}} on Windows).
+  chunk in parallel via \code{mcparallel} (or \code{\link[snow]{sendCall}} on Windows).
   If not set, \code{chunk.ncpus} defaults to 1 (sequential execution).
   The second reserved resource, \code{measure.memory}, can be set to \code{TRUE} to enable the measure of
   memory requirements using \code{\link[base]{gc}}. But note that the reported values are quite
