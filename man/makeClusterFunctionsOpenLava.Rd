@@ -37,6 +37,7 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsSGE}},
   \code{\link{makeClusterFunctionsSLURM}},
   \code{\link{makeClusterFunctionsTorque}},
-  \code{\link{makeClusterFunctions}}
+  \code{\link{makeClusterFunctions}},
+  \code{\link{runOSCommand}}
 }
 
