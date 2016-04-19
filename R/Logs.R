@@ -60,7 +60,9 @@ grepLogs = function(ids = NULL, pattern, reg = getDefaultRegistry()) {
     }
   }
 
-  setkeyv(cbind(ids[found, "job.id", with = FALSE], data.table(matches = matches[found])), "job.id")
+  res = cbind(ids[found, "job.id", with = FALSE], data.table(matches = matches[found]))
+  setkeyv(res, "job.id")
+  return(res)
 }
 
 #' @title Inspect Log Files
