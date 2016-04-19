@@ -134,12 +134,20 @@ count = function(x) {
 }
 
 capture = function(expr) {
+  cleanup = function() {
+    sink(type = "message")
+    sink(type = "output")
+    close(con)
+  }
+
   output = character(0L)
   con = textConnection("output","w", local = TRUE)
   sink(file = con)
   sink(file = con, type = "message")
-  on.exit({ sink(type = "message"); sink(); close(con) })
+  on.exit(cleanup())
   res = try(eval(expr, parent.frame()))
+  cleanup()
+  on.exit(NULL)
   list(output = output, res = res)
 }
 
