@@ -95,9 +95,9 @@ makeClusterFunctionsSLURM = function(template = NULL, text = NULL, clusters = NU
     assertString(batch.id)
     
     if (!is.null(clusters)) {
-      cfKillBatchJob("scancel", paste0("--clusters=", clusters, " ",batch.id))
+      cfKillJob("scancel", paste0("--clusters=", clusters, " ",batch.id))
     } else {
-      cfKillBatchJob("scancel", batch.id)
+      cfKillJob("scancel", batch.id)
     }
   }
 
