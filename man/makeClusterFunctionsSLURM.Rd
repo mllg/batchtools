@@ -4,7 +4,7 @@
 \alias{makeClusterFunctionsSLURM}
 \title{ClusterFunctions for SLURM Systems}
 \usage{
-makeClusterFunctionsSLURM(template = NULL, text = NULL)
+makeClusterFunctionsSLURM(template = NULL, text = NULL, clusters = NULL)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -14,6 +14,10 @@ Mutually exclusive with argument \code{text}.}
 \item{text}{[\code{character(1)}]\cr
 Single string holding the template to be used.
 Mutually exclusive with argument \code{template}.}
+
+\item{clusters}{[\code{character(1)}] \cr
+If multiple clusters are managed by one SLURM system, the name of one cluster has to be specified.
+If only one cluster is present the argument can be omitted.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
