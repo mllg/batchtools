@@ -10,7 +10,7 @@
 #' @export
 #' @family Experiment
 removeExperiments = function(ids = integer(0L), reg = getDefaultRegistry()) {
-  assertExperimentRegistry(reg, writeable = TRUE)
+  assertExperimentRegistry(reg, writeable = TRUE, running.ok = FALSE)
   ids = asJobTable(reg, ids)
 
   info("Removing %i Experiments", nrow(ids))
