@@ -60,22 +60,19 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
 #' @export
 #' @rdname ProblemAlgorithm
 removeProblem = function(name, reg = getDefaultRegistry()) {
-  assertExperimentRegistry(reg, writeable = TRUE)
+  assertExperimentRegistry(reg, writeable = TRUE, running.ok = FALSE)
   assertString(name)
   assertSubset(name, levels(reg$defs$problem))
 
-  fns = file.path(reg$file.dir, "problems", sprintf("%s.rds", name))
+  fn = file.path(reg$file.dir, "problems", sprintf("%s.rds", name))
   def.ids = reg$defs[problem == name, "def.id", with = FALSE]
   job.ids = inner_join(reg$status, def.ids)[, "job.id", with = FALSE]
 
-  if (nrow(.findOnSystem(job.ids, reg = reg)) > 0L)
-    stop("Cannot remove Problem while jobs are running on the system")
-
   info("Removing Problem '%s' and %i corresponding jobs ...", name, nrow(job.ids))
-  file.remove(fns)
+  file.remove(fn)
   reg$defs = reg$defs[!def.ids]
   reg$status = reg$status[!job.ids]
   reg$defs$problem = droplevel(reg$defs$problem, name)
-  saveRegistry(reg)
+  sweepRegistry(reg)
   invisible(TRUE)
 }

@@ -61,9 +61,11 @@ print.ExperimentRegistry = function(x, ...) {
   catf("  Seed        : %i", x$seed)
 }
 
-assertExperimentRegistry = function(reg, writeable = FALSE) {
+assertExperimentRegistry = function(reg, writeable = FALSE, running.ok = TRUE) {
   assertClass(reg, "ExperimentRegistry")
   if (writeable & !reg$writeable)
     stop("Registry must be writeable")
+  if (!running.ok && nrow(.findOnSystem(reg = reg)) > 0L)
+    stop("This operation is not allowed while jobs are running on the system")
   invisible(TRUE)
 }

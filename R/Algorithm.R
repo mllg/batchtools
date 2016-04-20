@@ -21,22 +21,19 @@ addAlgorithm = function(name, fun, reg = getDefaultRegistry())  {
 #' @export
 #' @rdname ProblemAlgorithm
 removeAlgorithm = function(name, reg = getDefaultRegistry()) {
-  assertExperimentRegistry(reg, writeable = TRUE)
+  assertExperimentRegistry(reg, writeable = TRUE, running.ok = FALSE)
   assertString(name)
   assertSubset(name, levels(reg$defs$algorithm))
 
-  fns = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", name))
+  fn = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", name))
   def.ids = reg$defs[algorithm == name, "def.id", with = FALSE]
   job.ids = inner_join(reg$status, def.ids)[, "job.id", with = FALSE]
 
-  if (nrow(.findOnSystem(job.ids, reg = reg)) > 0L)
-    stop("Cannot remove Algorithm while jobs are running on the system")
-
   info("Removing Algorithm '%s' and %i corresponding jobs ...", name, nrow(job.ids))
-  file.remove(fns)
+  file.remove(fn)
   reg$defs = reg$defs[!def.ids]
   reg$status = reg$status[!job.ids]
   reg$defs$algorithm = droplevel(reg$defs$algorithm, name)
-  saveRegistry(reg)
+  sweepRegistry(reg)
   invisible(TRUE)
 }
