@@ -15,9 +15,10 @@ Mutually exclusive with argument \code{text}.}
 Single string holding the template to be used.
 Mutually exclusive with argument \code{template}.}
 
-\item{clusters}{[\code{character(1)}] \cr
+\item{clusters}{[\code{character(1)}]\cr
 If multiple clusters are managed by one SLURM system, the name of one cluster has to be specified.
-If only one cluster is present the argument can be omitted.}
+If only one cluster is present, this argument may be omitted.
+Note that you should not select the cluster in your template file via \code{#SBATCH --clusters}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
@@ -32,8 +33,8 @@ cluster (this is usually the case).
 
 The template file can access all arguments passed to the \code{submitJob}
 function, see here \code{\link{ClusterFunctions}}. It is the template file's
-job to choose a queue for the job and handle the desired resource
-allocations.
+job handle the desired resource allocations. The cluster selection however is
+done via the argument \code{clusters}.
 }
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},

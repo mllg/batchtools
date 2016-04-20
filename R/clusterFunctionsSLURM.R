@@ -10,36 +10,29 @@
 #'
 #' The template file can access all arguments passed to the \code{submitJob}
 #' function, see here \code{\link{ClusterFunctions}}. It is the template file's
-#' job to choose a queue for the job and handle the desired resource
-#' allocations.
+#' job handle the desired resource allocations. The cluster selection however is
+#' done via the argument \code{clusters}.
 #'
 #' @template template_or_text
-#' @param clusters [\code{character(1)}] \cr
+#' @param clusters [\code{character(1)}]\cr
 #'  If multiple clusters are managed by one SLURM system, the name of one cluster has to be specified.
-#'  If only one cluster is present the argument can be omitted. 
+#'  If only one cluster is present, this argument may be omitted.
+#'  Note that you should not select the cluster in your template file via \code{#SBATCH --clusters}.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
 makeClusterFunctionsSLURM = function(template = NULL, text = NULL, clusters = NULL) {
-  
-  if (!is.null(clusters)) {
-    checkmate::assertString(clusters)
-  }
-  
+  if (!is.null(clusters))
+    checkmate::assertString(clusters, min.chars = 1L)
   text = cfReadBrewTemplate(template, text, "##")
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
 
+    if (!is.null(clusters))
+      text = stri_join(sprintf("#SBATCH --clusters=%s", clusters), text, sep = "\n")
     outfile = cfBrewTemplate(reg, text, jc)
-    
-    #If cluster has to be specified, it is done with the clusters argument and not in the template file,
-    #otherwise there are two different sections .batchtools.r and template file where the cluster has to be set
-    if (!is.null(clusters)) {
-      write(paste0("#SBATCH --clusters=", clusters), file = outfile, append=TRUE)
-    }
-    
     res = runOSCommand("sbatch", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
@@ -59,53 +52,32 @@ makeClusterFunctionsSLURM = function(template = NULL, text = NULL, clusters = NU
   }
 
   listJobs = function(reg, cmd) {
-    
-    if (!is.null(clusters)) {
-      cmd = append(cmd, paste0("--clusters=", clusters))
-    }
+    cmd = c(cmd, sprintf("--clusters=%s", clusters))
     batch.ids = runOSCommand(cmd[1L], cmd[-1L], debug = reg$debug)$output
-    
-    #if cluster name is specified, the first line will be the cluster name
-    if (!is.null(clusters)) {
-      batch.ids = batch.ids[-1L]
-    }
-    
+
+    # if cluster name is specified, the first line will be the cluster name
+    if (!is.null(clusters))
+      batch.ids = tail(batch.ids, -1L)
+
     stri_extract_first_regex(batch.ids, "[0-9]+")
   }
 
   listJobsQueued = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    
     cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t PD")
-    
-    if (!is.null(clusters)) {
-      cmd = append(cmd, paste0("--clusters=", clusters))
-    }
-    
     listJobs(reg, cmd)
   }
 
   listJobsRunning = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    
     cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t R,S,CG")
-    
-    if (!is.null(clusters)) {
-      cmd = append(cmd, paste0("--clusters=", clusters))
-    }
-    
     listJobs(reg, cmd)
   }
 
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-    
-    if (!is.null(clusters)) {
-      cfKillJob(reg, "scancel", paste0("--clusters=", clusters, " ",batch.id))
-    } else {
-      cfKillJob(reg, "scancel", batch.id)
-    }
+    cfKillJob(reg, "scancel", c(sprintf("--clusters=%s", clusters), batch.id))
   }
 
   makeClusterFunctions(name = "SLURM", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
