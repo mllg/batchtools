@@ -33,6 +33,13 @@ makeClusterFunctionsSLURM = function(template = NULL, text = NULL, clusters = NU
     assertClass(jc, "JobCollection")
 
     outfile = cfBrewTemplate(reg, text, jc)
+    
+    #If cluster has to be specified, it is done with the clusters argument and not in the template file,
+    #otherwise there are two different sections .batchtools.r and template file where the cluster has to be set
+    if (!is.null(clusters)) {
+      write(paste0("#SBATCH --clusters=", clusters), file = outfile, append=TRUE)
+    }
+    
     res = runOSCommand("sbatch", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
