@@ -1,3 +1,11 @@
+getDefaultBackend = function(ncpus) {
+  if (ncpus == 1L)
+    return(Sequential$new())
+  if (testOS("windows"))
+    return(Snow$new(ncpus))
+  return(Multicore$new(ncpus))
+}
+
 Sequential = R6Class("Sequential",
   cloneable = FALSE,
   public = list(

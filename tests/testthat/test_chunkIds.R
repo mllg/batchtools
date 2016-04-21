@@ -33,16 +33,16 @@ test_that("chunkIds", {
 test_that("parallel execution works", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(i) i^2
-  batchMap(fun, i = 1:4, reg = reg)
-  jc = makeJobCollection(reg = reg)
+  ids = batchMap(fun, i = 1:4, reg = reg)
   silent({
-    submitJobs(chunkIds(reg = reg), resources = list(chunk.ncpus = 2, chunk.par.mode = "parallel"), reg = reg)
+    submitJobs(chunkIds(ids, reg = reg), resources = list(chunk.ncpus = 2, parallel.backend = "snow/socket"), reg = reg)
     waitForJobs(reg = reg)
   })
   expect_true(nrow(findDone(reg = reg)) == 4)
 
+  skip_on_os("windows")
   silent({
-    submitJobs(chunkIds(reg = reg), resources = list(chunk.ncpus = 2, chunk.par.mode = "snow"), reg = reg)
+    submitJobs(chunkIds(ids, reg = reg), resources = list(chunk.ncpus = 2, parallel.backend = "multicore"), reg = reg)
     waitForJobs(reg = reg)
   })
   expect_true(nrow(findDone(reg = reg)) == 4)

@@ -65,6 +65,8 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   if (!is.null(resources$chunk.ncpus))
     assertCount(resources$chunk.ncpus, positive = TRUE)
+  if (!is.null(resources$parallel.backend))
+    assertChoice(resources$parallel.backend, c("sequential", "multicore", "snow/socket"))
   if (!is.null(resources$measure.memory))
     assertFlag(resources$measure.memory)
 
