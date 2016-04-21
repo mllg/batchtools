@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2016-04-14" />
+<meta name="date" content="2016-04-21" />
 
 <title>Setup batchtools</title>
 
@@ -68,7 +68,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title">Setup batchtools</h1>
-<h4 class="date"><em>2016-04-14</em></h4>
+<h4 class="date"><em>2016-04-21</em></h4>
 
 </div>
 
@@ -103,7 +103,7 @@ reg$cluster.functions =<span class="st"> </span><span class="kw">makeClusterFunc
 ##   List queued Jobs : TRUE
 ##   List running Jobs: TRUE
 ##   Kill Jobs        : TRUE</code></pre>
-<p>Most characteristics and specialities of cluster systems can be mapped to such a <a href="https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl">template file</a> which is parsed by the <a href="https://cran.r-project.org/web/packages/brew/">brew package</a>. If the flexibility which comes with templating is not sufficient for your system, you can still construct the cluster functions yourself by just adapting our <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSLURM.R">implementation</a>.</p>
+<p>Most characteristics and specialities of cluster systems can be mapped to such a <a href="https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl">template file</a> which is parsed by the <a href="https://cran.r-project.org/package=brew">brew package</a>. If the flexibility which comes with templating is not sufficient for your system, you can still construct the cluster functions yourself by just adapting our <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSLURM.R">implementation</a>.</p>
 <p>To make your cluster function selection permanent for a specific system across R sessions, you can set up a configuration file which is described in the following.</p>
 </div>
 <div id="configuration-file" class="section level1">

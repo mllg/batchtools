@@ -59,6 +59,7 @@
 <div>loadRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;NULL, conf.file&nbsp;=&nbsp;"~/.batchtools.conf.r", make.default&nbsp;=&nbsp;TRUE, update.paths&nbsp;=&nbsp;FALSE)</div>
 <div>saveRegistry(reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>sweepRegistry(reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>clearRegistry(reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>syncRegistry(reg&nbsp;=&nbsp;getDefaultRegistry(), save&nbsp;=&nbsp;TRUE)</div></pre>
     
     <h2>Arguments</h2>
@@ -181,7 +182,8 @@ Work can later be resumed by calling <code>loadRegistry</code> which de-serializ
 the file system.</p>
   
       <p>Canceled jobs and repeatedly submitted jobs leave in some cases stray files behind which can be
-swept using <code>sweepRegistry</code>.</p>
+swept using <code>sweepRegistry</code>.
+<code>clearRegistry</code> completely erases all jobs from a registry, including log files and results.</p>
   
     </div>
     
@@ -194,9 +196,9 @@ swept using <code>sweepRegistry</code>.</p>
 <div class='output'>Job Registry
   ClusterFunctions: Interactive
   Number of Jobs  : 0
-  File dir        : /scratch/registry40b72a874414
+  File dir        : /scratch/registry4b871e9fb61d
   Work dir        : /home/lang/Projekte/batchtools
-  Seed            : 292544388
+  Seed            : 767641911
 </div>
 <div class='input'>
 #&#39; Set debug mode
@@ -212,7 +214,7 @@ saveRegistry(reg = reg)
   </div>
   <div class="span4">
     <!-- <ul>
-      <li>Registry</li><li>clearDefaultRegistry</li><li>getDefaultRegistry</li><li>loadRegistry</li><li>makeRegistry</li><li>saveRegistry</li><li>setDefaultRegistry</li><li>sweepRegistry</li><li>syncRegistry</li>
+      <li>Registry</li><li>clearDefaultRegistry</li><li>clearRegistry</li><li>getDefaultRegistry</li><li>loadRegistry</li><li>makeRegistry</li><li>saveRegistry</li><li>setDefaultRegistry</li><li>sweepRegistry</li><li>syncRegistry</li>
     </ul>
     <ul>
       

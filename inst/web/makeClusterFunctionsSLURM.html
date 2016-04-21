@@ -52,7 +52,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeClusterFunctionsSLURM(template&nbsp;=&nbsp;NULL, text&nbsp;=&nbsp;NULL)</div></pre>
+    <pre><div>makeClusterFunctionsSLURM(template&nbsp;=&nbsp;NULL, text&nbsp;=&nbsp;NULL, clusters&nbsp;=&nbsp;NULL)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -64,6 +64,11 @@ Mutually exclusive with argument <code>text</code>.</dd>
       <dd>[<code>character(1)</code>]
 Single string holding the template to be used.
 Mutually exclusive with argument <code>template</code>.</dd>
+      <dt>clusters</dt>
+      <dd>[<code>character(1)</code>]
+If multiple clusters are managed by one SLURM system, the name of one cluster has to be specified.
+If only one cluster is present, this argument may be omitted.
+Note that you should not select the cluster in your template file via <code>#SBATCH --clusters</code>.</dd>
     </dl>
     
     <div class="Value">
@@ -87,8 +92,8 @@ cluster (this is usually the case).</p>
   
       <p>The template file can access all arguments passed to the <code>submitJob</code>
 function, see here <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>. It is the template file's
-job to choose a queue for the job and handle the desired resource
-allocations.</p>
+job handle the desired resource allocations. The cluster selection however is
+done via the argument <code>clusters</code>.</p>
   
     </div>
       </div>
@@ -107,7 +112,8 @@ Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClus
   <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
   <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
   <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code>,
-  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>
+  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>,
+  <code><a href='runOSCommand.html'>runOSCommand</a></code>
 
         
   </div>

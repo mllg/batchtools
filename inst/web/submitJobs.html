@@ -68,7 +68,7 @@ If not set, defaults to the return value of <code><a href='findJobs.html'>findNo
   (e.g. something like &#147;walltime&#148; or &#147;nodes&#148;) depend on your template file.
   The resources <code>chunk.ncpus</code> and <code>measure.memory</code> are reserved for internal functionality:
   The setting <code>chunk.ncpus</code> is used to determine the number of CPUs to execute jobs in a
-  chunk in parallel via <code><a href='http://www.inside-r.org/r-doc/parallel/mcparallel'>mcparallel</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/snow/docs/snow-internal'>sendCall</a></code> on Windows).
+  chunk in parallel via <code>mcparallel</code> (or <code><a href='http://www.inside-r.org/packages/cran/snow/docs/snow-internal'>sendCall</a></code> on Windows).
   If not set, <code>chunk.ncpus</code> defaults to 1 (sequential execution).
   The second reserved resource, <code>measure.memory</code>, can be set to <code>TRUE</code> to enable the measure of
   memory requirements using <code><a href='http://www.inside-r.org/r-doc/base/gc'>gc</a></code>. But note that the reported values are quite

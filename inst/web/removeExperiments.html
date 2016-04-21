@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>batchtools-package. batchtools 0.1</title>
+<title>removeExperiments. batchtools 0.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,43 +47,56 @@
         
       </header>
       
-      <h1>Tools for Computation on Batch Systems</h1>
+      <h1>Remove Experiments</h1>
 
 <div class="row">
   <div class="span8">
-        
-    <div class="Description">
-      <h2>Description</h2>
+    <h2>Usage</h2>
+    <pre><div>removeExperiments(ids&nbsp;=&nbsp;integer(0L), reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>ids</dt>
+      <dd>[<code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code> (or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>)
+with a column named &#147;job.id&#148;.
+Alternatively, you may also pass a vector of integerish job ids.
+If not set, defaults to no job.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
 
-      <p>For bug reports and feature requests please use the tracker:
-<a href = 'https://github.com/mllg/batchtools'>https://github.com/mllg/batchtools</a>.</p>
+      <p><dl>
+[<code>data.table</code>] of removed job ids.
+</dl></p>
   
     </div>
 
-    <div class="Package options">
-      <h2>Package options</h2>
+    <div class="Description">
+      <h2>Description</h2>
 
-      <p></p>
-  
-      <p><dl>
-  <dt><code>batchtools.verbose</code></dt><dd>
-    Verbosity. Set to <code>FALSE</code> to suppress info messages and progress bars.
-  </dd></p>
-  
-      <p></dl></p>
-  
-      <p></p>
+      <p>Remove Experiments from an <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>batchtools</li><li>batchtools-package</li>
+      <li>removeExperiments</li>
     </ul>
     <ul>
       
     </ul> -->
       
+    <h2>See also</h2>
+    
+Other Experiment: <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>,
+  <code><a href='addExperiments.html'>addExperiments</a></code>,
+  <code><a href='summarizeExperiments.html'>summarizeExperiments</a></code>
+
         
   </div>
 </div>

@@ -62,7 +62,7 @@ Name of cluster functions.</dd>
       <dt>submitJob</dt>
       <dd>[<code>function(reg, jc, ...)</code>]
 Function to submit new jobs. Must return a <code><a href='makeSubmitJobResult.html'>SubmitJobResult</a></code> object.
-The arguments are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and <code>jobs</code> (<code><a href='makeJobCollection.html'>JobCollection</a></code>).
+The arguments are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and <code>jobs</code> (<code><a href='JobCollection.html'>JobCollection</a></code>).
 Set <code>submitJob</code> to <code>NULL</code> if killing jobs is not supported.</dd>
       <dt>killJob</dt>
       <dd>[<code>function(reg, batch.id)</code>]
@@ -122,7 +122,8 @@ Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClus
   <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
   <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
   <code><a href='makeClusterFunctionsSLURM.html'>makeClusterFunctionsSLURM</a></code>,
-  <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code>
+  <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code>,
+  <code><a href='runOSCommand.html'>runOSCommand</a></code>
 
         
   </div>

@@ -112,15 +112,15 @@ reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="
 ## 2:      9       TRUE  TRUE Error in (function (value)  : Ooops.</code></pre>
 <p>If we want to peek into the R log file of a job to see more context for the error we can use <a href="https://mllg.github.io/batchtools/showLog.html"><code>showLog()</code></a> which opens a pager:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">showLog</span>(<span class="dt">id =</span> <span class="dv">9</span>)</code></pre></div>
-<pre><code>## [1] &quot;[job(chunk): 2016-04-14 15:18:08] Starting calculation of 1 jobs&quot;                                         
-## [2] &quot;[job(chunk): 2016-04-14 15:18:08] Setting working directory to '/home/lang/Projekte/batchtools/vignettes'&quot;
-## [3] &quot;[job(chunk): 2016-04-14 15:18:08] Using 1 cpus&quot;                                                           
-## [4] &quot;[job(chunk): 2016-04-14 15:18:08] Memory measurement disabled&quot;                                            
-## [5] &quot;[job(chunk): 2016-04-14 15:18:08] Prefetching objects&quot;                                                    
-## [6] &quot;[job(9): 2016-04-14 15:18:08] Starting job with job.id=9&quot;                                                 
-## [7] &quot;[job(9): 2016-04-14 15:18:08] Error in (function (value)  : Ooops.&quot;                                       
-## [8] &quot;[job(9): 2016-04-14 15:18:08] Job terminated with an exception&quot;                                           
-## [9] &quot;[job(chunk): 2016-04-14 15:18:08] Calculation finished!&quot;</code></pre>
+<pre><code>## [1] &quot;[job(chunk): 2016-04-21 15:00:43] Starting calculation of 1 jobs&quot;                                         
+## [2] &quot;[job(chunk): 2016-04-21 15:00:43] Setting working directory to '/home/lang/Projekte/batchtools/vignettes'&quot;
+## [3] &quot;[job(chunk): 2016-04-21 15:00:43] Using 1 cpus&quot;                                                           
+## [4] &quot;[job(chunk): 2016-04-21 15:00:43] Memory measurement disabled&quot;                                            
+## [5] &quot;[job(chunk): 2016-04-21 15:00:43] Prefetching objects&quot;                                                    
+## [6] &quot;[job(9): 2016-04-21 15:00:43] Starting job with job.id=9&quot;                                                 
+## [7] &quot;[job(9): 2016-04-21 15:00:43] Error in (function (value)  : Ooops.&quot;                                       
+## [8] &quot;[job(9): 2016-04-21 15:00:43] Job terminated with an exception&quot;                                           
+## [9] &quot;[job(chunk): 2016-04-21 15:00:43] Calculation finished!&quot;</code></pre>
 
 
 

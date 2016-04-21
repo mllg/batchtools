@@ -64,40 +64,6 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
 
 <p>You can browse the documentation and vignettes <a href="https://mllg.github.io/batchtools/">here</a>.</p>
 
-<h2>Configuration</h2>
-
-<p>If no configuration is provided, <code>batchtools</code> runs in an interactive (sequential) mode.
-You can change this by modifying the registry:</p>
-
-<pre><code class="r">library(batchtools)
-
-# create an interactive registry
-reg = makeRegistry(file.dir = &quot;test&quot;)
-
-# switch to SLURM cluster functions
-reg$cluster.functions = makeClusterFunctionsSLURM(&quot;~/slurm.tmpl&quot;)
-
-# set default resources for this systems
-reg$default.resources = list(walltime = 60 * 60, memory = 1024)
-
-# make these choices permanent for this registry
-saveRegistry(reg)
-</code></pre>
-
-<p>Instead of calling the constructor for the <code>ClusterFunctions</code> yourself in every session, you can also source a configuration file.
-To do so, create the file <code>~/.batchtools.conf.r</code> where you set everything accordingly:</p>
-
-<pre><code class="r">cluster.functions = makeClusterFunctionsSLURM(&quot;~/slurm.tmpl&quot;)
-default.resources = list(walltime = 60 * 60, memory = 1024)
-</code></pre>
-
-<p>This file is automatically sourced whenever you create a new registry:</p>
-
-<pre><code class="r">reg = makeRegistry(file.dir = &quot;test&quot;)
-</code></pre>
-
-<p>The default location of the configuration file can also be set via the option <code>batchtools.conf.file</code>.</p>
-
 
     <h2>Help topics</h2>
 
@@ -110,7 +76,7 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="ExperimentRegistry.html">ExperimentRegistry</a></code>(makeExperimentRegistry)<br />ExperimentRegistry Constructor</li>
             
       <li>
-        <code><a href="Registry.html">Registry</a></code>(clearDefaultRegistry, getDefaultRegistry, loadRegistry, makeRegistry, saveRegistry, setDefaultRegistry, sweepRegistry, syncRegistry)<br />Registry</li>
+        <code><a href="Registry.html">Registry</a></code>(clearDefaultRegistry, clearRegistry, getDefaultRegistry, loadRegistry, makeRegistry, saveRegistry, setDefaultRegistry, sweepRegistry, syncRegistry)<br />Registry</li>
             
       <li>
         <code><a href="Worker.html">Worker</a></code><br />Create a Linux-Worker</li>
@@ -125,7 +91,7 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="batchMap.html">batchMap</a></code><br />Map Operation for Batch Systems</li>
             
       <li>
-        <code><a href="batchtools-package.html">batchtools-package</a></code>(batchtools)<br />Tools for computation on batch systems</li>
+        <code><a href="batchtools-package.html">batchtools-package</a></code>(batchtools)<br />Tools for Computation on Batch Systems</li>
             
       <li>
         <code><a href="btlapply.html">btlapply</a></code>(btmapply)<br />Synchronous Apply Functions</li>
@@ -149,7 +115,7 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="doJobCollection.html">doJobCollection</a></code><br />Execute Jobs of a JobCollection</li>
             
       <li>
-        <code><a href="execJob.html">execJob</a></code><br />Execute Single Jobs</li>
+        <code><a href="execJob.html">execJob</a></code><br />Execute a Single Jobs</li>
             
       <li>
         <code><a href="findJobs.html">findSubmitted</a></code>(findDone, findError, findExperiments, findExpired, findJobs, findNotDone, findNotStarted, findNotSubmitted, findOnSystem, findStarted)<br />Find and Filter Jobs</li>
@@ -206,7 +172,7 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
         <code><a href="JobExperiment.html">makeJob</a></code>(Experiment, Job)<br />Jobs and Experiments</li>
             
       <li>
-        <code><a href="makeJobCollection.html">makeJobCollection</a></code>(JobCollection)<br />JobCollection Constructor</li>
+        <code><a href="JobCollection.html">makeJobCollection</a></code>(JobCollection)<br />JobCollection Constructor</li>
             
       <li>
         <code><a href="makeSubmitJobResult.html">makeSubmitJobResult</a></code>(SubmitJobResult)<br />Create a SubmitJobResult object</li>
@@ -216,6 +182,12 @@ default.resources = list(walltime = 60 * 60, memory = 1024)
             
       <li>
         <code><a href="reduceResultsList.html">reduceResultsList</a></code>(reduceResultsDataTable)<br />Apply functions on Results</li>
+            
+      <li>
+        <code><a href="removeExperiments.html">removeExperiments</a></code><br />Remove Experiments</li>
+            
+      <li>
+        <code><a href="runOSCommand.html">runOSCommand</a></code><br />Run OS Commands on local or remote machines</li>
             
       <li>
         <code><a href="showLog.html">showLog</a></code><br />Inspect Log Files</li>

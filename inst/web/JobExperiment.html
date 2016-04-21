@@ -52,7 +52,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeJob(id, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    <pre><div>makeJob(id, cache&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -60,6 +60,9 @@
       <dd>[<code>integer(1)</code> or <code>data.table</code>]
 Single integer to specify the job or a <code>data.table</code> with column <code>job.id</code>
 and exactly one row.</dd>
+      <dt>cache</dt>
+      <dd>[<code>Cache</code>]
+Cache to retrieve files. Used internally.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>

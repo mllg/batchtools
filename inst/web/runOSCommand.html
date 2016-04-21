@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>makeClusterFunctionsTorque. batchtools 0.1</title>
+<title>runOSCommand. batchtools 0.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,30 +47,38 @@
         
       </header>
       
-      <h1>ClusterFunctions for OpenPBS/Torque Systems</h1>
+      <h1>Run OS Commands on local or remote machines</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeClusterFunctionsTorque(template&nbsp;=&nbsp;NULL, text&nbsp;=&nbsp;NULL)</div></pre>
+    <pre><div>runOSCommand(sys.cmd, sys.args&nbsp;=&nbsp;character(0L), nodename&nbsp;=&nbsp;"localhost", stop.on.exit.code&nbsp;=&nbsp;TRUE, debug&nbsp;=&nbsp;FALSE)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>template</dt>
+      <dt>sys.cmd</dt>
       <dd>[<code>character(1)</code>]
-Path to a brew template file that can be used for the job description.
-Mutually exclusive with argument <code>text</code>.</dd>
-      <dt>text</dt>
+Command to run.</dd>
+      <dt>sys.args</dt>
+      <dd>[<code>character()</code>]
+Arguments to <code>sys.cmd</code>.</dd>
+      <dt>nodename</dt>
       <dd>[<code>character(1)</code>]
-Single string holding the template to be used.
-Mutually exclusive with argument <code>template</code>.</dd>
+Name of the SSH node to run the command on. If set to &#147;localhost&#148; (default), the command
+is not piped through SSH.</dd>
+      <dt>stop.on.exit.code</dt>
+      <dd>[<code>logical(1)</code>]
+Throw an error message if the exit code of <code>sys.cmd</code> is not &#147;0&#148;?</dd>
+      <dt>debug</dt>
+      <dd>[<code>logical(1)</code>]
+If set to <code>TRUE</code>, prints the complete command, exit code and output.</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p><dl>
-[<code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>].
+[<code>named list</code>] with &#147;exit.code&#148; (integer) and &#147;output&#148; (character).
 </dl></p>
   
     </div>
@@ -78,21 +86,23 @@ Mutually exclusive with argument <code>template</code>.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Job files are created based on the brew template <code>template.file</code>. This file is processed
-with brew and then submitted to the queue using the <code>qsub</code> command. Jobs are killed using
-the <code>qdel</code> command and the list of running jobs is retrieved using <code>qselect</code>. The user
-must have the appropriate privileges to submit, delete and list jobs on the cluster (this is
-usually the case).</p>
-  
-      <p>The template file can access all arguments passed to the <code>submitJob</code> function, see here
-<code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>. It is the template file's job to choose a queue for the job and
-handle the desired resource allocations.</p>
+      <p>This is a helper function to run arbitrary OS commands on local or remote machines.
+The interface is similar to <code><a href='http://www.inside-r.org/r-doc/base/system2'>system2</a></code>, but it always returns the exit status
+and the output.</p>
   
     </div>
-      </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>## Not run: 
+# runOSCommand(&quot;ls&quot;)
+# runOSCommand(&quot;ls&quot;, &quot;-al&quot;)
+# runOSCommand(&quot;notfound&quot;, stop.on.exit.code = FALSE)
+# ## End(Not run)
+</div></pre>
+  </div>
   <div class="span4">
     <!-- <ul>
-      <li>makeClusterFunctionsTorque</li>
+      <li>runOSCommand</li>
     </ul>
     <ul>
       
@@ -105,8 +115,8 @@ Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClus
   <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
   <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
   <code><a href='makeClusterFunctionsSLURM.html'>makeClusterFunctionsSLURM</a></code>,
-  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>,
-  <code><a href='runOSCommand.html'>runOSCommand</a></code>
+  <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code>,
+  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>
 
         
   </div>
