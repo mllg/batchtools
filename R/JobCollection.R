@@ -24,6 +24,7 @@
 #' @template reg
 #' @return [\code{JobCollection}].
 #' @aliases JobCollection
+#' @rdname JobCollection
 #' @export
 #' @examples
 #' reg = makeRegistry(file.dir = NA, make.default = FALSE)

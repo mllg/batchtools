@@ -4,7 +4,7 @@
 \name{batchtools-package}
 \alias{batchtools}
 \alias{batchtools-package}
-\title{Tools for computation on batch systems}
+\title{Tools for Computation on Batch Systems}
 \description{
 For bug reports and feature requests please use the tracker:
 \url{https://github.com/mllg/batchtools}.

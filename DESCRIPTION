@@ -1,5 +1,5 @@
 Package: batchtools
-Title: Tools for computation on batch systems
+Title: Tools for Computation on Batch Systems
 Version: 0.1
 Author: Michel Lang <michellang@gmail.com> [aut,cre],
     Dirk Surmann <surmann@statistik.tu-dortmund.de> [ctb]
