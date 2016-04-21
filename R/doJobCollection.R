@@ -59,14 +59,11 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   count = 1L
   updates = list()
   next.update = now() + as.integer(runif(1L, 300L, 1800L))
-  if (ncpus == 1L) {
-    p = Sequential$new()
-  } else {
-    if (testOS("windows"))
-      p = Snow$new(ncpus)
-    else
-      p = Multicore$new(ncpus)
-  }
+  p = switch(jc$resources$parallel.backend %??% "default",
+    "sequential" = Sequential$new(),
+    "snow/socket" = Snow$new(ncpus),
+    "multicore" = Multicore$new(ncpus),
+    getDefaultBackend(ncpus))
 
   for (i in seq_len(n.jobs)) {
     job = getJob(jc, jc$defs$job.id[i], cache = cache)

@@ -27,7 +27,7 @@ Experiment = R6Class("Experiment",
       p = self$problem
       seed = if (is.null(p$seed)) self$seed else p$seed + self$repl - 1L
       wrapper = function(...) p$fun(job = self, data = p$data, ...)
-      with_seed(seed, do.call(wrapper, self$pars$prob.pars))
+      with_seed(seed, do.call(wrapper, self$pars$prob.pars, envir = .GlobalEnv))
     }
   )
 )

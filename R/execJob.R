@@ -19,7 +19,7 @@ execJob.character = function(job) {
 
 #' @export
 execJob.Job = function(job) {
-  with_seed(job$seed, do.call(job$fun, job$pars))
+  with_seed(job$seed, do.call(job$fun, job$pars, envir = .GlobalEnv))
 }
 
 #' @export
@@ -29,5 +29,5 @@ execJob.Experiment = function(job) {
 
   catf("Applying algorithm %s on problem %s ...", job$algo.name, job$prob.name)
   wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, instance = instance, ...)
-  with_seed(job$seed, do.call(wrapper, job$pars$algo.pars))
+  with_seed(job$seed, do.call(wrapper, job$pars$algo.pars, envir = .GlobalEnv))
 }
