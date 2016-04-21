@@ -42,7 +42,7 @@ test_that("parallel execution works", {
 
   skip_on_os("windows")
   silent({
-    submitJobs(chunkIds(ids, reg = reg), resources = list(chunk.ncpus = 2, parallel.backend = "multicore"), reg = reg)
+    submitJobs(chunkIds(ids, reg = reg), resources = list(chunk.ncpus = 2), reg = reg)
     waitForJobs(reg = reg)
   })
   expect_true(nrow(findDone(reg = reg)) == 4)

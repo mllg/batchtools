@@ -13,6 +13,12 @@ silent = function(expr) {
   with_options(list(batchtools.progress = FALSE), expr)
 }
 
+
+suppressAll = function (expr) {
+    capture.output({z = suppressWarnings(suppressMessages(suppressPackageStartupMessages(force(expr))))})
+    invisible(z)
+}
+
 expect_data_table = function(tab, key = NULL, ...) {
   expect_is(tab, "data.table")
   expect_data_frame(tab, ...)
