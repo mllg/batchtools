@@ -34,7 +34,7 @@ testJob = function(id, fresh.session = FALSE, reg = getDefaultRegistry()) {
 
   if (fresh.session) {
     fn = tempfile("testjob_")
-    fn.r   = stri_join(fn, ".r")
+    fn.r   = stri_join(fn, ".R")
     fn.job = stri_join(fn, ".job")
     fn.res = stri_join(fn, ".rds")
     fn.tmpl = system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE)
