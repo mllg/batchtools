@@ -30,8 +30,7 @@ makeClusterFunctionsSLURM = function(template = NULL, text = NULL, clusters = NU
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
 
-    if (!is.null(clusters))
-      text = stri_join(sprintf("#SBATCH --clusters=%s", clusters), text, sep = "\n")
+    jc$clusters = clusters
     outfile = cfBrewTemplate(reg, text, jc)
     res = runOSCommand("sbatch", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
 
