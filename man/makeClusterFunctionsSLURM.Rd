@@ -33,8 +33,10 @@ cluster (this is usually the case).
 
 The template file can access all arguments passed to the \code{submitJob}
 function, see here \code{\link{ClusterFunctions}}. It is the template file's
-job handle the desired resource allocations. The cluster selection however is
-done via the argument \code{clusters}.
+job handle the desired resource allocations.
+Note that you have to specify the cluster name here (if you do not want to use the default),
+otherwise the commands for listing and killing jobs do not work.
+The value set can be accessed in the template via \dQuote{clusters}.
 }
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
