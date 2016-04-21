@@ -41,7 +41,7 @@ writeLines("empty", path)
 reg$cluster.functions = makeClusterFunctionsSLURM(path)
 print(reg$cluster.functions)
 ```
-Most characteristics and specialities of cluster systems can be mapped to such a [template file](https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl) which is parsed by the [brew package](https://cran.r-project.org/web/packages/brew/).
+Most characteristics and specialities of cluster systems can be mapped to such a [template file](https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl) which is parsed by the [brew package](https://cran.r-project.org/package=brew).
 If the flexibility which comes with templating is not sufficient for your system, you can still construct the cluster functions yourself by just adapting our [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSLURM.R).
 
 To make your cluster function selection permanent for a specific system across R sessions, you can set up a configuration file which is described in the following.
