@@ -10,13 +10,12 @@ with_options = function(opts, expr) {
 }
 
 silent = function(expr) {
-  with_options(list(batchtools.progress = FALSE), expr)
+  with_options(list(batchtools.progress = FALSE, batchtools.verbose = FALSE), expr)
 }
 
-
 suppressAll = function (expr) {
-    capture.output({z = suppressWarnings(suppressMessages(suppressPackageStartupMessages(force(expr))))})
-    invisible(z)
+  silent(capture.output({z = suppressWarnings(suppressMessages(suppressPackageStartupMessages(force(expr))))}))
+  invisible(z)
 }
 
 expect_data_table = function(tab, key = NULL, ...) {

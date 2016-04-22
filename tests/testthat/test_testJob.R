@@ -8,10 +8,8 @@ test_that("testJob", {
   expect_equal(testJob(reg = reg, id = 3), 9)
   expect_error(testJob(reg = reg, id = 2), "foo")
 
-  if (!testOS("windows")) {
-    expect_equal(suppressAll(testJob(reg = reg, id = 1, fresh.session = TRUE)), 1)
-    expect_error(suppressAll(testJob(reg = reg, id = 2, fresh.session = TRUE)), "re-run")
-  }
+  expect_equal(suppressAll(testJob(reg = reg, id = 1, fresh.session = TRUE)), 1)
+  expect_error(suppressAll(testJob(reg = reg, id = 2, fresh.session = TRUE)), "re-run")
 
   expect_equal(findSubmitted(reg = reg), data.table(job.id = integer(0L), key = "job.id"))
   expect_equal(findDone(reg = reg), data.table(job.id = integer(0L), key = "job.id"))
@@ -26,8 +24,6 @@ test_that("testJob.ExperimentRegistry", {
 
   suppressAll(x <- testJob(id = 1, reg = reg))
   expect_equal(x, 150)
-  if (!testOS("windows")) {
-    suppressAll(x <- testJob(id = 2, reg = reg, fresh.session = TRUE))
-    expect_equal(x, 150^2)
-  }
+  suppressAll(x <- testJob(id = 2, reg = reg, fresh.session = TRUE))
+  expect_equal(x, 150^2)
 })
