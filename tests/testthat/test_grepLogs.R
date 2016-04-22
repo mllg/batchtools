@@ -1,18 +1,18 @@
 context("grepLogs")
 
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
-ids = batchMap(reg = reg, function(x) {
-  if (x == 1) {
-    print("FOOBAR: AAA")
-  } else if (x == 2) {
-    cat("FOOBAR: BBB")
-  } else {
-    message("FOOBAR: CCC")
-  }
-  invisible(NULL)
-}, x = 1:3)
-ids$chunk = as.integer(c(1, 1, 2))
 silent({
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  ids = batchMap(reg = reg, function(x) {
+    if (x == 1) {
+      print("FOOBAR: AAA")
+    } else if (x == 2) {
+      cat("FOOBAR: BBB")
+    } else {
+      message("FOOBAR: CCC")
+    }
+    invisible(NULL)
+  }, x = 1:3)
+  ids$chunk = as.integer(c(1, 1, 2))
   submitJobs(reg = reg, ids = ids[1:3])
   waitForJobs(reg = reg)
 })

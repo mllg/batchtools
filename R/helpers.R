@@ -36,7 +36,7 @@ stamp = function() {
 }
 
 npath = function(file.dir, ...) {
-  stri_replace_all_fixed(file.path(normalizePath(file.dir, winslash = "/", mustWork = FALSE), ...), "\\", "/")
+  file.path(normalizePath(file.dir, winslash = "/", mustWork = FALSE), ...)
 }
 
 insert = function(x, y) {
