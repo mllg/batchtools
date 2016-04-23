@@ -25,6 +25,10 @@
 #'  testJob(2, reg = reg)
 #' }
 testJob = function(id, fresh.session = FALSE, reg = getDefaultRegistry()) {
+  Rscript = function() {
+    file.path(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
+  }
+
   assertRegistry(reg)
   assertFlag(fresh.session)
   id = asJobTable(reg, id)
@@ -41,7 +45,7 @@ testJob = function(id, fresh.session = FALSE, reg = getDefaultRegistry()) {
 
     writeRDS(job, file = fn.job)
     brew::brew(file = fn.tmpl, output = fn.r, envir = list2env(list(job = fn.job, result = fn.res)))
-    res = runOSCommand("Rscript", fn.r, stop.on.exit.code = FALSE, debug = reg$debug)
+    res = runOSCommand(Rscript(), fn.r, stop.on.exit.code = FALSE, debug = reg$debug)
 
     if (res$exit.code == 0L) {
       writeLines(res$output)
