@@ -3,51 +3,24 @@
 ## Set sane defaults
 if (is.null(resources$modules))
   resources$modules = character(0L)
-if (is.null(resources$nodes))
-    resources$nodes = 1L
 if (is.null(resources$parcpus))
     resources$parcpus = 1L
 
 ## Check variables
 resources$walltime = checkmate::asInt(resources$walltime, lower = 60L, upper = 3600L * 672L)
 resources$memory = checkmate::asInt(resources$memory, lower = 100L, upper = 64L * 1024L)
-resources$nodes = checkmate::asInt(resources$nodes, lower = 1L)
 resources$parcpus = checkmate::asInt(resources$parcpus, lower = 1L)
 checkmate::assertCharacter(resources$modules, any.missing = FALSE)
-checkmate::assertChoice(resources$R, choices = c("R-3.1.2-gcc-4.8.2-base", "R-3.2.2-gcc-4.8.5-base"))
+checkmate::assertString(resources$R)
+if (!is.null(resources$type))
+    checkmate::assertString(resources$type)
+if (resources$memory > 15000)
+    resources$type = "quad"
 
 ## first string of queue, selected by walltime
 walltimes = 3600L * c(1L, 8L, 48L, 672L)
-queue = c("short", "med", "long", "ultralong")[which(resources$walltime <= walltimes)[1L]]
-
-if (resources$nodes == 1L)  {
-  cmd = "Rscript"
-  vmem = resources$memory
-} else {
-  cmd = "mpirun -np 1 Rscript"
-  ## for MPI jobs at most 4 jobs get scheduled on the cores of one node
-  vmem = 4L * resources$memory
-}
-
-if (vmem <= 15000L) {
-  queue = sprintf("%s_eth", queue)
-} else if (vmem <= 61440L) {
-  queue = sprintf("%s_quad", queue)
-} else {
-  stop("You are requesting too much memory, there is no queue for this!")
-}
-
-if (queue == "ultralong_quad")
-  stop("No 'ultralong_quad' queue available. Reduce memory or walltime.")
-
-modules = switch(resources$R,
-  "R-3.1.2-gcc-4.8.2-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.2", "gotoblas/shared/64/1.26", "R/3.1.2-gcc48"),
-  "R-3.2.2-gcc-4.8.5-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.5", "gotoblas/shared/64/1.26", "R/3.2.2-gcc48")
-)
-
-if(resources$nodes == 1L)
-  modules = modules[-1L]
-modules = paste0(union(modules, resources$modules), collapse = " ")
+queue = c("short", "med", "long", "ultralong")[checkmate::wf(resources$walltime <= walltimes)]
+modules = paste0(c("binutils", "gcc", "openblas", resources$R), collapse = " ")
 
 ## very ugly hack because we cannot log to data (nobackup) filesystem on lido,
 ## only home fs is available
@@ -70,7 +43,7 @@ if (length(grep("^/data/", log.file)) > 0L) {
 
 #PBS -N <%= job.hash %>
 #PBS -o <%= log.file %>
-#PBS -l walltime=<%= resources$walltime %>,nodes=<%= resources$nodes %>,vmem=<%= vmem %>M
+#PBS -l walltime=<%= resources$walltime %>,nodes=<%= resources$parcpus %><%= if (!is.null(resources$type)) paste0(":", resources$type %>,vmem=<%= vmem %>M
 #PBS -q <%= queue %>
 #PBS -j oe
 
