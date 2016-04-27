@@ -55,6 +55,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   catf("[job(chunk): %s] Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"), con = con)
   catf("[job(chunk): %s] Prefetching objects", s, ifelse(measure.memory, "enabled", "disabled"), con = con)
   prefetch(jc, cache)
+  runHook(jc, "collection.start", con = con, cache = cache)
 
   count = 1L
   updates = list()
@@ -86,8 +87,12 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     updates = c(updates, lapply(messages, "[[", "update"))
     lapply(messages, function(r) catf(r$output, con = con))
   }
-  writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
+
+  if (length(updates) > 0L) {
+    writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
+  }
 
   catf("[job(chunk): %s] Calculation finished!", stamp(), con = con)
+  runHook(jc, "collection.end", con = con, cache = cache)
   invisible(TRUE)
 }

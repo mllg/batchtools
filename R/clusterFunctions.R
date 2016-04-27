@@ -52,7 +52,7 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
     assertFunction(listJobsRunning, "reg")
   assertString(array.envir.var, na.ok = TRUE)
   assertFlag(store.job)
-  assertList(hooks, "function", names = "unique")
+  assertList(hooks, types = "function", names = "unique")
 
   setClasses(list(
       name = name,
