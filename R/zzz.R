@@ -19,6 +19,7 @@
 "_PACKAGE"
 
 batchtools = new.env(parent = emptyenv())
+batchtools$remote.hooks = c("collection.start", "collection.end")
 job.id = def.id = pars = NULL
 submitted = started = done = error = NULL
 batch.id = status = NULL
