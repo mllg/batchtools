@@ -20,7 +20,7 @@ if (resources$memory > 15000)
 ## first string of queue, selected by walltime
 walltimes = 3600L * c(1L, 8L, 48L, 672L)
 queue = c("short", "med", "long", "ultralong")[checkmate::wf(resources$walltime <= walltimes)]
-modules = paste0(c("binutils", "gcc", "openblas", resources$R), collapse = " ")
+modules = paste0(c("binutils", "gcc/4.8.5", "openblas", resources$R), collapse = " ")
 
 ## very ugly hack because we cannot log to data (nobackup) filesystem on lido,
 ## only home fs is available
@@ -43,7 +43,7 @@ if (length(grep("^/data/", log.file)) > 0L) {
 
 #PBS -N <%= job.hash %>
 #PBS -o <%= log.file %>
-#PBS -l walltime=<%= resources$walltime %>,nodes=<%= resources$parcpus %><%= if (!is.null(resources$type)) paste0(":", resources$type %>,vmem=<%= vmem %>M
+#PBS -l walltime=<%= resources$walltime %>,nodes=<%= resources$parcpus %><%= if (!is.null(resources$type)) paste0(":", resources$type) %>,vmem=<%= resources$memory %>M
 #PBS -q <%= queue %>
 #PBS -j oe
 
@@ -55,5 +55,5 @@ module add <%= modules %>
 mkdir /scratch/${USER}-${PBS_JOBID}
 export TMPDIR=/scratch/${USER}-${PBS_JOBID}
 ## run R
-<%= cmd %> -e 'batchtools::doJobCollection("<%= uri %>")'
+Rscript -e 'batchtools::doJobCollection("<%= uri %>")'
 rm -rf /scratch/${USER}-${PBS_JOBID}
