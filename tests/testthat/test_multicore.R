@@ -17,11 +17,9 @@ test_that("cf multicore", {
   })
 })
 
-test_that("chunk parallelization works", {
-  skip("Manual test")
-
+if (FALSE) {
   reg = makeRegistry(file.dir = NA, make.default = FALSE, packages = "rscimark")
   batchMap(function(i) rscimark(), i = 1:8, reg = reg)
   submitJobs(chunkIds(1:8, reg = reg), resources = list(chunk.ncpus = 4), reg = reg)
   getErrorMessages(reg = reg)
-})
+}

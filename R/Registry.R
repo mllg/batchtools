@@ -377,7 +377,7 @@ syncRegistry = function(reg = getDefaultRegistry(), save = TRUE) {
     return(invisible(TRUE))
   }
 
-  runHook(reg, "pre.sync", fns)
+  runHook(reg, "pre.sync", fns = fns)
 
   updates = lapply(fns, function(fn) {
     x = try(readRDS(fn), silent = TRUE)
@@ -397,6 +397,6 @@ syncRegistry = function(reg = getDefaultRegistry(), save = TRUE) {
     unlink(fns[!failed])
   }
 
-  runHook(reg, "post.sync", updates)
+  runHook(reg, "post.sync", updates = updates)
   invisible(TRUE)
 }

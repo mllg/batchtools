@@ -35,8 +35,8 @@
 #' @param store.job [\code{logical(1)}]\cr
 #'   Store the job on the file system before submitting? Default is \code{TRUE}.
 #' @param hooks [\code{list}]\cr
-#'   Experimental feature. Named list of functions which will we called on certain events like \dQuote{pre.submit},
-#'   \dQuote{post.submit}, \dQuote{pre.sync} or \dQuote{post.sync}.
+#'   Experimental feature. Named list of functions which will we called on certain events like \dQuote{pre.submit}
+#'   or \dQuote{post.sync}. See \link{Hooks}.
 #' @export
 #' @aliases ClusterFunctions
 #' @family ClusterFunctions
@@ -53,6 +53,7 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
   assertString(array.envir.var, na.ok = TRUE)
   assertFlag(store.job)
   assertList(hooks, types = "function", names = "unique")
+  assertSubset(names(hooks), batchtools$hooks)
 
   setClasses(list(
       name = name,

@@ -19,7 +19,8 @@
 "_PACKAGE"
 
 batchtools = new.env(parent = emptyenv())
-batchtools$remote.hooks = c("collection.start", "collection.end")
+batchtools$hooks = c("pre.sync", "post.sync", "pre.do.collection", "post.do.collection", "pre.submit", "post.submit")
+batchtools$remote.hooks = c("pre.do.collection", "post.do.collection")
 job.id = def.id = pars = NULL
 submitted = started = done = error = NULL
 batch.id = status = NULL
