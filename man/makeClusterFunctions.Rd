@@ -48,8 +48,8 @@ Name of the environment variable set by the scheduler to identify IDs of job arr
 Store the job on the file system before submitting? Default is \code{TRUE}.}
 
 \item{hooks}{[\code{list}]\cr
-Experimental feature. Named list of functions which will we called on certain events like \dQuote{pre.submit},
-\dQuote{post.submit}, \dQuote{pre.sync} or \dQuote{post.sync}.}
+Experimental feature. Named list of functions which will we called on certain events like \dQuote{pre.submit}
+or \dQuote{post.sync}. See \link{Hooks}.}
 }
 \description{
 Use this function when you implement a back-end for a batch system. You must define the functions

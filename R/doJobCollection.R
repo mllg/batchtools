@@ -55,7 +55,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   catf("[job(chunk): %s] Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"), con = con)
   catf("[job(chunk): %s] Prefetching objects", s, ifelse(measure.memory, "enabled", "disabled"), con = con)
   prefetch(jc, cache)
-  runHook(jc, "collection.start", con = con, cache = cache)
+  runHook(jc, "pre.do.collection", con = con, cache = cache)
 
   count = 1L
   updates = list()
@@ -93,6 +93,6 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   }
 
   catf("[job(chunk): %s] Calculation finished!", stamp(), con = con)
-  runHook(jc, "collection.end", con = con, cache = cache)
+  runHook(jc, "post.do.collection", con = con, cache = cache)
   invisible(TRUE)
 }

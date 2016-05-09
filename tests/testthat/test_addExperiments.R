@@ -68,8 +68,7 @@ test_that("addExperiments handles parameters correctly", {
   expect_true(nrow(findError(reg = reg)) == 0)
 })
 
-test_that("benchmark of addExperiments", {
-  skip("This is a manual regression test")
+if (FALSE) {
   reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
@@ -79,4 +78,4 @@ test_that("benchmark of addExperiments", {
   repls = 2
   st = system.time({addExperiments(prob.designs, algo.designs = algo.designs, repls = repls, reg = reg)})
   print(st)
-})
+}
