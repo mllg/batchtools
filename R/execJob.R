@@ -24,10 +24,10 @@ execJob.Job = function(job) {
 
 #' @export
 execJob.Experiment = function(job) {
-  catf("Generating problem instance for problem %s ...", job$prob.name)
+  catf("Generating problem instance for problem '%s' ...", job$prob.name)
   instance = job$instance
 
-  catf("Applying algorithm %s on problem %s ...", job$algo.name, job$prob.name)
+  catf("Applying algorithm '%s' on problem '%s' ...", job$algo.name, job$prob.name)
   wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, instance = instance, ...)
   with_seed(job$seed, do.call(wrapper, job$pars$algo.pars, envir = .GlobalEnv))
 }
