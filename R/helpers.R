@@ -53,7 +53,7 @@ writeRDS = function(object, file, wait = FALSE) {
 
 makeProgressBar = function(..., tokens = list()) {
   if (getOption("batchtools.verbose", TRUE) && getOption("batchtools.progress", TRUE)) {
-    pb = progress_bar$new(..., show_after = 1)
+    pb = progress_bar$new(..., show_after = 1, width = getOption("width") - 2L)
     pb$tick(0L, tokens = tokens)
     return(pb)
   }
@@ -84,19 +84,28 @@ is.error = function(x) {
   inherits(x, "try-error")
 }
 
+# formating message
 info = function(...) {
   if (getOption("batchtools.verbose", TRUE))
     message(sprintf(...))
 }
 
+# concatenating cat()
+catc = function (..., con = stdout()) {
+  cat(stri_join(..., collapse = "\n"), "\n", sep = "", file = con)
+}
+
+# formating cat()
 catf = function (..., con = stdout()) {
   cat(stri_join(sprintf(...), collapse = "\n"), "\n", sep = "", file = con)
 }
 
+# formating waring()
 warningf = function (...) {
   warning(simpleWarning(sprintf(...), call = sys.call(sys.parent())))
 }
 
+# formating stop()
 stopf = function (...) {
   stop(simpleError(sprintf(...), call = sys.call(sys.parent())))
 }
