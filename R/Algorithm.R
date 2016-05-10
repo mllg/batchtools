@@ -37,3 +37,10 @@ removeAlgorithm = function(name, reg = getDefaultRegistry()) {
   sweepRegistry(reg)
   invisible(TRUE)
 }
+
+#' @export
+#' @rdname ProblemAlgorithm
+getAlgorithmIds = function(reg = getDefaultRegistry()) {
+  assertExperimentRegistry(reg)
+  levels(reg$defs$algorithm)
+}
