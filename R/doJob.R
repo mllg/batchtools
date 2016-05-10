@@ -14,7 +14,7 @@ doJob = function(job, measure.memory = FALSE) {
 
   if (is.error(result$res)) {
     msg.terminated = sprintf("[job(%i): %s] Job terminated with an exception", id, stamp())
-    update$error = stri_trim_both(as.character(result$res))
+    update$error = stri_trunc(stri_trim_both(as.character(result$res)), 500L, " [truncated]")
   } else {
     msg.terminated = sprintf("[job(%i): %s] Job terminated successfully", id, stamp())
     writeRDS(result$res, file = file.path(job$cache$file.dir, "results", sprintf("%i.rds", id)))

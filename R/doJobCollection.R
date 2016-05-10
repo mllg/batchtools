@@ -11,11 +11,7 @@
 #' @param con [\code{\link[base]{connection}} | \code{character(1)}]\cr
 #'   A connection for the output. Defaults to \code{\link[base]{stdout}}.
 #'   Alternatively the name of a file to write to.
-#' @return [\code{data.table}]. Data table with updates on the computational
-#' status, i.e. a table with the columns \dQuote{job.id}, \dQuote{started}
-#' (unix time stamp of job start), \dQuote{done} (unix time stamp of job
-#' termination), \dQuote{error} (error message as string) and \code{memory}
-#' (memory usage as double).
+#' @return [\code{NULL}].
 #' @export
 doJobCollection = function(jc, con = stdout()) {
   UseMethod("doJobCollection")
@@ -94,5 +90,5 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
 
   catf("[job(chunk): %s] Calculation finished!", stamp(), con = con)
   runHook(jc, "post.do.collection", con = con, cache = cache)
-  invisible(TRUE)
+  invisible(NULL)
 }
