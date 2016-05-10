@@ -304,7 +304,7 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
   if (debug)
     info("OS cmd: %s %s", sys.cmd, stri_join(sys.args, collapse = " "))
 
-  if (nzchar(Sys.which(sys.cmd)) > 0L) {
+  if (nzchar(Sys.which(sys.cmd))) {
     res = suppressWarnings(system2(command = sys.cmd, args = sys.args, stdout = TRUE, stderr = TRUE, wait = TRUE))
     output = as.character(res)
     exit.code = attr(res, "status") %??% 0L

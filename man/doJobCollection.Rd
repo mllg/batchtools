@@ -17,11 +17,7 @@ A connection for the output. Defaults to \code{\link[base]{stdout}}.
 Alternatively the name of a file to write to.}
 }
 \value{
-[\code{data.table}]. Data table with updates on the computational
-status, i.e. a table with the columns \dQuote{job.id}, \dQuote{started}
-(unix time stamp of job start), \dQuote{done} (unix time stamp of job
-termination), \dQuote{error} (error message as string) and \code{memory}
-(memory usage as double).
+[\code{NULL}].
 }
 \description{
 Executes every job in a \code{\link{JobCollection}}.

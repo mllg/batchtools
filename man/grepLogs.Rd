@@ -4,7 +4,7 @@
 \alias{grepLogs}
 \title{Grep Log Files for a Pattern}
 \usage{
-grepLogs(ids = NULL, pattern, reg = getDefaultRegistry())
+grepLogs(ids = NULL, pattern = "", reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr

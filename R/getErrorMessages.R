@@ -23,6 +23,7 @@
 #' getErrorMessages(ids, missing.as.error = TRUE, reg = reg)
 getErrorMessages = function(ids = NULL, missing.as.error = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
+  syncRegistry(reg)
   assertFlag(missing.as.error)
   tab = filter(reg$status, ids %??% .findError(reg = reg))[, list(job.id, terminated = !is.na(done), error = !is.na(error), message = error)]
 

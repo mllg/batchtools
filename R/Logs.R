@@ -25,7 +25,7 @@ readLog = function(id, impute = NULL, read.fun = readLines, reg = getDefaultRegi
 #' @export
 #' @family debug
 #' @return [\code{data.table}]. Matching job ids are stored in the column \dQuote{job.id}.
-grepLogs = function(ids = NULL, pattern, reg = getDefaultRegistry()) {
+grepLogs = function(ids = NULL, pattern = "", reg = getDefaultRegistry()) {
   Reader = function() {
     last.fn = NA_character_
     lines = NA_character_
@@ -39,8 +39,9 @@ grepLogs = function(ids = NULL, pattern, reg = getDefaultRegistry()) {
   }
 
   assertRegistry(reg)
+  syncRegistry(reg)
   ids = filter(reg$status, ids %??% .findStarted(reg = reg))[, c("job.id", "job.hash"), with = FALSE]
-  if (!nzchar(pattern))
+  if (is.na(pattern) || !nzchar(pattern))
     return(ids[, "job.id", with = FALSE])
   setorderv(ids, "job.hash")
 

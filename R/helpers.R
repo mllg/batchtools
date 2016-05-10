@@ -164,3 +164,14 @@ capture = function(expr) {
 filterNull = function(x) {
   x[!vlapply(x, is.null)]
 }
+
+stri_trunc = function(str, length, append = "") {
+  if (is.na(str))
+    return(str)
+  if (stri_length(str) > length) {
+    if (is.na(append) || !nzchar(append))
+      return(stri_sub(str, 1L, length))
+    return(stri_join(stri_sub(str, 1L, length - stri_length(append)), append))
+  }
+  return(str)
+}
