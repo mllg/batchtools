@@ -4,17 +4,19 @@
 \alias{addExperiments}
 \title{Add Experiments to the Registry}
 \usage{
-addExperiments(prob.designs, algo.designs, repls = 1L,
+addExperiments(prob.designs = NULL, algo.designs = NULL, repls = 1L,
   reg = getDefaultRegistry())
 }
 \arguments{
 \item{prob.designs}{[named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 Named list of data frames. The name must match the problem name while the column names correspond to parameters
-of the problem.}
+of the problem.
+If \code{NULL}, adds experiments for all defined problems without any hyperparameters set.}
 
 \item{algo.designs}{[named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 Named list of data frames. The name must match the algorithm name while the column names correspond to parameters
-of the algorithm.}
+of the algorithm.
+If \code{NULL}, adds experiments for all defined algorithms without any hyperparameters set.}
 
 \item{repls}{[\code{integer(1)}]\cr
 Number of replications for each distinct experiment.}

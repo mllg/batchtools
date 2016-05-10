@@ -21,10 +21,7 @@ Split the resulting table by columns of \code{\link{getJobPars}}.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{named list}] with elements \dQuote{table}
-(\code{\link[data.table]{data.table}}] of frequencies), \dQuote{problems}
-(\code{character} of problem names) and \dQuote{algorithms}
-(\code{character} of algorithm names).
+[\code{data.table}] of frequencies.
 }
 \description{
 Returns a frequency table of defined experiments.

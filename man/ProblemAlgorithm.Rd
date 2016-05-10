@@ -6,6 +6,7 @@
 \alias{ProblemAlgorithm}
 \alias{addAlgorithm}
 \alias{addProblem}
+\alias{getAlgorithmIds}
 \alias{removeAlgorithm}
 \alias{removeProblem}
 \title{Define Problems and Algorithms for Experiments}
@@ -13,6 +14,8 @@
 addAlgorithm(name, fun, reg = getDefaultRegistry())
 
 removeAlgorithm(name, reg = getDefaultRegistry())
+
+getAlgorithmIds(reg = getDefaultRegistry())
 
 addProblem(name, data = NULL, fun = NULL, seed = NULL,
   reg = getDefaultRegistry())
@@ -60,5 +63,8 @@ This instance is then typically passed to a learning algorithm like a wrapper ar
 
 The functions serialize the components to the file system and register the respective problem or algorithm
 names in the \code{\link{ExperimentRegistry}}.
+
+\code{getProblemIds} and \code{getAlgorithmIds} can be used to retrieve the IDs of already defined problems
+and algorithms, respectively.
 }
 

@@ -11,6 +11,8 @@
 #' The functions serialize the components to the file system and register the respective problem or algorithm
 #' names in the \code{\link{ExperimentRegistry}}.
 #'
+#' \code{getProblemIds} and \code{getAlgorithmIds} can be used to retrieve the IDs of already defined problems
+#' and algorithms, respectively.
 #' @param name [\code{character(1)}]\cr
 #'   Unique identifier for the problem or algorithm.
 #' @param data [\code{ANY}]\cr
@@ -75,4 +77,9 @@ removeProblem = function(name, reg = getDefaultRegistry()) {
   reg$defs$problem = droplevel(reg$defs$problem, name)
   sweepRegistry(reg)
   invisible(TRUE)
+}
+
+getProblemIds = function(reg = getDefaultRegistry()) {
+  assertExperimentRegistry(reg)
+  levels(reg$defs$problem)
 }
