@@ -1,4 +1,4 @@
-#' @title Retrieve error messages
+#' @title Retrieve Error Messages
 #'
 #' @description
 #' Extracts error messages from the internal data base and returns them in a compact table.

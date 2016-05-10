@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctions.R
 \name{cfReadBrewTemplate}
 \alias{cfReadBrewTemplate}
-\title{Cluster functions helper: Read in your brew template file}
+\title{Cluster Functions Helper to Parse a Brew Template}
 \usage{
 cfReadBrewTemplate(template = NULL, text = NULL,
   comment.string = NA_character_)

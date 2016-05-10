@@ -2,7 +2,7 @@
 % Please edit documentation in R/getErrorMessages.R
 \name{getErrorMessages}
 \alias{getErrorMessages}
-\title{Retrieve error messages}
+\title{Retrieve Error Messages}
 \usage{
 getErrorMessages(ids = NULL, missing.as.error = FALSE,
   reg = getDefaultRegistry())

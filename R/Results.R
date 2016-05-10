@@ -64,7 +64,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
   return(init)
 }
 
-#' @title Apply functions on Results
+#' @title Apply Functions on Results
 #'
 #' @description
 #' Applies a function on the results of your finished jobs and thereby collects

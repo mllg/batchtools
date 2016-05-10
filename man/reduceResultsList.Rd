@@ -3,7 +3,7 @@
 \name{reduceResultsList}
 \alias{reduceResultsDataTable}
 \alias{reduceResultsList}
-\title{Apply functions on Results}
+\title{Apply Functions on Results}
 \usage{
 reduceResultsList(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry())
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctions.R
 \name{runOSCommand}
 \alias{runOSCommand}
-\title{Run OS Commands on local or remote machines}
+\title{Run OS Commands on Local or Remote Machines}
 \usage{
 runOSCommand(sys.cmd, sys.args = character(0L), nodename = "localhost",
   stop.on.exit.code = TRUE, debug = FALSE)
