@@ -11,7 +11,7 @@
 \alias{setDefaultRegistry}
 \alias{sweepRegistry}
 \alias{syncRegistry}
-\title{Registry}
+\title{Registry Constructor}
 \usage{
 makeRegistry(file.dir = "registry", work.dir = getwd(),
   conf.file = "~/.batchtools.conf.r", packages = character(0L),

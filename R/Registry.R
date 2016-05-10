@@ -1,4 +1,4 @@
-#' @title Registry
+#' @title Registry Constructor
 #'
 #' @description
 #' \code{makeRegistry} constructs the inter-communication object for all functions in \code{batchtools}.

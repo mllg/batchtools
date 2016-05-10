@@ -1,4 +1,4 @@
-#' @title Hooks
+#' @title Trigger Evaluation of Custom Function
 #'
 #' @description
 #' Hooks allow to trigger functions calls on specific events.

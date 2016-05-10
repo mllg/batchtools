@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctions.R
 \name{cfKillJob}
 \alias{cfKillJob}
-\title{Cluster functions helper: Kill a batch job via OS command}
+\title{Cluster Functions Helper to Kill Batch Jobs}
 \usage{
 cfKillJob(reg, cmd, args = character(0L), max.tries = 3L)
 }

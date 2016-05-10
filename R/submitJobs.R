@@ -1,4 +1,4 @@
-#' @title Submit jobs to the Batch Systems
+#' @title Submit Jobs to the Batch Systems
 #'
 #' @description
 #' Submits all jobs defined with \code{\link{batchMap}} to the batch system.

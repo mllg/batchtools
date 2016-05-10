@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctions.R
 \name{cfBrewTemplate}
 \alias{cfBrewTemplate}
-\title{Cluster functions helper: Brew your template into a job description file}
+\title{Cluster Functions Helper to Write Job Description Files}
 \usage{
 cfBrewTemplate(reg, text, jc)
 }

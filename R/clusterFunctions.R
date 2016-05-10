@@ -75,7 +75,7 @@ print.ClusterFunctions = function(x, ...) {
   catf("  Kill Jobs        : %s", !is.null(x$killJob))
 }
 
-#' @title Create a SubmitJobResult object
+#' @title Create a SubmitJobResult
 #'
 #' @description
 #' Use this function in your implementation of \code{\link{makeClusterFunctions}} to create a return
@@ -116,7 +116,7 @@ print.SubmitJobResult = function(x, ...) {
   catf("  Msg   : %s", x$msg)
 }
 
-#' @title Cluster functions helper: Read in your brew template file
+#' @title Cluster Functions Helper to Parse a Brew Template
 #'
 #' @description
 #' This function is only intended for use in your own cluster functions implementation.
@@ -147,7 +147,7 @@ cfReadBrewTemplate = function(template = NULL, text = NULL, comment.string = NA_
   return(stri_join(lines, collapse = "\n"))
 }
 
-#' @title Cluster functions helper: Brew your template into a job description file
+#' @title Cluster Functions Helper to Write Job Description Files
 #'
 #' @description
 #' This function is only intended for use in your own cluster functions implementation.
@@ -179,7 +179,7 @@ cfBrewTemplate = function(reg, text, jc) {
   return(outfile)
 }
 
-#' @title Cluster functions helper: Handle an unknown error during job submission.
+#' @title Cluster Functions Helper to Handle Unknown Errors
 #'
 #' @description
 #' This function is only intended for use in your own cluster functions implementation.
@@ -205,7 +205,7 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
   makeSubmitJobResult(status = 101L, batch.id = NA_character_, msg = msg)
 }
 
-#' @title Cluster functions helper: Kill a batch job via OS command
+#' @title Cluster Functions Helper to Kill Batch Jobs
 #'
 #' @description
 #' This function is only intended for use in your own cluster functions implementation.
@@ -260,7 +260,7 @@ getBatchIds = function(reg, status = "all") {
   tab[batch.id %in% reg$status$batch.id]
 }
 
-#' @title Run OS Commands on local or remote machines
+#' @title Run OS Commands on Local or Remote Machines
 #'
 #' @description
 #' This is a helper function to run arbitrary OS commands on local or remote machines.

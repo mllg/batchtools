@@ -2,7 +2,7 @@
 % Please edit documentation in R/submitJobs.R
 \name{submitJobs}
 \alias{submitJobs}
-\title{Submit jobs to the Batch Systems}
+\title{Submit Jobs to the Batch Systems}
 \usage{
 submitJobs(ids = NULL, resources = list(), reg = getDefaultRegistry())
 }

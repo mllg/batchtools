@@ -2,7 +2,7 @@
 % Please edit documentation in R/clusterFunctions.R
 \name{cfHandleUnknownSubmitError}
 \alias{cfHandleUnknownSubmitError}
-\title{Cluster functions helper: Handle an unknown error during job submission.}
+\title{Cluster Functions Helper to Handle Unknown Errors}
 \usage{
 cfHandleUnknownSubmitError(cmd, exit.code, output)
 }

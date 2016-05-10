@@ -3,7 +3,7 @@
 \name{runHook}
 \alias{Hooks}
 \alias{runHook}
-\title{Hooks}
+\title{Trigger Evaluation of Custom Function}
 \usage{
 runHook(obj, hook, ...)
 }

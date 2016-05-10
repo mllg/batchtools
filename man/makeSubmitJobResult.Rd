@@ -3,7 +3,7 @@
 \name{makeSubmitJobResult}
 \alias{SubmitJobResult}
 \alias{makeSubmitJobResult}
-\title{Create a SubmitJobResult object}
+\title{Create a SubmitJobResult}
 \usage{
 makeSubmitJobResult(status, batch.id, msg = NA_character_)
 }
