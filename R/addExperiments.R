@@ -7,9 +7,11 @@
 #' @param prob.designs [named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 #'   Named list of data frames. The name must match the problem name while the column names correspond to parameters
 #'   of the problem.
+#'   If \code{NULL}, adds experiments for all defined problems without any hyperparameters set.
 #' @param algo.designs [named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 #'   Named list of data frames. The name must match the algorithm name while the column names correspond to parameters
 #'   of the algorithm.
+#'   If \code{NULL}, adds experiments for all defined algorithms without any hyperparameters set.
 #' @param repls [\code{integer(1)}]\cr
 #'   Number of replications for each distinct experiment.
 #' @template expreg
@@ -24,12 +26,24 @@
 #' prob.designs = list(p1 = expand.grid(n = 100, mean = -3:3, sd = 1:5))
 #' algo.designs = list(a1 = data.table())
 #' addExperiments(reg = reg, prob.designs, algo.designs)
-addExperiments = function(prob.designs, algo.designs, repls = 1L, reg = getDefaultRegistry()) {
+addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
-  assertList(prob.designs, types = "data.frame", names = "named")
-  assertList(algo.designs, types = "data.frame", names = "named")
-  assertSubset(names(prob.designs), levels(reg$defs$problem))
-  assertSubset(names(algo.designs), levels(reg$defs$algorithm))
+  if (is.null(prob.designs)) {
+    probs = levels(reg$defs$problem)
+    prob.designs = replicate(length(probs), data.table(), simplify = FALSE)
+    names(prob.designs) = probs
+  } else {
+    assertList(prob.designs, types = "data.frame", names = "named")
+    assertSubset(names(prob.designs), levels(reg$defs$problem))
+  }
+  if (is.null(algo.designs)) {
+    algos = levels(reg$defs$algorithm)
+    algo.designs = replicate(length(algos), data.table(), simplify = FALSE)
+    names(algo.designs) = algos
+  } else {
+    assertList(algo.designs, types = "data.frame", names = "named")
+    assertSubset(names(algo.designs), levels(reg$defs$algorithm))
+  }
   repls = asCount(repls)
 
   all.ids = integer(0L)
