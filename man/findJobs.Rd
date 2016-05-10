@@ -2,7 +2,7 @@
 % Please edit documentation in R/findJobs.R
 \name{findSubmitted}
 \alias{findDone}
-\alias{findError}
+\alias{findErrors}
 \alias{findExperiments}
 \alias{findExpired}
 \alias{findJobs}
@@ -26,7 +26,7 @@ findDone(ids = NULL, reg = getDefaultRegistry())
 
 findNotDone(ids = NULL, reg = getDefaultRegistry())
 
-findError(ids = NULL, reg = getDefaultRegistry())
+findErrors(ids = NULL, reg = getDefaultRegistry())
 
 findOnSystem(ids = NULL, status = "all", reg = getDefaultRegistry())
 

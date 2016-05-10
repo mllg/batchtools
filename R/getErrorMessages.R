@@ -3,7 +3,7 @@
 #' @description
 #' Extracts error messages from the internal data base and returns them in a compact table.
 #' For further investigation, see \code{\link{showLog}}.
-#' @templateVar ids.default findError
+#' @templateVar ids.default findErrors
 #' @template ids
 #' @param missing.as.error [\code{logical(1)}]\cr
 #'   Treat missing results as errors? If \code{TRUE}, an error message is imputed for jobs
@@ -25,7 +25,7 @@ getErrorMessages = function(ids = NULL, missing.as.error = FALSE, reg = getDefau
   assertRegistry(reg)
   syncRegistry(reg)
   assertFlag(missing.as.error)
-  tab = filter(reg$status, ids %??% .findError(reg = reg))[, list(job.id, terminated = !is.na(done), error = !is.na(error), message = error)]
+  tab = filter(reg$status, ids %??% .findErrors(reg = reg))[, list(job.id, terminated = !is.na(done), error = !is.na(error), message = error)]
 
   if (missing.as.error) {
     tab[!tab$terminated, c("error", "message") := list(TRUE, "Not terminated")]

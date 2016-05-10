@@ -12,7 +12,7 @@ getErrorMessages(ids = NULL, missing.as.error = FALSE,
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})
 with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to the return value of \code{\link{findError}}.}
+If not set, defaults to the return value of \code{\link{findErrors}}.}
 
 \item{missing.as.error}{[\code{logical(1)}]\cr
 Treat missing results as errors? If \code{TRUE}, an error message is imputed for jobs

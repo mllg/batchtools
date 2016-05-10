@@ -11,7 +11,7 @@ test_that("find[Status]", {
   expect_equal(findNotStarted(reg = reg), none)
   expect_equal(findDone(reg = reg), none)
   expect_equal(findNotDone(reg = reg), none)
-  expect_equal(findError(reg = reg), none)
+  expect_equal(findErrors(reg = reg), none)
   expect_equal(findOnSystem(reg = reg), none)
 
   fun = function(i) if (i == 3) stop(i) else i
@@ -24,7 +24,7 @@ test_that("find[Status]", {
   expect_equal(findNotStarted(reg = reg), all)
   expect_equal(findDone(reg = reg), none)
   expect_equal(findNotDone(reg = reg), all)
-  expect_equal(findError(reg = reg), none)
+  expect_equal(findErrors(reg = reg), none)
   expect_equal(findOnSystem(reg = reg), none)
 
   silent({
@@ -39,7 +39,7 @@ test_that("find[Status]", {
   expect_equal(findNotStarted(reg = reg), none)
   expect_equal(findDone(reg = reg), all[-3L])
   expect_equal(findNotDone(reg = reg), all[3L])
-  expect_equal(findError(reg = reg), all[3L])
+  expect_equal(findErrors(reg = reg), all[3L])
   expect_equal(findOnSystem(reg = reg), none)
 })
 
@@ -56,7 +56,7 @@ test_that("Subsetting", {
 
   expect_equal(findJobs(ids = 1:3, reg = reg), all[1:3])
   expect_equal(findDone(ids = 3, reg = reg), none)
-  expect_equal(findError(ids = 1:2, reg = reg), none)
+  expect_equal(findErrors(ids = 1:2, reg = reg), none)
   expect_equal(findSubmitted(1:5, reg = reg), all)
   expect_data_table(findSubmitted(6, reg = reg), ncol = 1L, nrow = 0L)
 })

@@ -44,7 +44,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
 
   batch.ids = getBatchIds(reg)
   if (nrow(batch.ids) == 0L)
-    return(nrow(.findError(reg, ids)) == 0L)
+    return(nrow(.findErrors(reg, ids)) == 0L)
 
   timeout = now() + timeout
   ids.disappeared = data.table(job.id = integer(0L), key = "job.id")
@@ -57,11 +57,11 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     ids.nt = .findNotTerminated(reg, ids)
     if (nrow(ids.nt) == 0L) {
       pb$tick(n.jobs.total)
-      return(nrow(.findError(reg, ids)) == 0L)
+      return(nrow(.findErrors(reg, ids)) == 0L)
     }
 
     # case 2: there are errors and stop.on.error is TRUE
-    if (stop.on.error && nrow(.findError(reg, ids)) > 0L) {
+    if (stop.on.error && nrow(.findErrors(reg, ids)) > 0L) {
       pb$tick(n.jobs.total)
       return(FALSE)
     }
