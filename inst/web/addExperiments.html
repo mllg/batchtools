@@ -52,18 +52,20 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>addExperiments(prob.designs, algo.designs, repls&nbsp;=&nbsp;1L, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    <pre><div>addExperiments(prob.designs&nbsp;=&nbsp;NULL, algo.designs&nbsp;=&nbsp;NULL, repls&nbsp;=&nbsp;1L, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>prob.designs</dt>
       <dd>[named list of <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> or <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code>]
 Named list of data frames. The name must match the problem name while the column names correspond to parameters
-of the problem.</dd>
+of the problem.
+If <code>NULL</code>, adds experiments for all defined problems without any hyperparameters set.</dd>
       <dt>algo.designs</dt>
       <dd>[named list of <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> or <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code>]
 Named list of data frames. The name must match the algorithm name while the column names correspond to parameters
-of the algorithm.</dd>
+of the algorithm.
+If <code>NULL</code>, adds experiments for all defined algorithms without any hyperparameters set.</dd>
       <dt>repls</dt>
       <dd>[<code>integer(1)</code>]
 Number of replications for each distinct experiment.</dd>

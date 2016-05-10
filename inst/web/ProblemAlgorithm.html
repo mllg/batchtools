@@ -54,6 +54,7 @@
     <h2>Usage</h2>
     <pre><div>addAlgorithm(name, fun, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>removeAlgorithm(name, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>getAlgorithmIds(reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>addProblem(name, data&nbsp;=&nbsp;NULL, fun&nbsp;=&nbsp;NULL, seed&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>removeProblem(name, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
     
@@ -110,11 +111,14 @@ This instance is then typically passed to a learning algorithm like a wrapper ar
       <p>The functions serialize the components to the file system and register the respective problem or algorithm
 names in the <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>.</p>
   
+      <p><code>getProblemIds</code> and <code>getAlgorithmIds</code> can be used to retrieve the IDs of already defined problems
+and algorithms, respectively.</p>
+  
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>Algorithm</li><li>Problem</li><li>ProblemAlgorithm</li><li>addAlgorithm</li><li>addProblem</li><li>removeAlgorithm</li><li>removeProblem</li>
+      <li>Algorithm</li><li>Problem</li><li>ProblemAlgorithm</li><li>addAlgorithm</li><li>addProblem</li><li>getAlgorithmIds</li><li>removeAlgorithm</li><li>removeProblem</li>
     </ul>
     <ul>
       

@@ -92,8 +92,10 @@ cluster (this is usually the case).</p>
   
       <p>The template file can access all arguments passed to the <code>submitJob</code>
 function, see here <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>. It is the template file's
-job handle the desired resource allocations. The cluster selection however is
-done via the argument <code>clusters</code>.</p>
+job handle the desired resource allocations.
+Note that you have to specify the cluster name here (if you do not want to use the default),
+otherwise the commands for listing and killing jobs do not work.
+The value set can be accessed in the template via &#147;clusters&#148;.</p>
   
     </div>
       </div>

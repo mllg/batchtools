@@ -82,7 +82,7 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
         <code><a href="Worker.html">Worker</a></code><br />Create a Linux-Worker</li>
             
       <li>
-        <code><a href="ProblemAlgorithm.html">addAlgorithm</a></code>(Algorithm, Problem, ProblemAlgorithm, addProblem, removeAlgorithm, removeProblem)<br />Define Problems and Algorithms for Experiments</li>
+        <code><a href="ProblemAlgorithm.html">addAlgorithm</a></code>(Algorithm, Problem, ProblemAlgorithm, addProblem, getAlgorithmIds, removeAlgorithm, removeProblem)<br />Define Problems and Algorithms for Experiments</li>
             
       <li>
         <code><a href="addExperiments.html">addExperiments</a></code><br />Add Experiments to the Registry</li>
@@ -118,7 +118,7 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
         <code><a href="execJob.html">execJob</a></code><br />Execute a Single Jobs</li>
             
       <li>
-        <code><a href="findJobs.html">findSubmitted</a></code>(findDone, findError, findExperiments, findExpired, findJobs, findNotDone, findNotStarted, findNotSubmitted, findOnSystem, findStarted)<br />Find and Filter Jobs</li>
+        <code><a href="findJobs.html">findSubmitted</a></code>(findDone, findErrors, findExperiments, findExpired, findJobs, findNotDone, findNotStarted, findNotSubmitted, findOnSystem, findStarted)<br />Find and Filter Jobs</li>
             
       <li>
         <code><a href="getErrorMessages.html">getErrorMessages</a></code><br />Retrieve error messages</li>
@@ -185,6 +185,9 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
             
       <li>
         <code><a href="removeExperiments.html">removeExperiments</a></code><br />Remove Experiments</li>
+            
+      <li>
+        <code><a href="runHook.html">runHook</a></code>(Hooks)<br />Hooks</li>
             
       <li>
         <code><a href="runOSCommand.html">runOSCommand</a></code><br />Run OS Commands on local or remote machines</li>
