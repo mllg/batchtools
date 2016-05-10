@@ -78,13 +78,13 @@ findNotDone = function(ids = NULL, reg = getDefaultRegistry()) {
 
 #' @export
 #' @rdname findJobs
-findError = function(ids = NULL, reg = getDefaultRegistry()) {
+findErrors = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  .findError(reg, ids)
+  .findErrors(reg, ids)
 }
 
-.findError = function(reg, ids = NULL) {
+.findErrors = function(reg, ids = NULL) {
   filter(reg$status, ids)[!is.na(error), "job.id", with = FALSE]
 }
 

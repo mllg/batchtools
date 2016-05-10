@@ -13,7 +13,7 @@ test_that("testJob", {
 
   expect_equal(findSubmitted(reg = reg), data.table(job.id = integer(0L), key = "job.id"))
   expect_equal(findDone(reg = reg), data.table(job.id = integer(0L), key = "job.id"))
-  expect_equal(findError(reg = reg), data.table(job.id = integer(0L), key = "job.id"))
+  expect_equal(findErrors(reg = reg), data.table(job.id = integer(0L), key = "job.id"))
 })
 
 test_that("testJob.ExperimentRegistry", {

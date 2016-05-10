@@ -67,7 +67,7 @@ test_that("addExperiments handles parameters correctly", {
     submitJobs(reg = reg, ids = chunkIds(reg = reg))
     waitForJobs(reg = reg)
   })
-  expect_true(nrow(findError(reg = reg)) == 0)
+  expect_true(nrow(findErrors(reg = reg)) == 0)
 })
 
 test_that("addExperiments creates default designs", {
