@@ -202,9 +202,9 @@ clearDefaultRegistry = function() {
 print.Registry = function(x, ...) {
   catf("Job Registry")
   catf("  ClusterFunctions: %s", x$cluster.functions$name)
-  catf("  Number of Jobs  : %i", nrow(x$status))
   catf("  File dir        : %s", x$file.dir)
   catf("  Work dir        : %s", x$work.dir)
+  catf("  Jobs            : %i", nrow(x$status))
   catf("  Seed            : %i", x$seed)
 }
 
