@@ -26,6 +26,7 @@ execJob.Job = function(job) {
 execJob.Experiment = function(job) {
   catf("Generating problem instance for problem '%s' ...", job$prob.name)
   instance = job$instance
+  job$allow.access.to.instance = FALSE
 
   catf("Applying algorithm '%s' on problem '%s' ...", job$algo.name, job$prob.name)
   wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, instance = instance, ...)

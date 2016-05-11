@@ -27,10 +27,12 @@ removeProblem(name, reg = getDefaultRegistry())
 Unique identifier for the problem or algorithm.}
 
 \item{fun}{[\code{function}]\cr
-For \code{addProblem}, the stochastic problem part. The static part is passed to this function with name
-\dQuote{data} and the \code{\link{Job}} is passed as \dQuote{job}.
-For \code{addAlgorithm}, the algorithm function. The static part is passed as \dQuote{data}, the generated
-problem instance is passed as \dQuote{instance} and the \code{\link{Job}} as \dQuote{job}.}
+  For \code{addProblem}, the function defining the stochastic problem part.
+  The static part is passed to this function with name \dQuote{data} and the \code{\link{Job}}/\code{\link{Experiment}}
+  is passed as \dQuote{job}.
+
+  For \code{addAlgorithm}, the algorithm function. The static part is passed as \dQuote{data}, the generated
+  problem instance is passed as \dQuote{instance} and the \code{\link{Job}}/\code{\link{Experiment}} as \dQuote{job}.}
 
 \item{reg}{[\code{\link{ExperimentRegistry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
