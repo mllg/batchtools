@@ -15,7 +15,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family clusterFunctions
 #' @export
-makeClusterFunctionsSSH = function(workers) {
+makeClusterFunctionsSSH = function(workers) { # nocov start
   assertList(workers, types = "Worker")
   if (testOS("windows"))
     stop("clusterFunctionsSSH not compatible with Windows")
@@ -60,4 +60,4 @@ makeClusterFunctionsSSH = function(workers) {
 
   makeClusterFunctions(name = "SSH", submitJob = submitJob, killJob = killJob,
     listJobsRunning = listJobsRunning, store.job = TRUE)
-}
+} # nocov start
