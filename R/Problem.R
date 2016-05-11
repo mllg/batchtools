@@ -21,9 +21,11 @@
 #'   For \code{addProblem}, the function defining the stochastic problem part.
 #'   The static part is passed to this function with name \dQuote{data} and the \code{\link{Job}}/\code{\link{Experiment}}
 #'   is passed as \dQuote{job}.
+#'   Therefore, your function must have the formal arguments \dQuote{job} and \dQuote{data} (or dots \code{...}).
 #'
 #'   For \code{addAlgorithm}, the algorithm function. The static part is passed as \dQuote{data}, the generated
 #'   problem instance is passed as \dQuote{instance} and the \code{\link{Job}}/\code{\link{Experiment}} as \dQuote{job}.
+#'   Therefore, your function must have the formal arguments \dQuote{job}, \dQuote{data} and \dQuote{instance} (or dots \code{...}).
 #' @param seed [\code{integer(1)}]\cr
 #'   Start seed for this problem. This allows the \dQuote{synchronization} of a stochastic
 #'   problem across algorithms, so that different algorithms are evaluated on the same stochastic instance.
@@ -49,7 +51,7 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
   if (is.null(fun)) {
     fun = function(job, data, ...) data
   } else {
-    assertFunction(fun, args = c("job", "data"))
+    assert(checkFunction(fun, args = c("job", "data")), checkFunction(fun, args = "..."))
   }
   if (!is.null(seed))
     seed = asCount(seed, positive = TRUE)
