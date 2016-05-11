@@ -8,7 +8,7 @@ addAlgorithm = function(name, fun, reg = getDefaultRegistry())  {
   if (is.null(fun)) {
     fun = function(job, data, instance, ...) instance
   } else {
-    assertFunction(fun, args = c("job", "data", "instance"))
+    assert(checkFunction(fun, args = c("job", "data", "instance")), checkFunction(fun, args = "..."))
   }
 
   algo = setClasses(list(fun = fun, name = name), "Algorithm")
