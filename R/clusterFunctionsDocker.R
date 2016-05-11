@@ -21,7 +21,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.args = character(0L)) {
+makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.args = character(0L)) { # nocov start
   assertString(image)
   assertCharacter(docker.args, any.missing = FALSE)
   assertCharacter(image.args, any.missing = FALSE)
@@ -81,4 +81,4 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
 
   makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning, store.job = TRUE,
     hooks = list(pre.submit = housekeeping, post.sync = housekeeping))
-}
+} # nocov start

@@ -17,7 +17,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsLSF = function(template = NULL, text = NULL) {
+makeClusterFunctionsLSF = function(template = NULL, text = NULL) { # nocov start
   text = cfReadBrewTemplate(template, text)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
@@ -68,4 +68,4 @@ makeClusterFunctionsLSF = function(template = NULL, text = NULL) {
 
   makeClusterFunctions(name = "LSF", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
     listJobsRunning = listJobsRunning, array.envir.var = "LSB_JOBINDEX", store.job = TRUE)
-}
+} # nocov start

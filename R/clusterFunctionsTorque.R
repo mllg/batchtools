@@ -15,7 +15,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsTorque = function(template = NULL, text = NULL) {
+makeClusterFunctionsTorque = function(template = NULL, text = NULL) { # nocov start
   text = cfReadBrewTemplate(template, text, "##")
 
   submitJob = function(reg, jc) {
@@ -60,4 +60,4 @@ makeClusterFunctionsTorque = function(template = NULL, text = NULL) {
 
   makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
     listJobsQueued = listJobsQueued, array.envir.var = "PBS_ARRAYID", store.job = TRUE)
-}
+} # nocov end

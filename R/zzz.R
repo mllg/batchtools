@@ -21,7 +21,10 @@
 batchtools = new.env(parent = emptyenv())
 batchtools$hooks = c("pre.sync", "post.sync", "pre.do.collection", "post.do.collection", "pre.submit", "post.submit")
 batchtools$remote.hooks = c("pre.do.collection", "post.do.collection")
-job.id = def.id = pars = NULL
-submitted = started = done = error = NULL
-batch.id = status = NULL
-problem = algorithm = repl = NULL
+
+# Fix for data.table's NSE
+job.id = def.id = pars = submitted = started = done = error = batch.id = status = problem = algorithm = repl = NULL
+
+.onUnload <- function (libpath) {
+  library.dynam.unload("batchtools", libpath) # nocov
+}
