@@ -18,12 +18,15 @@ Experiment = R6Class("Experiment",
     resources = NULL,
     cache = NULL,
     prob.name = NULL,
-    algo.name = NULL
+    algo.name = NULL,
+    allow.access.to.instance = TRUE
   ),
   active = list(
     problem = function() self$cache$get(id = "..problem..", file.path("problems", self$prob.name)),
     algorithm = function() self$cache$get(file.path("algorithms", self$algo.name)),
     instance = function() {
+      if (!self$allow.access.to.instance)
+        stop("You cannot access 'job$instance' in the problem generation or algorithm function")
       p = self$problem
       seed = if (is.null(p$seed)) self$seed else p$seed + self$repl - 1L
       wrapper = function(...) p$fun(job = self, data = p$data, ...)
