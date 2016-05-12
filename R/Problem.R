@@ -83,6 +83,8 @@ removeProblem = function(name, reg = getDefaultRegistry()) {
   invisible(TRUE)
 }
 
+#' @export
+#' @rdname ProblemAlgorithm
 getProblemIds = function(reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg)
   levels(reg$defs$problem)

@@ -7,6 +7,7 @@
 \alias{addAlgorithm}
 \alias{addProblem}
 \alias{getAlgorithmIds}
+\alias{getProblemIds}
 \alias{removeAlgorithm}
 \alias{removeProblem}
 \title{Define Problems and Algorithms for Experiments}
@@ -21,6 +22,8 @@ addProblem(name, data = NULL, fun = NULL, seed = NULL,
   reg = getDefaultRegistry())
 
 removeProblem(name, reg = getDefaultRegistry())
+
+getProblemIds(reg = getDefaultRegistry())
 }
 \arguments{
 \item{name}{[\code{character(1)}]\cr
@@ -30,9 +33,11 @@ Unique identifier for the problem or algorithm.}
   For \code{addProblem}, the function defining the stochastic problem part.
   The static part is passed to this function with name \dQuote{data} and the \code{\link{Job}}/\code{\link{Experiment}}
   is passed as \dQuote{job}.
+  Therefore, your function must have the formal arguments \dQuote{job} and \dQuote{data} (or dots \code{...}).
 
   For \code{addAlgorithm}, the algorithm function. The static part is passed as \dQuote{data}, the generated
-  problem instance is passed as \dQuote{instance} and the \code{\link{Job}}/\code{\link{Experiment}} as \dQuote{job}.}
+  problem instance is passed as \dQuote{instance} and the \code{\link{Job}}/\code{\link{Experiment}} as \dQuote{job}.
+  Therefore, your function must have the formal arguments \dQuote{job}, \dQuote{data} and \dQuote{instance} (or dots \code{...}).}
 
 \item{reg}{[\code{\link{ExperimentRegistry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
