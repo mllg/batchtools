@@ -46,7 +46,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   if (nrow(batch.ids) == 0L)
     return(nrow(.findErrors(reg, ids)) == 0L)
 
-  timeout = now() + timeout
+  timeout = ustamp() + timeout
   ids.disappeared = data.table(job.id = integer(0L), key = "job.id")
 
   pb = makeProgressBar(total = n.jobs.total, format = "Waiting (S::system R::running D::done E::error) [:bar] :percent eta: :eta",
@@ -67,7 +67,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     }
 
     # case 3: we have reached a timeout
-    if (now() > timeout) {
+    if (ustamp() > timeout) {
       pb$tick(n.jobs.total)
       warning("Timeout reached")
       return(FALSE)

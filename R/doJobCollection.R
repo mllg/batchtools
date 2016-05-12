@@ -38,7 +38,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   measure.memory = ncpus == 1L && (jc$resources$measure.memory %??% FALSE)
   cache = Cache$new(jc$file.dir)
 
-  s = stamp()
+  s = now()
   catf("[job(chunk): %s] Starting calculation of %i jobs", s, n.jobs, con = con)
   catf("[job(chunk): %s] Setting working directory to '%s'", s, jc$work.dir, con = con)
   prev.wd = getwd()
@@ -55,7 +55,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
 
   count = 1L
   updates = list()
-  next.update = now() + as.integer(runif(1L, 300L, 1800L))
+  next.update = ustamp() + as.integer(runif(1L, 300L, 1800L))
   p = switch(jc$resources$parallel.backend %??% "default",
     "sequential" = Sequential$new(),
     "snow/socket" = Snow$new(ncpus),
@@ -70,11 +70,11 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
       lapply(messages, function(r) catc(r$output, con = con))
     }
 
-    if (length(updates) > 0L && now() > next.update) {
+    if (length(updates) > 0L && ustamp() > next.update) {
       writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
       updates = list()
       count = count + 1L
-      next.update = now() + as.integer(runif(1L, 300L, 1800L))
+      next.update = ustamp() + as.integer(runif(1L, 300L, 1800L))
     }
   }
 
@@ -88,7 +88,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
   }
 
-  catf("[job(chunk): %s] Calculation finished!", stamp(), con = con)
+  catf("[job(chunk): %s] Calculation finished!", now(), con = con)
   runHook(jc, "post.do.collection", con = con, cache = cache)
   invisible(NULL)
 }
