@@ -10,6 +10,8 @@
 \alias{findNotStarted}
 \alias{findNotSubmitted}
 \alias{findOnSystem}
+\alias{findQueued}
+\alias{findRunning}
 \alias{findStarted}
 \alias{findSubmitted}
 \title{Find and Filter Jobs}
@@ -28,7 +30,11 @@ findNotDone(ids = NULL, reg = getDefaultRegistry())
 
 findErrors(ids = NULL, reg = getDefaultRegistry())
 
-findOnSystem(ids = NULL, status = "all", reg = getDefaultRegistry())
+findOnSystem(ids = NULL, reg = getDefaultRegistry())
+
+findRunning(ids = NULL, reg = getDefaultRegistry())
+
+findQueued(ids = NULL, reg = getDefaultRegistry())
 
 findExpired(ids = NULL, reg = getDefaultRegistry())
 
@@ -46,11 +52,6 @@ If not set, defaults to all jobs.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
-
-\item{status}{[\code{character(1)}]\cr
-If set to \dQuote{all} (default), \code{findOnSystem} finds all jobs on the system.
-If set to \dQuote{queued} or \dQuote{running}, the result is restricted to queued
-or running jobs, respectively.}
 
 \item{expr}{[\code{expression}]\cr
 Predicate expression evaluated in the job parameters.}
