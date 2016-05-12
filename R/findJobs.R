@@ -90,22 +90,34 @@ findErrors = function(ids = NULL, reg = getDefaultRegistry()) {
 
 
 #' @export
-#' @param status [\code{character(1)}]\cr
-#'  If set to \dQuote{all} (default), \code{findOnSystem} finds all jobs on the system.
-#'  If set to \dQuote{queued} or \dQuote{running}, the result is restricted to queued
-#'  or running jobs, respectively.
 #' @rdname findJobs
-findOnSystem = function(ids = NULL, status = "all", reg = getDefaultRegistry()) {
+findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  assertChoice(status, choices = c("all", "queued", "running"))
-  .findOnSystem(reg, ids, status)
+  .findOnSystem(reg, ids)
 }
 
 .findOnSystem = function(reg, ids = NULL, status = "all", batch.ids = getBatchIds(reg, status = status)) {
   if (length(batch.ids) == 0L)
     return(data.table(job.id = integer(0L), key = "job.id"))
   filter(reg$status, ids)[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids$batch.id, "job.id", with = FALSE]
+}
+
+
+#' @export
+#' @rdname findJobs
+findRunning = function(ids = NULL, reg = getDefaultRegistry()) {
+  assertRegistry(reg)
+  syncRegistry(reg)
+  .findOnSystem(reg, ids, batch.ids = getBatchIds(reg, status = "running"))
+}
+
+#' @export
+#' @rdname findJobs
+findQueued = function(ids = NULL, reg = getDefaultRegistry()) {
+  assertRegistry(reg)
+  syncRegistry(reg)
+  .findOnSystem(reg, ids, batch.ids = getBatchIds(reg, status = "queued"))
 }
 
 
