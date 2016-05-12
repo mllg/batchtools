@@ -27,11 +27,11 @@ auto_increment = function(ids, n = 1L) {
   if (length(ids) == 0L) seq_len(n) else max(ids) + seq_len(n)
 }
 
-now = function() {
+ustamp = function() {
   as.integer(Sys.time())
 }
 
-stamp = function() {
+now = function() {
   strftime(Sys.time())
 }
 

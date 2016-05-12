@@ -102,7 +102,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
     repeat {
       runHook(reg, "pre.submit")
-      now = now()
+      now = ustamp()
       submit = reg$cluster.functions$submitJob(reg = reg, jc = jc)
 
       if (submit$status == 0L) {
