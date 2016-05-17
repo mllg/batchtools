@@ -58,4 +58,4 @@ makeClusterFunctionsSGE = function(template = NULL, text = NULL) { # nocov start
 
   makeClusterFunctions(name = "SGE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
     listJobsRunning = listJobsRunning, array.envir.var = "SGE_TASK_ID", store.job = TRUE)
-} # nocov start
+} # nocov end

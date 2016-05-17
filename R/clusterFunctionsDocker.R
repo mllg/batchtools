@@ -81,4 +81,4 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
 
   makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning, store.job = TRUE,
     hooks = list(pre.submit = housekeeping, post.sync = housekeeping))
-} # nocov start
+} # nocov end

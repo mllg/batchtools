@@ -68,4 +68,4 @@ makeClusterFunctionsLSF = function(template = NULL, text = NULL) { # nocov start
 
   makeClusterFunctions(name = "LSF", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
     listJobsRunning = listJobsRunning, array.envir.var = "LSB_JOBINDEX", store.job = TRUE)
-} # nocov start
+} # nocov end
