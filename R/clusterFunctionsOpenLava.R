@@ -68,4 +68,4 @@ makeClusterFunctionsOpenLava = function(template = NULL, text = NULL) { # nocov 
 
   makeClusterFunctions(name = "OpenLava", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
     listJobsRunning = listJobsRunning, array.envir.var = "LSB_JOBINDEX", store.job = TRUE)
-} # nocov start
+} # nocov end

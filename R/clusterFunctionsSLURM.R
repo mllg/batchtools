@@ -83,4 +83,4 @@ makeClusterFunctionsSLURM = function(template = NULL, text = NULL, clusters = NU
 
   makeClusterFunctions(name = "SLURM", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
     listJobsQueued = listJobsQueued, array.envir.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE)
-} # nocov start
+} # nocov end

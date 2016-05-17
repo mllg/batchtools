@@ -60,4 +60,4 @@ makeClusterFunctionsSSH = function(workers) { # nocov start
 
   makeClusterFunctions(name = "SSH", submitJob = submitJob, killJob = killJob,
     listJobsRunning = listJobsRunning, store.job = TRUE)
-} # nocov start
+} # nocov end
