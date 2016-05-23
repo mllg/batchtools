@@ -23,7 +23,7 @@ makeClusterFunctionsTorque = function(template = NULL, text = NULL) { # nocov st
     assertClass(jc, "JobCollection")
 
     outfile = cfBrewTemplate(reg, text, jc)
-    res = runOSCommand("qsub", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
+    res = runOSCommand("qsub", outfile, debug = reg$debug)
 
     max.jobs.msg = "Maximum number of jobs already in queue"
     output = stri_join(res$output, collapse = "\n")

@@ -5,7 +5,7 @@
 \title{Run OS Commands on Local or Remote Machines}
 \usage{
 runOSCommand(sys.cmd, sys.args = character(0L), nodename = "localhost",
-  stop.on.exit.code = TRUE, debug = FALSE)
+  debug = FALSE)
 }
 \arguments{
 \item{sys.cmd}{[\code{character(1)}]\cr
@@ -18,11 +18,8 @@ Arguments to \code{sys.cmd}.}
 Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
 is not piped through SSH.}
 
-\item{stop.on.exit.code}{[\code{logical(1)}]\cr
-Throw an error message if the exit code of \code{sys.cmd} is not \dQuote{0}?}
-
 \item{debug}{[\code{logical(1)}]\cr
-If set to \code{TRUE}, prints the complete command, exit code and output.}
+If set to \code{TRUE}, prints additional output like OS commands, exit codes and returned strings.}
 }
 \value{
 [\code{named list}] with \dQuote{exit.code} (integer) and \dQuote{output} (character).
@@ -36,7 +33,7 @@ and the output.
 \dontrun{
 runOSCommand("ls")
 runOSCommand("ls", "-al")
-runOSCommand("notfound", stop.on.exit.code = FALSE)
+runOSCommand("notfound")
 }
 }
 \seealso{

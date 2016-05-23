@@ -25,7 +25,7 @@ makeClusterFunctionsSGE = function(template = NULL, text = NULL) { # nocov start
     assertClass(jc, "JobCollection")
 
     outfile = cfBrewTemplate(reg, text, jc)
-    res = runOSCommand("qsub", outfile, stop.on.exit.code = FALSE, debug = reg$debug)
+    res = runOSCommand("qsub", outfile, debug = reg$debug)
 
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)

@@ -18,7 +18,7 @@ Load average (of the last 5 min) at which the worker is considered occupied,
 so that no job can be submitted. Default is \code{Inf}.}
 
 \item{debug}{[\code{logical(1)}]\cr
-Set to \code{TRUE} to get more messages for debugging.}
+If set to \code{TRUE}, prints additional output like OS commands, exit codes and returned strings.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

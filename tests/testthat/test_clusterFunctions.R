@@ -69,11 +69,3 @@ test_that("brew", {
   expect_equal(brewed[1], "!!!")
   expect_equal(brewed[2], sprintf("foo=%s", jc$job.hash))
 })
-
-test_that("brew", {
-  skip_on_os("windows")
-  x = runOSCommand("ls", find.package("batchtools"))
-  expect_list(x, names = "named", len = 2)
-  expect_identical(x$exit.code, 0L)
-  expect_true(all(c("DESCRIPTION", "NAMESPACE", "NEWS.md") %in% x$output))
-})

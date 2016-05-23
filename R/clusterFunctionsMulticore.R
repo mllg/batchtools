@@ -10,8 +10,7 @@
 #' @param max.load [\code{numeric(1)}]\cr
 #'   Load average (of the last 5 min) at which the worker is considered occupied,
 #'   so that no job can be submitted. Default is \code{Inf}.
-#' @param debug [\code{logical(1)}]\cr
-#'   Set to \code{TRUE} to get more messages for debugging.
+#' @template debug
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family clusterFunctions
 #' @export

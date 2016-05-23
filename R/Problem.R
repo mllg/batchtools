@@ -26,6 +26,8 @@
 #'   For \code{addAlgorithm}, the algorithm function. The static part is passed as \dQuote{data}, the generated
 #'   problem instance is passed as \dQuote{instance} and the \code{\link{Job}}/\code{\link{Experiment}} as \dQuote{job}.
 #'   Therefore, your function must have the formal arguments \dQuote{job}, \dQuote{data} and \dQuote{instance} (or dots \code{...}).
+#'
+#'   If you do not provide a function, it defaults to a function which just returns the data part (Problem) or the instance (Algorithm).
 #' @param seed [\code{integer(1)}]\cr
 #'   Start seed for this problem. This allows the \dQuote{synchronization} of a stochastic
 #'   problem across algorithms, so that different algorithms are evaluated on the same stochastic instance.

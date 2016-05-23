@@ -11,6 +11,8 @@ test_that("chunkIds", {
   ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
   ids = getJobDefs(reg = reg)[, c("job.id", "problem"), with = FALSE]
 
+  expect_error(chunkIds(1:3, chunk.size = 1, n.chunks = 1, reg = reg), "Either")
+
   res = chunkIds(ids, n.chunks = 1, reg = reg)
   expect_data_table(res, ncol = 2L, any.missing = FALSE, key = "job.id")
   expect_set_equal(names(res), c("job.id", "chunk"))

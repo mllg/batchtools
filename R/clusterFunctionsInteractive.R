@@ -26,7 +26,7 @@ makeClusterFunctionsInteractive = function(external = FALSE, write.logs = TRUE) 
 
   submitJob = function(reg, jc) {
     if (external) {
-      runOSCommand(Rscript(), sprintf("-e \"batchtools::doJobCollection('%s', con = '%s')\"", jc$uri, jc$log.file), stop.on.exit.code = FALSE, debug = reg$debug)
+      runOSCommand(Rscript(), sprintf("-e \"batchtools::doJobCollection('%s', con = '%s')\"", jc$uri, jc$log.file), debug = reg$debug)
       makeSubmitJobResult(status = 0L, batch.id = "cfInteractive", msg = "")
     } else {
       doJobCollection(jc, con = jc$log.file)

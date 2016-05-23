@@ -1,6 +1,6 @@
 #' @rdname ProblemAlgorithm
 #' @export
-addAlgorithm = function(name, fun, reg = getDefaultRegistry())  {
+addAlgorithm = function(name, fun = NULL, reg = getDefaultRegistry())  {
   assertExperimentRegistry(reg, writeable = TRUE)
   assertString(name, min.chars = 1L)
   if (!stri_detect_regex(name, "^[[:alnum:]_.-]+$"))

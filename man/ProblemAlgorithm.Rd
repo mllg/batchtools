@@ -12,7 +12,7 @@
 \alias{removeProblem}
 \title{Define Problems and Algorithms for Experiments}
 \usage{
-addAlgorithm(name, fun, reg = getDefaultRegistry())
+addAlgorithm(name, fun = NULL, reg = getDefaultRegistry())
 
 removeAlgorithm(name, reg = getDefaultRegistry())
 
@@ -37,7 +37,9 @@ Unique identifier for the problem or algorithm.}
 
   For \code{addAlgorithm}, the algorithm function. The static part is passed as \dQuote{data}, the generated
   problem instance is passed as \dQuote{instance} and the \code{\link{Job}}/\code{\link{Experiment}} as \dQuote{job}.
-  Therefore, your function must have the formal arguments \dQuote{job}, \dQuote{data} and \dQuote{instance} (or dots \code{...}).}
+  Therefore, your function must have the formal arguments \dQuote{job}, \dQuote{data} and \dQuote{instance} (or dots \code{...}).
+
+  If you do not provide a function, it defaults to a function which just returns the data part (Problem) or the instance (Algorithm).}
 
 \item{reg}{[\code{\link{ExperimentRegistry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
