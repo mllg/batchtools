@@ -67,7 +67,7 @@ Worker = R6Class("Worker",
     },
 
     kill = function(reg, pid) {
-      runOSCommand(private$script, c("kill-job", pid), debug = private$debug)$exit.code == 0L
+      cfKillJob(reg, private$script, c("kill-job", pid), debug = private$debug)
     },
 
     update = function(reg) {

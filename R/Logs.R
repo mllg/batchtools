@@ -72,21 +72,27 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
 #' @title Inspect Log Files
 #'
 #' @description
-#' Opens a pager to the stored log file. For customization, see \code{\link[base]{file.show}}.
+#' \code{showLog} opens the log in the pager. For customization, see \code{\link[base]{file.show}}.
+#' \code{getLog} returns the log as character vector.
 #' @template id
 #' @template reg
 #' @export
 #' @family debug
 #' @return Nothing.
 showLog = function(id, reg = getDefaultRegistry()) {
+  lines = getLog(id, reg = reg)
+  log.file = file.path(tempdir(), sprintf("%i.log", id$job.id))
+  writeLines(text = lines, con = log.file)
+  file.show(log.file, delete.file = TRUE)
+}
+
+#' @export
+#' @rdname showLog
+getLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
   id = asJobTable(reg, id)
   if (nrow(id) != 1L)
     stopf("You must provide exactly 1 id (%i provided)", nrow(id))
-  lines = readLog(id, reg = reg)
-
-  log.file = file.path(tempdir(), sprintf("%i.log", id$job.id))
-  writeLines(text = lines, con = log.file)
-  file.show(log.file, delete.file = TRUE)
+  readLog(id, reg = reg)
 }

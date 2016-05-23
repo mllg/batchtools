@@ -24,3 +24,13 @@ test_that("waitForJobs: detection of expired jobs", {
     expect_warning(waitForJobs(ids, reg = reg, sleep = 1))
   })
 })
+
+test_that("waitForJobs: filter out unsubmitted jobs", {
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  ids = batchMap(identity, 1:2, reg = reg)
+  silent({
+    submitJobs(ids = 1, reg = reg)
+    expect_warning(res <- waitForJobs(ids = ids, reg = reg), "unsubmitted")
+    expect_true(res)
+  })
+})

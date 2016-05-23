@@ -23,4 +23,7 @@ test_that("filter", {
   tab = filter(reg$status, as.data.frame(findJobs(reg = reg)))
   expect_data_table(tab, ncol = ncol(reg$status), key = "job.id")
   expect_copied(tab, reg$status)
+
+
+  expect_error(filter(reg$status, as.character(1:3)), "not recognized")
 })

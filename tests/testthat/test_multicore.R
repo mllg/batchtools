@@ -11,7 +11,7 @@ test_that("cf multicore", {
     submitJobs(1:2, reg = reg)
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
     expect_true(killJobs(2, reg = reg)$killed)
-    expect_true(waitForJobs(1, reg = reg))
+    expect_true(waitForJobs(1, sleep = 0.5, reg = reg))
     expect_equal(findDone(reg = reg), findJobs(ids = 1, reg = reg))
     expect_equal(findNotDone(reg = reg), findJobs(ids = 2, reg = reg))
   })

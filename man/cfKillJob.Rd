@@ -4,7 +4,8 @@
 \alias{cfKillJob}
 \title{Cluster Functions Helper to Kill Batch Jobs}
 \usage{
-cfKillJob(reg, cmd, args = character(0L), max.tries = 3L)
+cfKillJob(reg, cmd, args = character(0L), max.tries = 3L,
+  debug = reg$debug)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -19,6 +20,9 @@ Arguments to \code{cmd}, including the batch id.}
 \item{max.tries}{[\code{integer(1)}]\cr
 Number of total times to try execute the OS command in cases of failures.
 Default is \code{3}.}
+
+\item{debug}{[\code{logical(1)}]\cr
+If set to \code{TRUE}, prints additional output like OS commands, exit codes and returned strings.}
 }
 \value{
 \code{TRUE} on success. An exception is raised otherwise.

@@ -25,6 +25,14 @@ test_that("makeRegistry", {
   expect_output(print(reg), "Registry")
 })
 
+test_that("reading conf file", {
+  fn = tempfile("conf")
+  writeLines(con = fn, c("debug = TRUE", "default.resources = list(walltime = 42)"))
+  reg = makeRegistry(file.dir = NA, make.default = FALSE, conf.file = fn)
+  expect_true(reg$debug)
+  expect_identical(reg$default.resources, list(walltime = 42))
+})
+
 test_that("make.default does work", {
   if (!interactive()) {
     clearDefaultRegistry()
@@ -37,6 +45,8 @@ test_that("make.default does work", {
 
     expect_true(clearDefaultRegistry())
     expect_error(getDefaultRegistry(), "No default")
+    setDefaultRegistry(reg)
+    expect_class(getDefaultRegistry(), "Registry")
   }
 })
 

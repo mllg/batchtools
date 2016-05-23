@@ -4,7 +4,7 @@
 \alias{cfBrewTemplate}
 \title{Cluster Functions Helper to Write Job Description Files}
 \usage{
-cfBrewTemplate(reg, text, jc)
+cfBrewTemplate(reg, text, jc, debug = reg$debug)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -16,6 +16,9 @@ String ready to be brewed. See \code{\link{cfReadBrewTemplate}} to read a templa
 \item{jc}{[\code{\link{JobCollection})}]\cr
 JobCollection holding all essential information. Will be used as environment to look
 up variables.}
+
+\item{debug}{[\code{logical(1)}]\cr
+If set to \code{TRUE}, prints additional output like OS commands, exit codes and returned strings.}
 }
 \value{
 [\code{character(1)}]. File path to resulting template file.

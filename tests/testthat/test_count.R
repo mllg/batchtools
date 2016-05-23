@@ -1,9 +1,5 @@
 context("count")
 
-count = function(x) {
-  .Call("count_not_missing", x, PACKAGE = "batchtools")
-}
-
 test_that("count", {
   expect_identical(count(1:3), 3L)
   expect_identical(count(integer(0L)), 0L)

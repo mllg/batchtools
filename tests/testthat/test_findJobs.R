@@ -13,6 +13,9 @@ test_that("find[Status]", {
   expect_equal(findNotDone(reg = reg), none)
   expect_equal(findErrors(reg = reg), none)
   expect_equal(findOnSystem(reg = reg), none)
+  expect_equal(findRunning(reg = reg), none)
+  expect_equal(findQueued(reg = reg), none)
+  expect_equal(findExpired(reg = reg), none)
 
   fun = function(i) if (i == 3) stop(i) else i
   ids = batchMap(fun, i = 1:5, reg = reg)
@@ -26,6 +29,9 @@ test_that("find[Status]", {
   expect_equal(findNotDone(reg = reg), all)
   expect_equal(findErrors(reg = reg), none)
   expect_equal(findOnSystem(reg = reg), none)
+  expect_equal(findRunning(reg = reg), none)
+  expect_equal(findQueued(reg = reg), none)
+  expect_equal(findExpired(reg = reg), none)
 
   silent({
     submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
@@ -41,6 +47,9 @@ test_that("find[Status]", {
   expect_equal(findNotDone(reg = reg), all[3L])
   expect_equal(findErrors(reg = reg), all[3L])
   expect_equal(findOnSystem(reg = reg), none)
+  expect_equal(findRunning(reg = reg), none)
+  expect_equal(findQueued(reg = reg), none)
+  expect_equal(findExpired(reg = reg), none)
 })
 
 test_that("Subsetting", {
@@ -81,6 +90,7 @@ test_that("findOnSystem", {
     ids = batchMap(reg = reg, Sys.sleep, c(20, 20))
     submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
+    expect_equal(findExpired(reg = reg), none)
     waitForJobs(reg = reg)
   })
 })

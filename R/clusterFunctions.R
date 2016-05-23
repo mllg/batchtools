@@ -163,13 +163,14 @@ cfReadBrewTemplate = function(template = NULL, text = NULL, comment.string = NA_
 #' @param jc [\code{\link{JobCollection})}]\cr
 #'   JobCollection holding all essential information. Will be used as environment to look
 #'   up variables.
+#' @template debug
 #' @return [\code{character(1)}]. File path to resulting template file.
 #' @family ClusterFunctionsHelper
 #' @export
-cfBrewTemplate = function(reg, text, jc) {
+cfBrewTemplate = function(reg, text, jc, debug = reg$debug) {
   assertString(text)
 
-  outfile = if (reg$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
+  outfile = if (debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
   parent.env(jc) = .GlobalEnv
   on.exit(parent.env(jc) <- emptyenv())
 
@@ -222,16 +223,17 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 #' @param max.tries [\code{integer(1)}]\cr
 #'   Number of total times to try execute the OS command in cases of failures.
 #'   Default is \code{3}.
+#' @template debug
 #' @return \code{TRUE} on success. An exception is raised otherwise.
 #' @family ClusterFunctionsHelper
 #' @export
-cfKillJob = function(reg, cmd, args = character(0L), max.tries = 3L) {
+cfKillJob = function(reg, cmd, args = character(0L), max.tries = 3L, debug = reg$debug) {
   assertString(cmd, min.chars = 1L)
   assertCharacter(args, any.missing = FALSE)
   max.tries = asCount(max.tries)
 
-  for (tmp in seq_len(max.tries)) {
-    res = runOSCommand(cmd, args, stop.on.exit.code = FALSE, debug = reg$debug)
+  for (i in seq_len(max.tries)) {
+    res = runOSCommand(cmd, args, debug = debug)
     if (res$exit.code == 0L)
       return(TRUE)
     Sys.sleep(1)
@@ -274,10 +276,7 @@ getBatchIds = function(reg, status = "all") {
 #' @param nodename [\code{character(1)}]\cr
 #'   Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
 #'   is not piped through SSH.
-#' @param stop.on.exit.code [\code{logical(1)}]\cr
-#'   Throw an error message if the exit code of \code{sys.cmd} is not \dQuote{0}?
-#' @param debug [\code{logical(1)}]\cr
-#'   If set to \code{TRUE}, prints the complete command, exit code and output.
+#' @template debug
 #' @return [\code{named list}] with \dQuote{exit.code} (integer) and \dQuote{output} (character).
 #' @export
 #' @family ClusterFunctions
@@ -285,13 +284,12 @@ getBatchIds = function(reg, status = "all") {
 #' \dontrun{
 #' runOSCommand("ls")
 #' runOSCommand("ls", "-al")
-#' runOSCommand("notfound", stop.on.exit.code = FALSE)
+#' runOSCommand("notfound")
 #' }
-runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost", stop.on.exit.code = TRUE, debug = FALSE) {
+runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost", debug = FALSE) {
   assertCharacter(sys.cmd, any.missing = FALSE, len = 1L)
   assertCharacter(sys.args, any.missing = FALSE)
   assertString(nodename, min.chars = 1L)
-  assertFlag(stop.on.exit.code)
   assertFlag(debug)
 
   if (nodename != "localhost") {
@@ -313,10 +311,7 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
     exit.code = 127L
   }
 
-  if (stop.on.exit.code && exit.code > 0L) {
-    output = if (length(output) == 0L) "" else stri_join(output, collapse = "\n")
-    stopf("Command '%s %s' produced exit code: %i; output: %s", sys.cmd, stri_join(sys.args, collapse = " "), exit.code, output)
-  } else if (debug) {
+  if (debug) {
     catf("OS result (exit code %i):", exit.code)
     print(output)
   }
