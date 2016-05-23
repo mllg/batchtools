@@ -29,6 +29,7 @@ Imports:
     utils
 Suggests:
     e1071,
+    dplyr,
     knitr,
     parallel,
     ranger,
