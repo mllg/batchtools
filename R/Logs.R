@@ -56,7 +56,7 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
   for (i in seq_row(ids)) {
     lines = readLog(ids$job.id[i], impute = NA_character_, reg = reg, read.fun = reader)
     if (!testScalarNA(lines)) {
-      m = stri_detect_regex(lines, pattern, case.insensitive = ignore.case)
+      m = stri_detect_regex(lines, pattern, case_insensitive = ignore.case)
       if (any(m)) {
         found[i] = TRUE
         matches[i] = stri_join(lines[m], collapse = "\n")

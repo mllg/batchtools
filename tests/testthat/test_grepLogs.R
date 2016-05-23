@@ -31,4 +31,7 @@ test_that("grepLogs", {
   expect_equal(grepLogs(pattern = "AAA", reg = reg)$job.id, 1L)
   expect_equal(grepLogs(pattern = "BBB", reg = reg)$job.id, 2L)
   expect_equal(grepLogs(pattern = "CCC", reg = reg)$job.id, 3L)
+
+  expect_equal(grepLogs(pattern = "aaa", reg = reg)$job.id, integer(0L))
+  expect_equal(grepLogs(pattern = "aaa", ignore.case = TRUE, reg = reg)$job.id, 1L)
 })
