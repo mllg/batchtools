@@ -18,13 +18,6 @@ suppressAll = function (expr) {
   invisible(z)
 }
 
-expect_data_table = function(tab, key = NULL, ...) {
-  expect_is(tab, "data.table")
-  expect_data_frame(tab, ...)
-  if (!is.null(key))
-    expect_identical(key(tab), key)
-}
-
 checkTables = function(reg, ...) {
   if (class(reg)[1L] == "Registry") {
     cols = c("def.id", "pars", "pars.hash")

@@ -10,6 +10,9 @@
 #' Listing jobs returns an empty vector (as no jobs can be running when you call this)
 #' and \code{killJob} returns at once (for the same reason).
 #'
+#' @param external [\code{logical(1)}]\cr
+#'   If set to \code{TRUE}, jobs are started in a fresh R session instead of currently active.
+#'   Default is \code{FALSE}.
 #' @param write.logs [\code{logical(1)}]\cr
 #'   Sink the output to log files. Turning logging off can increase the speed of
 #'   calculations but makes it very difficult to debug.
@@ -17,13 +20,20 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family clusterFunctions
 #' @export
-makeClusterFunctionsInteractive = function(write.logs = TRUE) {
+makeClusterFunctionsInteractive = function(external = FALSE, write.logs = TRUE) {
+  assertFlag(external)
   assertFlag(write.logs)
 
   submitJob = function(reg, jc) {
-    doJobCollection(jc, con = jc$log.file)
-    makeSubmitJobResult(status = 0L, batch.id = "cfInteractive", msg = "")
+    if (external) {
+      # writeRDS(jc, file = jc$uri, wait = TRUE)
+      runOSCommand(Rscript(), sprintf("-e \"batchtools::doJobCollection('%s', con = '%s')\"", jc$uri, jc$log.file), stop.on.exit.code = FALSE, debug = TRUE)
+      makeSubmitJobResult(status = 0L, batch.id = "cfInteractive", msg = "")
+    } else {
+      doJobCollection(jc, con = jc$log.file)
+      makeSubmitJobResult(status = 0L, batch.id = "cfInteractive", msg = "")
+    }
   }
 
-  makeClusterFunctions(name = "Interactive", submitJob = submitJob, store.job = FALSE)
+  makeClusterFunctions(name = "Interactive", submitJob = submitJob, store.job = external)
 }

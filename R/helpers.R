@@ -175,3 +175,7 @@ stri_trunc = function(str, length, append = "") {
   }
   return(str)
 }
+
+Rscript = function() {
+  file.path(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
+}

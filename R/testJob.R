@@ -25,10 +25,6 @@
 #'  testJob(2, reg = reg)
 #' }
 testJob = function(id, fresh.session = FALSE, reg = getDefaultRegistry()) {
-  Rscript = function() {
-    file.path(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
-  }
-
   assertRegistry(reg)
   assertFlag(fresh.session)
   id = asJobTable(reg, id)
@@ -37,10 +33,10 @@ testJob = function(id, fresh.session = FALSE, reg = getDefaultRegistry()) {
   job = makeJob(id, reg = reg)
 
   if (fresh.session) {
-    fn = npath(tempfile("testjob_"))
-    fn.r   = stri_join(fn, ".R")
-    fn.job = stri_join(fn, ".job")
-    fn.res = stri_join(fn, ".rds")
+    fn      = npath(tempfile("testjob_"))
+    fn.r    = stri_join(fn, ".R")
+    fn.job  = stri_join(fn, ".job")
+    fn.res  = stri_join(fn, ".rds")
     fn.tmpl = npath(system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE))
 
     writeRDS(job, file = fn.job)
