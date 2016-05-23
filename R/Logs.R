@@ -21,11 +21,13 @@ readLog = function(id, impute = NULL, read.fun = readLines, reg = getDefaultRegi
 #' @template ids
 #' @param pattern [\code{character(1L)}]\cr
 #'  Regular expression.
+#' @param ignore.case [\code{logical(1L)}]\cr
+#'  If \code{TRUE} the match will be performed case insensitive.
 #' @template reg
 #' @export
 #' @family debug
 #' @return [\code{data.table}]. Matching job ids are stored in the column \dQuote{job.id}.
-grepLogs = function(ids = NULL, pattern = "", reg = getDefaultRegistry()) {
+grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefaultRegistry()) {
   Reader = function() {
     last.fn = NA_character_
     lines = NA_character_
@@ -40,12 +42,13 @@ grepLogs = function(ids = NULL, pattern = "", reg = getDefaultRegistry()) {
 
   assertRegistry(reg)
   syncRegistry(reg)
+  assertString(pattern, na.ok = TRUE)
+  assertFlag(ignore.case)
+
   ids = filter(reg$status, ids %??% .findStarted(reg = reg))[, c("job.id", "job.hash"), with = FALSE]
   if (is.na(pattern) || !nzchar(pattern))
     return(ids[, "job.id", with = FALSE])
   setorderv(ids, "job.hash")
-
-  assertString(pattern)
   reader = Reader()
 
   found = logical(nrow(ids))
@@ -53,7 +56,7 @@ grepLogs = function(ids = NULL, pattern = "", reg = getDefaultRegistry()) {
   for (i in seq_row(ids)) {
     lines = readLog(ids$job.id[i], impute = NA_character_, reg = reg, read.fun = reader)
     if (!testScalarNA(lines)) {
-      m = stri_detect_regex(lines, pattern)
+      m = stri_detect_regex(lines, pattern, case.insensitive = ignore.case)
       if (any(m)) {
         found[i] = TRUE
         matches[i] = stri_join(lines[m], collapse = "\n")

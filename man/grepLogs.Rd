@@ -4,7 +4,8 @@
 \alias{grepLogs}
 \title{Grep Log Files for a Pattern}
 \usage{
-grepLogs(ids = NULL, pattern = "", reg = getDefaultRegistry())
+grepLogs(ids = NULL, pattern = "", ignore.case = FALSE,
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -15,6 +16,9 @@ If not set, defaults to the return value of \code{\link{findStarted}}.}
 
 \item{pattern}{[\code{character(1L)}]\cr
 Regular expression.}
+
+\item{ignore.case}{[\code{logical(1L)}]\cr
+If \code{TRUE} the match will be performed case insensitive.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
