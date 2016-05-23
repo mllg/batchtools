@@ -4,9 +4,13 @@
 \alias{makeClusterFunctionsInteractive}
 \title{ClusterFunctions for Sequential Execution in the Running R Session}
 \usage{
-makeClusterFunctionsInteractive(write.logs = TRUE)
+makeClusterFunctionsInteractive(external = FALSE, write.logs = TRUE)
 }
 \arguments{
+\item{external}{[\code{logical(1)}]\cr
+If set to \code{TRUE}, jobs are started in a fresh R session instead of currently active.
+Default is \code{FALSE}.}
+
 \item{write.logs}{[\code{logical(1)}]\cr
 Sink the output to log files. Turning logging off can increase the speed of
 calculations but makes it very difficult to debug.
