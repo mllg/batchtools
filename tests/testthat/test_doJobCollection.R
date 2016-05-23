@@ -24,3 +24,12 @@ test_that("doJobCollection truncates error messages", {
   msg = getErrorMessages(reg = reg)$message
   expect_true(stri_endswith_fixed(msg, " [truncated]"))
 })
+
+test_that("doJobCollection does not swallow warning messages", {
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg$cluster.functions = makeClusterFunctionsInteractive(external = TRUE)
+  fun = function(x) warning("GREPME")
+  batchMap(fun, 1, reg = reg)
+  silent(submitJobs(1, reg = reg))
+  expect_data_table(grepLogs(pattern = "GREPME", reg = reg), nrow = 1)
+})

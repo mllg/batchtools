@@ -33,6 +33,10 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     con = file(con, open = "wt")
     on.exit(close(con))
   }
+  warn = getOption("warn")
+  on.exit(options(warn = warn), add = TRUE)
+  options(warn = 1L)
+
   n.jobs = nrow(jc$defs)
   ncpus = min(n.jobs, jc$resources$chunk.ncpus %??% 1L)
   measure.memory = ncpus == 1L && (jc$resources$measure.memory %??% FALSE)
