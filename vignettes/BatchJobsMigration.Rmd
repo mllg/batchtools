@@ -48,20 +48,7 @@ The packages [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperim
       Some variable names have changed and need to be adapted though.
       See the vignette on cluster functions.
 * Most functions now return a [data.table](https://cran.r-project.org/package=data.table) which is keyed with the `job.id`.
-  This way, return values can be joined together easily and efficient (see example below).
-  Furthermore, you can use these tables to subset ids (but you can still use integers if you want to).
-```{r}
-library(batchtools)
-reg = makeRegistry(file.dir = NA)
-batchMap(function(x, y) x + y, x = 1:5, y = 1)
-ids = findJobs(x > 3)
-print(ids)
-
-# pass ids around ...
-getJobPars(ids)
-# or subset in a second step
-getJobPars()[ids]
-```
+  This way, return values can be joined together easily and efficient (see the vignette on working with job tables).
 
 ### BatchExperiments
 * The building blocks of a problem has been renamed from `static` and `dynamic` to the more intuitive `data` and `fun`.
