@@ -12,8 +12,8 @@ The cluster might have an outage, jobs may run into resource limits or crash, su
 In these situations it is important to quickly determine what went wrong and to recompute only the minimal number of required jobs.
 
 Therefore, before you submit anything you should use [`testJob()`](https://mllg.github.io/batchtools/testJob.html) to catch errors that are easy to spot because they are raised in many or all jobs.
-If `fresh.session` is set, this function runs the job without side effects in an independent R process on your local machine via `Rscript` similar as on the slave, redirects the output of the process to your R console, loads the job result and returns it.
-If you do not set `fresh.session`, the job is executed is in the currently running R session, with the drawback that you might be unable to catch missing variable declarations or missing package dependencies.
+If `external` is set, this function runs the job without side effects in an independent R process on your local machine via `Rscript` similar as on the slave, redirects the output of the process to your R console, loads the job result and returns it.
+If you do not set `external`, the job is executed is in the currently running R session, with the drawback that you might be unable to catch missing variable declarations or missing package dependencies.
 
 By way of illustration here is a small example.
 First, we create a temporary registry.
