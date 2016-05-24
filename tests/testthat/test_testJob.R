@@ -8,8 +8,8 @@ test_that("testJob", {
   expect_equal(testJob(reg = reg, id = 3), 9)
   expect_error(testJob(reg = reg, id = 2), "foo")
 
-  expect_equal(suppressAll(testJob(reg = reg, id = 1, fresh.session = TRUE)), 1)
-  expect_error(suppressAll(testJob(reg = reg, id = 2, fresh.session = TRUE)), "re-run")
+  expect_equal(suppressAll(testJob(reg = reg, id = 1, external = TRUE)), 1)
+  expect_error(suppressAll(testJob(reg = reg, id = 2, external = TRUE)), "re-run")
 
   expect_equal(findSubmitted(reg = reg), data.table(job.id = integer(0L), key = "job.id"))
   expect_equal(findDone(reg = reg), data.table(job.id = integer(0L), key = "job.id"))
@@ -24,6 +24,18 @@ test_that("testJob.ExperimentRegistry", {
 
   suppressAll(x <- testJob(id = 1, reg = reg))
   expect_equal(x, 150)
-  suppressAll(x <- testJob(id = 2, reg = reg, fresh.session = TRUE))
+  suppressAll(x <- testJob(id = 2, reg = reg, external = TRUE))
   expect_equal(x, 150^2)
+})
+
+test_that("traceback works in external session", {
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  f = function(x) {
+    g = function(x) findme(x)
+    findme = function(x) h(x)
+    h = function(x) stop("Error in h")
+    g(x)
+  }
+  batchMap(f, 1, reg = reg)
+  expect_output(expect_error(testJob(1, external = TRUE, reg = reg), "external=FALSE"), "findme")
 })

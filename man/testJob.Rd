@@ -4,19 +4,19 @@
 \alias{testJob}
 \title{Run Jobs Interactively}
 \usage{
-testJob(id, fresh.session = FALSE, reg = getDefaultRegistry())
+testJob(id, external = FALSE, reg = getDefaultRegistry())
 }
 \arguments{
 \item{id}{[\code{integer(1)} or \code{data.table}]\cr
 Single integer to specify the job or a \code{data.table} with column \code{job.id}
 and exactly one row.}
 
-\item{fresh.session}{[\code{logical(1)}]\cr
-Run the job in a fresh R session? If \code{TRUE}, starts a fresh R
+\item{external}{[\code{logical(1)}]\cr
+Run the job in an external R session? If \code{TRUE}, starts a fresh R
 session on the local machine to execute the with \code{\link{execJob}}.
 You will not be able to use debug tools like \code{\link[base]{traceback}}
 or \code{\link[base]{browser}}.
-If \code{fresh.session} is set to \code{FALSE} (default), \code{testJob} will
+If \code{external} is set to \code{FALSE} (default), \code{testJob} will
 execute the job in the current R session, and you are unable to spot
 missing variable declarations (possibly resolved in the global environment) as well
 as forgotten package dependencies.}
