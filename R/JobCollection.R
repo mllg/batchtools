@@ -39,7 +39,7 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
 
 createCollection = function(ids, resources = list(), reg = getDefaultRegistry()) {
   jc            = new.env(parent = emptyenv())
-  jc$debug      = reg$debug
+  jc$debug      = getOption("batchtools.debug", FALSE)
   jc$file.dir   = reg$file.dir
   jc$work.dir   = reg$work.dir
   jc$seed       = reg$seed

@@ -25,7 +25,7 @@ makeClusterFunctionsSGE = function(template = NULL, text = NULL) { # nocov start
     assertClass(jc, "JobCollection")
 
     outfile = cfBrewTemplate(reg, text, jc)
-    res = runOSCommand("qsub", outfile, debug = reg$debug)
+    res = runOSCommand("qsub", outfile)
 
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
@@ -36,7 +36,7 @@ makeClusterFunctionsSGE = function(template = NULL, text = NULL) { # nocov start
   }
 
   listJobs = function(reg, cmd) {
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L], debug = reg$debug)$output
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
     stri_extract_first_regex(tail(batch.ids, -2L), "\\d+")
   }
 

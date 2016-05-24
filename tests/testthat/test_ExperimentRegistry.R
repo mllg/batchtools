@@ -13,7 +13,6 @@ test_that("makeExperimentRegistry", {
   expect_character(reg$namespaces, any.missing = FALSE)
   expect_int(reg$seed, na.ok = FALSE)
   expect_true(reg$writeable)
-  expect_false(reg$debug)
   expect_is(reg$cluster.functions, "ClusterFunctions")
   expect_list(reg$default.resources, names = "strict")
   checkTables(reg, any.missing = FALSE, nrows = 0L)

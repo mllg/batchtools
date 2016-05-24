@@ -25,7 +25,7 @@
 #' @export
 makeClusterFunctionsSLURM = function(template = NULL, text = NULL, clusters = NULL) { # nocov start
   if (!is.null(clusters))
-    checkmate::assertString(clusters, min.chars = 1L)
+    assertString(clusters, min.chars = 1L)
   text = cfReadBrewTemplate(template, text, "##")
 
   submitJob = function(reg, jc) {
@@ -34,7 +34,7 @@ makeClusterFunctionsSLURM = function(template = NULL, text = NULL, clusters = NU
 
     jc$clusters = clusters
     outfile = cfBrewTemplate(reg, text, jc)
-    res = runOSCommand("sbatch", outfile, debug = reg$debug)
+    res = runOSCommand("sbatch", outfile)
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
     temp.error = "Socket timed out on send/recv operation"
@@ -54,7 +54,7 @@ makeClusterFunctionsSLURM = function(template = NULL, text = NULL, clusters = NU
 
   listJobs = function(reg, cmd) {
     cmd = c(cmd, sprintf("--clusters=%s", clusters))
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L], debug = reg$debug)$output
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
 
     # if cluster name is specified, the first line will be the cluster name
     if (!is.null(clusters))

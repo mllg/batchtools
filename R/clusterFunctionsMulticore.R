@@ -10,14 +10,13 @@
 #' @param max.load [\code{numeric(1)}]\cr
 #'   Load average (of the last 5 min) at which the worker is considered occupied,
 #'   so that no job can be submitted. Default is \code{Inf}.
-#' @template debug
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family clusterFunctions
 #' @export
-makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", parallel::detectCores()), 1L), max.load = Inf, debug = FALSE) {
+makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", parallel::detectCores()), 1L), max.load = Inf) {
   if (.Platform$OS.type == "windows")
     stop("clusterFunctionsMulticore not compatible with Windows")
-  worker = Worker$new(nodename = "localhost", ncpus = ncpus, max.load = max.load, debug = debug)
+  worker = Worker$new(nodename = "localhost", ncpus = ncpus, max.load = max.load)
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
@@ -39,7 +38,6 @@ makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", paral
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-
     worker$kill(reg, batch.id)
   }
 

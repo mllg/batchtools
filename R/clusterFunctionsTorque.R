@@ -23,7 +23,7 @@ makeClusterFunctionsTorque = function(template = NULL, text = NULL) { # nocov st
     assertClass(jc, "JobCollection")
 
     outfile = cfBrewTemplate(reg, text, jc)
-    res = runOSCommand("qsub", outfile, debug = reg$debug)
+    res = runOSCommand("qsub", outfile)
 
     max.jobs.msg = "Maximum number of jobs already in queue"
     output = stri_join(res$output, collapse = "\n")
@@ -44,7 +44,7 @@ makeClusterFunctionsTorque = function(template = NULL, text = NULL) { # nocov st
   }
 
   listJobs = function(reg, cmd) {
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L], debug = reg$debug)$output
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
     unique(stri_replace_all_regex(batch.ids, "\\[[0-9]+\\]", "[]"))
   }
 
