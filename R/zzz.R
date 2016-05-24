@@ -21,8 +21,6 @@
 batchtools = new.env(parent = emptyenv())
 batchtools$hooks = c("pre.sync", "post.sync", "pre.do.collection", "post.do.collection", "pre.submit", "post.submit")
 batchtools$remote.hooks = c("pre.do.collection", "post.do.collection")
-
-# Fix for data.table's NSE
 job.id = def.id = pars = submitted = started = done = error = batch.id = status = problem = algorithm = repl = NULL
 
 .onUnload <- function (libpath) {

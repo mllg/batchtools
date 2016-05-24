@@ -31,7 +31,7 @@ yourself.}
 Path to a configuration file which is sourced directly after the registry is created.
 For example, you can set system-specific cluster functions in it.
 The script is executed inside the registry environment, thus you can directly set
-all slots, e.g. \dQuote{debug = TRUE} would overwrite the debug flag of the registry.}
+all slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.}
 
 \item{packages}{[\code{character}]\cr
 Packages that will always be loaded on each node.

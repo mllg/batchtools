@@ -23,14 +23,12 @@ Worker
 
 \item{\code{max.load}}{Maximum load average (of the last 5 min). Set via constructor.}
 
-\item{\code{debug}}{Verbose output. Set via constructor.}
-
 \item{\code{status}}{Status of the worker; one of \dQuote{unknown}, \dQuote{available}, \dQuote{max.cpus} and \dQuote{max.load}.}
 }}
 \section{Methods}{
 
 \describe{
- \item{\code{new(nodename, ncpus, max.load, debug)}}{Constructor.}
+ \item{\code{new(nodename, ncpus, max.load)}}{Constructor.}
  \item{\code{update(reg)}}{Update the worker status.}
  \item{\code{list(reg)}}{List running jobs.}
  \item{\code{start(reg, fn, outfile)}}{Start job collection in file \dQuote{fn} and output to \dQuote{outfile}.}

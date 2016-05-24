@@ -12,7 +12,6 @@ test_that("makeRegistry", {
   expect_character(reg$namespaces, any.missing = FALSE)
   expect_int(reg$seed, na.ok = FALSE)
   expect_true(reg$writeable)
-  expect_false(reg$debug)
   expect_is(reg$cluster.functions, "ClusterFunctions")
   expect_list(reg$default.resources, names = "strict")
   checkTables(reg, any.missing = FALSE, nrows = 0L)
@@ -27,9 +26,8 @@ test_that("makeRegistry", {
 
 test_that("reading conf file", {
   fn = tempfile("conf")
-  writeLines(con = fn, c("debug = TRUE", "default.resources = list(walltime = 42)"))
+  writeLines(con = fn, "default.resources = list(walltime = 42)")
   reg = makeRegistry(file.dir = NA, make.default = FALSE, conf.file = fn)
-  expect_true(reg$debug)
   expect_identical(reg$default.resources, list(walltime = 42))
 })
 

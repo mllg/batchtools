@@ -30,7 +30,7 @@ makeClusterFunctionsOpenLava = function(template = NULL, text = NULL) { # nocov 
     assertClass(jc, "JobCollection")
 
     outfile = cfBrewTemplate(reg, text, jc)
-    res = runOSCommand("bsub", outfile, debug = reg$debug)
+    res = runOSCommand("bsub", outfile)
 
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)
@@ -41,7 +41,7 @@ makeClusterFunctionsOpenLava = function(template = NULL, text = NULL) { # nocov 
   }
 
   listJobs = function(reg, cmd) {
-    res = runOSCommand(cmd[1L], cmd[-1L], debug = reg$debug)$output
+    res = runOSCommand(cmd[1L], cmd[-1L])$output
     if (res$exit.code == 255L && stri_detect_fixed(res$output, "No unfinished job found"))
       return(character(0L))
     if (res$exit.code > 0L)

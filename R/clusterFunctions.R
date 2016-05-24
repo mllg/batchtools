@@ -153,8 +153,8 @@ cfReadBrewTemplate = function(template = NULL, text = NULL, comment.string = NA_
 #' This function is only intended for use in your own cluster functions implementation.
 #'
 #' Calls brew silently on your template, any error will lead to an exception. If debug mode is
-#' enabled, the file is stored at the same place as the corresponding R script in the
-#' \dQuote{jobs}-subdir of your files directory, otherwise in the temp dir via
+#' enabled (via option \dQuote{batchtools.debug}), the file is stored at the same place as the corresponding
+#' R script in the \dQuote{jobs}-subdir of your files directory, otherwise in the temp dir via
 #' \code{\link{tempfile}}.
 #'
 #' @template reg
@@ -163,14 +163,14 @@ cfReadBrewTemplate = function(template = NULL, text = NULL, comment.string = NA_
 #' @param jc [\code{\link{JobCollection})}]\cr
 #'   JobCollection holding all essential information. Will be used as environment to look
 #'   up variables.
-#' @template debug
 #' @return [\code{character(1)}]. File path to resulting template file.
 #' @family ClusterFunctionsHelper
 #' @export
-cfBrewTemplate = function(reg, text, jc, debug = reg$debug) {
+cfBrewTemplate = function(reg, text, jc) {
   assertString(text)
 
-  outfile = if (debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
+  debug = getOption("batchtools.debug", FALSE)
+  outfile = if (isTRUE(debug)) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
   parent.env(jc) = .GlobalEnv
   on.exit(parent.env(jc) <- emptyenv())
 
@@ -223,17 +223,16 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 #' @param max.tries [\code{integer(1)}]\cr
 #'   Number of total times to try execute the OS command in cases of failures.
 #'   Default is \code{3}.
-#' @template debug
 #' @return \code{TRUE} on success. An exception is raised otherwise.
 #' @family ClusterFunctionsHelper
 #' @export
-cfKillJob = function(reg, cmd, args = character(0L), max.tries = 3L, debug = reg$debug) {
+cfKillJob = function(reg, cmd, args = character(0L), max.tries = 3L) {
   assertString(cmd, min.chars = 1L)
   assertCharacter(args, any.missing = FALSE)
   max.tries = asCount(max.tries)
 
   for (i in seq_len(max.tries)) {
-    res = runOSCommand(cmd, args, debug = debug)
+    res = runOSCommand(cmd, args)
     if (res$exit.code == 0L)
       return(TRUE)
     Sys.sleep(1)
@@ -276,7 +275,8 @@ getBatchIds = function(reg, status = "all") {
 #' @param nodename [\code{character(1)}]\cr
 #'   Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
 #'   is not piped through SSH.
-#' @template debug
+#' @param debug [\code{logical(1)}]\cr
+#'   If \code{TRUE}, the commands send to the OS are printed.
 #' @return [\code{named list}] with \dQuote{exit.code} (integer) and \dQuote{output} (character).
 #' @export
 #' @family ClusterFunctions
@@ -286,11 +286,10 @@ getBatchIds = function(reg, status = "all") {
 #' runOSCommand("ls", "-al")
 #' runOSCommand("notfound")
 #' }
-runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost", debug = FALSE) {
+runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost", debug = getOption("batchtools.debug", FALSE)) {
   assertCharacter(sys.cmd, any.missing = FALSE, len = 1L)
   assertCharacter(sys.args, any.missing = FALSE)
   assertString(nodename, min.chars = 1L)
-  assertFlag(debug)
 
   if (nodename != "localhost") {
     sys.args = c(nodename, shQuote(stri_join(c(sys.cmd, sys.args), collapse = " ")))
@@ -299,7 +298,7 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
       sys.args = ""
   }
 
-  if (debug)
+  if (isTRUE(debug))
     info("OS cmd: %s %s", sys.cmd, stri_join(sys.args, collapse = " "))
 
   if (nzchar(Sys.which(sys.cmd))) {
@@ -311,7 +310,7 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
     exit.code = 127L
   }
 
-  if (debug) {
+  if (isTRUE(debug)) {
     catf("OS result (exit code %i):", exit.code)
     print(output)
   }

@@ -4,7 +4,7 @@
 \alias{cfBrewTemplate}
 \title{Cluster Functions Helper to Write Job Description Files}
 \usage{
-cfBrewTemplate(reg, text, jc, debug = reg$debug)
+cfBrewTemplate(reg, text, jc)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -16,9 +16,6 @@ String ready to be brewed. See \code{\link{cfReadBrewTemplate}} to read a templa
 \item{jc}{[\code{\link{JobCollection})}]\cr
 JobCollection holding all essential information. Will be used as environment to look
 up variables.}
-
-\item{debug}{[\code{logical(1)}]\cr
-If set to \code{TRUE}, prints additional output like OS commands, exit codes and returned strings.}
 }
 \value{
 [\code{character(1)}]. File path to resulting template file.
@@ -27,8 +24,8 @@ If set to \code{TRUE}, prints additional output like OS commands, exit codes and
 This function is only intended for use in your own cluster functions implementation.
 
 Calls brew silently on your template, any error will lead to an exception. If debug mode is
-enabled, the file is stored at the same place as the corresponding R script in the
-\dQuote{jobs}-subdir of your files directory, otherwise in the temp dir via
+enabled (via option \dQuote{batchtools.debug}), the file is stored at the same place as the corresponding
+R script in the \dQuote{jobs}-subdir of your files directory, otherwise in the temp dir via
 \code{\link{tempfile}}.
 }
 \seealso{

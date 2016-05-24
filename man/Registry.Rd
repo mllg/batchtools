@@ -57,7 +57,7 @@ yourself.}
 Path to a configuration file which is sourced directly after the registry is created.
 For example, you can set system-specific cluster functions in it.
 The script is executed inside the registry environment, thus you can directly set
-all slots, e.g. \dQuote{debug = TRUE} would overwrite the debug flag of the registry.}
+all slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.}
 
 \item{packages}{[\code{character}]\cr
 Packages that will always be loaded on each node.
@@ -108,7 +108,6 @@ Save the registry to the file system? Default is \code{TRUE}.}
     \item{\code{packages} [character()]:}{Packages to load on the slaves.}
     \item{\code{namespaces} [character()]:}{Namespaces to load on the slaves.}
     \item{\code{seed} [integer(1)]:}{Registry seed. Before each job is executed, the seed \code{seed + job.id} is set.}
-    \item{\code{debug} [logical(1)]:}{Flag to turn additional debug functionality on.}
     \item{\code{cluster.functions} [cluster.functions]:}{Usually set in your \code{conf.file}. Set via a call to \code{\link{makeClusterFunctions}}. See example.}
     \item{\code{default.resources} [named list()]:}{Usually set in your \code{conf.file}. Named list of default resources.}
     \item{\code{max.concurrent.jobs} [integer(1)]:}{Usually set in your \code{conf.file}. Maximum number of concurrent jobs for a single user on the system. \code{\link{submitJobs}} will try to respect this setting.}
@@ -138,11 +137,8 @@ swept using \code{sweepRegistry}.
 reg = makeRegistry(file.dir = NA, make.default = FALSE)
 print(reg)
 
-#' Set debug mode
-reg$debug = TRUE
-
-# Set cluster functions to interactive mode (default)
-reg$cluster.functions = makeClusterFunctionsInteractive()
+# Set cluster functions to interactive mode and start jobs in external R sessions
+reg$cluster.functions = makeClusterFunctionsInteractive(external = TRUE)
 
 # Change default packages
 reg$packages = c("MASS")

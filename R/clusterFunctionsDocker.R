@@ -39,7 +39,7 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
       sprintf("--label batchtools=%s", jc$job.hash),
       sprintf("--name=%s_batchtools_%s", Sys.info()["user"], jc$job.hash),
       image, timeout, "Rscript", stri_join("-e", shQuote(sprintf("batchtools::doJobCollection('%s', '%s')", jc$uri, jc$log.file)), sep = " "))
-    res = runOSCommand(cmd[1L], cmd[-1L], debug = reg$debug)
+    res = runOSCommand(cmd[1L], cmd[-1L])
 
     if (res$exit.code > 0L) {
       no.res.msg = "no resources available to schedule container"
@@ -59,9 +59,9 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
 
   housekeeping = function(reg, ...) {
     args = c(docker.args, "ps", "-a", "--format={{.ID}}", "--filter 'label=batchtools'", "--filter 'status=exited'")
-    batch.ids = intersect(runOSCommand("docker", args, debug = reg$debug)$output, reg$status$batch.id)
+    batch.ids = intersect(runOSCommand("docker", args)$output, reg$status$batch.id)
     if (length(batch.ids) > 0L)
-      runOSCommand("docker", c(docker.args, "rm", batch.ids), debug = reg$debug)
+      runOSCommand("docker", c(docker.args, "rm", batch.ids))
     invisible(TRUE)
   }
 
@@ -73,7 +73,7 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
 
   listJobsRunning = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    res = runOSCommand("docker", c(docker.args, "ps", "--format={{.ID}}", "--filter 'label=batchtools'"), debug = reg$debug)
+    res = runOSCommand("docker", c(docker.args, "ps", "--format={{.ID}}", "--filter 'label=batchtools'"))
     if (res$exit.code == 0L)
       return(res$output)
     stop("docker returned non-zero exit code")
