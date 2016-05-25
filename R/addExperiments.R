@@ -15,7 +15,8 @@
 #' @param repls [\code{integer(1)}]\cr
 #'   Number of replications for each distinct experiment.
 #' @template expreg
-#' @return [\code{data.table}]. Generated job ids are stored in the column \dQuote{job.id}.
+#' @return [\code{\link{data.table}}]. Generated job ids are stored in the column \dQuote{job.id}.
+#'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @export
 #' @family Experiment
 #' @examples

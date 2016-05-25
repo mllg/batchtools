@@ -72,7 +72,8 @@ Predicate expression evaluated in the algorithm parameters.}
 Whitelist of replication numbers. If not provided, all replications are matched.}
 }
 \value{
-[\code{data.table}]. Matching job ids are stored in the column \dQuote{job.id}.
+[\code{\link{data.table}}]. Matching job ids are stored in the column \dQuote{job.id}.
+  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 Use \code{findJobs} to query jobs for which a predicate expression, evaluated on the parameters, yields \code{TRUE}.

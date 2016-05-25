@@ -19,8 +19,8 @@
 #' @param ... [\code{ANY}]\cr
 #'   Additional arguments passed to to function \code{fun}.
 #' @return Aggregated results, return type depends on function. If \code{ids}
-#' is empty, \code{reduceResults} returns \code{init} (if available) or
-#' \code{NULL} otherwise.
+#'   is empty, \code{reduceResults} returns \code{init} (if available) or
+#'   \code{NULL} otherwise.
 #' @template reg
 #' @family Results
 #' @export

@@ -32,6 +32,7 @@
 #'   Individual settings set via \code{resources} \code{resources} overrule those in \code{default.resources}.
 #' @template reg
 #' @return [\code{\link{data.table}}]. Table with columns \dQuote{job.id} and \dQuote{chunk}.
+#'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @export
 submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE)

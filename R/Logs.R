@@ -26,7 +26,8 @@ readLog = function(id, impute = NULL, read.fun = readLines, reg = getDefaultRegi
 #' @template reg
 #' @export
 #' @family debug
-#' @return [\code{data.table}]. Matching job ids are stored in the column \dQuote{job.id}.
+#' @return [\code{\link{data.table}}]. Matching job ids are stored in the column \dQuote{job.id}.
+#'   See \code{\link{JoinTables}} for examples on working with job tables.
 grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefaultRegistry()) {
   Reader = function() {
     last.fn = NA_character_

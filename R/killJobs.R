@@ -11,8 +11,9 @@
 #' @templateVar ids.default findOnSystem
 #' @template ids
 #' @template reg
-#' @return [\code{data.table}] with columns \dQuote{job.id}, the corresponding \dQuote{batch.id} and
+#' @return [\code{\link{data.table}}] with columns \dQuote{job.id}, the corresponding \dQuote{batch.id} and
 #'   the flag \dQuote{killed} to indicate success.
+#'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @family debug
 #' @export
 killJobs = function(ids = NULL, reg = getDefaultRegistry()) {

@@ -9,8 +9,9 @@
 #'   Treat missing results as errors? If \code{TRUE}, an error message is imputed for jobs
 #'   which are not terminated. Default is \code{FALSE}
 #' @template reg
-#' @return [\code{data.table}]. Table with columns \dQuote{job.id}, \dQuote{terminated} (logical),
+#' @return [\code{\link{data.table}}]. Table with columns \dQuote{job.id}, \dQuote{terminated} (logical),
 #'   \dQuote{error} (logical) and \dQuote{message} (string).
+#'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @family debug
 #' @export
 #' @examples

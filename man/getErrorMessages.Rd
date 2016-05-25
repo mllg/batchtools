@@ -22,8 +22,9 @@ which are not terminated. Default is \code{FALSE}}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{data.table}]. Table with columns \dQuote{job.id}, \dQuote{terminated} (logical),
+[\code{\link{data.table}}]. Table with columns \dQuote{job.id}, \dQuote{terminated} (logical),
   \dQuote{error} (logical) and \dQuote{message} (string).
+  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 Extracts error messages from the internal data base and returns them in a compact table.

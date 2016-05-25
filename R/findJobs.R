@@ -148,7 +148,8 @@ findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
 #' @templateVar ids.default all
 #' @template ids
 #' @template reg
-#' @return [\code{data.table}]. Matching job ids are stored in the column \dQuote{job.id}.
+#' @return [\code{\link{data.table}}]. Matching job ids are stored in the column \dQuote{job.id}.
+#'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @export
 #' @examples
 #' reg = makeRegistry(file.dir = NA, make.default = FALSE)

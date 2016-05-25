@@ -17,8 +17,9 @@ If not set, defaults to the return value of \code{\link{findOnSystem}}.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{data.table}] with columns \dQuote{job.id}, the corresponding \dQuote{batch.id} and
+[\code{\link{data.table}}] with columns \dQuote{job.id}, the corresponding \dQuote{batch.id} and
   the flag \dQuote{killed} to indicate success.
+  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 Kill jobs which have already been submitted to the batch system.

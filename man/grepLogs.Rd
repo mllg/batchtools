@@ -24,7 +24,8 @@ If \code{TRUE} the match will be performed case insensitive.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{data.table}]. Matching job ids are stored in the column \dQuote{job.id}.
+[\code{\link{data.table}}]. Matching job ids are stored in the column \dQuote{job.id}.
+  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 Greps through log files and reports jobs with matches.

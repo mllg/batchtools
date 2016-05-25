@@ -17,8 +17,7 @@ If not set, defaults to all jobs.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{\link[data.table]{data.table}}] with class \dQuote{Status} to
-  trigger a nice print function.
+[\code{\link[data.table]{data.table}}] (with class \dQuote{Status} for printing).
 }
 \description{
 This function gives an encompassing overview over the computational status
