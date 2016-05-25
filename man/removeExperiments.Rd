@@ -17,7 +17,8 @@ If not set, defaults to no job.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{data.table}] of removed job ids.
+[\code{\link{data.table}}] of removed job ids.
+  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 Remove Experiments from an \code{\link{ExperimentRegistry}}.

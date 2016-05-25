@@ -6,8 +6,7 @@
 #' @templateVar ids.default all
 #' @template ids
 #' @template reg
-#' @return [\code{\link[data.table]{data.table}}] with class \dQuote{Status} to
-#'   trigger a nice print function.
+#' @return [\code{\link[data.table]{data.table}}] (with class \dQuote{Status} for printing).
 #' @export
 getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)

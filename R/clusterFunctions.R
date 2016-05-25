@@ -163,7 +163,7 @@ cfReadBrewTemplate = function(template = NULL, text = NULL, comment.string = NA_
 #' @param jc [\code{\link{JobCollection})}]\cr
 #'   JobCollection holding all essential information. Will be used as environment to look
 #'   up variables.
-#' @return [\code{character(1)}]. File path to resulting template file.
+#' @return [\code{character(1)}]. File path to brewed template file.
 #' @family ClusterFunctionsHelper
 #' @export
 cfBrewTemplate = function(reg, text, jc) {

@@ -25,7 +25,8 @@ Number of replications for each distinct experiment.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{data.table}]. Generated job ids are stored in the column \dQuote{job.id}.
+[\code{\link{data.table}}]. Generated job ids are stored in the column \dQuote{job.id}.
+  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.

@@ -35,6 +35,7 @@ Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 [\code{\link{data.table}}]. Table with columns \dQuote{job.id} and \dQuote{chunk}.
+  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 Submits all jobs defined with \code{\link{batchMap}} to the batch system.

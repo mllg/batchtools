@@ -16,7 +16,8 @@
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is an empty list.
 #' @template reg
-#' @return [\code{data.table}]. Generated job ids are stored in the column \dQuote{job.id}.
+#' @return [\code{\link{data.table}}]. Generated job ids are stored in the column \dQuote{job.id}.
+#'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @export
 #' @examples
 #' reg = makeRegistry(file.dir = NA, make.default = FALSE)

@@ -21,7 +21,8 @@ Default is an empty list.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{data.table}]. Generated job ids are stored in the column \dQuote{job.id}.
+[\code{\link{data.table}}]. Generated job ids are stored in the column \dQuote{job.id}.
+  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 A parallel \code{\link[base]{Map}} for batch systems.

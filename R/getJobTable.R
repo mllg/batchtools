@@ -20,24 +20,25 @@
 #'   the columns of a \code{\link{ExperimentRegistry}}. Resources are prefixed with \dQuote{res.}.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
-#' @return [\code{data.frame}] with the following columns in no particular order:
-#' \describe{
-#'   \item{job.id}{Unique Job ID as integer.}
-#'   \item{submitted}{Time the job was submitted to the batch system as \code{\link[base]{POSIXct}}.}
-#'   \item{started}{Time the job was started on the batch system as \code{\link[base]{POSIXct}}.}
-#'   \item{done}{Time the job terminated (successfully or with an error) as \code{\link[base]{POSIXct}}.}
-#'   \item{error}{Either \code{NA} if the job terminated successfully or the error message.}
-#'   \item{time.queued}{Time in seconds (as \code{\link[base]{difftime}}) the job was queued.}
-#'   \item{time.running}{Time in seconds (as \code{\link[base]{difftime}}) the job was running.}
-#'   \item{memory}{Estimate of the memory usage.}
-#'   \item{batch.id}{Batch ID as reported by the scheduler.}
-#'   \item{job.hash}{Unique string identifying the job or chunk.}
-#'   \item{resources}{List of computational resources set for this job.}
-#'   \item{pars}{List of parameters/arguments for this job.}
-#'   \item{pars.hash}{MD5 hash of the job parameters.}
-#'   \item{problem}{Only for \code{\link{ExperimentRegistry}}: the problem identifier.}
-#'   \item{algorithm}{Only for \code{\link{ExperimentRegistry}}: the algorithm identifier.}
-#' }
+#' @return [\code{\link{data.table}}] with the following columns:
+#'   \describe{
+#'     \item{job.id}{Unique Job ID as integer.}
+#'     \item{submitted}{Time the job was submitted to the batch system as \code{\link[base]{POSIXct}}.}
+#'     \item{started}{Time the job was started on the batch system as \code{\link[base]{POSIXct}}.}
+#'     \item{done}{Time the job terminated (successfully or with an error) as \code{\link[base]{POSIXct}}.}
+#'     \item{error}{Either \code{NA} if the job terminated successfully or the error message.}
+#'     \item{time.queued}{Time in seconds (as \code{\link[base]{difftime}}) the job was queued.}
+#'     \item{time.running}{Time in seconds (as \code{\link[base]{difftime}}) the job was running.}
+#'     \item{memory}{Estimate of the memory usage.}
+#'     \item{batch.id}{Batch ID as reported by the scheduler.}
+#'     \item{job.hash}{Unique string identifying the job or chunk.}
+#'     \item{resources}{List of computational resources set for this job.}
+#'     \item{pars}{List of parameters/arguments for this job.}
+#'     \item{pars.hash}{MD5 hash of the job parameters.}
+#'     \item{problem}{Only for \code{\link{ExperimentRegistry}}: the problem identifier.}
+#'     \item{algorithm}{Only for \code{\link{ExperimentRegistry}}: the algorithm identifier.}
+#'   }
+#'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @export
 #' @examples
 #' reg = makeRegistry(file.dir = NA, make.default = FALSE)

@@ -34,6 +34,7 @@ Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 [\code{\link[data.table]{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
+  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 Partition jobs into \dQuote{chunks} which will be executed together on the nodes.

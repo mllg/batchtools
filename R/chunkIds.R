@@ -24,6 +24,7 @@
 #'   See example.
 #' @template reg
 #' @return [\code{\link[data.table]{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
+#'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @export
 #' @examples
 #' # chunking for Registry

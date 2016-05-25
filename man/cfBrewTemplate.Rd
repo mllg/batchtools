@@ -18,7 +18,7 @@ JobCollection holding all essential information. Will be used as environment to 
 up variables.}
 }
 \value{
-[\code{character(1)}]. File path to resulting template file.
+[\code{character(1)}]. File path to brewed template file.
 }
 \description{
 This function is only intended for use in your own cluster functions implementation.
