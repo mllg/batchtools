@@ -40,6 +40,8 @@
 #'   Packages that will always be loaded on each node.
 #'   Uses \code{\link[base]{require}} internally.
 #'   Default is \code{character(0)}.
+#'   Note that you can also set \code{default.packages} in your config.
+#'   These are then merged with the packages specified via \code{packages} during construction of the registry.
 #' @param namespaces [\code{character}]\cr
 #'   Same as \code{packages}, but the packages will not be attached.
 #'   Uses \code{\link[base]{requireNamespace}} internally.
@@ -84,7 +86,7 @@
 #' # Set cluster functions to interactive mode and start jobs in external R sessions
 #' reg$cluster.functions = makeClusterFunctionsInteractive(external = TRUE)
 #'
-#' # Change default packages
+#' # Change packages to load
 #' reg$packages = c("MASS")
 #' saveRegistry(reg = reg)
 makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "~/.batchtools.conf.r", packages = character(0L), namespaces = character(0L),
@@ -149,6 +151,10 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "
       assertClass(reg$cluster.functions, "ClusterFunctions")
     if (!is.null(reg$default.resources))
       assertList(reg$default.resources, names = "unique")
+    if (!is.null(reg$default.packages)) {
+      assertCharacter(reg$default.packages, any.missing = FALSE, min.chars = 1L)
+      reg$packages = union(reg$default.packages, reg$packages)
+    }
   }
 
   loadRegistryDependencies(list(work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
@@ -208,24 +214,25 @@ print.Registry = function(x, ...) {
 #'   If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
 #'   registry in an read-only mode.
 #' @rdname Registry
-loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = "~/.batchtools.conf.r",
-  make.default = TRUE, update.paths = FALSE) {
+loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = "~/.batchtools.conf.r", make.default = TRUE, update.paths = FALSE) {
+  assertString(file.dir)
+  assertFlag(make.default)
+  assertFlag(update.paths)
 
   readRegistry = function() {
     fns = file.path(file.dir, c("registry.new.rds", "registry.rds"))
+    fns = fns[file.exists(fns)]
+    if (length(fns) == 0L)
+      stopf("No registry found in '%s'", file.dir)
+
     for (fn in fns) {
-      reg = try(readRDS(file.path(file.dir, "registry.rds")), silent = TRUE)
+      reg = try(readRDS(fns), silent = TRUE)
       if (!is.error(reg))
         return(reg)
       warning(sprintf("Registry file '%s' is corrupt", fn))
     }
     stop("Could not load the registry, files seem to be corrupt")
   }
-
-  assertString(file.dir)
-  assertFlag(make.default)
-  assertFlag(update.paths)
-
   reg = readRegistry()
 
   if (update.paths) {
@@ -236,18 +243,17 @@ loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = "~/.
       reg$writeable = FALSE
   }
 
-  if (!is.null(work.dir))
+  if (!is.null(work.dir)) {
+    assertString(work.dir)
     reg$work.dir = npath(work.dir)
+  }
   if (!dir.exists(reg$work.dir))
     warningf("The work.dir '%s' does not exist, jobs might fail to run on this system.", reg$work.dir)
 
   loadRegistryDependencies(reg, switch.wd = TRUE)
   reg$cluster.functions = makeClusterFunctionsInteractive()
-  if (file.exists(conf.file)) {
-    parent.env(reg) = .GlobalEnv
+  if (file.exists(conf.file))
     sys.source(conf.file, envir = reg, keep.source = FALSE)
-    parent.env(reg) = emptyenv()
-  }
   if (make.default)
     batchtools$default.registry = reg
   syncRegistry(reg = reg)
@@ -263,7 +269,7 @@ saveRegistry = function(reg = getDefaultRegistry()) {
     writeRDS(reg, file = fn[1L], wait = TRUE)
     file.rename(fn[1L], fn[2L])
   }
-  invisible(TRUE)
+  invisible(reg$writeable)
 }
 
 #' @rdname Registry

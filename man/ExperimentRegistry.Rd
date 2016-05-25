@@ -36,7 +36,9 @@ all slots, e.g. \code{default.resources = list(walltime = 3600)} to set default 
 \item{packages}{[\code{character}]\cr
 Packages that will always be loaded on each node.
 Uses \code{\link[base]{require}} internally.
-Default is \code{character(0)}.}
+Default is \code{character(0)}.
+Note that you can also set \code{default.packages} in your config.
+These are then merged with the packages specified via \code{packages} during construction of the registry.}
 
 \item{namespaces}{[\code{character}]\cr
 Same as \code{packages}, but the packages will not be attached.
