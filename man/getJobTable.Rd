@@ -8,18 +8,18 @@
 \alias{getJobTable}
 \title{Query Job Information}
 \usage{
-getJobTable(ids = NULL, pars.as.cols = NULL, resources.as.cols = FALSE,
-  prefix = FALSE, reg = getDefaultRegistry())
+getJobTable(ids = NULL, flatten = NULL, prefix = FALSE,
+  reg = getDefaultRegistry())
 
 getJobStatus(ids = NULL, reg = getDefaultRegistry())
 
-getJobDefs(ids = NULL, pars.as.cols = NULL, prefix = FALSE,
+getJobDefs(ids = NULL, flatten = NULL, prefix = FALSE,
   reg = getDefaultRegistry())
 
-getJobResources(ids = NULL, resources.as.cols = FALSE, prefix = FALSE,
+getJobResources(ids = NULL, flatten = NULL, prefix = FALSE,
   reg = getDefaultRegistry())
 
-getJobPars(ids = NULL, pars.as.cols = NULL, prefix = FALSE,
+getJobPars(ids = NULL, flatten = NULL, prefix = FALSE,
   reg = getDefaultRegistry())
 }
 \arguments{
@@ -29,15 +29,13 @@ with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.}
 
-\item{pars.as.cols}{[\code{logical(1)}]\cr
-Transform the job parameters to data frame columns? Defaults to \code{TRUE} if all parameters
-are atomic vectors, \code{FALSE} otherwise.}
-
-\item{resources.as.cols}{[\code{logical(1)}]\cr
-Transform the resources data frame columns? Default is \code{FALSE}.}
+\item{flatten}{[\code{logical(1)}]\cr
+Transform the job parameters and/or resource specifications to data frame columns?
+Defaults to \code{TRUE} if all elements are atomic vectors, \code{FALSE} otherwise and each row of the
+column will hold a named list. The new columns will be named, depending on the value of \code{prefix}.}
 
 \item{prefix}{[\code{logical(1)}]\cr
-If set to \code{TRUE} (default), the prefix \dQuote{par.} is used to name column names of parameters
+If set to \code{TRUE}, the prefix \dQuote{par.} is used to name column names of parameters
 for a \code{\link{Registry}} and prefixes \dQuote{prob.par.} and \dQuote{algo.par.} are used to name
 the columns of a \code{\link{ExperimentRegistry}}. Resources are prefixed with \dQuote{res.}.}
 
