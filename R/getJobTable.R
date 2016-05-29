@@ -9,13 +9,12 @@
 #'
 #' @templateVar ids.default all
 #' @template ids
-#' @param pars.as.cols [\code{logical(1)}]\cr
-#'   Transform the job parameters to data frame columns? Defaults to \code{TRUE} if all parameters
-#'   are atomic vectors, \code{FALSE} otherwise.
-#' @param resources.as.cols [\code{logical(1)}]\cr
-#'   Transform the resources data frame columns? Default is \code{FALSE}.
+#' @param flatten [\code{logical(1)}]\cr
+#'   Transform the job parameters and/or resource specifications to data frame columns?
+#'   Defaults to \code{TRUE} if all elements are atomic vectors, \code{FALSE} otherwise and each row of the
+#'   column will hold a named list. The new columns will be named, depending on the value of \code{prefix}.
 #' @param prefix [\code{logical(1)}]\cr
-#'   If set to \code{TRUE} (default), the prefix \dQuote{par.} is used to name column names of parameters
+#'   If set to \code{TRUE}, the prefix \dQuote{par.} is used to name column names of parameters
 #'   for a \code{\link{Registry}} and prefixes \dQuote{prob.par.} and \dQuote{algo.par.} are used to name
 #'   the columns of a \code{\link{ExperimentRegistry}}. Resources are prefixed with \dQuote{res.}.
 #' @param reg [\code{\link{Registry}}]\cr
@@ -48,9 +47,9 @@
 #' waitForJobs(reg = reg)
 #'
 #' getJobTable(reg = reg)
-getJobTable = function(ids = NULL, pars.as.cols = NULL, resources.as.cols = FALSE, prefix = FALSE, reg = getDefaultRegistry()) {
-  inner_join(inner_join(getJobStatus(ids, reg = reg), getJobDefs(ids, pars.as.cols = pars.as.cols, prefix = prefix, reg = reg)),
-    getJobResources(ids = ids, resources.as.cols = resources.as.cols, reg = reg))
+getJobTable = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
+  inner_join(inner_join(getJobStatus(ids, reg = reg), getJobDefs(ids, flatten = flatten, prefix = prefix, reg = reg)),
+    getJobResources(ids = ids, flatten = flatten, reg = reg))
 }
 
 #' @export
@@ -70,26 +69,31 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
 
 #' @export
 #' @rdname getJobTable
-getJobDefs = function(ids = NULL, pars.as.cols = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
-  if (!is.null(pars.as.cols))
-    assertFlag(pars.as.cols)
+getJobDefs = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
+  if (!is.null(flatten))
+    assertFlag(flatten)
   assertFlag(prefix)
   tab = inner_join(filter(reg$status, ids), reg$defs)[, c("job.id", names(reg$defs)), with = FALSE]
-  parsAsCols(tab, pars.as.cols, prefix, reg = reg)
+  parsAsCols(tab, flatten, prefix, reg = reg)
   tab[, !"def.id", with = FALSE]
 }
 
 #' @export
 #' @rdname getJobTable
-getJobResources = function(ids = NULL, resources.as.cols = FALSE, prefix = FALSE, reg = getDefaultRegistry()) {
+getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
+  if (!is.null(flatten))
+    assertFlag(flatten)
   assertFlag(prefix)
 
   tab = merge(filter(reg$status, ids), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", names(reg$resources)), with = FALSE]
-  if (resources.as.cols) {
+  if (flatten %??% qtestr(tab$resources, c("v", "L"))) {
     new.cols = rbindlist(tab$resources, fill = TRUE)
-    if (nrow(new.cols) > 0L)
+    if (nrow(new.cols) > 0L) {
+      if (prefix)
+        setnames(new.cols, names(new.cols), stri_join("res.", names(new.cols)))
       tab[, names(new.cols) := new.cols]
+    }
     tab[, "resources" := NULL]
   }
   setkeyv(tab, "job.id")
@@ -98,21 +102,23 @@ getJobResources = function(ids = NULL, resources.as.cols = FALSE, prefix = FALSE
 
 #' @export
 #' @rdname getJobTable
-getJobPars = function(ids = NULL, pars.as.cols = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
+getJobPars = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
+  if (!is.null(flatten))
+    assertFlag(flatten)
   assertFlag(prefix)
   def.cols = c("job.id", setdiff(names(reg$defs), c("def.id", "pars.hash")))
   tab = inner_join(filter(reg$status, ids), reg$defs)[, def.cols, with = FALSE]
-  parsAsCols(tab, pars.as.cols, prefix, reg = reg)
+  parsAsCols(tab, flatten, prefix, reg = reg)
   tab[]
 }
 
-parsAsCols = function(tab, pars.as.cols, prefix, reg = getDefaultRegistry()) {
+parsAsCols = function(tab, flatten, prefix, reg = getDefaultRegistry()) {
   UseMethod("parsAsCols", object = reg)
 }
 
-parsAsCols.Registry = function(tab, pars.as.cols, prefix, reg = getDefaultRegistry()) {
-  if (pars.as.cols %??% qtestr(tab$pars[-2L], c("v", "L"), depth = 2L)) {
+parsAsCols.Registry = function(tab, flatten, prefix, reg = getDefaultRegistry()) {
+  if (flatten %??% qtestr(tab$pars, c("v", "L"), depth = 2L)) {
     new.cols = rbindlist(tab$pars)
     if (ncol(new.cols) > 0L) {
       if (prefix)
@@ -123,11 +129,11 @@ parsAsCols.Registry = function(tab, pars.as.cols, prefix, reg = getDefaultRegist
   }
 }
 
-parsAsCols.ExperimentRegistry = function(tab, pars.as.cols, prefix, reg = getDefaultRegistry()) {
-  if (pars.as.cols %??% qtestr(tab$pars, c("v", "L"), depth = 2L)) {
+parsAsCols.ExperimentRegistry = function(tab, flatten, prefix, reg = getDefaultRegistry()) {
+  if (flatten %??% qtestr(tab$pars, c("v", "L"), depth = 2L)) {
     new.cols = rbindlist(lapply(tab$pars, unlist, recursive = FALSE), fill = TRUE)
     if (ncol(new.cols) > 0L) {
-      pattern = "^(prob|algo).pars."
+      pattern = "^(prob|algo)\\.pars\\."
       replacement = if (prefix) "$1.par." else ""
       setnames(new.cols, names(new.cols), stri_replace_all_regex(names(new.cols), pattern, replacement))
       tab[, names(new.cols) := new.cols]
