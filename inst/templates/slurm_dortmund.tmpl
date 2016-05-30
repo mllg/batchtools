@@ -1,34 +1,27 @@
 #!/bin/bash
 <%
-## Set some sane defaults
-if (is.null(resources$ntasks))
-    resources$ntasks = 1L
-if (is.null(resources$ncpus))
-  resources$ncpus = 1L
+inner.backend = resources$inner.backend %??% "sequential"
+inner.ncpus = resources$inner.ncpus %??% 1L
+walltime = asInt(resources$walltime, lower = 1L, upper = 172800L)
+memory = asInt(resources$memory, lower = 100L, upper = 64000L)
 
-## Check variables
-resources$walltime = checkmate::asInt(resources$walltime, lower = 1L, upper = 172800L)
-resources$memory = checkmate::asInt(resources$memory, lower = 100L, upper = 64000L)
-resources$ntasks = checkmate::asInt(resources$ntasks, lower = 1L)
-resources$ncpus = checkmate::asInt(resources$ncpus, lower = 1L)
-
-if (resources$ntasks == 1L) {
-  cmd = "Rscript"
-  mincpus = 1L
-} else {
+if (inner.backend == "mpi") {
   cmd = "mpirun -np 1 Rscript"
   mincpus = 2L
+} else {
+  cmd = "Rscript"
+  mincpus = 1L
 }
 -%>
 
 #SBATCH --job-name=<%= job.hash %>
 #SBATCH --output=<%= log.file %>
 #SBATCH --error=<%= log.file %>
-#SBATCH --time=<%= ceiling(resources$walltime / 60L)%>
-#SBATCH --ntasks=<%= resources$ntasks %>
+#SBATCH --time=<%= ceiling(walltime / 60L)%>
+#SBATCH --ntasks=<%= if (inner.backend == "mpi") inner.ncpus else 1L %>
 #SBATCH --mincpus=<%= mincpus %>
-#SBATCH --cpus-per-task=<%= resources$ncpus %>
-#SBATCH --mem-per-cpu=<%= resources$memory %>
+#SBATCH --cpus-per-task=<%= if (inner.backend != "mpi") inner.ncpus else 1L %>
+#SBATCH --mem-per-cpu=<%= memory %>
 #SBATCH --partition=all
 
 mkdir /tmp/${USER}-${SLURM_JOBID}
