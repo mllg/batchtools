@@ -28,12 +28,14 @@ Imports:
     stringi,
     utils
 Suggests:
-    e1071,
     dplyr,
+    e1071,
     knitr,
     parallel,
+    parallelMap,
     ranger,
     rmarkdown,
+    Rmpi,
     rpart,
     snow,
     testthat (>= 1.0.1)

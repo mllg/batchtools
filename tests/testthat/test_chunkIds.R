@@ -31,21 +31,3 @@ test_that("chunkIds", {
   expect_equal(as.numeric(tab[1, ]), rep(c(10, 0), c(3, 6)))
   expect_equal(as.numeric(tab[2, ]), rep(c(0, 10), c(3, 6)))
 })
-
-test_that("parallel execution works", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
-  fun = function(i) i^2
-  ids = batchMap(fun, i = 1:4, reg = reg)
-  silent({
-    submitJobs(chunkIds(ids, reg = reg), resources = list(chunk.ncpus = 2, parallel.backend = "snow/socket"), reg = reg)
-    waitForJobs(reg = reg)
-  })
-  expect_true(nrow(findDone(reg = reg)) == 4)
-
-  skip_on_os("windows")
-  silent({
-    submitJobs(chunkIds(ids, reg = reg), resources = list(chunk.ncpus = 2), reg = reg)
-    waitForJobs(reg = reg)
-  })
-  expect_true(nrow(findDone(reg = reg)) == 4)
-})
