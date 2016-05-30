@@ -171,7 +171,7 @@ cfBrewTemplate = function(reg, text, jc) {
 
   debug = getOption("batchtools.debug", FALSE)
   outfile = if (isTRUE(debug)) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
-  parent.env(jc) = .GlobalEnv
+  parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
 
   z = try(brew::brew(text = text, output = outfile, envir = jc), silent = TRUE)
