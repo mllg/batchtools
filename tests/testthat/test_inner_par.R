@@ -5,6 +5,7 @@ fun = function(i) i^2
 ids = batchMap(fun, i = 1:4, reg = reg)
 
 test_that("chunk/socket", {
+  skip_if_not_installed("snow")
   silent({
     submitJobs(chunkIds(ids, reg = reg), resources = list(inner.mode = "chunk", inner.ncpus = 2, inner.backend = "socket"), reg = reg)
     waitForJobs(reg = reg)
@@ -24,6 +25,7 @@ test_that("chunk/multicore", {
 test_that("chunk/Rmpi", {
   skip_if_not_installed("Rmpi")
   skip_on_cran()
+  skip_on_travis()
   silent({
     submitJobs(chunkIds(ids, reg = reg), resources = list(inner.mode = "chunk", inner.ncpus = 2, inner.backend = "mpi"), reg = reg)
     waitForJobs(reg = reg)
@@ -37,6 +39,7 @@ fun = function(i) { fun = function(i) i^2; parallelMap::parallelMap(fun, 1:i)}
 ids = batchMap(fun, i = 1:4, reg = reg)
 
 test_that("pm/socket", {
+  skip_if_not_installed("snow")
   skip_if_not_installed("parallelMap")
   silent({
     submitJobs(chunkIds(ids, reg = reg), resources = list(inner.mode = "pm", inner.ncpus = 2, inner.backend = "socket"), reg = reg)
@@ -59,6 +62,7 @@ test_that("pm/mpi", {
   skip_if_not_installed("parallelMap")
   skip_if_not_installed("Rmpi")
   skip_on_cran()
+  skip_on_travis()
   silent({
     submitJobs(chunkIds(ids, reg = reg), resources = list(inner.mode = "pm", inner.ncpus = 2, inner.backend = "mpi"), reg = reg)
     waitForJobs(reg = reg)

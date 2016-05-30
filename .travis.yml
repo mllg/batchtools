@@ -1,6 +1,6 @@
+sudo: required
+dist: trusty
 language: r
-sudo: false
-cache: packages
 r:
    - release
    - devel
@@ -11,24 +11,26 @@ env:
 
 addons:
  apt:
-   sources:
-   - ubuntu-toolchain-r-test
    packages:
-   - gcc-4.9
-   - g++-4.9
+   - r-cran-rmpi
 
-r_packages:
+r_binary_packages:
   - covr
-
-r_github_packages:
-  - mllg/checkmate
-
-before_install:
-  - mkdir $HOME/bin
-  - export PATH=$HOME/bin:$PATH
-  - ln -s $(which gcc-4.9) $HOME/bin/gcc
-  - ln -s $(which g++-4.9) $HOME/bin/g++
+  - data.table
+  - backports
+  - brew
+  - checkmate
+  - digest
+  - progress
+  - r6
+  - stringi
+  - dplyr
+  - e1071
+  - parallelmap
+  - ranger
+  - rmarkdown
+  - snow
+  - testthat
 
 after_success:
-  - rm $HOME/bin/*
   - Rscript -e 'covr::coveralls()'
