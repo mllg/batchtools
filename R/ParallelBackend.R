@@ -1,9 +1,26 @@
-getDefaultBackend = function(ncpus) {
-  if (ncpus == 1L)
-    return(Sequential$new())
-  if (testOS("windows"))
-    return(Snow$new(ncpus))
-  return(Multicore$new(ncpus))
+getParallelMode = function(mode, backend, ncpus, n.jobs) {
+  if (is.null(mode))
+    return(list(mode = "none", backend = "sequential", ncpus = 1L))
+
+  if (is.null(backend)) {
+    backend = if(testOS("windows")) "socket" else "multicore"
+  }
+
+  if (is.null(ncpus)) {
+    if (backend %in% c("multicore", "socket")) {
+      loadNamespace("parallel")
+      ncpus = max(parallel::detectCores(), 1L)
+    } else if (backend == "mpi") {
+      loadNamespace("Rmpi")
+      ncpus = max(Rmpi::mpi.universe.size() - 1L, 1L)
+    }
+  }
+
+  if (mode == "chunk")
+    ncpus = min(n.jobs, ncpus)
+  if (ncpus <= 1L)
+    return(list(mode = "none", backend = "sequential", ncpus = 1L))
+  return(list(mode = mode, backend = backend, ncpus = ncpus))
 }
 
 Sequential = R6Class("Sequential",
@@ -53,9 +70,13 @@ Snow = R6Class("Snow",
     cl = NULL,
     avail = NULL,
 
-    initialize = function(ncpus) {
+    initialize = function(type, ncpus) {
       loadNamespace("snow")
-      self$cl = snow::makeSOCKcluster(rep.int("localhost", ncpus))
+      if (type == "socket") {
+        self$cl = snow::makeSOCKcluster(rep.int("localhost", ncpus))
+      } else {
+        self$cl = snow::makeMPIcluster(ncpus)
+      }
       self$avail = rep.int(TRUE, ncpus)
       reg.finalizer(self, function(e) if (!is.null(e$cl)) snow::stopCluster(e$cl), onexit = TRUE)
     },

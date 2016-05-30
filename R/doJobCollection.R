@@ -33,39 +33,59 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     con = file(con, open = "wt")
     on.exit(close(con))
   }
+
+  # throw warning immediately
   warn = getOption("warn")
   on.exit(options(warn = warn), add = TRUE)
   options(warn = 1L)
 
+  # say hi
   n.jobs = nrow(jc$defs)
-  ncpus = min(n.jobs, jc$resources$chunk.ncpus %??% 1L)
-  measure.memory = ncpus == 1L && (jc$resources$measure.memory %??% FALSE)
-  cache = Cache$new(jc$file.dir)
-
   s = now()
   catf("[job(chunk): %s] Starting calculation of %i jobs", s, n.jobs, con = con)
   catf("[job(chunk): %s] Setting working directory to '%s'", s, jc$work.dir, con = con)
+
+  # set work dir
   prev.wd = getwd()
   setwd(jc$work.dir)
   on.exit(setwd(prev.wd), add = TRUE)
 
+  # setup inner parallelization
+  inner = getParallelMode(jc$resources$inner.mode, jc$resources$inner.backend, jc$resources$inner.ncpus, n.jobs)
+  if (inner$mode != "none") {
+    if (inner$mode == "chunk") {
+      catf("[job(chunk): %s] Using %i CPUs for inner chunk parallelization", s, inner$ncpus, con = con)
+      p = switch(inner$backend,
+        "sequential" = Sequential$new(),
+        "multicore" = Multicore$new(inner$ncpus),
+        "socket" = Snow$new("socket", inner$ncpus),
+        "mpi" = Snow$new("mpi", inner$ncpus))
+    } else if (inner$mode == "pm") {
+      loadNamespace("parallelMap")
+      parallelMap::parallelStart(mode = inner$backend, cpus = inner$ncpus)
+      on.exit(parallelMap::parallelStop(), add = TRUE)
+      catf("[job(chunk): %s] Using %i CPUs for inner parallelMap parallelization", s, inner$ncpus, con = con)
+      p = Sequential$new()
+    }
+  } else {
+    p = Sequential$new()
+  }
+
+
+  measure.memory = (jc$resources$measure.memory %??% FALSE)
+  catf("[job(chunk): %s] Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"), con = con)
+
+  # try to pre-fetch some objects from the file system and load registry dependencies
+  catf("[job(chunk): %s] Prefetching objects", s, con = con)
+  cache = Cache$new(jc$file.dir)
+  prefetch(jc, cache)
   loadRegistryDependencies(jc, switch.wd = FALSE)
 
-  catf("[job(chunk): %s] Using %i cpus", s, ncpus, con = con)
-  catf("[job(chunk): %s] Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"), con = con)
-  catf("[job(chunk): %s] Prefetching objects", s, ifelse(measure.memory, "enabled", "disabled"), con = con)
-  prefetch(jc, cache)
   runHook(jc, "pre.do.collection", con = con, cache = cache)
 
   count = 1L
   updates = list()
   next.update = ustamp() + as.integer(runif(1L, 300L, 1800L))
-  p = switch(jc$resources$parallel.backend %??% "default",
-    "sequential" = Sequential$new(),
-    "snow/socket" = Snow$new(ncpus),
-    "multicore" = Multicore$new(ncpus),
-    getDefaultBackend(ncpus))
-
   for (i in seq_len(n.jobs)) {
     job = getJob(jc, jc$defs$job.id[i], cache = cache)
     messages = p$spawn(doJob, job = job, measure.memory = measure.memory)

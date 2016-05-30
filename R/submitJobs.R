@@ -12,23 +12,42 @@
 #' to collect partial results.
 #' The progress can be monitored with \code{\link{getJobStatus}}.
 #'
+#' @note
+#' Setting \code{measure.memory} to \code{TRUE} turns on memory measurement: \code{\link[base]{gc}} is called  directly before
+#' and after the job and the difference is stored in the internal database. Note that this is just a rough estimate and does
+#' neither work reliably for external code like C/C++ nor in combination with inner parallelization and threading.
+#'
+#' Furthermore, the package provides support for inner parallelization using threads, sockets or MPI.
+#' I.e., if a \code{\link{JobCollection}} starts on the slave, there are two ways for further parallelization:
+#' Either execute multiple jobs in the chunk in parallel, or let each single job parallelize itself.
+#'
+#' For the first case, \pkg{batchtools} is responsible for the parallelization.
+#' You can enable parallelization on the chunk level by setting the resource \code{inner.mode} to \dQuote{chunk}
+#' and \code{inner.ncpus} to the desired number of CPUs to use. Furthermore, you can select a backend
+#' by setting \code{inner.backend} to one of \dQuote{multicore}, \dQuote{socket} or \dQuote{mpi}.
+#' The resource \code{inner.ncpus} defaults to the number of available CPUs (as reported by
+#' (see \code{\link[parallel]{detectCores}}))
+#' on the executing machine for multicore  and socket mode and defaults to the return value of
+#' \code{\link[Rmpi]{mpi.universe.size}} for MPI.
+#' The backend defaults to \code{socket} for Windows and to \dQuote{multicore} otherwise.
+#'
+#' In the second case, the provided user function must explicitly start parallelization.
+#' However, \pkg{batchtools} provides built-in support for \pkg{parallelMap}.
+#' If you set \code{inner.mode} to \dQuote{pm}, \code{\link[parallelMap]{parallelStart}} is called before the first job
+#' is started and \code{\link[parallelMap]{parallelStop}} is called after the last job in the chunk is terminated.
+#' This way, the used resources for inner parallelization are set like the resources for the outer parallelization and
+#' get automatically stored in the \code{\link{Registry}}. Again, you may set \code{inner.ncpus} and \code{inner.backend}
+#' (defaults are identical to the defaults of parallelization on chunk level).
+#' The user provided function must only call \code{\link[parallelMap]{parallelMap}} for parallelization.
+#'
 #' @templateVar ids.default findNotSubmitted
 #' @template ids
 #' @param resources [\code{named list}]\cr
 #'   Computational  resources for the batch jobs. The elements of this list
 #'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file.
-#'   The resources \code{chunk.ncpus} and \code{measure.memory} are reserved for internal functionality:
-#'   The setting \code{chunk.ncpus} is used to determine the number of CPUs to execute jobs in a
-#'   chunk in parallel via \code{mcparallel} (or \code{\link[snow]{sendCall}} on Windows).
-#'   If not set, \code{chunk.ncpus} defaults to 1 (sequential execution).
-#'   The second reserved resource, \code{measure.memory}, can be set to \code{TRUE} to enable the measure of
-#'   memory requirements using \code{\link[base]{gc}}. But note that the reported values are quite
-#'   heuristic and may not reflect the real memory requirements. Furthermore, measuring memory with
-#'   \code{\link[base]{gc}} in parallel is impossible, thus this feature is disabled if \code{chunk.ncpus}
-#'   is greater than one.
-#'
-#'   Defaults for all resources, the reserved as well as the those depending on your template, can be stored in the \code{\link{Registry}} in
-#'   \code{default.resources} (e.g., using a configuration file).
+#'   See notes for reserved special resource names.
+#'   Defaults can be set in the \code{\link{Registry}} via the variable \code{default.resources} as a named list.
+#'   The setting can be made permanent for all future registries by setting this variable in your configuration file.
 #'   Individual settings set via \code{resources} \code{resources} overrule those in \code{default.resources}.
 #' @template reg
 #' @return [\code{\link{data.table}}]. Table with columns \dQuote{job.id} and \dQuote{chunk}.
@@ -63,11 +82,12 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   }
 
   resources = insert(reg$default.resources, resources)
-
-  if (!is.null(resources$chunk.ncpus))
-    assertCount(resources$chunk.ncpus, positive = TRUE)
-  if (!is.null(resources$parallel.backend))
-    assertChoice(resources$parallel.backend, c("sequential", "multicore", "snow/socket"))
+  if (!is.null(resources$inner.mode))
+    assertChoice(resources$inner.mode, c("chunk", "pm"))
+  if (!is.null(resources$inner.ncpus))
+    assertCount(resources$inner.ncpus, positive = TRUE)
+  if (!is.null(resources$inner.backend))
+    assertChoice(resources$inner.backend, c("sequential", "multicore", "socket", "mpi"))
   if (!is.null(resources$measure.memory))
     assertFlag(resources$measure.memory)
 
