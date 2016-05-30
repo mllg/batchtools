@@ -37,6 +37,6 @@ reg = makeRegistry(file.dir = NA, make.default = FALSE)
 f = function(x, y) x^2 + y
 ids = batchMap(f, x = 1:10, more.args = list(y = 100), reg = reg)
 print(ids)
-getJobTable(reg = reg, pars.as.cols = TRUE)
+getJobTable(reg = reg, flatten = TRUE)
 }
 
