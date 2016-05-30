@@ -1,9 +1,14 @@
-asJobTable = function(reg, ids = NULL, default = NULL, keep.extra = FALSE) {
+asJobTable = function(reg, ids = NULL, default = NULL, keep.extra = FALSE, single.id = FALSE) {
   if (is.null(ids) && !is.null(default))
     return(default)
+
   res = filter(reg$status, ids)[, "job.id", with = FALSE]
-  if (keep.extra && is.data.frame(ids) && ncol(ids) >= 2L)
-    res = cbind(res, ids[, !"job.id", with = FALSE])
+  if (single.id && nrow(res) != 1L) {
+    stopf("You must provide exactly one id (%i provided)", nrow(res))
+  }
+  if (keep.extra && is.data.frame(ids) && ncol(ids) >= 2L) {
+    res = merge(res, ids, by = job.id, all = TRUE)
+  }
   return(res)
 }
 

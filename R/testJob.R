@@ -27,9 +27,7 @@
 testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   assertFlag(external)
-  id = asJobTable(reg, id)
-  if (nrow(id) != 1L)
-    stopf("You must provide exactly 1 id (%i provided)", nrow(id))
+  id = asJobTable(reg, id, single.id = TRUE)
   job = makeJob(id, reg = reg)
 
   if (external) {

@@ -120,7 +120,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
         stopf("Fatal error occurred: %i. %s", submit$status, submit$msg)
       }
     }
-    pb$tick(tokens = list(status = "Submitting "))
+    pb$tick(tokens = list(status = "Submitting"))
   }
 
   ### return ids (on.exit handler kicks now in to submit the remaining messages)
