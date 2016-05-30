@@ -81,7 +81,10 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
 #' @family debug
 #' @return Nothing.
 showLog = function(id, reg = getDefaultRegistry()) {
-  lines = getLog(id, reg = reg)
+  assertRegistry(reg)
+  syncRegistry(reg)
+  id = asJobTable(reg, id, single.id = TRUE)
+  lines = readLog(id, reg = reg)
   log.file = file.path(tempdir(), sprintf("%i.log", id$job.id))
   writeLines(text = lines, con = log.file)
   file.show(log.file, delete.file = TRUE)
@@ -92,8 +95,6 @@ showLog = function(id, reg = getDefaultRegistry()) {
 getLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
-  id = asJobTable(reg, id)
-  if (nrow(id) != 1L)
-    stopf("You must provide exactly 1 id (%i provided)", nrow(id))
+  id = asJobTable(reg, id, single.id = TRUE)
   readLog(id, reg = reg)
 }

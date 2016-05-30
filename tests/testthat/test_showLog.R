@@ -19,4 +19,13 @@ test_that("showLog/getLog", {
   lines = getLog(id = 2, reg = reg)
   expect_true(all(stri_detect_regex(lines, "job\\((2|chunk)\\)")))
   expect_false(any(stri_detect_fixed(lines, "job(1)")))
+
+  with_options(list(pager = function(files, header, title, delete.file) files), {
+    x = showLog(id = 2, reg = reg)
+    expect_equal(basename(x), "2.log")
+    expect_equal(sum(stri_detect_fixed(readLines(x), "GREPME")), 1L)
+  })
+
+  expect_error(getLog(id = 1:2, reg = reg), "exactly")
+  expect_error(getLog(id = 3, reg = reg), "exactly")
 })

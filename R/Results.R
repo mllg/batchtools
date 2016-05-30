@@ -157,9 +157,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
 #' @export
 loadResult = function(id, missing.val = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  id = asJobTable(reg, id)
-  if (nrow(id) != 1L)
-    stopf("You must provide exactly 1 id (%i provided)", nrow(id))
+  id = asJobTable(reg, id, single.id = TRUE)
   fn = file.path(reg$file.dir, "results", sprintf("%i.rds", id$job.id))
   if (!file.exists(fn))
     return(missing.val)
