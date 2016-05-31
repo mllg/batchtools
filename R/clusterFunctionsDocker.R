@@ -5,7 +5,7 @@
 #'
 #' The \code{submitJobs} function executes \code{docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]}.
 #' Arguments \code{docker.args}, \code{image.args} and \code{image} can be set via arguments on construction.
-#' The \code{resources} part takes the named resources \code{ncpus} and \code{memory} from \code{\link{submitJobs}} and maps them to
+#' The \code{resources} part takes the named resources \code{inner.ncpus} and \code{memory} from \code{\link{submitJobs}} and maps them to
 #' the arguments \code{--cpu-shares} and \code{--memory} (in Megabytes).
 #'
 #' \code{listJobsRunning} uses \code{docker [docker.args] ps --format=\{\{.ID\}\}} to filter for running jobs.
@@ -29,12 +29,12 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
-    assertIntegerish(jc$resources$ncpus, lower = 1L, any.missing = FALSE, .var.name = "resources$ncpus")
+    assertIntegerish(jc$resources$inner.ncpus, lower = 1L, any.missing = FALSE, .var.name = "resources$inner.ncpus")
     assertIntegerish(jc$resources$memory, lower = 1L, any.missing = FALSE, .var.name = "resources$memory")
     timeout = if (is.null(jc$resources$walltime)) character(0L) else sprintf("timeout %i", asInt(jc$resources$walltime, lower = 0L))
 
     cmd = c("docker", docker.args, "run", "--detach=true", image.args,
-      sprintf("-c %i", jc$resources$ncpus),
+      sprintf("-c %i", jc$resources$inner.ncpus),
       sprintf("-m %im", jc$resources$memory),
       sprintf("--label batchtools=%s", jc$job.hash),
       sprintf("--name=%s_batchtools_%s", Sys.info()["user"], jc$job.hash),
