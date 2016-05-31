@@ -15,21 +15,21 @@
 #' @note
 #' Setting \code{measure.memory} to \code{TRUE} turns on memory measurement: \code{\link[base]{gc}} is called  directly before
 #' and after the job and the difference is stored in the internal database. Note that this is just a rough estimate and does
-#' neither work reliably for external code like C/C++ nor in combination with inner parallelization and threading.
+#' neither work reliably for external code like C/C++ nor in combination with threading.
 #'
-#' Furthermore, the package provides support for inner parallelization using threads, sockets or MPI.
+#' Furthermore, the package provides support for inner parallelization using threading, sockets or MPI.
 #' I.e., if a \code{\link{JobCollection}} starts on the slave, there are two ways for further parallelization:
-#' Either execute multiple jobs in the chunk in parallel, or let each single job parallelize itself.
+#' Either to execute multiple jobs in the chunk in parallel, or let each single job parallelize itself.
 #'
-#' For the first case, \pkg{batchtools} is responsible for the parallelization.
+#' In the first case, \pkg{batchtools} is directly responsible for the parallelization.
 #' You can enable parallelization on the chunk level by setting the resource \code{inner.mode} to \dQuote{chunk}
 #' and \code{inner.ncpus} to the desired number of CPUs to use. Furthermore, you can select a backend
-#' by setting \code{inner.backend} to one of \dQuote{multicore}, \dQuote{socket} or \dQuote{mpi}.
-#' The resource \code{inner.ncpus} defaults to the number of available CPUs (as reported by
-#' (see \code{\link[parallel]{detectCores}}))
+#' by setting \code{inner.backend} to one of \dQuote{multicore} (\pkg{parallel}), \dQuote{socket} (\pkg{snow})
+#' or \dQuote{mpi} (\pkg{snow} and \pkg{Rmpi}).
+#' The resource \code{inner.ncpus} defaults to the number of available CPUs (as reported by (see \code{\link[parallel]{detectCores}}))
 #' on the executing machine for multicore  and socket mode and defaults to the return value of
-#' \code{\link[Rmpi]{mpi.universe.size}} for MPI.
-#' The backend defaults to \code{socket} for Windows and to \dQuote{multicore} otherwise.
+#' \code{\link[Rmpi]{mpi.universe.size}-1} for MPI.
+#' The backend defaults to \code{socket} for Windows and to \dQuote{multicore} for all other operating systems.
 #'
 #' In the second case, the provided user function must explicitly start parallelization.
 #' However, \pkg{batchtools} provides built-in support for \pkg{parallelMap}.
@@ -38,7 +38,11 @@
 #' This way, the used resources for inner parallelization are set like the resources for the outer parallelization and
 #' get automatically stored in the \code{\link{Registry}}. Again, you may set \code{inner.ncpus} and \code{inner.backend}
 #' (defaults are identical to the defaults of parallelization on chunk level).
-#' The user provided function must only call \code{\link[parallelMap]{parallelMap}} for parallelization.
+#' The user function can just call \code{\link[parallelMap]{parallelMap}} to start parallelization as the backend is already
+#' configured.
+#'
+#' Both ways to parallelize usually require support in the template, e.g.\ you must make sure that the template handles
+#' \code{inner.backend} and starts R using \code{mpirun}. Furthermore, the required packages must be installed on the slaves.
 #'
 #' @templateVar ids.default findNotSubmitted
 #' @template ids
