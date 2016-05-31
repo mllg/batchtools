@@ -1,6 +1,8 @@
 options(warn = 1L, error = function() { traceback(2L); quit(save = "no", status = 1L) })
-
-res = batchtools::execJob("<%= job %>")
+requireNamespace("batchtools", quietly = TRUE)
+jc = readRDS("<%= jc %>")
+batchtools:::loadRegistryDependencies(jc)
+res = batchtools::execJob(jc)
 saveRDS(res, file = "<%= result %>")
 quit(save = "no", status = 0L)
 

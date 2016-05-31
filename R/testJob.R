@@ -28,17 +28,16 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   assertFlag(external)
   id = asJobTable(reg, id, single.id = TRUE)
-  job = makeJob(id, reg = reg)
 
   if (external) {
     fn      = npath(tempfile("testjob_"))
     fn.r    = stri_join(fn, ".R")
-    fn.job  = stri_join(fn, ".job")
+    fn.jc   = stri_join(fn, ".jc")
     fn.res  = stri_join(fn, ".rds")
     fn.tmpl = npath(system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE))
 
-    writeRDS(job, file = fn.job)
-    brew::brew(file = fn.tmpl, output = fn.r, envir = list2env(list(job = fn.job, result = fn.res)))
+    writeRDS(makeJobCollection(id, reg = reg), file = fn.jc, wait = TRUE)
+    brew::brew(file = fn.tmpl, output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))
     res = runOSCommand(Rscript(), fn.r)
 
     if (res$exit.code == 0L) {
@@ -50,6 +49,6 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
     }
   } else {
     loadRegistryDependencies(reg, switch.wd = TRUE)
-    execJob(job = job)
+    execJob(job = makeJob(id, reg = reg))
   }
 }
