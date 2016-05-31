@@ -14,7 +14,7 @@
 \title{Registry Constructor}
 \usage{
 makeRegistry(file.dir = "registry", work.dir = getwd(),
-  conf.file = "~/.batchtools.conf.r", packages = character(0L),
+  conf.file = "~/.batchtools.conf.R", packages = character(0L),
   namespaces = character(0L), source = character(0L),
   load = character(0L), seed = NULL, make.default = TRUE)
 
@@ -25,7 +25,7 @@ setDefaultRegistry(reg)
 clearDefaultRegistry()
 
 loadRegistry(file.dir = "registry", work.dir = NULL,
-  conf.file = "~/.batchtools.conf.r", make.default = TRUE,
+  conf.file = "~/.batchtools.conf.R", make.default = TRUE,
   update.paths = FALSE)
 
 saveRegistry(reg = getDefaultRegistry())
