@@ -1,8 +1,9 @@
 context("findJobs")
 
+none = data.table(job.id = integer(0L), key = "job.id")
+
 test_that("find[Status]", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
-  none = data.table(job.id = integer(0L), key = "job.id")
 
   expect_equal(findJobs(reg = reg), none)
   expect_equal(findSubmitted(reg = reg), none)
@@ -61,7 +62,6 @@ test_that("Subsetting", {
     waitForJobs(reg = reg)
   })
   all = reg$status[, "job.id", with = FALSE]
-  none = data.table(job.id = integer(0L), key = "job.id")
 
   expect_equal(findJobs(ids = 1:3, reg = reg), all[1:3])
   expect_equal(findDone(ids = 3, reg = reg), none)
