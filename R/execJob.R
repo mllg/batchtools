@@ -18,6 +18,14 @@ execJob.character = function(job) {
 }
 
 #' @export
+execJob.JobCollection = function(job) {
+  ids = jc$defs$job.id
+  if (length(ids) != 1L)
+    stop("You must provide a JobCollection with exactly one job")
+  execJob(getJob(job, id = ids))
+}
+
+#' @export
 execJob.Job = function(job) {
   with_seed(job$seed, do.call(job$fun, job$pars, envir = .GlobalEnv))
 }
