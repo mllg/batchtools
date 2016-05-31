@@ -89,7 +89,7 @@
 #' # Change packages to load
 #' reg$packages = c("MASS")
 #' saveRegistry(reg = reg)
-makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "~/.batchtools.conf.r", packages = character(0L), namespaces = character(0L),
+makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "~/.batchtools.conf.R", packages = character(0L), namespaces = character(0L),
   source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
   assertString(file.dir, na.ok = TRUE)
   if (!is.na(file.dir))
@@ -214,7 +214,7 @@ print.Registry = function(x, ...) {
 #'   If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
 #'   registry in an read-only mode.
 #' @rdname Registry
-loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = "~/.batchtools.conf.r", make.default = TRUE, update.paths = FALSE) {
+loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = "~/.batchtools.conf.R", make.default = TRUE, update.paths = FALSE) {
   assertString(file.dir)
   assertFlag(make.default)
   assertFlag(update.paths)
