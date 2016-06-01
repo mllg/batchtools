@@ -16,10 +16,3 @@ test_that("cf multicore", {
     expect_equal(findNotDone(reg = reg), findJobs(ids = 2, reg = reg))
   })
 })
-
-if (FALSE) {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE, packages = "rscimark")
-  batchMap(function(i) rscimark(), i = 1:8, reg = reg)
-  submitJobs(chunkIds(1:8, reg = reg), resources = list(inner.mode = "chunks", inner.ncpus = 4), reg = reg)
-  getErrorMessages(reg = reg)
-}

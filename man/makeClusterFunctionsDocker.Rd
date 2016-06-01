@@ -25,7 +25,7 @@ Experimental cluster functions for Docker/Docker Swarm.
 
 The \code{submitJobs} function executes \code{docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]}.
 Arguments \code{docker.args}, \code{image.args} and \code{image} can be set via arguments on construction.
-The \code{resources} part takes the named resources \code{inner.ncpus} and \code{memory} from \code{\link{submitJobs}} and maps them to
+The \code{resources} part takes the named resources \code{ncpus} and \code{memory} from \code{\link{submitJobs}} and maps them to
 the arguments \code{--cpu-shares} and \code{--memory} (in Megabytes).
 
 \code{listJobsRunning} uses \code{docker [docker.args] ps --format=\{\{.ID\}\}} to filter for running jobs.
