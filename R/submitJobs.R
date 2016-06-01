@@ -17,32 +17,21 @@
 #' and after the job and the difference is stored in the internal database. Note that this is just a rough estimate and does
 #' neither work reliably for external code like C/C++ nor in combination with threading.
 #'
-#' Furthermore, the package provides support for inner parallelization using threading, sockets or MPI.
-#' I.e., if a \code{\link{JobCollection}} starts on the slave, there are two ways for further parallelization:
-#' Either to execute multiple jobs in the chunk in parallel, or let each single job parallelize itself.
+#' Furthermore, the package provides support for inner parallelization using threading, sockets or MPI via the
+#' package \pkg{parallelMap}.
+#' If you set the resource \dQuote{pm.backend} to \dQuote{multicore}, \dQuote{socket} or \dQuote{mpi},
+#' \code{\link[parallelMap]{parallelStart}} is called on the slave before the first job in the chunk is started
+#' and \code{\link[parallelMap]{parallelStop}} is called after the last job terminated.
+#' This way, the used resources for inner parallelization are set in the same place as the resources for the outer parallelization and
+#' get automatically stored in the \code{\link{Registry}}.
+#' The user function just has to call \code{\link[parallelMap]{parallelMap}} to start parallelization to use the configured backend.
 #'
-#' In the first case, \pkg{batchtools} is directly responsible for the parallelization.
-#' You can enable parallelization on the chunk level by setting the resource \code{inner.mode} to \dQuote{chunk}
-#' and \code{inner.ncpus} to the desired number of CPUs to use. Furthermore, you can select a backend
-#' by setting \code{inner.backend} to one of \dQuote{multicore} (\pkg{parallel}), \dQuote{socket} (\pkg{snow})
-#' or \dQuote{mpi} (\pkg{snow} and \pkg{Rmpi}).
-#' The resource \code{inner.ncpus} defaults to the number of available CPUs (as reported by (see \code{\link[parallel]{detectCores}}))
-#' on the executing machine for multicore  and socket mode and defaults to the return value of
-#' \code{\link[Rmpi]{mpi.universe.size}-1} for MPI.
-#' The backend defaults to \code{socket} for Windows and to \dQuote{multicore} for all other operating systems.
+#' You may set the resource \code{ncpus} to control the number of CPUs to use in \pkg{parallelMap}.
+#' \code{ncpus} defaults to the number of available CPUs (as reported by (see \code{\link[parallel]{detectCores}}))
+#' on the executing machine for multicore and socket mode and defaults to the return value of \code{\link[Rmpi]{mpi.universe.size}-1} for MPI.
+#' Furthermore, you can set the \code{level} for \code{\link[parallelMap]{parallelMap}} via \dQuote{pm.level}.
 #'
-#' In the second case, the provided user function must explicitly start parallelization.
-#' However, \pkg{batchtools} provides built-in support for \pkg{parallelMap}.
-#' If you set \code{inner.mode} to \dQuote{pm}, \code{\link[parallelMap]{parallelStart}} is called before the first job
-#' is started and \code{\link[parallelMap]{parallelStop}} is called after the last job in the chunk is terminated.
-#' This way, the used resources for inner parallelization are set like the resources for the outer parallelization and
-#' get automatically stored in the \code{\link{Registry}}. Again, you may set \code{inner.ncpus} and \code{inner.backend}
-#' (defaults are identical to the defaults of parallelization on chunk level).
-#' The user function can just call \code{\link[parallelMap]{parallelMap}} to start parallelization as the backend is already
-#' configured.
-#'
-#' Both ways to parallelize usually require support in the template, e.g.\ you must make sure that the template handles
-#' \code{inner.backend} and starts R using \code{mpirun}. Furthermore, the required packages must be installed on the slaves.
+#' Note that your template must be set up to handle the parallelization, e.g. start R with \code{mpirun} or request the correct number of CPUs.
 #'
 #' @templateVar ids.default findNotSubmitted
 #' @template ids
@@ -86,12 +75,12 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   }
 
   resources = insert(reg$default.resources, resources)
-  if (!is.null(resources$inner.mode))
-    assertChoice(resources$inner.mode, c("chunk", "pm"))
-  if (!is.null(resources$inner.ncpus))
-    assertCount(resources$inner.ncpus, positive = TRUE)
-  if (!is.null(resources$inner.backend))
-    assertChoice(resources$inner.backend, c("sequential", "multicore", "socket", "mpi"))
+  if (!is.null(resources$pm.backend))
+    assertChoice(resources$pm.backend, c("local", "multicore", "socket", "mpi"))
+  if (!is.null(resources$pm.level))
+    assertString(resources$pm.level)
+  if (!is.null(resources$ncpus))
+    assertCount(resources$ncpus, positive = TRUE)
   if (!is.null(resources$measure.memory))
     assertFlag(resources$measure.memory)
 

@@ -51,26 +51,14 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   on.exit(setwd(prev.wd), add = TRUE)
 
   # setup inner parallelization
-  inner = getParallelMode(jc$resources$inner.mode, jc$resources$inner.backend, jc$resources$inner.ncpus, n.jobs)
-  if (inner$mode != "none") {
-    if (inner$mode == "chunk") {
-      catf("[job(chunk): %s] Using %i CPUs for inner chunk parallelization", s, inner$ncpus, con = con)
-      p = switch(inner$backend,
-        "sequential" = Sequential$new(),
-        "multicore" = Multicore$new(inner$ncpus),
-        "socket" = Snow$new("socket", inner$ncpus),
-        "mpi" = Snow$new("mpi", inner$ncpus))
-    } else if (inner$mode == "pm") {
-      loadNamespace("parallelMap")
-      parallelMap::parallelStart(mode = inner$backend, cpus = inner$ncpus)
-      on.exit(parallelMap::parallelStop(), add = TRUE)
-      catf("[job(chunk): %s] Using %i CPUs for inner parallelMap parallelization", s, inner$ncpus, con = con)
-      p = Sequential$new()
-    }
-  } else {
-    p = Sequential$new()
+  if (!is.null(jc$resources$pm.backend)) {
+    loadNamespace("parallelMap")
+    pm.opts = filterNull(list(mode = jc$resources$pm.backend, cpus = jc$resources$ncpus, level = jc$resources$pm.level, show.info = FALSE))
+    do.call(parallelMap::parallelStart, pm.opts)
+    on.exit(parallelMap::parallelStop(), add = TRUE)
+    pm.opts = parallelMap::parallelGetOptions()$settings
+    catf("[job(chunk): %s] Using %i CPUs for parallelMap/%s", s, pm.opts$cpus, pm.opts$mode, con = con)
   }
-
 
   measure.memory = (jc$resources$measure.memory %??% FALSE)
   catf("[job(chunk): %s] Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"), con = con)
@@ -80,39 +68,69 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   cache = Cache$new(jc$file.dir)
   prefetch(jc, cache)
   loadRegistryDependencies(jc, switch.wd = FALSE)
+  buf = UpdateBuffer$new(jc$defs$job.id)
 
   runHook(jc, "pre.do.collection", con = con, cache = cache)
 
-  count = 1L
-  updates = list()
-  next.update = ustamp() + as.integer(runif(1L, 300L, 1800L))
   for (i in seq_len(n.jobs)) {
     job = getJob(jc, jc$defs$job.id[i], cache = cache)
-    messages = p$spawn(doJob, job = job, measure.memory = measure.memory)
-    if (length(messages) > 0L) {
-      updates = c(updates, lapply(messages, "[[", "update"))
-      lapply(messages, function(r) catc(r$output, con = con))
+    id = job$id
+
+    catf("[job(%i): %s] Starting job with job.id=%i", id, now(), id, con = con)
+    update = list(started = ustamp(), done = NA_integer_, error = NA_character_, memory = NA_real_)
+    if (measure.memory) {
+      gc(reset = TRUE)
+      result = capture(execJob(job))
+      update$memory = sum(gc()[, 6L])
+    } else {
+      result = capture(execJob(job))
     }
+    update$done = ustamp()
+    catf("[job(%i): %s] %s", id, now(), result$output, con = con)
 
-    if (length(updates) > 0L && ustamp() > next.update) {
-      writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
-      updates = list()
-      count = count + 1L
-      next.update = ustamp() + as.integer(runif(1L, 300L, 1800L))
+    if (is.error(result$res)) {
+      catf("[job(%i): %s] Job terminated with an exception", id, now(), con = con)
+      update$error = stri_trunc(stri_trim_both(as.character(result$res)), 500L, " [truncated]")
+    } else {
+      catf("[job(%i): %s] Job terminated successfully", id, now(), con = con)
+      writeRDS(result$res, file = file.path(job$cache$file.dir, "results", sprintf("%i.rds", id)))
     }
+    buf$add(id, update)
+    buf$flush(jc)
   }
 
-  messages = p$collect()
-  if (length(messages) > 0L) {
-    updates = c(updates, lapply(messages, "[[", "update"))
-    lapply(messages, function(r) catc(r$output, con = con))
-  }
-
-  if (length(updates) > 0L) {
-    writeRDS(rbindlist(updates), file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
-  }
+  buf$flush(jc, force = TRUE)
 
   catf("[job(chunk): %s] Calculation finished!", now(), con = con)
   runHook(jc, "post.do.collection", con = con, cache = cache)
   invisible(NULL)
 }
+
+
+UpdateBuffer = R6Class("UpdateBuffer",
+  cloneable = FALSE,
+  public = list(
+    updates = NULL,
+    next.update = NA_integer_,
+    initialize = function(ids) {
+      self$updates = data.table(job.id = ids, started = NA_integer_, done = NA_integer_, error = NA_character_, memory = NA_real_, written = 0L, key = "job.id")
+      self$next.update = ustamp() + as.integer(runif(1L, 300L, 1800L))
+    },
+
+    add = function(id, x) {
+      self$updates[list(id), names(x) := x]
+    },
+
+    flush = function(jc, force = FALSE) {
+      if (force || ustamp() > self$next.update) {
+        i = self$updates[!is.na(started) & written == 0L, which = TRUE]
+        if (length(i) > 0L) {
+          count = max(self$updates$written) + 1L
+          writeRDS(self$updates[i, !"written", with = FALSE], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
+          self$updates[i, "written" := count]
+          self$next.update = ustamp() + as.integer(runif(1L, 300L, 1800L))
+        }
+      }
+    }
+  )
+)
