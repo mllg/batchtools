@@ -33,3 +33,18 @@ test_that("doJobCollection does not swallow warning messages", {
   silent(submitJobs(1, reg = reg))
   expect_data_table(grepLogs(pattern = "GREPME", reg = reg), nrow = 1)
 })
+
+test_that("doJobCollection signals slave errors", {
+  fn = tempfile(fileext = ".R")
+  assign("y_on_master", 2, envir = .GlobalEnv)
+  writeLines("x <- y_on_master", fn)
+  reg = makeRegistry(file.dir = NA, make.default = FALSE, source = fn)
+  rm(y_on_master, envir = .GlobalEnv)
+
+  expect_error(loadRegistryDependencies(reg), "y_on_master")
+  batchMap(identity, 1, reg = reg)
+  silent(submitJobs(1, reg = reg))
+  expect_data_table(findErrors(reg = reg), nrow = 1)
+  expect_string(getErrorMessages(reg = reg)$message, fixed = "y_on_master")
+  file.remove(fn)
+})

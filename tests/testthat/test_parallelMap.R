@@ -1,4 +1,4 @@
-context("inner parallelization")
+context("parallelMap")
 
 reg = makeRegistry(file.dir = NA, make.default = FALSE)
 fun = function(i) { fun = function(i) i^2; parallelMap::parallelMap(fun, 1:i)}
@@ -24,8 +24,9 @@ test_that("pm/multicore", {
 })
 
 test_that("pm/mpi", {
-  skip_if_not_installed("parallelMap")
   skip_if_not_installed("Rmpi")
+  skip_if_not_installed("snow")
+  skip_if_not_installed("parallelMap")
   skip_on_cran()
   skip_on_travis()
   silent({
