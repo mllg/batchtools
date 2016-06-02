@@ -339,13 +339,19 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
   }
 
   if (length(x$source) > 0L) {
-    assertFile(x$source)
-    lapply(x$source, sys.source, envir = .GlobalEnv)
+    for (fn in x$source) {
+      sys.source(fn, envir = .GlobalEnv)
+      if (is.error(ok))
+        stopf("Error sourcing file '%s': %s", fn, as.character(ok))
+    }
   }
 
   if (length(x$load) > 0L) {
-    assertFile(x$load)
-    lapply(x$load, load, envir = .GlobalEnv)
+    for (fn in x$load) {
+      ok = try(load(fn, envir = .GlobalEnv), silent = TRUE)
+      if (is.error(ok))
+        stopf("Error loading file '%s': %s", fn, as.character(ok))
+    }
   }
 
   invisible(TRUE)

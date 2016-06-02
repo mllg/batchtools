@@ -46,13 +46,16 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   catf("[job(chunk): %s] Setting working directory to '%s'", s, jc$work.dir, con = con)
 
   # set work dir
+  if (!dir.exists(jc$work.dir))
+    return(slaveError(jc, "Work dir does not exist"))
   prev.wd = getwd()
   setwd(jc$work.dir)
   on.exit(setwd(prev.wd), add = TRUE)
 
   # setup inner parallelization
   if (!is.null(jc$resources$pm.backend)) {
-    loadNamespace("parallelMap")
+    if (!requireNamespace("parallelMap", quiet = TRUE))
+      return(slaveError(jc, "parallelMap not installed"))
     pm.opts = filterNull(list(mode = jc$resources$pm.backend, cpus = jc$resources$ncpus, level = jc$resources$pm.level, show.info = FALSE))
     do.call(parallelMap::parallelStart, pm.opts)
     on.exit(parallelMap::parallelStop(), add = TRUE)
@@ -64,10 +67,10 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   catf("[job(chunk): %s] Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"), con = con)
 
   # try to pre-fetch some objects from the file system and load registry dependencies
-  catf("[job(chunk): %s] Prefetching objects", s, con = con)
   cache = Cache$new(jc$file.dir)
-  prefetch(jc, cache)
-  loadRegistryDependencies(jc, switch.wd = FALSE)
+  ok = try(loadRegistryDependencies(jc, switch.wd = FALSE), silent = TRUE)
+  if (is.error(ok))
+    return(slaveError(jc, sprintf("Error loading registry dependencies: %s", as.character(ok))))
   buf = UpdateBuffer$new(jc$defs$job.id)
 
   runHook(jc, "pre.do.collection", con = con, cache = cache)
@@ -93,7 +96,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
       update$error = stri_trunc(stri_trim_both(as.character(result$res)), 500L, " [truncated]")
     } else {
       catf("[job(%i): %s] Job terminated successfully", id, now(), con = con)
-      writeRDS(result$res, file = file.path(job$cache$file.dir, "results", sprintf("%i.rds", id)))
+      writeRDS(result$res, file = file.path(jc$file.dir, "results", sprintf("%i.rds", id)))
     }
     buf$add(id, update)
     buf$flush(jc)
@@ -134,3 +137,11 @@ UpdateBuffer = R6Class("UpdateBuffer",
     }
   )
 )
+
+slaveError = function(jc, msg) {
+  updates = data.table(job.id = jc$defs$job.id, started = ustamp(), done = ustamp(),
+    error = stri_trunc(stri_trim_both(msg), 500L, " [truncated]"),
+    memory = NA_real_, key = "job.id")
+  writeRDS(updates, file = file.path(jc$file.dir, "updates", sprintf("%s-0.rds", jc$job.hash)), wait = TRUE)
+  invisible(NULL)
+}
