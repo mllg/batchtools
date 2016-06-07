@@ -19,9 +19,9 @@ Worker
 \describe{
 \item{\code{nodename}}{Host name. Set via constructor.}
 
-\item{\code{ncpus}}{Number of VPUs of worker. Set via constructor.}
+\item{\code{ncpus}}{Number of VPUs of worker. Set via constructor and defaults to the number of CPUs of the machine.}
 
-\item{\code{max.load}}{Maximum load average (of the last 5 min). Set via constructor.}
+\item{\code{max.load}}{Maximum load average (of the last 5 min). Set via constructor and defaults to the number of CPUs of the machine.}
 
 \item{\code{status}}{Status of the worker; one of \dQuote{unknown}, \dQuote{available}, \dQuote{max.cpus} and \dQuote{max.load}.}
 }}
@@ -32,7 +32,7 @@ Worker
  \item{\code{update(reg)}}{Update the worker status.}
  \item{\code{list(reg)}}{List running jobs.}
  \item{\code{start(reg, fn, outfile)}}{Start job collection in file \dQuote{fn} and output to \dQuote{outfile}.}
- \item{\code{kill(reg, pid)}}{Kill job matching the process id.}
+ \item{\code{kill(reg, batch.id)}}{Kill job matching the \dQuote{batch.id}.}
 }
 }
 \examples{
