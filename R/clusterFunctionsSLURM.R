@@ -48,7 +48,7 @@ makeClusterFunctionsSLURM = function(template = NULL, text = NULL, clusters = NU
     } else if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("sbatch", res$exit.code, res$output)
     } else {
-      makeSubmitJobResult(status = 0L, batch.id = stri_trim_both(stri_split_fixed(output, " ")[[1L]][4L]))
+      makeSubmitJobResult(status = 0L, batch.id = stri_trim_both(stri_split_fixed(output[1L], " ")[[1L]][4L]))
     }
   }
 

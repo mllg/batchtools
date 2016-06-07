@@ -1,7 +1,9 @@
 #' @title ClusterFunctions for Remote SSH Execution
 #'
 #' @description
-#' Jobs are spawned by starting multiple R sessions via SSH.
+#' Jobs are spawned by starting multiple R sessions via \code{Rscript} over SSH.
+#' If the hostname of the \code{\link{Worker}} equals \dQuote{localhost},
+#' \code{Rscript} is called directly so that you do not need to have an SSH client installed.
 #'
 #' @param workers [\code{list} of \code{\link{Worker}}]\cr
 #'   List of Workers as constructed with \code{\link{Worker}}.
@@ -15,10 +17,13 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family clusterFunctions
 #' @export
+#' @examples
+#' \dontrun{
+#' # cluster functions for multicore execution on the local machine
+#' makeClusterFunctionsSSH(list(Worker$new("localhost", ncpus = 2)))
+#' }
 makeClusterFunctionsSSH = function(workers) { # nocov start
   assertList(workers, types = "Worker")
-  if (testOS("windows"))
-    stop("clusterFunctionsSSH not compatible with Windows")
   nodenames = vcapply(workers, "[[", "nodename")
   if (anyDuplicated(nodenames))
     stop("Duplicated hostnames found in list of workers")
@@ -29,8 +34,8 @@ makeClusterFunctionsSSH = function(workers) { # nocov start
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
 
-    lapply(workers, function(w) w$update())
-    rload = vnapply(workers, function(w) w$load / w$ncpus)
+    lapply(workers, function(w) w$update(reg))
+    rload = vnapply(workers, function(w) w$max.load / w$ncpus)
     worker = Find(function(w) w$status == "available", sample(workers, prob = 1 / (rload + 0.1)), nomatch = NULL)
 
     if (!is.null(worker) && worker$status == "available") {
@@ -41,16 +46,15 @@ makeClusterFunctionsSSH = function(workers) { # nocov start
         makeSubmitJobResult(status = 0L, batch.id = sprintf("%s#%s", worker$nodename, pid))
       }
     } else {
-      makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = sprintf("Busy: %s", worker$status))
+      makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = sprintf("Busy: %s", workers[[1L]]$status))
     }
   }
 
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-    parts = stri_split_fixed(batch.id, "#")[[1L]]
-    worker = workers[[parts[1L]]]
-    worker$kill(parts[2L])
+    nodename = stri_split_fixed(batch.id, "#", n = 2L)[[1L]][1L]
+    workers[[nodename]]$kill(reg, batch.id)
   }
 
   listJobsRunning = function(reg) {
