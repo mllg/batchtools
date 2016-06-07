@@ -1,12 +1,12 @@
-context("cf multicore")
+context("cf ssh")
 
-test_that("cf multicore", {
+test_that("cf ssh", {
   skip_on_os("windows")
-  # skip("does not work with R CMD check")
 
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
-  reg$cluster.functions = makeClusterFunctionsMulticore(ncpus = 99, max.load = Inf)
-  ids = batchMap(Sys.sleep, time = c(10, 5), reg = reg)
+  workers = list(Worker$new("localhost", ncpus = 2, max.load = 9999))
+  reg$cluster.functions = makeClusterFunctionsSSH(workers)
+  ids = batchMap(Sys.sleep, time = c(5, 5), reg = reg)
   silent({
     submitJobs(1:2, reg = reg)
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))

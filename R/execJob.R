@@ -19,7 +19,7 @@ execJob.character = function(job) {
 
 #' @export
 execJob.JobCollection = function(job) {
-  ids = jc$defs$job.id
+  ids = job$defs$job.id
   if (length(ids) != 1L)
     stop("You must provide a JobCollection with exactly one job")
   execJob(getJob(job, id = ids))

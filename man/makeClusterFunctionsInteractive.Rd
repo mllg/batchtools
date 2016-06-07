@@ -31,6 +31,7 @@ and \code{killJob} returns at once (for the same reason).
 }
 \seealso{
 Other clusterFunctions: \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsSSH}}
+  \code{\link{makeClusterFunctionsSSH}},
+  \code{\link{makeClusterFunctionsSocket}}
 }
 

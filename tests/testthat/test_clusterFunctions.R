@@ -9,10 +9,8 @@ test_that("clusterFunctions constructor", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   check(reg$cluster.functions)
   check(makeClusterFunctionsInteractive())
-  if (!testOS("windows")) {
-    check(makeClusterFunctionsMulticore(ncpus = 1, max.load = 1))
+  if (!testOS("windows"))
     check(makeClusterFunctionsSSH(workers = list(Worker$new(nodename = "localhost", ncpus = 1L))))
-  }
   check(makeClusterFunctionsSGE(text = "foo"))
   check(makeClusterFunctionsTorque(text = "foo"))
   check(makeClusterFunctionsSLURM(text = "foo"))

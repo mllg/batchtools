@@ -87,7 +87,7 @@ test_that("findOnSystem", {
   if (is.null(reg$cluster.functions$listJobsRunning))
     skip("Test requires listJobsRunning")
   silent({
-    ids = batchMap(reg = reg, Sys.sleep, c(20, 20))
+    ids = batchMap(reg = reg, Sys.sleep, c(10, 10))
     submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
     expect_equal(findExpired(reg = reg), none)

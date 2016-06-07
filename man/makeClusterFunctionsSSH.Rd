@@ -14,7 +14,9 @@ List of Workers as constructed with \code{\link{Worker}}.}
 [\code{\link{ClusterFunctions}}].
 }
 \description{
-Jobs are spawned by starting multiple R sessions via SSH.
+Jobs are spawned by starting multiple R sessions via \code{Rscript} over SSH.
+If the hostname of the \code{\link{Worker}} equals \dQuote{localhost},
+\code{Rscript} is called directly so that you do not need to have an SSH client installed.
 }
 \note{
 If you use a custom \dQuote{.ssh/config} file, make sure your
@@ -22,8 +24,15 @@ ProxyCommand passes \sQuote{-q} to ssh, otherwise each output will
 end with the message \dQuote{Killed by signal 1} and this will break
 the communication with the nodes.
 }
+\examples{
+\dontrun{
+# cluster functions for multicore execution on the local machine
+makeClusterFunctionsSSH(list(Worker$new("localhost", ncpus = 2)))
+}
+}
 \seealso{
 Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsMulticore}}
+  \code{\link{makeClusterFunctionsMulticore}},
+  \code{\link{makeClusterFunctionsSocket}}
 }
 

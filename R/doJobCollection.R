@@ -11,7 +11,7 @@
 #' @param con [\code{\link[base]{connection}} | \code{character(1)}]\cr
 #'   A connection for the output. Defaults to \code{\link[base]{stdout}}.
 #'   Alternatively the name of a file to write to.
-#' @return [\code{NULL}].
+#' @return [\code{character(1)}]: Hash of the \code{\link{JobCollection}} executed.
 #' @export
 doJobCollection = function(jc, con = stdout()) {
   UseMethod("doJobCollection")
@@ -34,7 +34,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     on.exit(close(con))
   }
 
-  # throw warning immediately
+  # signal warnings immediately
   warn = getOption("warn")
   on.exit(options(warn = warn), add = TRUE)
   options(warn = 1L)
@@ -54,7 +54,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
 
   # setup inner parallelization
   if (!is.null(jc$resources$pm.backend)) {
-    if (!requireNamespace("parallelMap", quiet = TRUE))
+    if (!requireNamespace("parallelMap", quietly = TRUE))
       return(slaveError(jc, "parallelMap not installed"))
     pm.opts = filterNull(list(mode = jc$resources$pm.backend, cpus = jc$resources$ncpus, level = jc$resources$pm.level, show.info = FALSE))
     do.call(parallelMap::parallelStart, pm.opts)
@@ -106,7 +106,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
 
   catf("[job(chunk): %s] Calculation finished!", now(), con = con)
   runHook(jc, "post.do.collection", con = con, cache = cache)
-  invisible(NULL)
+  invisible(jc$job.hash)
 }
 
 

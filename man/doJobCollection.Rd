@@ -17,7 +17,7 @@ A connection for the output. Defaults to \code{\link[base]{stdout}}.
 Alternatively the name of a file to write to.}
 }
 \value{
-[\code{NULL}].
+[\code{character(1)}]: Hash of the \code{\link{JobCollection}} executed.
 }
 \description{
 Executes every job in a \code{\link{JobCollection}}.

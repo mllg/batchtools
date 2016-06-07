@@ -1,0 +1,30 @@
+context("cf multicore / cf socket")
+
+test_that("cf multicore", {
+  skip_on_os("windows")
+
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg$cluster.functions = makeClusterFunctionsMulticore()
+  ids = batchMap(Sys.sleep, time = c(5, 5), reg = reg)
+  silent({
+    submitJobs(1:2, reg = reg)
+    expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
+    expect_true(waitForJobs(sleep = 0.5, reg = reg))
+    expect_data_table(findOnSystem(reg = reg), nrow = 0)
+    expect_equal(findDone(reg = reg), findJobs(reg = reg))
+  })
+})
+
+test_that("cf socket", {
+  skip_if_not_installed("snow")
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg$cluster.functions = makeClusterFunctionsSocket()
+  ids = batchMap(Sys.sleep, time = c(5, 5), reg = reg)
+  silent({
+    submitJobs(1:2, reg = reg)
+    expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
+    expect_true(waitForJobs(sleep = 0.5, reg = reg))
+    expect_data_table(findOnSystem(reg = reg), nrow = 0)
+    expect_equal(findDone(reg = reg), findJobs(reg = reg))
+  })
+})
