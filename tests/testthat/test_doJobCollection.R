@@ -38,10 +38,12 @@ test_that("doJobCollection does not swallow warning messages", {
 })
 
 test_that("doJobCollection signals slave errors", {
-  fn = tempfile(fileext = ".R")
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  fn = tempfile(fileext = ".R", tmpdir = reg$temp.dir)
+  reg$source = fn
+  saveRegistry(reg)
   assign("y_on_master", 2, envir = .GlobalEnv)
   writeLines("x <- y_on_master", fn)
-  reg = makeRegistry(file.dir = NA, make.default = FALSE, source = fn)
   rm(y_on_master, envir = .GlobalEnv)
 
   expect_error(loadRegistryDependencies(reg), "y_on_master")
