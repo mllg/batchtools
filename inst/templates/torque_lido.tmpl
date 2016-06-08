@@ -3,24 +3,31 @@
 ## Set sane defaults
 if (is.null(resources$modules))
   resources$modules = character(0L)
-if (is.null(resources$parcpus))
-    resources$parcpus = 1L
+if (is.null(resources$ncpus))
+    resources$ncpus = 1L
+use.mpi = (resources$pm.backend %??% "default") == "mpi"
 
 ## Check variables
-resources$walltime = checkmate::asInt(resources$walltime, lower = 60L, upper = 3600L * 672L)
-resources$memory = checkmate::asInt(resources$memory, lower = 100L, upper = 64L * 1024L)
-resources$parcpus = checkmate::asInt(resources$parcpus, lower = 1L)
-checkmate::assertCharacter(resources$modules, any.missing = FALSE)
-checkmate::assertString(resources$R)
+resources$walltime = asInt(resources$walltime, lower = 60L, upper = 3600L * 672L)
+resources$memory = asInt(resources$memory, lower = 100L, upper = 64L * 1024L)
+resources$ncpus = asInt(resources$ncpus, lower = 1L)
+assertCharacter(resources$modules, any.missing = FALSE)
+if (is.null(resources$R)) {
+  resources$R = "R-3.2.5-gcc-4.8.5-base"
+} else {
+  assertString(resources$R)
+}
 if (!is.null(resources$type))
-    checkmate::assertString(resources$type)
+  assertString(resources$type)
 if (resources$memory > 15000)
-    resources$type = "quad"
+  resources$type = "quad"
 
 ## first string of queue, selected by walltime
 walltimes = 3600L * c(1L, 8L, 48L, 672L)
-queue = c("short", "med", "long", "ultralong")[checkmate::wf(resources$walltime <= walltimes)]
-modules = paste0(c("binutils", "gcc/4.8.5", "openblas", resources$R), collapse = " ")
+queue = c("short", "med", "long", "ultralong")[wf(resources$walltime <= walltimes)]
+modules = paste0(c("binutils", "gcc/4.8.5", resources$R), collapse = " ")
+if (use.mpi)
+  modules = c(modules, "openmpi")
 
 ## very ugly hack because we cannot log to data (nobackup) filesystem on lido,
 ## only home fs is available
@@ -43,7 +50,7 @@ if (length(grep("^/data/", log.file)) > 0L) {
 
 #PBS -N <%= job.hash %>
 #PBS -o <%= log.file %>
-#PBS -l walltime=<%= resources$walltime %>,nodes=<%= resources$parcpus %><%= if (!is.null(resources$type)) paste0(":", resources$type) %>,vmem=<%= resources$memory %>M
+#PBS -l walltime=<%= resources$walltime %>,nodes=<%= if (use.mpi) resources$ncpus else 1 %>:ppn=<%= if (use.mpi) 1 else resources$ncpus %><%= if (!is.null(resources$type)) paste0(":", resources$type) %>,vmem=<%= resources$memory %>M
 #PBS -q <%= queue %>
 #PBS -j oe
 
@@ -55,5 +62,5 @@ module add <%= modules %>
 mkdir /scratch/${USER}-${PBS_JOBID}
 export TMPDIR=/scratch/${USER}-${PBS_JOBID}
 ## run R
-Rscript -e 'batchtools::doJobCollection("<%= uri %>")'
+<%= if (use.mpi) "mpirun -np 1 " else "" %>Rscript -e 'batchtools::doJobCollection("<%= uri %>")'
 rm -rf /scratch/${USER}-${PBS_JOBID}
