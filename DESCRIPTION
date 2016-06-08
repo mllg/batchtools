@@ -36,6 +36,7 @@ Suggests:
     ranger,
     rmarkdown,
     rpart,
+    snow,
     testthat (>= 1.0.1)
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
