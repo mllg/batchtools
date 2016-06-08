@@ -8,7 +8,7 @@ Multicore = R6Class("Multicore",
       loadNamespace("parallel")
       self$pids = rep.int(NA_integer_, ncpus)
       self$hashes = character(ncpus)
-      reg.finalizer(self, function(e) parallel::mccollect(wait = TRUE), onexit = FALSE)
+      reg.finalizer(self, function(e) parallel::mccollect(self$pids[!is.na(self$pids)], wait = TRUE), onexit = FALSE)
     },
 
     spawn = function(jc) {
