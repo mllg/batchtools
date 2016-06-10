@@ -57,10 +57,14 @@ Registry. If not explicitly passed, uses the last created registry.}
 Predicate expression evaluated in the job parameters.}
 
 \item{prob.name}{[\code{character}]\cr
-Whitelist of problem names. If not provided, all problems are matched.}
+Whitelist of problem names.
+If the string starts with \dQuote{~}, it is treated as regular expression.
+If not provided, all problems are matched.}
 
 \item{algo.name}{[\code{character}]\cr
-Whitelist of algorithm names. If not provided, all algorithms are matched.}
+Whitelist of algorithm names.
+If the string starts with \dQuote{~}, it is treated as regular expression.
+If not provided, all algorithms are matched.}
 
 \item{prob.pars}{[\code{expression}]\cr
 Predicate expression evaluated in the problem parameters.}
