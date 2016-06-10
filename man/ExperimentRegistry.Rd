@@ -18,8 +18,8 @@ makeExperimentRegistry(file.dir = "registry", work.dir = getwd(),
   If you pass \code{NA}, a temporary directory will be used.
   This way, you can create disposable registries for \code{\link{btlapply}} or examples.
   By default, the temporary directory \code{\link[base]{tempdir}()} will be used.
-  If you want to use another temp directory, e.g. a directory which is shared between nodes,
-  you can set it in your configuration via \code{temp.dir}.}
+  If you want to use another directory, e.g. a directory which is shared between nodes,
+  you can set it in your configuration file by setting the variable \code{temp.dir}.}
 
 \item{work.dir}{[\code{character(1)}]\cr
 Working directory for R process when experiment is executed.
