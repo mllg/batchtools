@@ -37,12 +37,12 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
       sprintf("-c %i", jc$resources$ncpus),
       sprintf("-m %im", jc$resources$memory),
       sprintf("--label batchtools=%s", jc$job.hash),
-      sprintf("--name=%s_batchtools_%s", Sys.info()["user"], jc$job.hash),
+      sprintf("--name=%s_bt_%s", Sys.info()["user"], jc$job.hash),
       image, timeout, "Rscript", stri_join("-e", shQuote(sprintf("batchtools::doJobCollection('%s', '%s')", jc$uri, jc$log.file)), sep = " "))
     res = runOSCommand(cmd[1L], cmd[-1L])
 
     if (res$exit.code > 0L) {
-      no.res.msg = "no resources available to schedule container"
+      no.res.msg = "no resources available"
       if (res$exit.code == 1L && any(stri_detect_fixed(res$output, no.res.msg)))
         return(makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = no.res.msg))
       return(cfHandleUnknownSubmitError(stri_join(cmd, collapse = " "), res$exit.code, res$output))

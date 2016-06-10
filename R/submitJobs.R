@@ -94,13 +94,14 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   }
   on.exit(saveRegistry(reg))
 
-  wait = 5
   info("Submitting %i jobs in %i chunks using cluster functions '%s' ...", nrow(ids), length(chunks), reg$cluster.functions$name)
   update = data.table(submitted = NA_integer_, started = NA_integer_, done = NA_integer_, error = NA_character_,
     memory = NA_real_, resource.id = res.id, batch.id = NA_character_, job.hash = NA_character_)
 
+  default.wait = 5
   pb = makeProgressBar(total = length(chunks), format = ":status [:bar] :percent eta: :eta", tokens = list(status = "Submitting"))
   for (ch in chunks) {
+    wait = default.wait
     ids.chunk = ids[ids$chunk == ch, nomatch = 0L, "job.id", with = FALSE]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
@@ -110,7 +111,8 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
       # count chunks or job.id (unique works on the key of ids)
       while (uniqueN(ids[.findOnSystem(reg = reg), on = "job.id", nomatch = 0L]) >= max.concurrent.jobs) {
         pb$tick(0, tokens = list(status = "Waiting   "))
-        Sys.sleep(5)
+        Sys.sleep(wait)
+        wait = wait * 1.025
       }
     }
 
@@ -128,6 +130,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
         # temp error
         pb$tick(0L, tokens = list(status = submit$msg))
         Sys.sleep(wait)
+        wait = wait * 1.025
       } else if (submit$status > 100L && submit$status <= 200L) {
         # fatal error
         stopf("Fatal error occurred: %i. %s", submit$status, submit$msg)
