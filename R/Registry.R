@@ -24,8 +24,8 @@
 #'   If you pass \code{NA}, a temporary directory will be used.
 #'   This way, you can create disposable registries for \code{\link{btlapply}} or examples.
 #'   By default, the temporary directory \code{\link[base]{tempdir}()} will be used.
-#'   If you want to use another temp directory, e.g. a directory which is shared between nodes,
-#'   you can set it in your configuration via \code{temp.dir}.
+#'   If you want to use another directory, e.g. a directory which is shared between nodes,
+#'   you can set it in your configuration file by setting the variable \code{temp.dir}.
 #' @param work.dir [\code{character(1)}]\cr
 #'   Working directory for R process when experiment is executed.
 #'   For \code{makeRegistry}, this defaults to the current working directory.
@@ -214,7 +214,7 @@ print.Registry = function(x, ...) {
 #'   If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
 #'   registry in an read-only mode.
 #' @rdname Registry
-loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = "~/.batchtools.conf.R", make.default = TRUE, update.paths = FALSE) {
+loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = "~/.batchtools.conf.R", make.default = TRUE, update.paths = FALSE) {
   assertString(file.dir)
   assertFlag(make.default)
   assertFlag(update.paths)
@@ -237,16 +237,21 @@ loadRegistry = function(file.dir = "registry", work.dir = NULL, conf.file = "~/.
 
   if (update.paths) {
     reg$file.dir = npath(file.dir)
-  } else if (npath(file.dir) != npath(reg$file.dir)) {
-      warning("The absolute path of the file.dir has changed. Enabling read-only mode for the registry.")
-      reg$file.dir = npath(file.dir)
+  } else {
+    before = npath(reg$file.dir)
+    after = npath(file.dir)
+    if (before != after) {
+      warningf("The absolute path of the file.dir has changed (before '%s', now '%s'). Enabling read-only mode for the registry.", before, after)
+      reg$file.dir = after
       reg$writeable = FALSE
+    }
   }
 
   if (!is.null(work.dir)) {
     assertString(work.dir)
     reg$work.dir = npath(work.dir)
   }
+
   if (!dir.exists(reg$work.dir))
     warningf("The work.dir '%s' does not exist, jobs might fail to run on this system.", reg$work.dir)
 
