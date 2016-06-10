@@ -111,6 +111,18 @@ test_that("findExperiments", {
   tab = findExperiments(reg = reg, prob.name = "p1")
   expect_data_table(tab, nrow = 60, ncol = 1, key = "job.id")
 
+  tab = findExperiments(reg = reg, prob.name = c("p1", "p2"))
+  expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
+
+  tab = findExperiments(reg = reg, prob.name = "~p.")
+  expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
+
+  tab = findExperiments(reg = reg, prob.name = "~2$")
+  expect_data_table(tab, nrow = 30, ncol = 1, key = "job.id")
+
+  tab = findExperiments(reg = reg, prob.name = c("~^p"))
+  expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
+
   tab = findExperiments(reg = reg, prob.name = "p2")
   expect_data_table(tab, nrow = 30, ncol = 1, key = "job.id")
 
@@ -125,6 +137,15 @@ test_that("findExperiments", {
 
   tab = findExperiments(reg = reg, algo.pars = sq == 2)
   expect_data_table(tab, nrow = 30, ncol = 1, key = "job.id")
+
+  tab = findExperiments(reg = reg, algo.name = "a1")
+  expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
+
+  tab = findExperiments(reg = reg, algo.name = "~a.")
+  expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
+
+  tab = findExperiments(reg = reg, algo.name = "a.")
+  expect_data_table(tab, nrow = 0, ncol = 1, key = "job.id")
 
   tab = findExperiments(reg = reg, repls = 1:2)
   expect_data_table(tab, nrow = 18, ncol = 1, key = "job.id")

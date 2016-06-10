@@ -181,9 +181,13 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
 #' @export
 #' @rdname findJobs
 #' @param prob.name [\code{character}]\cr
-#'   Whitelist of problem names. If not provided, all problems are matched.
+#'   Whitelist of problem names.
+#'   If the string starts with \dQuote{~}, it is treated as regular expression.
+#'   If not provided, all problems are matched.
 #' @param algo.name [\code{character}]\cr
-#'   Whitelist of algorithm names. If not provided, all algorithms are matched.
+#'   Whitelist of algorithm names.
+#'   If the string starts with \dQuote{~}, it is treated as regular expression.
+#'   If not provided, all algorithms are matched.
 #' @param prob.pars [\code{expression}]\cr
 #'   Predicate expression evaluated in the problem parameters.
 #' @param algo.pars [\code{expression}]\cr
@@ -191,6 +195,13 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
 #' @param repls [\code{integer}]\cr
 #'   Whitelist of replication numbers. If not provided, all replications are matched.
 findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.pars, repls = NULL, ids = NULL, reg = getDefaultRegistry()) {
+  strmatch = function(x, pattern) {
+    y = split(pattern, ifelse(stri_startswith_fixed(pattern, "~"), "regex", "table"))
+    for (p in y$regex)
+      y$table = union(y$table, stri_subset_regex(levels(x), stri_sub(p, 2L)))
+    x %in% y$table
+  }
+
   assertExperimentRegistry(reg)
   syncRegistry(reg)
 
@@ -199,12 +210,12 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
 
   if (!is.null(prob.name)) {
     assertCharacter(prob.name, any.missing = FALSE, min.chars = 1L)
-    tab = tab[problem %in% prob.name]
+    tab = tab[strmatch(problem, prob.name)]
   }
 
   if (!is.null(algo.name)) {
     assertCharacter(algo.name, any.missing = FALSE, min.chars = 1L)
-    tab = tab[algorithm %in% algo.name]
+    tab = tab[strmatch(algorithm, algo.name)]
   }
 
   if (!missing(prob.pars)) {
