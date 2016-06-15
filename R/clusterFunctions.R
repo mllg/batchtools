@@ -136,7 +136,7 @@ cfReadBrewTemplate = function(template = NULL, text = NULL, comment.string = NA_
     assertString(text)
     lines = stri_trim_both(stri_split_lines(text)[[1L]])
   } else {
-    assertFile(template, "r")
+    assertFileExists(template, "r")
     lines = stri_trim_both(readLines(template))
   }
   lines = lines[!stri_isempty(lines)]
