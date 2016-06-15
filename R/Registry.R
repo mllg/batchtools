@@ -95,7 +95,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "
   if (!is.na(file.dir))
     assertPathForOutput(file.dir, overwrite = FALSE)
   assertString(work.dir)
-  assertDirectory(work.dir, access = "r")
+  assertDirectoryExists(work.dir, access = "r")
   assertString(conf.file)
   assertCharacter(packages, any.missing = FALSE, min.chars = 1L)
   assertCharacter(namespaces, any.missing = FALSE, min.chars = 1L)
