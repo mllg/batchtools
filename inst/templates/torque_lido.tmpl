@@ -13,7 +13,7 @@ resources$memory = asInt(resources$memory, lower = 100L, upper = 64L * 1024L)
 resources$ncpus = asInt(resources$ncpus, lower = 1L)
 assertCharacter(resources$modules, any.missing = FALSE)
 if (is.null(resources$R)) {
-  resources$R = "R-3.2.5-gcc-4.8.5-base"
+  resources$R = "R/3.3.1-gcc48-base"
 } else {
   assertString(resources$R)
 }
