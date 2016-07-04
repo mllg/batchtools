@@ -282,7 +282,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% .findDone(reg = reg)$job.id)
   if (length(i) > 0L) {
     info("Removing %i obsolete result files", length(i))
-    file.remove(file.path(reg$file.dir, "results", result.files))
+    file.remove(file.path(reg$file.dir, "results", result.files[i]))
   }
 
   log.files = list.files(file.path(reg$file.dir, "logs"))

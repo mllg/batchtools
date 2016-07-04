@@ -41,6 +41,6 @@ testJob(1, reg = reg)
 \seealso{
 Other debug: \code{\link{getErrorMessages}},
   \code{\link{grepLogs}}, \code{\link{killJobs}},
-  \code{\link{showLog}}
+  \code{\link{resetJobs}}, \code{\link{showLog}}
 }
 

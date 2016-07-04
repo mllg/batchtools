@@ -31,7 +31,7 @@ killed are reset in the DB.
 }
 \seealso{
 Other debug: \code{\link{getErrorMessages}},
-  \code{\link{grepLogs}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+  \code{\link{grepLogs}}, \code{\link{resetJobs}},
+  \code{\link{showLog}}, \code{\link{testJob}}
 }
 

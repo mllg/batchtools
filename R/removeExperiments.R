@@ -2,6 +2,9 @@
 #'
 #' @description
 #' Remove Experiments from an \code{\link{ExperimentRegistry}}.
+#' This function automatically checks if any of the jobs to reset is either pending or running.
+#' However, if the implemented heuristic fails, this can lead to inconsistencies in the data base.
+#' Use with care.
 #'
 #' @templateVar ids.default none
 #' @template ids

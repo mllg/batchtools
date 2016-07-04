@@ -32,7 +32,7 @@ Greps through log files and reports jobs with matches.
 }
 \seealso{
 Other debug: \code{\link{getErrorMessages}},
-  \code{\link{killJobs}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+  \code{\link{killJobs}}, \code{\link{resetJobs}},
+  \code{\link{showLog}}, \code{\link{testJob}}
 }
 
