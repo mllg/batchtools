@@ -27,6 +27,6 @@ Nothing.
 \seealso{
 Other debug: \code{\link{getErrorMessages}},
   \code{\link{grepLogs}}, \code{\link{killJobs}},
-  \code{\link{testJob}}
+  \code{\link{resetJobs}}, \code{\link{testJob}}
 }
 

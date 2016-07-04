@@ -41,7 +41,7 @@ getErrorMessages(ids, missing.as.error = TRUE, reg = reg)
 }
 \seealso{
 Other debug: \code{\link{grepLogs}},
-  \code{\link{killJobs}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+  \code{\link{killJobs}}, \code{\link{resetJobs}},
+  \code{\link{showLog}}, \code{\link{testJob}}
 }
 
