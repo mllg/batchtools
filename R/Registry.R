@@ -220,20 +220,33 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = "~/.bat
   assertFlag(update.paths)
 
   readRegistry = function() {
-    fns = file.path(file.dir, c("registry.new.rds", "registry.rds"))
-    fns = fns[file.exists(fns)]
-    if (length(fns) == 0L)
-      stopf("No registry found in '%s'", file.dir)
+    fn.old = file.path(file.dir, "registry.rds")
+    fn.new = file.path(file.dir, "registry.new.rds")
 
-    for (fn in fns) {
-      reg = try(readRDS(fns), silent = TRUE)
+    if (file.exists(fn.new)) {
+      reg = try(readRDS(fn.new), silent = TRUE)
+      if (!is.error(reg)) {
+        file.rename(fn.new, fn.old)
+        return(reg)
+      } else {
+        warning("Latest version of registry seems to be corrupted, trying backup ...")
+      }
+    }
+
+    if (file.exists(fn.old)) {
+      reg = try(readRDS(fn.old), silent = TRUE)
       if (!is.error(reg))
         return(reg)
-      warning(sprintf("Registry file '%s' is corrupt", fn))
+      stop("Could not load the registry, files seem to be corrupt")
     }
-    stop("Could not load the registry, files seem to be corrupt")
+
+    stopf("No registry found in '%s'", file.dir)
   }
+
   reg = readRegistry()
+  reg$status = alloc.col(reg$status, nrow(reg$status))
+  reg$defs = alloc.col(reg$defs, nrow(reg$defs))
+  reg$resources = alloc.col(reg$resources, nrow(reg$resources))
 
   file.dir = npath(file.dir)
   if (!update.paths) {

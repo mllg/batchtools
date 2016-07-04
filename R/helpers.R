@@ -52,7 +52,7 @@ insert = function(x, y) {
 writeRDS = function(object, file, wait = FALSE) {
   saveRDS(object, file = file)
   if (wait)
-    while(!file.exists(file)) Sys.sleep(1)
+    while(!file.exists(file)) Sys.sleep(0.5)
   invisible(TRUE)
 }
 
