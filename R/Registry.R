@@ -325,8 +325,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
 #' @rdname Registry
 #' @export
 clearRegistry = function(reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE, running.ok = FALSE)
-  syncRegistry(reg = reg)
+  assertRegistry(reg, writeable = TRUE, running.ok = FALSE, sync = TRUE)
   info("Removing %i jobs", nrow(reg$status))
   reg$status = reg$status[FALSE]
   reg$defs = reg$defs[FALSE]
@@ -373,10 +372,15 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
   invisible(TRUE)
 }
 
-assertRegistry = function(reg, writeable = FALSE, strict = FALSE, running.ok = TRUE) {
+assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, running.ok = TRUE) {
   assertClass(reg, "Registry", ordered = strict)
-  if (writeable & !reg$writeable)
-    stop("Registry must be writeable")
+  if (reg$writeable) {
+    if (sync)
+      syncRegistry(reg)
+  } else {
+    if (writeable)
+      stop("Registry must be writeable")
+  }
   if (!running.ok && nrow(.findOnSystem(reg = reg)) > 0L)
     stop("This operation is not allowed while jobs are running on the system")
   invisible(TRUE)

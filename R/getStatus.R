@@ -9,8 +9,7 @@
 #' @return [\code{\link[data.table]{data.table}}] (with class \dQuote{Status} for printing).
 #' @export
 getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
-  assertRegistry(reg)
-  syncRegistry(reg)
+  assertRegistry(reg, sync = TRUE)
 
   stats = getStatusTable(ids, reg = reg)
   setClasses(stats, c("Status", class(stats)))

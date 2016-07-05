@@ -55,8 +55,7 @@ getJobTable = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefa
 #' @export
 #' @rdname getJobTable
 getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
-  assertRegistry(reg)
-  syncRegistry(reg)
+  assertRegistry(reg, sync = TRUE)
   submitted = started = done = NULL
 
   tab = filter(reg$status, ids)[, !c("def.id", "resource.id"), with = FALSE]

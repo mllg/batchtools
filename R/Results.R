@@ -32,8 +32,7 @@
 #' reduceResults(function(x, y) c(x, y), reg = reg)
 #' reduceResults(function(x, y) c(x, sqrt(y)), init = numeric(0), reg = reg)
 reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry()) {
-  assertRegistry(reg)
-  syncRegistry(reg)
+  assertRegistry(reg, sync = TRUE)
   ids = asJobTable(reg, ids, default = .findDone(reg))
   fun = match.fun(fun)
 
@@ -93,8 +92,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' waitForJobs(reg = reg)
 #' reduceResultsList(fun = sqrt, reg = reg)
 reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry()) {
-  assertRegistry(reg)
-  syncRegistry(reg)
+  assertRegistry(reg, sync = TRUE)
   ids = asJobTable(reg, ids, default = .findDone(reg = reg))
 
   fns = file.path(reg$file.dir, "results", sprintf("%i.rds", ids$job.id))
