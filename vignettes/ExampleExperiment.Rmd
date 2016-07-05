@@ -142,6 +142,7 @@ testJob(id = id2)
 After the jobs are executed, we collect the results with [`reduceResultsDataTable()`](https://mllg.github.io/batchtools/reduceResultsList.html) and directly extract the mean misclassification error:
 ```{r}
 submitJobs()
+waitForJobs()
 results = reduceResultsDataTable(fun = function(res) (list(mce = (sum(res) - sum(diag(res))) / sum(res))))
 ```
 
