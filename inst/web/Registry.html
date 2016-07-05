@@ -47,16 +47,16 @@
         
       </header>
       
-      <h1>Registry</h1>
+      <h1>Registry Constructor</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;getwd(), conf.file&nbsp;=&nbsp;"~/.batchtools.conf.r", packages&nbsp;=&nbsp;character(0L), namespaces&nbsp;=&nbsp;character(0L), source&nbsp;=&nbsp;character(0L), load&nbsp;=&nbsp;character(0L), seed&nbsp;=&nbsp;NULL, make.default&nbsp;=&nbsp;TRUE)</div>
+    <pre><div>makeRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;getwd(), conf.file&nbsp;=&nbsp;"~/.batchtools.conf.R", packages&nbsp;=&nbsp;character(0L), namespaces&nbsp;=&nbsp;character(0L), source&nbsp;=&nbsp;character(0L), load&nbsp;=&nbsp;character(0L), seed&nbsp;=&nbsp;NULL, make.default&nbsp;=&nbsp;TRUE)</div>
 <div>getDefaultRegistry()</div>
 <div>setDefaultRegistry(reg)</div>
 <div>clearDefaultRegistry()</div>
-<div>loadRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;NULL, conf.file&nbsp;=&nbsp;"~/.batchtools.conf.r", make.default&nbsp;=&nbsp;TRUE, update.paths&nbsp;=&nbsp;FALSE)</div>
+<div>loadRegistry(file.dir&nbsp;=&nbsp;getwd(), work.dir&nbsp;=&nbsp;NULL, conf.file&nbsp;=&nbsp;"~/.batchtools.conf.R", make.default&nbsp;=&nbsp;TRUE, update.paths&nbsp;=&nbsp;FALSE)</div>
 <div>saveRegistry(reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>sweepRegistry(reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>clearRegistry(reg&nbsp;=&nbsp;getDefaultRegistry())</div>
@@ -72,8 +72,8 @@
   If you pass <code>NA</code>, a temporary directory will be used.
   This way, you can create disposable registries for <code><a href='btlapply.html'>btlapply</a></code> or examples.
   By default, the temporary directory <code><a href='http://www.inside-r.org/r-doc/base/tempfile'>tempdir</a>()</code> will be used.
-  If you want to use another temp directory, e.g. a directory which is shared between nodes,
-  you can set it in your configuration via <code>temp.dir</code>.</dd>
+  If you want to use another directory, e.g. a directory which is shared between nodes,
+  you can set it in your configuration file by setting the variable <code>temp.dir</code>.</dd>
       <dt>work.dir</dt>
       <dd>[<code>character(1)</code>]
 Working directory for R process when experiment is executed.
@@ -85,12 +85,14 @@ yourself.</dd>
 Path to a configuration file which is sourced directly after the registry is created.
 For example, you can set system-specific cluster functions in it.
 The script is executed inside the registry environment, thus you can directly set
-all slots, e.g. &#147;debug = TRUE&#148; would overwrite the debug flag of the registry.</dd>
+all slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.</dd>
       <dt>packages</dt>
       <dd>[<code>character</code>]
 Packages that will always be loaded on each node.
 Uses <code><a href='http://www.inside-r.org/r-doc/base/library'>require</a></code> internally.
-Default is <code>character(0)</code>.</dd>
+Default is <code>character(0)</code>.
+Note that you can also set <code>default.packages</code> in your config.
+These are then merged with the packages specified via <code>packages</code> during construction of the registry.</dd>
       <dt>namespaces</dt>
       <dd>[<code>character</code>]
 Same as <code>packages</code>, but the packages will not be attached.
@@ -146,8 +148,6 @@ Save the registry to the file system? Default is <code>TRUE</code>.</dd>
   
       <p><dt><code>seed</code> [integer(1)]:</dt><dd>Registry seed. Before each job is executed, the seed <code>seed + job.id</code> is set.</dd></p>
   
-      <p><dt><code>debug</code> [logical(1)]:</dt><dd>Flag to turn additional debug functionality on.</dd></p>
-  
       <p><dt><code>cluster.functions</code> [cluster.functions]:</dt><dd>Usually set in your <code>conf.file</code>. Set via a call to <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>. See example.</dd></p>
   
       <p><dt><code>default.resources</code> [named list()]:</dt><dd>Usually set in your <code>conf.file</code>. Named list of default resources.</dd></p>
@@ -190,24 +190,21 @@ swept using <code>sweepRegistry</code>.
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
 <div class='input'>print(reg)
 </div>
 <div class='output'>Job Registry
   ClusterFunctions: Interactive
-  File dir        : /scratch/registry37f1a92a383
+  File dir        : /scratch/registry2f72e8d94d4
   Work dir        : /home/lang/Projekte/batchtools
   Jobs            : 0
-  Seed            : 53955397
+  Seed            : 249365004
 </div>
 <div class='input'>
-#&#39; Set debug mode
-reg$debug = TRUE
+# Set cluster functions to interactive mode and start jobs in external R sessions
+reg$cluster.functions = makeClusterFunctionsInteractive(external = TRUE)
 
-# Set cluster functions to interactive mode (default)
-reg$cluster.functions = makeClusterFunctionsInteractive()
-
-# Change default packages
+# Change packages to load
 reg$packages = c(&quot;MASS&quot;)
 saveRegistry(reg = reg)
 </div></pre>

@@ -52,7 +52,8 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>showLog(id, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    <pre><div>showLog(id, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>getLog(id, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -77,13 +78,14 @@ Nothing.
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Opens a pager to the stored log file. For customization, see <code><a href='http://www.inside-r.org/r-doc/base/file.show'>file.show</a></code>.</p>
+      <p><code>showLog</code> opens the log in the pager. For customization, see <code><a href='http://www.inside-r.org/r-doc/base/file.show'>file.show</a></code>.
+<code>getLog</code> returns the log as character vector.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>showLog</li>
+      <li>getLog</li><li>showLog</li>
     </ul>
     <ul>
       
@@ -93,7 +95,7 @@ Nothing.
     
 Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
   <code><a href='grepLogs.html'>grepLogs</a></code>, <code><a href='killJobs.html'>killJobs</a></code>,
-  <code><a href='testJob.html'>testJob</a></code>
+  <code><a href='resetJobs.html'>resetJobs</a></code>, <code><a href='testJob.html'>testJob</a></code>
 
         
   </div>

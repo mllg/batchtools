@@ -52,7 +52,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>grepLogs(ids&nbsp;=&nbsp;NULL, pattern&nbsp;=&nbsp;"", reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    <pre><div>grepLogs(ids&nbsp;=&nbsp;NULL, pattern&nbsp;=&nbsp;"", ignore.case&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -65,6 +65,9 @@ If not set, defaults to the return value of <code><a href='findJobs.html'>findSt
       <dt>pattern</dt>
       <dd>[<code>character(1L)</code>]
 Regular expression.</dd>
+      <dt>ignore.case</dt>
+      <dd>[<code>logical(1L)</code>]
+If <code>TRUE</code> the match will be performed case insensitive.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
@@ -74,7 +77,8 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code>data.table</code>]. Matching job ids are stored in the column &#147;job.id&#148;.
+[<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>]. Matching job ids are stored in the column &#147;job.id&#148;.
+  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
 </dl></p>
   
     </div>
@@ -97,8 +101,8 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     <h2>See also</h2>
     
 Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
-  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
-  <code><a href='testJob.html'>testJob</a></code>
+  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='resetJobs.html'>resetJobs</a></code>,
+  <code><a href='showLog.html'>showLog</a></code>, <code><a href='testJob.html'>testJob</a></code>
 
         
   </div>

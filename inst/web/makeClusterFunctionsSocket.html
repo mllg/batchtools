@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>makeClusterFunctionsMulticore. batchtools 0.1</title>
+<title>makeClusterFunctionsSocket. batchtools 0.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,12 +47,12 @@
         
       </header>
       
-      <h1>ClusterFunctions for Parallel Execution</h1>
+      <h1>ClusterFunctions for Parallel Socket Execution</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeClusterFunctionsMulticore(ncpus&nbsp;=&nbsp;max(getOption("mc.cores", parallel::detectCores()), 1L))</div></pre>
+    <pre><div>makeClusterFunctionsSocket(ncpus&nbsp;=&nbsp;max(getOption("mc.cores", parallel::detectCores()), 1L))</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -75,14 +75,13 @@ and defaults to the heuristic implemented in <code><a href='http://www.inside-r.
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Jobs are spawned asynchronously using the packages <span class = "pkg">parallel</span>.
-Does not work on Windows, use <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code> instead.</p>
+      <p>Jobs are spawned asynchronously using the package <span class = "pkg">snow</span>.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>makeClusterFunctionsMulticore</li>
+      <li>makeClusterFunctionsSocket</li>
     </ul>
     <ul>
       
@@ -91,8 +90,8 @@ Does not work on Windows, use <code><a href='makeClusterFunctionsSocket.html'>ma
     <h2>See also</h2>
     
 Other clusterFunctions: <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
-  <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>,
-  <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>
+  <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
+  <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>
 
         
   </div>

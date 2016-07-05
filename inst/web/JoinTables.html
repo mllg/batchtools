@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>JoinTables. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Inner, Left, Right, Outer and Anti Join for Job Tables</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>ijoin(x, y)</div>
+<div>ljoin(x, y)</div>
+<div>rjoin(x, y)</div>
+<div>ojoin(x, y)</div>
+<div>ajoin(x, y)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x</dt>
+      <dd>[<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>]
+Data table with key &#147;job.id&#148; as returned by most functions in batchtools.</dd>
+      <dt>y</dt>
+      <dd>[<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>]
+Data table with key &#147;job.id&#148; as returned by most functions in batchtools.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>] with key &#147;job.id&#148;.
+  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>These helper functions perform join operations on job tables.
+They are basically one-liners with additional argument checks for sanity.
+See <a href = 'http://rpubs.com/ronasta/join_data_tables'>http://rpubs.com/ronasta/join_data_tables</a> for a overview of join operations in
+data table or alternatively <span class = "pkg">dplyr</span>'s vignette on two table verbs.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># create two tables for demonstration
+reg = makeRegistry(file.dir = NA, make.default = FALSE)
+</div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<div class='input'>batchMap(identity, x = 1:6, reg = reg)
+</div>
+<strong class='message'>Adding 6 jobs ...</strong>
+<div class='input'>x = getJobPars(reg = reg)
+y = findJobs(x &gt;= 2 &amp; x &lt;= 5, reg = reg)
+y$extra.col = head(letters, nrow(y))
+
+# inner join: similar to intersect() on ids, keep all columns of x and y
+ijoin(x, y)
+</div>
+<div class='output'>   job.id x extra.col
+1:      2 2         a
+2:      3 3         b
+3:      4 4         c
+4:      5 5         d
+</div>
+<div class='input'>
+# left join: use all ids from x, keep all columns of x and y
+ljoin(x, y)
+</div>
+<div class='output'>   job.id extra.col x
+1:      1        NA 1
+2:      2         a 2
+3:      3         b 3
+4:      4         c 4
+5:      5         d 5
+6:      6        NA 6
+</div>
+<div class='input'>
+# right join: use all ids from y, keep all columns of x and y
+rjoin(x, y)
+</div>
+<div class='output'>   job.id x extra.col
+1:      2 2         a
+2:      3 3         b
+3:      4 4         c
+4:      5 5         d
+</div>
+<div class='input'>
+# outer join: similar to union() on ids, keep all columns of x and y
+ojoin(x, y)
+</div>
+<div class='output'>   job.id x extra.col
+1:      1 1        NA
+2:      2 2         a
+3:      3 3         b
+4:      4 4         c
+5:      5 5         d
+6:      6 6        NA
+</div>
+<div class='input'>
+# anti join: similar to setdiff() on ids, keep all columns of x
+ajoin(x, y)
+</div>
+<div class='output'>   job.id x
+1:      1 1
+2:      6 6
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>JoinTables</li><li>ajoin</li><li>ijoin</li><li>ljoin</li><li>ojoin</li><li>rjoin</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -47,7 +47,7 @@
         
       </header>
       
-      <h1>Submit jobs to the Batch Systems</h1>
+      <h1>Submit Jobs to the Batch Systems</h1>
 
 <div class="row">
   <div class="span8">
@@ -64,21 +64,12 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of <code><a href='findJobs.html'>findNotSubmitted</a></code>.</dd>
       <dt>resources</dt>
       <dd>[<code>named list</code>]
-  Computational  resources for the batch jobs. The elements of this list
-  (e.g. something like &#147;walltime&#148; or &#147;nodes&#148;) depend on your template file.
-  The resources <code>chunk.ncpus</code> and <code>measure.memory</code> are reserved for internal functionality:
-  The setting <code>chunk.ncpus</code> is used to determine the number of CPUs to execute jobs in a
-  chunk in parallel via <code>mcparallel</code> (or <code><a href='http://www.inside-r.org/packages/cran/snow/docs/snow-internal'>sendCall</a></code> on Windows).
-  If not set, <code>chunk.ncpus</code> defaults to 1 (sequential execution).
-  The second reserved resource, <code>measure.memory</code>, can be set to <code>TRUE</code> to enable the measure of
-  memory requirements using <code><a href='http://www.inside-r.org/r-doc/base/gc'>gc</a></code>. But note that the reported values are quite
-  heuristic and may not reflect the real memory requirements. Furthermore, measuring memory with
-  <code><a href='http://www.inside-r.org/r-doc/base/gc'>gc</a></code> in parallel is impossible, thus this feature is disabled if <code>chunk.ncpus</code>
-  is greater than one.
-
-  Defaults for all resources, the reserved as well as the those depending on your template, can be stored in the <code><a href='Registry.html'>Registry</a></code> in
-  <code>default.resources</code> (e.g., using a configuration file).
-  Individual settings set via <code>resources</code> <code>resources</code> overrule those in <code>default.resources</code>.</dd>
+Computational  resources for the batch jobs. The elements of this list
+(e.g. something like &#147;walltime&#148; or &#147;nodes&#148;) depend on your template file.
+See notes for reserved special resource names.
+Defaults can be set in the <code><a href='Registry.html'>Registry</a></code> via the variable <code>default.resources</code> as a named list.
+The setting can be made permanent for all future registries by setting this variable in your configuration file.
+Individual settings set via <code>resources</code> <code>resources</code> overrule those in <code>default.resources</code>.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
@@ -89,6 +80,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
 
       <p><dl>
 [<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>]. Table with columns &#147;job.id&#148; and &#147;chunk&#148;.
+  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
 </dl></p>
   
     </div>
@@ -106,6 +98,31 @@ information.</p>
 termination of jobs or immediately call <code><a href='reduceResultsList.html'>reduceResultsList</a></code>/<code><a href='reduceResults.html'>reduceResults</a></code>
 to collect partial results.
 The progress can be monitored with <code><a href='getJobTable.html'>getJobStatus</a></code>.</p>
+  
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+
+      <p>Setting <code>measure.memory</code> to <code>TRUE</code> turns on memory measurement: <code><a href='http://www.inside-r.org/r-doc/base/gc'>gc</a></code> is called  directly before
+and after the job and the difference is stored in the internal database. Note that this is just a rough estimate and does
+neither work reliably for external code like C/C++ nor in combination with threading.</p>
+  
+      <p>Furthermore, the package provides support for inner parallelization using threading, sockets or MPI via the
+package <span class = "pkg">parallelMap</span>.
+If you set the resource &#147;pm.backend&#148; to &#147;multicore&#148;, &#147;socket&#148; or &#147;mpi&#148;,
+<code><a href='http://www.inside-r.org/packages/cran/parallelMap/docs/parallelStart'>parallelStart</a></code> is called on the slave before the first job in the chunk is started
+and <code><a href='http://www.inside-r.org/packages/cran/parallelMap/docs/parallelStop'>parallelStop</a></code> is called after the last job terminated.
+This way, the used resources for inner parallelization are set in the same place as the resources for the outer parallelization and
+get automatically stored in the <code><a href='Registry.html'>Registry</a></code>.
+The user function just has to call <code><a href='http://www.inside-r.org/packages/cran/parallelMap/docs/parallelMap'>parallelMap</a></code> to start parallelization to use the configured backend.</p>
+  
+      <p>You may set the resource <code>ncpus</code> to control the number of CPUs to use in <span class = "pkg">parallelMap</span>.
+<code>ncpus</code> defaults to the number of available CPUs (as reported by (see <code><a href='http://www.inside-r.org/r-doc/parallel/detectCores'>detectCores</a></code>))
+on the executing machine for multicore and socket mode and defaults to the return value of <code><a href='http://www.inside-r.org/packages/cran/Rmpi/docs/mpi.universe.size'>mpi.universe.size</a>-1</code> for MPI.
+Furthermore, you can set the <code>level</code> for <code><a href='http://www.inside-r.org/packages/cran/parallelMap/docs/parallelMap'>parallelMap</a></code> via &#147;pm.level&#148;.</p>
+  
+      <p>Note that your template must be set up to handle the parallelization, e.g. start R with <code>mpirun</code> or request the correct number of CPUs.</p>
   
     </div>
       </div>

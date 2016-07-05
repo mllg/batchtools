@@ -52,7 +52,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>testJob(id, fresh.session&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+    <pre><div>testJob(id, external&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -60,13 +60,13 @@
       <dd>[<code>integer(1)</code> or <code>data.table</code>]
 Single integer to specify the job or a <code>data.table</code> with column <code>job.id</code>
 and exactly one row.</dd>
-      <dt>fresh.session</dt>
+      <dt>external</dt>
       <dd>[<code>logical(1)</code>]
-Run the job in a fresh R session? If <code>TRUE</code>, starts a fresh R
+Run the job in an external R session? If <code>TRUE</code>, starts a fresh R
 session on the local machine to execute the with <code><a href='execJob.html'>execJob</a></code>.
 You will not be able to use debug tools like <code><a href='http://www.inside-r.org/r-doc/base/traceback'>traceback</a></code>
 or <code><a href='http://www.inside-r.org/r-doc/base/browser'>browser</a></code>.
-If <code>fresh.session</code> is set to <code>FALSE</code> (default), <code>testJob</code> will
+If <code>external</code> is set to <code>FALSE</code> (default), <code>testJob</code> will
 execute the job in the current R session, and you are unable to spot
 missing variable declarations (possibly resolved in the global environment) as well
 as forgotten package dependencies.</dd>
@@ -94,7 +94,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
 <div class='input'>batchMap(function(x) if (x == 2) xxx else x, 1:2, reg = reg)
 </div>
 <strong class='message'>Adding 2 jobs ...</strong>
@@ -119,7 +119,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     
 Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
   <code><a href='grepLogs.html'>grepLogs</a></code>, <code><a href='killJobs.html'>killJobs</a></code>,
-  <code><a href='showLog.html'>showLog</a></code>
+  <code><a href='resetJobs.html'>resetJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>
 
         
   </div>

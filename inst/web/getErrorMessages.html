@@ -47,7 +47,7 @@
         
       </header>
       
-      <h1>Retrieve error messages</h1>
+      <h1>Retrieve Error Messages</h1>
 
 <div class="row">
   <div class="span8">
@@ -75,8 +75,9 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code>data.table</code>]. Table with columns &#147;job.id&#148;, &#147;terminated&#148; (logical),
+[<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>]. Table with columns &#147;job.id&#148;, &#147;terminated&#148; (logical),
   &#147;error&#148; (logical) and &#147;message&#148; (string).
+  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
 </dl></p>
   
     </div>
@@ -92,7 +93,7 @@ For further investigation, see <code><a href='showLog.html'>showLog</a></code>.<
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
 <div class='input'>fun = function(i) if (i == 3) stop(i) else i
 ids = batchMap(fun, i = 1:5, reg = reg)
 </div>
@@ -135,8 +136,8 @@ ids = batchMap(fun, i = 1:5, reg = reg)
     <h2>See also</h2>
     
 Other debug: <code><a href='grepLogs.html'>grepLogs</a></code>,
-  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
-  <code><a href='testJob.html'>testJob</a></code>
+  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='resetJobs.html'>resetJobs</a></code>,
+  <code><a href='showLog.html'>showLog</a></code>, <code><a href='testJob.html'>testJob</a></code>
 
         
   </div>

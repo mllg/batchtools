@@ -47,12 +47,12 @@
         
       </header>
       
-      <h1>Run OS Commands on local or remote machines</h1>
+      <h1>Run OS Commands on Local or Remote Machines</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>runOSCommand(sys.cmd, sys.args&nbsp;=&nbsp;character(0L), nodename&nbsp;=&nbsp;"localhost", stop.on.exit.code&nbsp;=&nbsp;TRUE, debug&nbsp;=&nbsp;FALSE)</div></pre>
+    <pre><div>runOSCommand(sys.cmd, sys.args&nbsp;=&nbsp;character(0L), nodename&nbsp;=&nbsp;"localhost", debug&nbsp;=&nbsp;getOption("batchtools.debug", FALSE))</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -66,12 +66,9 @@ Arguments to <code>sys.cmd</code>.</dd>
       <dd>[<code>character(1)</code>]
 Name of the SSH node to run the command on. If set to &#147;localhost&#148; (default), the command
 is not piped through SSH.</dd>
-      <dt>stop.on.exit.code</dt>
-      <dd>[<code>logical(1)</code>]
-Throw an error message if the exit code of <code>sys.cmd</code> is not &#147;0&#148;?</dd>
       <dt>debug</dt>
       <dd>[<code>logical(1)</code>]
-If set to <code>TRUE</code>, prints the complete command, exit code and output.</dd>
+If <code>TRUE</code>, the commands send to the OS are printed.</dd>
     </dl>
     
     <div class="Value">
@@ -96,7 +93,7 @@ and the output.</p>
     <pre class="examples"><div class='input'>## Not run: 
 # runOSCommand(&quot;ls&quot;)
 # runOSCommand(&quot;ls&quot;, &quot;-al&quot;)
-# runOSCommand(&quot;notfound&quot;, stop.on.exit.code = FALSE)
+# runOSCommand(&quot;notfound&quot;)
 # ## End(Not run)
 </div></pre>
   </div>

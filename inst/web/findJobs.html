@@ -59,7 +59,9 @@
 <div>findDone(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findNotDone(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findErrors(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
-<div>findOnSystem(ids&nbsp;=&nbsp;NULL, status&nbsp;=&nbsp;"all", reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findOnSystem(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findRunning(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>findQueued(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findExpired(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findJobs(expr, ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>findExperiments(prob.name&nbsp;=&nbsp;NULL, algo.name&nbsp;=&nbsp;NULL, prob.pars, algo.pars, repls&nbsp;=&nbsp;NULL, ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
@@ -75,20 +77,19 @@ If not set, defaults to all jobs.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
-      <dt>status</dt>
-      <dd>[<code>character(1)</code>]
-If set to &#147;all&#148; (default), <code>findOnSystem</code> finds all jobs on the system.
-If set to &#147;queued&#148; or &#147;running&#148;, the result is restricted to queued
-or running jobs, respectively.</dd>
       <dt>expr</dt>
       <dd>[<code>expression</code>]
 Predicate expression evaluated in the job parameters.</dd>
       <dt>prob.name</dt>
       <dd>[<code>character</code>]
-Whitelist of problem names. If not provided, all problems are matched.</dd>
+Whitelist of problem names.
+If the string starts with &#147;~&#148;, it is treated as regular expression.
+If not provided, all problems are matched.</dd>
       <dt>algo.name</dt>
       <dd>[<code>character</code>]
-Whitelist of algorithm names. If not provided, all algorithms are matched.</dd>
+Whitelist of algorithm names.
+If the string starts with &#147;~&#148;, it is treated as regular expression.
+If not provided, all algorithms are matched.</dd>
       <dt>prob.pars</dt>
       <dd>[<code>expression</code>]
 Predicate expression evaluated in the problem parameters.</dd>
@@ -104,7 +105,8 @@ Whitelist of replication numbers. If not provided, all replications are matched.
       <h2>Value</h2>
 
       <p><dl>
-[<code>data.table</code>]. Matching job ids are stored in the column &#147;job.id&#148;.
+[<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>]. Matching job ids are stored in the column &#147;job.id&#148;.
+  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
 </dl></p>
   
     </div>
@@ -123,7 +125,7 @@ Note that <code>findOnSystem</code> and <code>findExpired</code> are somewhat he
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
 <div class='input'>batchMap(identity, i = 1:3, reg = reg)
 </div>
 <strong class='message'>Adding 3 jobs ...</strong>
@@ -162,7 +164,7 @@ findSubmitted(reg = reg)
   </div>
   <div class="span4">
     <!-- <ul>
-      <li>findDone</li><li>findErrors</li><li>findExperiments</li><li>findExpired</li><li>findJobs</li><li>findNotDone</li><li>findNotStarted</li><li>findNotSubmitted</li><li>findOnSystem</li><li>findStarted</li><li>findSubmitted</li>
+      <li>findDone</li><li>findErrors</li><li>findExperiments</li><li>findExpired</li><li>findJobs</li><li>findNotDone</li><li>findNotStarted</li><li>findNotSubmitted</li><li>findOnSystem</li><li>findQueued</li><li>findRunning</li><li>findStarted</li><li>findSubmitted</li>
     </ul>
     <ul>
       

@@ -52,11 +52,11 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>getJobTable(ids&nbsp;=&nbsp;NULL, pars.as.cols&nbsp;=&nbsp;NULL, resources.as.cols&nbsp;=&nbsp;FALSE, prefix&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+    <pre><div>getJobTable(ids&nbsp;=&nbsp;NULL, flatten&nbsp;=&nbsp;NULL, prefix&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
 <div>getJobStatus(ids&nbsp;=&nbsp;NULL, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
-<div>getJobDefs(ids&nbsp;=&nbsp;NULL, pars.as.cols&nbsp;=&nbsp;NULL, prefix&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
-<div>getJobResources(ids&nbsp;=&nbsp;NULL, resources.as.cols&nbsp;=&nbsp;FALSE, prefix&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
-<div>getJobPars(ids&nbsp;=&nbsp;NULL, pars.as.cols&nbsp;=&nbsp;NULL, prefix&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
+<div>getJobDefs(ids&nbsp;=&nbsp;NULL, flatten&nbsp;=&nbsp;NULL, prefix&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>getJobResources(ids&nbsp;=&nbsp;NULL, flatten&nbsp;=&nbsp;NULL, prefix&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div>
+<div>getJobPars(ids&nbsp;=&nbsp;NULL, flatten&nbsp;=&nbsp;NULL, prefix&nbsp;=&nbsp;FALSE, reg&nbsp;=&nbsp;getDefaultRegistry())</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -66,16 +66,14 @@ A <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></
 with a column named &#147;job.id&#148;.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.</dd>
-      <dt>pars.as.cols</dt>
+      <dt>flatten</dt>
       <dd>[<code>logical(1)</code>]
-Transform the job parameters to data frame columns? Defaults to <code>TRUE</code> if all parameters
-are atomic vectors, <code>FALSE</code> otherwise.</dd>
-      <dt>resources.as.cols</dt>
-      <dd>[<code>logical(1)</code>]
-Transform the resources data frame columns? Default is <code>FALSE</code>.</dd>
+Transform the job parameters and/or resource specifications to data frame columns?
+Defaults to <code>TRUE</code> if all elements are atomic vectors, <code>FALSE</code> otherwise and each row of the
+column will hold a named list. The new columns will be named, depending on the value of <code>prefix</code>.</dd>
       <dt>prefix</dt>
       <dd>[<code>logical(1)</code>]
-If set to <code>TRUE</code> (default), the prefix &#147;par.&#148; is used to name column names of parameters
+If set to <code>TRUE</code>, the prefix &#147;par.&#148; is used to name column names of parameters
 for a <code><a href='Registry.html'>Registry</a></code> and prefixes &#147;prob.par.&#148; and &#147;algo.par.&#148; are used to name
 the columns of a <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>. Resources are prefixed with &#147;res.&#148;.</dd>
       <dt>reg</dt>
@@ -87,9 +85,9 @@ Registry.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code>data.frame</code>] with the following columns in no particular order:
-<dl>
-  <dt>job.id</dt><dd>Unique Job ID as integer.</dd></p>
+[<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>] with the following columns:
+  <dl>
+    <dt>job.id</dt><dd>Unique Job ID as integer.</dd></p>
   
       <p><dt>submitted</dt><dd>Time the job was submitted to the batch system as <code><a href='http://www.inside-r.org/r-doc/base/DateTimeClasses'>POSIXct</a></code>.</dd></p>
   
@@ -121,7 +119,8 @@ Registry.</dd>
   
       <p></dl></p>
   
-      <p></dl></p>
+      <p>See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
+</dl></p>
   
     </div>
 
@@ -139,7 +138,7 @@ and <code>getJobPars</code> a table with the job parameters.</p>
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.r&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
 <div class='input'>f = function(x) if (x &lt; 0) stop(&quot;x must be &gt; 0&quot;) else sqrt(x)
 batchMap(f, x = c(-1, 0, 1), reg = reg)
 </div>
@@ -156,21 +155,21 @@ batchMap(f, x = c(-1, 0, 1), reg = reg)
 getJobTable(reg = reg)
 </div>
 <div class='output'>   job.id           submitted             started                done
-1:      1 2016-05-10 15:17:11 2016-05-10 15:17:11 2016-05-10 15:17:11
-2:      2 2016-05-10 15:17:11 2016-05-10 15:17:11 2016-05-10 15:17:11
-3:      3 2016-05-10 15:17:11 2016-05-10 15:17:11 2016-05-10 15:17:11
+1:      1 2016-07-05 12:14:49 2016-07-05 12:14:49 2016-07-05 12:14:49
+2:      2 2016-07-05 12:14:49 2016-07-05 12:14:49 2016-07-05 12:14:49
+3:      3 2016-07-05 12:14:49 2016-07-05 12:14:49 2016-07-05 12:14:49
                                      error memory      batch.id
 1: Error in (function (x)  : x must be &gt; 0     NA cfInteractive
 2:                                      NA     NA cfInteractive
 3:                                      NA     NA cfInteractive
                            job.hash time.queued time.running
-1: 94780216ec22152fc40fffa73de6c54c      0 secs       0 secs
-2: b31b04e537961bd8663d8ac009af596b      0 secs       0 secs
-3: ab0e1478559a4342425961cb07be1502      0 secs       0 secs
-                          pars.hash  x resources
-1: 2527ed6f690f8f2fe000bbcdaed10e7a -1    &lt;list&gt;
-2: a3624e002d012627022b656227590880  0    &lt;list&gt;
-3: f90efcda6753da655ae611ffe2e3fb61  1    &lt;list&gt;
+1: 49119f656da742bb95f25998e94b7b9d      0 secs       0 secs
+2: e6479b5b1322e4833b14b054855117b7      0 secs       0 secs
+3: cb59c02f713ec8c59526767084a1f71e      0 secs       0 secs
+                          pars.hash  x
+1: 2527ed6f690f8f2fe000bbcdaed10e7a -1
+2: a3624e002d012627022b656227590880  0
+3: f90efcda6753da655ae611ffe2e3fb61  1
 </div></pre>
   </div>
   <div class="span4">

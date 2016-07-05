@@ -73,7 +73,9 @@ List of Workers as constructed with <code><a href='Worker.html'>Worker</a></code
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Jobs are spawned by starting multiple R sessions via SSH.</p>
+      <p>Jobs are spawned by starting multiple R sessions via <code>Rscript</code> over SSH.
+If the hostname of the <code><a href='Worker.html'>Worker</a></code> equals &#147;localhost&#148;,
+<code>Rscript</code> is called directly so that you do not need to have an SSH client installed.</p>
   
     </div>
 
@@ -86,7 +88,14 @@ end with the message &#147;Killed by signal 1&#148; and this will break
 the communication with the nodes.</p>
   
     </div>
-      </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>## Not run: 
+# # cluster functions for multicore execution on the local machine
+# makeClusterFunctionsSSH(list(Worker$new(&quot;localhost&quot;, ncpus = 2)))
+# ## End(Not run)
+</div></pre>
+  </div>
   <div class="span4">
     <!-- <ul>
       <li>makeClusterFunctionsSSH</li>
@@ -98,7 +107,8 @@ the communication with the nodes.</p>
     <h2>See also</h2>
     
 Other clusterFunctions: <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
-  <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>
+  <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
+  <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>
 
         
   </div>

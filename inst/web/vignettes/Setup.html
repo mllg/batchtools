@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2016-05-10" />
+<meta name="date" content="2016-07-05" />
 
 <title>Setup batchtools</title>
 
@@ -68,7 +68,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Setup batchtools</h1>
-<h4 class="date"><em>2016-05-10</em></h4>
+<h4 class="date"><em>2016-07-05</em></h4>
 
 
 
@@ -76,7 +76,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1>Cluster Functions</h1>
 <p>The communication with the batch system is managed via the cluster functions. They are constructed with <a href="https://mllg.github.io/batchtools/makeClusterFunctions.html">makeClusterFunctions</a> where you must at least provide a function which submits a job to your system. The cluster function implementation is stored in your registry and defaults to interactive cluster functions:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>)</code></pre></div>
-<pre><code>## Sourcing configuration file '~/.batchtools.conf.r' ...</code></pre>
+<pre><code>## Sourcing configuration file '~/.batchtools.conf.R' ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(reg$cluster.functions)</code></pre></div>
 <pre><code>## ClusterFunctions for mode: Interactive
 ##   List queued Jobs : FALSE
@@ -107,7 +107,7 @@ reg$cluster.functions =<span class="st"> </span><span class="kw">makeClusterFunc
 </div>
 <div id="configuration-file" class="section level1">
 <h1>Configuration file</h1>
-<p>The configuration file, usually located in your home directory as <code>~/.batchtools.conf.r</code>, can be used to set system specific options. For example, to set the cluster function implementation (see next section), you would generate a file with the following content:</p>
+<p>The configuration file, usually located in your home directory as <code>~/.batchtools.conf.R</code>, can be used to set system specific options. For example, to set the cluster function implementation (see next section), you would generate a file with the following content:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cluster.functions =<span class="st"> </span><span class="kw">makeClusterFunctionsInteractive</span>()</code></pre></div>
 <p>The configuration file is parsed when you create your <a href="https://mllg.github.io/batchtools/Registry.html">Registry</a>. It is sourced inside of your registry which has the advantage that you can (a) access all of the parameters which are passed to <a href="https://mllg.github.io/batchtools/Registry.html">makeRegistry</a> and (b) you can also directly change them. Lets say you always want your working directory be relative to your home directory and you always want to load the <code>checkmate</code> package on the nodes, you can just append these lines:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">work.dir =<span class="st"> &quot;~&quot;</span>

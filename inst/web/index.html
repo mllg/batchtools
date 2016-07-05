@@ -76,13 +76,16 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
         <code><a href="ExperimentRegistry.html">ExperimentRegistry</a></code>(makeExperimentRegistry)<br />ExperimentRegistry Constructor</li>
             
       <li>
-        <code><a href="Registry.html">Registry</a></code>(clearDefaultRegistry, clearRegistry, getDefaultRegistry, loadRegistry, makeRegistry, saveRegistry, setDefaultRegistry, sweepRegistry, syncRegistry)<br />Registry</li>
+        <code><a href="JoinTables.html">JoinTables</a></code>(ajoin, ijoin, ljoin, ojoin, rjoin)<br />Inner, Left, Right, Outer and Anti Join for Job Tables</li>
+            
+      <li>
+        <code><a href="Registry.html">Registry</a></code>(clearDefaultRegistry, clearRegistry, getDefaultRegistry, loadRegistry, makeRegistry, saveRegistry, setDefaultRegistry, sweepRegistry, syncRegistry)<br />Registry Constructor</li>
             
       <li>
         <code><a href="Worker.html">Worker</a></code><br />Create a Linux-Worker</li>
             
       <li>
-        <code><a href="ProblemAlgorithm.html">addAlgorithm</a></code>(Algorithm, Problem, ProblemAlgorithm, addProblem, getAlgorithmIds, removeAlgorithm, removeProblem)<br />Define Problems and Algorithms for Experiments</li>
+        <code><a href="ProblemAlgorithm.html">addAlgorithm</a></code>(Algorithm, Problem, ProblemAlgorithm, addProblem, getAlgorithmIds, getProblemIds, removeAlgorithm, removeProblem)<br />Define Problems and Algorithms for Experiments</li>
             
       <li>
         <code><a href="addExperiments.html">addExperiments</a></code><br />Add Experiments to the Registry</li>
@@ -97,16 +100,16 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
         <code><a href="btlapply.html">btlapply</a></code>(btmapply)<br />Synchronous Apply Functions</li>
             
       <li>
-        <code><a href="cfBrewTemplate.html">cfBrewTemplate</a></code><br />Cluster functions helper: Brew your template into a job description file</li>
+        <code><a href="cfBrewTemplate.html">cfBrewTemplate</a></code><br />Cluster Functions Helper to Write Job Description Files</li>
             
       <li>
-        <code><a href="cfHandleUnknownSubmitError.html">cfHandleUnknownSubmitError</a></code><br />Cluster functions helper: Handle an unknown error during job submission.</li>
+        <code><a href="cfHandleUnknownSubmitError.html">cfHandleUnknownSubmitError</a></code><br />Cluster Functions Helper to Handle Unknown Errors</li>
             
       <li>
-        <code><a href="cfKillJob.html">cfKillJob</a></code><br />Cluster functions helper: Kill a batch job via OS command</li>
+        <code><a href="cfKillJob.html">cfKillJob</a></code><br />Cluster Functions Helper to Kill Batch Jobs</li>
             
       <li>
-        <code><a href="cfReadBrewTemplate.html">cfReadBrewTemplate</a></code><br />Cluster functions helper: Read in your brew template file</li>
+        <code><a href="cfReadBrewTemplate.html">cfReadBrewTemplate</a></code><br />Cluster Functions Helper to Parse a Brew Template</li>
             
       <li>
         <code><a href="chunkIds.html">chunkIds</a></code><br />Chunk Jobs for Sequential Execution</li>
@@ -118,10 +121,10 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
         <code><a href="execJob.html">execJob</a></code><br />Execute a Single Jobs</li>
             
       <li>
-        <code><a href="findJobs.html">findSubmitted</a></code>(findDone, findErrors, findExperiments, findExpired, findJobs, findNotDone, findNotStarted, findNotSubmitted, findOnSystem, findStarted)<br />Find and Filter Jobs</li>
+        <code><a href="findJobs.html">findSubmitted</a></code>(findDone, findErrors, findExperiments, findExpired, findJobs, findNotDone, findNotStarted, findNotSubmitted, findOnSystem, findQueued, findRunning, findStarted)<br />Find and Filter Jobs</li>
             
       <li>
-        <code><a href="getErrorMessages.html">getErrorMessages</a></code><br />Retrieve error messages</li>
+        <code><a href="getErrorMessages.html">getErrorMessages</a></code><br />Retrieve Error Messages</li>
             
       <li>
         <code><a href="getJobTable.html">getJobTable</a></code>(getJobDefs, getJobPars, getJobResources, getJobStatus)<br />Query Job Information</li>
@@ -151,7 +154,7 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
         <code><a href="makeClusterFunctionsLSF.html">makeClusterFunctionsLSF</a></code><br />ClusterFunctions for LSF Systems</li>
             
       <li>
-        <code><a href="makeClusterFunctionsMulticore.html">makeClusterFunctionsMulticore</a></code><br />ClusterFunctions for Local Multicore Execution</li>
+        <code><a href="makeClusterFunctionsMulticore.html">makeClusterFunctionsMulticore</a></code><br />ClusterFunctions for Parallel Execution</li>
             
       <li>
         <code><a href="makeClusterFunctionsOpenLava.html">makeClusterFunctionsOpenLava</a></code><br />ClusterFunctions for OpenLava</li>
@@ -166,6 +169,9 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
         <code><a href="makeClusterFunctionsSSH.html">makeClusterFunctionsSSH</a></code><br />ClusterFunctions for Remote SSH Execution</li>
             
       <li>
+        <code><a href="makeClusterFunctionsSocket.html">makeClusterFunctionsSocket</a></code><br />ClusterFunctions for Parallel Socket Execution</li>
+            
+      <li>
         <code><a href="makeClusterFunctionsTorque.html">makeClusterFunctionsTorque</a></code><br />ClusterFunctions for OpenPBS/Torque Systems</li>
             
       <li>
@@ -175,28 +181,31 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
         <code><a href="JobCollection.html">makeJobCollection</a></code>(JobCollection)<br />JobCollection Constructor</li>
             
       <li>
-        <code><a href="makeSubmitJobResult.html">makeSubmitJobResult</a></code>(SubmitJobResult)<br />Create a SubmitJobResult object</li>
+        <code><a href="makeSubmitJobResult.html">makeSubmitJobResult</a></code>(SubmitJobResult)<br />Create a SubmitJobResult</li>
             
       <li>
         <code><a href="reduceResults.html">reduceResults</a></code><br />Reduce Results</li>
             
       <li>
-        <code><a href="reduceResultsList.html">reduceResultsList</a></code>(reduceResultsDataTable)<br />Apply functions on Results</li>
+        <code><a href="reduceResultsList.html">reduceResultsList</a></code>(reduceResultsDataTable)<br />Apply Functions on Results</li>
             
       <li>
         <code><a href="removeExperiments.html">removeExperiments</a></code><br />Remove Experiments</li>
             
       <li>
-        <code><a href="runHook.html">runHook</a></code>(Hooks)<br />Hooks</li>
+        <code><a href="resetJobs.html">resetJobs</a></code><br />Reset the Computational State of Jobs</li>
             
       <li>
-        <code><a href="runOSCommand.html">runOSCommand</a></code><br />Run OS Commands on local or remote machines</li>
+        <code><a href="runHook.html">runHook</a></code>(Hooks)<br />Trigger Evaluation of Custom Function</li>
             
       <li>
-        <code><a href="showLog.html">showLog</a></code><br />Inspect Log Files</li>
+        <code><a href="runOSCommand.html">runOSCommand</a></code><br />Run OS Commands on Local or Remote Machines</li>
             
       <li>
-        <code><a href="submitJobs.html">submitJobs</a></code><br />Submit jobs to the Batch Systems</li>
+        <code><a href="showLog.html">showLog</a></code>(getLog)<br />Inspect Log Files</li>
+            
+      <li>
+        <code><a href="submitJobs.html">submitJobs</a></code><br />Submit Jobs to the Batch Systems</li>
             
       <li>
         <code><a href="summarizeExperiments.html">summarizeExperiments</a></code><br />Quick Summary over Experiments</li>
@@ -223,8 +232,8 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
     <h2>Dependencies</h2>
     <ul>
       <li><strong>Depends</strong>: data.table</li>
-      <li><strong>Imports</strong>: backports, brew, checkmate, digest, progress, R6, stats, stringi, utils</li>
-      <li><strong>Suggests</strong>: e1071, knitr, parallel, ranger, rmarkdown, rpart, snow, testthat</li>
+      <li><strong>Imports</strong>: backports, brew, checkmate, digest, parallel, progress, R6, stats, stringi, utils</li>
+      <li><strong>Suggests</strong>: dplyr, e1071, knitr, parallelMap, ranger, rmarkdown, rpart, snow, testthat</li>
       
     </ul>
     <h2>Authors</h2>

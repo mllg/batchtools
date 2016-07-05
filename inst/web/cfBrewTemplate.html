@@ -47,7 +47,7 @@
         
       </header>
       
-      <h1>Cluster functions helper: Brew your template into a job description file</h1>
+      <h1>Cluster Functions Helper to Write Job Description Files</h1>
 
 <div class="row">
   <div class="span8">
@@ -72,7 +72,7 @@ up variables.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code>character(1)</code>]. File path to resulting template file.
+[<code>character(1)</code>]. File path to brewed template file.
 </dl></p>
   
     </div>
@@ -83,8 +83,8 @@ up variables.</dd>
       <p>This function is only intended for use in your own cluster functions implementation.</p>
   
       <p>Calls brew silently on your template, any error will lead to an exception. If debug mode is
-enabled, the file is stored at the same place as the corresponding R script in the
-&#147;jobs&#148;-subdir of your files directory, otherwise in the temp dir via
+enabled (via option &#147;batchtools.debug&#148;), the file is stored at the same place as the corresponding
+R script in the &#147;jobs&#148;-subdir of your files directory, otherwise in the temp dir via
 <code><a href='http://www.inside-r.org/r-doc/base/tempfile'>tempfile</a></code>.</p>
   
     </div>

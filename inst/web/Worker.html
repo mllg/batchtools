@@ -85,11 +85,9 @@
       <p><dl>
 <dt><code>nodename</code></dt><dd>Host name. Set via constructor.</dd></p>
   
-      <p><dt><code>ncpus</code></dt><dd>Number of VPUs of worker. Set via constructor.</dd></p>
+      <p><dt><code>ncpus</code></dt><dd>Number of VPUs of worker. Set via constructor and defaults to the number of CPUs of the machine.</dd></p>
   
-      <p><dt><code>max.load</code></dt><dd>Maximum load average (of the last 5 min). Set via constructor.</dd></p>
-  
-      <p><dt><code>debug</code></dt><dd>Verbose output. Set via constructor.</dd></p>
+      <p><dt><code>max.load</code></dt><dd>Maximum load average (of the last 5 min). Set via constructor and defaults to the number of CPUs of the machine.</dd></p>
   
       <p><dt><code>status</code></dt><dd>Status of the worker; one of &#147;unknown&#148;, &#147;available&#148;, &#147;max.cpus&#148; and &#147;max.load&#148;.</dd></p>
   
@@ -103,7 +101,7 @@
       <p></p>
   
       <p><dl>
- <dt><code>new(nodename, ncpus, max.load, debug)</code></dt><dd>Constructor.</dd></p>
+ <dt><code>new(nodename, ncpus, max.load)</code></dt><dd>Constructor.</dd></p>
   
       <p><dt><code>update(reg)</code></dt><dd>Update the worker status.</dd></p>
   
@@ -111,7 +109,7 @@
   
       <p><dt><code>start(reg, fn, outfile)</code></dt><dd>Start job collection in file &#147;fn&#148; and output to &#147;outfile&#148;.</dd></p>
   
-      <p><dt><code>kill(reg, pid)</code></dt><dd>Kill job matching the process id.</dd></p>
+      <p><dt><code>kill(reg, batch.id)</code></dt><dd>Kill job matching the &#147;batch.id&#148;.</dd></p>
   
       <p></dl></p>
   

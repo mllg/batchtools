@@ -52,10 +52,14 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeClusterFunctionsInteractive(write.logs&nbsp;=&nbsp;TRUE)</div></pre>
+    <pre><div>makeClusterFunctionsInteractive(external&nbsp;=&nbsp;FALSE, write.logs&nbsp;=&nbsp;TRUE)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
+      <dt>external</dt>
+      <dd>[<code>logical(1)</code>]
+If set to <code>TRUE</code>, jobs are started in a fresh R session instead of currently active.
+Default is <code>FALSE</code>.</dd>
       <dt>write.logs</dt>
       <dd>[<code>logical(1)</code>]
 Sink the output to log files. Turning logging off can increase the speed of
@@ -97,7 +101,8 @@ and <code>killJob</code> returns at once (for the same reason).</p>
     <h2>See also</h2>
     
 Other clusterFunctions: <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
-  <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>
+  <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>,
+  <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>
 
         
   </div>
