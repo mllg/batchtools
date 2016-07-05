@@ -54,7 +54,7 @@ createCollection = function(ids, resources = list(), reg = getDefaultRegistry())
 
   hooks = reg$cluster.functions$hooks
   if (length(hooks) > 0L) {
-    hooks = hooks[intersect(names(hooks), batchtools$remote.hooks)]
+    hooks = hooks[intersect(names(hooks), batchtools$hooks[batchtools$hooks$remote]$name)]
     if (length(hooks) > 0L)
       jc$hooks = hooks
   }
