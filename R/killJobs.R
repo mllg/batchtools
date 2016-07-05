@@ -24,6 +24,7 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   if (is.null(kill))
     stop("ClusterFunction implementation does not support the killing of jobs")
 
+  done = NULL
   ids = filter(reg$status, ids %??% .findSubmitted(reg))[is.na(done), c("job.id", "started", "batch.id"), with = FALSE]
   ids = ids[.findOnSystem(ids = ids, reg = reg)]
   if (nrow(ids) == 0L)

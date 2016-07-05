@@ -17,6 +17,7 @@ getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 getStatusTable = function(ids, batch.ids = getBatchIds(reg = reg), reg = getDefaultRegistry()) {
+  submitted = started = done = error = batch.id = status = NULL
   stats = filter(reg$status, ids)[, list(
     defined   = .N,
     submitted = count(submitted),

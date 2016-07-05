@@ -57,6 +57,7 @@ getJobTable = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefa
 getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   syncRegistry(reg)
+  submitted = started = done = NULL
 
   tab = filter(reg$status, ids)[, !c("def.id", "resource.id"), with = FALSE]
   tab[, "submitted" := as.POSIXct(submitted, origin = "1970-01-01")]

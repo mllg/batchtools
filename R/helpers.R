@@ -7,7 +7,7 @@ asJobTable = function(reg, ids = NULL, default = NULL, keep.extra = FALSE, singl
     stopf("You must provide exactly one id (%i provided)", nrow(res))
   }
   if (keep.extra && is.data.frame(ids) && ncol(ids) >= 2L) {
-    res = merge(res, ids, by = job.id, all = TRUE)
+    res = merge(res, ids, by = "job.id", all = TRUE)
   }
   return(res)
 }

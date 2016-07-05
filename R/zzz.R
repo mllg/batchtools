@@ -23,7 +23,6 @@ batchtools$hooks = data.table(
   name = c("pre.sync", "post.sync", "pre.do.collection", "post.do.collection", "pre.submit", "post.submit"),
   remote = c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE)
 )
-job.id = def.id = pars = submitted = started = done = error = batch.id = status = problem = algorithm = repl = NULL
 
 .onUnload <- function (libpath) {
   library.dynam.unload("batchtools", libpath) # nocov

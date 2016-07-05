@@ -73,6 +73,7 @@ removeProblem = function(name, reg = getDefaultRegistry()) {
   assertSubset(name, levels(reg$defs$problem))
 
   fn = file.path(reg$file.dir, "problems", sprintf("%s.rds", name))
+  problem = NULL
   def.ids = reg$defs[problem == name, "def.id", with = FALSE]
   job.ids = inner_join(reg$status, def.ids)[, "job.id", with = FALSE]
 

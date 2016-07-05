@@ -47,6 +47,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
   }
   repls = asCount(repls)
 
+  def.id = NULL
   all.ids = integer(0L)
 
   for (i in seq_along(prob.designs)) {
