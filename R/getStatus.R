@@ -10,7 +10,6 @@
 #' @export
 getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
-
   stats = getStatusTable(ids, reg = reg)
   setClasses(stats, c("Status", class(stats)))
 }

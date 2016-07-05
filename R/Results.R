@@ -127,7 +127,7 @@ reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegist
 #' @export
 #' @rdname reduceResultsList
 reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg = getDefaultRegistry()) {
-  assertRegistry(reg)
+  assertRegistry(reg, sync = TRUE)
   ids = asJobTable(reg, ids, default = .findDone(reg = reg))
   assertFlag(fill)
   results = reduceResultsList(ids = ids, fun = fun, ..., reg = reg)
