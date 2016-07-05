@@ -41,8 +41,7 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
     }
   }
 
-  assertRegistry(reg)
-  syncRegistry(reg)
+  assertRegistry(reg, sync = TRUE)
   assertString(pattern, na.ok = TRUE)
   assertFlag(ignore.case)
 
@@ -81,8 +80,7 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
 #' @family debug
 #' @return Nothing.
 showLog = function(id, reg = getDefaultRegistry()) {
-  assertRegistry(reg)
-  syncRegistry(reg)
+  assertRegistry(reg, sync = TRUE)
   id = asJobTable(reg, id, single.id = TRUE)
   lines = readLog(id, reg = reg)
   log.file = file.path(tempdir(), sprintf("%i.log", id$job.id))
@@ -93,8 +91,7 @@ showLog = function(id, reg = getDefaultRegistry()) {
 #' @export
 #' @rdname showLog
 getLog = function(id, reg = getDefaultRegistry()) {
-  assertRegistry(reg)
-  syncRegistry(reg)
+  assertRegistry(reg, sync = TRUE)
   id = asJobTable(reg, id, single.id = TRUE)
   readLog(id, reg = reg)
 }

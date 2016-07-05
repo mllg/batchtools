@@ -17,8 +17,7 @@
 #' @family debug
 #' @export
 killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE)
-  syncRegistry(reg)
+  assertRegistry(reg, writeable = TRUE, sync = TRUE)
 
   kill = reg$cluster.functions$killJob
   if (is.null(kill))

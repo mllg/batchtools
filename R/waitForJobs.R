@@ -21,11 +21,10 @@
 #' one job terminated with an exception.
 #' @export
 waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = FALSE)
+  assertRegistry(reg, writeable = FALSE, sync = TRUE)
   assertNumeric(sleep, len = 1L, lower = 0.2, finite = TRUE)
   assertNumeric(timeout, len = 1L, lower = sleep)
   assertFlag(stop.on.error)
-  syncRegistry(reg)
   ids = asJobTable(reg, ids, default = .findSubmitted(reg = reg))
 
   .findNotTerminated = function(reg, ids = NULL) {

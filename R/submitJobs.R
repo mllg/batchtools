@@ -47,8 +47,7 @@
 #'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @export
 submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE)
-  syncRegistry(reg)
+  assertRegistry(reg, writeable = TRUE, sync = TRUE)
   assertList(resources, names = "strict")
   ids = asJobTable(reg, ids, default = .findNotSubmitted(reg), keep.extra = TRUE)
   if (nrow(ids) == 0L)
@@ -140,7 +139,6 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   }
 
   ### return ids (on.exit handler kicks now in to submit the remaining messages)
-  syncRegistry(reg = reg, save = FALSE)
   setkeyv(ids, "job.id")
   return(invisible(ids))
 }
