@@ -111,7 +111,7 @@ reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegist
   }
 
   results = vector("list", n)
-  pb = makeProgressBar(total = n, format = "Submit [:bar] :percent eta: :eta")
+  pb = makeProgressBar(total = n, format = "Reducing [:bar] :percent eta: :eta")
   cache = Cache$new(reg$file.dir)
   for (i in which(file.exists(fns))) {
     results[[i]] = worker(readRDS(fns[i]), makeJob(ids$job.id[i], cache = cache, reg = reg), ...)
