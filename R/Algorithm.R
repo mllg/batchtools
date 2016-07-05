@@ -26,6 +26,7 @@ removeAlgorithm = function(name, reg = getDefaultRegistry()) {
   assertSubset(name, levels(reg$defs$algorithm))
 
   fn = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", name))
+  algorithm = NULL
   def.ids = reg$defs[algorithm == name, "def.id", with = FALSE]
   job.ids = inner_join(reg$status, def.ids)[, "job.id", with = FALSE]
 

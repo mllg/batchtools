@@ -245,6 +245,7 @@ cfKillJob = function(reg, cmd, args = character(0L), max.tries = 3L) {
 getBatchIds = function(reg, status = "all") {
   cf = reg$cluster.functions
   tab = data.table(batch.id = character(0L), status = character(0L))
+  batch.id = NULL
 
   if (status %in% c("all", "running") && !is.null(cf$listJobsRunning)) {
     x = cf$listJobsRunning(reg)
