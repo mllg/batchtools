@@ -49,7 +49,7 @@ To make your cluster function selection permanent for a specific system across R
 
 # Configuration file
 
-The configuration file, usually located in your home directory as `~/.batchtools.conf.r`, can be used to set system specific options.
+The configuration file, usually located in your home directory as `~/.batchtools.conf.R`, can be used to set system specific options.
 For example, to set the cluster function implementation (see next section), you would generate a file with the following content:
 ```{r,eval=FALSE}
 cluster.functions = makeClusterFunctionsInteractive()
