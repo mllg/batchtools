@@ -5,7 +5,7 @@
 \title{Add Experiments to the Registry}
 \usage{
 addExperiments(prob.designs = NULL, algo.designs = NULL, repls = 1L,
-  reg = getDefaultRegistry())
+  combine = "crossprod", reg = getDefaultRegistry())
 }
 \arguments{
 \item{prob.designs}{[named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
@@ -21,6 +21,12 @@ If \code{NULL}, adds experiments for all defined algorithms without any hyperpar
 \item{repls}{[\code{integer(1)}]\cr
 Number of replications for each distinct experiment.}
 
+\item{combine}{[\code{character(1)}]\cr
+How to combine parameters of the single  problem design with a single  algorithm design?
+Default is \dQuote{crossprod} which does a \code{\link[data.table]{CJ}} (similar to \code{\link[base]{expand.grid}}
+on the problem and algorithm design.
+Set to \dQuote{bind} to just \code{\link[base]{cbind}} them where the shorter table is repeated if necessary.}
+
 \item{reg}{[\code{\link{ExperimentRegistry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
 }
@@ -30,7 +36,9 @@ Registry. If not explicitly passed, uses the last created registry.}
 }
 \description{
 Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.
-Each element in the Cartesian product of problem designs and algorithm designs defines one computational job.
+If multiple problem designs or algorithm designs are provided, they are combined via the Cartesian product.
+Each row of a single problem design is combined with each row of a single algorithm design in either a
+\code{\link[base]{expand.grid}} or \code{\link[base]{cbind}} fashion (depending on parameter \code{combine}).
 }
 \examples{
 reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
