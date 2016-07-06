@@ -2,7 +2,9 @@
 #'
 #' @description
 #' Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.
-#' Each element in the Cartesian product of problem designs and algorithm designs defines one computational job.
+#' If multiple problem designs or algorithm designs are provided, they are combined via the Cartesian product.
+#' Each row of a single problem design is combined with each row of a single algorithm design in either a
+#' \code{\link[base]{expand.grid}} or \code{\link[base]{cbind}} fashion (depending on parameter \code{combine}).
 #'
 #' @param prob.designs [named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 #'   Named list of data frames. The name must match the problem name while the column names correspond to parameters
@@ -14,6 +16,11 @@
 #'   If \code{NULL}, adds experiments for all defined algorithms without any hyperparameters set.
 #' @param repls [\code{integer(1)}]\cr
 #'   Number of replications for each distinct experiment.
+#' @param combine [\code{character(1)}]\cr
+#'   How to combine parameters of the single  problem design with a single  algorithm design?
+#'   Default is \dQuote{crossprod} which does a \code{\link[data.table]{CJ}} (similar to \code{\link[base]{expand.grid}}
+#'   on the problem and algorithm design.
+#'   Set to \dQuote{bind} to just \code{\link[base]{cbind}} them where the shorter table is repeated if necessary.
 #' @template expreg
 #' @return [\code{\link{data.table}}]. Generated job ids are stored in the column \dQuote{job.id}.
 #'   See \code{\link{JoinTables}} for examples on working with job tables.
@@ -27,7 +34,7 @@
 #' prob.designs = list(p1 = expand.grid(n = 100, mean = -3:3, sd = 1:5))
 #' algo.designs = list(a1 = data.table())
 #' addExperiments(reg = reg, prob.designs, algo.designs)
-addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, reg = getDefaultRegistry()) {
+addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, combine = "crossprod", reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
   if (is.null(prob.designs)) {
     probs = levels(reg$defs$problem)
@@ -46,6 +53,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
     assertSubset(names(algo.designs), levels(reg$defs$algorithm))
   }
   repls = asCount(repls)
+  assertChoice(combine, c("crossprod", "bind"))
 
   def.id = NULL
   all.ids = integer(0L)
@@ -60,10 +68,15 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
       ad = as.data.table(algo.designs[[j]])
       n.ad = max(nrow(ad), 1L)
 
-      n.jobs = n.pd * n.ad * repls
-      info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
-
-      idx = CJ(.i = seq_len(n.pd), .j = seq_len(n.ad))
+      if (combine == "crossprod") {
+        n.jobs = n.pd * n.ad * repls
+        info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
+        idx = CJ(.i = seq_len(n.pd), .j = seq_len(n.ad))
+      } else {
+        n.jobs = max(n.pd, n.ad) * repls
+        info("Adding %i experiments (('%s'[%i] | '%s'[%i]) x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
+        idx = data.table(.i = rep_len(seq_len(n.pd), n.jobs), .j = rep_len(seq_len(n.ad), n.jobs))
+      }
       tab = data.table(pars = Map(function(pp, ap) list(prob.pars = pp, algo.pars = ap),
           pp = if (nrow(pd) > 0L) .mapply(list, pd[idx$.i], list()) else list(list()),
           ap = if (nrow(ad) > 0L) .mapply(list, ad[idx$.j], list()) else list(list())))
