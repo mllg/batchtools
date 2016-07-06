@@ -43,6 +43,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
   } else {
     assertList(prob.designs, types = "data.frame", names = "named")
     assertSubset(names(prob.designs), levels(reg$defs$problem))
+    prob.designs = lapply(prob.designs, as.data.table)
   }
   if (is.null(algo.designs)) {
     algos = levels(reg$defs$algorithm)
@@ -51,21 +52,21 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
   } else {
     assertList(algo.designs, types = "data.frame", names = "named")
     assertSubset(names(algo.designs), levels(reg$defs$algorithm))
+    algo.designs = lapply(algo.designs, as.data.table)
   }
   repls = asCount(repls)
   assertChoice(combine, c("crossprod", "bind"))
 
-  def.id = NULL
   all.ids = integer(0L)
 
   for (i in seq_along(prob.designs)) {
     pn = names(prob.designs)[i]
-    pd = as.data.table(prob.designs[[i]])
+    pd = prob.designs[[i]]
     n.pd = max(nrow(pd), 1L)
 
     for (j in seq_along(algo.designs)) {
       an = names(algo.designs)[j]
-      ad = as.data.table(algo.designs[[j]])
+      ad = algo.designs[[j]]
       n.ad = max(nrow(ad), 1L)
 
       if (combine == "crossprod") {
@@ -77,24 +78,38 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
         info("Adding %i experiments (('%s'[%i] | '%s'[%i]) x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
         idx = data.table(.i = rep_len(seq_len(n.pd), n.jobs), .j = rep_len(seq_len(n.ad), n.jobs))
       }
-      tab = data.table(pars = Map(function(pp, ap) list(prob.pars = pp, algo.pars = ap),
+
+      # create temp tab with prob name, algo name and pars as list
+      tab = data.table(
+        pars = Map(function(pp, ap) list(prob.pars = pp, algo.pars = ap),
           pp = if (nrow(pd) > 0L) .mapply(list, pd[idx$.i], list()) else list(list()),
-          ap = if (nrow(ad) > 0L) .mapply(list, ad[idx$.j], list()) else list(list())))
-      tab$problem = pn
-      tab$algorithm = an
+          ap = if (nrow(ad) > 0L) .mapply(list, ad[idx$.j], list()) else list(list())),
+        problem = pn,
+        algorithm = an)
+
+      # create hash of each row of tab
       tab$pars.hash = unlist(.mapply(function(...) digest::digest(list(...)), tab, list()))
-      tab = merge(reg$defs[, !c("pars", "problem", "algorithm"), with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 
-      miss = tab[is.na(def.id), which = TRUE]
-      tab[miss, "def.id" := auto_increment(reg$defs$def.id, length(miss))]
-      reg$defs = rbind(reg$defs, tab[miss])
+      # remove already defined experiments
+      tab = tab[!reg$defs, on = "pars.hash"]
 
-      tab = CJ(def.id = tab$def.id, repl = seq_len(repls))
-      tab = tab[!reg$status, on = c("def.id", "repl")]
+      if (nrow(tab) > 0L) {
+        # rbind new defs
+        tab$def.id = auto_increment(reg$defs$def.id, nrow(tab))
+        reg$defs = rbind(reg$defs, tab)
+      }
+
+      # create rows in status table for new defs and each repl and filter for defined
+      tab = CJ(def.id = tab$def.id, repl = seq_len(repls))[!reg$status, on = c("def.id", "repl")]
       if (nrow(tab) < n.jobs)
         info("Skipping %i duplicated experiments ...", n.jobs - nrow(tab))
-      tab$job.id = auto_increment(reg$status$job.id, nrow(tab))
-      reg$status = rbind(reg$status, tab, fill = TRUE)
+
+      if (nrow(tab) > 0L) {
+        # rbind new status
+        tab$job.id = auto_increment(reg$status$job.id, nrow(tab))
+        reg$status = rbind(reg$status, tab, fill = TRUE)
+      }
+
       all.ids = c(all.ids, tab$job.id)
     }
   }
