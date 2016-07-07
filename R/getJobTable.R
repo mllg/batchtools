@@ -73,7 +73,8 @@ getJobDefs = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefau
   if (!is.null(flatten))
     assertFlag(flatten)
   assertFlag(prefix)
-  tab = inner_join(filter(reg$status, ids), reg$defs)[, c("job.id", names(reg$defs)), with = FALSE]
+  tab = inner_join(reg$defs, filter(reg$status, ids))[, c("job.id", names(reg$defs)), with = FALSE]
+  setkeyv(tab, "job.id")
   parsAsCols(tab, flatten, prefix, reg = reg)
   tab[, !"def.id", with = FALSE]
 }
@@ -96,8 +97,7 @@ getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = get
     }
     tab[, "resources" := NULL]
   }
-  setkeyv(tab, "job.id")
-  tab[, !c("resource.id", "resource.hash"), with = FALSE]
+  setkeyv(tab[, !c("resource.id", "resource.hash"), with = FALSE], "job.id")[]
 }
 
 #' @export
@@ -108,9 +108,9 @@ getJobPars = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefau
     assertFlag(flatten)
   assertFlag(prefix)
   def.cols = c("job.id", setdiff(names(reg$defs), c("def.id", "pars.hash")))
-  tab = inner_join(filter(reg$status, ids), reg$defs)[, def.cols, with = FALSE]
+  tab = inner_join(reg$defs, filter(reg$status, ids))[, def.cols, with = FALSE]
   parsAsCols(tab, flatten, prefix, reg = reg)
-  tab[]
+  setkeyv(tab, "job.id")[]
 }
 
 parsAsCols = function(tab, flatten, prefix, reg = getDefaultRegistry()) {

@@ -140,5 +140,4 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   ### return ids (on.exit handler kicks now in to submit the remaining messages)
   setkeyv(ids, "job.id")
-  return(invisible(ids))
 }

@@ -65,14 +65,16 @@ createCollection = function(ids, resources = list(), reg = getDefaultRegistry())
 #' @export
 makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   jc = createCollection(ids, resources, reg)
-  jc$defs = inner_join(filter(reg$status, ids), reg$defs)[, c("job.id", "pars"), with = FALSE]
+  jc$defs = inner_join(reg$defs, filter(reg$status, ids))[, c("job.id", "pars"), with = FALSE]
+  setkeyv(jc$defs, "job.id")
   setClasses(jc, "JobCollection")
 }
 
 #' @export
 makeJobCollection.ExperimentRegistry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   jc = createCollection(ids, resources, reg)
-  jc$defs = inner_join(filter(reg$status, ids), reg$defs)[, c("job.id", "pars", "problem", "algorithm", "repl"), with = FALSE]
+  jc$defs = inner_join(reg$defs, filter(reg$status, ids))[, c("job.id", "pars", "problem", "algorithm", "repl"), with = FALSE]
+  setkeyv(jc$defs, "job.id")
   setClasses(jc, c("ExperimentCollection", "JobCollection"))
 }
 
