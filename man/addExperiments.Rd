@@ -22,10 +22,10 @@ If \code{NULL}, adds experiments for all defined algorithms without any hyperpar
 Number of replications for each distinct experiment.}
 
 \item{combine}{[\code{character(1)}]\cr
-How to combine parameters of the single  problem design with a single  algorithm design?
-Default is \dQuote{crossprod} which does a \code{\link[data.table]{CJ}} (similar to \code{\link[base]{expand.grid}}
-on the problem and algorithm design.
-Set to \dQuote{bind} to just \code{\link[base]{cbind}} them where the shorter table is repeated if necessary.}
+How to combine the rows of a single problem design with the rows of a single algorithm design?
+Default is \dQuote{crossprod} which combines each row of the problem design which each row of the algorithm design
+in a cross-product fashion. Set to \dQuote{bind} to just \code{\link[base]{cbind}} the tables of
+problem and algorithm designs where the shorter table is repeated if necessary.}
 
 \item{reg}{[\code{\link{ExperimentRegistry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
@@ -37,17 +37,23 @@ Registry. If not explicitly passed, uses the last created registry.}
 \description{
 Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.
 If multiple problem designs or algorithm designs are provided, they are combined via the Cartesian product.
-Each row of a single problem design is combined with each row of a single algorithm design in either a
-\code{\link[base]{expand.grid}} or \code{\link[base]{cbind}} fashion (depending on parameter \code{combine}).
+E.g., if you have two problems \code{p1} and \code{p2} and three algorithms \code{a1}, \code{a2} and \code{a3},
+\code{addExperiments} creates experiments for the combinations \code{(p1, a1)}, \code{(p1, a2)},
+\code{(p1, a3)}, \code{(p2, a1)}, \code{(p2, a2)} and \code{(p2, a3)}.
+
+The combination of a single problem design with a single algorithm design (e.g., \code{p1, a1}) can be
+controlled via the parameter \code{combine}.
 }
 \examples{
 reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
-addProblem(reg = reg, "p1",
-  fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
-addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) mean(instance))
-prob.designs = list(p1 = expand.grid(n = 100, mean = -3:3, sd = 1:5))
-algo.designs = list(a1 = data.table())
-addExperiments(reg = reg, prob.designs, algo.designs)
+addProblem("p1", fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd), reg = reg)
+addProblem("p2", fun = function(job, data, n, lamba, ...) rexp(n, lambda = lambda), reg = reg)
+addAlgorithm("a1", fun = function(instance, method, ...) if (method == "mean") mean(instance) else median(instance), reg = reg)
+addAlgorithm("a2", fun = function(instance, ...) se(instance), reg = reg)
+prob.designs = list(p1 = expand.grid(n = 100, mean = -1:1, sd = 1:5), p2 = data.table(lambda = 1:5))
+algo.designs = list(a1 = data.table(method = c("mean", "median")), a2 = data.table())
+addExperiments(prob.designs, algo.designs, reg = reg)
+getJobPars(reg = reg)
 }
 \seealso{
 Other Experiment: \code{\link{ExperimentRegistry}},
