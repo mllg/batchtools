@@ -6,8 +6,14 @@ test_that("addExperiments handles parameters correctly", {
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, a, b, ...) { print(str(a)); assertList(a, len = 1, names = "named"); assertDataFrame(b); } )
   prob.designs = list(p1 = data.table(x = 1:2, y = letters[1:2]))
   algo.designs = list(a1 = data.table(a = list(list(x = 1)), b = list(iris)))
-  repls = 1
+  repls = 2
   ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
+  expect_data_table(ids, nrow = 4, key = "job.id")
+  ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
+  expect_data_table(ids, nrow = 0, key = "job.id")
+  ids = addExperiments(prob.designs, algo.designs, repls = repls + 1L, reg = reg)
+  expect_data_table(ids, nrow = 2, key = "job.id")
+
   silent({
     submitJobs(reg = reg, ids = chunkIds(reg = reg))
     waitForJobs(reg = reg)
