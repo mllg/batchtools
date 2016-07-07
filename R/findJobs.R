@@ -172,7 +172,7 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   ee = parent.frame()
   fun = function(pars) eval(expr, pars, enclos = ee)
   pars = NULL
-  inner_join(filter(reg$status, ids), reg$defs)[vlapply(pars, fun), "job.id", with = FALSE]
+  setkeyv(inner_join(reg$defs, filter(reg$status, ids))[vlapply(pars, fun), "job.id", with = FALSE], "job.id")[]
 }
 
 
@@ -202,7 +202,7 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
 
   assertExperimentRegistry(reg, sync = TRUE)
   ee = parent.frame()
-  tab = inner_join(filter(reg$status, ids), reg$defs)[, c("job.id", "pars", "problem", "algorithm", "repl"), with = FALSE]
+  tab = inner_join(reg$defs, filter(reg$status, ids))[, c("job.id", "pars", "problem", "algorithm", "repl"), with = FALSE]
 
   if (!is.null(prob.name)) {
     assertCharacter(prob.name, any.missing = FALSE, min.chars = 1L)
@@ -236,5 +236,5 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
     tab = tab[repl %in% repls]
   }
 
-  return(tab[, "job.id", with = FALSE])
+  setkeyv(tab[, "job.id", with = FALSE], "job.id")[]
 }

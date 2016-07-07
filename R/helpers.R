@@ -24,8 +24,8 @@ filter = function(x, ids = NULL) {
   stop("Format of 'ids' not recognized. Must be a data frame with column 'job.id' or an integerish vector")
 }
 
-inner_join = function(x, y, on = key(y)) {
-  x[y, nomatch = 0, on = on]
+inner_join = function(x, y) {
+  x[y, nomatch = 0, on = key(x)]
 }
 
 auto_increment = function(ids, n = 1L) {

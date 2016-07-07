@@ -47,16 +47,16 @@ makeJob = function(id, cache = NULL, reg = getDefaultRegistry()) {
 
 #' @export
 makeJob.Registry = function(id, cache = NULL, reg = getDefaultRegistry()) {
-  row = inner_join(filter(reg$status, id), reg$defs)
+  row = inner_join(reg$defs, filter(reg$status, id))
   Job$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
-    resources = inner_join(row, reg$resources)$resources)
+    resources = inner_join(reg$resources, row)$resources)
 }
 
 #' @export
 makeJob.ExperimentRegistry = function(id, cache = NULL, reg = getDefaultRegistry()) {
-  row = inner_join(filter(reg$status, id), reg$defs)
+  row = inner_join(reg$defs, filter(reg$status, id))
   Experiment$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
-    repl = row$repl, resources = inner_join(row, reg$resources)$resources, prob.name = row$problem, algo.name = row$algorithm)
+    repl = row$repl, resources = inner_join(reg$resources, row)$resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
 getJob = function(jc, id, cache = NULL) {

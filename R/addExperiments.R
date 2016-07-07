@@ -3,8 +3,12 @@
 #' @description
 #' Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.
 #' If multiple problem designs or algorithm designs are provided, they are combined via the Cartesian product.
-#' Each row of a single problem design is combined with each row of a single algorithm design in either a
-#' \code{\link[base]{expand.grid}} or \code{\link[base]{cbind}} fashion (depending on parameter \code{combine}).
+#' E.g., if you have two problems \code{p1} and \code{p2} and three algorithms \code{a1}, \code{a2} and \code{a3},
+#' \code{addExperiments} creates experiments for the combinations \code{(p1, a1)}, \code{(p1, a2)},
+#' \code{(p1, a3)}, \code{(p2, a1)}, \code{(p2, a2)} and \code{(p2, a3)}.
+#'
+#' The combination of a single problem design with a single algorithm design (e.g., \code{p1, a1}) can be
+#' controlled via the parameter \code{combine}.
 #'
 #' @param prob.designs [named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 #'   Named list of data frames. The name must match the problem name while the column names correspond to parameters
@@ -17,10 +21,10 @@
 #' @param repls [\code{integer(1)}]\cr
 #'   Number of replications for each distinct experiment.
 #' @param combine [\code{character(1)}]\cr
-#'   How to combine parameters of the single  problem design with a single  algorithm design?
-#'   Default is \dQuote{crossprod} which does a \code{\link[data.table]{CJ}} (similar to \code{\link[base]{expand.grid}}
-#'   on the problem and algorithm design.
-#'   Set to \dQuote{bind} to just \code{\link[base]{cbind}} them where the shorter table is repeated if necessary.
+#'   How to combine the rows of a single problem design with the rows of a single algorithm design?
+#'   Default is \dQuote{crossprod} which combines each row of the problem design which each row of the algorithm design
+#'   in a cross-product fashion. Set to \dQuote{bind} to just \code{\link[base]{cbind}} the tables of
+#'   problem and algorithm designs where the shorter table is repeated if necessary.
 #' @template expreg
 #' @return [\code{\link{data.table}}]. Generated job ids are stored in the column \dQuote{job.id}.
 #'   See \code{\link{JoinTables}} for examples on working with job tables.
@@ -28,12 +32,14 @@
 #' @family Experiment
 #' @examples
 #' reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
-#' addProblem(reg = reg, "p1",
-#'   fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
-#' addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) mean(instance))
-#' prob.designs = list(p1 = expand.grid(n = 100, mean = -3:3, sd = 1:5))
-#' algo.designs = list(a1 = data.table())
-#' addExperiments(reg = reg, prob.designs, algo.designs)
+#' addProblem("p1", fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd), reg = reg)
+#' addProblem("p2", fun = function(job, data, n, lamba, ...) rexp(n, lambda = lambda), reg = reg)
+#' addAlgorithm("a1", fun = function(instance, method, ...) if (method == "mean") mean(instance) else median(instance), reg = reg)
+#' addAlgorithm("a2", fun = function(instance, ...) se(instance), reg = reg)
+#' prob.designs = list(p1 = expand.grid(n = 100, mean = -1:1, sd = 1:5), p2 = data.table(lambda = 1:5))
+#' algo.designs = list(a1 = data.table(method = c("mean", "median")), a2 = data.table())
+#' addExperiments(prob.designs, algo.designs, reg = reg)
+#' getJobPars(reg = reg)
 addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, combine = "crossprod", reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
   if (is.null(prob.designs)) {
@@ -90,13 +96,14 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
       # create hash of each row of tab
       tab$pars.hash = unlist(.mapply(function(...) digest::digest(list(...)), tab, list()))
 
-      # remove already defined experiments
-      tab = tab[!reg$defs, on = "pars.hash"]
+      # merge with already defined experiments to get def.ids
+      tab = merge(reg$defs[, !c("pars", "problem", "algorithm"), with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 
-      if (nrow(tab) > 0L) {
-        # rbind new defs
-        tab$def.id = auto_increment(reg$defs$def.id, nrow(tab))
-        reg$defs = rbind(reg$defs, tab)
+      # generate def ids for new experiments
+      w = which(is.na(tab$def.id))
+      if (length(w) > 0L) {
+        tab[w, "def.id" := auto_increment(reg$defs$def.id, length(w))]
+        reg$defs = rbind(reg$defs, tab[w])
       }
 
       # create rows in status table for new defs and each repl and filter for defined

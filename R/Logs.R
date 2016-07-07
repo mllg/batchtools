@@ -65,8 +65,7 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
   }
 
   res = cbind(ids[found, "job.id", with = FALSE], data.table(matches = matches[found]))
-  setkeyv(res, "job.id")
-  return(res)
+  setkeyv(res, "job.id")[]
 }
 
 #' @title Inspect Log Files
