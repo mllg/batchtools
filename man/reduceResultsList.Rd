@@ -18,10 +18,8 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of \code{\link{findDone}}.}
 
 \item{fun}{[\code{function}]\cr
-Function to apply to each result. The result is passed unnamed as first
-argument. If \code{NULL}, the identity is used.
-If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}}
-is passed to the function.}
+Function to apply to each result. The result is passed unnamed as first argument. If \code{NULL}, the identity is used.
+If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}} is passed to the function.}
 
 \item{...}{[\code{ANY}]\cr
 Additional arguments passed to to function \code{fun}.}
@@ -35,13 +33,19 @@ In \code{reduceResultsDataTable}: This flag is passed down to
 to a \code{\link[data.table]{data.table}}.}
 }
 \value{
-\code{reduceResultsList} returns a list, \code{reduceResultsDataTable}
-  returns a \code{\link[data.table]{data.table}} with
-  columns \dQuote{job.id} and additional result columns as returned by (see \code{\link[data.table]{rbindlist}}).
+\code{reduceResultsList} returns a list,
+  \code{reduceResultsDataTable} returns a \code{\link[data.table]{data.table}} with columns \dQuote{job.id} and additional result columns
+  created via \code{\link[data.table]{rbindlist}}.
 }
 \description{
 Applies a function on the results of your finished jobs and thereby collects
 them in a \code{\link[base]{list}} or \code{\link[data.table]{data.table}}.
+The later requires the provided function to return a list (or \code{data.frame}) of scalar values.
+See \code{\link[data.table]{rbindlist}} for features and limitations of the aggregation.
+}
+\note{
+If you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
+can significantly increase the performance.
 }
 \examples{
 reg = makeRegistry(file.dir = NA, make.default = FALSE)

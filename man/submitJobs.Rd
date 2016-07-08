@@ -60,5 +60,8 @@ on the executing machine for multicore and socket mode and defaults to the retur
 Furthermore, you can set the \code{level} for \code{\link[parallelMap]{parallelMap}} via \dQuote{pm.level}.
 
 Note that your template must be set up to handle the parallelization, e.g. start R with \code{mpirun} or request the correct number of CPUs.
+
+If you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
+can significantly increase the performance.
 }
 

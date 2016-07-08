@@ -33,6 +33,10 @@
 #'
 #' Note that your template must be set up to handle the parallelization, e.g. start R with \code{mpirun} or request the correct number of CPUs.
 #'
+#' @note
+#' If you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
+#' can significantly increase the performance.
+#'
 #' @templateVar ids.default findNotSubmitted
 #' @template ids
 #' @param resources [\code{named list}]\cr

@@ -40,6 +40,10 @@ Aggregated results, return type depends on function. If \code{ids}
 A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects
 which iterates over finished jobs and aggregates them.
 }
+\note{
+If you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
+can significantly increase the performance.
+}
 \examples{
 reg = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(function(x) x^2, x = 1:10, reg = reg)
