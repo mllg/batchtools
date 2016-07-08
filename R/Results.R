@@ -4,6 +4,10 @@
 #' A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects
 #' which iterates over finished jobs and aggregates them.
 #'
+#' @note
+#' If you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
+#' can significantly increase the performance.
+#'
 #' @templateVar ids.default findDone
 #' @template ids
 #' @param fun [\code{function}]\cr
@@ -68,20 +72,24 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @description
 #' Applies a function on the results of your finished jobs and thereby collects
 #' them in a \code{\link[base]{list}} or \code{\link[data.table]{data.table}}.
+#' The later requires the provided function to return a list (or \code{data.frame}) of scalar values.
+#' See \code{\link[data.table]{rbindlist}} for features and limitations of the aggregation.
+#'
+#' @note
+#' If you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
+#' can significantly increase the performance.
 #'
 #' @templateVar ids.default findDone
 #' @template ids
 #' @param fun [\code{function}]\cr
-#'   Function to apply to each result. The result is passed unnamed as first
-#'   argument. If \code{NULL}, the identity is used.
-#'   If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}}
-#'   is passed to the function.
+#'   Function to apply to each result. The result is passed unnamed as first argument. If \code{NULL}, the identity is used.
+#'   If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}} is passed to the function.
 #' @param ... [\code{ANY}]\cr
 #'   Additional arguments passed to to function \code{fun}.
 #' @template reg
-#' @return \code{reduceResultsList} returns a list, \code{reduceResultsDataTable}
-#'   returns a \code{\link[data.table]{data.table}} with
-#'   columns \dQuote{job.id} and additional result columns as returned by (see \code{\link[data.table]{rbindlist}}).
+#' @return \code{reduceResultsList} returns a list,
+#'   \code{reduceResultsDataTable} returns a \code{\link[data.table]{data.table}} with columns \dQuote{job.id} and additional result columns
+#'   created via \code{\link[data.table]{rbindlist}}.
 #' @seealso \code{\link{reduceResults}}.
 #' @family Results
 #' @export
