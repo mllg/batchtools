@@ -46,13 +46,36 @@ controlled via the parameter \code{combine}.
 }
 \examples{
 reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
-addProblem("p1", fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd), reg = reg)
-addProblem("p2", fun = function(job, data, n, lamba, ...) rexp(n, lambda = lambda), reg = reg)
-addAlgorithm("a1", fun = function(instance, method, ...) if (method == "mean") mean(instance) else median(instance), reg = reg)
-addAlgorithm("a2", fun = function(instance, ...) se(instance), reg = reg)
-prob.designs = list(p1 = expand.grid(n = 100, mean = -1:1, sd = 1:5), p2 = data.table(lambda = 1:5))
-algo.designs = list(a1 = data.table(method = c("mean", "median")), a2 = data.table())
+
+# add first problem
+fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd)
+addProblem("p1", fun = fun, reg = reg)
+
+# add second problem
+fun = function(job, data, n, lamba, ...) rexp(n, lambda = lambda)
+addProblem("p2", fun = fun, reg = reg)
+
+
+# add first algorithm
+fun = function(instance, method, ...) if (method == "mean") mean(instance) else median(instance)
+addAlgorithm("a1", fun = fun, reg = reg)
+
+# add second algorithm
+fun = function(instance, ...) se(instance)
+addAlgorithm("a2", reg = reg)
+
+# define problem and algorithm designs
+prob.designs = algo.designs = list()
+prob.designs$p1 = expand.grid(n = 100, mean = -1:1, sd = 1:5)
+prob.designs$p2 = data.table(lambda = 1:5)
+algo.designs$a1 = data.table(method = c("mean", "median"))
+algo.designs$a2 = data.table()
+
+# add experiments
 addExperiments(prob.designs, algo.designs, reg = reg)
+
+# check what has been created
+summarizeExperiments(reg = reg)
 getJobPars(reg = reg)
 }
 \seealso{

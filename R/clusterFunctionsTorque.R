@@ -11,18 +11,18 @@
 #' \code{\link{ClusterFunctions}}. It is the template file's job to choose a queue for the job and
 #' handle the desired resource allocations.
 #'
-#' @template template_or_text
+#' @template template
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsTorque = function(template = NULL, text = NULL) { # nocov start
-  text = cfReadBrewTemplate(template, text, "##")
+makeClusterFunctionsTorque = function(template = findConfFile("batchtools.torque.tmpl")) { # nocov start
+  template = cfReadBrewTemplate(template, "##")
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
 
-    outfile = cfBrewTemplate(reg, text, jc)
+    outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("qsub", outfile)
 
     max.jobs.msg = "Maximum number of jobs already in queue"

@@ -34,11 +34,10 @@
 #' @param conf.file [\code{character(1)}]\cr
 #'   Path to a configuration file which is sourced directly after the registry is created.
 #'   For example, you can set cluster functions or default resources in it.
-#'   If set to \code{NA} (default), the package looks for \dQuote{batchtools.conf.R} in the
-#'   current working directory (see \code{\link[base]{getwd}}) first,
-#'   then tries \dQuote{.batchtools.conf.R} in the home directory.
 #'   The script is executed inside the registry environment, thus you can directly set
 #'   all slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.
+#'   Defaults to a heuristic implemented in \code{\link{findConfFile}}, set to \code{character(0)}
+#'   if you want to completely disable the lookup.
 #' @param packages [\code{character}]\cr
 #'   Packages that will always be loaded on each node.
 #'   Uses \code{\link[base]{require}} internally.
@@ -92,14 +91,14 @@
 #' # Change packages to load
 #' reg$packages = c("MASS")
 #' saveRegistry(reg = reg)
-makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "~/.batchtools.conf.R", packages = character(0L), namespaces = character(0L),
+makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = findConfFile("batchtools.conf.R"), packages = character(0L), namespaces = character(0L),
   source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
   assertString(file.dir, na.ok = TRUE)
   if (!is.na(file.dir))
     assertPathForOutput(file.dir, overwrite = FALSE)
   assertString(work.dir)
   assertDirectoryExists(work.dir, access = "r")
-  assertString(conf.file)
+  assertCharacter(conf.file, any.missing = FALSE, max.len = 1L)
   assertCharacter(packages, any.missing = FALSE, min.chars = 1L)
   assertCharacter(namespaces, any.missing = FALSE, min.chars = 1L)
   assertCharacter(source, any.missing = FALSE, min.chars = 1L)
@@ -146,7 +145,8 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = "
     resources      = list(),
     key = "resource.id")
 
-  if (file.exists(conf.file)) {
+  if (length(conf.file) > 0L) {
+    assertString(conf.file)
     info("Sourcing configuration file '%s' ...", conf.file)
     sys.source(conf.file, envir = reg, keep.source = FALSE)
 
