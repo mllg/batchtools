@@ -4,16 +4,12 @@
 \alias{makeClusterFunctionsSGE}
 \title{ClusterFunctions for SGE Systems}
 \usage{
-makeClusterFunctionsSGE(template = NULL, text = NULL)
+makeClusterFunctionsSGE(template = findConfFile("batchtools.sge.tmpl"))
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
 Path to a brew template file that can be used for the job description.
-Mutually exclusive with argument \code{text}.}
-
-\item{text}{[\code{character(1)}]\cr
-Single string holding the template to be used.
-Mutually exclusive with argument \code{template}.}
+Alternatively, the template as a single string (including at least one newline \dQuote{\\n}).}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

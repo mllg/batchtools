@@ -4,16 +4,13 @@
 \alias{makeClusterFunctionsSLURM}
 \title{ClusterFunctions for SLURM Systems}
 \usage{
-makeClusterFunctionsSLURM(template = NULL, text = NULL, clusters = NULL)
+makeClusterFunctionsSLURM(template = findConfFile("batchtools.slurm.tmpl"),
+  clusters = NULL)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
 Path to a brew template file that can be used for the job description.
-Mutually exclusive with argument \code{text}.}
-
-\item{text}{[\code{character(1)}]\cr
-Single string holding the template to be used.
-Mutually exclusive with argument \code{template}.}
+Alternatively, the template as a single string (including at least one newline \dQuote{\\n}).}
 
 \item{clusters}{[\code{character(1)}]\cr
 If multiple clusters are managed by one SLURM system, the name of one cluster has to be specified.

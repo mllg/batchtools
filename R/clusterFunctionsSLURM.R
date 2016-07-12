@@ -15,7 +15,7 @@
 #' otherwise the commands for listing and killing jobs do not work.
 #' The value set can be accessed in the template via \dQuote{clusters}.
 #'
-#' @template template_or_text
+#' @template template
 #' @param clusters [\code{character(1)}]\cr
 #'  If multiple clusters are managed by one SLURM system, the name of one cluster has to be specified.
 #'  If only one cluster is present, this argument may be omitted.
@@ -23,17 +23,17 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSLURM = function(template = NULL, text = NULL, clusters = NULL) { # nocov start
+makeClusterFunctionsSLURM = function(template = findConfFile("batchtools.slurm.tmpl"), clusters = NULL) { # nocov start
   if (!is.null(clusters))
     assertString(clusters, min.chars = 1L)
-  text = cfReadBrewTemplate(template, text, "##")
+  template = cfReadBrewTemplate(template, "##")
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
 
     jc$clusters = clusters
-    outfile = cfBrewTemplate(reg, text, jc)
+    outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("sbatch", outfile)
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"

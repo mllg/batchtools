@@ -122,23 +122,25 @@ print.SubmitJobResult = function(x, ...) {
 #' This function is only intended for use in your own cluster functions implementation.
 #' Simply reads your template and returns it as a character vector.
 #'
-#' @template template_or_text
+#' @template template
 #' @param comment.string [\code{character(1)}]\cr
 #'   Ignore lines starting with this string.
 #' @return [\code{character}].
 #' @family ClusterFunctionsHelper
 #' @export
-cfReadBrewTemplate = function(template = NULL, text = NULL, comment.string = NA_character_) {
-  if (!xor(is.null(template), is.null(text)))
-    stop("Either 'template' or 'text' must be provided")
+cfReadBrewTemplate = function(template, comment.string = NA_character_) {
+  assertCharacter(template, any.missing = FALSE, max.len = 1L)
+  if (length(template) == 0L)
+    stop("No template found")
 
-  if (!is.null(text)) {
-    assertString(text)
-    lines = stri_trim_both(stri_split_lines(text)[[1L]])
-  } else {
-    assertFileExists(template, "r")
+  if (stri_detect_regex(template, "\n")) {
+    lines = stri_trim_both(stri_split_lines(template)[[1L]])
+  } else if (testFileExists(template, "r")) {
     lines = stri_trim_both(readLines(template))
+  } else {
+    stop("Argument 'template' must non point to a template file or provide the template as string (containing at least one newline)")
   }
+
   lines = lines[!stri_isempty(lines)]
   if (!is.na(comment.string))
     lines = lines[!stri_startswith_fixed(lines, comment.string)]

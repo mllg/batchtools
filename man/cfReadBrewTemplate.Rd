@@ -4,17 +4,12 @@
 \alias{cfReadBrewTemplate}
 \title{Cluster Functions Helper to Parse a Brew Template}
 \usage{
-cfReadBrewTemplate(template = NULL, text = NULL,
-  comment.string = NA_character_)
+cfReadBrewTemplate(template, comment.string = NA_character_)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
 Path to a brew template file that can be used for the job description.
-Mutually exclusive with argument \code{text}.}
-
-\item{text}{[\code{character(1)}]\cr
-Single string holding the template to be used.
-Mutually exclusive with argument \code{template}.}
+Alternatively, the template as a single string (including at least one newline \dQuote{\\n}).}
 
 \item{comment.string}{[\code{character(1)}]\cr
 Ignore lines starting with this string.}

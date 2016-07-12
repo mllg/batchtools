@@ -14,7 +14,7 @@
 \title{Registry Constructor}
 \usage{
 makeRegistry(file.dir = "registry", work.dir = getwd(),
-  conf.file = "~/.batchtools.conf.R", packages = character(0L),
+  conf.file = findConfFile("batchtools.conf.R"), packages = character(0L),
   namespaces = character(0L), source = character(0L),
   load = character(0L), seed = NULL, make.default = TRUE)
 
@@ -55,9 +55,11 @@ yourself.}
 
 \item{conf.file}{[\code{character(1)}]\cr
 Path to a configuration file which is sourced directly after the registry is created.
-For example, you can set system-specific cluster functions in it.
+For example, you can set cluster functions or default resources in it.
 The script is executed inside the registry environment, thus you can directly set
-all slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.}
+all slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.
+Defaults to a heuristic implemented in \code{\link{findConfFile}}, set to \code{character(0)}
+if you want to completely disable the lookup.}
 
 \item{packages}{[\code{character}]\cr
 Packages that will always be loaded on each node.

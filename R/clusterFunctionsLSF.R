@@ -13,12 +13,12 @@
 #' job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
-#' @template template_or_text
+#' @template template
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsLSF = function(template = NULL, text = NULL) { # nocov start
-  text = cfReadBrewTemplate(template, text)
+makeClusterFunctionsLSF = function(template = findConfFile("batchtools.lsf.tmpl")) { # nocov start
+  template = cfReadBrewTemplate(template)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
   # when unfinished jobs are found, and 255 when no jobs are found,
@@ -29,7 +29,7 @@ makeClusterFunctionsLSF = function(template = NULL, text = NULL) { # nocov start
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
 
-    outfile = cfBrewTemplate(reg, text, jc)
+    outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("bsub", outfile)
 
     if (res$exit.code > 0L) {
