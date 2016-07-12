@@ -33,7 +33,10 @@
 #'   yourself.
 #' @param conf.file [\code{character(1)}]\cr
 #'   Path to a configuration file which is sourced directly after the registry is created.
-#'   For example, you can set system-specific cluster functions in it.
+#'   For example, you can set cluster functions or default resources in it.
+#'   If set to \code{NA} (default), the package looks for \dQuote{batchtools.conf.R} in the
+#'   current working directory (see \code{\link[base]{getwd}}) first,
+#'   then tries \dQuote{.batchtools.conf.R} in the home directory.
 #'   The script is executed inside the registry environment, thus you can directly set
 #'   all slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.
 #' @param packages [\code{character}]\cr
