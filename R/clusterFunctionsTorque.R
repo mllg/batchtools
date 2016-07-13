@@ -11,11 +11,12 @@
 #' \code{\link{ClusterFunctions}}. It is the template file's job to choose a queue for the job and
 #' handle the desired resource allocations.
 #'
+#' @templateVar cf.name torque
 #' @template template
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsTorque = function(template = findConfFile("batchtools.torque.tmpl")) { # nocov start
+makeClusterFunctionsTorque = function(template = findTemplateFile("torque")) { # nocov start
   template = cfReadBrewTemplate(template, "##")
 
   submitJob = function(reg, jc) {

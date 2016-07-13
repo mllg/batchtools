@@ -13,11 +13,12 @@
 #' job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
+#' @templateVar cf.name sge
 #' @template template
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSGE = function(template = findConfFile("batchtools.sge.tmpl")) { # nocov start
+makeClusterFunctionsSGE = function(template = findTemplateFile("sge")) { # nocov start
   template = cfReadBrewTemplate(template)
 
   submitJob = function(reg, jc) {

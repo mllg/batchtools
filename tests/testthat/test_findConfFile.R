@@ -1,13 +1,11 @@
 context("findConfFile")
 
 test_that("findConfFile", {
-  expect_identical(findConfFile("youwontfineme"), character(0))
-
   d = tempdir()
-  fn = file.path(d, "my.conf")
+  fn = file.path(d, "batchtools.conf.R")
   writeLines("hello", fn)
   prev = getwd()
   setwd(d)
-  expect_equal(findConfFile("my.conf"), fn)
+  expect_equal(findConfFile(), fn)
   setwd(prev)
 })

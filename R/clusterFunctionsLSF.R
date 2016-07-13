@@ -13,11 +13,12 @@
 #' job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
+#' @templateVar cf.name lsf
 #' @template template
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsLSF = function(template = findConfFile("batchtools.lsf.tmpl")) { # nocov start
+makeClusterFunctionsLSF = function(template = findTemplateFile("lsf")) { # nocov start
   template = cfReadBrewTemplate(template)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only

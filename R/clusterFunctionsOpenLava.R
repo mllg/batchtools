@@ -13,11 +13,12 @@
 #' job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
+#' @templateVar cf.name openlava
 #' @template template
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsOpenLava = function(template = findConfFile("batchtools.openlava.tmpl")) { # nocov start
+makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava")) { # nocov start
   template = cfReadBrewTemplate(template)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only

@@ -8,8 +8,8 @@ cfReadBrewTemplate(template, comment.string = NA_character_)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
-Path to a brew template file that can be used for the job description.
-Alternatively, the template as a single string (including at least one newline \dQuote{\\n}).}
+Path to template file or single string (containing newlines) which is then passed
+to \code{\link[brew]{brew}}.}
 
 \item{comment.string}{[\code{character(1)}]\cr
 Ignore lines starting with this string.}
