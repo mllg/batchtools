@@ -93,7 +93,7 @@ For further investigation, see <code><a href='showLog.html'>showLog</a></code>.<
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/lang/.batchtools.conf.R&#39; ...</strong>
 <div class='input'>fun = function(i) if (i == 3) stop(i) else i
 ids = batchMap(fun, i = 1:5, reg = reg)
 </div>
@@ -101,9 +101,9 @@ ids = batchMap(fun, i = 1:5, reg = reg)
 <div class='input'>submitJobs(1:4, reg = reg)
 </div>
 <strong class='message'>Submitting 4 jobs in 4 chunks using cluster functions &#39;Interactive&#39; ...</strong>
-<strong class='message'>Syncing 4 files ...</strong>
 <div class='input'>waitForJobs(1:4, reg = reg)
 </div>
+<strong class='message'>Syncing 4 files ...</strong>
 <div class='output'>[1] FALSE
 </div>
 <div class='input'>getErrorMessages(ids, reg = reg)

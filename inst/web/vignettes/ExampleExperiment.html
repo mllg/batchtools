@@ -154,7 +154,9 @@ id2 =<span class="st"> </span><span class="kw">findExperiments</span>(<span clas
 <p>After the jobs are executed, we collect the results with <a href="https://mllg.github.io/batchtools/reduceResultsList.html"><code>reduceResultsDataTable()</code></a> and directly extract the mean misclassification error:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">submitJobs</span>()</code></pre></div>
 <pre><code>## Submitting 90 jobs in 90 chunks using cluster functions 'Interactive' ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">waitForJobs</span>()</code></pre></div>
 <pre><code>## Syncing 90 files ...</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results =<span class="st"> </span><span class="kw">reduceResultsDataTable</span>(<span class="dt">fun =</span> function(res) (<span class="kw">list</span>(<span class="dt">mce =</span> (<span class="kw">sum</span>(res) -<span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(res))) /<span class="st"> </span><span class="kw">sum</span>(res))))</code></pre></div>
 <p>Next, we merge the results table with the table of job parameters:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tab =<span class="st"> </span><span class="kw">merge</span>(<span class="kw">getJobPars</span>(), results)

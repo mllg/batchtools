@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>makeClusterFunctionsLSF. batchtools 0.1</title>
+<title>makeClusterFunctionsSlurm. batchtools 0.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,12 +47,12 @@
         
       </header>
       
-      <h1>ClusterFunctions for LSF Systems</h1>
+      <h1>ClusterFunctions for Slurm Systems</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeClusterFunctionsLSF(template&nbsp;=&nbsp;findTemplateFile("lsf"))</div></pre>
+    <pre><div>makeClusterFunctionsSlurm(template&nbsp;=&nbsp;findTemplateFile("slurm"), clusters&nbsp;=&nbsp;NULL)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -62,10 +62,15 @@ Path to a brew template file that can be used for the job description.
 Alternatively, the template as a single string (including at least one newline &#147;\n&#148;).
 Defaults to a heuristic which looks for a template file in the following locations and picks
 the first one found:
-(1) &#147;batchtools.lsf.tmpl&#148; in the current working directory,
-(2) &#147;.batchtools.lsf.tmpl&#148; in the home directory and finally
-(3) &#147;lsf.default.tmpl&#148; in the package installation directory
+(1) &#147;batchtools.slurm.tmpl&#148; in the current working directory,
+(2) &#147;.batchtools.slurm.tmpl&#148; in the home directory and finally
+(3) &#147;slurm.default.tmpl&#148; in the package installation directory
 in the subfolder &#147;templates&#148;.</dd>
+      <dt>clusters</dt>
+      <dd>[<code>character(1)</code>]
+If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.
+If only one cluster is present, this argument may be omitted.
+Note that you should not select the cluster in your template file via <code>#SBATCH --clusters</code>.</dd>
     </dl>
     
     <div class="Value">
@@ -82,21 +87,23 @@ in the subfolder &#147;templates&#148;.</dd>
 
       <p>Job files are created based on the brew template <code>template.file</code>. This
 file is processed with brew and then submitted to the queue using the
-<code>bsub</code> command. Jobs are killed using the <code>bkill</code> command and the
-list of running jobs is retrieved using <code>bjobs -u $USER -w</code>. The user
-must have the appropriate privileges to submit, delete and list jobs on the
+<code>sbatch</code> command. Jobs are killed using the <code>scancel</code> command and
+the list of running jobs is retrieved using <code>squeue</code>. The user must
+have the appropriate privileges to submit, delete and list jobs on the
 cluster (this is usually the case).</p>
   
       <p>The template file can access all arguments passed to the <code>submitJob</code>
 function, see here <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>. It is the template file's
-job to choose a queue for the job and handle the desired resource
-allocations.</p>
+job handle the desired resource allocations.
+Note that you have to specify the cluster name here (if you do not want to use the default),
+otherwise the commands for listing and killing jobs do not work.
+The value set can be accessed in the template via &#147;clusters&#148;.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>makeClusterFunctionsLSF</li>
+      <li>makeClusterFunctionsSlurm</li>
     </ul>
     <ul>
       
@@ -105,9 +112,9 @@ allocations.</p>
     <h2>See also</h2>
     
 Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+  <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
   <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
   <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
-  <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
   <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code>,
   <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>,
   <code><a href='runOSCommand.html'>runOSCommand</a></code>

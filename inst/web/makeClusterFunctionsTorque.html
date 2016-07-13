@@ -52,18 +52,20 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeClusterFunctionsTorque(template&nbsp;=&nbsp;NULL, text&nbsp;=&nbsp;NULL)</div></pre>
+    <pre><div>makeClusterFunctionsTorque(template&nbsp;=&nbsp;findTemplateFile("torque"))</div></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>template</dt>
       <dd>[<code>character(1)</code>]
 Path to a brew template file that can be used for the job description.
-Mutually exclusive with argument <code>text</code>.</dd>
-      <dt>text</dt>
-      <dd>[<code>character(1)</code>]
-Single string holding the template to be used.
-Mutually exclusive with argument <code>template</code>.</dd>
+Alternatively, the template as a single string (including at least one newline &#147;\n&#148;).
+Defaults to a heuristic which looks for a template file in the following locations and picks
+the first one found:
+(1) &#147;batchtools.torque.tmpl&#148; in the current working directory,
+(2) &#147;.batchtools.torque.tmpl&#148; in the home directory and finally
+(3) &#147;torque.default.tmpl&#148; in the package installation directory
+in the subfolder &#147;templates&#148;.</dd>
     </dl>
     
     <div class="Value">
@@ -104,7 +106,7 @@ Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClus
   <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
   <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
   <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
-  <code><a href='makeClusterFunctionsSLURM.html'>makeClusterFunctionsSLURM</a></code>,
+  <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
   <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>,
   <code><a href='runOSCommand.html'>runOSCommand</a></code>
 

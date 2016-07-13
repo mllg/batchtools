@@ -91,8 +91,8 @@ reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="
 <p>When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run <a href="https://mllg.github.io/batchtools/getStatus.html"><code>getStatus()</code></a> to display a summary of the current state of the system.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">submitJobs</span>()</code></pre></div>
 <pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
-<pre><code>## Syncing 10 files ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getStatus</span>()</code></pre></div>
+<pre><code>## Syncing 10 files ...</code></pre>
 <pre><code>## Status for 10 jobs:
 ##   Submitted : 10 (100.0%)
 ##   Queued    :  0 (  0.0%)
@@ -112,13 +112,13 @@ reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="
 ## 2:      9       TRUE  TRUE Error in (function (value)  : Ooops.</code></pre>
 <p>If we want to peek into the R log file of a job to see more context for the error we can use <a href="https://mllg.github.io/batchtools/showLog.html"><code>showLog()</code></a> which opens a pager:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">showLog</span>(<span class="dt">id =</span> <span class="dv">9</span>)</code></pre></div>
-<pre><code>## [1] &quot;[job(chunk): 2016-07-05 12:14:50] Starting calculation of 1 jobs&quot;                                         
-## [2] &quot;[job(chunk): 2016-07-05 12:14:50] Setting working directory to '/home/lang/Projekte/batchtools/vignettes'&quot;
-## [3] &quot;[job(chunk): 2016-07-05 12:14:50] Memory measurement disabled&quot;                                            
-## [4] &quot;[job(9): 2016-07-05 12:14:50] Starting job with job.id=9&quot;                                                 
-## [5] &quot;[job(9): 2016-07-05 12:14:50] Error in (function (value)  : Ooops.&quot;                                       
-## [6] &quot;[job(9): 2016-07-05 12:14:50] Job terminated with an exception&quot;                                           
-## [7] &quot;[job(chunk): 2016-07-05 12:14:50] Calculation finished!&quot;</code></pre>
+<pre><code>## [1] &quot;[job(chunk): 2016-07-13 14:25:30] Starting calculation of 1 jobs&quot;                                         
+## [2] &quot;[job(chunk): 2016-07-13 14:25:30] Setting working directory to '/home/lang/Projekte/batchtools/vignettes'&quot;
+## [3] &quot;[job(chunk): 2016-07-13 14:25:30] Memory measurement disabled&quot;                                            
+## [4] &quot;[job(9): 2016-07-13 14:25:30] Starting job with job.id=9&quot;                                                 
+## [5] &quot;[job(9): 2016-07-13 14:25:30] Error in (function (value)  : Ooops.&quot;                                       
+## [6] &quot;[job(9): 2016-07-13 14:25:30] Job terminated with an exception&quot;                                           
+## [7] &quot;[job(chunk): 2016-07-13 14:25:30] Calculation finished!&quot;</code></pre>
 
 
 

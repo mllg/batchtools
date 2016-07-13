@@ -82,7 +82,7 @@ reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="
   <span class="dv">4</span> *<span class="st"> </span><span class="kw">mean</span>(d &lt;=<span class="st"> </span><span class="dv">1</span>)
 }
 <span class="kw">piApprox</span>(<span class="dv">1000</span>)</code></pre></div>
-<pre><code>## [1] 3.028</code></pre>
+<pre><code>## [1] 3.14</code></pre>
 <p>We now parallelize <code>piApprox()</code> with <code>batchtools</code>: We create 10 jobs, each doing a MC simulation with <span class="math inline">\(10^5\)</span> jobs. We use <a href="https://mllg.github.io/batchtools/batchMap.html"><code>batchMap()</code></a> to define the jobs (note that this does not yet start the calculation):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">batchMap</span>(<span class="dt">fun =</span> piApprox, <span class="dt">n =</span> <span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>))</code></pre></div>
 <pre><code>## Adding 10 jobs ...</code></pre>
@@ -95,9 +95,9 @@ reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="
 <p>Note that a unique job ID is assigned to each job. These IDs can be used to restrict operations to subsets of jobs. To actually start the calculation, call <a href="https://mllg.github.io/batchtools/submitJobs.html"><code>submitJobs()</code></a>. The registry and the selected job IDs can be taken as arguments as well as an arbitrary list of resource requirements, which are to be handled by the cluster back end.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">submitJobs</span>(<span class="dt">resources =</span> <span class="kw">list</span>(<span class="dt">walltime =</span> <span class="dv">3600</span>, <span class="dt">memory =</span> <span class="dv">1024</span>))</code></pre></div>
 <pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
-<pre><code>## Syncing 10 files ...</code></pre>
 <p>In this example, a cap for the execution time (so-called walltime) and for the maximum memory requirements are set. The progress of the submitted jobs can be checked with <a href="https://mllg.github.io/batchtools/getStatus.html"><code>getStatus()</code></a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getStatus</span>()</code></pre></div>
+<pre><code>## Syncing 10 files ...</code></pre>
 <pre><code>## Status for 10 jobs:
 ##   Submitted : 10 (100.0%)
 ##   Queued    :  0 (  0.0%)
@@ -113,12 +113,12 @@ reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="
 <pre><code>## [1] 3.140652</code></pre>
 <p>If you are absolutely sure that your function is stable and you have a reliable cluster, you can take a shortcut and use <em>batchtools</em> in an <code>*apply</code> fashion:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res =<span class="st"> </span><span class="kw">btlapply</span>(<span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>), piApprox)</code></pre></div>
-<pre><code>## Sourcing configuration file '~/.batchtools.conf.R' ...</code></pre>
+<pre><code>## Sourcing configuration file '/home/lang/.batchtools.conf.R' ...</code></pre>
 <pre><code>## Adding 10 jobs ...</code></pre>
 <pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
 <pre><code>## Syncing 10 files ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(<span class="kw">unlist</span>(res))</code></pre></div>
-<pre><code>## [1] 3.139728</code></pre>
+<pre><code>## [1] 3.144468</code></pre>
 <p><a href="https://mllg.github.io/batchtools/btlapply.html"><code>btlapply()</code></a> creates a temporary registry, calls <code>batchMap()</code>, wait for the jobs to terminate with <a href="https://mllg.github.io/batchtools/waitForJobs.html"><code>waitForJobs()</code></a> and then uses <a href="https://mllg.github.io/batchtools/reduceResultsList.html"><code>reduceResultsList()</code></a> to return the results.</p>
 
 

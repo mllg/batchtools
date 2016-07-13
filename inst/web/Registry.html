@@ -52,7 +52,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;getwd(), conf.file&nbsp;=&nbsp;"~/.batchtools.conf.R", packages&nbsp;=&nbsp;character(0L), namespaces&nbsp;=&nbsp;character(0L), source&nbsp;=&nbsp;character(0L), load&nbsp;=&nbsp;character(0L), seed&nbsp;=&nbsp;NULL, make.default&nbsp;=&nbsp;TRUE)</div>
+    <pre><div>makeRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;getwd(), conf.file&nbsp;=&nbsp;findConfFile(), packages&nbsp;=&nbsp;character(0L), namespaces&nbsp;=&nbsp;character(0L), source&nbsp;=&nbsp;character(0L), load&nbsp;=&nbsp;character(0L), seed&nbsp;=&nbsp;NULL, make.default&nbsp;=&nbsp;TRUE)</div>
 <div>getDefaultRegistry()</div>
 <div>setDefaultRegistry(reg)</div>
 <div>clearDefaultRegistry()</div>
@@ -83,9 +83,12 @@ yourself.</dd>
       <dt>conf.file</dt>
       <dd>[<code>character(1)</code>]
 Path to a configuration file which is sourced directly after the registry is created.
-For example, you can set system-specific cluster functions in it.
+For example, you can set cluster functions or default resources in it.
 The script is executed inside the registry environment, thus you can directly set
-all slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.</dd>
+all slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.
+Defaults to a heuristic which first looks for &#147;batchtools.conf.R&#148; in the current working directory
+and then tries &#147;.batchtools.conf.R&#148; in the home directory.
+Set to <code>character(0)</code> if you want to disable this lookup.</dd>
       <dt>packages</dt>
       <dd>[<code>character</code>]
 Packages that will always be loaded on each node.
@@ -190,15 +193,15 @@ swept using <code>sweepRegistry</code>.
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/lang/.batchtools.conf.R&#39; ...</strong>
 <div class='input'>print(reg)
 </div>
 <div class='output'>Job Registry
   ClusterFunctions: Interactive
-  File dir        : /scratch/registry2f72e8d94d4
+  File dir        : /scratch/registry49fb3ea68b64
   Work dir        : /home/lang/Projekte/batchtools
   Jobs            : 0
-  Seed            : 249365004
+  Seed            : 900783745
 </div>
 <div class='input'>
 # Set cluster functions to interactive mode and start jobs in external R sessions

@@ -65,10 +65,8 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of <code><a href='findJobs.html'>findDone</a></code>.</dd>
       <dt>fun</dt>
       <dd>[<code>function</code>]
-Function to apply to each result. The result is passed unnamed as first
-argument. If <code>NULL</code>, the identity is used.
-If the function has the formal argument &#147;job&#148;, the <code><a href='JobExperiment.html'>Job</a></code>/<code><a href='JobExperiment.html'>Experiment</a></code>
-is passed to the function.</dd>
+Function to apply to each result. The result is passed unnamed as first argument. If <code>NULL</code>, the identity is used.
+If the function has the formal argument &#147;job&#148;, the <code><a href='JobExperiment.html'>Job</a></code>/<code><a href='JobExperiment.html'>Experiment</a></code> is passed to the function.</dd>
       <dt>...</dt>
       <dd>[<code>ANY</code>]
 Additional arguments passed to to function <code>fun</code>.</dd>
@@ -86,9 +84,9 @@ to a <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.t
       <h2>Value</h2>
 
       <p><dl>
-<code>reduceResultsList</code> returns a list, <code>reduceResultsDataTable</code>
-  returns a <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> with
-  columns &#147;job.id&#148; and additional result columns as returned by (see <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/rbindlist'>rbindlist</a></code>).
+<code>reduceResultsList</code> returns a list,
+  <code>reduceResultsDataTable</code> returns a <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code> with columns &#147;job.id&#148; and additional result columns
+  created via <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/rbindlist'>rbindlist</a></code>.
 </dl></p>
   
     </div>
@@ -97,23 +95,33 @@ to a <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.t
       <h2>Description</h2>
 
       <p>Applies a function on the results of your finished jobs and thereby collects
-them in a <code><a href='http://www.inside-r.org/r-doc/base/list'>list</a></code> or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>.</p>
+them in a <code><a href='http://www.inside-r.org/r-doc/base/list'>list</a></code> or <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>.
+The later requires the provided function to return a list (or <code>data.frame</code>) of scalar values.
+See <code><a href='http://www.inside-r.org/packages/cran/data.table/docs/rbindlist'>rbindlist</a></code> for features and limitations of the aggregation.</p>
+  
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+
+      <p>If you have thousands of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
+can significantly increase the performance.</p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeRegistry(file.dir = NA, make.default = FALSE)
 </div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/lang/.batchtools.conf.R&#39; ...</strong>
 <div class='input'>batchMap(function(x) x^2, x = 1:10, reg = reg)
 </div>
 <strong class='message'>Adding 10 jobs ...</strong>
 <div class='input'>submitJobs(reg = reg)
 </div>
 <strong class='message'>Submitting 10 jobs in 10 chunks using cluster functions &#39;Interactive&#39; ...</strong>
-<strong class='message'>Syncing 10 files ...</strong>
 <div class='input'>waitForJobs(reg = reg)
 </div>
+<strong class='message'>Syncing 10 files ...</strong>
 <div class='output'>[1] TRUE
 </div>
 <div class='input'>reduceResultsList(fun = sqrt, reg = reg)

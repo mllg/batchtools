@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2016-07-05" />
+<meta name="date" content="2016-07-13" />
 
 <title>Setup batchtools</title>
 
@@ -68,7 +68,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Setup batchtools</h1>
-<h4 class="date"><em>2016-07-05</em></h4>
+<h4 class="date"><em>2016-07-13</em></h4>
 
 
 
@@ -76,7 +76,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1>Cluster Functions</h1>
 <p>The communication with the batch system is managed via the cluster functions. They are constructed with <a href="https://mllg.github.io/batchtools/makeClusterFunctions.html">makeClusterFunctions</a> where you must at least provide a function which submits a job to your system. The cluster function implementation is stored in your registry and defaults to interactive cluster functions:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>)</code></pre></div>
-<pre><code>## Sourcing configuration file '~/.batchtools.conf.R' ...</code></pre>
+<pre><code>## Sourcing configuration file '/home/lang/.batchtools.conf.R' ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(reg$cluster.functions)</code></pre></div>
 <pre><code>## ClusterFunctions for mode: Interactive
 ##   List queued Jobs : FALSE
@@ -90,19 +90,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>OpenLava: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsOpenLava.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsOpenLava.R">implementation</a></li>
 <li>Makeshift SSH cluster: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSSH.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSSH.R">implementation</a></li>
 <li>Sun Grid Engine (SGE): <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSGE.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSGE.R">implementation</a></li>
-<li>SLURM: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSLURM.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSLURM.R">implementation</a>, <a href="https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl">example template</a></li>
+<li>Slurm: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSlurm.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSlurm.R">implementation</a>, <a href="https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl">example template</a></li>
 <li>Torque/OpenPBS: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsTorque.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsTorque.R">implementation</a>, <a href="https://github.com/mllg/batchtools/blob/master/inst/templates/torque_lido.tmpl">example template</a></li>
 </ul>
-<p>For example, to use the package with the SLURM scheduler, you would call the respective constructor <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSLURM.html">makeClusterFunctionsSLURM</a> with the path to the template file. Here, we use a dummy template file for demonstration:</p>
+<p>For example, to use the package with the Slurm scheduler, you would call the respective constructor <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSlurm.html">makeClusterFunctionsSlurm</a> with the path to the template file. Here, we use a dummy template file for demonstration:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">path =<span class="st"> </span><span class="kw">tempfile</span>()
 <span class="kw">writeLines</span>(<span class="st">&quot;empty&quot;</span>, path)
-reg$cluster.functions =<span class="st"> </span><span class="kw">makeClusterFunctionsSLURM</span>(path)
+reg$cluster.functions =<span class="st"> </span><span class="kw">makeClusterFunctionsSlurm</span>(path)
 <span class="kw">print</span>(reg$cluster.functions)</code></pre></div>
-<pre><code>## ClusterFunctions for mode: SLURM
+<pre><code>## ClusterFunctions for mode: Slurm
 ##   List queued Jobs : TRUE
 ##   List running Jobs: TRUE
 ##   Kill Jobs        : TRUE</code></pre>
-<p>Most characteristics and specialities of cluster systems can be mapped to such a <a href="https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl">template file</a> which is parsed by the <a href="https://cran.r-project.org/package=brew">brew package</a>. If the flexibility which comes with templating is not sufficient for your system, you can still construct the cluster functions yourself by just adapting our <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSLURM.R">implementation</a>.</p>
+<p>Most characteristics and specialities of cluster systems can be mapped to such a <a href="https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl">template file</a> which is parsed by the <a href="https://cran.r-project.org/package=brew">brew package</a>. If the flexibility which comes with templating is not sufficient for your system, you can still construct the cluster functions yourself by just adapting our <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSlurm.R">implementation</a>.</p>
 <p>To make your cluster function selection permanent for a specific system across R sessions, you can set up a configuration file which is described in the following.</p>
 </div>
 <div id="configuration-file" class="section level1">

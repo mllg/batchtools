@@ -52,7 +52,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>makeExperimentRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;getwd(), conf.file&nbsp;=&nbsp;"~/.batchtools.conf.R", packages&nbsp;=&nbsp;character(0L), namespaces&nbsp;=&nbsp;character(0L), source&nbsp;=&nbsp;character(0L), load&nbsp;=&nbsp;character(0L), seed&nbsp;=&nbsp;NULL, make.default&nbsp;=&nbsp;TRUE)</div></pre>
+    <pre><div>makeExperimentRegistry(file.dir&nbsp;=&nbsp;"registry", work.dir&nbsp;=&nbsp;getwd(), conf.file&nbsp;=&nbsp;findConfFile(), packages&nbsp;=&nbsp;character(0L), namespaces&nbsp;=&nbsp;character(0L), source&nbsp;=&nbsp;character(0L), load&nbsp;=&nbsp;character(0L), seed&nbsp;=&nbsp;NULL, make.default&nbsp;=&nbsp;TRUE)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -75,9 +75,12 @@ yourself.</dd>
       <dt>conf.file</dt>
       <dd>[<code>character(1)</code>]
 Path to a configuration file which is sourced directly after the registry is created.
-For example, you can set system-specific cluster functions in it.
+For example, you can set cluster functions or default resources in it.
 The script is executed inside the registry environment, thus you can directly set
-all slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.</dd>
+all slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.
+Defaults to a heuristic which first looks for &#147;batchtools.conf.R&#148; in the current working directory
+and then tries &#147;.batchtools.conf.R&#148; in the home directory.
+Set to <code>character(0)</code> if you want to disable this lookup.</dd>
       <dt>packages</dt>
       <dd>[<code>character</code>]
 Packages that will always be loaded on each node.
@@ -134,7 +137,7 @@ jobs.</p>
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 </div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/lang/.batchtools.conf.R&#39; ...</strong>
 <div class='input'>addProblem(reg = reg, &quot;p1&quot;,
   fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
 addAlgorithm(reg = reg, &quot;a1&quot;, fun = function(job, data, instance, ...) mean(instance))
@@ -144,21 +147,21 @@ addExperiments(reg = reg, list(p1 = CJ(n = 100, mean = -3:3, sd = 1:5)), list(a1
 <div class='input'>submitJobs(reg = reg)
 </div>
 <strong class='message'>Submitting 35 jobs in 35 chunks using cluster functions &#39;Interactive&#39; ...</strong>
-<strong class='message'>Syncing 35 files ...</strong>
 <div class='input'>waitForJobs(reg = reg)
 </div>
+<strong class='message'>Syncing 35 files ...</strong>
 <div class='output'>[1] TRUE
 </div>
 <div class='input'>
 # Reduce the results
 reduceResults(reg = reg, fun = function(aggr, res, ...) c(aggr, res))
 </div>
-<div class='output'> [1] -3.05445811 -3.19815853 -2.93910291 -2.54997991 -1.46969635 -1.85334550
- [7] -2.43322612 -1.74822793 -2.78446044 -1.07475440 -0.96314323 -0.94282451
-[13] -0.96205698 -1.12469007 -1.32541544 -0.08491710  0.02939391  0.96298113
-[19]  0.11175976 -0.25497481  1.13003424  0.88437493  1.07774628  0.95811621
-[25]  1.49344319  1.89632382  2.01701266  2.00957688  2.51120856  1.99731488
-[31]  2.91297329  2.92770473  2.76441025  3.23700564  3.73091357
+<div class='output'> [1] -3.12636707 -3.07370624 -2.71426843 -2.81643184 -3.98419972 -1.86025679
+ [7] -1.97480866 -1.84933826 -2.15786803 -2.18005398 -0.98965967 -0.95635323
+[13] -1.28796349 -0.76321540 -1.19738616  0.08519163 -0.02832770  0.11600567
+[19]  0.22805448 -0.24824836  1.07553773  1.03853704  1.22048862  0.47552574
+[25]  0.54928751  2.01227089  2.18950591  2.06038634  1.55757290  1.51684289
+[31]  2.99112538  2.95522644  2.84228231  2.58065562  3.57511621
 </div>
 <div class='input'>
 # Join info table with results
@@ -168,41 +171,41 @@ res = reduceResultsDataTable(reg = reg, ids = ids)
 tab[res]
 </div>
 <div class='output'>    job.id problem algorithm   n mean sd          V1
- 1:      1      p1        a1 100   -3  1 -3.05445811
- 2:      2      p1        a1 100   -3  2 -3.19815853
- 3:      3      p1        a1 100   -3  3 -2.93910291
- 4:      4      p1        a1 100   -3  4 -2.54997991
- 5:      5      p1        a1 100   -3  5 -1.46969635
- 6:      6      p1        a1 100   -2  1 -1.85334550
- 7:      7      p1        a1 100   -2  2 -2.43322612
- 8:      8      p1        a1 100   -2  3 -1.74822793
- 9:      9      p1        a1 100   -2  4 -2.78446044
-10:     10      p1        a1 100   -2  5 -1.07475440
-11:     11      p1        a1 100   -1  1 -0.96314323
-12:     12      p1        a1 100   -1  2 -0.94282451
-13:     13      p1        a1 100   -1  3 -0.96205698
-14:     14      p1        a1 100   -1  4 -1.12469007
-15:     15      p1        a1 100   -1  5 -1.32541544
-16:     16      p1        a1 100    0  1 -0.08491710
-17:     17      p1        a1 100    0  2  0.02939391
-18:     18      p1        a1 100    0  3  0.96298113
-19:     19      p1        a1 100    0  4  0.11175976
-20:     20      p1        a1 100    0  5 -0.25497481
-21:     21      p1        a1 100    1  1  1.13003424
-22:     22      p1        a1 100    1  2  0.88437493
-23:     23      p1        a1 100    1  3  1.07774628
-24:     24      p1        a1 100    1  4  0.95811621
-25:     25      p1        a1 100    1  5  1.49344319
-26:     26      p1        a1 100    2  1  1.89632382
-27:     27      p1        a1 100    2  2  2.01701266
-28:     28      p1        a1 100    2  3  2.00957688
-29:     29      p1        a1 100    2  4  2.51120856
-30:     30      p1        a1 100    2  5  1.99731488
-31:     31      p1        a1 100    3  1  2.91297329
-32:     32      p1        a1 100    3  2  2.92770473
-33:     33      p1        a1 100    3  3  2.76441025
-34:     34      p1        a1 100    3  4  3.23700564
-35:     35      p1        a1 100    3  5  3.73091357
+ 1:      1      p1        a1 100   -3  1 -3.12636707
+ 2:      2      p1        a1 100   -3  2 -3.07370624
+ 3:      3      p1        a1 100   -3  3 -2.71426843
+ 4:      4      p1        a1 100   -3  4 -2.81643184
+ 5:      5      p1        a1 100   -3  5 -3.98419972
+ 6:      6      p1        a1 100   -2  1 -1.86025679
+ 7:      7      p1        a1 100   -2  2 -1.97480866
+ 8:      8      p1        a1 100   -2  3 -1.84933826
+ 9:      9      p1        a1 100   -2  4 -2.15786803
+10:     10      p1        a1 100   -2  5 -2.18005398
+11:     11      p1        a1 100   -1  1 -0.98965967
+12:     12      p1        a1 100   -1  2 -0.95635323
+13:     13      p1        a1 100   -1  3 -1.28796349
+14:     14      p1        a1 100   -1  4 -0.76321540
+15:     15      p1        a1 100   -1  5 -1.19738616
+16:     16      p1        a1 100    0  1  0.08519163
+17:     17      p1        a1 100    0  2 -0.02832770
+18:     18      p1        a1 100    0  3  0.11600567
+19:     19      p1        a1 100    0  4  0.22805448
+20:     20      p1        a1 100    0  5 -0.24824836
+21:     21      p1        a1 100    1  1  1.07553773
+22:     22      p1        a1 100    1  2  1.03853704
+23:     23      p1        a1 100    1  3  1.22048862
+24:     24      p1        a1 100    1  4  0.47552574
+25:     25      p1        a1 100    1  5  0.54928751
+26:     26      p1        a1 100    2  1  2.01227089
+27:     27      p1        a1 100    2  2  2.18950591
+28:     28      p1        a1 100    2  3  2.06038634
+29:     29      p1        a1 100    2  4  1.55757290
+30:     30      p1        a1 100    2  5  1.51684289
+31:     31      p1        a1 100    3  1  2.99112538
+32:     32      p1        a1 100    3  2  2.95522644
+33:     33      p1        a1 100    3  3  2.84228231
+34:     34      p1        a1 100    3  4  2.58065562
+35:     35      p1        a1 100    3  5  3.57511621
     job.id problem algorithm   n mean sd          V1
 </div></pre>
   </div>
