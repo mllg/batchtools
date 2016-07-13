@@ -1,4 +1,4 @@
-#' @title ClusterFunctions for SLURM Systems
+#' @title ClusterFunctions for Slurm Systems
 #'
 #' @description
 #' Job files are created based on the brew template \code{template.file}. This
@@ -18,13 +18,13 @@
 #' @templateVar cf.name slurm
 #' @template template
 #' @param clusters [\code{character(1)}]\cr
-#'  If multiple clusters are managed by one SLURM system, the name of one cluster has to be specified.
+#'  If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.
 #'  If only one cluster is present, this argument may be omitted.
 #'  Note that you should not select the cluster in your template file via \code{#SBATCH --clusters}.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSLURM = function(template = findTemplateFile("slurm"), clusters = NULL) { # nocov start
+makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clusters = NULL) { # nocov start
   if (!is.null(clusters))
     assertString(clusters, min.chars = 1L)
   template = cfReadBrewTemplate(template, "##")
@@ -82,6 +82,6 @@ makeClusterFunctionsSLURM = function(template = findTemplateFile("slurm"), clust
     cfKillJob(reg, "scancel", c(sprintf("--clusters=%s", clusters), batch.id))
   }
 
-  makeClusterFunctions(name = "SLURM", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
+  makeClusterFunctions(name = "Slurm", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
     listJobsQueued = listJobsQueued, array.envir.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE)
 } # nocov end

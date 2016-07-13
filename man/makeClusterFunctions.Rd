@@ -60,7 +60,7 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsOpenLava}},
   \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSLURM}},
+  \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsTorque}},
   \code{\link{runOSCommand}}
 }
