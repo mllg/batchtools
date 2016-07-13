@@ -32,7 +32,7 @@
 #' tab = getJobPars(reg = reg, ids = ids)
 #' res = reduceResultsDataTable(reg = reg, ids = ids)
 #' tab[res]
-makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = findConfFile("batchtools.conf.R"), packages = character(0L), namespaces = character(0L),
+makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = findConfFile(), packages = character(0L), namespaces = character(0L),
   source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
 
   reg = makeRegistry(file.dir = file.dir, work.dir = work.dir, conf.file = conf.file,

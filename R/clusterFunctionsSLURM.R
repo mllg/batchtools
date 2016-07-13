@@ -15,6 +15,7 @@
 #' otherwise the commands for listing and killing jobs do not work.
 #' The value set can be accessed in the template via \dQuote{clusters}.
 #'
+#' @templateVar cf.name slurm
 #' @template template
 #' @param clusters [\code{character(1)}]\cr
 #'  If multiple clusters are managed by one SLURM system, the name of one cluster has to be specified.
@@ -23,7 +24,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSLURM = function(template = findConfFile("batchtools.slurm.tmpl"), clusters = NULL) { # nocov start
+makeClusterFunctionsSLURM = function(template = findTemplateFile("slurm"), clusters = NULL) { # nocov start
   if (!is.null(clusters))
     assertString(clusters, min.chars = 1L)
   template = cfReadBrewTemplate(template, "##")

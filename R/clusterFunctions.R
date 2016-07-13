@@ -122,7 +122,9 @@ print.SubmitJobResult = function(x, ...) {
 #' This function is only intended for use in your own cluster functions implementation.
 #' Simply reads your template and returns it as a character vector.
 #'
-#' @template template
+#' @param template [\code{character(1)}]\cr
+#'   Path to template file or single string (containing newlines) which is then passed
+#'   to \code{\link[brew]{brew}}.
 #' @param comment.string [\code{character(1)}]\cr
 #'   Ignore lines starting with this string.
 #' @return [\code{character}].

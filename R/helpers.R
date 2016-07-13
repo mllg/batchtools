@@ -180,3 +180,19 @@ stri_trunc = function(str, length, append = "") {
 Rscript = function() {
   file.path(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
 }
+
+findConfFile = function() {
+  uris = file.path(c(".", "~"), c("batchtools.conf.R", ".batchtools.conf.R"))
+  i = wf(file.exists(uris))
+  return(normalizePath(uris[i], winslash = "/"))
+}
+
+findTemplateFile = function(name) {
+  uris = c(
+    sprintf("batchtools.%s.tmpl", name),
+    file.path("~", sprintf(".batchtools.%s.tmpl", name)),
+    system.file("templates", sprintf("%s.default.tmpl", name), package = "batchtools")
+  )
+  i = wf(nzchar(uris) & file.exists(uri))
+  return(normalizePath(uris[i], winslash = "/"))
+}

@@ -6,7 +6,7 @@
 \title{ExperimentRegistry Constructor}
 \usage{
 makeExperimentRegistry(file.dir = "registry", work.dir = getwd(),
-  conf.file = findConfFile("batchtools.conf.R"), packages = character(0L),
+  conf.file = findConfFile(), packages = character(0L),
   namespaces = character(0L), source = character(0L),
   load = character(0L), seed = NULL, make.default = TRUE)
 }
@@ -32,8 +32,9 @@ Path to a configuration file which is sourced directly after the registry is cre
 For example, you can set cluster functions or default resources in it.
 The script is executed inside the registry environment, thus you can directly set
 all slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.
-Defaults to a heuristic implemented in \code{\link{findConfFile}}, set to \code{character(0)}
-if you want to completely disable the lookup.}
+Defaults to a heuristic which first looks for \dQuote{batchtools.conf.R} in the current working directory
+and then tries \dQuote{.batchtools.conf.R} in the home directory.
+Set to \code{character(0)} if you want to disable this lookup.}
 
 \item{packages}{[\code{character}]\cr
 Packages that will always be loaded on each node.
