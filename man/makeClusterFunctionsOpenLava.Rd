@@ -37,7 +37,7 @@ allocations.
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSLURM}},
+  \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsTorque}},
   \code{\link{makeClusterFunctions}},
   \code{\link{runOSCommand}}

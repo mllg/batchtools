@@ -13,11 +13,11 @@ test_that("clusterFunctions constructor", {
     check(makeClusterFunctionsSSH(workers = list(Worker$new(nodename = "localhost", ncpus = 1L))))
   check(makeClusterFunctionsSGE(template = "foo\n"))
   check(makeClusterFunctionsTorque(template = "foo\n"))
-  check(makeClusterFunctionsSLURM(template = "foo\n"))
+  check(makeClusterFunctionsSlurm(template = "foo\n"))
   check(makeClusterFunctionsOpenLava(template = "foo\n"))
   check(makeClusterFunctionsLSF(template = "foo\n"))
   check(makeClusterFunctionsTorque(system.file(file.path("templates", "torque_lido.tmpl"), package = "batchtools")))
-  check(makeClusterFunctionsSLURM(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools")))
+  check(makeClusterFunctionsSlurm(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools")))
   check(makeClusterFunctionsDocker("image"))
 })
 
