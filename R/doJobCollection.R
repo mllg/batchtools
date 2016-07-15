@@ -39,6 +39,17 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   on.exit(options(warn = warn), add = TRUE)
   options(warn = 1L)
 
+  # subset array jobs
+  if (jc$resources$chunks.as.arrayjobs %??% FALSE && !is.na(jc$array.var)) {
+    i = Sys.getenv(jc$array.var)
+    if (nzchar(i)) {
+      i = as.integer(i)
+      if (!testInteger(i, any.missing = FALSE, lower = 1L, upper = nrow(jc$defs)))
+        return(slaveError(jc, sprintf("Failed to subset JobCollection using array environment variable '%s' [='%s']", jc$array.var, i)))
+      jc$defs = jc$defs[i]
+    }
+  }
+
   # say hi
   n.jobs = nrow(jc$defs)
   s = now()
