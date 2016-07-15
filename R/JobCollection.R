@@ -51,6 +51,7 @@ createCollection = function(ids, resources = list(), reg = getDefaultRegistry())
   jc$source     = reg$source
   jc$load       = reg$load
   jc$resources  = resources
+  jc$array.var  = reg$cluster.functions$array.envir.var
 
   hooks = reg$cluster.functions$hooks
   if (length(hooks) > 0L) {
