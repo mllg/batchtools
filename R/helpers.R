@@ -193,6 +193,6 @@ findTemplateFile = function(name) {
     file.path("~", sprintf(".batchtools.%s.tmpl", name)),
     system.file("templates", sprintf("%s.default.tmpl", name), package = "batchtools")
   )
-  i = wf(nzchar(uris) & file.exists(uri))
+  i = wf(nzchar(uris) & file.exists(uris))
   return(normalizePath(uris[i], winslash = "/"))
 }

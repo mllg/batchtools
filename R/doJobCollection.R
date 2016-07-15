@@ -40,7 +40,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   options(warn = 1L)
 
   # subset array jobs
-  if (jc$resources$chunks.as.arrayjobs %??% FALSE && !is.na(jc$array.var)) {
+  if (isTRUE(jc$resources$chunks.as.arrayjobs) && !is.na(jc$array.var)) {
     i = Sys.getenv(jc$array.var)
     if (nzchar(i)) {
       i = as.integer(i)
@@ -74,7 +74,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     catf("[job(chunk): %s] Using %i CPUs for parallelMap/%s", s, pm.opts$cpus, pm.opts$mode, con = con)
   }
 
-  measure.memory = (jc$resources$measure.memory %??% FALSE)
+  measure.memory = isTRUE(jc$resources$measure.memory)
   catf("[job(chunk): %s] Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"), con = con)
 
   # try to pre-fetch some objects from the file system and load registry dependencies
