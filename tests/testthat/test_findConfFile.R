@@ -6,6 +6,6 @@ test_that("findConfFile", {
   writeLines("hello", fn)
   prev = getwd()
   setwd(d)
-  expect_equal(findConfFile(), fn)
+  expect_equal(findConfFile(), npath(fn))
   setwd(prev)
 })
