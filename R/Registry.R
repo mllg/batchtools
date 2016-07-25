@@ -164,7 +164,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   loadRegistryDependencies(list(work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
 
   if (is.na(file.dir)) {
-    reg$file.dir = tempfile("registry", tmpdir = npath(reg$temp.dir))
+    reg$file.dir = npath(tempfile("registry", tmpdir = reg$temp.dir))
   } else {
     reg$file.dir = npath(file.dir)
   }
