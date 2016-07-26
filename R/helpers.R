@@ -184,7 +184,7 @@ Rscript = function() {
 findConfFile = function() {
   uris = file.path(c(".", "~"), c("batchtools.conf.R", ".batchtools.conf.R"))
   i = wf(file.exists(uris))
-  return(normalizePath(uris[i], winslash = "/"))
+  return(npath(uris[i]))
 }
 
 findTemplateFile = function(name) {
@@ -194,5 +194,5 @@ findTemplateFile = function(name) {
     system.file("templates", sprintf("%s.default.tmpl", name), package = "batchtools")
   )
   i = wf(nzchar(uris) & file.exists(uris))
-  return(normalizePath(uris[i], winslash = "/"))
+  return(npath(uris[i]))
 }
