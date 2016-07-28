@@ -8,10 +8,8 @@ install:
   ps: Bootstrap
 
 build_script:
+  - travis-tool.sh install_github hadley/devtools
   - travis-tool.sh install_deps
-  - travis-tool.sh install_r assertthat
-  - travis-tool.sh install_r chron
-  - travis-tool.sh install_r prettyunits
 
 test_script:
   - travis-tool.sh run_tests
