@@ -19,6 +19,7 @@ and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}
 \description{
 Jobs are spawned asynchronously using the packages \pkg{parallel}.
 Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
+Sets the number of threads used by \pkg{data.table} to 1 during initialization via \code{\link[data.table]{setthreads}}.
 }
 \seealso{
 Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},

@@ -3,6 +3,7 @@
 #' @description
 #' This function gives an encompassing overview over the computational status
 #' on your system.
+#'
 #' @templateVar ids.default all
 #' @template ids
 #' @template reg

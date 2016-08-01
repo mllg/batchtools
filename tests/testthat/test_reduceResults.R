@@ -58,6 +58,10 @@ test_that("reduceResultsDataTable", {
     expect_data_table(tab, nrow = 3, ncol = 2, key = "job.id")
     expect_equal(tab$a, 1:3)
 
+    tab = reduceResultsDataTable(reg = reg, ids = 3:2, fun = function(x) list(a = x$a))
+    expect_data_table(tab, nrow = 2, ncol = 2, key = "job.id")
+    expect_equal(tab$a, 2:3)
+
     tab = reduceResultsDataTable(reg = reg, fun = function(x) x$a)
     expect_data_table(tab, nrow = 3, ncol = 2, key = "job.id")
     expect_equal(tab$V1, 1:3)

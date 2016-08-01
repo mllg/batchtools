@@ -89,7 +89,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @template reg
 #' @return \code{reduceResultsList} returns a list,
 #'   \code{reduceResultsDataTable} returns a \code{\link[data.table]{data.table}} with columns \dQuote{job.id} and additional result columns
-#'   created via \code{\link[data.table]{rbindlist}}.
+#'   created via \code{\link[data.table]{rbindlist}} (sorted by ids).
 #' @seealso \code{\link{reduceResults}}.
 #' @family Results
 #' @export
@@ -141,11 +141,11 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
   results = reduceResultsList(ids = ids, fun = fun, ..., reg = reg)
   if (!all(vlapply(results, is.data.table)))
     results = lapply(results, as.data.table)
-  results = rbindlist(results, fill = fill, idcol = "..id")
-  if (!identical(results$..id, seq_row(ids)))
+  results = rbindlist(results, fill = fill, idcol = "job.id")
+  if (!identical(results$job.id, seq_row(ids)))
     stop("The function must return an object for each job which is convertible to a data.frame with one row")
-  results$..id = NULL
-  cbind(ids, results)
+  results[, "job.id" := ids$job.id]
+  setkeyv(results, "job.id")
 }
 
 #' @title Load the Result of a Single Job
