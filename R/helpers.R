@@ -1,27 +1,30 @@
+### FIXME: refactor
 asJobTable = function(reg, ids = NULL, default = NULL, keep.extra = FALSE, single.id = FALSE) {
   if (is.null(ids) && !is.null(default))
     return(default)
 
   res = filter(reg$status, ids)[, "job.id", with = FALSE]
-  if (single.id && nrow(res) != 1L) {
+  if (single.id && nrow(res) != 1L)
     stopf("You must provide exactly one id (%i provided)", nrow(res))
-  }
-  if (keep.extra && is.data.frame(ids) && ncol(ids) >= 2L) {
+  if (keep.extra && is.data.frame(ids) && ncol(ids) >= 2L)
     res = merge(res, ids, by = "job.id", all = TRUE)
-  }
   return(res)
 }
 
 filter = function(x, ids = NULL) {
   if (is.null(ids))
-    return(x)
-  if (identical(key(ids), "job.id"))
-    return(x[unique(ids), nomatch = 0L])
-  if (is.data.frame(ids))
-    ids = ids$job.id
-  if (qtest(ids, "X"))
-    return(x[list(unique(as.integer(ids))), nomatch = 0L])
-  stop("Format of 'ids' not recognized. Must be a data frame with column 'job.id' or an integerish vector")
+    return(copy(x))
+
+  if (is.data.frame(ids) && "job.id" %in% names(ids)) {
+    if (!is.data.table(ids))
+      ids = as.data.table(ids)
+  } else if (qtest(ids, "X")) {
+    ids = data.table(job.id = as.integer(ids), key = "job.id")
+  } else {
+    stop("Format of 'ids' not recognized. Must be a data frame with column 'job.id' or an integerish vector")
+  }
+
+  setkeyv(x[unique(ids, by = "job.id"), nomatch = 0L], "job.id")
 }
 
 inner_join = function(x, y) {

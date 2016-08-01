@@ -7,7 +7,7 @@ test_that("filter", {
 
   tab = filter(reg$status, NULL)
   expect_data_table(tab, ncol = ncol(reg$status), nrow = 9, key = "job.id")
-  #expect_copied(tab, reg$status)
+  expect_copied(tab, reg$status)
 
   tab = filter(reg$status, 1:10)
   expect_data_table(tab, ncol = ncol(reg$status), nrow = 9, key = "job.id")
@@ -24,6 +24,10 @@ test_that("filter", {
   expect_data_table(tab, ncol = ncol(reg$status), key = "job.id")
   expect_copied(tab, reg$status)
 
+  tab = filter(reg$status, 10:8)
+  expect_data_table(tab, nrow = 3, ncol = ncol(reg$status), key = "job.id")
+  expect_equal(tab$job.id, 8:10)
+  expect_copied(tab, reg$status)
 
   expect_error(filter(reg$status, as.character(1:3)), "not recognized")
 })

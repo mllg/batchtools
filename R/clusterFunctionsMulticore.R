@@ -5,6 +5,9 @@ Multicore = R6Class("Multicore",
     hashes = NULL,
 
     initialize = function(ncpus) {
+      if (packageVersion("data.table") > "1.9.6")
+        setthreads(1L)
+      # FIXME: reset threads
       loadNamespace("parallel")
       self$pids = rep.int(NA_integer_, ncpus)
       self$hashes = character(ncpus)
@@ -41,6 +44,9 @@ Multicore = R6Class("Multicore",
 #' @description
 #' Jobs are spawned asynchronously using the packages \pkg{parallel}.
 #' Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
+#'
+#' @note
+#' Sets the number of threads internally used by \pkg{data.table} to 1 during initialization (via \code{\link[data.table]{setthreads}}).
 #'
 #' @param ncpus [\code{integer(1)}]\cr
 #'   Number of VPUs of worker.
