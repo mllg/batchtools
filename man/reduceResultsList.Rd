@@ -35,7 +35,7 @@ to a \code{\link[data.table]{data.table}}.}
 \value{
 \code{reduceResultsList} returns a list,
   \code{reduceResultsDataTable} returns a \code{\link[data.table]{data.table}} with columns \dQuote{job.id} and additional result columns
-  created via \code{\link[data.table]{rbindlist}}.
+  created via \code{\link[data.table]{rbindlist}} (sorted by ids).
 }
 \description{
 Applies a function on the results of your finished jobs and thereby collects

@@ -13,9 +13,9 @@
 #'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @family debug
 #' @export
-resetJobs = function(ids, reg = getDefaultRegistry()) {
+resetJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, sync = TRUE, running.ok = FALSE)
-  ids = asJobTable(reg, ids)
+  ids = asIds(reg, ids, default = data.table(job.id = integer(0L), key = "job.id"))
 
   info("Resetting %i jobs in DB.", nrow(ids))
   reg$status[ids, c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash") := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_), with = FALSE]

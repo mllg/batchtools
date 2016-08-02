@@ -80,7 +80,7 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
 #' @return Nothing.
 showLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
-  id = asJobTable(reg, id, single.id = TRUE)
+  id = asId(reg, id)
   lines = readLog(id, reg = reg)
   log.file = file.path(tempdir(), sprintf("%i.log", id$job.id))
   writeLines(text = lines, con = log.file)
@@ -91,6 +91,6 @@ showLog = function(id, reg = getDefaultRegistry()) {
 #' @rdname showLog
 getLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
-  id = asJobTable(reg, id, single.id = TRUE)
+  id = asId(reg, id)
   readLog(id, reg = reg)
 }

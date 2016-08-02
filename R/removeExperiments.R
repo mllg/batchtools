@@ -13,9 +13,9 @@
 #'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @export
 #' @family Experiment
-removeExperiments = function(ids = integer(0L), reg = getDefaultRegistry()) {
+removeExperiments = function(ids = NULL, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE, running.ok = FALSE)
-  ids = asJobTable(reg, ids)
+  ids = asIds(reg, ids, default = data.table(job.id = integer(0L), key = "job.id"))
 
   info("Removing %i Experiments", nrow(ids))
   reg$status = reg$status[!ids]

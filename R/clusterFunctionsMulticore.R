@@ -46,7 +46,7 @@ Multicore = R6Class("Multicore",
 #' Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
 #'
 #' @note
-#' Sets the number of threads internally used by \pkg{data.table} to 1 during initialization (via \code{\link[data.table]{setthreads}}).
+#' Sets the number of threads internally used by \pkg{data.table} to 1 during initialization (via \code{data.table::setthreads}).
 #'
 #' @param ncpus [\code{integer(1)}]\cr
 #'   Number of VPUs of worker.
