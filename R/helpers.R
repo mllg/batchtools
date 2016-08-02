@@ -1,14 +1,18 @@
-### FIXME: refactor
-asJobTable = function(reg, ids = NULL, default = NULL, keep.extra = FALSE, single.id = FALSE) {
-  if (is.null(ids) && !is.null(default))
-    return(default)
+asId = function(reg, id) {
+  id = filter(reg$status, id)[, "job.id", with = FALSE]
+  if (nrow(id) != 1L)
+    stopf("You must provide exactly one id (%i provided)", nrow(id))
+  id
+}
 
-  res = filter(reg$status, ids)[, "job.id", with = FALSE]
-  if (single.id && nrow(res) != 1L)
-    stopf("You must provide exactly one id (%i provided)", nrow(res))
-  if (keep.extra && is.data.frame(ids) && ncol(ids) >= 2L)
-    res = merge(res, ids, by = "job.id", all = TRUE)
-  return(res)
+asIds = function(reg, ids, default = NULL, keep.cols = character(0L)) {
+  if (is.null(ids)) {
+    if (is.null(default))
+      return(reg$status[, "job.id", with = FALSE])
+    return(default)
+  }
+  keep.cols = union("job.id", intersect(colnames(ids), keep.cols))
+  filter(reg$status, ids)[, keep.cols, with = FALSE]
 }
 
 filter = function(x, ids = NULL) {
@@ -24,7 +28,7 @@ filter = function(x, ids = NULL) {
     stop("Format of 'ids' not recognized. Must be a data frame with column 'job.id' or an integerish vector")
   }
 
-  setkeyv(x[unique(ids, by = "job.id"), nomatch = 0L], "job.id")
+  setkeyv(x[unique(ids, by = "job.id"), nomatch = 0L], "job.id")[]
 }
 
 inner_join = function(x, y) {

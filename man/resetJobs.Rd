@@ -4,7 +4,7 @@
 \alias{resetJobs}
 \title{Reset the Computational State of Jobs}
 \usage{
-resetJobs(ids, reg = getDefaultRegistry())
+resetJobs(ids = NULL, reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr

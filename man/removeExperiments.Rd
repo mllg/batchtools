@@ -4,7 +4,7 @@
 \alias{removeExperiments}
 \title{Remove Experiments}
 \usage{
-removeExperiments(ids = integer(0L), reg = getDefaultRegistry())
+removeExperiments(ids = NULL, reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr

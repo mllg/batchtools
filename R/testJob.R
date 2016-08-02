@@ -27,7 +27,7 @@
 testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   assertFlag(external)
-  id = asJobTable(reg, id, single.id = TRUE)
+  id = asId(reg, id)
 
   if (external) {
     fn      = npath(tempfile("testjob_"))

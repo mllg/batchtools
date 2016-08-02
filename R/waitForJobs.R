@@ -25,7 +25,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   assertNumeric(sleep, len = 1L, lower = 0.2, finite = TRUE)
   assertNumeric(timeout, len = 1L, lower = sleep)
   assertFlag(stop.on.error)
-  ids = asJobTable(reg, ids, default = .findSubmitted(reg = reg))
+  ids = asIds(reg, ids, default = .findSubmitted(reg = reg))
 
   .findNotTerminated = function(reg, ids = NULL) {
     done = NULL
