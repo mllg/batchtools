@@ -29,6 +29,6 @@ test_that("addProblem", {
   expect_set_equal(levels(reg$defs$problem), "p2")
   expect_set_equal(getProblemIds(reg), "p2")
   expect_false(file.exists(file.path(reg$file.dir, "problems", "p1.rds")))
-  expect_set_equal(getJobDefs(reg = reg)$problem, "p2")
+  expect_set_equal(as.character(getJobDefs(reg = reg)$problem), "p2")
   checkTables(reg)
 })
