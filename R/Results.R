@@ -119,7 +119,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
   assertFlag(fill)
 
   results = .reduceResultsList(ids = ids, fun = fun, ..., reg = reg)
-  if (!qtestr(results, c("d")))
+  if (!qtestr(results, "d"))
     results = lapply(results, as.data.table)
   results = rbindlist(results, fill = fill, idcol = "job.id")
   if (!identical(results$job.id, seq_row(ids)))
