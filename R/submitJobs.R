@@ -53,12 +53,13 @@
 submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, sync = TRUE)
   assertList(resources, names = "strict")
-  ids = asIds(reg, ids, default = .findNotSubmitted(reg), keep.cols = "chunk")
-  if (nrow(ids) == 0L)
-    return(data.table(job.id = integer(0L), key = "job.id"))
+  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = TRUE)
   drop = setdiff(names(ids), c("job.id", "chunk"))
   if (length(drop) > 0L)
     ids[, drop := NULL, with = FALSE]
+
+  if (nrow(ids) == 0L)
+    return(copy(noids))
 
   on.sys = .findOnSystem(reg = reg)
   if (nrow(on.sys[ids, nomatch = 0L]) > 0L)

@@ -25,11 +25,11 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   assertNumeric(sleep, len = 1L, lower = 0.2, finite = TRUE)
   assertNumeric(timeout, len = 1L, lower = sleep)
   assertFlag(stop.on.error)
-  ids = asIds(reg, ids, default = .findSubmitted(reg = reg))
+  ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
 
   .findNotTerminated = function(reg, ids = NULL) {
     done = NULL
-    filter(reg$status, ids)[is.na(done), "job.id", with = FALSE]
+    inner_join(reg$status, ids)[is.na(done), "job.id", with = FALSE]
   }
 
   if (nrow(.findNotSubmitted(ids = ids, reg = reg)) > 0L) {
@@ -46,7 +46,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     return(nrow(.findErrors(reg, ids)) == 0L)
 
   timeout = ustamp() + timeout
-  ids.disappeared = data.table(job.id = integer(0L), key = "job.id")
+  ids.disappeared = copy(noids)
 
   pb = makeProgressBar(total = n.jobs.total, format = "Waiting (S::system R::running D::done E::error) [:bar] :percent eta: :eta",
     tokens = as.list(getStatusTable(ids, batch.ids, reg = reg)))

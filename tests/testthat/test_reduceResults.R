@@ -18,6 +18,11 @@ test_that("reduceResults", {
     expect_equal(reduceResults(fun = function(aggr, res, extra.arg, ...) aggr + res$a + extra.arg, init = 0, extra.arg = 1, reg = reg), sum(1:3 + 1))
     expect_equal(reduceResults(fun = function(job, aggr, res) c(aggr, job$id), init = integer(0), ids = 2:3, reg = reg), 2:3)
     expect_list(reduceResults(fun = function(job, aggr, res) c(aggr, list(job)), init = list(), ids = 2:3, reg = reg), types = "Job", len = 2)
+
+    expect_equal(
+      reduceResults(fun = function(aggr, res, ...) c(aggr, res$a), ids = 3:1, init = integer(0), reg = reg),
+      rev(reduceResults(fun = function(aggr, res, ...) c(aggr, res$a), ids = 1:3, init = integer(0), reg = reg))
+    )
   })
 })
 
@@ -44,6 +49,7 @@ test_that("reduceResultsList", {
     expect_equal(reduceResultsList(reg = reg, fun = function(x) x$a), as.list(1:3))
     expect_equal(reduceResultsList(reg = reg, fun = function(x, y) x$a + y, y = 1), as.list(1:3 + 1))
     expect_list(reduceResultsList(reg = reg, fun = function(job, ...) job), types = "Job", len = 3)
+    expect_equal(reduceResultsList(ids = 2:1, reg = reg), rev(reduceResultsList(ids = 1:2, reg = reg)))
   })
 })
 

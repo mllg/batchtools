@@ -1,6 +1,6 @@
 context("findJobs")
 
-none = data.table(job.id = integer(0L), key = "job.id")
+none = noids
 
 test_that("find[Status]", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)

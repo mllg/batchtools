@@ -34,7 +34,7 @@ batchMap = function(fun, ..., more.args = list(), reg = getDefaultRegistry()) {
 
   ddd = list(...)
   if (length(ddd) == 0L)
-    return(data.table(job.id = integer(0L), key = "job.id"))
+    return(copy(noids))
 
   n = unique(lengths(ddd))
   if(length(n) != 1L) {
@@ -45,7 +45,7 @@ batchMap = function(fun, ..., more.args = list(), reg = getDefaultRegistry()) {
     n = mn
   }
   if (n == 0L)
-    return(data.table(job.id = integer(0L), key = "job.id"))
+    return(copy(noids))
 
   info("Adding %i jobs ...", n)
 
@@ -74,5 +74,5 @@ batchMap = function(fun, ..., more.args = list(), reg = getDefaultRegistry()) {
     key = "job.id")
 
   saveRegistry(reg)
-  invisible(reg$status[, "job.id", with = FALSE])
+  invisible(ids(reg$status))
 }

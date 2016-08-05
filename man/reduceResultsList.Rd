@@ -33,9 +33,9 @@ In \code{reduceResultsDataTable}: This flag is passed down to
 to a \code{\link[data.table]{data.table}}.}
 }
 \value{
-\code{reduceResultsList} returns a list,
+\code{reduceResultsList} returns a list of the results in the same order as the provided ids.
   \code{reduceResultsDataTable} returns a \code{\link[data.table]{data.table}} with columns \dQuote{job.id} and additional result columns
-  created via \code{\link[data.table]{rbindlist}} (sorted by ids).
+  created via \code{\link[data.table]{rbindlist}}, sorted by \dQuote{job.id}.
 }
 \description{
 Applies a function on the results of your finished jobs and thereby collects
