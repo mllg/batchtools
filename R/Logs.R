@@ -45,7 +45,6 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
   assertString(pattern, na.ok = TRUE)
   assertFlag(ignore.case)
 
-  cols = c("job.id", "job.hash")
   ids = convertIds(reg, ids, default = .findStarted(reg = reg))
   tab = reg$status[ids, c("job.id", "job.hash"), with = FALSE]
   if (is.na(pattern) || !nzchar(pattern))
