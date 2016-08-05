@@ -2,7 +2,8 @@
 #'
 #' @description
 #' Extracts error messages from the internal data base and returns them in a compact table.
-#' For further investigation, see \code{\link{showLog}}.
+#' For further investigation of logs, use \code{\link{showLog}}.
+#'
 #' @templateVar ids.default findErrors
 #' @template ids
 #' @param missing.as.error [\code{logical(1)}]\cr
@@ -25,12 +26,12 @@
 getErrorMessages = function(ids = NULL, missing.as.error = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   assertFlag(missing.as.error)
+  ids = convertIds(reg, ids, default = .findErrors(reg = reg))
+
   job.id = done = error = NULL
-  tab = filter(reg$status, ids %??% .findErrors(reg = reg))[, list(job.id, terminated = !is.na(done), error = !is.na(error), message = error)]
+  tab = reg$status[ids, list(job.id, terminated = !is.na(done), error = !is.na(error), message = error)]
 
-  if (missing.as.error) {
+  if (missing.as.error)
     tab[!tab$terminated, c("error", "message") := list(TRUE, "Not terminated")]
-  }
-
-  return(tab[])
+  tab[]
 }

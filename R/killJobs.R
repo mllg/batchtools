@@ -23,35 +23,35 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   if (is.null(kill))
     stop("ClusterFunction implementation does not support the killing of jobs")
 
-  done = NULL
-  ids = filter(reg$status, ids %??% .findSubmitted(reg))[is.na(done), c("job.id", "started", "batch.id"), with = FALSE]
-  ids = ids[.findOnSystem(ids = ids, reg = reg)]
-  if (nrow(ids) == 0L)
+  ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
+  tab = reg$status[.findOnSystem(ids = ids, reg = reg), c("job.id", "started", "batch.id"), with = FALSE]
+
+  if (nrow(tab) == 0L)
     return(data.table(job.id = integer(0L), batch.id = character(0L), killed = logical(0L)))
 
-  info("Trying to kill %i jobs ...", nrow(ids))
+  info("Trying to kill %i jobs ...", nrow(tab))
 
   # kill queued jobs first, otherwise they might get started while killing running jobs
-  setorderv(ids, "started", na.last = FALSE)
-  ids[, "killed" := FALSE]
+  setorderv(tab, "started", na.last = FALSE)
+  tab[, "killed" := FALSE]
 
-  batch.ids = unique(ids$batch.id)
+  batch.ids = unique(tab$batch.id)
   info("Killing %i real batch jobs ...", length(batch.ids))
 
   for (i in 1:3) {
-    ids[!ids$killed, "killed" := !is.error(try(kill(reg, .BY$batch.id), silent = TRUE)), by = "batch.id"]
-    if (all(ids$killed))
+    tab[!tab$killed, "killed" := !is.error(try(kill(reg, .BY$batch.id), silent = TRUE)), by = "batch.id"]
+    if (all(tab$killed))
       break
     Sys.sleep(2)
   }
 
-  if (!all(ids$killed))
-    warningf("Could not kill %i jobs", sum(!ids$killed))
+  if (!all(tab$killed))
+    warningf("Could not kill %i jobs", sum(!tab$killed))
 
   # reset killed jobs
   syncRegistry(reg = reg)
-  reg$status[ids[ids$killed], c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash") := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_)]
+  reg$status[tab[tab$killed], c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash") := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_)]
 
   saveRegistry(reg)
-  ids[, c("job.id", "batch.id", "killed"), with = FALSE]
+  tab[, c("job.id", "batch.id", "killed"), with = FALSE]
 }

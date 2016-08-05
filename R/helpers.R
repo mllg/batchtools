@@ -1,38 +1,52 @@
-asId = function(reg, id) {
-  id = filter(reg$status, id)[, "job.id", with = FALSE]
-  if (nrow(id) != 1L)
-    stopf("You must provide exactly one id (%i provided)", nrow(id))
-  id
-}
-
-asIds = function(reg, ids, default = NULL, keep.cols = character(0L)) {
-  if (is.null(ids)) {
-    if (is.null(default))
-      return(reg$status[, "job.id", with = FALSE])
-    return(default)
-  }
-  keep.cols = union("job.id", intersect(colnames(ids), keep.cols))
-  filter(reg$status, ids)[, keep.cols, with = FALSE]
-}
-
-filter = function(x, ids = NULL) {
-  if (is.null(ids))
-    return(copy(x))
-
-  if (is.data.frame(ids) && "job.id" %in% names(ids)) {
-    if (!is.data.table(ids))
-      ids = as.data.table(ids)
+castIds = function(ids, setkey = TRUE) {
+  if (is.data.table(ids)) {
+    qassert(ids$job.id, "X", .var.name = "column 'job.id'")
+    if (setkey && !identical(key(ids), "job.id")) {
+      ids = copy(ids)
+      setkeyv(ids, "job.id")
+    }
+  } else if (is.data.frame(ids)) {
+    qassert(ids$job.id, "X", .var.name = "column 'job.id'")
+    ids = as.data.table(ids)
+    if (setkey)
+      setkeyv(ids, "job.id")
   } else if (qtest(ids, "X")) {
-    ids = data.table(job.id = as.integer(ids), key = "job.id")
+    ids = if (setkey) data.table(job.id = as.integer(ids), key = "job.id") else data.table(job.id = as.integer(ids))
   } else {
     stop("Format of 'ids' not recognized. Must be a data frame with column 'job.id' or an integerish vector")
   }
 
-  setkeyv(x[unique(ids, by = "job.id"), nomatch = 0L], "job.id")[]
+  return(ids)
+}
+
+convertIds = function(reg, ids, default = NULL, keep.extra = FALSE, keep.order = FALSE) {
+  if (is.null(ids))
+    return(default)
+
+  ids = castIds(ids, setkey = !keep.order)
+  if (anyDuplicated(ids, by = "job.id"))
+    stop("Duplicated ids provided")
+
+  if (keep.extra && ncol(ids) > 1L)
+    return(ids[reg$status[ids, on = "job.id", nomatch = 0L, which = TRUE]])
+  return(reg$status[ids, "job.id", on = "job.id", nomatch = 0L, with = FALSE])
+}
+
+convertId = function(reg, id) {
+  id = convertIds(reg, id)
+  if (nrow(id) != 1L)
+    stopf("You must provide exactly one id (%i provided)", nrow(id))
+  return(id)
 }
 
 inner_join = function(x, y) {
+  if (is.null(y))
+    return(x)
   x[y, nomatch = 0, on = key(x)]
+}
+
+ids = function(tab) {
+  tab[, "job.id", with = FALSE]
 }
 
 auto_increment = function(ids, n = 1L) {

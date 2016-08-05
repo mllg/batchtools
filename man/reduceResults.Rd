@@ -32,9 +32,9 @@ Additional arguments passed to to function \code{fun}.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-Aggregated results, return type depends on function. If \code{ids}
-  is empty, \code{reduceResults} returns \code{init} (if available) or
-  \code{NULL} otherwise.
+Aggregated results in the same order as provided ids.
+  Return type depends on the user function. If \code{ids}
+  is empty, \code{reduceResults} returns \code{init} (if available) or \code{NULL} otherwise.
 }
 \description{
 A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects

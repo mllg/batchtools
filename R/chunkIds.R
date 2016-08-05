@@ -59,7 +59,7 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
   }
 
   assertRegistry(reg)
-  ids = asIds(reg, ids, default = findJobs(reg = reg), keep.cols = group.by)
+  ids = convertIds(reg, ids, keep.extra = TRUE) %??% ids(reg$status)
   assertCharacter(group.by, any.missing = FALSE, min.chars = 1L)
   job.id = NULL
 

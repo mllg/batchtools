@@ -11,13 +11,13 @@
 #' @export
 getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
-  stats = getStatusTable(ids, reg = reg)
+  stats = getStatusTable(convertIds(reg, ids), reg = reg)
   setClasses(stats, c("Status", class(stats)))
 }
 
-getStatusTable = function(ids, batch.ids = getBatchIds(reg = reg), reg = getDefaultRegistry()) {
+getStatusTable = function(ids = NULL, batch.ids = getBatchIds(reg = reg), reg = getDefaultRegistry()) {
   submitted = started = done = error = batch.id = status = NULL
-  stats = filter(reg$status, ids)[, list(
+  stats = inner_join(reg$status, ids)[, list(
     defined   = .N,
     submitted = count(submitted),
     started   = count(started),

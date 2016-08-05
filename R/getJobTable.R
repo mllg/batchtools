@@ -48,6 +48,8 @@
 #'
 #' getJobTable(reg = reg)
 getJobTable = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
+  assertRegistry(reg)
+  ids = convertIds(reg, ids)
   inner_join(inner_join(getJobStatus(ids, reg = reg), getJobDefs(ids, flatten = flatten, prefix = prefix, reg = reg)),
     getJobResources(ids = ids, flatten = flatten, reg = reg))
 }
@@ -58,7 +60,8 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   submitted = started = done = NULL
 
-  tab = filter(reg$status, ids)[, !c("def.id", "resource.id"), with = FALSE]
+  ids = convertIds(reg, ids)
+  tab = inner_join(reg$status, ids)[, !c("def.id", "resource.id"), with = FALSE]
   tab[, "submitted" := as.POSIXct(submitted, origin = "1970-01-01")]
   tab[, "started" := as.POSIXct(started, origin = "1970-01-01")]
   tab[, "done" := as.POSIXct(done, origin = "1970-01-01")]
@@ -73,7 +76,8 @@ getJobDefs = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefau
   if (!is.null(flatten))
     assertFlag(flatten)
   assertFlag(prefix)
-  tab = inner_join(reg$defs, filter(reg$status, ids))[, c("job.id", names(reg$defs)), with = FALSE]
+  ids = convertIds(reg, ids)
+  tab = inner_join(reg$defs, inner_join(reg$status, ids))[, c("job.id", names(reg$defs)), with = FALSE]
   setkeyv(tab, "job.id")
   parsAsCols(tab, flatten, prefix, reg = reg)
   tab[, !"def.id", with = FALSE]
@@ -87,7 +91,8 @@ getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = get
     assertFlag(flatten)
   assertFlag(prefix)
 
-  tab = merge(filter(reg$status, ids), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", names(reg$resources)), with = FALSE]
+  ids = convertIds(reg, ids)
+  tab = merge(inner_join(reg$status, ids), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", names(reg$resources)), with = FALSE]
   if (flatten %??% qtestr(tab$resources, c("v", "L"))) {
     new.cols = rbindlist(tab$resources, fill = TRUE)
     if (nrow(new.cols) > 0L) {
@@ -104,11 +109,12 @@ getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = get
 #' @rdname getJobTable
 getJobPars = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  if (!is.null(flatten))
-    assertFlag(flatten)
+  ids = convertIds(reg, ids)
+  assertFlag(flatten, null.ok = TRUE)
   assertFlag(prefix)
+
   def.cols = c("job.id", setdiff(names(reg$defs), c("def.id", "pars.hash")))
-  tab = inner_join(reg$defs, filter(reg$status, ids))[, def.cols, with = FALSE]
+  tab = inner_join(reg$defs, inner_join(reg$status, ids))[, def.cols, with = FALSE]
   parsAsCols(tab, flatten, prefix, reg = reg)
   setkeyv(tab, "job.id")[]
 }

@@ -28,7 +28,7 @@ Registry. If not explicitly passed, uses the last created registry.}
 }
 \description{
 Extracts error messages from the internal data base and returns them in a compact table.
-For further investigation, see \code{\link{showLog}}.
+For further investigation of logs, use \code{\link{showLog}}.
 }
 \examples{
 reg = makeRegistry(file.dir = NA, make.default = FALSE)

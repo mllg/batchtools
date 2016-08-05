@@ -37,7 +37,7 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
   UseMethod("makeJobCollection", reg)
 }
 
-createCollection = function(ids, resources = list(), reg = getDefaultRegistry()) {
+createCollection = function(resources = list(), reg = getDefaultRegistry()) {
   jc            = new.env(parent = emptyenv())
   jc$debug      = getOption("batchtools.debug", FALSE)
   jc$file.dir   = reg$file.dir
@@ -65,16 +65,16 @@ createCollection = function(ids, resources = list(), reg = getDefaultRegistry())
 
 #' @export
 makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  jc = createCollection(ids, resources, reg)
-  jc$defs = inner_join(reg$defs, filter(reg$status, ids))[, c("job.id", "pars"), with = FALSE]
+  jc = createCollection(resources, reg)
+  jc$defs = inner_join(reg$defs, inner_join(reg$status, convertIds(reg, ids)))[, c("job.id", "pars"), with = FALSE]
   setkeyv(jc$defs, "job.id")
   setClasses(jc, "JobCollection")
 }
 
 #' @export
 makeJobCollection.ExperimentRegistry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  jc = createCollection(ids, resources, reg)
-  jc$defs = inner_join(reg$defs, filter(reg$status, ids))[, c("job.id", "pars", "problem", "algorithm", "repl"), with = FALSE]
+  jc = createCollection(resources, reg)
+  jc$defs = inner_join(reg$defs, inner_join(reg$status, convertIds(reg, ids)))[, c("job.id", "pars", "problem", "algorithm", "repl"), with = FALSE]
   setkeyv(jc$defs, "job.id")
   setClasses(jc, c("ExperimentCollection", "JobCollection"))
 }

@@ -22,9 +22,9 @@
 #'   Default is the first result.
 #' @param ... [\code{ANY}]\cr
 #'   Additional arguments passed to to function \code{fun}.
-#' @return Aggregated results, return type depends on function. If \code{ids}
-#'   is empty, \code{reduceResults} returns \code{init} (if available) or
-#'   \code{NULL} otherwise.
+#' @return Aggregated results in the same order as provided ids.
+#'   Return type depends on the user function. If \code{ids}
+#'   is empty, \code{reduceResults} returns \code{init} (if available) or \code{NULL} otherwise.
 #' @template reg
 #' @family Results
 #' @export
@@ -37,7 +37,7 @@
 #' reduceResults(function(x, y) c(x, sqrt(y)), init = numeric(0), reg = reg)
 reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
-  ids = asIds(reg, ids, default = .findDone(reg))
+  ids = convertIds(reg, ids, default = .findDone(reg = reg), keep.order = TRUE)
   fun = match.fun(fun)
 
   fns = sprintf("%i.rds", ids$job.id)
@@ -87,9 +87,9 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @param ... [\code{ANY}]\cr
 #'   Additional arguments passed to to function \code{fun}.
 #' @template reg
-#' @return \code{reduceResultsList} returns a list,
+#' @return \code{reduceResultsList} returns a list of the results in the same order as the provided ids.
 #'   \code{reduceResultsDataTable} returns a \code{\link[data.table]{data.table}} with columns \dQuote{job.id} and additional result columns
-#'   created via \code{\link[data.table]{rbindlist}} (sorted by ids).
+#'   created via \code{\link[data.table]{rbindlist}}, sorted by \dQuote{job.id}.
 #' @seealso \code{\link{reduceResults}}.
 #' @family Results
 #' @export
@@ -101,31 +101,9 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' reduceResultsList(fun = sqrt, reg = reg)
 reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
-  ids = asIds(reg, ids, default = .findDone(reg = reg))
-
-  fns = file.path(reg$file.dir, "results", sprintf("%i.rds", ids$job.id))
-  n = length(fns)
-  if (n == 0L)
-    return(list())
-
-  if (is.null(fun)) {
-    worker = function(..res, ..job, ...) ..res
-  } else {
-    fun = match.fun(fun)
-    if ("job" %in% names(formals(fun)))
-      worker = function(..res, ..job, ...) fun(..res, job = ..job, ...)
-    else
-      worker = function(..res, ..job, ...) fun(..res, ...)
-  }
-
-  results = vector("list", n)
-  pb = makeProgressBar(total = n, format = "Reducing [:bar] :percent eta: :eta")
-  cache = Cache$new(reg$file.dir)
-  for (i in which(file.exists(fns))) {
-    results[[i]] = worker(readRDS(fns[i]), makeJob(ids$job.id[i], cache = cache, reg = reg), ...)
-    pb$tick()
-  }
-  return(results)
+  assertFunction(fun, null.ok = TRUE)
+  ids = convertIds(reg, ids, default = .findDone(reg = reg), keep.order = TRUE)
+  .reduceResultsList(ids, fun, ..., reg = reg)
 }
 
 #' @param fill [\code{logical(1)}]\cr
@@ -136,16 +114,45 @@ reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegist
 #' @rdname reduceResultsList
 reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
-  ids = asIds(reg, ids, default = .findDone(reg = reg))
+  ids = convertIds(reg, ids, default = .findDone(reg = reg))
+  assertFunction(fun, null.ok = TRUE)
   assertFlag(fill)
-  results = reduceResultsList(ids = ids, fun = fun, ..., reg = reg)
-  if (!all(vlapply(results, is.data.table)))
+
+  results = .reduceResultsList(ids = ids, fun = fun, ..., reg = reg)
+  if (!qtestr(results, c("d")))
     results = lapply(results, as.data.table)
   results = rbindlist(results, fill = fill, idcol = "job.id")
   if (!identical(results$job.id, seq_row(ids)))
     stop("The function must return an object for each job which is convertible to a data.frame with one row")
   results[, "job.id" := ids$job.id]
-  setkeyv(results, "job.id")[]
+  setkeyv(results, "job.id")
+  results
+}
+
+.reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry()) {
+  if (is.null(fun)) {
+    worker = function(..res, ..job, ...) ..res
+  } else {
+    fun = match.fun(fun)
+    if ("job" %in% names(formals(fun)))
+      worker = function(..res, ..job, ...) fun(..res, job = ..job, ...)
+    else
+      worker = function(..res, ..job, ...) fun(..res, ...)
+  }
+
+  fns = file.path(reg$file.dir, "results", sprintf("%i.rds", ids$job.id))
+  n = length(fns)
+  if (n == 0L)
+    return(list())
+
+  results = vector("list", n)
+  pb = makeProgressBar(total = n, format = "Reducing [:bar] :percent eta: :eta")
+  cache = Cache$new(reg$file.dir)
+  for (i in which(file.exists(fns))) {
+    results[[i]] = worker(readRDS(fns[i]), makeJob(ids$job.id[i], cache = cache, reg = reg), ...)
+    pb$tick()
+  }
+  return(results)
 }
 
 #' @title Load the Result of a Single Job
@@ -163,7 +170,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
 #' @export
 loadResult = function(id, missing.val = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  id = asId(reg, id)
+  id = convertId(reg, id)
   fn = file.path(reg$file.dir, "results", sprintf("%i.rds", id$job.id))
   if (!file.exists(fn))
     return(missing.val)

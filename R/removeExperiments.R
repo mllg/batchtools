@@ -15,7 +15,7 @@
 #' @family Experiment
 removeExperiments = function(ids = NULL, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE, running.ok = FALSE)
-  ids = asIds(reg, ids, default = data.table(job.id = integer(0L), key = "job.id"))
+  ids = convertIds(reg, ids, default = copy(noids))
 
   info("Removing %i Experiments", nrow(ids))
   reg$status = reg$status[!ids]

@@ -45,16 +45,18 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
   assertString(pattern, na.ok = TRUE)
   assertFlag(ignore.case)
 
-  ids = filter(reg$status, ids %??% .findStarted(reg = reg))[, c("job.id", "job.hash"), with = FALSE]
+  cols = c("job.id", "job.hash")
+  ids = convertIds(reg, ids, default = .findStarted(reg = reg))
+  tab = reg$status[ids, c("job.id", "job.hash"), with = FALSE]
   if (is.na(pattern) || !nzchar(pattern))
-    return(ids[, "job.id", with = FALSE])
-  setorderv(ids, "job.hash")
+    return(ids(tab))
+  setorderv(tab, "job.hash")
   reader = Reader()
 
-  found = logical(nrow(ids))
-  matches = character(nrow(ids))
-  for (i in seq_row(ids)) {
-    lines = readLog(ids$job.id[i], impute = NA_character_, reg = reg, read.fun = reader)
+  found = logical(nrow(tab))
+  matches = character(nrow(tab))
+  for (i in seq_row(tab)) {
+    lines = readLog(tab$job.id[i], impute = NA_character_, reg = reg, read.fun = reader)
     if (!testScalarNA(lines)) {
       m = stri_detect_regex(lines, pattern, case_insensitive = ignore.case)
       if (any(m)) {
@@ -64,8 +66,9 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
     }
   }
 
-  res = cbind(ids[found, "job.id", with = FALSE], data.table(matches = matches[found]))
-  setkeyv(res, "job.id")[]
+  res = cbind(ids(tab[found]), data.table(matches = matches[found]))
+  setkeyv(res, "job.id")
+  return(res)
 }
 
 #' @title Inspect Log Files
@@ -80,7 +83,7 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
 #' @return Nothing.
 showLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
-  id = asId(reg, id)
+  id = convertId(reg, id)
   lines = readLog(id, reg = reg)
   log.file = file.path(tempdir(), sprintf("%i.log", id$job.id))
   writeLines(text = lines, con = log.file)
@@ -91,6 +94,6 @@ showLog = function(id, reg = getDefaultRegistry()) {
 #' @rdname showLog
 getLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
-  id = asId(reg, id)
+  id = convertId(reg, id)
   readLog(id, reg = reg)
 }
