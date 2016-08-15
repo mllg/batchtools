@@ -62,7 +62,7 @@ now = function() {
 }
 
 npath = function(file.dir, ...) {
-  normalizePath(file.path(file.dir, ...), winslash = "/", mustWork = FALSE)
+  file.path(normalizePath(file.dir, winslash = "/", mustWork = FALSE), ...)
 }
 
 insert = function(x, y) {
