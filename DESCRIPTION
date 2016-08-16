@@ -29,7 +29,6 @@ Imports:
     stringi,
     utils
 Suggests:
-    dplyr,
     e1071,
     knitr,
     parallelMap,
