@@ -56,6 +56,8 @@ Multicore = R6Class("Multicore",
 #' @family clusterFunctions
 #' @export
 makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", parallel::detectCores()), 1L)) {
+  if (testOS("windows"))
+    stop("ClusterFunctionsMulticore do not support Windows. Use makeClusterFunctionsSocket instead.")
   assertCount(ncpus, positive = TRUE)
   p = Multicore$new(ncpus)
 
