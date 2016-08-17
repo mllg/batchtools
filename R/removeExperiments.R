@@ -20,7 +20,7 @@ removeExperiments = function(ids = NULL, reg = getDefaultRegistry()) {
   info("Removing %i Experiments", nrow(ids))
   reg$status = reg$status[!ids]
 
-  i = which(reg$defs$def.id %nin% reg$status$def.id)
+  i = reg$defs[!reg$status, on = "def.id", which = TRUE]
   if (length(i) > 0L) {
     info("Cleaning up %i job definitions", length(i))
     reg$defs = reg$defs[-i]

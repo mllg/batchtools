@@ -53,17 +53,10 @@
 submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, sync = TRUE)
   assertList(resources, names = "strict")
-  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = TRUE)
-  drop = setdiff(names(ids), c("job.id", "chunk"))
-  if (length(drop) > 0L)
-    ids[, drop := NULL, with = FALSE]
 
+  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = c("job.id", "chunk"))
   if (nrow(ids) == 0L)
     return(copy(noids))
-
-  on.sys = .findOnSystem(reg = reg)
-  if (nrow(on.sys[ids, nomatch = 0L]) > 0L)
-    stopf("Some jobs are already on the system, e.g. %s", stri_join(head(on.sys[ids, nomatch = 0L]$job.id, 1L), collapse = ", "))
 
   if (is.null(ids$chunk)) {
     chunks = ids$chunk = seq_row(ids)
@@ -72,7 +65,10 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     chunks = sort(unique(ids$chunk))
   }
 
+  on.sys = .findOnSystem(reg = reg)
   max.concurrent.jobs = NA_integer_
+  if (on.sys[ids, .N, nomatch = 0L] > 0L)
+    stopf("Some jobs are already on the system, e.g. %s", stri_join(head(on.sys[ids, nomatch = 0L]$job.id, 1L), collapse = ", "))
   if (!is.null(reg$max.concurrent.jobs)) {
     if (nrow(on.sys) + length(chunks) > reg$max.concurrent.jobs)
       max.concurrent.jobs = reg$max.concurrent.jobs
@@ -101,10 +97,11 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     memory = NA_real_, resource.id = res.id, batch.id = NA_character_, job.hash = NA_character_)
 
   default.wait = 5
+  chunk = NULL
   pb = makeProgressBar(total = length(chunks), format = ":status [:bar] :percent eta: :eta", tokens = list(status = "Submitting"))
   for (ch in chunks) {
     wait = default.wait
-    ids.chunk = ids[ids$chunk == ch, nomatch = 0L, "job.id", with = FALSE]
+    ids.chunk = ids(ids[chunk == ch])
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
       writeRDS(jc, file = jc$uri, wait = TRUE)

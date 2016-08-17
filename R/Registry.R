@@ -295,25 +295,31 @@ saveRegistry = function(reg = getDefaultRegistry()) {
 #' @rdname Registry
 #' @export
 sweepRegistry = function(reg = getDefaultRegistry()) {
-  result.files = list.files(file.path(reg$file.dir, "results"))
+  result.files = list.files(file.path(reg$file.dir, "results"), pattern = "\\.rds$")
   i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% .findDone(reg = reg)$job.id)
   if (length(i) > 0L) {
     info("Removing %i obsolete result files", length(i))
     file.remove(file.path(reg$file.dir, "results", result.files[i]))
   }
 
-  log.files = list.files(file.path(reg$file.dir, "logs"))
+  log.files = list.files(file.path(reg$file.dir, "logs"), pattern = "\\.log$")
   i = which(stri_replace_last_fixed(log.files, ".log", "") %nin% reg$status$job.hash)
   if (length(i) > 0L) {
     info("Removing %i obsolete log files", length(i))
     file.remove(file.path(reg$file.dir, "logs", log.files[i]))
   }
 
-  job.files = list.files(file.path(reg$file.dir, "jobs"))
+  job.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.rds$")
   i = which(stri_replace_last_fixed(job.files, ".rds", "") %nin% reg$status$job.hash)
   if (length(i) > 0L) {
     info("Removing %i obsolete job files", length(i))
     file.remove(file.path(reg$file.dir, "jobs", job.files[i]))
+  }
+
+  job.desc.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.job$")
+  if (length(job.desc.files) > 0L) {
+    info("Removing %i job description files", length(i))
+    file.remove(file.path(reg$file.dir, "jobs", job.desc.files))
   }
 
   i = which(reg$resources$resource.id %nin% reg$status$resource.id)
@@ -378,6 +384,14 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
 
 assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, running.ok = TRUE) {
   assertClass(reg, "Registry", ordered = strict)
+  if (isTRUE(getOption("batchtools.debug", FALSE))) {
+    if (!identical(key(reg$status), "job.id"))
+      stop("Key of reg$job.id lost")
+    if (!identical(key(reg$defs), "def.id"))
+      stop("Key of reg$defs lost")
+    if (!identical(key(reg$resources), "resource.id"))
+      stop("Key of reg$resources lost")
+  }
   if (reg$writeable) {
     if (sync)
       syncRegistry(reg)

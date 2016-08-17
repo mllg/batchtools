@@ -27,8 +27,12 @@ convertIds = function(reg, ids, default = NULL, keep.extra = FALSE, keep.order =
   if (anyDuplicated(ids, by = "job.id"))
     stop("Duplicated ids provided")
 
-  if (keep.extra && ncol(ids) > 1L)
-    return(ids[reg$status[ids, on = "job.id", nomatch = 0L, which = TRUE]])
+  if (!identical(keep.extra, FALSE) && ncol(ids) > 1L) {
+    if (isTRUE(keep.extra))
+      return(ids[reg$status[ids, on = "job.id", nomatch = 0L, which = TRUE]])
+    keep.extra = intersect(keep.extra, names(ids))
+    return(ids[reg$status[ids, on = "job.id", nomatch = 0L, which = TRUE], keep.extra, with = FALSE])
+  }
   return(reg$status[ids, "job.id", on = "job.id", nomatch = 0L, with = FALSE])
 }
 
@@ -63,6 +67,13 @@ now = function() {
 
 npath = function(file.dir, ...) {
   file.path(normalizePath(file.dir, winslash = "/", mustWork = FALSE), ...)
+}
+
+names2 = function (x, missing.val = NA_character_) {
+  n = names(x)
+  if (is.null(n))
+    return(rep.int(missing.val, length(x)))
+  replace(n, is.na(n) | !nzchar(n), missing.val)
 }
 
 insert = function(x, y) {
@@ -134,13 +145,6 @@ stopf = function (...) {
 
 `%nin%` = function(x, y) {
   !match(x, y, nomatch = 0L)
-}
-
-names2 = function (x, missing.val = NA_character_) {
-  n = names(x)
-  if (is.null(n))
-    return(rep.int(missing.val, length(x)))
-  replace(n, is.na(n) | !nzchar(n), missing.val)
 }
 
 setClasses = function(x, cl) {
