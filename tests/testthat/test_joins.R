@@ -30,6 +30,10 @@ test_that("joins", {
   expect_identical(res$job.id, 1:5)
   expect_true(anyMissing(res$extra.col))
 
+  res = sjoin(x, y)
+  expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
+  expect_identical(res$job.id, 2:5)
+
   res = ajoin(x, y)
   expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
   expect_identical(res$job.id, 1L)

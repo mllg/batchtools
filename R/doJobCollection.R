@@ -29,6 +29,14 @@ doJobCollection.character = function(jc, con = stdout()) {
 
 #' @export
 doJobCollection.JobCollection = function(jc, con = stdout()) {
+  error = function(msg, ...) {
+    updates = data.table(job.id = jc$defs$job.id, started = ustamp(), done = ustamp(),
+      error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),
+      memory = NA_real_, key = "job.id")
+    writeRDS(updates, file = file.path(jc$file.dir, "updates", sprintf("%s-0.rds", jc$job.hash)), wait = TRUE)
+    invisible(NULL)
+  }
+
   if (!inherits(con, "connection")) {
     con = file(con, open = "wt")
     on.exit(close(con))
@@ -45,7 +53,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     if (nzchar(i)) {
       i = as.integer(i)
       if (!testInteger(i, any.missing = FALSE, lower = 1L, upper = nrow(jc$defs)))
-        return(slaveError(jc, sprintf("Failed to subset JobCollection using array environment variable '%s' [='%s']", jc$array.var, i)))
+        return(error("Failed to subset JobCollection using array environment variable '%s' [='%s']", jc$array.var, i))
       jc$defs = jc$defs[i]
     }
   }
@@ -58,7 +66,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
 
   # set work dir
   if (!dir.exists(jc$work.dir))
-    return(slaveError(jc, "Work dir does not exist"))
+    return(error("Work dir does not exist"))
   prev.wd = getwd()
   setwd(jc$work.dir)
   on.exit(setwd(prev.wd), add = TRUE)
@@ -66,7 +74,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   # setup inner parallelization
   if (!is.null(jc$resources$pm.backend)) {
     if (!requireNamespace("parallelMap", quietly = TRUE))
-      return(slaveError(jc, "parallelMap not installed"))
+      return(error("parallelMap not installed"))
     pm.opts = filterNull(list(mode = jc$resources$pm.backend, cpus = jc$resources$ncpus, level = jc$resources$pm.level, show.info = FALSE))
     do.call(parallelMap::parallelStart, pm.opts)
     on.exit(parallelMap::parallelStop(), add = TRUE)
@@ -81,7 +89,7 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   cache = Cache$new(jc$file.dir)
   ok = try(loadRegistryDependencies(jc, switch.wd = FALSE), silent = TRUE)
   if (is.error(ok))
-    return(slaveError(jc, sprintf("Error loading registry dependencies: %s", as.character(ok))))
+    return(error("Error loading registry dependencies: %s", as.character(ok)))
   buf = UpdateBuffer$new(jc$defs$job.id)
 
   runHook(jc, "pre.do.collection", con = con, cache = cache)
@@ -128,7 +136,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
     next.update = NA_integer_,
     initialize = function(ids) {
       self$updates = data.table(job.id = ids, started = NA_integer_, done = NA_integer_, error = NA_character_, memory = NA_real_, written = 0L, key = "job.id")
-      self$next.update = ustamp() + as.integer(runif(1L, 300L, 1800L))
+      self$next.update = ustamp() + as.integer(runif(1L, 300, 1800))
     },
 
     add = function(id, x) {
@@ -142,17 +150,9 @@ UpdateBuffer = R6Class("UpdateBuffer",
           count = max(self$updates$written) + 1L
           writeRDS(self$updates[i, !"written", with = FALSE], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
           self$updates[i, "written" := count]
-          self$next.update = ustamp() + as.integer(runif(1L, 300L, 1800L))
+          self$next.update = ustamp() + as.integer(runif(1L, 300, 1800))
         }
       }
     }
   )
 )
-
-slaveError = function(jc, msg) {
-  updates = data.table(job.id = jc$defs$job.id, started = ustamp(), done = ustamp(),
-    error = stri_trunc(stri_trim_both(msg), 500L, " [truncated]"),
-    memory = NA_real_, key = "job.id")
-  writeRDS(updates, file = file.path(jc$file.dir, "updates", sprintf("%s-0.rds", jc$job.hash)), wait = TRUE)
-  invisible(NULL)
-}

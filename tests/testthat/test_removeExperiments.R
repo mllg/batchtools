@@ -25,4 +25,6 @@ test_that("removeExperiments", {
   expect_equal(findExperiments(reg = reg)$job.id, 6:(N-nrow(ids)))
   expect_true(file.exists(file.path(reg$file.dir, "algorithms", "a2.rds")))
   expect_set_equal(levels(reg$defs$algorithm), c("a1", "a2"))
+
+  checkTables(reg)
 })

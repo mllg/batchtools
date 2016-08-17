@@ -7,6 +7,7 @@
 \alias{ljoin}
 \alias{ojoin}
 \alias{rjoin}
+\alias{sjoin}
 \title{Inner, Left, Right, Outer and Anti Join for Job Tables}
 \usage{
 ijoin(x, y)
@@ -16,6 +17,8 @@ ljoin(x, y)
 rjoin(x, y)
 
 ojoin(x, y)
+
+sjoin(x, y)
 
 ajoin(x, y)
 }
@@ -55,6 +58,9 @@ rjoin(x, y)
 
 # outer join: similar to union() on ids, keep all columns of x and y
 ojoin(x, y)
+
+# semi join: similar to intersect() on ids, keep all columns of x
+sjoin(x, y)
 
 # anti join: similar to setdiff() on ids, keep all columns of x
 ajoin(x, y)

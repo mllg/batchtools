@@ -34,6 +34,9 @@
 #' # outer join: similar to union() on ids, keep all columns of x and y
 #' ojoin(x, y)
 #'
+#' # semi join: similar to intersect() on ids, keep all columns of x
+#' sjoin(x, y)
+#'
 #' # anti join: similar to setdiff() on ids, keep all columns of x
 #' ajoin(x, y)
 ijoin = function(x, y) {
@@ -72,6 +75,16 @@ ojoin = function(x, y) {
   assertDataTable(y, key = "job.id")
   assertInteger(y$job.id, any.missing = FALSE, lower = 1L)
   merge(x, y, all = TRUE)
+}
+#' @rdname JoinTables
+#' @export
+sjoin = function(x, y) {
+  assertDataTable(x, key = "job.id")
+  assertInteger(x$job.id, any.missing = FALSE, lower = 1L)
+  assertDataTable(y, key = "job.id")
+  assertInteger(y$job.id, any.missing = FALSE, lower = 1L)
+  tmp = x[!y, "job.id", with = FALSE]
+  x[!tmp]
 }
 
 #' @rdname JoinTables
