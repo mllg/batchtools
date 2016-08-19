@@ -92,17 +92,15 @@ getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = get
   assertFlag(prefix)
 
   ids = convertIds(reg, ids)
-  tab = merge(inner_join(reg$status, ids), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", names(reg$resources)), with = FALSE]
-  if (flatten %??% qtestr(tab$resources, c("v", "L"))) {
-    new.cols = rbindlist(tab$resources, fill = TRUE)
-    if (nrow(new.cols) > 0L) {
-      if (prefix)
-        setnames(new.cols, names(new.cols), stri_join("res.", names(new.cols)))
-      tab[, names(new.cols) := new.cols]
+  tab = merge(inner_join(reg$status, ids), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", "resources"), with = FALSE]
+  if (flatten %??% qtestr(tab$resources, c("v", "0"), depth = 2L)) {
+    tab = rbindlist(.mapply(function(job.id, resources) c(list(job.id = job.id), resources), tab, list()), fill = TRUE)
+    if (prefix && nrow(tab) >= 2L) {
+      nn = setdiff(names(tab), "job.id")
+      setnames(tab, nn, stri_join("res.", nn))
     }
-    tab[, "resources" := NULL]
   }
-  setkeyv(tab[, !c("resource.id", "resource.hash"), with = FALSE], "job.id")[]
+  setkeyv(tab, "job.id")[]
 }
 
 #' @export
