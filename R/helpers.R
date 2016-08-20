@@ -65,10 +65,15 @@ now = function() {
   strftime(Sys.time())
 }
 
-npath = function(file.dir, ...) {
-  if (stri_startswith_fixed(file.dir, "~"))
-    return(file.path(file.dir, ...))
-  file.path(normalizePath(file.dir, winslash = "/", mustWork = FALSE), ...)
+npath = function(file.dir, must.work = TRUE) {
+  if (stri_startswith_fixed(file.dir, "~")) {
+    if (must.work && !file.exists(file.dir))
+      stopf("File '%s' not found", file.dir)
+    if (testOS("windows"))
+      file.dir = stri_replace_all_fixed(file.dir, "\\", "/")
+    return(file.dir)
+  }
+  normalizePath(file.dir, winslash = "/", mustWork = must.work)
 }
 
 names2 = function (x, missing.val = NA_character_) {
@@ -187,7 +192,6 @@ capture = function(expr) {
   on.exit(NULL)
   list(output = output, res = res)
 }
-
 
 filterNull = function(x) {
   x[!vlapply(x, is.null)]
