@@ -40,6 +40,8 @@ syncRegistry(reg = getDefaultRegistry(), save = TRUE)
 \item{file.dir}{[\code{character(1)}]\cr
   Path where all files of the registry are saved.
   Default is directory \dQuote{registry} in the current working directory.
+  Path will get normalized unless it is provided relative to the home directory
+  (i.e., starting with \dQuote{~}).
 
   If you pass \code{NA}, a temporary directory will be used.
   This way, you can create disposable registries for \code{\link{btlapply}} or examples.
@@ -51,7 +53,9 @@ syncRegistry(reg = getDefaultRegistry(), save = TRUE)
 Working directory for R process when experiment is executed.
 For \code{makeRegistry}, this defaults to the current working directory.
 \code{loadRegistry} uses the stored \code{work.dir}, but you may also explicitly provide one
-yourself.}
+yourself.
+Path will get normalized unless it is provided relative to the home directory
+(i.e., starting with \dQuote{~}).}
 
 \item{conf.file}{[\code{character(1)}]\cr
 Path to a configuration file which is sourced directly after the registry is created.

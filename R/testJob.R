@@ -30,11 +30,11 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   id = convertId(reg, id)
 
   if (external) {
-    fn      = npath(tempfile("testjob_"))
+    fn      = tempfile("testjob_")
     fn.r    = stri_join(fn, ".R")
     fn.jc   = stri_join(fn, ".jc")
     fn.res  = stri_join(fn, ".rds")
-    fn.tmpl = npath(system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE))
+    fn.tmpl = system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE)
 
     writeRDS(makeJobCollection(id, reg = reg), file = fn.jc, wait = TRUE)
     brew::brew(file = fn.tmpl, output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))

@@ -66,6 +66,8 @@ now = function() {
 }
 
 npath = function(file.dir, ...) {
+  if (stri_startswith_fixed(file.dir, "~"))
+    return(file.path(file.dir, ...))
   file.path(normalizePath(file.dir, winslash = "/", mustWork = FALSE), ...)
 }
 
@@ -209,7 +211,7 @@ Rscript = function() {
 findConfFile = function() {
   uris = file.path(c(".", "~"), c("batchtools.conf.R", ".batchtools.conf.R"))
   i = wf(file.exists(uris))
-  return(npath(uris[i]))
+  if (length(i) == 0L) character(0L) else npath(uris[i])
 }
 
 findTemplateFile = function(name) {
@@ -219,5 +221,5 @@ findTemplateFile = function(name) {
     system.file("templates", sprintf("%s.default.tmpl", name), package = "batchtools")
   )
   i = wf(nzchar(uris) & file.exists(uris))
-  return(npath(uris[i]))
+  if (length(i) == 0L) character(0L) else npath(uris[i])
 }
