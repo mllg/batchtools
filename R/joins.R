@@ -7,12 +7,13 @@
 #' See \url{http://rpubs.com/ronasta/join_data_tables} for a overview of join operations in
 #' data table or alternatively \pkg{dplyr}'s vignette on two table verbs.
 #'
-#' @param x [\code{\link{data.table}}]\cr
-#'   Data table with key \dQuote{job.id} as returned by most functions in batchtools.
-#' @param y [\code{\link{data.table}}]\cr
-#'   Data table with key \dQuote{job.id} as returned by most functions in batchtools.
+#' @param x [\code{\link{data.frame}} | \code{integer}]\cr
+#'   Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
+#'   or an integer vector fof job ids.
+#' @param x [\code{\link{data.frame}} | \code{integer}]\cr
+#'   Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
+#'   or an integer vector fof job ids.
 #' @return [\code{\link{data.table}}] with key \dQuote{job.id}.
-#'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @export
 #' @examples
 #' # create two tables for demonstration
@@ -40,59 +41,47 @@
 #' # anti join: similar to setdiff() on ids, keep all columns of x
 #' ajoin(x, y)
 ijoin = function(x, y) {
-  assertDataTable(x, key = "job.id")
-  assertInteger(x$job.id, any.missing = FALSE, lower = 1L)
-  assertDataTable(y, key = "job.id")
-  assertInteger(y$job.id, any.missing = FALSE, lower = 1L)
-  x[y, nomatch = 0L]
+  x = castIds(x)
+  y = castIds(y)
+  x[y, nomatch = 0L, on = "job.id"]
 }
 
 #' @rdname JoinTables
 #' @export
 ljoin = function(x, y) {
-  assertDataTable(x, key = "job.id")
-  assertInteger(x$job.id, any.missing = FALSE, lower = 1L)
-  assertDataTable(y, key = "job.id")
-  assertInteger(y$job.id, any.missing = FALSE, lower = 1L)
-  y[x]
+  x = castIds(x)
+  y = castIds(y)
+  y[x, on = "job.id"]
 }
 
 #' @rdname JoinTables
 #' @export
 rjoin = function(x, y) {
-  assertDataTable(x, key = "job.id")
-  assertInteger(x$job.id, any.missing = FALSE, lower = 1L)
-  assertDataTable(y, key = "job.id")
-  assertInteger(y$job.id, any.missing = FALSE, lower = 1L)
-  x[y]
+  x = castIds(x)
+  y = castIds(y)
+  x[y, on = "job.id"]
 }
 
 #' @rdname JoinTables
 #' @export
 ojoin = function(x, y) {
-  assertDataTable(x, key = "job.id")
-  assertInteger(x$job.id, any.missing = FALSE, lower = 1L)
-  assertDataTable(y, key = "job.id")
-  assertInteger(y$job.id, any.missing = FALSE, lower = 1L)
-  merge(x, y, all = TRUE)
+  x = castIds(x)
+  y = castIds(y)
+  merge(x, y, all = TRUE, by = "job.id")
 }
 #' @rdname JoinTables
 #' @export
 sjoin = function(x, y) {
-  assertDataTable(x, key = "job.id")
-  assertInteger(x$job.id, any.missing = FALSE, lower = 1L)
-  assertDataTable(y, key = "job.id")
-  assertInteger(y$job.id, any.missing = FALSE, lower = 1L)
-  tmp = x[!y, "job.id", with = FALSE]
-  x[!tmp]
+  x = castIds(x)
+  y = castIds(y)
+  tmp = x[!y, "job.id", with = FALSE, on = "job.id"]
+  x[!tmp, on = "job.id"]
 }
 
 #' @rdname JoinTables
 #' @export
 ajoin = function(x, y) {
-  assertDataTable(x, key = "job.id")
-  assertInteger(x$job.id, any.missing = FALSE, lower = 1L)
-  assertDataTable(y, key = "job.id")
-  assertInteger(y$job.id, any.missing = FALSE, lower = 1L)
-  x[!y]
+  x = castIds(x)
+  y = castIds(y)
+  x[!y, on = "job.id"]
 }

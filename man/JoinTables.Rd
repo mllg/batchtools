@@ -23,15 +23,16 @@ sjoin(x, y)
 ajoin(x, y)
 }
 \arguments{
-\item{x}{[\code{\link{data.table}}]\cr
-Data table with key \dQuote{job.id} as returned by most functions in batchtools.}
+\item{x}{[\code{\link{data.frame}} | \code{integer}]\cr
+Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
+or an integer vector fof job ids.}
 
-\item{y}{[\code{\link{data.table}}]\cr
-Data table with key \dQuote{job.id} as returned by most functions in batchtools.}
+\item{x}{[\code{\link{data.frame}} | \code{integer}]\cr
+Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
+or an integer vector fof job ids.}
 }
 \value{
 [\code{\link{data.table}}] with key \dQuote{job.id}.
-  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 These helper functions perform join operations on job tables.

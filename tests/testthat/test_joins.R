@@ -37,4 +37,16 @@ test_that("joins", {
   res = ajoin(x, y)
   expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
   expect_identical(res$job.id, 1L)
+
+  res = ijoin(x, 2:4)
+  expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
+  expect_identical(res$job.id, 2:4)
+
+  res = ijoin(2:4, x)
+  expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
+  expect_identical(res$job.id, 2:4)
+
+  res = ajoin(as.data.frame(x), y)
+  expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
+  expect_identical(res$job.id, 1L)
 })

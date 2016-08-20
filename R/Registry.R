@@ -255,7 +255,7 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = "~/.bat
 
   file.dir = npath(file.dir)
   if (!update.paths) {
-    before = npath(reg$file.dir)
+    before = npath(reg$file.dir, must.work = FALSE)
     if (before != file.dir) {
       warningf("The absolute path of the file.dir has changed (before '%s', now '%s'). Enabling read-only mode for the registry.", before, file.dir)
       reg$writeable = FALSE
