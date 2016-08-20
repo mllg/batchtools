@@ -20,6 +20,8 @@
 #' @param file.dir [\code{character(1)}]\cr
 #'   Path where all files of the registry are saved.
 #'   Default is directory \dQuote{registry} in the current working directory.
+#'   Path will get normalized unless it is provided relative to the home directory
+#'   (i.e., starting with \dQuote{~}).
 #'
 #'   If you pass \code{NA}, a temporary directory will be used.
 #'   This way, you can create disposable registries for \code{\link{btlapply}} or examples.
@@ -31,6 +33,8 @@
 #'   For \code{makeRegistry}, this defaults to the current working directory.
 #'   \code{loadRegistry} uses the stored \code{work.dir}, but you may also explicitly provide one
 #'   yourself.
+#'   Path will get normalized unless it is provided relative to the home directory
+#'   (i.e., starting with \dQuote{~}).
 #' @param conf.file [\code{character(1)}]\cr
 #'   Path to a configuration file which is sourced directly after the registry is created.
 #'   For example, you can set cluster functions or default resources in it.
@@ -110,7 +114,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   reg = new.env(parent = asNamespace("batchtools"))
 
   reg$file.dir = file.dir
-  reg$work.dir = work.dir
+  reg$work.dir = npath(work.dir)
   reg$temp.dir = tempdir()
   reg$packages = packages
   reg$namespaces = namespaces
@@ -163,14 +167,11 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   loadRegistryDependencies(list(work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
 
-  if (is.na(file.dir)) {
-    reg$file.dir = npath(tempfile("registry", tmpdir = reg$temp.dir))
-  } else {
-    reg$file.dir = npath(file.dir)
-  }
-
+  if (is.na(file.dir))
+    reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
   for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs")))
     dir.create(d, recursive = TRUE)
+  reg$file.dir = npath(reg$file.dir)
 
   setattr(reg, "class", "Registry")
   saveRegistry(reg)
