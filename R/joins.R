@@ -7,10 +7,10 @@
 #' See \url{http://rpubs.com/ronasta/join_data_tables} for a overview of join operations in
 #' data table or alternatively \pkg{dplyr}'s vignette on two table verbs.
 #'
-#' @param x [\code{\link{data.frame}} | \code{integer}]\cr
+#' @param x [\code{\link{data.frame}} | \code{integer}]\cr
 #'   Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
 #'   or an integer vector fof job ids.
-#' @param x [\code{\link{data.frame}} | \code{integer}]\cr
+#' @param y [\code{\link{data.frame}} | \code{integer}]\cr
 #'   Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
 #'   or an integer vector fof job ids.
 #' @return [\code{\link{data.table}}] with key \dQuote{job.id}.
@@ -74,8 +74,8 @@ ojoin = function(x, y) {
 sjoin = function(x, y) {
   x = castIds(x)
   y = castIds(y)
-  tmp = x[!y, "job.id", with = FALSE, on = "job.id"]
-  x[!tmp, on = "job.id"]
+  w = unique(x[y, on = "job.id", which = TRUE, allow.cartesian = TRUE])
+  x[w]
 }
 
 #' @rdname JoinTables
@@ -83,5 +83,5 @@ sjoin = function(x, y) {
 ajoin = function(x, y) {
   x = castIds(x)
   y = castIds(y)
-  x[!y, on = "job.id"]
+  setkeyv(x[!y, on = "job.id"], "job.id")[]
 }
