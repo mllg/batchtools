@@ -23,11 +23,11 @@ sjoin(x, y)
 ajoin(x, y)
 }
 \arguments{
-\item{x}{[\code{\link{data.frame}} | \code{integer}]\cr
+\item{x}{[\code{\link{data.frame}} | \code{integer}]\cr
 Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
 or an integer vector fof job ids.}
 
-\item{x}{[\code{\link{data.frame}} | \code{integer}]\cr
+\item{y}{[\code{\link{data.frame}} | \code{integer}]\cr
 Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
 or an integer vector fof job ids.}
 }
