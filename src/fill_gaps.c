@@ -8,7 +8,7 @@ SEXP fill_gaps(SEXP x) {
     int last = NA_INTEGER;
 
     const int *xi = INTEGER(x);
-    const int const * xend = xi + n;
+    const int * const xend = xi + n;
 
     SEXP y = PROTECT(allocVector(INTSXP, n));
     int *yi = INTEGER(y);

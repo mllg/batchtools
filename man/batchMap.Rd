@@ -4,14 +4,22 @@
 \alias{batchMap}
 \title{Map Operation for Batch Systems}
 \usage{
-batchMap(fun, ..., more.args = list(), reg = getDefaultRegistry())
+batchMap(fun, ..., args = list(), more.args = list(),
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{fun}{[\code{function}]\cr
 Function to map over \code{...}.}
 
 \item{...}{[any]\cr
-Arguments to vectorize over (list or vector).}
+Arguments to vectorize over (list or vector).
+Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the maximum length).
+Mutually exclusive with \code{args}.}
+
+\item{args}{[\code{list} | \code{data.frame}]\cr
+Arguments to vectorize over as (named) list or data frame.
+Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the maximum length).
+Mutually exclusive with \code{...}.}
 
 \item{more.args}{[\code{list}]\cr
 A list of other arguments passed to \code{fun}.
@@ -33,10 +41,23 @@ can be collected with \code{\link{reduceResultsList}}, \code{\link{reduceResults
 For a synchronous \code{\link[base]{Map}}-like execution see \code{\link{btmapply}}.
 }
 \examples{
+# example using "..." and more.args
 reg = makeRegistry(file.dir = NA, make.default = FALSE)
 f = function(x, y) x^2 + y
 ids = batchMap(f, x = 1:10, more.args = list(y = 100), reg = reg)
-print(ids)
-getJobTable(reg = reg, flatten = TRUE)
+getJobPars(reg = reg)
+testJob(6, reg = reg) # 100 + 6^2 = 136
+
+# vector recycling
+reg = makeRegistry(file.dir = NA, make.default = FALSE)
+f = function(...) list(...)
+ids = batchMap(f, x = 1:3, y = 1:6, reg = reg)
+getJobPars(reg = reg)
+
+# example for an expand.grid()-like operation on parameters
+reg = makeRegistry(file.dir = NA, make.default = FALSE)
+ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), more.args = list(sep = ""), reg = reg)
+getJobPars(reg = reg)
+testJob(6, reg = reg)
 }
 

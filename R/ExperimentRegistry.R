@@ -52,7 +52,7 @@ makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), con
 
 #' @export
 print.ExperimentRegistry = function(x, ...) {
-  catc("Experiment Registry")
+  cat("Experiment Registry\n")
   catf("  ClusterFunctions: %s", x$cluster.functions$name)
   catf("  File dir   : %s", x$file.dir)
   catf("  Work dir   : %s", x$work.dir)
