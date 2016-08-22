@@ -30,7 +30,7 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   id = convertId(reg, id)
 
   if (external) {
-    fn      = tempfile("testjob_")
+    fn      = normalizePath(tempfile("testjob_"), winslash = "/", mustWork = FALSE)
     fn.r    = stri_join(fn, ".R")
     fn.jc   = stri_join(fn, ".jc")
     fn.res  = stri_join(fn, ".rds")
