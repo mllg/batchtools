@@ -110,7 +110,7 @@ makeSubmitJobResult = function(status, batch.id, msg = NA_character_) {
 
 #' @export
 print.SubmitJobResult = function(x, ...) {
-  catc("Job submission result:")
+  cat("Job submission result\n")
   catf("  ID    : %s", x$batch.id)
   catf("  Status: %i", x$status)
   catf("  Msg   : %s", x$msg)

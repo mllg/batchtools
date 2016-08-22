@@ -23,6 +23,19 @@ test_that("batchMap", {
 
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(...) list(...)
+  ids = batchMap(fun, args = list(1:3), more.args = list(j = 1), reg = reg)
+  expect_equal(readRDS(file.path(reg$file.dir, "more.args.rds")), list(j = 1))
+  expect_equal(reg$defs$pars, lapply(1:3, list))
+
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, j = 1L, reg = reg)
   expect_identical(reg$defs$pars[[3L]], list(i = 3L, j = 1L))
+
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  fun = function(...) list(...)
+  cj = CJ(a = 1:3, b = letters[1:3])
+  ids = batchMap(fun, args = cj, reg = reg)
+  expect_data_table(ids, nrow = 9, key = "job.id")
+  expect_equivalent(getJobPars(reg = reg)[, c("a", "b"), with = FALSE], cj)
 })

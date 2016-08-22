@@ -204,7 +204,7 @@ clearDefaultRegistry = function() {
 
 #' @export
 print.Registry = function(x, ...) {
-  catc("Job Registry")
+  cat("Job Registry\n")
   catf("  ClusterFunctions: %s", x$cluster.functions$name)
   catf("  File dir        : %s", x$file.dir)
   catf("  Work dir        : %s", x$work.dir)
