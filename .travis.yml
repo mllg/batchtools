@@ -24,7 +24,6 @@ r_binary_packages:
   - progress
   - r6
   - stringi
-  - dplyr
   - e1071
   - parallelmap
   - ranger

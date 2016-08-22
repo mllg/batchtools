@@ -11,14 +11,14 @@ test_that("showLog/getLog", {
     waitForJobs(reg = reg)
   })
   lines = getLog(id = 1, reg = reg)
-  expect_character(lines, min.len = 3L, any.missing = FALSE, min.chars = 1L, pattern =  "^\\[job")
+  expect_character(lines, min.len = 3L, any.missing = FALSE)
   expect_equal(sum(stri_detect_fixed(lines, "GREPME")), 1L)
-  expect_true(all(stri_detect_regex(lines, "job\\((1|chunk)\\)")))
-  expect_false(any(stri_detect_fixed(lines, "job(2)")))
+  expect_true(any(stri_startswith_fixed(lines, "### [bt ")))
+  expect_identical(sum(stri_endswith_fixed(lines, "[batchtools job.id=1]")), 2L)
+  expect_false(any(stri_endswith_fixed(lines, "[batchtools job.id=2]")))
 
   lines = getLog(id = 2, reg = reg)
-  expect_true(all(stri_detect_regex(lines, "job\\((2|chunk)\\)")))
-  expect_false(any(stri_detect_fixed(lines, "job(1)")))
+  expect_false(any(stri_endswith_fixed(lines, "[batchtools job.id=1]")))
 
   with_options(list(pager = function(files, header, title, delete.file) files), {
     x = showLog(id = 2, reg = reg)

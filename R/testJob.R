@@ -30,10 +30,10 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   id = convertId(reg, id)
 
   if (external) {
-    fn      = tempfile("testjob_")
-    fn.r    = stri_join(fn, ".R")
-    fn.jc   = stri_join(fn, ".jc")
-    fn.res  = stri_join(fn, ".rds")
+    td      = npath(tempdir())
+    fn.r    = file.path(td, sprintf("testjob_%i.R", id$job.id))
+    fn.jc   = file.path(td, sprintf("testjob_%i.jc", id$job.id))
+    fn.res  = file.path(td, sprintf("testjob_%i.rds", id$job.id))
     fn.tmpl = system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE)
 
     writeRDS(makeJobCollection(id, reg = reg), file = fn.jc, wait = TRUE)

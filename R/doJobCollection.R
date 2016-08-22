@@ -8,27 +8,27 @@
 #'   Either an object of class \dQuote{JobCollection} as returned by
 #'   \code{\link{makeJobCollection}} or a string point to file containing a
 #'   \dQuote{JobCollection} (saved with \code{\link[base]{saveRDS}}).
-#' @param con [\code{\link[base]{connection}} | \code{character(1)}]\cr
-#'   A connection for the output. Defaults to \code{\link[base]{stdout}}.
-#'   Alternatively the name of a file to write to.
+#' @param output [\code{character(1)}]\cr
+#'   Path to a file to write the output to. Defaults to \code{NULL} which means
+#'   that output is written to the active \code{\link[base]{sink}}.
 #' @return [\code{character(1)}]: Hash of the \code{\link{JobCollection}} executed.
 #' @export
-doJobCollection = function(jc, con = stdout()) {
+doJobCollection = function(jc, output = NULL) {
   UseMethod("doJobCollection")
 }
 
 
 #' @export
-doJobCollection.character = function(jc, con = stdout()) {
+doJobCollection.character = function(jc, output = NULL) {
   obj = readRDS(jc)
   if (!obj$debug)
     file.remove(jc)
-  doJobCollection.JobCollection(obj, con = con)
+  doJobCollection.JobCollection(obj, output = output)
 }
 
 
 #' @export
-doJobCollection.JobCollection = function(jc, con = stdout()) {
+doJobCollection.JobCollection = function(jc, output = NULL) {
   error = function(msg, ...) {
     updates = data.table(job.id = jc$defs$job.id, started = ustamp(), done = ustamp(),
       error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),
@@ -37,15 +37,20 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     invisible(NULL)
   }
 
-  if (!inherits(con, "connection")) {
-    con = file(con, open = "wt")
-    on.exit(close(con))
-  }
-
   # signal warnings immediately
   warn = getOption("warn")
-  on.exit(options(warn = warn), add = TRUE)
-  options(warn = 1L)
+  if (!identical(warn, 1L)) {
+    on.exit(options(warn = warn))
+    options(warn = 1L)
+  }
+
+  if (!is.null(output)) {
+    assertString(output)
+    fp = file(output, open = "wt")
+    sink(file = fp)
+    sink(file = fp, type = "message")
+    on.exit({ sink(type = "message"); sink(type = "output"); close(fp) }, add = TRUE)
+  }
 
   # subset array jobs
   if (isTRUE(jc$resources$chunks.as.arrayjobs) && !is.na(jc$array.var)) {
@@ -61,8 +66,8 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
   # say hi
   n.jobs = nrow(jc$defs)
   s = now()
-  catf("[job(chunk): %s] Starting calculation of %i jobs", s, n.jobs, con = con)
-  catf("[job(chunk): %s] Setting working directory to '%s'", s, jc$work.dir, con = con)
+  catf("### [bt %s]: Starting calculation of %i jobs", s, n.jobs)
+  catf("### [bt %s]: Setting working directory to '%s'", s, jc$work.dir)
 
   # set work dir
   if (!dir.exists(jc$work.dir))
@@ -79,11 +84,11 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     do.call(parallelMap::parallelStart, pm.opts)
     on.exit(parallelMap::parallelStop(), add = TRUE)
     pm.opts = parallelMap::parallelGetOptions()$settings
-    catf("[job(chunk): %s] Using %i CPUs for parallelMap/%s", s, pm.opts$cpus, pm.opts$mode, con = con)
+    catf("### [bt %s]: Using %i CPUs for parallelMap/%s on level '%s'", s, pm.opts$cpus, pm.opts$mode, if (is.na(pm.opts$level)) "default" else pm.opts$level)
   }
 
   measure.memory = isTRUE(jc$resources$measure.memory)
-  catf("[job(chunk): %s] Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"), con = con)
+  catf("### [bt %s]: Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"))
 
   # try to pre-fetch some objects from the file system and load registry dependencies
   cache = Cache$new(jc$file.dir)
@@ -92,30 +97,29 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     return(error("Error loading registry dependencies: %s", as.character(ok)))
   buf = UpdateBuffer$new(jc$defs$job.id)
 
-  runHook(jc, "pre.do.collection", con = con, cache = cache)
+  runHook(jc, "pre.do.collection", cache = cache)
 
   for (i in seq_len(n.jobs)) {
     job = getJob(jc, jc$defs$job.id[i], cache = cache)
     id = job$id
 
-    catf("[job(%i): %s] Starting job with job.id=%i", id, now(), id, con = con)
+    catf("### [bt %s]: Starting job [batchtools job.id=%i]", now(), id)
     update = list(started = ustamp(), done = NA_integer_, error = NA_character_, memory = NA_real_)
     if (measure.memory) {
       gc(reset = TRUE)
-      result = capture(execJob(job))
+      result = try(execJob(job))
       update$memory = sum(gc()[, 6L])
     } else {
-      result = capture(execJob(job))
+      result = try(execJob(job))
     }
     update$done = ustamp()
-    catf("[job(%i): %s] %s", id, now(), result$output, con = con)
 
-    if (is.error(result$res)) {
-      catf("[job(%i): %s] Job terminated with an exception", id, now(), con = con)
-      update$error = stri_trunc(stri_trim_both(as.character(result$res)), 500L, " [truncated]")
+    if (is.error(result)) {
+      catf("\n### [bt %s]: Job terminated with an exception [batchtools job.id=%i]", now(), id)
+      update$error = stri_trunc(stri_trim_both(as.character(result)), 500L, " [truncated]")
     } else {
-      catf("[job(%i): %s] Job terminated successfully", id, now(), con = con)
-      writeRDS(result$res, file = file.path(jc$file.dir, "results", sprintf("%i.rds", id)))
+      catf("\n### [bt %s]: Job terminated successfully [batchtools job.id=%i]", now(), id)
+      writeRDS(result, file = file.path(jc$file.dir, "results", sprintf("%i.rds", id)))
     }
     buf$add(id, update)
     buf$flush(jc)
@@ -123,8 +127,8 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
 
   buf$flush(jc, force = TRUE)
 
-  catf("[job(chunk): %s] Calculation finished!", now(), con = con)
-  runHook(jc, "post.do.collection", con = con, cache = cache)
+  catf("### [bt %s]: Calculation finished!", now())
+  runHook(jc, "post.do.collection", cache = cache)
   invisible(jc$job.hash)
 }
 

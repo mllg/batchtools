@@ -19,7 +19,7 @@ Multicore = R6Class("Multicore",
         while(!self$collect()) {}
 
       i = wf(is.na(self$pids))
-      self$pids[i] = parallel::mcparallel(doJobCollection(jc, con = jc$log.file), mc.set.seed = FALSE)$pid
+      self$pids[i] = parallel::mcparallel(doJobCollection(jc, output = jc$log.file), mc.set.seed = FALSE)$pid
       self$hashes[i] = jc$job.hash
       invisible(jc$job.hash)
     },
@@ -39,7 +39,7 @@ Multicore = R6Class("Multicore",
   )
 )
 
-#' @title ClusterFunctions for Parallel Execution
+#' @title ClusterFunctions for Parallel Multicore Execution
 #'
 #' @description
 #' Jobs are spawned asynchronously using the packages \pkg{parallel}.
@@ -50,15 +50,19 @@ Multicore = R6Class("Multicore",
 #'
 #' @param ncpus [\code{integer(1)}]\cr
 #'   Number of VPUs of worker.
-#'   Default is to use all cores but one, where total number of cores "available" is given by option \code{mc.cores}
+#'   Default is to use all cores. The total number of cores "available" is given by option \code{mc.cores}
 #'   and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family clusterFunctions
 #' @export
-makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", parallel::detectCores()), 1L)) {
+makeClusterFunctionsMulticore = function(ncpus = NA_integer_) {
   if (testOS("windows"))
     stop("ClusterFunctionsMulticore do not support Windows. Use makeClusterFunctionsSocket instead.")
-  assertCount(ncpus, positive = TRUE)
+  assertCount(ncpus, positive = TRUE, na.ok = TRUE)
+  if (is.na(ncpus)) {
+    ncpus = max(getOption("mc.cores", parallel::detectCores()), 1L)
+    info("Auto-detected %i CPUs", ncpus)
+  }
   p = Multicore$new(ncpus)
 
   submitJob = function(reg, jc) {
@@ -71,6 +75,6 @@ makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", paral
     p$list()
   }
 
-  makeClusterFunctions(name = "Parallel", submitJob = submitJob, listJobsRunning = listJobsRunning,
+  makeClusterFunctions(name = "Multicore", submitJob = submitJob, listJobsRunning = listJobsRunning,
     hooks = list(pre.sync = function(reg, fns) p$collect()), store.job = FALSE)
 }
