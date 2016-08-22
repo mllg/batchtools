@@ -30,7 +30,6 @@ r_binary_packages:
   - rmarkdown
   - snow
   - testthat
-  - tibble
 
 after_success:
   - Rscript -e 'covr::coveralls()'
