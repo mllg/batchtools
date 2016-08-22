@@ -69,8 +69,8 @@ npath = function(file.dir, must.work = TRUE) {
   if (stri_startswith_fixed(file.dir, "~")) {
     if (must.work && !file.exists(file.dir))
       stopf("File '%s' not found", file.dir)
-    if (testOS("windows"))
-      file.dir = stri_replace_all_fixed(file.dir, "\\", "/")
+    # if (testOS("windows"))
+    #   file.dir = stri_replace_all_fixed(file.dir, "\\", "/")
     return(file.dir)
   }
   normalizePath(file.dir, winslash = "/", mustWork = must.work)
