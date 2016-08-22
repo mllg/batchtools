@@ -24,13 +24,13 @@ r_binary_packages:
   - progress
   - r6
   - stringi
-  - dplyr
   - e1071
   - parallelmap
   - ranger
   - rmarkdown
   - snow
   - testthat
+  - tibble
 
 after_success:
   - Rscript -e 'covr::coveralls()'
