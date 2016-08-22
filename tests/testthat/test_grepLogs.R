@@ -17,13 +17,12 @@ silent({
   waitForJobs(reg = reg)
 })
 
-test_that("readLogs", {
-  expect_true(any(grepl("AAA", readLog(1, reg = reg))))
-  expect_true(any(grepl("BBB", readLog(2, reg = reg))))
-  expect_true(any(grepl("CCC", readLog(3, reg = reg))))
-})
-
 test_that("grepLogs", {
+  expect_true(any(grepl("AAA", getLog(1, reg = reg))))
+  expect_true(any(grepl("BBB", getLog(2, reg = reg))))
+  expect_true(any(grepl("CCC", getLog(3, reg = reg))))
+  expect_false(any(grepl("AAA", getLog(2, reg = reg))))
+
   expect_data_table(grepLogs(pattern = "FOOBAR", reg = reg), ncol = 2, key = "job.id")
   expect_equal(grepLogs(pattern = "FOOBAR", reg = reg)$job.id, 1:3)
   expect_equal(grepLogs(pattern = "XXX", reg = reg)$job.id, integer(0L))

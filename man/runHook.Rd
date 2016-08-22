@@ -32,8 +32,8 @@ They can be specified via the \code{\link{ClusterFunctions}} and are trigged on 
   \item{\code{post.sync}}{\code{function(reg, updates, ...)}: Run after synchronizing the registry on the master. \code{updates} is the data.table of processed updates.}
   \item{\code{pre.submit}}{\code{function(reg, ...)}: Run before a job is successfully submitted to the scheduler on the master.}
   \item{\code{post.submit}}{\code{function(reg, ...)}: Run after a job is successfully submitted to the scheduler on the master.}
-  \item{\code{pre.do.collection}}{\code{function(reg, con, cache, ...)}: Run before starting the job collection on the slave. \code{con} is the connection for output, \code{cache} is an internal cache object.}
-  \item{\code{post.do.collection}}{\code{function(reg, con, cache, ...)}: Run before terminating the job on the slave. \code{con} is the connection for output, \code{cache} is an internal cache object.}
+  \item{\code{pre.do.collection}}{\code{function(reg, cache, ...)}: Run before starting the job collection on the slave. \code{cache} is an internal cache object.}
+  \item{\code{post.do.collection}}{\code{function(reg, cache, ...)}: Run before terminating the job on the slave. \code{cache} is an internal cache object.}
 }
 }
 

@@ -1,5 +1,10 @@
-readLog = function(id, impute = NULL, read.fun = readLines, reg = getDefaultRegistry()) {
-  x = reg$status[id, c("job.id", "done", "job.hash"), with = FALSE, nomatch = 0L]
+#' @useDynLib batchtools fill_gaps
+readLog = function(id, impute = NULL, reg = getDefaultRegistry()) {
+  fill = function(x) {
+    .Call(fill_gaps, as.integer(x))
+  }
+
+  x = reg$status[id, c("job.id", "done", "job.hash"), with = FALSE, nomatch = NA]
   log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", x$job.hash))
 
   if (is.na(x$job.hash) || !file.exists(log.file)) {
@@ -8,9 +13,14 @@ readLog = function(id, impute = NULL, read.fun = readLines, reg = getDefaultRegi
     stopf("Log file for job with id %i not available", x$job.id)
   }
 
-  lines = read.fun(log.file)
-  pattern = sprintf("\\[job\\((chunk|%i)\\):", x$job.id)
-  return(lines[!stri_startswith_fixed(lines, "[job") | stri_detect_regex(lines, pattern)])
+  lines = readLines(log.file)
+  job.id = fill(stri_match_last_regex(lines, c("\\[batchtools job\\.id=([0-9]+)\\]$"))[, 2L])
+  return(data.table(job.id = job.id, lines = lines))
+}
+
+extractLog = function(log, id) {
+  job.id = NULL
+  log[is.na(job.id) | job.id %in% id$job.id]$lines
 }
 
 #' @title Grep Log Files for a Pattern
@@ -29,18 +39,6 @@ readLog = function(id, impute = NULL, read.fun = readLines, reg = getDefaultRegi
 #' @return [\code{\link{data.table}}]. Matching job ids are stored in the column \dQuote{job.id}.
 #'   See \code{\link{JoinTables}} for examples on working with job tables.
 grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefaultRegistry()) {
-  Reader = function() {
-    last.fn = NA_character_
-    lines = NA_character_
-    function(fn) {
-      if (is.na(last.fn) || fn != last.fn) {
-        last.fn <<- fn
-        lines <<- readLines(fn)
-      }
-      return(lines)
-    }
-  }
-
   assertRegistry(reg, sync = TRUE)
   assertString(pattern, na.ok = TRUE)
   assertFlag(ignore.case)
@@ -50,12 +48,18 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
   if (is.na(pattern) || !nzchar(pattern))
     return(ids(tab))
   setorderv(tab, "job.hash")
-  reader = Reader()
 
   found = logical(nrow(tab))
   matches = character(nrow(tab))
+  hash.before = NA_character_
+
   for (i in seq_row(tab)) {
-    lines = readLog(tab$job.id[i], impute = NA_character_, reg = reg, read.fun = reader)
+    if (is.na(hash.before) || hash.before != tab$job.hash[i]) {
+      log = readLog(tab[i], impute = NA_character_, reg = reg)
+      hash.before = tab$job.hash[i]
+    }
+
+    lines = extractLog(log, tab[i])
     if (!testScalarNA(lines)) {
       m = stri_detect_regex(lines, pattern, case_insensitive = ignore.case)
       if (any(m)) {
@@ -66,8 +70,7 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
   }
 
   res = cbind(ids(tab[found]), data.table(matches = matches[found]))
-  setkeyv(res, "job.id")
-  return(res)
+  setkeyv(res, "job.id")[]
 }
 
 #' @title Inspect Log Files
@@ -83,7 +86,7 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
 showLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   id = convertId(reg, id)
-  lines = readLog(id, reg = reg)
+  lines = extractLog(readLog(id, reg = reg), id)
   log.file = file.path(tempdir(), sprintf("%i.log", id$job.id))
   writeLines(text = lines, con = log.file)
   file.show(log.file, delete.file = TRUE)
@@ -94,5 +97,5 @@ showLog = function(id, reg = getDefaultRegistry()) {
 getLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   id = convertId(reg, id)
-  readLog(id, reg = reg)
+  extractLog(readLog(id, reg = reg), id)
 }
