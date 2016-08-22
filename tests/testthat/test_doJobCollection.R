@@ -30,8 +30,6 @@ test_that("doJobCollection does not swallow warning messages", {
   reg$cluster.functions = makeClusterFunctionsInteractive(external = TRUE)
   fun = function(x) warning("GREPME")
   batchMap(fun, 1, reg = reg)
-  jc = makeJobCollection(1, reg = reg)
-  writeRDS(jc, file = jc$uri)
   silent({
     submitJobs(1, reg = reg)
     waitForJobs(reg = reg)
