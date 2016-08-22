@@ -4,13 +4,12 @@
 \alias{makeClusterFunctionsSocket}
 \title{ClusterFunctions for Parallel Socket Execution}
 \usage{
-makeClusterFunctionsSocket(ncpus = max(getOption("mc.cores",
-  parallel::detectCores()), 1L))
+makeClusterFunctionsSocket(ncpus = NA_integer_)
 }
 \arguments{
 \item{ncpus}{[\code{integer(1)}]\cr
 Number of VPUs of worker.
-Default is to use all cores but one, where total number of cores "available" is given by option \code{mc.cores}
+Default is to use all cores. The total number of cores "available" is given by option \code{mc.cores}
 and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}.}
 }
 \value{

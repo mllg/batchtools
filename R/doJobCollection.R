@@ -8,27 +8,27 @@
 #'   Either an object of class \dQuote{JobCollection} as returned by
 #'   \code{\link{makeJobCollection}} or a string point to file containing a
 #'   \dQuote{JobCollection} (saved with \code{\link[base]{saveRDS}}).
-#' @param con [\code{\link[base]{connection}} | \code{character(1)}]\cr
-#'   A connection for the output. Defaults to \code{\link[base]{stdout}}.
-#'   Alternatively the name of a file to write to.
+#' @param output [\code{character(1)}]\cr
+#'   Path to a file to write the output to. Defaults to \code{NULL} which means
+#'   that output is written to the active \code{\link[base]{sink}}.
 #' @return [\code{character(1)}]: Hash of the \code{\link{JobCollection}} executed.
 #' @export
-doJobCollection = function(jc, con = stdout()) {
+doJobCollection = function(jc, output = NULL) {
   UseMethod("doJobCollection")
 }
 
 
 #' @export
-doJobCollection.character = function(jc, con = stdout()) {
+doJobCollection.character = function(jc, output = NULL) {
   obj = readRDS(jc)
   if (!obj$debug)
     file.remove(jc)
-  doJobCollection.JobCollection(obj, con = con)
+  doJobCollection.JobCollection(obj, output = output)
 }
 
 
 #' @export
-doJobCollection.JobCollection = function(jc, con = stdout()) {
+doJobCollection.JobCollection = function(jc, output = NULL) {
   error = function(msg, ...) {
     updates = data.table(job.id = jc$defs$job.id, started = ustamp(), done = ustamp(),
       error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),
@@ -44,27 +44,13 @@ doJobCollection.JobCollection = function(jc, con = stdout()) {
     options(warn = 1L)
   }
 
-  # sink output
-  if (!inherits(con, "terminal")) {
-    close.sinks = function() {
-      sink(type = "message")
-      sink(type = "output")
-      if (close.file)
-        close(con)
-    }
-
-    if (!inherits(con, "connection")) {
-      con = file(con, open = "wt")
-      close.file = TRUE
-    } else {
-      close.file = FALSE
-    }
-
-    sink(file = con)
-    sink(file = con, type = "message")
-    on.exit(close.sinks(), add = TRUE)
+  if (!is.null(output)) {
+    assertString(output)
+    fp = file(output, open = "wt")
+    sink(file = fp)
+    sink(file = fp, type = "message")
+    on.exit({ sink(type = "message"); sink(type = "output"); close(fp) }, add = TRUE)
   }
-
 
   # subset array jobs
   if (isTRUE(jc$resources$chunks.as.arrayjobs) && !is.na(jc$array.var)) {
