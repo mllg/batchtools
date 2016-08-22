@@ -99,6 +99,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   default.wait = 5
   chunk = NULL
   pb = makeProgressBar(total = length(chunks), format = ":status [:bar] :percent eta: :eta", tokens = list(status = "Submitting"))
+
   for (ch in chunks) {
     wait = default.wait
     ids.chunk = ids(ids[chunk == ch])
@@ -139,5 +140,5 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   }
 
   ### return ids (on.exit handler kicks now in to submit the remaining messages)
-  setkeyv(ids, "job.id")
+  return(ids)
 }

@@ -1,21 +1,21 @@
 #' @useDynLib batchtools fill_gaps
 readLog = function(id, impute = NULL, reg = getDefaultRegistry()) {
-  fill = function(x) {
-    .Call(fill_gaps, as.integer(x))
-  }
+  tab = reg$status[id, c("job.id", "done", "job.hash"), with = FALSE, nomatch = NA]
+  log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", tab$job.hash))
 
-  x = reg$status[id, c("job.id", "done", "job.hash"), with = FALSE, nomatch = NA]
-  log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", x$job.hash))
-
-  if (is.na(x$job.hash) || !file.exists(log.file)) {
+  if (is.na(tab$job.hash) || !file.exists(log.file)) {
     if (!is.null(impute))
       return(impute)
-    stopf("Log file for job with id %i not available", x$job.id)
+    stopf("Log file for job with id %i not available", tab$job.id)
   }
 
   lines = readLines(log.file)
-  job.id = fill(stri_match_last_regex(lines, c("\\[batchtools job\\.id=([0-9]+)\\]$"))[, 2L])
-  return(data.table(job.id = job.id, lines = lines))
+  job.id = as.integer(stri_match_last_regex(lines, c("\\[batchtools job\\.id=([0-9]+)\\]$"))[, 2L])
+
+  setkeyv(data.table(
+    job.id = .Call(fill_gaps, job.id),
+    lines = lines
+  ), "job.id", physical = FALSE)
 }
 
 extractLog = function(log, id) {
@@ -44,17 +44,17 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
   assertFlag(ignore.case)
 
   ids = convertIds(reg, ids, default = .findStarted(reg = reg))
-  tab = reg$status[ids, c("job.id", "job.hash"), with = FALSE]
+  tab = inner_join(reg$status, ids)[, c("job.id", "job.hash"), with = FALSE]
   if (is.na(pattern) || !nzchar(pattern))
     return(ids(tab))
-  setorderv(tab, "job.hash")
 
+  setorderv(tab, "job.hash")
   found = logical(nrow(tab))
   matches = character(nrow(tab))
-  hash.before = NA_character_
+  hash.before = ""
 
   for (i in seq_row(tab)) {
-    if (is.na(hash.before) || hash.before != tab$job.hash[i]) {
+    if (hash.before != tab$job.hash[i]) {
       log = readLog(tab[i], impute = NA_character_, reg = reg)
       hash.before = tab$job.hash[i]
     }
