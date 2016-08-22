@@ -7,7 +7,7 @@ test_that("doJobCollection handles bulky log output", {
   batchMap(fun, N, reg = reg)
   jc = makeJobCollection(1, reg = reg)
   fn = tempfile()
-  doJobCollection(jc, con = fn)
+  doJobCollection(jc, output = fn)
   lines = readLines(fn)
   expect_true(any(nchar(lines) >= N))
 })
@@ -19,7 +19,7 @@ test_that("doJobCollection truncates error messages", {
   batchMap(fun, N, reg = reg)
   jc = makeJobCollection(1, reg = reg)
   fn = tempfile()
-  doJobCollection(jc, con = fn)
+  doJobCollection(jc, output = fn)
   syncRegistry(reg = reg)
   msg = getErrorMessages(reg = reg)$message
   expect_true(stri_endswith_fixed(msg, " [truncated]"))

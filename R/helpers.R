@@ -65,15 +65,15 @@ now = function() {
   strftime(Sys.time())
 }
 
-npath = function(file.dir, must.work = TRUE) {
-  if (stri_startswith_fixed(file.dir, "~")) {
-    if (must.work && !file.exists(file.dir))
-      stopf("File '%s' not found", file.dir)
+npath = function(path, must.work = TRUE) {
+  if (stri_startswith_fixed(path, "~")) {
+    if (must.work && !file.exists(path))
+      stopf("File '%s' not found", path)
     if (testOS("windows"))
-      file.dir = stri_replace_all_fixed(file.dir, "\\", "/")
-    return(file.dir)
+      path = stri_replace_all_fixed(path, "\\", "/")
+    return(path)
   }
-  normalizePath(file.dir, winslash = "/", mustWork = must.work)
+  normalizePath(path, winslash = "/", mustWork = must.work)
 }
 
 names2 = function (x, missing.val = NA_character_) {
@@ -173,24 +173,6 @@ droplevel = function(x, lvl) {
 #' @useDynLib batchtools count_not_missing
 count = function(x) {
   .Call(count_not_missing, x)
-}
-
-capture = function(expr) {
-  cleanup = function() {
-    sink(type = "message")
-    sink(type = "output")
-    close(con)
-  }
-
-  output = character(0L)
-  con = textConnection("output","w", local = TRUE)
-  sink(file = con)
-  sink(file = con, type = "message")
-  on.exit(cleanup())
-  res = try(eval(expr, parent.frame()))
-  cleanup()
-  on.exit(NULL)
-  list(output = output, res = res)
 }
 
 filterNull = function(x) {
