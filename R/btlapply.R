@@ -31,7 +31,7 @@ btlapply = function(X, fun, ..., reg = makeRegistry(file.dir = NA)) {
   assertFunction(fun)
   assertRegistry(reg, writeable = TRUE, strict = TRUE)
 
-  ids = do.call(batchMap, list(X, fun = fun, reg = reg, more.args = list(...)))
+  ids = batchMap(fun, X, more.args = list(...), reg = reg)
   submitJobs(ids = ids, reg = reg)
   waitForJobs(ids = ids, reg = reg)
   reduceResultsList(ids = ids, reg = reg)
@@ -49,19 +49,20 @@ btmapply = function(fun, ..., more.args = list(), simplify = FALSE, use.names = 
   assertFlag(use.names)
   assertRegistry(reg, writeable = TRUE, strict = TRUE)
 
-  dots = list(...)
-  ids = do.call(batchMap, c(dots, list(fun = fun, reg = reg, more.args = more.args)))
+  ids = batchMap(fun, ..., more.args = more.args, reg = reg)
   submitJobs(ids = ids, reg = reg)
   waitForJobs(ids = ids, reg = reg)
   res = reduceResultsList(ids = ids, reg = reg)
 
   if (use.names) {
-    if (use.names && length(dots)) {
-      if (is.null(names(dots[[1L]]))) {
-        if(is.character(dots[[1L]]))
-          names(res) = dots[[1L]]
+    x = head(list(...), 1L)
+    if (length(x) > 0L) {
+      x = x[[1L]]
+      if (is.null(names(x))) {
+        if(is.character(x))
+          names(res) = x
       } else {
-        names(res) = names(dots[[1L]])
+        names(res) = names(x)
       }
     }
   }
