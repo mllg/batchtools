@@ -139,6 +139,6 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     pb$tick(tokens = list(status = "Submitting"))
   }
 
-  ### return ids (on.exit handler kicks now in to submit the remaining messages)
-  return(ids)
+  ### return ids, registry is saved via on.exit()
+  return(invisible(ids))
 }
