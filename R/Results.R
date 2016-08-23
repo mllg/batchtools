@@ -125,8 +125,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
   if (!identical(results$job.id, seq_row(ids)))
     stop("The function must return an object for each job which is convertible to a data.frame with one row")
   results[, "job.id" := ids$job.id]
-  setkeyv(results, "job.id")
-  results
+  setkeyv(results, "job.id")[]
 }
 
 .reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry()) {

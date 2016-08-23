@@ -172,8 +172,7 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   ee = parent.frame()
   fun = function(pars) eval(expr, pars, enclos = ee)
   pars = NULL
-  res = setkeyv(inner_join(reg$defs, inner_join(reg$status, ids))[vlapply(pars, fun), "job.id", with = FALSE], "job.id")
-  return(res)
+  setkeyv(inner_join(reg$defs, inner_join(reg$status, ids))[vlapply(pars, fun), "job.id", with = FALSE], "job.id")[]
 }
 
 
@@ -237,6 +236,5 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
     tab = tab[repl %in% repls]
   }
 
-  res = setkeyv(tab[, "job.id", with = FALSE], "job.id")
-  return(res)
+  setkeyv(tab[, "job.id", with = FALSE], "job.id")[]
 }
