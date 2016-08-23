@@ -33,4 +33,7 @@ test_that("grepLogs", {
 
   expect_equal(grepLogs(pattern = "aaa", reg = reg)$job.id, integer(0L))
   expect_equal(grepLogs(pattern = "aaa", ignore.case = TRUE, reg = reg)$job.id, 1L)
+
+  expect_data_table(grepLogs(pattern = "F..BAR", reg = reg), ncol = 2, nrow = 3, key = "job.id")
+  expect_data_table(grepLogs(pattern = "F..BAR", fixed = TRUE, reg = reg), ncol = 2, nrow = 0, key = "job.id")
 })

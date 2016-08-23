@@ -4,7 +4,7 @@
 \alias{grepLogs}
 \title{Grep Log Files for a Pattern}
 \usage{
-grepLogs(ids = NULL, pattern = "", ignore.case = FALSE,
+grepLogs(ids = NULL, pattern = "", ignore.case = FALSE, fixed = FALSE,
   reg = getDefaultRegistry())
 }
 \arguments{
@@ -15,10 +15,13 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of \code{\link{findStarted}}.}
 
 \item{pattern}{[\code{character(1L)}]\cr
-Regular expression.}
+Regular expression or string (see \code{fixed}).}
 
 \item{ignore.case}{[\code{logical(1L)}]\cr
 If \code{TRUE} the match will be performed case insensitive.}
+
+\item{fixed}{[\code{logical(1L)}]\cr
+If \code{FALSE} (default), \code{pattern} is a regular expression and a fixed string otherwise.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
