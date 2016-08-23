@@ -80,7 +80,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   if (!is.null(jc$resources$pm.backend)) {
     if (!requireNamespace("parallelMap", quietly = TRUE))
       return(error("parallelMap not installed"))
-    pm.opts = filterNull(list(mode = jc$resources$pm.backend, cpus = jc$resources$ncpus, level = jc$resources$pm.level, show.info = FALSE))
+    pm.opts = filterNull(c(list(mode = jc$resources$pm.backend, cpus = jc$resources$ncpus, show.info = FALSE), jc$resources$pm.opts))
     do.call(parallelMap::parallelStart, pm.opts)
     on.exit(parallelMap::parallelStop(), add = TRUE)
     pm.opts = parallelMap::parallelGetOptions()$settings
