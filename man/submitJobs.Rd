@@ -41,7 +41,8 @@ to collect partial results.
 The progress can be monitored with \code{\link{getJobStatus}}.
 }
 \note{
-Setting \code{measure.memory} to \code{TRUE} turns on memory measurement: \code{\link[base]{gc}} is called  directly before
+Setting the resource \code{measure.memory} to \code{TRUE} turns on memory measurement:
+\code{\link[base]{gc}} is called  directly before
 and after the job and the difference is stored in the internal database. Note that this is just a rough estimate and does
 neither work reliably for external code like C/C++ nor in combination with threading.
 
@@ -65,8 +66,34 @@ Also note that if you have thousands of jobs, disabling the progress bar (\code{
 can significantly increase the performance.
 }
 \examples{
+### Example 1: Using memory measurement
+reg = makeRegistry(file.dir = NA, make.default = FALSE)
+
+# Toy function which creates a large matrix and returns the column sums
+fun = function(n, p) colMeans(matrix(runif(n*p), n, p))
+
+# Arguments to fun:
+args = expand.grid(n = c(1e4, 1e5), p = c(10, 50))
+print(args)
+
+# Map function to create jobs
+ids = batchMap(fun, args = args, reg = reg)
+
+# Set resources: enable memory measurement
+res = list(measure.memory = TRUE)
+
+# Submit jobs using the currently configured cluster functions
+submitJobs(ids, resources = res, reg = reg)
+
+# Retrive information about memory, combine with parameters
+info = ijoin(getJobStatus(reg = reg)[, .(job.id, memory)], getJobPars(reg = reg))
+print(info)
+
+# Combine job info with results -> each job is aggregated using mean()
+ijoin(info, reduceResultsDataTable(fun = function(res) list(res = mean(res)), reg = reg))
+
 \dontrun{
-# Example: Multicore execution on the slave
+### Example 2: Multicore execution on the slave
 reg = makeRegistry(file.dir = NA, make.default = FALSE)
 
 # Function which sleeps 10 seconds, i-times
@@ -74,18 +101,19 @@ f = function(i) {
   parallelMap::parallelMap(Sys.sleep, rep(10, i))
 }
 
-# Create 2 jobs with parameter i=4
-ids = batchMap(f, i = c(4, 4), reg = reg)
+# Create one job with parameter i=4
+ids = batchMap(f, i = 4, reg = reg)
 
 # Set resources: Use parallelMap in multicore mode with 4 CPUs
-# batchtools calls parallelStart() and parallelStop() on the slave
+# batchtools internally loads the namespace of parallelMap and then calls parallelStart() before the job and
+# parallelStop() right after the job terminated.
 res = list(pm.backend = "multicore", ncpus = 4)
 
 # Submit both jobs and wait for them
 submitJobs(resources = res, reg = reg)
 waitForJobs(reg = reg)
 
-# If successfull, the running time should be ~10s each
+# If successfull, the running time should be ~10s
 getJobTable(reg = reg)[, .(job.id, time.running)]
 
 # There should also be a note in the log:
