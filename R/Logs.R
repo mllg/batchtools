@@ -30,18 +30,21 @@ extractLog = function(log, id) {
 #' @templateVar ids.default findStarted
 #' @template ids
 #' @param pattern [\code{character(1L)}]\cr
-#'  Regular expression.
+#'  Regular expression or string (see \code{fixed}).
 #' @param ignore.case [\code{logical(1L)}]\cr
 #'  If \code{TRUE} the match will be performed case insensitive.
+#' @param fixed [\code{logical(1L)}]\cr
+#'  If \code{FALSE} (default), \code{pattern} is a regular expression and a fixed string otherwise.
 #' @template reg
 #' @export
 #' @family debug
 #' @return [\code{\link{data.table}}]. Matching job ids are stored in the column \dQuote{job.id}.
 #'   See \code{\link{JoinTables}} for examples on working with job tables.
-grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefaultRegistry()) {
+grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, fixed = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   assertString(pattern, na.ok = TRUE)
   assertFlag(ignore.case)
+  assertFlag(fixed)
 
   ids = convertIds(reg, ids, default = .findStarted(reg = reg))
   tab = inner_join(reg$status, ids)[, c("job.id", "job.hash"), with = FALSE]
@@ -52,6 +55,7 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
   found = logical(nrow(tab))
   matches = character(nrow(tab))
   hash.before = ""
+  matcher = if (fixed) stri_detect_fixed else stri_detect_regex
 
   for (i in seq_row(tab)) {
     if (hash.before != tab$job.hash[i]) {
@@ -61,7 +65,7 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, reg = getDefa
 
     lines = extractLog(log, tab[i])
     if (!testScalarNA(lines)) {
-      m = stri_detect_regex(lines, pattern, case_insensitive = ignore.case)
+      m = matcher(lines, pattern, case_insensitive = ignore.case)
       if (any(m)) {
         found[i] = TRUE
         matches[i] = stri_join(lines[m], collapse = "\n")
