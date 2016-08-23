@@ -57,11 +57,39 @@ The user function just has to call \code{\link[parallelMap]{parallelMap}} to sta
 You may set the resource \code{ncpus} to control the number of CPUs to use in \pkg{parallelMap}.
 \code{ncpus} defaults to the number of available CPUs (as reported by (see \code{\link[parallel]{detectCores}}))
 on the executing machine for multicore and socket mode and defaults to the return value of \code{\link[Rmpi]{mpi.universe.size}-1} for MPI.
-Furthermore, you can set the \code{level} for \code{\link[parallelMap]{parallelMap}} via \dQuote{pm.level}.
+You can pass further options like \code{level} to \code{\link[parallelMap]{parallelStart}} via the named list \dQuote{pm.opts}.
 
 Note that your template must be set up to handle the parallelization, e.g. start R with \code{mpirun} or request the correct number of CPUs.
 
-If you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
+Also note that if you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
 can significantly increase the performance.
+}
+\examples{
+\dontrun{
+# Example: Multicore execution on the slave
+reg = makeRegistry(file.dir = NA, make.default = FALSE)
+
+# Function which sleeps 10 seconds, i-times
+f = function(i) {
+  parallelMap::parallelMap(Sys.sleep, rep(10, i))
+}
+
+# Create 2 jobs with parameter i=4
+ids = batchMap(f, i = c(4, 4), reg = reg)
+
+# Set resources: Use parallelMap in multicore mode with 4 CPUs
+# batchtools calls parallelStart() and parallelStop() on the slave
+res = list(pm.backend = "multicore", ncpus = 4)
+
+# Submit both jobs and wait for them
+submitJobs(resources = res, reg = reg)
+waitForJobs(reg = reg)
+
+# If successfull, the running time should be ~10s each
+getJobTable(reg = reg)[, .(job.id, time.running)]
+
+# There should also be a note in the log:
+grepLogs(pattern = "parallelMap", reg = reg)
+}
 }
 
