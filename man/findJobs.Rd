@@ -95,18 +95,18 @@ or, if you are really just interested in the status, use \code{\link{getStatus}}
 Note that \code{findOnSystem} and \code{findExpired} are somewhat heuristic and may report misleading results, depending on the state of the system.
 }
 \examples{
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
-batchMap(identity, i = 1:3, reg = reg)
-ids = findNotSubmitted(reg = reg)
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+batchMap(identity, i = 1:3, reg = tmp)
+ids = findNotSubmitted(reg = tmp)
 
 # get all jobs:
-findJobs(reg = reg)
+findJobs(reg = tmp)
 
 # filter for jobs with parameter i >= 2
-findJobs(i >= 2, reg = reg)
+findJobs(i >= 2, reg = tmp)
 
 # filter on the computational status
-findSubmitted(reg = reg)
-findNotDone(reg = reg)
+findSubmitted(reg = tmp)
+findNotDone(reg = tmp)
 }
 

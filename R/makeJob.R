@@ -37,9 +37,9 @@
 #' @rdname JobExperiment
 #' @export
 #' @examples
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
-#' batchMap(identity, 1:5, reg = reg)
-#' job = makeJob(1, reg = reg)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' batchMap(identity, 1:5, reg = tmp)
+#' job = makeJob(1, reg = tmp)
 #' names(job)
 makeJob = function(id, cache = NULL, reg = getDefaultRegistry()) {
   UseMethod("makeJob", object = reg)

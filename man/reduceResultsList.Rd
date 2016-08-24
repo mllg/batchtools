@@ -48,11 +48,11 @@ If you have thousands of jobs, disabling the progress bar (\code{options(batchto
 can significantly increase the performance.
 }
 \examples{
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
-batchMap(function(x) x^2, x = 1:10, reg = reg)
-submitJobs(reg = reg)
-waitForJobs(reg = reg)
-reduceResultsList(fun = sqrt, reg = reg)
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+batchMap(function(x) x^2, x = 1:10, reg = tmp)
+submitJobs(reg = tmp)
+waitForJobs(reg = tmp)
+reduceResultsList(fun = sqrt, reg = tmp)
 }
 \seealso{
 \code{\link{reduceResults}}.

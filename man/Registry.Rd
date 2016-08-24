@@ -144,14 +144,14 @@ swept using \code{sweepRegistry}.
 \code{clearRegistry} completely erases all jobs from a registry, including log files and results.
 }
 \examples{
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
-print(reg)
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+print(tmp)
 
 # Set cluster functions to interactive mode and start jobs in external R sessions
-reg$cluster.functions = makeClusterFunctionsInteractive(external = TRUE)
+tmp$cluster.functions = makeClusterFunctionsInteractive(external = TRUE)
 
 # Change packages to load
-reg$packages = c("MASS")
-saveRegistry(reg = reg)
+tmp$packages = c("MASS")
+saveRegistry(reg = tmp)
 }
 

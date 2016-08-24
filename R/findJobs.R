@@ -149,19 +149,19 @@ findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
 #'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @export
 #' @examples
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
-#' batchMap(identity, i = 1:3, reg = reg)
-#' ids = findNotSubmitted(reg = reg)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' batchMap(identity, i = 1:3, reg = tmp)
+#' ids = findNotSubmitted(reg = tmp)
 #'
 #' # get all jobs:
-#' findJobs(reg = reg)
+#' findJobs(reg = tmp)
 #'
 #' # filter for jobs with parameter i >= 2
-#' findJobs(i >= 2, reg = reg)
+#' findJobs(i >= 2, reg = tmp)
 #'
 #' # filter on the computational status
-#' findSubmitted(reg = reg)
-#' findNotDone(reg = reg)
+#' findSubmitted(reg = tmp)
+#' findNotDone(reg = tmp)
 findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   ids = convertIds(reg, ids)

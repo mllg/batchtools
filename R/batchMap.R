@@ -27,23 +27,23 @@
 #' @export
 #' @examples
 #' # example using "..." and more.args
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' f = function(x, y) x^2 + y
-#' ids = batchMap(f, x = 1:10, more.args = list(y = 100), reg = reg)
-#' getJobPars(reg = reg)
-#' testJob(6, reg = reg) # 100 + 6^2 = 136
+#' ids = batchMap(f, x = 1:10, more.args = list(y = 100), reg = tmp)
+#' getJobPars(reg = tmp)
+#' testJob(6, reg = tmp) # 100 + 6^2 = 136
 #'
 #' # vector recycling
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' f = function(...) list(...)
-#' ids = batchMap(f, x = 1:3, y = 1:6, reg = reg)
-#' getJobPars(reg = reg)
+#' ids = batchMap(f, x = 1:3, y = 1:6, reg = tmp)
+#' getJobPars(reg = tmp)
 #'
 #' # example for an expand.grid()-like operation on parameters
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
-#' ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), more.args = list(sep = ""), reg = reg)
-#' getJobPars(reg = reg)
-#' testJob(6, reg = reg)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), more.args = list(sep = ""), reg = tmp)
+#' getJobPars(reg = tmp)
+#' testJob(6, reg = tmp)
 batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, strict = TRUE)
   if (nrow(reg$defs) > 0L)

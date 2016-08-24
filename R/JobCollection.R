@@ -27,9 +27,9 @@
 #' @rdname JobCollection
 #' @export
 #' @examples
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
-#' batchMap(identity, 1:5, reg = reg)
-#' coll = makeJobCollection(1:3, reg = reg)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' batchMap(identity, 1:5, reg = tmp)
+#' coll = makeJobCollection(1:3, reg = tmp)
 #' ls(coll)
 #' coll$defs
 #' coll$defs$pars

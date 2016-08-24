@@ -18,11 +18,11 @@
 #' @export
 #' @family debug
 #' @examples
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
-#' batchMap(function(x) if (x == 2) xxx else x, 1:2, reg = reg)
-#' testJob(1, reg = reg)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' batchMap(function(x) if (x == 2) xxx else x, 1:2, reg = tmp)
+#' testJob(1, reg = tmp)
 #' \dontrun{
-#'  testJob(2, reg = reg)
+#'  testJob(2, reg = tmp)
 #' }
 testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)

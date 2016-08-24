@@ -16,13 +16,13 @@
 #' @family debug
 #' @export
 #' @examples
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' fun = function(i) if (i == 3) stop(i) else i
-#' ids = batchMap(fun, i = 1:5, reg = reg)
-#' submitJobs(1:4, reg = reg)
-#' waitForJobs(1:4, reg = reg)
-#' getErrorMessages(ids, reg = reg)
-#' getErrorMessages(ids, missing.as.error = TRUE, reg = reg)
+#' ids = batchMap(fun, i = 1:5, reg = tmp)
+#' submitJobs(1:4, reg = tmp)
+#' waitForJobs(1:4, reg = tmp)
+#' getErrorMessages(ids, reg = tmp)
+#' getErrorMessages(ids, missing.as.error = TRUE, reg = tmp)
 getErrorMessages = function(ids = NULL, missing.as.error = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   assertFlag(missing.as.error)

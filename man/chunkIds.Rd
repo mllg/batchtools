@@ -46,24 +46,24 @@ computational job.
 }
 \examples{
 # chunking for Registry
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
-ids = batchMap(identity, 1:25, reg = reg)
-ids = ids[chunkIds(ids, chunk.size = 10, reg = reg)]
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+ids = batchMap(identity, 1:25, reg = tmp)
+ids = ids[chunkIds(ids, chunk.size = 10, reg = tmp)]
 print(ids)
 print(table(ids$chunk))
 
 # Creating chunks for an ExperimentRegistry
-reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
-prob = addProblem(reg = reg, "prob1", data = iris, fun = function(job, data) nrow(data))
-prob = addProblem(reg = reg, "prob2", data = Titanic, fun = function(job, data) nrow(data))
-algo = addAlgorithm(reg = reg, "algo", fun = function(job, data, instance, i, ...) problem)
+tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+prob = addProblem(reg = tmp, "prob1", data = iris, fun = function(job, data) nrow(data))
+prob = addProblem(reg = tmp, "prob2", data = Titanic, fun = function(job, data) nrow(data))
+algo = addAlgorithm(reg = tmp, "algo", fun = function(job, data, instance, i, ...) problem)
 prob.designs = list(prob1 = data.table(), prob2 = data.table(x = 1:2))
 algo.designs = list(algo = data.table(i = 1:5))
-addExperiments(prob.designs, algo.designs, repls = 10, reg = reg)
+addExperiments(prob.designs, algo.designs, repls = 10, reg = tmp)
 
 # -> group into chunks of 5 jobs, but do not mix problems
-ids = getJobTable(reg = reg)[, .(job.id, problem, algorithm)]
-ids = ids[chunkIds(ids, chunk.size = 5, group.by = "problem", reg = reg)]
+ids = getJobTable(reg = tmp)[, .(job.id, problem, algorithm)]
+ids = ids[chunkIds(ids, chunk.size = 5, group.by = "problem", reg = tmp)]
 print(ids)
 dcast(ids, chunk ~ problem)
 }

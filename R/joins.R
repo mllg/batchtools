@@ -17,10 +17,10 @@
 #' @export
 #' @examples
 #' # create two tables for demonstration
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
-#' batchMap(identity, x = 1:6, reg = reg)
-#' x = getJobPars(reg = reg)
-#' y = findJobs(x >= 2 & x <= 5, reg = reg)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' batchMap(identity, x = 1:6, reg = tmp)
+#' x = getJobPars(reg = tmp)
+#' y = findJobs(x >= 2 & x <= 5, reg = tmp)
 #' y$extra.col = head(letters, nrow(y))
 #'
 #' # inner join: similar to intersect() on ids, keep all columns of x and y

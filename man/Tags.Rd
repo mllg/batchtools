@@ -33,30 +33,30 @@ Registry. If not explicitly passed, uses the last created registry.}
 Add and remove arbitrary tags. Tags are stored inside with the registry.
 }
 \examples{
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
-ids = batchMap(sqrt, x = -3:3, reg = reg)
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+ids = batchMap(sqrt, x = -3:3, reg = tmp)
 
 # Add new tag to all ids
-addJobTags(ids, "needs.computation", reg = reg)
-getJobTags(reg = reg)
+addJobTags(ids, "needs.computation", reg = tmp)
+getJobTags(reg = tmp)
 
 # Add more tags
-addJobTags(findJobs(x < 0, reg = reg), "x.neg", reg = reg)
-addJobTags(findJobs(x > 0, reg = reg), "x.pos", reg = reg)
-getJobTags(reg = reg)
+addJobTags(findJobs(x < 0, reg = tmp), "x.neg", reg = tmp)
+addJobTags(findJobs(x > 0, reg = tmp), "x.pos", reg = tmp)
+getJobTags(reg = tmp)
 
 # Submit first 5 jobs and remove tag if successful
-ids = submitJobs(1:5, reg = reg)
-if (waitForJobs(reg = reg))
-  removeJobTags(ids, "needs.computation", reg = reg)
-getJobTags(reg = reg)
+ids = submitJobs(1:5, reg = tmp)
+if (waitForJobs(reg = tmp))
+  removeJobTags(ids, "needs.computation", reg = tmp)
+getJobTags(reg = tmp)
 
 # Grep for warning message and add a tag
-addJobTags(grepLogs(pattern = "NaNs produced", reg = reg), "div.zero", reg = reg)
-getJobTags(reg = reg)
+addJobTags(grepLogs(pattern = "NaNs produced", reg = tmp), "div.zero", reg = tmp)
+getJobTags(reg = tmp)
 
 # All tags where tag x.neg is set:
-ids = findTagged("x.neg", reg = reg)
-getUsedJobTags(ids, reg = reg)
+ids = findTagged("x.neg", reg = tmp)
+getUsedJobTags(ids, reg = tmp)
 }
 

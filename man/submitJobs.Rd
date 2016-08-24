@@ -67,7 +67,7 @@ can significantly increase the performance.
 }
 \examples{
 ### Example 1: Using memory measurement
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 
 # Toy function which creates a large matrix and returns the column sums
 fun = function(n, p) colMeans(matrix(runif(n*p), n, p))
@@ -77,24 +77,24 @@ args = expand.grid(n = c(1e4, 1e5), p = c(10, 50))
 print(args)
 
 # Map function to create jobs
-ids = batchMap(fun, args = args, reg = reg)
+ids = batchMap(fun, args = args, reg = tmp)
 
 # Set resources: enable memory measurement
 res = list(measure.memory = TRUE)
 
 # Submit jobs using the currently configured cluster functions
-submitJobs(ids, resources = res, reg = reg)
+submitJobs(ids, resources = res, reg = tmp)
 
 # Retrive information about memory, combine with parameters
-info = ijoin(getJobStatus(reg = reg)[, .(job.id, memory)], getJobPars(reg = reg))
+info = ijoin(getJobStatus(reg = tmp)[, .(job.id, memory)], getJobPars(reg = tmp))
 print(info)
 
 # Combine job info with results -> each job is aggregated using mean()
-ijoin(info, reduceResultsDataTable(fun = function(res) list(res = mean(res)), reg = reg))
+ijoin(info, reduceResultsDataTable(fun = function(res) list(res = mean(res)), reg = tmp))
 
 \dontrun{
 ### Example 2: Multicore execution on the slave
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 
 # Function which sleeps 10 seconds, i-times
 f = function(i) {
@@ -102,7 +102,7 @@ f = function(i) {
 }
 
 # Create one job with parameter i=4
-ids = batchMap(f, i = 4, reg = reg)
+ids = batchMap(f, i = 4, reg = tmp)
 
 # Set resources: Use parallelMap in multicore mode with 4 CPUs
 # batchtools internally loads the namespace of parallelMap and then
@@ -111,14 +111,14 @@ ids = batchMap(f, i = 4, reg = reg)
 res = list(pm.backend = "multicore", ncpus = 4)
 
 # Submit both jobs and wait for them
-submitJobs(resources = res, reg = reg)
-waitForJobs(reg = reg)
+submitJobs(resources = res, reg = tmp)
+waitForJobs(reg = tmp)
 
 # If successfull, the running time should be ~10s
-getJobTable(reg = reg)[, .(job.id, time.running)]
+getJobTable(reg = tmp)[, .(job.id, time.running)]
 
 # There should also be a note in the log:
-grepLogs(pattern = "parallelMap", reg = reg)
+grepLogs(pattern = "parallelMap", reg = tmp)
 }
 }
 

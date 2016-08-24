@@ -82,21 +82,21 @@ These can be parametrized with \code{\link{addExperiments}} to actually define c
 jobs.
 }
 \examples{
-reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
-addProblem(reg = reg, "p1",
+tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+addProblem(reg = tmp, "p1",
   fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
-addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) mean(instance))
-addExperiments(reg = reg, list(p1 = CJ(n = 100, mean = -3:3, sd = 1:5)), list(a1 = data.table()))
-submitJobs(reg = reg)
-waitForJobs(reg = reg)
+addAlgorithm(reg = tmp, "a1", fun = function(job, data, instance, ...) mean(instance))
+addExperiments(reg = tmp, list(p1 = CJ(n = 100, mean = -3:3, sd = 1:5)), list(a1 = data.table()))
+submitJobs(reg = tmp)
+waitForJobs(reg = tmp)
 
 # Reduce the results
-reduceResults(reg = reg, fun = function(aggr, res, ...) c(aggr, res))
+reduceResults(reg = tmp, fun = function(aggr, res, ...) c(aggr, res))
 
 # Join info table with results
-ids = findDone(reg = reg)
-tab = getJobPars(reg = reg, ids = ids)
-res = reduceResultsDataTable(reg = reg, ids = ids)
+ids = findDone(reg = tmp)
+tab = getJobPars(reg = tmp, ids = ids)
+res = reduceResultsDataTable(reg = tmp, ids = ids)
 tab[res]
 }
 \seealso{

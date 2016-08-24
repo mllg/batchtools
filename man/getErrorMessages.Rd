@@ -31,13 +31,13 @@ Extracts error messages from the internal data base and returns them in a compac
 For further investigation of logs, use \code{\link{showLog}}.
 }
 \examples{
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 fun = function(i) if (i == 3) stop(i) else i
-ids = batchMap(fun, i = 1:5, reg = reg)
-submitJobs(1:4, reg = reg)
-waitForJobs(1:4, reg = reg)
-getErrorMessages(ids, reg = reg)
-getErrorMessages(ids, missing.as.error = TRUE, reg = reg)
+ids = batchMap(fun, i = 1:5, reg = tmp)
+submitJobs(1:4, reg = tmp)
+waitForJobs(1:4, reg = tmp)
+getErrorMessages(ids, reg = tmp)
+getErrorMessages(ids, missing.as.error = TRUE, reg = tmp)
 }
 \seealso{
 Other debug: \code{\link{grepLogs}},

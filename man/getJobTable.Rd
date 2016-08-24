@@ -72,16 +72,16 @@ with the resources which were set to submit the jobs, and \code{getJobTags} the 
 \code{getJobTable} returns all these tables joined.
 }
 \examples{
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 f = function(x) if (x < 0) stop("x must be > 0") else sqrt(x)
-batchMap(f, x = c(-1, 0, 1), reg = reg)
-submitJobs(reg = reg)
-waitForJobs(reg = reg)
+batchMap(f, x = c(-1, 0, 1), reg = tmp)
+submitJobs(reg = tmp)
+waitForJobs(reg = tmp)
 
-getJobTable(reg = reg, flatten = FALSE)
-getJobPars(reg = reg)
-addJobTags(1:2, "tag1", reg = reg)
-addJobTags(2, "tag2", reg = reg)
-getJobTags(reg = reg)
+getJobTable(reg = tmp, flatten = FALSE)
+getJobPars(reg = tmp)
+addJobTags(1:2, "tag1", reg = tmp)
+addJobTags(2, "tag2", reg = tmp)
+getJobTags(reg = tmp)
 }
 

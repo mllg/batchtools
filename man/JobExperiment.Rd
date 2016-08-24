@@ -52,9 +52,9 @@ Each subsequent access returns a cached version from memory (except \dQuote{inst
 Jobs and Experiments be executed with \code{\link{execJob}}.
 }
 \examples{
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
-batchMap(identity, 1:5, reg = reg)
-job = makeJob(1, reg = reg)
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+batchMap(identity, 1:5, reg = tmp)
+job = makeJob(1, reg = tmp)
 names(job)
 }
 

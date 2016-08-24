@@ -45,24 +45,24 @@ The combination of a single problem design with a single algorithm design (e.g.,
 controlled via the parameter \code{combine}.
 }
 \examples{
-reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 
 # add first problem
 fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd)
-addProblem("p1", fun = fun, reg = reg)
+addProblem("p1", fun = fun, reg = tmp)
 
 # add second problem
 fun = function(job, data, n, lamba, ...) rexp(n, lambda = lambda)
-addProblem("p2", fun = fun, reg = reg)
+addProblem("p2", fun = fun, reg = tmp)
 
 
 # add first algorithm
 fun = function(instance, method, ...) if (method == "mean") mean(instance) else median(instance)
-addAlgorithm("a1", fun = fun, reg = reg)
+addAlgorithm("a1", fun = fun, reg = tmp)
 
 # add second algorithm
 fun = function(instance, ...) se(instance)
-addAlgorithm("a2", reg = reg)
+addAlgorithm("a2", reg = tmp)
 
 # define problem and algorithm designs
 prob.designs = algo.designs = list()
@@ -72,11 +72,11 @@ algo.designs$a1 = data.table(method = c("mean", "median"))
 algo.designs$a2 = data.table()
 
 # add experiments
-addExperiments(prob.designs, algo.designs, reg = reg)
+addExperiments(prob.designs, algo.designs, reg = tmp)
 
 # check what has been created
-summarizeExperiments(reg = reg)
-getJobPars(reg = reg)
+summarizeExperiments(reg = tmp)
+getJobPars(reg = tmp)
 }
 \seealso{
 Other Experiment: \code{\link{ExperimentRegistry}},

@@ -88,15 +88,15 @@
 #' @rdname Registry
 #' @export
 #' @examples
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
-#' print(reg)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' print(tmp)
 #'
 #' # Set cluster functions to interactive mode and start jobs in external R sessions
-#' reg$cluster.functions = makeClusterFunctionsInteractive(external = TRUE)
+#' tmp$cluster.functions = makeClusterFunctionsInteractive(external = TRUE)
 #'
 #' # Change packages to load
-#' reg$packages = c("MASS")
-#' saveRegistry(reg = reg)
+#' tmp$packages = c("MASS")
+#' saveRegistry(reg = tmp)
 makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = findConfFile(), packages = character(0L), namespaces = character(0L),
   source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
   assertString(file.dir, na.ok = TRUE)

@@ -31,11 +31,11 @@ Registry. If not explicitly passed, uses the last created registry.}
 Starts a single job on the local machine.
 }
 \examples{
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
-batchMap(function(x) if (x == 2) xxx else x, 1:2, reg = reg)
-testJob(1, reg = reg)
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+batchMap(function(x) if (x == 2) xxx else x, 1:2, reg = tmp)
+testJob(1, reg = tmp)
 \dontrun{
- testJob(2, reg = reg)
+ testJob(2, reg = tmp)
 }
 }
 \seealso{

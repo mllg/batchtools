@@ -29,12 +29,12 @@
 #' @family Results
 #' @export
 #' @examples
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
-#' batchMap(function(x) x^2, x = 1:10, reg = reg)
-#' submitJobs(reg = reg)
-#' waitForJobs(reg = reg)
-#' reduceResults(function(x, y) c(x, y), reg = reg)
-#' reduceResults(function(x, y) c(x, sqrt(y)), init = numeric(0), reg = reg)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' batchMap(function(x) x^2, x = 1:10, reg = tmp)
+#' submitJobs(reg = tmp)
+#' waitForJobs(reg = tmp)
+#' reduceResults(function(x, y) c(x, y), reg = tmp)
+#' reduceResults(function(x, y) c(x, sqrt(y)), init = numeric(0), reg = tmp)
 reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   ids = convertIds(reg, ids, default = .findDone(reg = reg), keep.order = TRUE)
@@ -94,11 +94,11 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @family Results
 #' @export
 #' @examples
-#' reg = makeRegistry(file.dir = NA, make.default = FALSE)
-#' batchMap(function(x) x^2, x = 1:10, reg = reg)
-#' submitJobs(reg = reg)
-#' waitForJobs(reg = reg)
-#' reduceResultsList(fun = sqrt, reg = reg)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' batchMap(function(x) x^2, x = 1:10, reg = tmp)
+#' submitJobs(reg = tmp)
+#' waitForJobs(reg = tmp)
+#' reduceResultsList(fun = sqrt, reg = tmp)
 reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   assertFunction(fun, null.ok = TRUE)
