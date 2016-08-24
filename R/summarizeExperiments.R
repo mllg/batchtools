@@ -14,5 +14,5 @@
 summarizeExperiments = function(ids = NULL, by = c("problem", "algorithm"), reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg)
   pars = !setequal(by, c("problem", "algorithm"))
-  getJobDefs(ids = ids, flatten = pars, reg = reg)[, list(.count = .N), by = by]
+  getJobPars(ids = ids, flatten = pars, reg = reg)[, list(.count = .N), by = by]
 }

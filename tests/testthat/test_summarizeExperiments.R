@@ -12,7 +12,6 @@ test_that("summarizeExperiments", {
   expect_equal(s$problem, factor(c("p1", "p2")))
   expect_equal(s$algorithm, factor(c("a1", "a1")))
 
-
   s = summarizeExperiments(reg = reg, by = c("problem", "algorithm", "x"))
   expect_data_table(s, nrows = 3, ncols = 4)
   expect_equal(s$.count, c(3, 3, 3))

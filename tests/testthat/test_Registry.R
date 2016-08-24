@@ -94,7 +94,6 @@ test_that("sweepRegistry", {
     writeRDS(makeJobCollection(1, reg = reg), file.path(reg$file.dir, "jobs", "test.rds"))
   })
 
-
   expect_data_table(reg$resources, nrow = 2)
   expect_character(list.files(file.path(reg$file.dir, "logs")), len = 2L)
   expect_character(list.files(file.path(reg$file.dir, "jobs")), len = 1L)
@@ -104,6 +103,8 @@ test_that("sweepRegistry", {
   expect_data_table(reg$resources, nrow = 1)
   expect_character(list.files(file.path(reg$file.dir, "logs")), len = 1L)
   expect_character(list.files(file.path(reg$file.dir, "jobs")), len = 0L)
+
+  checkTables(reg)
 })
 
 test_that("clearRegistry", {

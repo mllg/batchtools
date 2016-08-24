@@ -238,3 +238,26 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
 
   setkeyv(tab[, "job.id", with = FALSE], "job.id")[]
 }
+
+
+#' @export
+#' @rdname findJobs
+#' @param tags [\code{character}]\cr
+#'   Return jobs which are tagged with any of the tags provided.
+#'   You can negate the search by prefixing a tag with \dQuote{!}, e.g. \dQuote{!walltime} would
+#'   search for jobs which do \strong{not} have the tag \dQuote{walltime}.
+findTagged = function(tags = character(0L), ids = NULL, reg = getDefaultRegistry()) {
+  assertRegistry(reg)
+  ids = convertIds(reg, ids)
+  assertCharacter(tags, any.missing = FALSE, pattern = "^!?[[:alnum:]_.]+$", min.len = 1L)
+  tag = NULL
+
+  tags = split(tags, ifelse(stri_startswith_fixed(tags, "!"), "exclude", "include"))
+  tags$exclude = stri_sub(tags$exclude, from = 2L)
+  unique(ids(switch((length(tags$include) > 0L) + 2 * (length(tags$exclude) > 0L) + 1L,
+    copy(noids),
+    inner_join(reg$tags, convertIds(reg, ids))[tag %in% tags$include],
+    inner_join(reg$tags, convertIds(reg, ids))[tag %nin% tags$exclude],
+    inner_join(reg$tags, convertIds(reg, ids))[tag %in% tags$include | tag %nin% tags$exclude],
+  )), by = "job.id")
+}

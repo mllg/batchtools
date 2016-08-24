@@ -23,6 +23,8 @@ test_that("getJobTable.Registry", {
   expect_numeric(tab$time.queued, lower = 0)
   expect_is(tab$time.running, "difftime")
   expect_numeric(tab$time.running, lower = 0)
+  expect_character(tab$tags)
+  expect_true(allMissing(tab$tags))
 
   tab = getJobTable(reg = reg, flatten = TRUE, prefix = TRUE)
   expect_null(tab[["pars"]])
@@ -36,6 +38,7 @@ test_that("getJobTable.Registry", {
     submitJobs(reg = reg, ids = chunkIds(ids, reg = reg), resources = list(my.walltime = 42L))
     waitForJobs(reg = reg)
   })
+  addJobTags(2:3, "my_tag", reg = reg)
 
   tab = getJobTable(reg = reg, flatten = TRUE)
   expect_data_table(tab, key = "job.id")
@@ -47,6 +50,7 @@ test_that("getJobTable.Registry", {
   expect_numeric(tab$time.queued, lower = 0)
   expect_is(tab$time.running, "difftime")
   expect_numeric(tab$time.running, lower = 0)
+  expect_character(tab$tags, min.len = 1L)
 
   tab = getJobResources(reg = reg, flatten = FALSE)
   expect_data_table(tab, nrow = 4, ncols = 2, key = "job.id")
@@ -123,7 +127,7 @@ test_that("getJobTable.ExperimentRegistry", {
 })
 
 
-test_that("parsAsCols autodetection", {
+test_that("flatten autodetection", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   input = list(1, NULL, iris, letters)
   batchMap(identity, x = input, reg = reg)
