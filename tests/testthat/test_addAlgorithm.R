@@ -18,6 +18,6 @@ test_that("addAlgorithm", {
   expect_set_equal(levels(reg$defs$algorithm), "a2")
   expect_set_equal(getAlgorithmIds(reg), "a2")
   expect_false(file.exists(file.path(reg$file.dir, "algorithms", "a1.rds")))
-  expect_set_equal(as.character(getJobDefs(reg = reg)$algorithm), "a2")
+  expect_set_equal(as.character(getJobPars(reg = reg)$algorithm), "a2")
   checkTables(reg)
 })

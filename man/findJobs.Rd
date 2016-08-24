@@ -14,6 +14,7 @@
 \alias{findRunning}
 \alias{findStarted}
 \alias{findSubmitted}
+\alias{findTagged}
 \title{Find and Filter Jobs}
 \usage{
 findSubmitted(ids = NULL, reg = getDefaultRegistry())
@@ -42,6 +43,8 @@ findJobs(expr, ids = NULL, reg = getDefaultRegistry())
 
 findExperiments(prob.name = NULL, algo.name = NULL, prob.pars, algo.pars,
   repls = NULL, ids = NULL, reg = getDefaultRegistry())
+
+findTagged(tags = character(0L), ids = NULL, reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -74,6 +77,11 @@ Predicate expression evaluated in the algorithm parameters.}
 
 \item{repls}{[\code{integer}]\cr
 Whitelist of replication numbers. If not provided, all replications are matched.}
+
+\item{tags}{[\code{character}]\cr
+Return jobs which are tagged with any of the tags provided.
+You can negate the search by prefixing a tag with \dQuote{!}, e.g. \dQuote{!walltime} would
+search for jobs which do \strong{not} have the tag \dQuote{walltime}.}
 }
 \value{
 [\code{\link{data.table}}]. Matching job ids are stored in the column \dQuote{job.id}.

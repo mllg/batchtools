@@ -81,6 +81,7 @@
 #'     \item{\code{defs} [data.table]:}{Table with job definitions (i.e. parameters).}
 #'     \item{\code{status} [data.table]:}{Table holding information about the computational status. Also see \code{\link{getJobStatus}}.}
 #'     \item{\code{resources} [data.table]:}{Table holding information about the computational resources used for the job. Also see \code{\link{getJobResources}}.}
+#'     \item{\code{tags} [data.table]:}{Table holding information about tags. See \link{Tags}.}
 #'   }
 #' @aliases Registry
 #' @name Registry
@@ -129,7 +130,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
     def.id    = integer(0L),
     pars      = list(),
     pars.hash = character(),
-    key = "def.id")
+    key       = "def.id")
 
   reg$status = data.table(
     job.id      = integer(0L),
@@ -142,13 +143,18 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
     resource.id = integer(0L),
     batch.id    = character(0L),
     job.hash    = character(0L),
-    key = "job.id")
+    key         = "job.id")
 
   reg$resources = data.table(
-    resource.id    = integer(0L),
-    resource.hash  = character(0L),
-    resources      = list(),
-    key = "resource.id")
+    resource.id   = integer(0L),
+    resource.hash = character(0L),
+    resources     = list(),
+    key           = "resource.id")
+
+  reg$tags = data.table(
+    job.id = integer(0L),
+    tag    = character(0L),
+    key    = "job.id")
 
   if (length(conf.file) > 0L) {
     assertString(conf.file)
@@ -249,9 +255,10 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = "~/.bat
   }
 
   reg = readRegistry()
-  reg$status = alloc.col(reg$status, nrow(reg$status))
-  reg$defs = alloc.col(reg$defs, nrow(reg$defs))
-  reg$resources = alloc.col(reg$resources, nrow(reg$resources))
+  alloc.col(reg$status, ncol(reg$status))
+  alloc.col(reg$defs, ncol(reg$defs))
+  alloc.col(reg$resources, ncol(reg$resources))
+  alloc.col(reg$tags, ncol(reg$tags))
 
   file.dir = npath(file.dir)
   if (!update.paths) {
@@ -323,10 +330,16 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
     file.remove(file.path(reg$file.dir, "jobs", job.desc.files))
   }
 
-  i = which(reg$resources$resource.id %nin% reg$status$resource.id)
+  i = reg$resources[!reg$status, on = "resource.id", which = TRUE]
   if (length(i) > 0L) {
     info("Removing %i resource specifications", length(i))
     reg$resources = reg$resources[-i]
+  }
+
+  i = reg$tags[!reg$status, on = "job.id", which = TRUE]
+  if (length(i) > 0L) {
+    info("Removing %i tags", length(i))
+    reg$tags = reg$tags[-i]
   }
 
   saveRegistry(reg)

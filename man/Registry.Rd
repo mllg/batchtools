@@ -123,6 +123,7 @@ Save the registry to the file system? Default is \code{TRUE}.}
     \item{\code{defs} [data.table]:}{Table with job definitions (i.e. parameters).}
     \item{\code{status} [data.table]:}{Table holding information about the computational status. Also see \code{\link{getJobStatus}}.}
     \item{\code{resources} [data.table]:}{Table holding information about the computational resources used for the job. Also see \code{\link{getJobResources}}.}
+    \item{\code{tags} [data.table]:}{Table holding information about tags. See \link{Tags}.}
   }
 }
 \description{

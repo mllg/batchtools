@@ -78,13 +78,13 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     #   in the previous iteration
     ids.on.sys = .findOnSystem(reg, ids, batch.ids = batch.ids)
     if (nrow(ids.disappeared) > 0L) {
-      if (nrow(ids.nt[!ids.on.sys][ids.disappeared, nomatch = 0L]) > 0L) {
+      if (nrow(ids.nt[!ids.on.sys, on = "job.id"][ids.disappeared, on = "job.id", nomatch = 0L]) > 0L) {
         warning("Some jobs disappeared from the system")
         pb$tick(n.jobs.total)
         return(FALSE)
       }
     }
-    ids.disappeared = ids[!ids.on.sys]
+    ids.disappeared = ids[!ids.on.sys, on = "job.id"]
 
     stats = getStatusTable(ids = ids, batch.ids = batch.ids, reg = reg)
     pb$tick(n.jobs - nrow(ids.nt), tokens = as.list(stats))

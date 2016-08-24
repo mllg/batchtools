@@ -105,8 +105,9 @@ f = function(i) {
 ids = batchMap(f, i = 4, reg = reg)
 
 # Set resources: Use parallelMap in multicore mode with 4 CPUs
-# batchtools internally loads the namespace of parallelMap and then calls parallelStart() before the job and
-# parallelStop() right after the job terminated.
+# batchtools internally loads the namespace of parallelMap and then
+# calls parallelStart() before the job and parallelStop() right
+# after the job last job in the chunk terminated.
 res = list(pm.backend = "multicore", ncpus = 4)
 
 # Submit both jobs and wait for them
