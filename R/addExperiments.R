@@ -41,7 +41,6 @@
 #' fun = function(job, data, n, lamba, ...) rexp(n, lambda = lambda)
 #' addProblem("p2", fun = fun, reg = tmp)
 #'
-#'
 #' # add first algorithm
 #' fun = function(instance, method, ...) if (method == "mean") mean(instance) else median(instance)
 #' addAlgorithm("a1", fun = fun, reg = tmp)

@@ -50,4 +50,8 @@ Note that these functions are one suitable for short and fail-safe operations
 on batch system. If some jobs fail, you have to retrieve partial results from the
 registry directory yourself.
 }
+\examples{
+btlapply(1:3, function(x) x^2)
+btmapply(function(x, y, z) x + y + z, x = 1:3, y = 1:3, more.args = list(z = 1), simplify = TRUE)
+}
 

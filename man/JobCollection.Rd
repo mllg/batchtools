@@ -44,9 +44,12 @@ a collection. Thus all variables available inside the job can be used in the tem
 \examples{
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(identity, 1:5, reg = tmp)
-coll = makeJobCollection(1:3, reg = tmp)
-ls(coll)
-coll$defs
-coll$defs$pars
+jc = makeJobCollection(1:3, reg = tmp)
+ls(jc)
+jc$defs
+jc$defs$pars
+}
+\seealso{
+Other JobCollection: \code{\link{doJobCollection}}
 }
 

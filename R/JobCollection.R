@@ -23,16 +23,17 @@
 #'   Named list of resources. Default is \code{list()}.
 #' @template reg
 #' @return [\code{JobCollection}].
+#' @family JobCollection
 #' @aliases JobCollection
 #' @rdname JobCollection
 #' @export
 #' @examples
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(identity, 1:5, reg = tmp)
-#' coll = makeJobCollection(1:3, reg = tmp)
-#' ls(coll)
-#' coll$defs
-#' coll$defs$pars
+#' jc = makeJobCollection(1:3, reg = tmp)
+#' ls(jc)
+#' jc$defs
+#' jc$defs$pars
 makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   UseMethod("makeJobCollection", reg)
 }

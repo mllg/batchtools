@@ -45,6 +45,17 @@
 #' @rdname ProblemAlgorithm
 #' @aliases Problem Algorithm
 #' @export
+#' @examples
+#' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+#' addProblem("p1", fun = function(job, data) data, reg = tmp)
+#' addProblem("p2", fun = function(job, data) job, reg = tmp)
+#' getProblemIds(reg = tmp)
+#'
+#' addAlgorithm("a1", fun = function(job, data, instance) instance, reg = tmp)
+#' getAlgorithmIds(reg = tmp)
+#'
+#' removeAlgorithm("a1", reg = tmp)
+#' getAlgorithmIds(reg = tmp)
 addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
   assertString(name, min.chars = 1L)

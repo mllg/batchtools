@@ -12,7 +12,13 @@
 #'   Path to a file to write the output to. Defaults to \code{NULL} which means
 #'   that output is written to the active \code{\link[base]{sink}}.
 #' @return [\code{character(1)}]: Hash of the \code{\link{JobCollection}} executed.
+#' @family JobCollection
 #' @export
+#' @examples
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' batchMap(identity, 1:2, reg = tmp)
+#' jc = makeJobCollection(1:2, reg = tmp)
+#' doJobCollection(jc)
 doJobCollection = function(jc, output = NULL) {
   UseMethod("doJobCollection")
 }

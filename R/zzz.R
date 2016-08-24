@@ -4,6 +4,9 @@
 #'
 #' @section Package options:
 #' \describe{
+#'   \item{\code{batchtools.progress}}{
+#'     Progress bars. Set to \code{FALSE} to disable them.
+#'   }
 #'   \item{\code{batchtools.verbose}}{
 #'     Verbosity. Set to \code{FALSE} to suppress info messages and progress bars.
 #'   }

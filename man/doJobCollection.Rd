@@ -23,4 +23,13 @@ that output is written to the active \code{\link[base]{sink}}.}
 Executes every job in a \code{\link{JobCollection}}.
 This function is intended to be called on the slave.
 }
+\examples{
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+batchMap(identity, 1:2, reg = tmp)
+jc = makeJobCollection(1:2, reg = tmp)
+doJobCollection(jc)
+}
+\seealso{
+Other JobCollection: \code{\link{makeJobCollection}}
+}
 

@@ -26,13 +26,8 @@ test_that("tags work", {
   expect_data_table(x, nrow = 5, ncol = 1, key = "job.id")
   expect_equal(x$job.id, 3:7)
 
-  x = findTagged(tags = "!broken", reg = reg)
-  expect_data_table(x, nrow = 4, ncol = 1, key = "job.id")
-  expect_equal(x$job.id, 1:4)
-
-  x = findTagged(1:5, tags = c("walltime", "!walltime"), reg = reg)
-  expect_data_table(x, nrow = 5, ncol = 1, key = "job.id")
-  expect_equal(x$job.id, 1:5)
+  x = findTagged(tags = "whoops", reg = reg)
+  expect_data_table(x, nrow = 0, ncol = 1, key = "job.id")
 
   x = removeJobTags(9:3, "walltime", reg = reg)
   expect_data_table(x, ncol = 1, nrow = 2, key = "job.id")

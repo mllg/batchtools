@@ -76,4 +76,16 @@ names in the \code{\link{ExperimentRegistry}}.
 \code{getProblemIds} and \code{getAlgorithmIds} can be used to retrieve the IDs of already defined problems
 and algorithms, respectively.
 }
+\examples{
+tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+addProblem("p1", fun = function(job, data) data, reg = tmp)
+addProblem("p2", fun = function(job, data) job, reg = tmp)
+getProblemIds(reg = tmp)
+
+addAlgorithm("a1", fun = function(job, data, instance) instance, reg = tmp)
+getAlgorithmIds(reg = tmp)
+
+removeAlgorithm("a1", reg = tmp)
+getAlgorithmIds(reg = tmp)
+}
 

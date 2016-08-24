@@ -26,6 +26,9 @@
 #' @template reg
 #' @return [\code{list}] List with the results of the function call.
 #' @export
+#' @examples
+#' btlapply(1:3, function(x) x^2)
+#' btmapply(function(x, y, z) x + y + z, x = 1:3, y = 1:3, more.args = list(z = 1), simplify = TRUE)
 btlapply = function(X, fun, ..., reg = makeRegistry(file.dir = NA)) {
   assertVector(X)
   assertFunction(fun)

@@ -6,8 +6,13 @@
 #'
 #' @param job [\code{\link{Job}} \code{\link{Experiment}}]\cr
 #'   Job/Experiment to execute.
-#' @return [any]. Result of the job.
+#' @return Result of the job.
 #' @export
+#' @examples
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' batchMap(identity, 1:2, reg = tmp)
+#' job = makeJob(1, reg = tmp)
+#' execJob(job)
 execJob = function(job) {
   UseMethod("execJob")
 }
