@@ -1,3 +1,7 @@
+noids = function() {
+  data.table(job.id = integer(0L), key = "job.id")
+}
+
 castIds = function(ids, setkey = TRUE) {
   if (is.data.table(ids)) {
     qassert(ids$job.id, "X", .var.name = "column 'job.id'")

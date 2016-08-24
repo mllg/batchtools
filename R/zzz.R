@@ -24,8 +24,6 @@ batchtools$hooks = data.table(
   remote = c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE)
 )
 
-noids = data.table(job.id = integer(0L), key = "job.id")
-
 .onUnload <- function (libpath) {
   library.dynam.unload("batchtools", libpath) # nocov
 }

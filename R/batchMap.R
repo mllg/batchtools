@@ -61,7 +61,7 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
   }
 
   if (any(dim(ddd) == 0L))
-    return(copy(noids))
+    return(noids())
   info("Adding %i jobs ...", nrow(ddd))
 
   writeRDS(fun, file = file.path(reg$file.dir, "user.function.rds"))

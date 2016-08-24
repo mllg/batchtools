@@ -98,7 +98,7 @@ findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findOnSystem = function(reg, ids = NULL, status = "all", batch.ids = getBatchIds(reg, status = status)) {
   if (length(batch.ids) == 0L)
-    return(copy(noids))
+    return(noids())
   submitted = done = batch.id = NULL
   inner_join(reg$status, ids)[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids$batch.id, "job.id", with = FALSE]
 }
@@ -255,7 +255,7 @@ findTagged = function(tags = character(0L), ids = NULL, reg = getDefaultRegistry
   tags = split(tags, ifelse(stri_startswith_fixed(tags, "!"), "exclude", "include"))
   tags$exclude = stri_sub(tags$exclude, from = 2L)
   unique(ids(switch((length(tags$include) > 0L) + 2 * (length(tags$exclude) > 0L) + 1L,
-    copy(noids),
+    noids(),
     inner_join(reg$tags, convertIds(reg, ids))[tag %in% tags$include],
     inner_join(reg$tags, convertIds(reg, ids))[tag %nin% tags$exclude],
     inner_join(reg$tags, convertIds(reg, ids))[tag %in% tags$include | tag %nin% tags$exclude],
