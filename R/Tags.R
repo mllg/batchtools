@@ -3,6 +3,7 @@
 #' @rdname Tags
 #'
 #' @description
+#' Add and remove arbitrary tags. Tags are stored inside with the registry.
 #'
 #' @templateVar ids.default all
 #' @template ids
@@ -58,6 +59,7 @@ removeJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE)
   ids = convertIds(reg, ids)
   assertCharacter(tags, any.missing = FALSE, pattern = "^[[:alnum:]_.]+$", min.len = 1L)
+  job.id = tag = NULL
 
   if (is.null(ids)) {
     i = reg$tags[tag %in% tags, which = TRUE]

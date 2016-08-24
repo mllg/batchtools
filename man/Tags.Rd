@@ -30,7 +30,7 @@ Registry. If not explicitly passed, uses the last created registry.}
 [\code{\link[data.table]{data.table}}] with job ids affected (invisible).
 }
 \description{
-
+Add and remove arbitrary tags. Tags are stored inside with the registry.
 }
 \examples{
 reg = makeRegistry(file.dir = NA, make.default = FALSE)

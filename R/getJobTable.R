@@ -149,5 +149,6 @@ getJobPars.ExperimentRegistry = function(ids = NULL, flatten = NULL, prefix = FA
 getJobTags = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   ids = convertIds(reg, ids, default = ids(reg$status))
-  reg$tags[ids, on = "job.id"][, list(tags = stri_join(sort(tag, na.last = TRUE), collapse = ",")), by = job.id]
+  tag = NULL
+  reg$tags[ids, on = "job.id"][, list(tags = stri_join(sort(tag, na.last = TRUE), collapse = ",")), by = "job.id"]
 }
