@@ -35,6 +35,10 @@ doJobCollection.character = function(jc, output = NULL) {
 
 #' @export
 doJobCollection.JobCollection = function(jc, output = NULL) {
+  now = function() {
+    strftime(Sys.time())
+  }
+
   error = function(msg, ...) {
     updates = data.table(job.id = jc$defs$job.id, started = ustamp(), done = ustamp(),
       error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),

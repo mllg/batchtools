@@ -65,10 +65,6 @@ ustamp = function() {
   as.integer(Sys.time())
 }
 
-now = function() {
-  strftime(Sys.time())
-}
-
 npath = function(path, must.work = TRUE) {
   if (stri_startswith_fixed(path, "~")) {
     if (must.work && !file.exists(path))

@@ -419,10 +419,8 @@ assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, 
 }
 
 #' @rdname Registry
-#' @param save [\code{logical(1)}]\cr
-#'   Save the registry to the file system? Default is \code{TRUE}.
 #' @export
-syncRegistry = function(reg = getDefaultRegistry(), save = TRUE) {
+syncRegistry = function(reg = getDefaultRegistry()) {
   fns = list.files(file.path(reg$file.dir, "updates"), full.names = TRUE)
   if (length(fns) == 0L)
     return(invisible(TRUE))
@@ -450,8 +448,7 @@ syncRegistry = function(reg = getDefaultRegistry(), save = TRUE) {
       c("started", "done", "error", "memory") := list(i.started, i.done, i.error, i.memory),
       on = "job.id", nomatch = 0L
     ]
-    if (save)
-      saveRegistry(reg)
+    saveRegistry(reg)
     unlink(fns[!failed])
   }
 

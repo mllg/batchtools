@@ -34,7 +34,7 @@ sweepRegistry(reg = getDefaultRegistry())
 
 clearRegistry(reg = getDefaultRegistry())
 
-syncRegistry(reg = getDefaultRegistry(), save = TRUE)
+syncRegistry(reg = getDefaultRegistry())
 }
 \arguments{
 \item{file.dir}{[\code{character(1)}]\cr
@@ -104,9 +104,6 @@ If set to \code{TRUE}, the \code{file.dir} and \code{work.dir} will be updated i
 likely to break computation on the system, only do this if no jobs are currently running. Default is \code{FALSE}.
 If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
 registry in an read-only mode.}
-
-\item{save}{[\code{logical(1)}]\cr
-Save the registry to the file system? Default is \code{TRUE}.}
 }
 \value{
 [\code{Registry}]. An environment with the following slots:
