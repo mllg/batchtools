@@ -40,7 +40,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   }
 
   error = function(msg, ...) {
-    updates = data.table(job.id = jc$defs$job.id, started = ustamp(), done = ustamp(),
+    updates = data.table(job.id = jc$jobs$job.id, started = ustamp(), done = ustamp(),
       error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),
       memory = NA_real_, key = "job.id")
     writeRDS(updates, file = file.path(jc$file.dir, "updates", sprintf("%s-0.rds", jc$job.hash)), wait = TRUE)
@@ -67,14 +67,14 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     i = Sys.getenv(jc$array.var)
     if (nzchar(i)) {
       i = as.integer(i)
-      if (!testInteger(i, any.missing = FALSE, lower = 1L, upper = nrow(jc$defs)))
+      if (!testInteger(i, any.missing = FALSE, lower = 1L, upper = nrow(jc$jobs)))
         return(error("Failed to subset JobCollection using array environment variable '%s' [='%s']", jc$array.var, i))
-      jc$defs = jc$defs[i]
+      jc$jobs = jc$jobs[i]
     }
   }
 
   # say hi
-  n.jobs = nrow(jc$defs)
+  n.jobs = nrow(jc$jobs)
   s = now()
   catf("### [bt %s]: Starting calculation of %i jobs", s, n.jobs)
   catf("### [bt %s]: Setting working directory to '%s'", s, jc$work.dir)
@@ -105,12 +105,12 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   ok = try(loadRegistryDependencies(jc, switch.wd = FALSE), silent = TRUE)
   if (is.error(ok))
     return(error("Error loading registry dependencies: %s", as.character(ok)))
-  buf = UpdateBuffer$new(jc$defs$job.id)
+  buf = UpdateBuffer$new(jc$jobs$job.id)
 
   runHook(jc, "pre.do.collection", cache = cache)
 
   for (i in seq_len(n.jobs)) {
-    job = getJob(jc, jc$defs$job.id[i], cache = cache)
+    job = getJob(jc, jc$jobs$job.id[i], cache = cache)
     id = job$id
 
     catf("### [bt %s]: Starting job [batchtools job.id=%i]", now(), id)

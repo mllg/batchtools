@@ -32,8 +32,8 @@
 #' batchMap(identity, 1:5, reg = tmp)
 #' jc = makeJobCollection(1:3, reg = tmp)
 #' ls(jc)
-#' jc$defs
-#' jc$defs$pars
+#' jc$jobs
+#' jc$jobs$pars
 makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   UseMethod("makeJobCollection", reg)
 }
@@ -67,22 +67,22 @@ createCollection = function(resources = list(), reg = getDefaultRegistry()) {
 #' @export
 makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   jc = createCollection(resources, reg)
-  jc$defs = inner_join(reg$defs, inner_join(reg$status, convertIds(reg, ids)))[, c("job.id", "pars"), with = FALSE]
-  setkeyv(jc$defs, "job.id")
+  jc$jobs = inner_join(reg$defs, inner_join(reg$status, convertIds(reg, ids)))[, c("job.id", "pars"), with = FALSE]
+  setkeyv(jc$jobs, "job.id")
   setClasses(jc, "JobCollection")
 }
 
 #' @export
 makeJobCollection.ExperimentRegistry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   jc = createCollection(resources, reg)
-  jc$defs = inner_join(reg$defs, inner_join(reg$status, convertIds(reg, ids)))[, c("job.id", "pars", "problem", "algorithm", "repl"), with = FALSE]
-  setkeyv(jc$defs, "job.id")
+  jc$jobs = inner_join(reg$defs, inner_join(reg$status, convertIds(reg, ids)))[, c("job.id", "pars", "problem", "algorithm", "repl"), with = FALSE]
+  setkeyv(jc$jobs, "job.id")
   setClasses(jc, c("ExperimentCollection", "JobCollection"))
 }
 
 #' @export
 print.JobCollection = function(x, ...) {
-  catf("Collection of %i jobs", nrow(x$defs))
+  catf("Collection of %i jobs", nrow(x$jobs))
   catf("  Hash    : %s", x$job.hash)
   catf("  Log file: %s", x$log.file)
 }

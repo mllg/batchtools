@@ -46,8 +46,8 @@ tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(identity, 1:5, reg = tmp)
 jc = makeJobCollection(1:3, reg = tmp)
 ls(jc)
-jc$defs
-jc$defs$pars
+jc$jobs
+jc$jobs$pars
 }
 \seealso{
 Other JobCollection: \code{\link{doJobCollection}}

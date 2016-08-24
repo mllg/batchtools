@@ -64,13 +64,13 @@ getJob = function(jc, id, cache = NULL) {
 }
 
 getJob.JobCollection = function(jc, id, cache = NULL) {
-  row = inner_join(jc$defs, castIds(id))
+  row = inner_join(jc$jobs, castIds(id))
   Job$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     resources = jc$resources)
 }
 
 getJob.ExperimentCollection = function(jc, id, cache = NULL) {
-  row = inner_join(jc$defs, castIds(id))
+  row = inner_join(jc$jobs, castIds(id))
   Experiment$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     repl = row$repl, resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm)
 }
