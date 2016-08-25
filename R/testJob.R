@@ -40,13 +40,10 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
     brew::brew(file = fn.tmpl, output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))
     res = runOSCommand(Rscript(), fn.r)
 
-    if (res$exit.code == 0L) {
-      writeLines(res$output)
+    writeLines(res$output)
+    if (res$exit.code == 0L)
       return(readRDS(fn.res))
-    } else {
-      writeLines(res$output)
-      stopf("testJob() failed for job with id=%i. To properly debug, re-run with external=FALSE", id$job.id)
-    }
+    stopf("testJob() failed for job with id=%i. To properly debug, re-run with external=FALSE", id$job.id)
   } else {
     loadRegistryDependencies(reg, switch.wd = TRUE)
     execJob(job = makeJob(id, reg = reg))

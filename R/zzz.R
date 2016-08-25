@@ -23,7 +23,7 @@
 
 batchtools = new.env(parent = emptyenv())
 batchtools$hooks = data.table(
-  name = c("pre.sync", "post.sync", "pre.do.collection", "post.do.collection", "pre.submit", "post.submit"),
+  name =   c("pre.sync", "post.sync", "pre.do.collection", "post.do.collection", "pre.submit", "post.submit"),
   remote = c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE)
 )
 

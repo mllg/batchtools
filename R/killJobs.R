@@ -38,7 +38,7 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   batch.ids = unique(tab$batch.id)
   info("Killing %i real batch jobs ...", length(batch.ids))
 
-  for (i in 1:3) {
+  for (i in seq_len(3L)) {
     tab[!tab$killed, "killed" := !is.error(try(kill(reg, .BY$batch.id), silent = TRUE)), by = "batch.id"]
     if (all(tab$killed))
       break

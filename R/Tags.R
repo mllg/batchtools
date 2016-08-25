@@ -66,10 +66,12 @@ removeJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
   } else {
     i = reg$tags[job.id %in% ids$job.id & tag %in% tags, which = TRUE]
   }
-  ids = unique(reg$tags[i, "job.id", with = FALSE], by = "job.id")
   if (length(i) > 0L) {
+    ids = unique(reg$tags[i, "job.id", with = FALSE], by = "job.id")
     reg$tags = reg$tags[-i]
     saveRegistry(reg)
+  } else {
+    ids = noids()
   }
 
   invisible(ids)
@@ -80,6 +82,7 @@ removeJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
 getUsedJobTags = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   ids = convertIds(reg, ids)
+
   tag = NULL
   inner_join(reg$tags, ids)[, unique(tag), on = "job.id", nomatch = 0L]
 }

@@ -13,6 +13,6 @@
 #' @family Experiment
 summarizeExperiments = function(ids = NULL, by = c("problem", "algorithm"), reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg)
-  pars = !setequal(by, c("problem", "algorithm"))
-  getJobPars(ids = ids, flatten = pars, reg = reg)[, list(.count = .N), by = by]
+  assertCharacter(by, any.missing = FALSE, min.chars = 1L, min.len = 1L, unique = TRUE)
+  getJobPars(ids = ids, flatten = !setequal(by, c("problem", "algorithm")), reg = reg)[, list(.count = .N), by = by]
 }
