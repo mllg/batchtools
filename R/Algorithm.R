@@ -28,7 +28,7 @@ removeAlgorithm = function(name, reg = getDefaultRegistry()) {
   fn = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", name))
   algorithm = NULL
   def.ids = reg$defs[algorithm == name, "def.id", with = FALSE]
-  job.ids = ids(inner_join(def.ids, reg$status))
+  job.ids = inner_join(def.ids, reg$status)[, "job.id", with = FALSE]
 
   info("Removing Algorithm '%s' and %i corresponding jobs ...", name, nrow(job.ids))
   file.remove(fn)

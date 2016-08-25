@@ -1,3 +1,7 @@
+allids = function(reg) {
+  reg$status[, "job.id", with = FALSE]
+}
+
 noids = function() {
   data.table(job.id = integer(0L), key = "job.id")
 }
@@ -51,10 +55,6 @@ inner_join = function(x, y) {
   if (is.null(y))
     return(x)
   x[y, nomatch = 0, on = key(x)]
-}
-
-ids = function(tab) {
-  tab[, "job.id", with = FALSE]
 }
 
 auto_increment = function(ids, n = 1L) {

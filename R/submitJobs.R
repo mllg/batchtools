@@ -157,7 +157,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   for (ch in chunks) {
     wait = default.wait
-    ids.chunk = ids(ids[chunk == ch])
+    ids.chunk = ids[chunk == ch, "job.id", with = FALSE]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
       writeRDS(jc, file = jc$uri, wait = TRUE)

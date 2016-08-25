@@ -40,16 +40,14 @@ extractLog = function(log, id) {
 #' @family debug
 #' @return [\code{\link{data.table}}]. Matching job ids are stored in the column \dQuote{job.id}.
 #'   See \code{\link{JoinTables}} for examples on working with job tables.
-grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, fixed = FALSE, reg = getDefaultRegistry()) {
+grepLogs = function(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
-  assertString(pattern, na.ok = TRUE)
+  assertString(pattern, min.chars = 1L)
   assertFlag(ignore.case)
   assertFlag(fixed)
 
   ids = convertIds(reg, ids, default = .findStarted(reg = reg))
   tab = inner_join(reg$status, ids)[, c("job.id", "job.hash"), with = FALSE]
-  if (is.na(pattern) || !nzchar(pattern))
-    return(ids(tab))
 
   setorderv(tab, "job.hash")
   found = logical(nrow(tab))
@@ -73,7 +71,7 @@ grepLogs = function(ids = NULL, pattern = "", ignore.case = FALSE, fixed = FALSE
     }
   }
 
-  res = cbind(ids(tab[found]), data.table(matches = matches[found]))
+  res = cbind(tab[found, "job.id", with = FALSE], data.table(matches = matches[found]))
   setkeyv(res, "job.id")[]
 }
 

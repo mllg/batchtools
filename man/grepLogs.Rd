@@ -4,7 +4,7 @@
 \alias{grepLogs}
 \title{Grep Log Files for a Pattern}
 \usage{
-grepLogs(ids = NULL, pattern = "", ignore.case = FALSE, fixed = FALSE,
+grepLogs(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE,
   reg = getDefaultRegistry())
 }
 \arguments{

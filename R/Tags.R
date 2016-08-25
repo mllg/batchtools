@@ -40,7 +40,7 @@
 #' getUsedJobTags(ids, reg = tmp)
 addJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE)
-  ids = convertIds(reg, ids, default = ids(reg$status))
+  ids = convertIds(reg, ids, default = allids(reg))
   assertCharacter(tags, any.missing = FALSE, pattern = "^[[:alnum:]_.]+$", min.len = 1L)
 
   for (cur in tags) {
@@ -50,7 +50,7 @@ addJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
   reg$tags = setkeyv(unique(reg$tags, by = NULL), "job.id")
 
   saveRegistry(reg)
-  invisible(ids(ids))
+  invisible(ids[, "job.id", with = FALSE])
 }
 
 #' @export
@@ -66,7 +66,7 @@ removeJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
   } else {
     i = reg$tags[job.id %in% ids$job.id & tag %in% tags, which = TRUE]
   }
-  ids = unique(ids(reg$tags[i]), by = "job.id")
+  ids = unique(reg$tags[i, "job.id", with = FALSE], by = "job.id")
   if (length(i) > 0L) {
     reg$tags = reg$tags[-i]
     saveRegistry(reg)

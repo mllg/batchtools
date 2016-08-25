@@ -37,7 +37,7 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   ids = convertIds(reg, ids)
   if (missing(expr))
-    return(ids(inner_join(reg$status, ids)))
+    return(ids %??% allids(reg))
 
   expr = substitute(expr)
   ee = parent.frame()
@@ -248,7 +248,7 @@ findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
 #'   Return jobs which are tagged with any of the tags provided.
 findTagged = function(tags = character(0L), ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  ids = convertIds(reg, ids, default = ids(reg$status))
+  ids = convertIds(reg, ids, default = allids(reg))
   assertCharacter(tags, any.missing = FALSE, pattern = "^[[:alnum:]_.]+$", min.len = 1L)
   tag = NULL
 

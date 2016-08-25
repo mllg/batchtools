@@ -89,5 +89,5 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
     key         = "job.id")
 
   saveRegistry(reg)
-  invisible(ids(reg$status))
+  invisible(allids(reg))
 }
