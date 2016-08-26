@@ -258,7 +258,10 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = "~/.bat
   alloc.col(reg$status, ncol(reg$status))
   alloc.col(reg$defs, ncol(reg$defs))
   alloc.col(reg$resources, ncol(reg$resources))
-  alloc.col(reg$tags, ncol(reg$tags))
+  if (is.data.table(reg$tags)) # FIXME: remove on release
+    alloc.col(reg$tags, ncol(reg$tags))
+  else
+    reg$tags = data.table(job.id = integer(0L), tag = character(0L), key = "job.id")
 
   file.dir = npath(file.dir)
   if (!update.paths) {
