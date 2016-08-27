@@ -171,13 +171,13 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
     }
   }
 
-  loadRegistryDependencies(list(work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
-
   if (is.na(file.dir))
     reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
   for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs")))
     dir.create(d, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)
+
+  loadRegistryDependencies(list(file.dir = file.dir, work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
 
   setattr(reg, "class", "Registry")
   saveRegistry(reg)
@@ -394,6 +394,15 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
       if (is.error(ok))
         stopf("Error loading file '%s': %s", fn, as.character(ok))
     }
+  }
+
+  path = file.path(x$file.dir, "exports")
+  if (dir.exists(path)) {
+    fns = list.files(path, pattern = "\\.rds$")
+    if (length(fns) > 0L)
+      Map(function(name, fn) {
+          assign(x = name, value = readRDS(fn), envir = .GlobalEnv)
+      }, name = basename(stri_sub(fns, to = -5L)), fn = file.path(path, fns))
   }
 
   invisible(TRUE)
