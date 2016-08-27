@@ -90,7 +90,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   if (!is.null(jc$resources$pm.backend)) {
     if (!requireNamespace("parallelMap", quietly = TRUE))
       return(error("parallelMap not installed"))
-    pm.opts = filterNull(c(list(mode = jc$resources$pm.backend, cpus = jc$resources$ncpus, show.info = FALSE), jc$resources$pm.opts))
+    pm.opts = filterNull(insert(list(mode = jc$resources$pm.backend, cpus = jc$resources$ncpus, show.info = FALSE), jc$resources$pm.opts))
     do.call(parallelMap::parallelStart, pm.opts)
     on.exit(parallelMap::parallelStop(), add = TRUE)
     pm.opts = parallelMap::parallelGetOptions()$settings
@@ -135,7 +135,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     buf$flush(jc)
   }
 
-  buf$flush(jc, force = TRUE)
+  buf$save(jc)
 
   catf("### [bt %s]: Calculation finished!", now())
   runHook(jc, "post.do.collection", cache = cache)
@@ -148,8 +148,9 @@ UpdateBuffer = R6Class("UpdateBuffer",
   public = list(
     updates = NULL,
     next.update = NA_integer_,
+    count = 0L,
     initialize = function(ids) {
-      self$updates = data.table(job.id = ids, started = NA_integer_, done = NA_integer_, error = NA_character_, memory = NA_real_, written = 0L, key = "job.id")
+      self$updates = data.table(job.id = ids, started = NA_integer_, done = NA_integer_, error = NA_character_, memory = NA_real_, written = FALSE, key = "job.id")
       self$next.update = ustamp() + as.integer(runif(1L, 300, 1800))
     },
 
@@ -157,16 +158,21 @@ UpdateBuffer = R6Class("UpdateBuffer",
       self$updates[list(id), names(x) := x]
     },
 
-    flush = function(jc, force = FALSE) {
-      if (force || ustamp() > self$next.update) {
-        i = self$updates[!is.na(started) & written == 0L, which = TRUE]
-        if (length(i) > 0L) {
-          count = max(self$updates$written) + 1L
-          writeRDS(self$updates[i, !"written", with = FALSE], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, count)), wait = TRUE)
-          self$updates[i, "written" := count]
-          self$next.update = ustamp() + as.integer(runif(1L, 300, 1800))
-        }
+    save = function(jc) {
+      i = self$updates[!written & !is.na(started), which = TRUE]
+      if (length(i) > 0L) {
+        self$count = self$count + 1L
+        writeRDS(self$updates[i, !"written", with = FALSE], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, self$count)), wait = TRUE)
+        self$updates[i, "written" := TRUE]
+      }
+    },
+
+    flush = function(jc) {
+      if (ustamp() > self$next.update) {
+        self$save(jc)
+        self$next.update = ustamp() + as.integer(runif(1L, 300, 1800))
       }
     }
+
   )
 )
