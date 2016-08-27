@@ -54,6 +54,6 @@ The packages [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperim
 * The building blocks of a problem has been renamed from `static` and `dynamic` to the more intuitive `data` and `fun`.
   Thus, algorithm function should have the formal arguments `job`, `data` and `instance`.
 * The function `makeDesign` has been removed.
-  Hyperparameters can be defined by just passing a `data.frame` or `data.table` to [addExperiments](https://mllg.github.io/batchtools/addExperiments.html).
+  Parameters can be defined by just passing a `data.frame` or `data.table` to [addExperiments](https://mllg.github.io/batchtools/addExperiments.html).
   For exhaustive designs, use `expand.grid()` or `data.table::CJ`.
 

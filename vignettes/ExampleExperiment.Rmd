@@ -60,7 +60,7 @@ Note that we set a problem seed to synchronize the experiments in the sense that
 The algorithms for the jobs are added to the registry in a similar manner.
 When using `addAlgorithm()`, an identifying name, the registry and a function, that contains the algorithm to be applied on the problem, are required arguments.
 The function must have the arguments `job`, `data` and `instance`.
-Further arbitrary arguments (e.g., hyper-parameters or strategy parameters) may be defined analogously as for the function in `addProblem`.
+Further arbitrary arguments (e.g., hyperparameters or strategy parameters) may be defined analogously as for the function in `addProblem`.
 The objects passed to the function via `job` and `data` are here the same as above, while via `instance` the return value of the evaluated problem function is passed.
 The algorithm can return any R object which will automatically be stored in the file system for later retrieval.
 Firstly, we create a classification support vector machine:

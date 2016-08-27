@@ -11,12 +11,12 @@ addExperiments(prob.designs = NULL, algo.designs = NULL, repls = 1L,
 \item{prob.designs}{[named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 Named list of data frames. The name must match the problem name while the column names correspond to parameters
 of the problem.
-If \code{NULL}, adds experiments for all defined problems without any hyperparameters set.}
+If \code{NULL}, adds experiments for all defined problems without any parameters set.}
 
 \item{algo.designs}{[named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
 Named list of data frames. The name must match the algorithm name while the column names correspond to parameters
 of the algorithm.
-If \code{NULL}, adds experiments for all defined algorithms without any hyperparameters set.}
+If \code{NULL}, adds experiments for all defined algorithms without any parameters set.}
 
 \item{repls}{[\code{integer(1)}]\cr
 Number of replications for each distinct experiment.}
