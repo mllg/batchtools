@@ -4,7 +4,7 @@ test_that("export works", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   x = batchExport(list(exported_obj = 42L), reg = reg)
   expect_data_table(x, nrow = 1, ncol = 2)
-  expect_names(names(x), permutation.of = c("name", "uri"))
+  expect_set_equal(names(x), c("name", "uri"))
   expect_equal(x$name, "exported_obj")
   expect_file_exists(file.path(reg$file.dir, "exports", "exported_obj.rds"))
   loadRegistryDependencies(reg)
@@ -12,12 +12,12 @@ test_that("export works", {
 
   x = batchExport(reg = reg)
   expect_data_table(x, nrow = 1, ncol = 2)
-  expect_names(names(x), permutation.of = c("name", "uri"))
+  expect_set_equal(names(x), c("name", "uri"))
   expect_equal(x$name, "exported_obj")
 
   x = batchExport(list(exported_obj = NULL), reg = reg)
   expect_data_table(x, nrow = 0, ncol = 2)
-  expect_names(names(x), permutation.of = c("name", "uri"))
+  expect_set_equal(names(x), c("name", "uri"))
   expect_false(file.exists(file.path(reg$file.dir, "exports", "exported_obj.rds")))
 
   x = batchExport(list(exported_obj = 43L), reg = reg)
