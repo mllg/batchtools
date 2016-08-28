@@ -56,10 +56,13 @@ To get the IDs of all jobs that failed due to an error we can use [`findErrors()
 findErrors()
 getErrorMessages()
 ```
-If we want to peek into the R log file of a job to see more context for the error we can use [`showLog()`](https://mllg.github.io/batchtools/showLog.html) which opens a pager:
-```{r,eval=FALSE}
-showLog(id = 9)
+If we want to peek into the R log file of a job to see more context for the error we can use [`showLog()`](https://mllg.github.io/batchtools/showLog.html) which opens a pager or use [`getLog()`](https://mllg.github.io/batchtools/showLog.html) to get the log as character vector:
+```{r}
+writeLines(getLog(id = 9))
 ```
-```{r,echo=FALSE}
-batchtools:::readLog(9)
+
+You can also grep for error or warning messages:
+```{r}
+ids = grepLogs(pattern = "ooops", ignore.case = TRUE)
+print(ids)
 ```

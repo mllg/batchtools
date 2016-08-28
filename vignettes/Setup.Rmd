@@ -21,6 +21,14 @@ The cluster function implementation is stored in your registry and defaults to i
 reg = makeRegistry(file.dir = NA)
 print(reg$cluster.functions)
 ```
+```{r, include = FALSE}
+library(batchtools)
+fd = file.path(dirname(tempdir()), "batchtools", "Setup")
+unlink(fd, recursive = TRUE)
+dir.create(dirname(fd), recursive = TRUE, showWarnings = FALSE)
+reg = makeRegistry(file.dir = fd, seed = 1)
+```
+
 Besides a function to submit jobs, you may provide functions to list queued/running jobs and to kill jobs, all can be passed to the constructor [makeClusterFunctions](https://mllg.github.io/batchtools/makeClusterFunctions.html).
 
 Usually you do not have to start from scratch but can just use one of the cluster function implementations which ship with the package:
@@ -42,7 +50,13 @@ reg$cluster.functions = makeClusterFunctionsSlurm(path)
 print(reg$cluster.functions)
 ```
 Most characteristics and specialities of cluster systems can be mapped to such a [template file](https://github.com/mllg/batchtools/blob/master/inst/templates/slurm_dortmund.tmpl) which is parsed by the [brew package](https://cran.r-project.org/package=brew).
-If the flexibility which comes with templating is not sufficient for your system, you can still construct the cluster functions yourself by just adapting our [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSlurm.R).
+All variables in a [JobCollection](https://mllg.github.io/batchtools/JobCollection.html) can be used inside the template.
+```{r, message = FALSE}
+batchMap(identity, 1:2)
+jc = makeJobCollection(1:2)
+print(ls.str(jc))
+```
+If the flexibility which comes with templating is not sufficient for your system, you can still construct the cluster functions yourself using the provided [constructor](https://mllg.github.io/batchtools/makeClusterFunctions.html).
 
 To make your cluster function selection permanent for a specific system across R sessions, you can set up a configuration file which is described in the following.
 
