@@ -10,12 +10,14 @@ readLog = function(id, impute = NULL, reg = getDefaultRegistry()) {
   }
 
   lines = readLines(log.file)
-  job.id = as.integer(stri_match_last_regex(lines, c("\\[batchtools job\\.id=([0-9]+)\\]$"))[, 2L])
+  if (length(lines) > 0L) {
+    job.id = as.integer(stri_match_last_regex(lines, c("\\[batchtools job\\.id=([0-9]+)\\]$"))[, 2L])
+    job.id = .Call(fill_gaps, job.id)
+  } else {
+    job.id = integer(0L)
+  }
 
-  setkeyv(data.table(
-    job.id = .Call(fill_gaps, job.id),
-    lines = lines
-  ), "job.id", physical = FALSE)
+  setkeyv(data.table(job.id = job.id, lines = lines), "job.id", physical = FALSE)
 }
 
 extractLog = function(log, id) {

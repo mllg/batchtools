@@ -2,7 +2,7 @@ context("showLog/getLog")
 
 test_that("showLog/getLog", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
-  batchMap(reg = reg, function(x) print("GREPME"), 1:2)
+  batchMap(function(x) print("GREPME"), 1:2, reg = reg)
   expect_error(showLog(id = 1, reg = reg), "not available")
   expect_error(readLog(id = 1, reg = reg), "not available")
   ids = chunkIds(1:2, n.chunks = 1, reg = reg)
@@ -28,4 +28,22 @@ test_that("showLog/getLog", {
 
   expect_error(getLog(id = 1:2, reg = reg), "exactly")
   expect_error(getLog(id = 3, reg = reg), "exactly")
+})
+
+test_that("empty log files", {
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  batchMap(identity, 1, reg = reg)
+  silent({
+    submitJobs(reg = reg)
+    waitForJobs(reg = reg)
+  })
+
+  # overwrite log file
+  log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", reg$status[1, job.hash]))
+  file.create(log.file)
+
+  x = readLog(list(1), reg = reg)
+  expect_data_table(x, ncol = 2, nrow = 0, index = "job.id")
+
+  expect_equal(getLog(1, reg = reg), character(0L))
 })
