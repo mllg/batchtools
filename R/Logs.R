@@ -1,11 +1,11 @@
 #' @useDynLib batchtools fill_gaps
-readLog = function(id, impute = NULL, reg = getDefaultRegistry()) {
+readLog = function(id, missing.as.empty = FALSE, reg = getDefaultRegistry()) {
   tab = reg$status[id, c("job.id", "done", "job.hash"), with = FALSE, nomatch = NA]
   log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", tab$job.hash))
 
   if (is.na(tab$job.hash) || !file.exists(log.file)) {
-    if (!is.null(impute))
-      return(impute)
+    if (missing.as.empty)
+      return(data.table(job.id = integer(0L), lines = character(0L)))
     stopf("Log file for job with id %i not available", tab$job.id)
   }
 
@@ -28,7 +28,8 @@ extractLog = function(log, id) {
 #' @title Grep Log Files for a Pattern
 #'
 #' @description
-#' Greps through log files and reports jobs with matches.
+#' Crawls through log files and reports jobs with where lines matches the \code{pattern}.
+#'
 #' @templateVar ids.default findStarted
 #' @template ids
 #' @param pattern [\code{character(1L)}]\cr
@@ -48,33 +49,31 @@ grepLogs = function(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE, reg
   assertFlag(ignore.case)
   assertFlag(fixed)
 
-  ids = convertIds(reg, ids, default = .findStarted(reg = reg))
-  tab = inner_join(reg$status, ids)[, c("job.id", "job.hash"), with = FALSE]
+  ids = convertIds(reg, ids)
+  tab = inner_join(reg$status[!is.na(job.hash)], ids)[, c("job.id", "job.hash"), with = FALSE]
+  if (nrow(tab) == 0L)
+    return(data.table(job.id = integer(0L), matches = character(0L)))
 
   setorderv(tab, "job.hash")
-  found = logical(nrow(tab))
-  matches = character(nrow(tab))
+  res = data.table(job.id = tab$job.id, matches = NA_character_)
   hash.before = ""
   matcher = if (fixed) stri_detect_fixed else stri_detect_regex
 
   for (i in seq_row(tab)) {
     if (hash.before != tab$job.hash[i]) {
-      log = readLog(tab[i], impute = NA_character_, reg = reg)
+      log = readLog(tab[i], missing.as.empty = TRUE, reg = reg)
       hash.before = tab$job.hash[i]
     }
 
-    lines = extractLog(log, tab[i])
-    if (!testScalarNA(lines)) {
+    if (nrow(log) > 0L) {
+      lines = extractLog(log, tab[i])
       m = matcher(lines, pattern, case_insensitive = ignore.case)
-      if (any(m)) {
-        found[i] = TRUE
-        matches[i] = stri_join(lines[m], collapse = "\n")
-      }
+      if (any(m))
+        set(res, i, "matches", stri_join(lines[m], collapse = "\n"))
     }
   }
 
-  res = cbind(tab[found, "job.id", with = FALSE], data.table(matches = matches[found]))
-  setkeyv(res, "job.id")[]
+  setkeyv(res[!is.na(matches)], "job.id")[]
 }
 
 #' @title Inspect Log Files

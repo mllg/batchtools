@@ -31,7 +31,7 @@ Registry. If not explicitly passed, uses the last created registry.}
   See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
-Greps through log files and reports jobs with matches.
+Crawls through log files and reports jobs with where lines matches the \code{pattern}.
 }
 \seealso{
 Other debug: \code{\link{getErrorMessages}},
