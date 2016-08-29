@@ -88,14 +88,6 @@ insert = function(x, y) {
   x[order(names2(x))]
 }
 
-# converts a list to a data.table, but avoids creating column names
-list2dt = function(x) {
-  nn = names(x)
-  if (is.null(nn))
-    names(x) = rep.int("", length(x))
-  as.data.table(x)
-}
-
 writeRDS = function(object, file, wait = FALSE) {
   saveRDS(object, file = file)
   if (wait)

@@ -45,6 +45,13 @@
 #' getJobPars(reg = tmp)
 #' testJob(6, reg = tmp)
 batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaultRegistry()) {
+  list2dt = function(x) { # converts a list to a data.table, but avoids creating column names
+    nn = names(x)
+    if (is.null(nn))
+      names(x) = rep.int("", length(x))
+    as.data.table(x)
+  }
+
   assertRegistry(reg, writeable = TRUE, strict = TRUE)
   if (nrow(reg$defs) > 0L)
     stop("Registry must be empty")
