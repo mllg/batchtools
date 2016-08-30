@@ -400,8 +400,9 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
   if (dir.exists(path)) {
     fns = list.files(path, pattern = "\\.rds$")
     if (length(fns) > 0L)
+      ee = .GlobalEnv
       Map(function(name, fn) {
-          assign(x = name, value = readRDS(fn), envir = .GlobalEnv)
+        assign(x = name, value = readRDS(fn), envir = ee)
       }, name = basename(stri_sub(fns, to = -5L)), fn = file.path(path, fns))
   }
 

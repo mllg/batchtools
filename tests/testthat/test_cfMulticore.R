@@ -32,6 +32,10 @@ test_that("cf socket", {
 })
 
 test_that("Multicore cleans up finished processes", {
+  skip_on_os("windows")
+  skip_on_travis()
+  skip_on_cran()
+
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(Sys.sleep, rep(0.8, 8), reg = reg)
   p = Multicore$new(4)
@@ -46,6 +50,7 @@ test_that("Multicore cleans up finished processes", {
   p$spawn(makeJobCollection(5L, reg = reg))
   expect_character(p$procs$hash, len = 1L, any.missing = FALSE, min.char = 1L)
   p$collect(3)
+  p$collect(1)
   x = parallel::mccollect()
   expect_true(is.null(x) || length(filterNull(x)) == 0L)
 })

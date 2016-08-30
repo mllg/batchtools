@@ -48,6 +48,7 @@ grepLogs = function(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE, reg
   assertString(pattern, min.chars = 1L)
   assertFlag(ignore.case)
   assertFlag(fixed)
+  job.hash = matches = NULL
 
   ids = convertIds(reg, ids)
   tab = inner_join(reg$status[!is.na(job.hash)], ids)[, c("job.id", "job.hash"), with = FALSE]

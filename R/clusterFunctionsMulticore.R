@@ -1,3 +1,7 @@
+# mcparallel / mccollect:
+# -> using 'name' does not work with wait = FALSE (but this is essential)
+# -> to identify spawned jobs, use the return value (unique hash)
+# -> jobs must be collected twice, the second time NULL is returned
 Multicore = R6Class("Multicore",
   cloneable = FALSE,
   public = list(
