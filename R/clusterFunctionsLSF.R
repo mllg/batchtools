@@ -29,7 +29,6 @@ makeClusterFunctionsLSF = function(template = findTemplateFile("lsf")) { # nocov
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
-
     outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("bsub", outfile)
 

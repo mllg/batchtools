@@ -1,40 +1,43 @@
 Multicore = R6Class("Multicore",
   cloneable = FALSE,
   public = list(
-    pids = NULL,
-    hashes = NULL,
+    procs = NULL,
+    ncpus = NA_integer_,
 
     initialize = function(ncpus) {
       if (packageVersion("data.table") > "1.9.6")
-        setthreads(1L)
-      # FIXME: reset threads
+        setthreads(1L) # FIXME: reset threads
       loadNamespace("parallel")
-      self$pids = rep.int(NA_integer_, ncpus)
-      self$hashes = character(ncpus)
-      reg.finalizer(self, function(e) parallel::mccollect(self$pids[!is.na(self$pids)], wait = TRUE), onexit = FALSE)
+      self$ncpus = ncpus
+      self$procs = data.table(pid = integer(0L), hash = character(0L))
+      # reg.finalizer(self, function(e) parallel::mccollect(self$procs$pid, wait = TRUE), onexit = FALSE)
     },
 
     spawn = function(jc) {
-      if (!anyMissing(self$pids))
-        while(!self$collect()) {}
-
-      i = wf(is.na(self$pids))
-      self$pids[i] = parallel::mcparallel(doJobCollection(jc, output = jc$log.file), mc.set.seed = FALSE)$pid
-      self$hashes[i] = jc$job.hash
-      invisible(jc$job.hash)
+      force(jc)
+      repeat {
+        self$collect(0)
+        if (nrow(self$procs) < self$ncpus)
+          break
+        Sys.sleep(1)
+      }
+      pid = parallel::mcparallel(doJobCollection(jc, output = jc$log.file), mc.set.seed = FALSE)$pid
+      self$procs = rbind(self$procs, data.table(pid = pid, hash = jc$job.hash))
+      invisible(as.character(pid))
     },
 
     list = function() {
-      self$collect()
-      self$hashes[nzchar(self$hashes)]
+      self$collect(1)
+      as.character(self$procs$pid)
     },
 
-    collect = function() {
-      results = unlist(filterNull(parallel::mccollect(self$pids[!is.na(self$pids)], wait = FALSE, timeout = 1)))
-      i = which(self$hashes %in% results)
-      self$pids[i] = NA_integer_
-      self$hashes[i] = ""
-      return(length(results) > 0L)
+    collect = function(timeout) {
+      hashes = parallel::mccollect(wait = FALSE, timeout = timeout)
+      if (!is.null(hashes)) {
+        hashes = as.character(filterNull(hashes))
+        self$procs = self$procs[hash %nin% hashes]
+      }
+      self$procs$pid
     }
   )
 )
@@ -66,8 +69,9 @@ makeClusterFunctionsMulticore = function(ncpus = NA_integer_) {
   p = Multicore$new(ncpus)
 
   submitJob = function(reg, jc) {
-    p$spawn(jc)
-    makeSubmitJobResult(status = 0L, batch.id = jc$job.hash, msg = "")
+    force(jc)
+    pid = p$spawn(jc)
+    makeSubmitJobResult(status = 0L, batch.id = pid, msg = "")
   }
 
   listJobsRunning = function(reg) {
@@ -76,5 +80,5 @@ makeClusterFunctionsMulticore = function(ncpus = NA_integer_) {
   }
 
   makeClusterFunctions(name = "Multicore", submitJob = submitJob, listJobsRunning = listJobsRunning,
-    hooks = list(pre.sync = function(reg, fns) p$collect()), store.job = FALSE)
+    hooks = list(pre.sync = function(reg, fns) p$collect(1)), store.job = FALSE)
 }

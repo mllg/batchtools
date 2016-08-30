@@ -25,6 +25,8 @@ makeClusterFunctionsInteractive = function(external = FALSE, write.logs = TRUE) 
   assertFlag(write.logs)
 
   submitJob = function(reg, jc) {
+    assertRegistry(reg, writeable = TRUE)
+    assertClass(jc, "JobCollection")
     if (external) {
       runOSCommand(Rscript(), sprintf("-e \"batchtools::doJobCollection('%s', output = '%s')\"", jc$uri, jc$log.file))
       makeSubmitJobResult(status = 0L, batch.id = "cfInteractive", msg = "")

@@ -12,6 +12,7 @@ Socket = R6Class("Socket",
     },
 
     spawn = function(jc, ...) {
+      force(jc)
       if (all(nzchar(self$pids))) {
         res = snow::recvOneResult(self$cl)
         self$pids[self$pids == res$tag] = ""
@@ -59,6 +60,9 @@ makeClusterFunctionsSocket = function(ncpus = NA_integer_) {
   p = Socket$new(ncpus)
 
   submitJob = function(reg, jc) {
+    assertRegistry(reg, writeable = TRUE)
+    assertClass(jc, "JobCollection")
+
     p$spawn(jc)
     makeSubmitJobResult(status = 0L, batch.id = jc$job.hash, msg = "")
   }
