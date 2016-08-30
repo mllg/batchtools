@@ -80,6 +80,9 @@ test_that("loadRegistry", {
   reg2 = loadRegistry(fd, make.default = FALSE)
   checkTables(reg2)
   expect_equal(reg1, reg2)
+
+  x = readRDS(file.path(fd, "registry.rds"))
+  expect_null(x$cluster.functions)
 })
 
 test_that("sweepRegistry", {

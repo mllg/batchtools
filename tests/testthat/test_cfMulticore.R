@@ -32,9 +32,7 @@ test_that("cf socket", {
 })
 
 test_that("Multicore cleans up finished processes", {
-  skip_on_os("windows")
-  skip_on_travis()
-  skip_on_cran()
+  skip("Interactive test")
 
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(Sys.sleep, rep(0.8, 8), reg = reg)

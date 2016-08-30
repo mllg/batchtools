@@ -44,8 +44,10 @@ Set to \code{character(0)} if you want to disable this lookup.}
 Packages that will always be loaded on each node.
 Uses \code{\link[base]{require}} internally.
 Default is \code{character(0)}.
-Note that you can also set \code{default.packages} in your config.
-These are then merged with the packages specified via \code{packages} during construction of the registry.}
+Note that it is often a good idea to explicitly load the \pkg{methods} package:
+Jobs are started via \code{Rscript} which in contrary to \code{R CMD batch} does not automatically
+load \pkg{methods} for a faster startup. Unfortunately, many packages which depend on \pkg{methods}
+do not state it in their description and thus do not work.}
 
 \item{namespaces}{[\code{character}]\cr
 Same as \code{packages}, but the packages will not be attached.

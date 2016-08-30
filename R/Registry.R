@@ -47,8 +47,10 @@
 #'   Packages that will always be loaded on each node.
 #'   Uses \code{\link[base]{require}} internally.
 #'   Default is \code{character(0)}.
-#'   Note that you can also set \code{default.packages} in your config.
-#'   These are then merged with the packages specified via \code{packages} during construction of the registry.
+#'   Note that it is often a good idea to explicitly load the \pkg{methods} package:
+#'   Jobs are started via \code{Rscript} which in contrary to \code{R CMD batch} does not automatically
+#'   load \pkg{methods} for a faster startup. Unfortunately, many packages which depend on \pkg{methods}
+#'   do not state it in their description and thus do not work.
 #' @param namespaces [\code{character}]\cr
 #'   Same as \code{packages}, but the packages will not be attached.
 #'   Uses \code{\link[base]{requireNamespace}} internally.
@@ -113,18 +115,14 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   seed = if (is.null(seed)) as.integer(runif(1L, 1, .Machine$integer.max / 2L)) else asCount(seed, positive = TRUE)
 
   reg = new.env(parent = asNamespace("batchtools"))
-
   reg$file.dir = file.dir
   reg$work.dir = npath(work.dir)
-  reg$temp.dir = tempdir()
   reg$packages = packages
   reg$namespaces = namespaces
   reg$source = source
   reg$load = load
   reg$seed = seed
   reg$writeable = TRUE
-  reg$cluster.functions = makeClusterFunctionsInteractive()
-  reg$default.resources = list()
 
   reg$defs = data.table(
     def.id    = integer(0L),
@@ -156,20 +154,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
     tag    = character(0L),
     key    = "job.id")
 
-  if (length(conf.file) > 0L) {
-    assertString(conf.file)
-    info("Sourcing configuration file '%s' ...", conf.file)
-    sys.source(conf.file, envir = reg, keep.source = FALSE)
-
-    if (!is.null(reg$cluster.functions))
-      assertClass(reg$cluster.functions, "ClusterFunctions")
-    if (!is.null(reg$default.resources))
-      assertList(reg$default.resources, names = "unique")
-    if (!is.null(reg$default.packages)) {
-      assertCharacter(reg$default.packages, any.missing = FALSE, min.chars = 1L)
-      reg$packages = union(reg$default.packages, reg$packages)
-    }
-  }
+  setSystemConf(reg, conf.file)
 
   if (is.na(file.dir))
     reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
@@ -184,6 +169,22 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   if (make.default)
     batchtools$default.registry = reg
   return(reg)
+}
+
+setSystemConf = function(reg, conf.file) {
+  reg$cluster.functions = makeClusterFunctionsInteractive()
+  reg$default.resources = list()
+  reg$temp.dir = tempdir()
+
+  if (length(conf.file) > 0L) {
+    assertString(conf.file)
+    info("Sourcing configuration file '%s' ...", conf.file)
+    sys.source(conf.file, envir = reg, keep.source = FALSE)
+
+    assertClass(reg$cluster.functions, "ClusterFunctions")
+    assertList(reg$default.resources, names = "unique")
+    assertDirectoryExists(reg$temp.dir, access = "w")
+  }
 }
 
 #' @export
@@ -225,7 +226,7 @@ print.Registry = function(x, ...) {
 #'   If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
 #'   registry in an read-only mode.
 #' @rdname Registry
-loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = "~/.batchtools.conf.R", make.default = TRUE, update.paths = FALSE) {
+loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findConfFile(), make.default = TRUE, update.paths = FALSE) {
   assertString(file.dir)
   assertFlag(make.default)
   assertFlag(update.paths)
@@ -283,8 +284,7 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = "~/.bat
 
   loadRegistryDependencies(reg, switch.wd = TRUE)
   reg$cluster.functions = makeClusterFunctionsInteractive()
-  if (file.exists(conf.file))
-    sys.source(conf.file, envir = reg, keep.source = FALSE)
+  setSystemConf(reg, conf.file)
   if (make.default)
     batchtools$default.registry = reg
   syncRegistry(reg = reg)
@@ -296,6 +296,12 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = "~/.bat
 #' @template reg
 saveRegistry = function(reg = getDefaultRegistry()) {
   if (reg$writeable) {
+    # do not save system specific stuff
+    massign = function(x, ee) .mapply(assign, list(x = names(x), value = x), MoreArgs = list(envir = ee))
+    extracted = mget(c("cluster.functions", "default.resources", "temp.dir"), reg)
+    on.exit(massign(extracted, reg))
+    rm(list = names(extracted), envir = reg)
+
     fn = file.path(reg$file.dir, c("registry.new.rds", "registry.rds"))
     writeRDS(reg, file = fn[1L], wait = TRUE)
     file.rename(fn[1L], fn[2L])
