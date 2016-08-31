@@ -1,47 +1,68 @@
-# mcparallel / mccollect:
-# -> using 'name' does not work with wait = FALSE (but this is essential)
-# -> to identify spawned jobs, use the return value (unique hash)
-# -> jobs must be collected twice, the second time NULL is returned
+if (getRversion() < "3.3.2") {
+  # Backport required to have retrieve job names
+  # Provided patch for upstream which is shipped with R >= 3.3.2
+  # https://stat.ethz.ch/pipermail/r-devel/2016-August/073035.html
+  selectChildren = getFromNamespace("selectChildren", "parallel")
+  readChild = getFromNamespace("readChild", "parallel")
+
+  mccollect = function(pids, timeout = 0) {
+    if (!length(pids)) return (NULL)
+    if (!is.integer(pids)) stop("invalid 'jobs' argument")
+
+    s = selectChildren(pids, timeout)
+    if (is.logical(s) || !length(s)) return(NULL)
+    res = lapply(s, function(x) {
+      r = readChild(x)
+      if (is.raw(r)) unserialize(r) else NULL
+    })
+    names(res) = as.character(pids)[match(s, pids)]
+    res
+  }
+} else {
+  mccollect = function(jobs, timeout = 0) {
+    parallel::mccollect(jobs, wait = FALSE, timeout = timeout)
+  }
+}
+
 Multicore = R6Class("Multicore",
   cloneable = FALSE,
   public = list(
-    procs = NULL,
+    jobs = NULL,
     ncpus = NA_integer_,
 
     initialize = function(ncpus) {
       if (packageVersion("data.table") > "1.9.6")
         setthreads(1L) # FIXME: reset threads
-      loadNamespace("parallel")
       self$ncpus = ncpus
-      self$procs = data.table(pid = integer(0L), hash = character(0L))
-      # reg.finalizer(self, function(e) parallel::mccollect(self$procs$pid, wait = TRUE), onexit = FALSE)
+      self$jobs = data.table(pid = integer(0L), count = integer(0L))
+      reg.finalizer(self, function(e) mccollect(self$procs$pid, timeout = 1), onexit = FALSE)
     },
 
     spawn = function(jc) {
       force(jc)
       repeat {
         self$collect(0)
-        if (nrow(self$procs) < self$ncpus)
+        if (nrow(self$jobs) < self$ncpus)
           break
         Sys.sleep(1)
       }
       pid = parallel::mcparallel(doJobCollection(jc, output = jc$log.file), mc.set.seed = FALSE)$pid
-      self$procs = rbind(self$procs, data.table(pid = pid, hash = jc$job.hash))
+      self$jobs = rbind(self$jobs, data.table(pid = pid, count = 0L))
       invisible(as.character(pid))
     },
 
     list = function() {
       self$collect(1)
-      as.character(self$procs$pid)
+      as.character(self$jobs$pid)
     },
 
     collect = function(timeout) {
-      hashes = parallel::mccollect(wait = FALSE, timeout = timeout)
-      if (!is.null(hashes)) {
-        hashes = as.character(filterNull(hashes))
-        self$procs = self$procs[hash %nin% hashes]
+      res = mccollect(self$jobs$pid, timeout = timeout)
+      if (!is.null(res)) {
+        pids = as.integer(names(res))
+        self$jobs[pid %in% pids, count := count + 1L]
+        self$jobs = self$jobs[count <= 1L]
       }
-      self$procs$pid
     }
   )
 )

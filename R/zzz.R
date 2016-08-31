@@ -18,7 +18,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom progress progress_bar
 #' @importFrom stats runif
-#' @importFrom utils head tail
+#' @importFrom utils head tail getFromNamespace
 "_PACKAGE"
 
 batchtools = new.env(parent = emptyenv())

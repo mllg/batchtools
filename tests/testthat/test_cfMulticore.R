@@ -36,19 +36,20 @@ test_that("Multicore cleans up finished processes", {
 
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(Sys.sleep, rep(0.8, 8), reg = reg)
-  p = Multicore$new(4)
+  parallel::mccollect()
+  p = self = Multicore$new(4)
 
   for (i in 1:4) {
     p$spawn(makeJobCollection(i, reg = reg))
   }
-  expect_data_table(p$procs, ncol = 2)
-  expect_integer(p$procs$pid, len = 4L, any.missing = FALSE, lower = 1L)
-  expect_character(p$procs$hash, len = 4L, any.missing = FALSE, min.char = 1L)
+  expect_data_table(p$jobs, ncol = 2)
+  expect_integer(p$jobs$pid, len = 4L, any.missing = FALSE, lower = 0L)
+  expect_integer(p$jobs$count, len = 4L, any.missing = FALSE, lower = 0L, upper = 1L)
   Sys.sleep(1.5)
   p$spawn(makeJobCollection(5L, reg = reg))
-  expect_character(p$procs$hash, len = 1L, any.missing = FALSE, min.char = 1L)
+  expect_integer(p$jobs$pid, len = 1L, any.missing = FALSE, lower = 0L)
   p$collect(3)
   p$collect(1)
   x = parallel::mccollect()
-  expect_true(is.null(x) || length(filterNull(x)) == 0L)
+  expect_true(is.null(x))
 })
