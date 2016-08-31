@@ -35,4 +35,9 @@ test_that("convertIds", {
   expect_equal(tab$job.id, 10:8)
 
   expect_error(convertIds(reg, as.character(1:3)), "not recognized")
+
+  # issue #40
+  ids = chunkIds(5:10, chunk.size = 3, reg = reg)
+  ids = convertIds(reg, ids,  keep.extra = c("job.id", "chunk"))
+  expect_data_table(ids, any.missing = FALSE)
 })

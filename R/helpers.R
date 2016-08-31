@@ -36,10 +36,11 @@ convertIds = function(reg, ids, default = NULL, keep.extra = FALSE, keep.order =
     stop("Duplicated ids provided")
 
   if (!identical(keep.extra, FALSE) && ncol(ids) > 1L) {
+    i = ids[reg$status, on = "job.id", nomatch = 0L, which = TRUE]
     if (isTRUE(keep.extra))
-      return(ids[reg$status[ids, on = "job.id", nomatch = 0L, which = TRUE]])
+      return(ids[i])
     keep.extra = intersect(keep.extra, names(ids))
-    return(ids[reg$status[ids, on = "job.id", nomatch = 0L, which = TRUE], keep.extra, with = FALSE])
+    return(ids[i, keep.extra, with = FALSE])
   }
   return(reg$status[ids, "job.id", on = "job.id", nomatch = 0L, with = FALSE])
 }
