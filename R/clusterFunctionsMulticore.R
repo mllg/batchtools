@@ -33,8 +33,8 @@ Multicore = R6Class("Multicore",
     initialize = function(ncpus) {
       if (packageVersion("data.table") > "1.9.6")
         setthreads(1L) # FIXME: reset threads
-      self$ncpus = ncpus
       self$jobs = data.table(pid = integer(0L), count = integer(0L))
+      self$ncpus = ncpus
       reg.finalizer(self, function(e) mccollect(self$procs$pid, timeout = 1), onexit = FALSE)
     },
 
@@ -52,13 +52,15 @@ Multicore = R6Class("Multicore",
     },
 
     list = function() {
-      self$collect(1)
+      self$collect(0)
       as.character(self$jobs$pid)
     },
 
     collect = function(timeout) {
-      res = mccollect(self$jobs$pid, timeout = timeout)
-      if (!is.null(res)) {
+      repeat {
+        res = mccollect(self$jobs$pid, timeout = timeout)
+        if (is.null(res))
+          break
         pids = as.integer(names(res))
         self$jobs[pid %in% pids, count := count + 1L]
         self$jobs = self$jobs[count <= 1L]
@@ -86,7 +88,7 @@ Multicore = R6Class("Multicore",
 makeClusterFunctionsMulticore = function(ncpus = NA_integer_) {
   if (testOS("windows"))
     stop("ClusterFunctionsMulticore do not support Windows. Use makeClusterFunctionsSocket instead.")
-  assertCount(ncpus, positive = TRUE, na.ok = TRUE)
+  ncpus = asCount(ncpus, na.ok = TRUE, positive = TRUE)
   if (is.na(ncpus)) {
     ncpus = max(getOption("mc.cores", parallel::detectCores()), 1L)
     info("Auto-detected %i CPUs", ncpus)
