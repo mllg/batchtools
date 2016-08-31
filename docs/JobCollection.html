@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>makeJobCollection. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>JobCollection Constructor</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='JobCollection.html'>makeJobCollection</a></span><span class="keyword">(</span><span class="argument">ids</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">resources</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>ids</dt>
+      <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
+with a column named &#147;job.id&#148;.
+Alternatively, you may also pass a vector of integerish job ids.
+If not set, defaults to all jobs.</dd>
+      <dt>resources</dt>
+      <dd>[<code>list</code>]
+Named list of resources. Default is <code>list()</code>.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>JobCollection</code>].
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p><code>makeJobCollection</code> takes multiple job ids and creates an object of class &#147;JobCollection&#148; which holds all
+necessary information for the calculation with <code><a href='doJobCollection.html'>doJobCollection</a></code>. It is implemented as an environment
+with the following variables:
+<dl>
+ <dt>file.dir</dt><dd><code>file.dir</code> of the <a href='Registry.html'>Registry</a>.</dd></p>
+
+      <p><dt>work.dir:</dt><dd><code>work.dir</code> of the <a href='Registry.html'>Registry</a>.</dd></p>
+
+      <p><dt>job.hash</dt><dd>Unique identifier of the job. Used to create names on the file system.</dd></p>
+
+      <p><dt>log.file</dt><dd>Location of the designated log file for this job.</dd></p>
+
+      <p><dt>packages</dt><dd>Vector of packages to load on the slaves, see <a href='Registry.html'>Registry</a>.</dd></p>
+
+      <p><dt>resources:</dt><dd>Named list of of specified computational resources.</dd></p>
+
+      <p><dt>uri</dt><dd>Location of the job description file (saved with <code>link[base]{saveRDS}</code> on the file system.</dd></p>
+
+      <p><dt>defs</dt><dd><code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> holding individual job information. See examples.</dd></p>
+
+      <p></dl></p>
+
+      <p>If your <a href='makeClusterFunctions.html'>ClusterFunctions</a> uses a template, <code><a href='http://www.rdocumentation.org/packages/brew/topics/brew'>brew</a></code> will be executed in the environment of such
+a collection. Thus all variables available inside the job can be used in the template.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+<span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">identity</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 5 jobs ...</strong>
+<div class='input'><span class="symbol">jc</span> <span class="assignement">=</span> <span class="functioncall"><a href='JobCollection.html'>makeJobCollection</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/ls'>ls</a></span><span class="keyword">(</span><span class="symbol">jc</span><span class="keyword">)</span></div>
+<div class='output'> [1] &quot;array.var&quot;  &quot;debug&quot;      &quot;file.dir&quot;   &quot;job.hash&quot;   &quot;jobs&quot;      
+ [6] &quot;load&quot;       &quot;log.file&quot;   &quot;namespaces&quot; &quot;packages&quot;   &quot;resources&quot; 
+[11] &quot;seed&quot;       &quot;source&quot;     &quot;uri&quot;        &quot;work.dir&quot;  
+</div>
+<div class='input'><span class="symbol">jc</span><span class="keyword">$</span><span class="symbol">jobs</span></div>
+<div class='output'>   job.id   pars
+1:      1 &lt;list&gt;
+2:      2 &lt;list&gt;
+3:      3 &lt;list&gt;
+</div>
+<div class='input'><span class="symbol">jc</span><span class="keyword">$</span><span class="symbol">jobs</span><span class="keyword">$</span><span class="symbol">pars</span></div>
+<div class='output'>[[1]]
+[[1]][[1]]
+[1] 1
+
+
+[[2]]
+[[2]][[1]]
+[1] 2
+
+
+[[3]]
+[[3]][[1]]
+[1] 3
+
+
+</div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>JobCollection</li><li>makeJobCollection</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+    <h2>See also</h2>
+      <p>Other JobCollection: <code><a href='doJobCollection.html'>doJobCollection</a></code></p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

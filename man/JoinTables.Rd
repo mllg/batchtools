@@ -8,7 +8,7 @@
 \alias{ojoin}
 \alias{rjoin}
 \alias{sjoin}
-\title{Inner, Left, Right, Outer and Anti Join for Job Tables}
+\title{Inner, Left, Right, Outer, Semi and Anti Join for Job Tables}
 \usage{
 ijoin(x, y)
 

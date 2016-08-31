@@ -32,6 +32,7 @@ R script in the \dQuote{jobs}-subdir of your files directory, otherwise in the t
 Other ClusterFunctionsHelper: \code{\link{cfHandleUnknownSubmitError}},
   \code{\link{cfKillJob}},
   \code{\link{cfReadBrewTemplate}},
-  \code{\link{makeSubmitJobResult}}
+  \code{\link{makeSubmitJobResult}},
+  \code{\link{runOSCommand}}
 }
 

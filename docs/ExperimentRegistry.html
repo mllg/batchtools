@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>ExperimentRegistry. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>ExperimentRegistry Constructor</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="string">"registry"</span><span class="keyword">,</span> <span class="argument">work.dir</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">conf.file</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall">findConfFile</span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">packages</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/character'>character</a></span><span class="keyword">(</span><span class="number">0L</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">namespaces</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/character'>character</a></span><span class="keyword">(</span><span class="number">0L</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">source</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/character'>character</a></span><span class="keyword">(</span><span class="number">0L</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">load</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/character'>character</a></span><span class="keyword">(</span><span class="number">0L</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">seed</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">make.default</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>file.dir</dt>
+      <dd>[<code>character(1)</code>]
+  Path where all files of the registry are saved.
+  Default is directory &#147;registry&#148; in the current working directory.
+  Path will get normalized unless it is provided relative to the home directory
+  (i.e., starting with &#147;~&#148;).
+
+  If you pass <code>NA</code>, a temporary directory will be used.
+  This way, you can create disposable registries for <code><a href='btlapply.html'>btlapply</a></code> or examples.
+  By default, the temporary directory <code><a href='http://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a>()</code> will be used.
+  If you want to use another directory, e.g. a directory which is shared between nodes,
+  you can set it in your configuration file by setting the variable <code>temp.dir</code>.</dd>
+      <dt>work.dir</dt>
+      <dd>[<code>character(1)</code>]
+Working directory for R process when experiment is executed.
+For <code>makeRegistry</code>, this defaults to the current working directory.
+<code>loadRegistry</code> uses the stored <code>work.dir</code>, but you may also explicitly provide one
+yourself.
+Path will get normalized unless it is provided relative to the home directory
+(i.e., starting with &#147;~&#148;).</dd>
+      <dt>conf.file</dt>
+      <dd>[<code>character(1)</code>]
+Path to a configuration file which is sourced directly after the registry is created.
+For example, you can set cluster functions or default resources in it.
+The script is executed inside the registry environment, thus you can directly set
+all slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.
+Defaults to a heuristic which first looks for &#147;batchtools.conf.R&#148; in the current working directory
+and then tries &#147;.batchtools.conf.R&#148; in the home directory.
+Set to <code>character(0)</code> if you want to disable this lookup.</dd>
+      <dt>packages</dt>
+      <dd>[<code>character</code>]
+Packages that will always be loaded on each node.
+Uses <code><a href='http://www.rdocumentation.org/packages/base/topics/library'>require</a></code> internally.
+Default is <code>character(0)</code>.
+Note that it is often a good idea to explicitly load the <span class = "pkg">methods</span> package:
+Jobs are started via <code>Rscript</code> which in contrary to <code>R CMD batch</code> does not automatically
+load <span class = "pkg">methods</span> for a faster startup. Unfortunately, many packages which depend on <span class = "pkg">methods</span>
+do not state it in their description and thus do not work.</dd>
+      <dt>namespaces</dt>
+      <dd>[<code>character</code>]
+Same as <code>packages</code>, but the packages will not be attached.
+Uses <code><a href='http://www.rdocumentation.org/packages/base/topics/ns-load'>requireNamespace</a></code> internally.
+Default is <code>character(0)</code>.</dd>
+      <dt>source</dt>
+      <dd>[<code>character</code>]
+Files which should be sourced on the slaves prior to executing a job.
+Calls <code><a href='http://www.rdocumentation.org/packages/base/topics/sys.source'>sys.source</a></code> using the <code><a href='http://www.rdocumentation.org/packages/base/topics/environment'>.GlobalEnv</a></code>.</dd>
+      <dt>load</dt>
+      <dd>[<code>character</code>]
+Files which should be loaded on the slaves prior to executing a job.
+Calls <code><a href='http://www.rdocumentation.org/packages/base/topics/load'>load</a></code> using the <code><a href='http://www.rdocumentation.org/packages/base/topics/environment'>.GlobalEnv</a></code>.</dd>
+      <dt>seed</dt>
+      <dd>[<code>integer(1)</code>]
+Start seed for jobs. Each job uses the (<code>seed</code> + <code>job.id</code>) as seed.
+Default is a random number in the range [1, <code>.Machine$integer.max/2</code>].</dd>
+      <dt>make.default</dt>
+      <dd>[<code>logical(1)</code>]
+If set to <code>TRUE</code>, the created registry is saved inside the package
+namespace and acts as default registry. You might want to switch this
+off if you work with multiple registries simultaneously.
+Default is <code>TRUE</code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>ExperimentRegistry</code>].
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p><code>makeExperimentRegistry</code> constructs a special <code><a href='Registry.html'>Registry</a></code> which
+is suitable for the definition of large scale computer experiments.</p>
+
+      <p>Each experiments consists of a <code><a href='ProblemAlgorithm.html'>Problem</a></code> and an <code><a href='ProblemAlgorithm.html'>Algorithm</a></code>.
+These can be parametrized with <code><a href='addExperiments.html'>addExperiments</a></code> to actually define computational
+jobs.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+<span class="functioncall"><a href='ProblemAlgorithm.html'>addProblem</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="string">"p1"</span><span class="keyword">,</span>
+  <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">job</span><span class="keyword">,</span> <span class="formalargs">data</span><span class="keyword">,</span> <span class="formalargs">n</span><span class="keyword">,</span> <span class="formalargs">mean</span><span class="keyword">,</span> <span class="formalargs">sd</span><span class="keyword">,</span> <span class="formalargs">...</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span><span class="keyword">(</span><span class="symbol">n</span><span class="keyword">,</span> <span class="argument">mean</span> <span class="argument">=</span> <span class="symbol">mean</span><span class="keyword">,</span> <span class="argument">sd</span> <span class="argument">=</span> <span class="symbol">sd</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="functioncall"><a href='ProblemAlgorithm.html'>addAlgorithm</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="string">"a1"</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">job</span><span class="keyword">,</span> <span class="formalargs">data</span><span class="keyword">,</span> <span class="formalargs">instance</span><span class="keyword">,</span> <span class="formalargs">...</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span><span class="keyword">(</span><span class="symbol">instance</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="functioncall"><a href='addExperiments.html'>addExperiments</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">p1</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/J'>CJ</a></span><span class="keyword">(</span><span class="argument">n</span> <span class="argument">=</span> <span class="number">100</span><span class="keyword">,</span> <span class="argument">mean</span> <span class="argument">=</span> <span class="keyword">-</span><span class="number">3</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">sd</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">a1</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 35 experiments (&#39;p1&#39;[35] x &#39;a1&#39;[1] x repls[1]) ...</strong>
+<div class='input'><span class="functioncall"><a href='submitJobs.html'>submitJobs</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Submitting 35 jobs in 35 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<div class='input'><span class="functioncall"><a href='waitForJobs.html'>waitForJobs</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Syncing 35 files ...</strong>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'>
+<span class="comment"># Reduce the results</span>
+<span class="functioncall"><a href='reduceResults.html'>reduceResults</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">aggr</span><span class="keyword">,</span> <span class="formalargs">res</span><span class="keyword">,</span> <span class="formalargs">...</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="symbol">aggr</span><span class="keyword">,</span> <span class="symbol">res</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'> [1] -3.223251138 -3.120772089 -2.448285728 -3.249251525 -2.620458443
+ [6] -1.908966007 -2.064567407 -2.149866838 -2.049372167 -0.819688094
+[11] -1.085622521 -1.002551601 -0.799541128 -1.408031908 -1.011927011
+[16] -0.002468501 -0.029269778 -0.162690270 -0.379753396 -0.612943870
+[21]  0.994477663  0.889824162  0.732233853  0.855844425  1.689137261
+[26]  2.132431667  2.122687884  1.727841373  2.291852217  2.570917208
+[31]  3.030025274  3.047823622  2.606961831  3.578196703  3.237495901
+</div>
+<div class='input'>
+<span class="comment"># Join info table with results</span>
+<span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='findJobs.html'>findDone</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="symbol">tab</span> <span class="assignement">=</span> <span class="functioncall"><a href='getJobTable.html'>getJobPars</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="argument">ids</span> <span class="argument">=</span> <span class="symbol">ids</span><span class="keyword">)</span>
+<span class="symbol">res</span> <span class="assignement">=</span> <span class="functioncall"><a href='reduceResultsList.html'>reduceResultsDataTable</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="argument">ids</span> <span class="argument">=</span> <span class="symbol">ids</span><span class="keyword">)</span>
+<span class="symbol">tab</span><span class="keyword">[</span><span class="symbol">res</span><span class="keyword">]</span></div>
+<div class='output'>    job.id problem algorithm   n mean sd           V1
+ 1:      1      p1        a1 100   -3  1 -3.223251138
+ 2:      2      p1        a1 100   -3  2 -3.120772089
+ 3:      3      p1        a1 100   -3  3 -2.448285728
+ 4:      4      p1        a1 100   -3  4 -3.249251525
+ 5:      5      p1        a1 100   -3  5 -2.620458443
+ 6:      6      p1        a1 100   -2  1 -1.908966007
+ 7:      7      p1        a1 100   -2  2 -2.064567407
+ 8:      8      p1        a1 100   -2  3 -2.149866838
+ 9:      9      p1        a1 100   -2  4 -2.049372167
+10:     10      p1        a1 100   -2  5 -0.819688094
+11:     11      p1        a1 100   -1  1 -1.085622521
+12:     12      p1        a1 100   -1  2 -1.002551601
+13:     13      p1        a1 100   -1  3 -0.799541128
+14:     14      p1        a1 100   -1  4 -1.408031908
+15:     15      p1        a1 100   -1  5 -1.011927011
+16:     16      p1        a1 100    0  1 -0.002468501
+17:     17      p1        a1 100    0  2 -0.029269778
+18:     18      p1        a1 100    0  3 -0.162690270
+19:     19      p1        a1 100    0  4 -0.379753396
+20:     20      p1        a1 100    0  5 -0.612943870
+21:     21      p1        a1 100    1  1  0.994477663
+22:     22      p1        a1 100    1  2  0.889824162
+23:     23      p1        a1 100    1  3  0.732233853
+24:     24      p1        a1 100    1  4  0.855844425
+25:     25      p1        a1 100    1  5  1.689137261
+26:     26      p1        a1 100    2  1  2.132431667
+27:     27      p1        a1 100    2  2  2.122687884
+28:     28      p1        a1 100    2  3  1.727841373
+29:     29      p1        a1 100    2  4  2.291852217
+30:     30      p1        a1 100    2  5  2.570917208
+31:     31      p1        a1 100    3  1  3.030025274
+32:     32      p1        a1 100    3  2  3.047823622
+33:     33      p1        a1 100    3  3  2.606961831
+34:     34      p1        a1 100    3  4  3.578196703
+35:     35      p1        a1 100    3  5  3.237495901
+    job.id problem algorithm   n mean sd           V1
+</div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>ExperimentRegistry</li><li>makeExperimentRegistry</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+    <h2>See also</h2>
+      <p>Other Experiment: <code><a href='addExperiments.html'>addExperiments</a></code>,
+  <code><a href='removeExperiments.html'>removeExperiments</a></code>,
+  <code><a href='summarizeExperiments.html'>summarizeExperiments</a></code></p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

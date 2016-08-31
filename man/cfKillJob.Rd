@@ -34,6 +34,7 @@ command returns an exit code > 0, the command is repeated after a 1 second sleep
 Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
   \code{\link{cfHandleUnknownSubmitError}},
   \code{\link{cfReadBrewTemplate}},
-  \code{\link{makeSubmitJobResult}}
+  \code{\link{makeSubmitJobResult}},
+  \code{\link{runOSCommand}}
 }
 

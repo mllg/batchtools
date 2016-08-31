@@ -284,7 +284,7 @@ getBatchIds = function(reg, status = "all") {
 #'   If \code{TRUE}, the commands send to the OS are printed.
 #' @return [\code{named list}] with \dQuote{exit.code} (integer) and \dQuote{output} (character).
 #' @export
-#' @family ClusterFunctions
+#' @family ClusterFunctionsHelper
 #' @examples
 #' \dontrun{
 #' runOSCommand("ls")

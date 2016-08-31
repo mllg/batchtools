@@ -25,6 +25,7 @@ Simply reads your template and returns it as a character vector.
 Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
   \code{\link{cfHandleUnknownSubmitError}},
   \code{\link{cfKillJob}},
-  \code{\link{makeSubmitJobResult}}
+  \code{\link{makeSubmitJobResult}},
+  \code{\link{runOSCommand}}
 }
 

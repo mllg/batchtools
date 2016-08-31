@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>reduceResultsList. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Apply Functions on Results</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='reduceResultsList.html'>reduceResultsList</a></span><span class="keyword">(</span><span class="argument">ids</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">fun</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='reduceResultsList.html'>reduceResultsDataTable</a></span><span class="keyword">(</span><span class="argument">ids</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">fun</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">fill</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span>
+  <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>ids</dt>
+      <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
+with a column named &#147;job.id&#148;.
+Alternatively, you may also pass a vector of integerish job ids.
+If not set, defaults to the return value of <code><a href='findJobs.html'>findDone</a></code>.</dd>
+      <dt>fun</dt>
+      <dd>[<code>function</code>]
+Function to apply to each result. The result is passed unnamed as first argument. If <code>NULL</code>, the identity is used.
+If the function has the formal argument &#147;job&#148;, the <code><a href='JobExperiment.html'>Job</a></code>/<code><a href='JobExperiment.html'>Experiment</a></code> is passed to the function.</dd>
+      <dt>...</dt>
+      <dd>[<code>ANY</code>]
+Additional arguments passed to to function <code>fun</code>.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+      <dt>fill</dt>
+      <dd>[<code>logical(1)</code>]
+In <code>reduceResultsDataTable</code>: This flag is passed down to
+<code><a href='http://www.rdocumentation.org/packages/data.table/topics/rbindlist'>rbindlist</a></code> which is used to convert the results
+to a <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+<code>reduceResultsList</code> returns a list of the results in the same order as the provided ids.
+  <code>reduceResultsDataTable</code> returns a <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> with columns &#147;job.id&#148; and additional result columns
+  created via <code><a href='http://www.rdocumentation.org/packages/data.table/topics/rbindlist'>rbindlist</a></code>, sorted by &#147;job.id&#148;.
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Applies a function on the results of your finished jobs and thereby collects
+them in a <code><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></code> or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>.
+The later requires the provided function to return a list (or <code>data.frame</code>) of scalar values.
+See <code><a href='http://www.rdocumentation.org/packages/data.table/topics/rbindlist'>rbindlist</a></code> for features and limitations of the aggregation.</p>
+
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+
+      <p>If you have thousands of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
+can significantly increase the performance.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+<span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">x</span><span class="keyword">)</span> <span class="symbol">x</span><span class="keyword">^</span><span class="number">2</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">10</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 10 jobs ...</strong>
+<div class='input'><span class="functioncall"><a href='submitJobs.html'>submitJobs</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Submitting 10 jobs in 10 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<div class='input'><span class="functioncall"><a href='waitForJobs.html'>waitForJobs</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Syncing 10 files ...</strong>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'><span class="functioncall"><a href='reduceResultsList.html'>reduceResultsList</a></span><span class="keyword">(</span><span class="argument">fun</span> <span class="argument">=</span> <span class="symbol">sqrt</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>[[1]]
+[1] 1
+
+[[2]]
+[1] 2
+
+[[3]]
+[1] 3
+
+[[4]]
+[1] 4
+
+[[5]]
+[1] 5
+
+[[6]]
+[1] 6
+
+[[7]]
+[1] 7
+
+[[8]]
+[1] 8
+
+[[9]]
+[1] 9
+
+[[10]]
+[1] 10
+
+</div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>reduceResultsDataTable</li><li>reduceResultsList</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+    <h2>See also</h2>
+      <p><code><a href='reduceResults.html'>reduceResults</a></code>.</p>
+
+      <p>Other Results: <code><a href='loadResult.html'>loadResult</a></code>,
+  <code><a href='reduceResults.html'>reduceResults</a></code></p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

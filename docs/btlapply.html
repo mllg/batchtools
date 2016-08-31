@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>btlapply. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Synchronous Apply Functions</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='btlapply.html'>btlapply</a></span><span class="keyword">(</span><span class="symbol">X</span><span class="keyword">,</span> <span class="symbol">fun</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">NA</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='btlapply.html'>btmapply</a></span><span class="keyword">(</span><span class="symbol">fun</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">more.args</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">simplify</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">use.names</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">,</span>
+  <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">NA</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>X</dt>
+      <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/vector'>vector</a></code>]
+Vector to apply over.</dd>
+      <dt>fun</dt>
+      <dd>[<code>function</code>]
+Function to apply.</dd>
+      <dt>...</dt>
+      <dd>[<code>ANY</code>]
+Additional arguments passed to <code>fun</code> (<code>btlapply</code>) or vectors to map over (<code>btmapply</code>).</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+      <dt>more.args</dt>
+      <dd>[<code>list</code>]
+Additional arguments passed to <code>fun</code>.</dd>
+      <dt>simplify</dt>
+      <dd>[<code>logical(1)</code>]
+Simplify the results using <code><a href='http://www.rdocumentation.org/packages/base/topics/lapply'>simplify2array</a></code>?</dd>
+      <dt>use.names</dt>
+      <dd>[<code>logical(1)</code>]
+Use names of the input to name the output?</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>list</code>] List with the results of the function call.
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>This is a set of convenience functions as counterparts to the sequential
+apply functions in base R: <code>btlapply</code> for <code><a href='http://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></code> and
+<code>btmapply</code> for <code>link[base]{mapply}</code>.
+Internally the jobs are created in a temporary registry (see argument <code>file.dir</code> of
+<code><a href='Registry.html'>makeRegistry</a></code>) and <code><a href='batchMap.html'>batchMap</a></code> is called on the input vector(s).
+After <code><a href='waitForJobs.html'>waitForJobs</a></code> terminated, the result is reduced into a list.
+Because the result is only returned as soon as all jobs are terminated,
+the execution is called synchronized (in contrast to the usual asynchronous execution on
+classical batch systems).</p>
+
+      <p>Note that these functions are one suitable for short and fail-safe operations
+on batch system. If some jobs fail, you have to retrieve partial results from the
+registry directory yourself.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="functioncall"><a href='btlapply.html'>btlapply</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">x</span><span class="keyword">)</span> <span class="symbol">x</span><span class="keyword">^</span><span class="number">2</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 3 jobs ...</strong>
+<strong class='message'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<strong class='message'>Syncing 3 files ...</strong>
+<div class='output'>[[1]]
+[1] 1
+
+[[2]]
+[1] 4
+
+[[3]]
+[1] 9
+
+</div>
+<div class='input'><span class="functioncall"><a href='btlapply.html'>btmapply</a></span><span class="keyword">(</span><span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">x</span><span class="keyword">,</span> <span class="formalargs">y</span><span class="keyword">,</span> <span class="formalargs">z</span><span class="keyword">)</span> <span class="symbol">x</span> <span class="keyword">+</span> <span class="symbol">y</span> <span class="keyword">+</span> <span class="symbol">z</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">more.args</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">z</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">simplify</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 3 jobs ...</strong>
+<strong class='message'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<strong class='message'>Syncing 3 files ...</strong>
+<div class='output'>[1] 3 5 7
+</div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>btlapply</li><li>btmapply</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

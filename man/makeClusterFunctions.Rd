@@ -65,7 +65,6 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsSocket}},
-  \code{\link{makeClusterFunctionsTorque}},
-  \code{\link{runOSCommand}}
+  \code{\link{makeClusterFunctionsTorque}}
 }
 

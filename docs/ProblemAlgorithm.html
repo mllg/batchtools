@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>addAlgorithm. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Define Problems and Algorithms for Experiments</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='ProblemAlgorithm.html'>addAlgorithm</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">fun</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='ProblemAlgorithm.html'>removeAlgorithm</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='ProblemAlgorithm.html'>getAlgorithmIds</a></span><span class="keyword">(</span><span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='ProblemAlgorithm.html'>addProblem</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">data</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">fun</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">seed</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
+  <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='ProblemAlgorithm.html'>removeProblem</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='ProblemAlgorithm.html'>getProblemIds</a></span><span class="keyword">(</span><span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>name</dt>
+      <dd>[<code>character(1)</code>]
+Unique identifier for the problem or algorithm.</dd>
+      <dt>fun</dt>
+      <dd>[<code>function</code>]
+  For <code>addProblem</code>, the function defining the stochastic problem part.
+  The static part is passed to this function with name &#147;data&#148; and the <code><a href='JobExperiment.html'>Job</a></code>/<code><a href='JobExperiment.html'>Experiment</a></code>
+  is passed as &#147;job&#148;.
+  Therefore, your function must have the formal arguments &#147;job&#148; and &#147;data&#148; (or dots <code>...</code>).
+
+  For <code>addAlgorithm</code>, the algorithm function. The static part is passed as &#147;data&#148;, the generated
+  problem instance is passed as &#147;instance&#148; and the <code><a href='JobExperiment.html'>Job</a></code>/<code><a href='JobExperiment.html'>Experiment</a></code> as &#147;job&#148;.
+  Therefore, your function must have the formal arguments &#147;job&#148;, &#147;data&#148; and &#147;instance&#148; (or dots <code>...</code>).
+
+  If you do not provide a function, it defaults to a function which just returns the data part (Problem) or the instance (Algorithm).</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+      <dt>data</dt>
+      <dd>[<code>ANY</code>]
+Static problem part. Default is <code>NULL</code>.</dd>
+      <dt>seed</dt>
+      <dd>[<code>integer(1)</code>]
+Start seed for this problem. This allows the &#147;synchronization&#148; of a stochastic
+problem across algorithms, so that different algorithms are evaluated on the same stochastic instance.
+If the problem seed is defined, the seeding mechanism works as follows:
+(1) Before the dynamic part of a problem is instantiated,
+the seed of the problem + [replication number] - 1 is set, i.e. the first
+replication uses the problem seed. (2) The stochastic part of the problem is
+instantiated. (3) From now on the usual experiment seed of the registry is used,
+see <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>.
+If <code>seed</code> is set to <code>NULL</code> (default), the job seed is used to instantiate the problem and
+different algorithms see different stochastic instances of the same problem.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>Problem</code>]. Object of class &#147;Problem&#148; (invisibly).
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Problems may consist of up to two parts. A static, immutable part (<code>data</code> in <code>addProblem</code>)
+and a dynamic, stochastic part (<code>fun</code> in <code>addProblem</code>).
+For example, for statistical learning problems a data frame would be the static problem part while
+a resampling function would be the stochastic part which creates problem instance.
+This instance is then typically passed to a learning algorithm like a wrapper around a statistical model
+(<code>fun</code> in <code>addAlgorithm</code>).</p>
+
+      <p>The functions serialize the components to the file system and register the respective problem or algorithm
+names in the <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>.</p>
+
+      <p><code>getProblemIds</code> and <code>getAlgorithmIds</code> can be used to retrieve the IDs of already defined problems
+and algorithms, respectively.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+<span class="functioncall"><a href='ProblemAlgorithm.html'>addProblem</a></span><span class="keyword">(</span><span class="string">"p1"</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">job</span><span class="keyword">,</span> <span class="formalargs">data</span><span class="keyword">)</span> <span class="symbol">data</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='ProblemAlgorithm.html'>addProblem</a></span><span class="keyword">(</span><span class="string">"p2"</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">job</span><span class="keyword">,</span> <span class="formalargs">data</span><span class="keyword">)</span> <span class="symbol">job</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='ProblemAlgorithm.html'>getProblemIds</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>[1] &quot;p1&quot; &quot;p2&quot;
+</div>
+<div class='input'>
+<span class="functioncall"><a href='ProblemAlgorithm.html'>addAlgorithm</a></span><span class="keyword">(</span><span class="string">"a1"</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">job</span><span class="keyword">,</span> <span class="formalargs">data</span><span class="keyword">,</span> <span class="formalargs">instance</span><span class="keyword">)</span> <span class="symbol">instance</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='ProblemAlgorithm.html'>getAlgorithmIds</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>[1] &quot;a1&quot;
+</div>
+<div class='input'>
+<span class="functioncall"><a href='ProblemAlgorithm.html'>removeAlgorithm</a></span><span class="keyword">(</span><span class="string">"a1"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Removing Algorithm &#39;a1&#39; and 0 corresponding jobs ...</strong>
+<div class='input'><span class="functioncall"><a href='ProblemAlgorithm.html'>getAlgorithmIds</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>character(0)
+</div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>Algorithm</li><li>Problem</li><li>ProblemAlgorithm</li><li>addAlgorithm</li><li>addProblem</li><li>getAlgorithmIds</li><li>getProblemIds</li><li>removeAlgorithm</li><li>removeProblem</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

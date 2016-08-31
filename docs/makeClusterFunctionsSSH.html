@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>makeClusterFunctionsSSH. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>ClusterFunctions for Remote SSH Execution</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></span><span class="keyword">(</span><span class="symbol">workers</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>workers</dt>
+      <dd>[<code>list</code> of <code><a href='Worker.html'>Worker</a></code>]
+List of Workers as constructed with <code><a href='Worker.html'>Worker</a></code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>].
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Jobs are spawned by starting multiple R sessions via <code>Rscript</code> over SSH.
+If the hostname of the <code><a href='Worker.html'>Worker</a></code> equals &#147;localhost&#148;,
+<code>Rscript</code> is called directly so that you do not need to have an SSH client installed.</p>
+
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+
+      <p>If you use a custom &#147;.ssh/config&#148; file, make sure your
+ProxyCommand passes &#145;-q&#146; to ssh, otherwise each output will
+end with the message &#147;Killed by signal 1&#148; and this will break
+the communication with the nodes.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment">## Not run: ------------------------------------</span>
+<span class="comment"># # cluster functions for multicore execution on the local machine</span>
+<span class="comment"># makeClusterFunctionsSSH(list(Worker$new("localhost", ncpus = 2)))</span>
+<span class="comment">## ---------------------------------------------</span></div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>makeClusterFunctionsSSH</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+    <h2>See also</h2>
+      <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+  <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
+  <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
+  <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
+  <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
+  <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
+  <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
+  <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
+  <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code>,
+  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

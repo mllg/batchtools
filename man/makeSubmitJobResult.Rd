@@ -32,6 +32,8 @@ value for the \code{submitJob} function.
 \seealso{
 Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
   \code{\link{cfHandleUnknownSubmitError}},
-  \code{\link{cfKillJob}}, \code{\link{cfReadBrewTemplate}}
+  \code{\link{cfKillJob}},
+  \code{\link{cfReadBrewTemplate}},
+  \code{\link{runOSCommand}}
 }
 

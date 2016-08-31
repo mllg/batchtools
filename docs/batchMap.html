@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>batchMap. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Map Operation for Batch Systems</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">fun</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">args</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">more.args</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>fun</dt>
+      <dd>[<code>function</code>]
+Function to map over <code>...</code>.</dd>
+      <dt>...</dt>
+      <dd>[any]
+Arguments to vectorize over (list or vector).
+Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the maximum length).
+Mutually exclusive with <code>args</code>.</dd>
+      <dt>args</dt>
+      <dd>[<code>list</code> | <code>data.frame</code>]
+Arguments to vectorize over as (named) list or data frame.
+Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the maximum length).
+Mutually exclusive with <code>...</code>.</dd>
+      <dt>more.args</dt>
+      <dd>[<code>list</code>]
+A list of other arguments passed to <code>fun</code>.
+Default is an empty list.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]. Generated job ids are stored in the column &#147;job.id&#148;.
+  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>A parallel <code><a href='http://www.rdocumentation.org/packages/base/topics/funprog'>Map</a></code> for batch systems.
+Note that this function only defines the jobs.
+The actual computation is started with <code><a href='submitJobs.html'>submitJobs</a></code> and results
+can be collected with <code><a href='reduceResultsList.html'>reduceResultsList</a></code>, <code><a href='reduceResults.html'>reduceResults</a></code> or
+<code><a href='loadResult.html'>loadResult</a></code>.
+For a synchronous <code><a href='http://www.rdocumentation.org/packages/base/topics/funprog'>Map</a></code>-like execution see <code><a href='btlapply.html'>btmapply</a></code>.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment"># example using "..." and more.args</span>
+<span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+<span class="symbol">f</span> <span class="assignement">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">x</span><span class="keyword">,</span> <span class="formalargs">y</span><span class="keyword">)</span> <span class="symbol">x</span><span class="keyword">^</span><span class="number">2</span> <span class="keyword">+</span> <span class="symbol">y</span>
+<span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">f</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">10</span><span class="keyword">,</span> <span class="argument">more.args</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">y</span> <span class="argument">=</span> <span class="number">100</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 10 jobs ...</strong>
+<div class='input'><span class="functioncall"><a href='getJobTable.html'>getJobPars</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>    job.id  x
+ 1:      1  1
+ 2:      2  2
+ 3:      3  3
+ 4:      4  4
+ 5:      5  5
+ 6:      6  6
+ 7:      7  7
+ 8:      8  8
+ 9:      9  9
+10:     10 10
+</div>
+<div class='input'><span class="functioncall"><a href='testJob.html'>testJob</a></span><span class="keyword">(</span><span class="number">6</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span> <span class="comment"># 100 + 6^2 = 136</span></div>
+<div class='output'>[1] 136
+</div>
+<div class='input'>
+<span class="comment"># vector recycling</span>
+<span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+<span class="symbol">f</span> <span class="assignement">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">...</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="symbol">...</span><span class="keyword">)</span>
+<span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">f</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">6</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 6 jobs ...</strong>
+<div class='input'><span class="functioncall"><a href='getJobTable.html'>getJobPars</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>   job.id x y
+1:      1 1 1
+2:      2 2 2
+3:      3 3 3
+4:      4 1 4
+5:      5 2 5
+6:      6 3 6
+</div>
+<div class='input'>
+<span class="comment"># example for an expand.grid()-like operation on parameters</span>
+<span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+<span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">paste</span><span class="keyword">,</span> <span class="argument">args</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/J'>CJ</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="symbol">letters</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">]</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">more.args</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">sep</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 9 jobs ...</strong>
+<div class='input'><span class="functioncall"><a href='getJobTable.html'>getJobPars</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>   job.id x y
+1:      1 a 1
+2:      2 a 2
+3:      3 a 3
+4:      4 b 1
+5:      5 b 2
+6:      6 b 3
+7:      7 c 1
+8:      8 c 2
+9:      9 c 3
+</div>
+<div class='input'><span class="functioncall"><a href='testJob.html'>testJob</a></span><span class="keyword">(</span><span class="number">6</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>[1] &quot;b3&quot;
+</div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>batchMap</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

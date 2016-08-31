@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>doJobCollection. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Execute Jobs of a JobCollection</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='doJobCollection.html'>doJobCollection</a></span><span class="keyword">(</span><span class="symbol">jc</span><span class="keyword">,</span> <span class="argument">output</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>jc</dt>
+      <dd>[<code><a href='JobCollection.html'>JobCollection</a></code>]
+Either an object of class &#147;JobCollection&#148; as returned by
+<code><a href='JobCollection.html'>makeJobCollection</a></code> or a string point to file containing a
+&#147;JobCollection&#148; (saved with <code><a href='http://www.rdocumentation.org/packages/base/topics/readRDS'>saveRDS</a></code>).</dd>
+      <dt>output</dt>
+      <dd>[<code>character(1)</code>]
+Path to a file to write the output to. Defaults to <code>NULL</code> which means
+that output is written to the active <code><a href='http://www.rdocumentation.org/packages/base/topics/sink'>sink</a></code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code>character(1)</code>]: Hash of the <code><a href='JobCollection.html'>JobCollection</a></code> executed.
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Executes every job in a <code><a href='JobCollection.html'>JobCollection</a></code>.
+This function is intended to be called on the slave.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+<span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">identity</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">2</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 2 jobs ...</strong>
+<div class='input'><span class="symbol">jc</span> <span class="assignement">=</span> <span class="functioncall"><a href='JobCollection.html'>makeJobCollection</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="number">2</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='doJobCollection.html'>doJobCollection</a></span><span class="keyword">(</span><span class="symbol">jc</span><span class="keyword">)</span></div>
+<div class='output'>### [bt 2016-09-01 01:38:21]: Starting calculation of 2 jobs
+### [bt 2016-09-01 01:38:21]: Setting working directory to &#39;/Users/michel/Projekte/batchtools&#39;
+### [bt 2016-09-01 01:38:21]: Memory measurement disabled
+### [bt 2016-09-01 01:38:21]: Starting job [batchtools job.id=1]
+
+### [bt 2016-09-01 01:38:21]: Job terminated successfully [batchtools job.id=1]
+### [bt 2016-09-01 01:38:21]: Starting job [batchtools job.id=2]
+
+### [bt 2016-09-01 01:38:21]: Job terminated successfully [batchtools job.id=2]
+### [bt 2016-09-01 01:38:21]: Calculation finished!
+</div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>doJobCollection</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+    <h2>See also</h2>
+      <p>Other JobCollection: <code><a href='JobCollection.html'>makeJobCollection</a></code></p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

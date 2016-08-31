@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>submitJobs. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Submit Jobs to the Batch Systems</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='submitJobs.html'>submitJobs</a></span><span class="keyword">(</span><span class="argument">ids</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">resources</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>ids</dt>
+      <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
+with a column named &#147;job.id&#148;.
+Alternatively, you may also pass a vector of integerish job ids.
+If not set, defaults to the return value of <code><a href='findJobs.html'>findNotSubmitted</a></code>.</dd>
+      <dt>resources</dt>
+      <dd>[<code>named list</code>]
+Computational  resources for the batch jobs. The elements of this list
+(e.g. something like &#147;walltime&#148; or &#147;nodes&#148;) depend on your template file.
+See notes for reserved special resource names.
+Defaults can be set in the <code><a href='Registry.html'>Registry</a></code> via the variable <code>default.resources</code> as a named list.
+The setting can be made permanent for all future registries by setting this variable in your configuration file.
+Individual settings set via <code>resources</code> <code>resources</code> overrule those in <code>default.resources</code>.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]. Table with columns &#147;job.id&#148; and &#147;chunk&#148;.
+  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Submits all jobs defined with <code><a href='batchMap.html'>batchMap</a></code> to the batch system.</p>
+
+      <p>If an additional column &#147;chunk&#148; is present in the table <code>ids</code>,
+the jobs will be grouped accordingly. See <code><a href='chunkIds.html'>chunkIds</a></code> for more
+information.</p>
+
+      <p>After submitting the jobs, you can use <code><a href='waitForJobs.html'>waitForJobs</a></code> to wait for the
+termination of jobs or immediately call <code><a href='reduceResultsList.html'>reduceResultsList</a></code>/<code><a href='reduceResults.html'>reduceResults</a></code>
+to collect partial results.
+The progress can be monitored with <code><a href='getJobTable.html'>getJobStatus</a></code>.</p>
+
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+
+      <p>Setting the resource <code>measure.memory</code> to <code>TRUE</code> turns on memory measurement:
+<code><a href='http://www.rdocumentation.org/packages/base/topics/gc'>gc</a></code> is called  directly before
+and after the job and the difference is stored in the internal database. Note that this is just a rough estimate and does
+neither work reliably for external code like C/C++ nor in combination with threading.</p>
+
+      <p>Furthermore, the package provides support for inner parallelization using threading, sockets or MPI via the
+package <span class = "pkg">parallelMap</span>.
+If you set the resource &#147;pm.backend&#148; to &#147;multicore&#148;, &#147;socket&#148; or &#147;mpi&#148;,
+<code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStart'>parallelStart</a></code> is called on the slave before the first job in the chunk is started
+and <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStop'>parallelStop</a></code> is called after the last job terminated.
+This way, the used resources for inner parallelization are set in the same place as the resources for the outer parallelization and
+get automatically stored in the <code><a href='Registry.html'>Registry</a></code>.
+The user function just has to call <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></code> to start parallelization to use the configured backend.</p>
+
+      <p>You may set the resource <code>ncpus</code> to control the number of CPUs to use in <span class = "pkg">parallelMap</span>.
+<code>ncpus</code> defaults to the number of available CPUs (as reported by (see <code><a href='http://www.rdocumentation.org/packages/parallel/topics/detectCores'>detectCores</a></code>))
+on the executing machine for multicore and socket mode and defaults to the return value of <code><a href='http://www.rdocumentation.org/packages/Rmpi/topics/mpi.universe.size'>mpi.universe.size</a>-1</code> for MPI.
+You can pass further options like <code>level</code> to <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStart'>parallelStart</a></code> via the named list &#147;pm.opts&#148;.</p>
+
+      <p>Note that your template must be set up to handle the parallelization, e.g. start R with <code>mpirun</code> or request the correct number of CPUs.</p>
+
+      <p>Also note that if you have thousands of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
+can significantly increase the performance.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment">### Example 1: Using memory measurement</span>
+<span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+
+<span class="comment"># Toy function which creates a large matrix and returns the column sums</span>
+<span class="symbol">fun</span> <span class="assignement">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">n</span><span class="keyword">,</span> <span class="formalargs">p</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/colSums'>colMeans</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span><span class="keyword">(</span><span class="symbol">n</span><span class="keyword">*</span><span class="symbol">p</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">,</span> <span class="symbol">p</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="comment"># Arguments to fun:</span>
+<span class="symbol">args</span> <span class="assignement">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/expand.grid'>expand.grid</a></span><span class="keyword">(</span><span class="argument">n</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="number">1e4</span><span class="keyword">,</span> <span class="number">1e5</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">p</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="number">10</span><span class="keyword">,</span> <span class="number">50</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">args</span><span class="keyword">)</span></div>
+<div class='output'>      n  p
+1 1e+04 10
+2 1e+05 10
+3 1e+04 50
+4 1e+05 50
+</div>
+<div class='input'>
+<span class="comment"># Map function to create jobs</span>
+<span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">fun</span><span class="keyword">,</span> <span class="argument">args</span> <span class="argument">=</span> <span class="symbol">args</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 4 jobs ...</strong>
+<div class='input'>
+<span class="comment"># Set resources: enable memory measurement</span>
+<span class="symbol">res</span> <span class="assignement">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">measure.memory</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
+
+<span class="comment"># Submit jobs using the currently configured cluster functions</span>
+<span class="functioncall"><a href='submitJobs.html'>submitJobs</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="argument">resources</span> <span class="argument">=</span> <span class="symbol">res</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Submitting 4 jobs in 4 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<div class='input'>
+<span class="comment"># Retrive information about memory, combine with parameters</span>
+<span class="symbol">info</span> <span class="assignement">=</span> <span class="functioncall"><a href='JoinTables.html'>ijoin</a></span><span class="keyword">(</span><span class="functioncall"><a href='getJobTable.html'>getJobStatus</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">[</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/plyr/topics/quoted'>.</a></span><span class="keyword">(</span><span class="symbol">job.id</span><span class="keyword">,</span> <span class="symbol">memory</span><span class="keyword">)</span><span class="keyword">]</span><span class="keyword">,</span> <span class="functioncall"><a href='getJobTable.html'>getJobPars</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<strong class='message'>Syncing 4 files ...</strong>
+<div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">info</span><span class="keyword">)</span></div>
+<div class='output'>   job.id memory     n  p
+1:      1   45.3 1e+04 10
+2:      2   59.0 1e+05 10
+3:      3   51.4 1e+04 50
+4:      4  120.0 1e+05 50
+</div>
+<div class='input'>
+<span class="comment"># Combine job info with results -&gt; each job is aggregated using mean()</span>
+<span class="functioncall"><a href='JoinTables.html'>ijoin</a></span><span class="keyword">(</span><span class="symbol">info</span><span class="keyword">,</span> <span class="functioncall"><a href='reduceResultsList.html'>reduceResultsDataTable</a></span><span class="keyword">(</span><span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">res</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">res</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span><span class="keyword">(</span><span class="symbol">res</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>   job.id memory     n  p       res
+1:      1   45.3 1e+04 10 0.5007545
+2:      2   59.0 1e+05 10 0.5000026
+3:      3   51.4 1e+04 50 0.5001482
+4:      4  120.0 1e+05 50 0.4999100
+</div>
+<div class='input'>
+<span class="comment">## Not run: ------------------------------------</span>
+<span class="comment"># ### Example 2: Multicore execution on the slave</span>
+<span class="comment"># tmp = makeRegistry(file.dir = NA, make.default = FALSE)</span>
+<span class="comment"># </span>
+<span class="comment"># # Function which sleeps 10 seconds, i-times</span>
+<span class="comment"># f = function(i) {</span>
+<span class="comment">#   parallelMap::parallelMap(Sys.sleep, rep(10, i))</span>
+<span class="comment"># }</span>
+<span class="comment"># </span>
+<span class="comment"># # Create one job with parameter i=4</span>
+<span class="comment"># ids = batchMap(f, i = 4, reg = tmp)</span>
+<span class="comment"># </span>
+<span class="comment"># # Set resources: Use parallelMap in multicore mode with 4 CPUs</span>
+<span class="comment"># # batchtools internally loads the namespace of parallelMap and then</span>
+<span class="comment"># # calls parallelStart() before the job and parallelStop() right</span>
+<span class="comment"># # after the job last job in the chunk terminated.</span>
+<span class="comment"># res = list(pm.backend = "multicore", ncpus = 4)</span>
+<span class="comment"># </span>
+<span class="comment"># # Submit both jobs and wait for them</span>
+<span class="comment"># submitJobs(resources = res, reg = tmp)</span>
+<span class="comment"># waitForJobs(reg = tmp)</span>
+<span class="comment"># </span>
+<span class="comment"># # If successfull, the running time should be ~10s</span>
+<span class="comment"># getJobTable(reg = tmp)[, .(job.id, time.running)]</span>
+<span class="comment"># </span>
+<span class="comment"># # There should also be a note in the log:</span>
+<span class="comment"># grepLogs(pattern = "parallelMap", reg = tmp)</span>
+<span class="comment">## ---------------------------------------------</span></div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>submitJobs</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

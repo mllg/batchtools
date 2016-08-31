@@ -42,7 +42,6 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsSocket}},
   \code{\link{makeClusterFunctionsTorque}},
-  \code{\link{makeClusterFunctions}},
-  \code{\link{runOSCommand}}
+  \code{\link{makeClusterFunctions}}
 }
 

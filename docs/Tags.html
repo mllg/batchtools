@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Tags. batchtools 0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">batchtools 0.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Add or Remove Job Tags</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='Tags.html'>addJobTags</a></span><span class="keyword">(</span><span class="argument">ids</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="symbol">tags</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='Tags.html'>removeJobTags</a></span><span class="keyword">(</span><span class="argument">ids</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="symbol">tags</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='Tags.html'>getUsedJobTags</a></span><span class="keyword">(</span><span class="argument">ids</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>ids</dt>
+      <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
+with a column named &#147;job.id&#148;.
+Alternatively, you may also pass a vector of integerish job ids.
+If not set, defaults to all jobs.</dd>
+      <dt>tags</dt>
+      <dd>[<code>character</code>]
+Tags to add or remove as string. May use letters, numbers, underscore and dots (pattern &#147;^[[:alnum:]_.]+&#148;).</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with job ids affected (invisible).
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Add and remove arbitrary tags. Tags are stored inside with the registry.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+<span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">sqrt</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="keyword">-</span><span class="number">3</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 7 jobs ...</strong>
+<div class='input'>
+<span class="comment"># Add new tag to all ids</span>
+<span class="functioncall"><a href='Tags.html'>addJobTags</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="string">"needs.computation"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='getJobTable.html'>getJobTags</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>   job.id              tags
+1:      1 needs.computation
+2:      2 needs.computation
+3:      3 needs.computation
+4:      4 needs.computation
+5:      5 needs.computation
+6:      6 needs.computation
+7:      7 needs.computation
+</div>
+<div class='input'>
+<span class="comment"># Add more tags</span>
+<span class="functioncall"><a href='Tags.html'>addJobTags</a></span><span class="keyword">(</span><span class="functioncall"><a href='findJobs.html'>findJobs</a></span><span class="keyword">(</span><span class="symbol">x</span> <span class="keyword">&lt;</span> <span class="number">0</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">,</span> <span class="string">"x.neg"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='Tags.html'>addJobTags</a></span><span class="keyword">(</span><span class="functioncall"><a href='findJobs.html'>findJobs</a></span><span class="keyword">(</span><span class="symbol">x</span> <span class="keyword">&gt;</span> <span class="number">0</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">,</span> <span class="string">"x.pos"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='getJobTable.html'>getJobTags</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>   job.id                    tags
+1:      1 needs.computation,x.neg
+2:      2 needs.computation,x.neg
+3:      3 needs.computation,x.neg
+4:      4       needs.computation
+5:      5 needs.computation,x.pos
+6:      6 needs.computation,x.pos
+7:      7 needs.computation,x.pos
+</div>
+<div class='input'>
+<span class="comment"># Submit first 5 jobs and remove tag if successful</span>
+<span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='submitJobs.html'>submitJobs</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Submitting 5 jobs in 5 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<strong class='warning'>Warning message:
+NaNs produced</strong>
+<strong class='warning'>Warning message:
+NaNs produced</strong>
+<strong class='warning'>Warning message:
+NaNs produced</strong>
+<div class='input'><span class="keyword">if</span> <span class="keyword">(</span><span class="functioncall"><a href='waitForJobs.html'>waitForJobs</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">)</span>
+  <span class="functioncall"><a href='Tags.html'>removeJobTags</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="string">"needs.computation"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Syncing 5 files ...</strong>
+<div class='input'><span class="functioncall"><a href='getJobTable.html'>getJobTags</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>   job.id                    tags
+1:      1                   x.neg
+2:      2                   x.neg
+3:      3                   x.neg
+4:      4                      NA
+5:      5                   x.pos
+6:      6 needs.computation,x.pos
+7:      7 needs.computation,x.pos
+</div>
+<div class='input'>
+<span class="comment"># Grep for warning message and add a tag</span>
+<span class="functioncall"><a href='Tags.html'>addJobTags</a></span><span class="keyword">(</span><span class="functioncall"><a href='grepLogs.html'>grepLogs</a></span><span class="keyword">(</span><span class="argument">pattern</span> <span class="argument">=</span> <span class="string">"NaNs produced"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">,</span> <span class="string">"div.zero"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='getJobTable.html'>getJobTags</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>   job.id                    tags
+1:      1                   x.neg
+2:      2                   x.neg
+3:      3                   x.neg
+4:      4                      NA
+5:      5                   x.pos
+6:      6 needs.computation,x.pos
+7:      7 needs.computation,x.pos
+</div>
+<div class='input'>
+<span class="comment"># All tags where tag x.neg is set:</span>
+<span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='findJobs.html'>findTagged</a></span><span class="keyword">(</span><span class="string">"x.neg"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='Tags.html'>getUsedJobTags</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>[1] &quot;x.neg&quot;
+</div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>Tags</li><li>addJobTags</li><li>getUsedJobTags</li><li>removeJobTags</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
