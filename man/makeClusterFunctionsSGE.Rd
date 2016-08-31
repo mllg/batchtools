@@ -36,8 +36,10 @@ allocations.
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsLSF}},
+  \code{\link{makeClusterFunctionsMulticore}},
   \code{\link{makeClusterFunctionsOpenLava}},
   \code{\link{makeClusterFunctionsSlurm}},
+  \code{\link{makeClusterFunctionsSocket}},
   \code{\link{makeClusterFunctionsTorque}},
   \code{\link{makeClusterFunctions}},
   \code{\link{runOSCommand}}

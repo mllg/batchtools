@@ -34,9 +34,11 @@ the arguments \code{--cpu-shares} and \code{--memory} (in Megabytes).
 }
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsLSF}},
+  \code{\link{makeClusterFunctionsMulticore}},
   \code{\link{makeClusterFunctionsOpenLava}},
   \code{\link{makeClusterFunctionsSGE}},
   \code{\link{makeClusterFunctionsSlurm}},
+  \code{\link{makeClusterFunctionsSocket}},
   \code{\link{makeClusterFunctionsTorque}},
   \code{\link{makeClusterFunctions}},
   \code{\link{runOSCommand}}

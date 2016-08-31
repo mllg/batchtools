@@ -1,4 +1,4 @@
-if (getRversion() < "3.3.2") {
+if (getRversion() < "3.3.2" && .Platform$OS.type != "windows") {
   # Backport required to have retrieve job names
   # Provided patch for upstream which is shipped with R >= 3.3.2
   # https://stat.ethz.ch/pipermail/r-devel/2016-August/073035.html
@@ -81,7 +81,7 @@ Multicore = R6Class("Multicore",
 #'   Default is to use all cores. The total number of cores "available" is given by option \code{mc.cores}
 #'   and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}.
 #' @return [\code{\link{ClusterFunctions}}].
-#' @family clusterFunctions
+#' @family ClusterFunctions
 #' @export
 makeClusterFunctionsMulticore = function(ncpus = NA_integer_) {
   if (testOS("windows"))

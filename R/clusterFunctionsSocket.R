@@ -49,7 +49,7 @@ Socket = R6Class("Socket",
 #'   Default is to use all cores. The total number of cores "available" is given by option \code{mc.cores}
 #'   and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}.
 #' @return [\code{\link{ClusterFunctions}}].
-#' @family clusterFunctions
+#' @family ClusterFunctions
 #' @export
 makeClusterFunctionsSocket = function(ncpus = NA_integer_) {
   assertCount(ncpus, positive = TRUE, na.ok = TRUE)

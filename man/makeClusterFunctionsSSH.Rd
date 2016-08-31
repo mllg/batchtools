@@ -31,8 +31,6 @@ makeClusterFunctionsSSH(list(Worker$new("localhost", ncpus = 2)))
 }
 }
 \seealso{
-Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsSocket}}
+Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}}
 }
 

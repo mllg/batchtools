@@ -23,8 +23,14 @@ Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
 Sets the number of threads internally used by \pkg{data.table} to 1 during initialization (via \code{data.table::setthreads}).
 }
 \seealso{
-Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctionsSocket}}
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+  \code{\link{makeClusterFunctionsLSF}},
+  \code{\link{makeClusterFunctionsOpenLava}},
+  \code{\link{makeClusterFunctionsSGE}},
+  \code{\link{makeClusterFunctionsSlurm}},
+  \code{\link{makeClusterFunctionsSocket}},
+  \code{\link{makeClusterFunctionsTorque}},
+  \code{\link{makeClusterFunctions}},
+  \code{\link{runOSCommand}}
 }
 

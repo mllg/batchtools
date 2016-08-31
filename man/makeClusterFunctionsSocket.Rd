@@ -19,8 +19,14 @@ and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}
 Jobs are spawned asynchronously using the package \pkg{snow}.
 }
 \seealso{
-Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+  \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsSSH}}
+  \code{\link{makeClusterFunctionsOpenLava}},
+  \code{\link{makeClusterFunctionsSGE}},
+  \code{\link{makeClusterFunctionsSlurm}},
+  \code{\link{makeClusterFunctionsTorque}},
+  \code{\link{makeClusterFunctions}},
+  \code{\link{runOSCommand}}
 }
 
