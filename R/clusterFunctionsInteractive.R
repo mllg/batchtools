@@ -18,7 +18,7 @@
 #'   calculations but makes it very difficult to debug.
 #'   Default is \code{TRUE}.
 #' @return [\code{\link{ClusterFunctions}}].
-#' @family clusterFunctions
+#' @family ClusterFunctions
 #' @export
 makeClusterFunctionsInteractive = function(external = FALSE, write.logs = TRUE) {
   assertFlag(external)

@@ -30,6 +30,16 @@ Listing jobs returns an empty vector (as no jobs can be running when you call th
 and \code{killJob} returns at once (for the same reason).
 }
 \seealso{
-Other clusterFunctions: \code{\link{makeClusterFunctionsSSH}}
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+  \code{\link{makeClusterFunctionsLSF}},
+  \code{\link{makeClusterFunctionsMulticore}},
+  \code{\link{makeClusterFunctionsOpenLava}},
+  \code{\link{makeClusterFunctionsSGE}},
+  \code{\link{makeClusterFunctionsSSH}},
+  \code{\link{makeClusterFunctionsSlurm}},
+  \code{\link{makeClusterFunctionsSocket}},
+  \code{\link{makeClusterFunctionsTorque}},
+  \code{\link{makeClusterFunctions}},
+  \code{\link{runOSCommand}}
 }
 

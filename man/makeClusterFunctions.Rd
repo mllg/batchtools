@@ -57,10 +57,12 @@ specified in the arguments.
 }
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+  \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsMulticore}},
   \code{\link{makeClusterFunctionsOpenLava}},
   \code{\link{makeClusterFunctionsSGE}},
+  \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsSocket}},
   \code{\link{makeClusterFunctionsTorque}},

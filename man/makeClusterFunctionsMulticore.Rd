@@ -24,9 +24,11 @@ Sets the number of threads internally used by \pkg{data.table} to 1 during initi
 }
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+  \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsOpenLava}},
   \code{\link{makeClusterFunctionsSGE}},
+  \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsSocket}},
   \code{\link{makeClusterFunctionsTorque}},

@@ -33,10 +33,12 @@ the arguments \code{--cpu-shares} and \code{--memory} (in Megabytes).
 \code{killJobs} uses \code{docker [docker.args] kill [batch.id]} to filter for running jobs.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsLSF}},
+Other ClusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
+  \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsMulticore}},
   \code{\link{makeClusterFunctionsOpenLava}},
   \code{\link{makeClusterFunctionsSGE}},
+  \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsSocket}},
   \code{\link{makeClusterFunctionsTorque}},

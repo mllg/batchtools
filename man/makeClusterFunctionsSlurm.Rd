@@ -43,10 +43,12 @@ The value set can be accessed in the template via \dQuote{clusters}.
 }
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+  \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsMulticore}},
   \code{\link{makeClusterFunctionsOpenLava}},
   \code{\link{makeClusterFunctionsSGE}},
+  \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsSocket}},
   \code{\link{makeClusterFunctionsTorque}},
   \code{\link{makeClusterFunctions}},

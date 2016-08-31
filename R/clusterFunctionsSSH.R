@@ -15,7 +15,7 @@
 #' the communication with the nodes.
 #'
 #' @return [\code{\link{ClusterFunctions}}].
-#' @family clusterFunctions
+#' @family ClusterFunctions
 #' @export
 #' @examples
 #' \dontrun{
