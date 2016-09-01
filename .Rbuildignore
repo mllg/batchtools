@@ -4,9 +4,6 @@
 ^\.agignore$
 ^\.editorconfig$
 ^.travis.yml$
-^README\.md$
-^NEWS\.md$
-^TODO\.md$
 ^man-roxygen$
 ^appveyor\.yml$
 ^.*\.Rproj$
