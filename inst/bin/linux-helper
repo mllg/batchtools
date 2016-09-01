@@ -52,8 +52,7 @@ case $CMD in
         fi
         ;;
     start-job)
-        RCMD="Rscript"
-        ${RCMD} -e "batchtools::doJobCollection('$1')" > "$2" 2>&1 &
+        Rscript -e "batchtools::doJobCollection('$1')" > "$2" 2>&1 &
         echo $!
         ;;
     kill-job)
@@ -63,8 +62,7 @@ case $CMD in
         exit 0
         ;;
     status)
-        # remove everyting till load average(s):
-        # then delete commas
+        # remove everyting till load average(s), then delete commas
         LOAD=$(uptime | awk '{gsub(/.*:/,""); {gsub(/,/,"")}; print $1}')
         JOBDIR="$1/jobs"
         # print 3 columns for all processes
