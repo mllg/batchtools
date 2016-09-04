@@ -106,16 +106,16 @@ makeJob = function(id, cache = NULL, reg = getDefaultRegistry()) {
 
 #' @export
 makeJob.Registry = function(id, cache = NULL, reg = getDefaultRegistry()) {
-  row = inner_join(reg$defs, reg$status[convertId(reg, id)])
+  row = filter(reg$defs, reg$status[convertId(reg, id)])
   Job$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
-    resources = inner_join(reg$resources, row)$resources)
+    resources = filter(reg$resources, row)$resources)
 }
 
 #' @export
 makeJob.ExperimentRegistry = function(id, cache = NULL, reg = getDefaultRegistry()) {
-  row = inner_join(reg$defs, reg$status[convertId(reg, id)])
+  row = filter(reg$defs, reg$status[convertId(reg, id)])
   Experiment$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
-    repl = row$repl, resources = inner_join(reg$resources, row)$resources, prob.name = row$problem, algo.name = row$algorithm)
+    repl = row$repl, resources = filter(reg$resources, row)$resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
 getJob = function(jc, id, cache = NULL) {
@@ -123,13 +123,13 @@ getJob = function(jc, id, cache = NULL) {
 }
 
 getJob.JobCollection = function(jc, id, cache = NULL) {
-  row = inner_join(jc$jobs, castIds(id))
+  row = filter(jc$jobs, castIds(id))
   Job$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     resources = jc$resources)
 }
 
 getJob.ExperimentCollection = function(jc, id, cache = NULL) {
-  row = inner_join(jc$jobs, castIds(id))
+  row = filter(jc$jobs, castIds(id))
   Experiment$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     repl = row$repl, resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm)
 }

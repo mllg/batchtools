@@ -69,6 +69,7 @@ ojoin = function(x, y) {
   y = castIds(y)
   merge(x, y, all = TRUE, by = "job.id")
 }
+
 #' @rdname JoinTables
 #' @export
 sjoin = function(x, y) {

@@ -64,8 +64,8 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   submitted = started = done = NULL
 
-  ids = convertIds(reg, ids)
-  tab = inner_join(reg$status, ids)[, !c("def.id", "resource.id"), with = FALSE]
+  cols = setdiff(names(reg$status), c("def.id", "resource.id"))
+  tab = filter(reg$status, convertIds(reg, ids), cols)
   tab[, "submitted" := as.POSIXct(submitted, origin = "1970-01-01")]
   tab[, "started" := as.POSIXct(started, origin = "1970-01-01")]
   tab[, "done" := as.POSIXct(done, origin = "1970-01-01")]
@@ -83,7 +83,7 @@ getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = get
   assertFlag(prefix)
 
   ids = convertIds(reg, ids)
-  tab = merge(inner_join(reg$status, ids), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", "resources"), with = FALSE]
+  tab = merge(filter(reg$status, ids, c("job.id", "resource.id")), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", "resources"), with = FALSE]
   if (flatten %??% qtestr(tab$resources, c("v", "0"), depth = 2L)) {
     tab = rbindlist(.mapply(function(job.id, resources) c(list(job.id = job.id), resources), tab, list()), fill = TRUE)
     if (prefix && nrow(tab) >= 2L) {
@@ -108,7 +108,7 @@ getJobPars = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefau
 #' @export
 getJobPars.Registry = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids)
-  tab = inner_join(reg$defs, inner_join(reg$status, ids))[, c("job.id", "pars"), with = FALSE]
+  tab = filter(reg$defs, filter(reg$status, ids, c("job.id", "def.id")), c("job.id", "pars"))
 
   if (flatten %??% qtestr(tab$pars, c("v", "L"), depth = 2L)) {
     new.cols = rbindlist(tab$pars)
@@ -127,7 +127,7 @@ getJobPars.Registry = function(ids = NULL, flatten = NULL, prefix = FALSE, reg =
 #' @export
 getJobPars.ExperimentRegistry = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids)
-  tab = inner_join(reg$defs, inner_join(reg$status, ids))[, c("job.id", "pars", "problem", "algorithm"), with = FALSE]
+  tab = filter(reg$defs, filter(reg$status, ids, c("job.id", "def.id")), c("job.id", "pars", "problem", "algorithm"))
 
   if (flatten %??% qtestr(tab$pars, c("v", "L"), depth = 2L)) {
     new.cols = rbindlist(lapply(tab$pars, unlist, recursive = FALSE), fill = TRUE)

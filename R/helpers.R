@@ -52,10 +52,10 @@ convertId = function(reg, id) {
   return(id)
 }
 
-inner_join = function(x, y) {
+filter = function(x, y, cols) {
   if (is.null(y))
-    return(x)
-  x[y, nomatch = 0, on = key(x)]
+    return(x[, cols, with = missing(cols)])
+  return(x[y, cols, on = key(x), nomatch = 0L, with = missing(cols)])
 }
 
 auto_increment = function(ids, n = 1L) {

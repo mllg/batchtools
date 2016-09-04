@@ -43,7 +43,7 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   ee = parent.frame()
   fun = function(pars) eval(expr, pars, enclos = ee)
   pars = NULL
-  setkeyv(inner_join(reg$defs, inner_join(reg$status, ids))[vlapply(pars, fun), "job.id", with = FALSE], "job.id")[]
+  setkeyv(filter(reg$defs, filter(reg$status, ids, c("job.id", "def.id")))[vlapply(pars, fun), "job.id", with = FALSE], "job.id")[]
 }
 
 #' @export
@@ -72,7 +72,7 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
 
   assertExperimentRegistry(reg, sync = TRUE)
   ee = parent.frame()
-  tab = inner_join(reg$defs, inner_join(reg$status, convertIds(reg, ids)))[, c("job.id", "pars", "problem", "algorithm", "repl"), with = FALSE]
+  tab = filter(reg$defs, filter(reg$status, convertIds(reg, ids), c("job.id", "def.id", "repl")), c("job.id", "pars", "problem", "algorithm", "repl"))
 
   if (!is.null(prob.name)) {
     assertCharacter(prob.name, any.missing = FALSE, min.chars = 1L)
@@ -119,7 +119,7 @@ findSubmitted = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findSubmitted = function(reg, ids = NULL) {
   submitted = NULL
-  inner_join(reg$status, ids)[!is.na(submitted), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "submitted"))[!is.na(submitted), "job.id", with = FALSE]
 }
 
 
@@ -132,7 +132,7 @@ findNotSubmitted = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findNotSubmitted = function(reg, ids = NULL) {
   submitted = NULL
-  inner_join(reg$status, ids)[is.na(submitted), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "submitted"))[is.na(submitted), "job.id", with = FALSE]
 }
 
 
@@ -145,7 +145,7 @@ findStarted = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findStarted = function(reg, ids = NULL) {
   started = NULL
-  inner_join(reg$status, ids)[!is.na(started), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "started"))[!is.na(started), "job.id", with = FALSE]
 }
 
 
@@ -158,7 +158,7 @@ findNotStarted = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findNotStarted = function(reg, ids = NULL) {
   started = NULL
-  inner_join(reg$status, ids)[is.na(started), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "started"))[is.na(started), "job.id", with = FALSE]
 }
 
 
@@ -171,7 +171,7 @@ findDone = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findDone = function(reg, ids = NULL) {
   done = error = NULL
-  inner_join(reg$status, ids)[!is.na(done) & is.na(error), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "done", "error"))[!is.na(done) & is.na(error), "job.id", with = FALSE]
 }
 
 
@@ -184,7 +184,7 @@ findNotDone = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findNotDone = function(reg, ids = NULL) {
   done = error = NULL
-  inner_join(reg$status, ids)[is.na(done) | !is.na(error), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "done", "error"))[is.na(done) | !is.na(error), "job.id", with = FALSE]
 }
 
 
@@ -197,7 +197,7 @@ findErrors = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findErrors = function(reg, ids = NULL) {
   error = NULL
-  inner_join(reg$status, ids)[!is.na(error), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "error"))[!is.na(error), "job.id", with = FALSE]
 }
 
 
@@ -212,7 +212,7 @@ findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {
   if (length(batch.ids) == 0L)
     return(noids())
   submitted = done = batch.id = NULL
-  inner_join(reg$status, ids)[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids$batch.id, "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "submitted", "done", "batch.id"))[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids$batch.id, "job.id", with = FALSE]
 }
 
 
@@ -239,7 +239,7 @@ findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findExpired = function(reg, ids = NULL, batch.ids = getBatchIds(reg)) {
   submitted = done = batch.id = NULL
-  inner_join(reg$status, ids)[!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids$batch.id, "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "submitted", "done", "batch.id"))[!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids$batch.id, "job.id", with = FALSE]
 }
 
 #' @export

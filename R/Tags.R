@@ -84,5 +84,5 @@ getUsedJobTags = function(ids = NULL, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids)
 
   tag = NULL
-  inner_join(reg$tags, ids)[, unique(tag), on = "job.id", nomatch = 0L]
+  filter(reg$tags, ids)[, unique(tag), on = "job.id", nomatch = 0L]
 }
