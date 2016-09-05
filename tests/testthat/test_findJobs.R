@@ -1,6 +1,6 @@
 context("findJobs")
 
-none = noids()
+none = noIds()
 
 test_that("find[Status]", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
