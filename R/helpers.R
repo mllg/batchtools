@@ -58,6 +58,13 @@ filter = function(x, y, cols) {
   return(x[y, cols, on = key(x), nomatch = 0L, with = missing(cols)])
 }
 
+viewSD = function(reg, ids, cols) {
+  if (is.null(ids))
+    reg$defs[reg$status, cols, on = "def.id", nomatch = 0L, with = missing(cols)]
+  else
+    reg$defs[reg$status[ids, nomatch = 0L, on = "job.id"], cols, on = "def.id", nomatch = 0L, with = missing(cols)]
+}
+
 auto_increment = function(ids, n = 1L) {
   if (length(ids) == 0L) seq_len(n) else max(ids) + seq_len(n)
 }

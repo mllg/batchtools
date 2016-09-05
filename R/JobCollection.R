@@ -67,7 +67,7 @@ createCollection = function(resources = list(), reg = getDefaultRegistry()) {
 #' @export
 makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   jc = createCollection(resources, reg)
-  jc$jobs = filter(reg$defs, filter(reg$status, convertIds(reg, ids), c("job.id", "def.id")), c("job.id", "pars"))
+  jc$jobs = viewSD(reg, convertIds(reg, ids), c("job.id", "pars"))
   setkeyv(jc$jobs, "job.id")
   setClasses(jc, "JobCollection")
 }
@@ -75,7 +75,7 @@ makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getD
 #' @export
 makeJobCollection.ExperimentRegistry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   jc = createCollection(resources, reg)
-  jc$jobs = filter(reg$defs, filter(reg$status, convertIds(reg, ids), c("job.id", "def.id", "repl")), c("job.id", "pars", "problem", "algorithm", "repl"))
+  jc$jobs = viewSD(reg, convertIds(reg, ids), c("job.id", "pars", "problem", "algorithm", "repl"))
   setkeyv(jc$jobs, "job.id")
   setClasses(jc, c("ExperimentCollection", "JobCollection"))
 }

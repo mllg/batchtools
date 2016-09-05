@@ -94,7 +94,6 @@ getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = get
   setkeyv(tab, "job.id")[]
 }
 
-
 #' @export
 #' @rdname getJobTable
 getJobPars = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
@@ -108,7 +107,7 @@ getJobPars = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefau
 #' @export
 getJobPars.Registry = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids)
-  tab = filter(reg$defs, filter(reg$status, ids, c("job.id", "def.id")), c("job.id", "pars"))
+  tab = viewSD(reg, ids, c("job.id", "pars"))
 
   if (flatten %??% qtestr(tab$pars, c("v", "L"), depth = 2L)) {
     new.cols = rbindlist(tab$pars)
@@ -127,7 +126,7 @@ getJobPars.Registry = function(ids = NULL, flatten = NULL, prefix = FALSE, reg =
 #' @export
 getJobPars.ExperimentRegistry = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids)
-  tab = filter(reg$defs, filter(reg$status, ids, c("job.id", "def.id")), c("job.id", "pars", "problem", "algorithm"))
+  tab = viewSD(reg, ids, c("job.id", "pars", "problem", "algorithm"))
 
   if (flatten %??% qtestr(tab$pars, c("v", "L"), depth = 2L)) {
     new.cols = rbindlist(lapply(tab$pars, unlist, recursive = FALSE), fill = TRUE)

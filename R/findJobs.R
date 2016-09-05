@@ -43,7 +43,7 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   ee = parent.frame()
   fun = function(pars) eval(expr, pars, enclos = ee)
   pars = NULL
-  setkeyv(filter(reg$defs, filter(reg$status, ids, c("job.id", "def.id")))[vlapply(pars, fun), "job.id", with = FALSE], "job.id")[]
+  setkeyv(viewSD(reg, ids, c("job.id", "pars"))[vlapply(pars, fun), "job.id", with = FALSE], "job.id")[]
 }
 
 #' @export
@@ -72,7 +72,7 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
 
   assertExperimentRegistry(reg, sync = TRUE)
   ee = parent.frame()
-  tab = filter(reg$defs, filter(reg$status, convertIds(reg, ids), c("job.id", "def.id", "repl")), c("job.id", "pars", "problem", "algorithm", "repl"))
+  tab = viewSD(reg, convertIds(reg, ids), c("job.id", "pars", "problem", "algorithm", "repl"))
 
   if (!is.null(prob.name)) {
     assertCharacter(prob.name, any.missing = FALSE, min.chars = 1L)
