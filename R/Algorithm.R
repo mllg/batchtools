@@ -34,7 +34,7 @@ removeAlgorithm = function(name, reg = getDefaultRegistry()) {
   file.remove(fn)
   reg$defs = reg$defs[!def.ids]
   reg$status = reg$status[!job.ids]
-  reg$defs$algorithm = droplevel(reg$defs$algorithm, name)
+  reg$defs$algorithm = rmlevel(reg$defs$algorithm, name)
   sweepRegistry(reg)
   invisible(TRUE)
 }

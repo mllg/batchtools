@@ -92,7 +92,7 @@ removeProblem = function(name, reg = getDefaultRegistry()) {
   file.remove(fn)
   reg$defs = reg$defs[!def.ids]
   reg$status = reg$status[!job.ids]
-  reg$defs$problem = droplevel(reg$defs$problem, name)
+  reg$defs$problem = rmlevel(reg$defs$problem, name)
   sweepRegistry(reg)
   invisible(TRUE)
 }

@@ -68,7 +68,7 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
   }
 
   if (any(dim(ddd) == 0L))
-    return(noids())
+    return(noIds())
   info("Adding %i jobs ...", nrow(ddd))
 
   writeRDS(fun, file = file.path(reg$file.dir, "user.function.rds"))
@@ -96,5 +96,5 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
     key         = "job.id")
 
   saveRegistry(reg)
-  invisible(allids(reg))
+  invisible(allIds(reg))
 }

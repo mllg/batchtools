@@ -40,7 +40,7 @@
 #' getUsedJobTags(ids, reg = tmp)
 addJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE)
-  ids = convertIds(reg, ids, default = allids(reg))
+  ids = convertIds(reg, ids, default = allIds(reg))
   assertCharacter(tags, any.missing = FALSE, pattern = "^[[:alnum:]_.]+$", min.len = 1L)
 
   for (cur in tags) {
@@ -71,7 +71,7 @@ removeJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
     reg$tags = reg$tags[-i]
     saveRegistry(reg)
   } else {
-    ids = noids()
+    ids = noIds()
   }
 
   invisible(ids)

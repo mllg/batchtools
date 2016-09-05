@@ -107,7 +107,7 @@ getJobPars = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefau
 #' @export
 getJobPars.Registry = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids)
-  tab = viewSD(reg, ids, c("job.id", "pars"))
+  tab = mergedJobs(reg, ids, c("job.id", "pars"))
 
   if (flatten %??% qtestr(tab$pars, c("v", "L"), depth = 2L)) {
     new.cols = rbindlist(tab$pars)
@@ -126,7 +126,7 @@ getJobPars.Registry = function(ids = NULL, flatten = NULL, prefix = FALSE, reg =
 #' @export
 getJobPars.ExperimentRegistry = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids)
-  tab = viewSD(reg, ids, c("job.id", "pars", "problem", "algorithm"))
+  tab = mergedJobs(reg, ids, c("job.id", "pars", "problem", "algorithm"))
 
   if (flatten %??% qtestr(tab$pars, c("v", "L"), depth = 2L)) {
     new.cols = rbindlist(lapply(tab$pars, unlist, recursive = FALSE), fill = TRUE)
@@ -147,7 +147,7 @@ getJobPars.ExperimentRegistry = function(ids = NULL, flatten = NULL, prefix = FA
 #' @rdname getJobTable
 getJobTags = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  ids = convertIds(reg, ids, default = allids(reg))
+  ids = convertIds(reg, ids, default = allIds(reg))
   tag = NULL
   reg$tags[ids, on = "job.id"][, list(tags = stri_join(sort(tag, na.last = TRUE), collapse = ",")), by = "job.id"]
 }

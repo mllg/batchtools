@@ -111,7 +111,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = c("job.id", "chunk"))
   if (nrow(ids) == 0L)
-    return(noids())
+    return(noIds())
 
   if (is.null(ids$chunk)) {
     chunks = ids$chunk = seq_row(ids)

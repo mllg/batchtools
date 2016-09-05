@@ -1,8 +1,8 @@
-allids = function(reg) {
+allIds = function(reg) {
   reg$status[, "job.id", with = FALSE]
 }
 
-noids = function() {
+noIds = function() {
   data.table(job.id = integer(0L), key = "job.id")
 }
 
@@ -58,7 +58,7 @@ filter = function(x, y, cols) {
   return(x[y, cols, on = key(x), nomatch = 0L, with = missing(cols)])
 }
 
-viewSD = function(reg, ids, cols) {
+mergedJobs = function(reg, ids, cols) {
   if (is.null(ids))
     reg$defs[reg$status, cols, on = "def.id", nomatch = 0L, with = missing(cols)]
   else
@@ -168,7 +168,7 @@ addlevel = function(x, lvl) {
   x
 }
 
-droplevel = function(x, lvl) {
+rmlevel = function(x, lvl) {
   levels(x) = replace(levels(x), levels(x) == lvl, NA_character_)
   x
 }

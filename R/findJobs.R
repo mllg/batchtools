@@ -37,13 +37,13 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   ids = convertIds(reg, ids)
   if (missing(expr))
-    return(ids %??% allids(reg))
+    return(ids %??% allIds(reg))
 
   expr = substitute(expr)
   ee = parent.frame()
   fun = function(pars) eval(expr, pars, enclos = ee)
   pars = NULL
-  setkeyv(viewSD(reg, ids, c("job.id", "pars"))[vlapply(pars, fun), "job.id", with = FALSE], "job.id")[]
+  setkeyv(mergedJobs(reg, ids, c("job.id", "pars"))[vlapply(pars, fun), "job.id", with = FALSE], "job.id")[]
 }
 
 #' @export
@@ -72,7 +72,7 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
 
   assertExperimentRegistry(reg, sync = TRUE)
   ee = parent.frame()
-  tab = viewSD(reg, convertIds(reg, ids), c("job.id", "pars", "problem", "algorithm", "repl"))
+  tab = mergedJobs(reg, convertIds(reg, ids), c("job.id", "pars", "problem", "algorithm", "repl"))
 
   if (!is.null(prob.name)) {
     assertCharacter(prob.name, any.missing = FALSE, min.chars = 1L)
@@ -210,7 +210,7 @@ findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findOnSystem = function(reg, ids = NULL, status = "all", batch.ids = getBatchIds(reg, status = status)) {
   if (length(batch.ids) == 0L)
-    return(noids())
+    return(noIds())
   submitted = done = batch.id = NULL
   filter(reg$status, ids, c("job.id", "submitted", "done", "batch.id"))[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids$batch.id, "job.id", with = FALSE]
 }
@@ -248,7 +248,7 @@ findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
 #'   Return jobs which are tagged with any of the tags provided.
 findTagged = function(tags = character(0L), ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  ids = convertIds(reg, ids, default = allids(reg))
+  ids = convertIds(reg, ids, default = allIds(reg))
   assertCharacter(tags, any.missing = FALSE, pattern = "^[[:alnum:]_.]+$", min.len = 1L)
   tag = NULL
 
