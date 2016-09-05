@@ -12,6 +12,9 @@ if (backend == "mpi") {
   cmd = "Rscript"
   mincpus = 1L
 }
+
+# relative paths are not handled well by Slurm
+log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
 -%>
 
 #SBATCH --job-name=<%= job.hash %>

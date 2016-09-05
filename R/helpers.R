@@ -73,8 +73,8 @@ ustamp = function() {
   as.integer(Sys.time())
 }
 
-npath = function(path, must.work = TRUE) {
-  if (stri_startswith_fixed(path, "~")) {
+npath = function(path, normalize = stri_startswith_fixed(path, "~"), must.work = TRUE) {
+  if (normalize) {
     if (must.work && !file.exists(path))
       stopf("File '%s' not found", path)
     if (testOS("windows"))

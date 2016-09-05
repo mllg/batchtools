@@ -22,6 +22,7 @@
 #'   Default is directory \dQuote{registry} in the current working directory.
 #'   Path will get normalized unless it is provided relative to the home directory
 #'   (i.e., starting with \dQuote{~}).
+#'   Note some template do not handle relative paths well.
 #'
 #'   If you pass \code{NA}, a temporary directory will be used.
 #'   This way, you can create disposable registries for \code{\link{btlapply}} or examples.
@@ -35,6 +36,7 @@
 #'   yourself.
 #'   Path will get normalized unless it is provided relative to the home directory
 #'   (i.e., starting with \dQuote{~}).
+#'   Note some template do not handle relative paths well.
 #' @param conf.file [\code{character(1)}]\cr
 #'   Path to a configuration file which is sourced directly after the registry is created.
 #'   For example, you can set cluster functions or default resources in it.
