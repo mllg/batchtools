@@ -112,14 +112,14 @@ reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="
 ## 2:      9       TRUE  TRUE Error in (function (value)  : Ooops.</code></pre>
 <p>If we want to peek into the R log file of a job to see more context for the error we can use <a href="https://mllg.github.io/batchtools/showLog.html"><code>showLog()</code></a> which opens a pager or use <a href="https://mllg.github.io/batchtools/showLog.html"><code>getLog()</code></a> to get the log as character vector:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">writeLines</span>(<span class="kw">getLog</span>(<span class="dt">id =</span> <span class="dv">9</span>))</code></pre></div>
-<pre><code>## ### [bt 2016-09-01 01:38:36]: Starting calculation of 1 jobs
-## ### [bt 2016-09-01 01:38:36]: Setting working directory to '/Users/michel/Projekte/batchtools/vignettes'
-## ### [bt 2016-09-01 01:38:36]: Memory measurement disabled
-## ### [bt 2016-09-01 01:38:36]: Starting job [batchtools job.id=9]
+<pre><code>## ### [bt 2016-09-05 02:26:36]: Starting calculation of 1 jobs
+## ### [bt 2016-09-05 02:26:36]: Setting working directory to '/home/michel/Projekte/batchtools/vignettes'
+## ### [bt 2016-09-05 02:26:36]: Memory measurement disabled
+## ### [bt 2016-09-05 02:26:36]: Starting job [batchtools job.id=9]
 ## Error in (function (value)  : Ooops.
 ## 
-## ### [bt 2016-09-01 01:38:36]: Job terminated with an exception [batchtools job.id=9]
-## ### [bt 2016-09-01 01:38:36]: Calculation finished!</code></pre>
+## ### [bt 2016-09-05 02:26:36]: Job terminated with an exception [batchtools job.id=9]
+## ### [bt 2016-09-05 02:26:36]: Calculation finished!</code></pre>
 <p>You can also grep for error or warning messages:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids =<span class="st"> </span><span class="kw">grepLogs</span>(<span class="dt">pattern =</span> <span class="st">&quot;ooops&quot;</span>, <span class="dt">ignore.case =</span> <span class="ot">TRUE</span>)
 <span class="kw">print</span>(ids)</code></pre></div>

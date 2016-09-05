@@ -147,8 +147,9 @@ with the resources which were set to submit the jobs, and <code>getJobTags</code
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
-<span class="symbol">f</span> <span class="assignement">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">x</span><span class="keyword">)</span> <span class="keyword">if</span> <span class="keyword">(</span><span class="symbol">x</span> <span class="keyword">&lt;</span> <span class="number">0</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/stop'>stop</a></span><span class="keyword">(</span><span class="string">"x must be &gt; 0"</span><span class="keyword">)</span> <span class="keyword">else</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/MathFun'>sqrt</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span>
+    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<div class='input'><span class="symbol">f</span> <span class="assignement">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">x</span><span class="keyword">)</span> <span class="keyword">if</span> <span class="keyword">(</span><span class="symbol">x</span> <span class="keyword">&lt;</span> <span class="number">0</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/stop'>stop</a></span><span class="keyword">(</span><span class="string">"x must be &gt; 0"</span><span class="keyword">)</span> <span class="keyword">else</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/MathFun'>sqrt</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span>
 <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">f</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="keyword">-</span><span class="number">1</span><span class="keyword">,</span> <span class="number">0</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
 <strong class='message'>Adding 3 jobs ...</strong>
 <div class='input'><span class="functioncall"><a href='submitJobs.html'>submitJobs</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
@@ -160,17 +161,17 @@ with the resources which were set to submit the jobs, and <code>getJobTags</code
 <div class='input'>
 <span class="functioncall"><a href='getJobTable.html'>getJobTable</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="argument">flatten</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
 <div class='output'>   job.id           submitted             started                done
-1:      1 2016-09-01 01:38:24 2016-09-01 01:38:24 2016-09-01 01:38:24
-2:      2 2016-09-01 01:38:24 2016-09-01 01:38:24 2016-09-01 01:38:24
-3:      3 2016-09-01 01:38:24 2016-09-01 01:38:24 2016-09-01 01:38:24
+1:      1 2016-09-05 02:26:32 2016-09-05 02:26:32 2016-09-05 02:26:32
+2:      2 2016-09-05 02:26:32 2016-09-05 02:26:32 2016-09-05 02:26:32
+3:      3 2016-09-05 02:26:32 2016-09-05 02:26:32 2016-09-05 02:26:32
                                      error memory      batch.id
 1: Error in (function (x)  : x must be &gt; 0     NA cfInteractive
 2:                                      NA     NA cfInteractive
 3:                                      NA     NA cfInteractive
                            job.hash time.queued time.running   pars resources
-1: d24c2373fae477c09b047f969e81833e      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
-2: 3e80e16ed6f4e694d784e7a40a14ec8f      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
-3: 85c6854429484fd58b15f71d2dc2cb4e      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+1: 20c2072ccca95300c996d1c5d59a9788      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+2: 8f22e1cc14b415be1413256188e86263      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+3: 50247fac5fcfc3660782c6d8ba83666c      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
    tags
 1:   NA
 2:   NA

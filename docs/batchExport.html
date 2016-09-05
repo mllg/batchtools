@@ -87,8 +87,9 @@ each time the registry is loaded on the master as well as on the slaves.</p>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
-
+    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<div class='input'>
 <span class="comment"># list exports</span>
 <span class="symbol">exports</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchExport.html'>batchExport</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">exports</span><span class="keyword">)</span></div>
@@ -102,12 +103,9 @@ each time the registry is loaded on the master as well as on the slaves.</p>
 <strong class='message'>Adding 3 jobs ...</strong>
 <div class='input'><span class="symbol">exports</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchExport.html'>batchExport</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">y</span> <span class="argument">=</span> <span class="number">99</span><span class="keyword">,</span> <span class="argument">z</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">exports</span><span class="keyword">)</span></div>
-<div class='output'>   name
-1:    y
-2:    z
-                                                                                                      uri
-1: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpFlzcqA/registry478c6229cf6d/exports/y.rds
-2: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpFlzcqA/registry478c6229cf6d/exports/z.rds
+<div class='output'>   name                                               uri
+1:    y /tmp/RtmpKMSAKp/registry35ffb342bdf/exports/y.rds
+2:    z /tmp/RtmpKMSAKp/registry35ffb342bdf/exports/z.rds
 </div>
 <div class='input'>
 <span class="functioncall"><a href='submitJobs.html'>submitJobs</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
@@ -123,10 +121,8 @@ each time the registry is loaded on the master as well as on the slaves.</p>
 <span class="comment"># Un-export z</span>
 <span class="symbol">exports</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchExport.html'>batchExport</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">z</span> <span class="argument">=</span> NULL<span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">exports</span><span class="keyword">)</span></div>
-<div class='output'>   name
-1:    y
-                                                                                                      uri
-1: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpFlzcqA/registry478c6229cf6d/exports/y.rds
+<div class='output'>   name                                               uri
+1:    y /tmp/RtmpKMSAKp/registry35ffb342bdf/exports/y.rds
 </div></pre>
   </div>
   <div class="span4 sidebar">
