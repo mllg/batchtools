@@ -34,5 +34,8 @@ r_binary_packages:
   - snow
   - testthat
 
+r_github_packages:
+  - mllg/checkmate
+
 after_success:
   - Rscript -e 'covr::coveralls()'

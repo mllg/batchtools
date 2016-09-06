@@ -18,6 +18,9 @@ For bug reports and feature requests please use the tracker:
   \item{\code{batchtools.verbose}}{
     Verbosity. Set to \code{FALSE} to suppress info messages and progress bars.
   }
+  \item{\code{batchtools.debug}}{
+    Set to \code{TRUE} to switch to debug mode.
+  }
 }
 }
 

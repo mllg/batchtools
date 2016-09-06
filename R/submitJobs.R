@@ -77,7 +77,6 @@
 #' # Combine job info with results -> each job is aggregated using mean()
 #' ijoin(info, reduceResultsDataTable(fun = function(res) list(res = mean(res)), reg = tmp))
 #'
-#' \dontrun{
 #' ### Example 2: Multicore execution on the slave
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #'
@@ -95,6 +94,7 @@
 #' # after the job last job in the chunk terminated.
 #' res = list(pm.backend = "multicore", ncpus = 4)
 #'
+#' \dontrun{
 #' # Submit both jobs and wait for them
 #' submitJobs(resources = res, reg = tmp)
 #' waitForJobs(reg = tmp)

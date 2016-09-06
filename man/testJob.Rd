@@ -35,7 +35,7 @@ tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(function(x) if (x == 2) xxx else x, 1:2, reg = tmp)
 testJob(1, reg = tmp)
 \dontrun{
- testJob(2, reg = tmp)
+testJob(2, reg = tmp)
 }
 }
 \seealso{

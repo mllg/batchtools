@@ -82,6 +82,26 @@ test_that("getJobPars", {
   expect_equal(tab$par.j, rep(1, 4))
 })
 
+test_that("flatten auto-detection works", {
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  fun = function(i, j) i
+  ids = batchMap(fun, i = 1:4, j = list(1, iris, 3, iris), reg = reg)
+
+  x = getJobPars(reg = reg, flatten = NULL)
+  y = getJobPars(reg = reg, flatten = FALSE)
+  expect_data_table(x, key = "job.id", nrow = 4, ncol = 2)
+  expect_data_table(y, key = "job.id", nrow = 4, ncol = 2)
+  expect_equal(x, y)
+
+  reg$cluster.functions = makeClusterFunctionsInteractive()
+  submitJobs(resources = list(ncpus = 2, strange.stuff = matrix(1:9)), reg = reg)
+  x = getJobResources(reg = reg, flatten = NULL)
+  y = getJobResources(reg = reg, flatten = FALSE)
+  expect_data_table(x, key = "job.id", nrow = 4, ncol = 2)
+  expect_data_table(y, key = "job.id", nrow = 4, ncol = 2)
+  expect_equal(x, y)
+})
+
 test_that("getJobPars with repls", {
   reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   prob = addProblem("prob", data = iris, fun = function(data, job) nrow(data), reg = reg)

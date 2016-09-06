@@ -22,7 +22,7 @@
 #' batchMap(function(x) if (x == 2) xxx else x, 1:2, reg = tmp)
 #' testJob(1, reg = tmp)
 #' \dontrun{
-#'  testJob(2, reg = tmp)
+#' testJob(2, reg = tmp)
 #' }
 testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
