@@ -3,7 +3,7 @@
 
 static R_len_t count_not_missing_logical(SEXP x) {
     const int * xp = LOGICAL(x);
-    const int * const xe = xp + xlength(x);
+    const int * const xe = xp + length(x);
     R_len_t count = 0;
     for (; xp != xe; xp++) {
         if (*xp != NA_LOGICAL)
@@ -14,7 +14,7 @@ static R_len_t count_not_missing_logical(SEXP x) {
 
 static R_len_t count_not_missing_integer(SEXP x) {
     const int * xp = INTEGER(x);
-    const int * const xe = xp + xlength(x);
+    const int * const xe = xp + length(x);
     R_len_t count = 0;
     for (; xp != xe; xp++) {
         if (*xp != NA_INTEGER)
@@ -25,7 +25,7 @@ static R_len_t count_not_missing_integer(SEXP x) {
 
 static R_len_t count_not_missing_double(SEXP x) {
     const double * xp = REAL(x);
-    const double * const xe = xp + xlength(x);
+    const double * const xe = xp + length(x);
     R_len_t count = 0;
     for (; xp != xe; xp++) {
         if (!ISNAN(*xp))
@@ -35,9 +35,9 @@ static R_len_t count_not_missing_double(SEXP x) {
 }
 
 static R_len_t count_not_missing_string(SEXP x) {
-    const R_xlen_t nx = xlength(x);
+    const R_len_t nx = length(x);
     R_len_t count = 0;
-    for (R_xlen_t i = 0; i < nx; i++) {
+    for (R_len_t i = 0; i < nx; i++) {
         if (STRING_ELT(x, i) != NA_STRING)
             count++;
     }
@@ -45,9 +45,9 @@ static R_len_t count_not_missing_string(SEXP x) {
 }
 
 static R_len_t count_not_missing_list(SEXP x) {
-    const R_xlen_t nx = xlength(x);
+    const R_len_t nx = length(x);
     R_len_t count = 0;
-    for (R_xlen_t i = 0; i < nx; i++) {
+    for (R_len_t i = 0; i < nx; i++) {
         if (!isNull(VECTOR_ELT(x, i)))
             count++;
     }
