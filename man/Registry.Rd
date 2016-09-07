@@ -39,9 +39,8 @@ syncRegistry(reg = getDefaultRegistry())
 \item{file.dir}{[\code{character(1)}]\cr
   Path where all files of the registry are saved.
   Default is directory \dQuote{registry} in the current working directory.
-  Path will get normalized unless it is provided relative to the home directory
-  (i.e., starting with \dQuote{~}).
-  Note some template do not handle relative paths well.
+  The provided path will get normalized unless it is given relative to the home directory
+  (i.e., starting with \dQuote{~}). Note that some templates do not handle relative paths well.
 
   If you pass \code{NA}, a temporary directory will be used.
   This way, you can create disposable registries for \code{\link{btlapply}} or examples.
@@ -50,13 +49,13 @@ syncRegistry(reg = getDefaultRegistry())
   you can set it in your configuration file by setting the variable \code{temp.dir}.}
 
 \item{work.dir}{[\code{character(1)}]\cr
-Working directory for R process when experiment is executed.
-For \code{makeRegistry}, this defaults to the current working directory.
-\code{loadRegistry} uses the stored \code{work.dir}, but you may also explicitly provide one
-yourself.
-Path will get normalized unless it is provided relative to the home directory
-(i.e., starting with \dQuote{~}).
-Note some template do not handle relative paths well.}
+  Working directory for R process for running jobs.
+  Defaults to the working directory currently set during Registry construction (see \code{\link[base]{getwd}}).
+  \code{loadRegistry} uses the stored \code{work.dir}, but you may also explicitly overwrite it,
+  e.g., after switching to another system.
+
+  The provided path will get normalized unless it is given relative to the home directory
+  (i.e., starting with \dQuote{~}). Note that some templates do not handle relative paths well.}
 
 \item{conf.file}{[\code{character(1)}]\cr
 Path to a configuration file which is sourced directly after the registry is created.
@@ -100,16 +99,16 @@ Registry. If not explicitly passed, uses the last created registry.}
 
 \item{update.paths}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, the \code{file.dir} and \code{work.dir} will be updated in the registry. Note that this is
-likely to break computation on the system, only do this if no jobs are currently running. Default is \code{FALSE}.
+likely to break computation on the system! Only do this if no jobs are currently running. Default is \code{FALSE}.
 If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
-registry in an read-only mode.}
+registry in read-only mode.}
 }
 \value{
 [\code{Registry}]. An environment with the following slots:
   \describe{
     \item{\code{file.dir} [path]:}{File directory.}
     \item{\code{work.dir} [path]:}{Working directory.}
-    \item{\code{temp.dir} [path]:}{Temporary directory. Only used if \code{file.dir} is \code{NA}.}
+    \item{\code{temp.dir} [path]:}{Temporary directory. Used if \code{file.dir} is \code{NA}.}
     \item{\code{packages} [character()]:}{Packages to load on the slaves.}
     \item{\code{namespaces} [character()]:}{Namespaces to load on the slaves.}
     \item{\code{seed} [integer(1)]:}{Registry seed. Before each job is executed, the seed \code{seed + job.id} is set.}
@@ -124,20 +123,24 @@ registry in an read-only mode.}
 }
 \description{
 \code{makeRegistry} constructs the inter-communication object for all functions in \code{batchtools}.
-The registry created last is saved in the package namespace (unless \code{make.default} is set to
-\code{FALSE}) and can be retrieved via \code{getDefaultRegistry}.
-
-\code{saveRegistry} serializes the registry to the file system.
-\code{syncRegistry} refreshes the registry by parsing updates from remote jobs, merging job
-status information in the internal data base.
-Both functions are called internally whenever required.
+All communication transactions are processed via the file system:
+All information required to run a job is stored as \code{\link{JobCollection}} in a file in the
+a subdirectory of the \code{file.dir} directory.
+Each jobs stores its results as well as computational status information (start time, end time, error message, ...)
+also on the file system which is regular merged parsed by the master using \code{syncRegistry}.
+After integrating the new information into the Registry, the Registry is serialized to the file system via \code{saveRegistry}.
+Both \code{syncRegistry} and \code{saveRegistry} are called whenever required internally.
 Therefore it should be safe to quit the R session at any time.
 Work can later be resumed by calling \code{loadRegistry} which de-serializes the registry from
 the file system.
 
-Canceled jobs and repeatedly submitted jobs leave in some cases stray files behind which can be
-swept using \code{sweepRegistry}.
-\code{clearRegistry} completely erases all jobs from a registry, including log files and results.
+The registry created last is saved in the package namespace (unless \code{make.default} is set to
+\code{FALSE}) and can be retrieved via \code{getDefaultRegistry}.
+
+Canceled jobs and repeatedly submitted jobs may leave stray files behind.
+These can be swept using \code{sweepRegistry}.
+\code{clearRegistry} completely erases all jobs from a registry, including log files and results,
+and thus allows you to start over.
 }
 \examples{
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)

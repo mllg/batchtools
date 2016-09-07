@@ -16,7 +16,7 @@
 #'   i-th iteration as second. See \code{\link[base]{Reduce}} for some
 #'   examples.
 #'   If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}}
-#'   is passed to the function.
+#'   is also passed to the function.
 #' @param init [\code{ANY}]\cr
 #'   Initial element, as used in \code{\link[base]{Reduce}}.
 #'   Default is the first result.
@@ -83,7 +83,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @template ids
 #' @param fun [\code{function}]\cr
 #'   Function to apply to each result. The result is passed unnamed as first argument. If \code{NULL}, the identity is used.
-#'   If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}} is passed to the function.
+#'   If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}} is also passed to the function.
 #' @param ... [\code{ANY}]\cr
 #'   Additional arguments passed to to function \code{fun}.
 #' @template reg
@@ -157,21 +157,24 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
 #' @title Load the Result of a Single Job
 #'
 #' @description
-#' A function to simply load the results for a single job.
+#' A function to simply load the result of a single job.
 #'
 #' @template id
 #' @param missing.val [\code{ANY}]\cr
-#'   Value to return if the result file is missing. Default is \code{NULL}.
+#'   Value to return if the result file is missing (if not provided, an exception is raised).
 #' @template reg
 #' @return [\code{ANY}]. The saved result or \code{missing.val} if result file
 #'   is not found.
 #' @family Results
 #' @export
-loadResult = function(id, missing.val = NULL, reg = getDefaultRegistry()) {
+loadResult = function(id, missing.val, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   id = convertId(reg, id)
   fn = file.path(reg$file.dir, "results", sprintf("%i.rds", id$job.id))
-  if (!file.exists(fn))
+  if (!file.exists(fn)) {
+    if (missing(missing.val))
+      stopf("Result for job with id=%i not found in %s", id$job.id, fn)
     return(missing.val)
+  }
   return(readRDS(fn))
 }

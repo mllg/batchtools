@@ -18,13 +18,12 @@ Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 [\code{\link{data.table}}] of removed job ids.
-  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 Remove Experiments from an \code{\link{ExperimentRegistry}}.
 This function automatically checks if any of the jobs to reset is either pending or running.
 However, if the implemented heuristic fails, this can lead to inconsistencies in the data base.
-Use with care.
+Use with care while jobs are running.
 }
 \seealso{
 Other Experiment: \code{\link{ExperimentRegistry}},

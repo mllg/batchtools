@@ -1,7 +1,7 @@
 #' @title Wait for Termination of Jobs
 #'
 #' @description
-#' This function can be used to synchronize the execution on batch systems.
+#' This function simply waits until all jobs are terminated.
 #'
 #' @templateVar ids.default findSubmitted
 #' @template ids
@@ -17,8 +17,8 @@
 #'   \code{FALSE}.
 #' @template reg
 #' @return [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated
-#' successfully and \code{FALSE} if either the timeout is reached or at least
-#' one job terminated with an exception.
+#'   successfully and \code{FALSE} if either the timeout is reached or at least
+#'   one job terminated with an exception.
 #' @export
 waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = FALSE, sync = TRUE)

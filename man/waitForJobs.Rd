@@ -32,10 +32,10 @@ Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated
-successfully and \code{FALSE} if either the timeout is reached or at least
-one job terminated with an exception.
+  successfully and \code{FALSE} if either the timeout is reached or at least
+  one job terminated with an exception.
 }
 \description{
-This function can be used to synchronize the execution on batch systems.
+This function simply waits until all jobs are terminated.
 }
 

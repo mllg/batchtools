@@ -132,9 +132,15 @@ is.error = function(x) {
   inherits(x, "try-error")
 }
 
-# formating message
+# formating info message
 info = function(...) {
   if (getOption("batchtools.verbose", TRUE))
+    message(sprintf(...))
+}
+
+# formating debug message
+debug = function(...) {
+  if (getOption("batchtools.debug", FALSE))
     message(sprintf(...))
 }
 

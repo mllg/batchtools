@@ -4,7 +4,7 @@
 \alias{loadResult}
 \title{Load the Result of a Single Job}
 \usage{
-loadResult(id, missing.val = NULL, reg = getDefaultRegistry())
+loadResult(id, missing.val, reg = getDefaultRegistry())
 }
 \arguments{
 \item{id}{[\code{integer(1)} or \code{data.table}]\cr
@@ -12,7 +12,7 @@ Single integer to specify the job or a \code{data.table} with column \code{job.i
 and exactly one row.}
 
 \item{missing.val}{[\code{ANY}]\cr
-Value to return if the result file is missing. Default is \code{NULL}.}
+Value to return if the result file is missing (if not provided, an exception is raised).}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
@@ -22,7 +22,7 @@ Registry. If not explicitly passed, uses the last created registry.}
   is not found.
 }
 \description{
-A function to simply load the results for a single job.
+A function to simply load the result of a single job.
 }
 \seealso{
 Other Results: \code{\link{reduceResultsList}},

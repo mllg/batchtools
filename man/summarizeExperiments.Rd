@@ -25,6 +25,7 @@ Registry. If not explicitly passed, uses the last created registry.}
 }
 \description{
 Returns a frequency table of defined experiments.
+See \code{\link{ExperimentRegistry}} for an example.
 }
 \seealso{
 Other Experiment: \code{\link{ExperimentRegistry}},

@@ -3,12 +3,12 @@
 #' @rdname Tags
 #'
 #' @description
-#' Add and remove arbitrary tags. Tags are stored inside with the registry.
+#' Add and remove arbitrary tags to jobs.
 #'
 #' @templateVar ids.default all
 #' @template ids
 #' @param tags [\code{character}]\cr
-#'   Tags to add or remove as string. May use letters, numbers, underscore and dots (pattern \dQuote{^[[:alnum:]_.]+}).
+#'   Tags to add or remove as strings. May use letters, numbers, underscore and dots (pattern \dQuote{^[[:alnum:]_.]+}).
 #' @return [\code{\link[data.table]{data.table}}] with job ids affected (invisible).
 #' @template reg
 #' @export

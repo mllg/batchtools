@@ -2,6 +2,7 @@
 #'
 #' @description
 #' Returns a frequency table of defined experiments.
+#' See \code{\link{ExperimentRegistry}} for an example.
 #'
 #' @templateVar ids.default all
 #' @template ids

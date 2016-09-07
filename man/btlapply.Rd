@@ -26,9 +26,8 @@ Additional arguments passed to \code{fun} (\code{btlapply}) or vectors to map ov
 Computational  resources for the batch jobs. The elements of this list
 (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file.
 See notes for reserved special resource names.
-Defaults can be set in the \code{\link{Registry}} via the variable \code{default.resources} as a named list.
-The setting can be made permanent for all future registries by setting this variable in your configuration file.
-Individual settings set via \code{resources} \code{resources} overrule those in \code{default.resources}.}
+Defaults can be stored in the configuration file by providing the named list \code{default.resources}.
+Settings in \code{resources} overwrite those in \code{default.resources}.}
 
 \item{n.chunks}{[\code{integer(1)}]\cr
 Requested number of chunks.

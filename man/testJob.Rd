@@ -12,20 +12,22 @@ Single integer to specify the job or a \code{data.table} with column \code{job.i
 and exactly one row.}
 
 \item{external}{[\code{logical(1)}]\cr
-Run the job in an external R session? If \code{TRUE}, starts a fresh R
-session on the local machine to execute the with \code{\link{execJob}}.
-You will not be able to use debug tools like \code{\link[base]{traceback}}
-or \code{\link[base]{browser}}.
-If \code{external} is set to \code{FALSE} (default), \code{testJob} will
-execute the job in the current R session, and you are unable to spot
-missing variable declarations (possibly resolved in the global environment) as well
-as forgotten package dependencies.}
+ Run the job in an external R session? If \code{TRUE}, starts a fresh R
+ session on the local machine to execute the with \code{\link{execJob}}.
+ You will not be able to use debug tools like \code{\link[base]{traceback}}
+ or \code{\link[base]{browser}}.
+
+ If \code{external} is set to \code{FALSE} (default) on the other hand,
+ \code{testJob} will execute the job in the current R session and the usual
+ debugging tools work. However, spotting missing variable declarations (as they
+ are possibly resolved in the global environment) is impossible.
+ Same holds for missing package dependency declarations.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[ANY]. Returns the result of the job if successful.
+Returns the result of the job if successful.
 }
 \description{
 Starts a single job on the local machine.

@@ -1,16 +1,16 @@
 #' @title Submit Jobs to the Batch Systems
 #'
 #' @description
-#' Submits all jobs defined with \code{\link{batchMap}} to the batch system.
+#' Submits defined jobs to the batch system.
 #'
 #' If an additional column \dQuote{chunk} is present in the table \code{ids},
-#' the jobs will be grouped accordingly. See \code{\link{chunkIds}} for more
-#' information.
+#' jobs will be grouped accordingly to be executed sequentially on the same slave.
+#' See \code{\link{chunkIds}} for more information.
 #'
 #' After submitting the jobs, you can use \code{\link{waitForJobs}} to wait for the
-#' termination of jobs or immediately call \code{\link{reduceResultsList}}/\code{\link{reduceResults}}
+#' termination of jobs or call \code{\link{reduceResultsList}}/\code{\link{reduceResults}}
 #' to collect partial results.
-#' The progress can be monitored with \code{\link{getJobStatus}}.
+#' The progress can be monitored with \code{\link{getStatus}}.
 #'
 #' @note
 #' Setting the resource \code{measure.memory} to \code{TRUE} turns on memory measurement:
@@ -25,17 +25,17 @@
 #' and \code{\link[parallelMap]{parallelStop}} is called after the last job terminated.
 #' This way, the used resources for inner parallelization are set in the same place as the resources for the outer parallelization and
 #' get automatically stored in the \code{\link{Registry}}.
-#' The user function just has to call \code{\link[parallelMap]{parallelMap}} to start parallelization to use the configured backend.
+#' The user function just has to call \code{\link[parallelMap]{parallelMap}} to start parallelization using the preconfigured backend.
 #'
 #' You may set the resource \code{ncpus} to control the number of CPUs to use in \pkg{parallelMap}.
 #' \code{ncpus} defaults to the number of available CPUs (as reported by (see \code{\link[parallel]{detectCores}}))
 #' on the executing machine for multicore and socket mode and defaults to the return value of \code{\link[Rmpi]{mpi.universe.size}-1} for MPI.
 #' You can pass further options like \code{level} to \code{\link[parallelMap]{parallelStart}} via the named list \dQuote{pm.opts}.
 #'
-#' Note that your template must be set up to handle the parallelization, e.g. start R with \code{mpirun} or request the correct number of CPUs.
+#' Note that your template must be set up to handle the parallelization, e.g. start R with \code{mpirun} or request the right number of CPUs.
 #'
 #' Also note that if you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
-#' can significantly increase the performance.
+#' can significantly increase the performance of \code{submitJobs}.
 #'
 #' @templateVar ids.default findNotSubmitted
 #' @template ids
@@ -43,9 +43,8 @@
 #'   Computational  resources for the batch jobs. The elements of this list
 #'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file.
 #'   See notes for reserved special resource names.
-#'   Defaults can be set in the \code{\link{Registry}} via the variable \code{default.resources} as a named list.
-#'   The setting can be made permanent for all future registries by setting this variable in your configuration file.
-#'   Individual settings set via \code{resources} \code{resources} overrule those in \code{default.resources}.
+#'   Defaults can be stored in the configuration file by providing the named list \code{default.resources}.
+#'   Settings in \code{resources} overwrite those in \code{default.resources}.
 #' @template reg
 #' @return [\code{\link{data.table}}]. Table with columns \dQuote{job.id} and \dQuote{chunk}.
 #'   See \code{\link{JoinTables}} for examples on working with job tables.

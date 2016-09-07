@@ -9,12 +9,15 @@
 #'  session on the local machine to execute the with \code{\link{execJob}}.
 #'  You will not be able to use debug tools like \code{\link[base]{traceback}}
 #'  or \code{\link[base]{browser}}.
-#'  If \code{external} is set to \code{FALSE} (default), \code{testJob} will
-#'  execute the job in the current R session, and you are unable to spot
-#'  missing variable declarations (possibly resolved in the global environment) as well
-#'  as forgotten package dependencies.
+#'
+#'  If \code{external} is set to \code{FALSE} (default) on the other hand,
+#'  \code{testJob} will execute the job in the current R session and the usual
+#'  debugging tools work. However, spotting missing variable declarations (as they
+#'  are possibly resolved in the global environment) is impossible.
+#'  Same holds for missing package dependency declarations.
+#'
 #' @template reg
-#' @return [ANY]. Returns the result of the job if successful.
+#' @return Returns the result of the job if successful.
 #' @export
 #' @family debug
 #' @examples

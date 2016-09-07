@@ -21,7 +21,7 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.}
 
 \item{tags}{[\code{character}]\cr
-Tags to add or remove as string. May use letters, numbers, underscore and dots (pattern \dQuote{^[[:alnum:]_.]+}).}
+Tags to add or remove as strings. May use letters, numbers, underscore and dots (pattern \dQuote{^[[:alnum:]_.]+}).}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
@@ -30,7 +30,7 @@ Registry. If not explicitly passed, uses the last created registry.}
 [\code{\link[data.table]{data.table}}] with job ids affected (invisible).
 }
 \description{
-Add and remove arbitrary tags. Tags are stored inside with the registry.
+Add and remove arbitrary tags to jobs.
 }
 \examples{
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)

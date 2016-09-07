@@ -19,7 +19,7 @@ If not set, defaults to the return value of \code{\link{findDone}}.}
 
 \item{fun}{[\code{function}]\cr
 Function to apply to each result. The result is passed unnamed as first argument. If \code{NULL}, the identity is used.
-If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}} is passed to the function.}
+If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}} is also passed to the function.}
 
 \item{...}{[\code{ANY}]\cr
 Additional arguments passed to to function \code{fun}.}

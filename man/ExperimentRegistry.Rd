@@ -14,9 +14,8 @@ makeExperimentRegistry(file.dir = "registry", work.dir = getwd(),
 \item{file.dir}{[\code{character(1)}]\cr
   Path where all files of the registry are saved.
   Default is directory \dQuote{registry} in the current working directory.
-  Path will get normalized unless it is provided relative to the home directory
-  (i.e., starting with \dQuote{~}).
-  Note some template do not handle relative paths well.
+  The provided path will get normalized unless it is given relative to the home directory
+  (i.e., starting with \dQuote{~}). Note that some templates do not handle relative paths well.
 
   If you pass \code{NA}, a temporary directory will be used.
   This way, you can create disposable registries for \code{\link{btlapply}} or examples.
@@ -25,13 +24,13 @@ makeExperimentRegistry(file.dir = "registry", work.dir = getwd(),
   you can set it in your configuration file by setting the variable \code{temp.dir}.}
 
 \item{work.dir}{[\code{character(1)}]\cr
-Working directory for R process when experiment is executed.
-For \code{makeRegistry}, this defaults to the current working directory.
-\code{loadRegistry} uses the stored \code{work.dir}, but you may also explicitly provide one
-yourself.
-Path will get normalized unless it is provided relative to the home directory
-(i.e., starting with \dQuote{~}).
-Note some template do not handle relative paths well.}
+  Working directory for R process for running jobs.
+  Defaults to the working directory currently set during Registry construction (see \code{\link[base]{getwd}}).
+  \code{loadRegistry} uses the stored \code{work.dir}, but you may also explicitly overwrite it,
+  e.g., after switching to another system.
+
+  The provided path will get normalized unless it is given relative to the home directory
+  (i.e., starting with \dQuote{~}). Note that some templates do not handle relative paths well.}
 
 \item{conf.file}{[\code{character(1)}]\cr
 Path to a configuration file which is sourced directly after the registry is created.
