@@ -19,6 +19,7 @@
 #'  \item{source}{\code{character} with list of files to source before execution.}
 #'  \item{load}{\code{character} with list of files to load before execution.}
 #'  \item{array.var}{\code{character(1)} of the array environment variable specified by the cluster functions.}
+#'  \item{n.array.jobs}{\code{integer(1)} of the number of array jobs (i.e., the number of jobs in chunk if \code{chunks.as.arrayjobs} is \code{TRUE} and 1 otherwise.}
 #' }
 #' If your \link{ClusterFunctions} uses a template, \code{\link[brew]{brew}} will be executed in the environment of such
 #' a collection. Thus all variables available inside the job can be used in the template.
@@ -43,21 +44,23 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
   UseMethod("makeJobCollection", reg)
 }
 
-createCollection = function(resources = list(), reg = getDefaultRegistry()) {
-  jc            = new.env(parent = emptyenv())
-  jc$debug      = getOption("batchtools.debug", FALSE)
-  jc$file.dir   = reg$file.dir
-  jc$work.dir   = reg$work.dir
-  jc$seed       = reg$seed
-  jc$job.hash   = digest::digest(list(runif(1L), Sys.time())) # random string
-  jc$uri        = file.path(reg$file.dir, "jobs", sprintf("%s.rds", jc$job.hash))
-  jc$log.file   = file.path(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
-  jc$packages   = reg$packages
-  jc$namespaces = reg$namespaces
-  jc$source     = reg$source
-  jc$load       = reg$load
-  jc$resources  = resources
-  jc$array.var  = reg$cluster.functions$array.envir.var
+createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()) {
+  jc              = new.env(parent = emptyenv())
+  jc$jobs         = setkeyv(jobs, "job.id")
+  jc$debug        = getOption("batchtools.debug", FALSE)
+  jc$file.dir     = reg$file.dir
+  jc$work.dir     = reg$work.dir
+  jc$seed         = reg$seed
+  jc$job.hash     = digest::digest(list(runif(1L), Sys.time())) # random string
+  jc$uri          = file.path(reg$file.dir, "jobs", sprintf("%s.rds", jc$job.hash))
+  jc$log.file     = file.path(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
+  jc$packages     = reg$packages
+  jc$namespaces   = reg$namespaces
+  jc$source       = reg$source
+  jc$load         = reg$load
+  jc$resources    = resources
+  jc$array.var    = reg$cluster.functions$array.envir.var
+  jc$n.array.jobs = if (isTRUE(resources$chunks.as.arrayjobs)) nrow(jobs) else 1L
 
   hooks = reg$cluster.functions$hooks
   if (length(hooks) > 0L) {
@@ -71,17 +74,13 @@ createCollection = function(resources = list(), reg = getDefaultRegistry()) {
 
 #' @export
 makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  jc = createCollection(resources, reg)
-  jc$jobs = mergedJobs(reg, convertIds(reg, ids), c("job.id", "pars"))
-  setkeyv(jc$jobs, "job.id")
+  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "pars")), resources, reg)
   setClasses(jc, "JobCollection")
 }
 
 #' @export
 makeJobCollection.ExperimentRegistry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  jc = createCollection(resources, reg)
-  jc$jobs = mergedJobs(reg, convertIds(reg, ids), c("job.id", "pars", "problem", "algorithm", "repl"))
-  setkeyv(jc$jobs, "job.id")
+  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "pars", "problem", "algorithm", "repl")), resources, reg)
   setClasses(jc, c("ExperimentCollection", "JobCollection"))
 }
 
