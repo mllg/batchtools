@@ -4,7 +4,7 @@
 #' Executes a single job (as created by \code{\link{makeJob}}) and returns
 #' its result. Also works for Experiments.
 #'
-#' @param job [\code{\link{Job}} \code{\link{Experiment}}]\cr
+#' @param job [\code{\link{Job}} | \code{\link{Experiment}}]\cr
 #'   Job/Experiment to execute.
 #' @return Result of the job.
 #' @export

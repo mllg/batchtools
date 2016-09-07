@@ -46,8 +46,7 @@
 #'   Defaults can be stored in the configuration file by providing the named list \code{default.resources}.
 #'   Settings in \code{resources} overwrite those in \code{default.resources}.
 #' @template reg
-#' @return [\code{\link{data.table}}]. Table with columns \dQuote{job.id} and \dQuote{chunk}.
-#'   See \code{\link{JoinTables}} for examples on working with job tables.
+#' @return [\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 #' @export
 #' @examples
 #' ### Example 1: Using memory measurement

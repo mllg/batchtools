@@ -24,8 +24,7 @@ Settings in \code{resources} overwrite those in \code{default.resources}.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{\link{data.table}}]. Table with columns \dQuote{job.id} and \dQuote{chunk}.
-  See \code{\link{JoinTables}} for examples on working with job tables.
+[\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 }
 \description{
 Submits defined jobs to the batch system.

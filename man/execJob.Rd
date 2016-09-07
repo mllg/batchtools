@@ -7,7 +7,7 @@
 execJob(job)
 }
 \arguments{
-\item{job}{[\code{\link{Job}} \code{\link{Experiment}}]\cr
+\item{job}{[\code{\link{Job}} | \code{\link{Experiment}}]\cr
 Job/Experiment to execute.}
 }
 \value{
