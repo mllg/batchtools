@@ -38,7 +38,6 @@
 #'     \item{problem}{Only for \code{\link{ExperimentRegistry}}: the problem identifier.}
 #'     \item{algorithm}{Only for \code{\link{ExperimentRegistry}}: the algorithm identifier.}
 #'   }
-#'   See \code{\link{JoinTables}} for examples on working with job tables.
 #' @export
 #' @examples
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
@@ -47,11 +46,16 @@
 #' submitJobs(reg = tmp)
 #' waitForJobs(reg = tmp)
 #'
+#' # Complete table:
 #' getJobTable(reg = tmp, flatten = FALSE)
-#' getJobPars(reg = tmp)
+#'
+#' # Table with tags:
 #' addJobTags(1:2, "tag1", reg = tmp)
 #' addJobTags(2, "tag2", reg = tmp)
 #' getJobTags(reg = tmp)
+#'
+#' # Job parameters with tags right-joined:
+#' rjoin(getJobPars(reg = tmp), getJobTags(reg = tmp))
 getJobTable = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   ids = convertIds(reg, ids)

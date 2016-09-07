@@ -12,7 +12,7 @@ test_that("pm/multicore", {
     skip("Nested Parallelization not supported")
 
   silent({
-    submitJobs(chunkIds(ids, reg = reg), resources = list(pm.backend = "multicore", ncpus = 2), reg = reg)
+    submitJobs(chunkIds(ids, n.chunks = 1, reg = reg), resources = list(pm.backend = "multicore", ncpus = 2), reg = reg)
     waitForJobs(reg = reg)
   })
   expect_true(nrow(findDone(reg = reg)) == 4)
@@ -26,7 +26,7 @@ test_that("pm/socket", {
       skip("Nested Parallelization not supported")
 
     silent({
-      submitJobs(chunkIds(ids, reg = reg), resources = list(pm.backend = "socket", ncpus = 2), reg = reg)
+      submitJobs(chunkIds(ids, n.chunks = 1, reg = reg), resources = list(pm.backend = "socket", ncpus = 2), reg = reg)
       waitForJobs(reg = reg)
     })
     expect_true(nrow(findDone(reg = reg)) == 4)
@@ -43,7 +43,7 @@ if (FALSE) {
       skip("Nested Parallelization not supported")
 
     silent({
-      submitJobs(chunkIds(ids, reg = reg), resources = list(pm.backend = "mpi", ncpus = 2), reg = reg)
+      submitJobs(chunkIds(ids, n.chunks = 1, reg = reg), resources = list(pm.backend = "mpi", ncpus = 2), reg = reg)
       waitForJobs(reg = reg)
     })
     expect_true(nrow(findDone(reg = reg)) == 4)

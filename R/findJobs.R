@@ -1,19 +1,20 @@
 #' @title Find and Filter Jobs
 #'
 #' @description
-#' Use \code{findJobs} to query jobs for which a predicate expression, evaluated on the parameters, yields \code{TRUE}.
-#' The other functions can be used to query the computational status.
-#' Note that they do not synchronize the registry, thus you are advised to run \code{\link{syncRegistry}} yourself
-#' or, if you are really just interested in the status, use \code{\link{getStatus}}.
-#' Note that \code{findOnSystem} and \code{findExpired} are somewhat heuristic and may report misleading results, depending on the state of the system.
+#' These functions are used to find and filter jobs, depending on either their parameters (\code{findJobs} and
+#' \code{findExperiments}), their tags (\code{findTagged}), or their computational status (all other functions).
+#'
+#' For a summarizing overview over the status, see \code{\link{getStatus}}.
+#' Note that \code{findOnSystem} and \code{findExpired} are somewhat heuristic and may report misleading results,
+#' depending on the state of the system and the \code{\link{ClusterFunctions}} implementation.
 #'
 #' @param expr [\code{expression}]\cr
 #'   Predicate expression evaluated in the job parameters.
+#'   Jobs for which \code{expr} evaluates to \code{TRUE} are returned.
 #' @templateVar ids.default all
 #' @template ids
 #' @template reg
-#' @return [\code{\link{data.table}}]. Matching job ids are stored in the column \dQuote{job.id}.
-#'   See \code{\link{JoinTables}} for examples on working with job tables.
+#' @return [\code{\link{data.table}}] with column \dQuote{job.id} containing matched jobs.
 #' @export
 #' @examples
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
@@ -33,6 +34,10 @@
 #' # filter on tags
 #' addJobTags(2:3, "my_tag", reg = tmp)
 #' findTagged(tags = "my_tag", reg = tmp)
+#'
+#' # combine filter functions using joins
+#' # -> jobs which are not done and not tagged (using an anti-join):
+#' ajoin(findNotDone(reg = tmp), findTagged("my_tag", reg = tmp))
 findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   ids = convertIds(reg, ids)

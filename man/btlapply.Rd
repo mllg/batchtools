@@ -5,9 +5,11 @@
 \alias{btmapply}
 \title{Synchronous Apply Functions}
 \usage{
-btlapply(X, fun, ..., reg = makeRegistry(file.dir = NA))
+btlapply(X, fun, ..., resources = list(), n.chunks = NULL,
+  chunk.size = NULL, reg = makeRegistry(file.dir = NA))
 
 btmapply(fun, ..., more.args = list(), simplify = FALSE, use.names = TRUE,
+  resources = list(), n.chunks = NULL, chunk.size = NULL,
   reg = makeRegistry(file.dir = NA))
 }
 \arguments{
@@ -19,6 +21,24 @@ Function to apply.}
 
 \item{...}{[\code{ANY}]\cr
 Additional arguments passed to \code{fun} (\code{btlapply}) or vectors to map over (\code{btmapply}).}
+
+\item{resources}{[\code{named list}]\cr
+Computational  resources for the batch jobs. The elements of this list
+(e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file.
+See notes for reserved special resource names.
+Defaults can be set in the \code{\link{Registry}} via the variable \code{default.resources} as a named list.
+The setting can be made permanent for all future registries by setting this variable in your configuration file.
+Individual settings set via \code{resources} \code{resources} overrule those in \code{default.resources}.}
+
+\item{n.chunks}{[\code{integer(1)}]\cr
+Requested number of chunks.
+If more chunks than elements in \code{ids} are requested, empty chunks are ignored.
+Mutually exclusive with \code{chunks.size}.}
+
+\item{chunk.size}{[\code{integer(1)}]\cr
+Requested number of elements in each chunk.
+If \code{ids} cannot be chunked evenly, some chunks will have less elements than others.
+Mutually exclusive with with \code{n.chunks}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
@@ -36,15 +56,13 @@ Use names of the input to name the output?}
 [\code{list}] List with the results of the function call.
 }
 \description{
-This is a set of convenience functions as counterparts to the sequential
-apply functions in base R: \code{btlapply} for \code{\link[base]{lapply}} and
-\code{btmapply} for \code{link[base]{mapply}}.
-Internally the jobs are created in a temporary registry (see argument \code{file.dir} of
-\code{\link{makeRegistry}}) and \code{\link{batchMap}} is called on the input vector(s).
-After \code{\link{waitForJobs}} terminated, the result is reduced into a list.
-Because the result is only returned as soon as all jobs are terminated,
-the execution is called synchronized (in contrast to the usual asynchronous execution on
-classical batch systems).
+This is a set of functions acting as counterparts to the sequential popular apply functions in base R:
+\code{btlapply} for \code{\link[base]{lapply}} and \code{btmapply} for \code{link[base]{mapply}}.
+
+Internally, jobs are created using \code{\link{batchMap}} on the provided registry.
+If no registry is provided, a temporary registry (see argument \code{file.dir} of \code{\link{makeRegistry}}) and \code{\link{batchMap}}
+will be used.
+After all jobs are terminated (see \code{\link{waitForJobs}}), the results are collected and returned as a list.
 
 Note that these functions are one suitable for short and fail-safe operations
 on batch system. If some jobs fail, you have to retrieve partial results from the

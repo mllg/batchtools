@@ -35,7 +35,7 @@ test_that("find[Status]", {
   expect_equal(findExpired(reg = reg), none)
 
   silent({
-    submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
+    submitJobs(reg = reg, ids = chunkIds(ids, n.chunks = 1, reg = reg))
     waitForJobs(reg = reg)
   })
 
@@ -58,7 +58,7 @@ test_that("Subsetting", {
   fun = function(i) if (i == 3) stop(i) else i
   ids = batchMap(fun, i = 1:5, reg = reg)
   silent({
-    submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
+    submitJobs(reg = reg, ids = chunkIds(ids, n.chunks = 1, reg = reg))
     waitForJobs(reg = reg)
   })
   all = reg$status[, "job.id", with = FALSE]
@@ -88,7 +88,7 @@ test_that("findOnSystem", {
     skip("Test requires listJobsRunning")
   silent({
     ids = batchMap(reg = reg, Sys.sleep, c(10, 10))
-    submitJobs(reg = reg, ids = chunkIds(ids, reg = reg))
+    submitJobs(reg = reg, ids = chunkIds(ids, n.chunks = 1, reg = reg))
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
     expect_equal(findExpired(reg = reg), none)
     waitForJobs(reg = reg)

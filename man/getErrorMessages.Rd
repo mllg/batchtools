@@ -15,20 +15,18 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of \code{\link{findErrors}}.}
 
 \item{missing.as.error}{[\code{logical(1)}]\cr
-Treat missing results as errors? If \code{TRUE}, an error message is imputed for jobs
-which are not terminated. Default is \code{FALSE}}
+Treat missing results as errors? If \code{TRUE}, the error message \dQuote{[not terminated]} is imputed
+for jobs which have not terminated. Default is \code{FALSE}}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{\link{data.table}}]. Table with columns \dQuote{job.id}, \dQuote{terminated} (logical),
+[\code{\link{data.table}}] with columns \dQuote{job.id}, \dQuote{terminated} (logical),
   \dQuote{error} (logical) and \dQuote{message} (string).
-  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
-Extracts error messages from the internal data base and returns them in a compact table.
-For further investigation of logs, use \code{\link{showLog}}.
+Extracts error messages from the internal data base and returns them in a table.
 }
 \examples{
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
@@ -40,8 +38,9 @@ getErrorMessages(ids, reg = tmp)
 getErrorMessages(ids, missing.as.error = TRUE, reg = tmp)
 }
 \seealso{
-Other debug: \code{\link{grepLogs}},
-  \code{\link{killJobs}}, \code{\link{resetJobs}},
-  \code{\link{showLog}}, \code{\link{testJob}}
+Other debug: \code{\link{getStatus}},
+  \code{\link{grepLogs}}, \code{\link{killJobs}},
+  \code{\link{resetJobs}}, \code{\link{showLog}},
+  \code{\link{testJob}}
 }
 

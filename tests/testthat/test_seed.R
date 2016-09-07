@@ -29,7 +29,7 @@ test_that("Problem and Algorithm seed", {
   ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
 
   silent({
-    submitJobs(chunkIds(ids, reg = reg), reg = reg)
+    submitJobs(chunkIds(ids, n.chunks = 1, reg = reg), reg = reg)
     waitForJobs(ids, reg = reg)
   })
 

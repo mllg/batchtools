@@ -20,7 +20,23 @@ Registry. If not explicitly passed, uses the last created registry.}
 [\code{\link[data.table]{data.table}}] (with class \dQuote{Status} for printing).
 }
 \description{
-This function gives an encompassing overview over the computational status
-on your system.
+This function gives an encompassing overview over the computational status on your system.
+}
+\examples{
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+fun = function(i) if (i == 3) stop(i) else i
+ids = batchMap(fun, i = 1:5, reg = tmp)
+submitJobs(ids = 1:4, reg = tmp)
+waitForJobs(reg = tmp)
+
+tab = getStatus(reg = tmp)
+print(tab)
+str(tab)
+}
+\seealso{
+Other debug: \code{\link{getErrorMessages}},
+  \code{\link{grepLogs}}, \code{\link{killJobs}},
+  \code{\link{resetJobs}}, \code{\link{showLog}},
+  \code{\link{testJob}}
 }
 

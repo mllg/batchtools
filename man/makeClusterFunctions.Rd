@@ -15,45 +15,46 @@ Name of cluster functions.}
 
 \item{submitJob}{[\code{function(reg, jc, ...)}]\cr
 Function to submit new jobs. Must return a \code{\link{SubmitJobResult}} object.
-The arguments are \code{reg} (\code{\link{Registry}}) and \code{jobs} (\code{\link{JobCollection}}).
-Set \code{submitJob} to \code{NULL} if killing jobs is not supported.}
+The arguments are \code{reg} (\code{\link{Registry}}) and \code{jobs} (\code{\link{JobCollection}}).}
 
 \item{killJob}{[\code{function(reg, batch.id)}]\cr
 Function to kill a job on the batch system. Make sure that you definitely kill the job! Return
 value is currently ignored. Must have the arguments \code{reg} (\code{\link{Registry}}) and
-\code{batch.id} (\code{character(1)}, returned by \code{submitJob}).
+\code{batch.id} (\code{character(1)} as returned by \code{submitJob}).
+Note that there is a helper function \code{\link{cfKillJob}} to repeatedly try to kill jobs.
 Set \code{killJob} to \code{NULL} if killing jobs cannot be supported.}
 
 \item{listJobsQueued}{[\code{function(reg)}]\cr
 List all queued jobs on the batch system for the current user and registry.
 Must return an character vector of batch ids, same format as they
-are produced by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.
+are returned by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.,
 all for the current user instead of all for the current registry), but you have to include all
 relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
-Set \code{listJobsQueued} to \code{NULL} if listing queued jobs is not supported.}
+Set \code{listJobsQueued} to \code{NULL} if listing of queued jobs is not supported.}
 
 \item{listJobsRunning}{[\code{function(reg)}]\cr
 List all running jobs on the batch system for the current user and registry. This includes
 running, held, idle, etc. jobs. Must return an character vector of batch ids, same format as they
-are produced by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.
+are returned by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.
 all for the current user instead of all for the current registry), but you have to include all
 relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
-Set \code{listJobsRunning} to \code{NULL} if listing jobs is not supported.}
+Set \code{listJobsRunning} to \code{NULL} if listing of running jobs is not supported.}
 
 \item{array.envir.var}{[\code{character(1)}]\cr
-Name of the environment variable set by the scheduler to identify IDs of job arrays. Default is
-\code{NA} for no array support.}
+Name of the environment variable set by the scheduler to identify IDs of job arrays.
+Default is \code{NA} for no array support.}
 
 \item{store.job}{[\code{logical(1)}]\cr
 Store the job on the file system before submitting? Default is \code{TRUE}.}
 
 \item{hooks}{[\code{list}]\cr
-Experimental feature. Named list of functions which will we called on certain events like \dQuote{pre.submit}
-or \dQuote{post.sync}. See \link{Hooks}.}
+Named list of functions which will we called on certain events like \dQuote{pre.submit} or \dQuote{post.sync}.
+See \link{Hooks}.}
 }
 \description{
-Use this function when you implement a back-end for a batch system. You must define the functions
-specified in the arguments.
+This is the constructor used to create \emph{custom} cluster functions.
+Note that some standard implementations for Torque, Slurm, LSF, SGE, etc. ship
+with the package.
 }
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
@@ -66,5 +67,12 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsSocket}},
   \code{\link{makeClusterFunctionsTorque}}
+
+Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
+  \code{\link{cfHandleUnknownSubmitError}},
+  \code{\link{cfKillJob}},
+  \code{\link{cfReadBrewTemplate}},
+  \code{\link{makeSubmitJobResult}},
+  \code{\link{runOSCommand}}
 }
 

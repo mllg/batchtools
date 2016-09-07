@@ -8,11 +8,17 @@
 #'  \item{file.dir}{\code{file.dir} of the \link{Registry}.}
 #'  \item{work.dir:}{\code{work.dir} of the \link{Registry}.}
 #'  \item{job.hash}{Unique identifier of the job. Used to create names on the file system.}
+#'  \item{jobs}{\code{\link[data.table]{data.table}} holding individual job information. See examples.}
 #'  \item{log.file}{Location of the designated log file for this job.}
-#'  \item{packages}{Vector of packages to load on the slaves, see \link{Registry}.}
 #'  \item{resources:}{Named list of of specified computational resources.}
 #'  \item{uri}{Location of the job description file (saved with \code{link[base]{saveRDS}} on the file system.}
-#'  \item{defs}{\code{\link[data.table]{data.table}} holding individual job information. See examples.}
+#'  \item{debug}{\code{logical(1)} Debug flag.}
+#'  \item{seed}{\code{integer(1)} Seed of the \link{Registry}.}
+#'  \item{packages}{\code{character} with required packages to load via \code{\link[base]{require}}.}
+#'  \item{namespaces}{code{character} with required packages to load via \code{\link[base]{requireNamespace}}.}
+#'  \item{source}{\code{character} with list of files to source before execution.}
+#'  \item{load}{\code{character} with list of files to load before execution.}
+#'  \item{array.var}{\code{character(1)} of the array environment variable specified by the cluster functions.}
 #' }
 #' If your \link{ClusterFunctions} uses a template, \code{\link[brew]{brew}} will be executed in the environment of such
 #' a collection. Thus all variables available inside the job can be used in the template.
@@ -28,12 +34,11 @@
 #' @rdname JobCollection
 #' @export
 #' @examples
-#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE, packages = "methods")
 #' batchMap(identity, 1:5, reg = tmp)
-#' jc = makeJobCollection(1:3, reg = tmp)
-#' ls(jc)
-#' jc$jobs
-#' jc$jobs$pars
+#' # resources are usually forwared from submitJobs()
+#' jc = makeJobCollection(1:3, resources = list(foo = "bar"), reg = tmp)
+#' print(ls.str(jc))
 makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   UseMethod("makeJobCollection", reg)
 }

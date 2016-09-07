@@ -9,14 +9,14 @@ makeClusterFunctionsMulticore(ncpus = NA_integer_)
 \arguments{
 \item{ncpus}{[\code{integer(1)}]\cr
 Number of VPUs of worker.
-Default is to use all cores. The total number of cores "available" is given by option \code{mc.cores}
+Default is to use all cores. The total number of cores "available" can be set via the option \code{mc.cores}
 and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
 }
 \description{
-Jobs are spawned asynchronously using the packages \pkg{parallel}.
+Jobs are spawned asynchronously using the functions \code{\link[parallel]{mcparallel}} and \code{\link[parallel]{mccollect}}.
 Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
 }
 \note{

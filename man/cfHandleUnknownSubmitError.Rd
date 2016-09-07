@@ -30,6 +30,7 @@ an informative error message containing the output of the OS command in \code{ou
 Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
   \code{\link{cfKillJob}},
   \code{\link{cfReadBrewTemplate}},
+  \code{\link{makeClusterFunctions}},
   \code{\link{makeSubmitJobResult}},
   \code{\link{runOSCommand}}
 }

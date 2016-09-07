@@ -5,7 +5,7 @@ test_that("getErrorMessages", {
   fun = function(i) if (i == 3) stop("foobar") else i
   ids = batchMap(fun, i = 1:5, reg = reg)
   silent({
-    submitJobs(chunkIds(1:4, reg=reg), reg = reg)
+    submitJobs(chunkIds(1:4, n.chunks = 1, reg=reg), reg = reg)
     waitForJobs(1:4, reg = reg)
   })
 
@@ -28,5 +28,5 @@ test_that("getErrorMessages", {
   expect_character(tab$message)
   expect_equal(is.na(tab$message), !replace(logical(5), c(3, 5), TRUE))
   expect_string(tab$message[3], fixed = "foobar")
-  expect_string(tab$message[5], fixed = "Not terminated")
+  expect_string(tab$message[5], fixed = "[not terminated]")
 })

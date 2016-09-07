@@ -44,10 +44,7 @@ Socket = R6Class("Socket",
 #' @description
 #' Jobs are spawned asynchronously using the package \pkg{snow}.
 #'
-#' @param ncpus [\code{integer(1)}]\cr
-#'   Number of VPUs of worker.
-#'   Default is to use all cores. The total number of cores "available" is given by option \code{mc.cores}
-#'   and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}.
+#' @template ncpus
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export

@@ -84,11 +84,12 @@ Experiment = R6Class("Experiment",
 #'
 #' Note that the slots \dQuote{pars}, \dQuote{fun}, \dQuote{algorithm} and \dQuote{problem}
 #' lazy-load required files from the file system and construct the object on the first access.
-#' Each subsequent access returns a cached version from memory (except \dQuote{instance} which is not cached).
+#' The realizations are cached for all slots except \dQuote{instance} (which might be stochastic).
 #'
-#' Jobs and Experiments be executed with \code{\link{execJob}}.
+#' Jobs and Experiments can be executed manually with \code{\link{execJob}}.
+#'
 #' @template id
-#' @param cache [\code{Cache}]\cr
+#' @param cache [\code{Cache} | \code{NULL}]\cr
 #'  Cache to retrieve files. Used internally.
 #' @template reg
 #' @return [\code{Job} | \code{Experiment}].
@@ -97,25 +98,38 @@ Experiment = R6Class("Experiment",
 #' @export
 #' @examples
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
-#' batchMap(identity, 1:5, reg = tmp)
+#' batchMap(function(x, y) x + y, x = 1:2, more.args = list(y = 99), reg = tmp)
+#' submitJobs(resources = list(foo = "bar"), reg = tmp)
 #' job = makeJob(1, reg = tmp)
-#' names(job)
+#' print(job)
+#'
+#' # Get the parameters:
+#' job$pars
+#'
+#' # Get the job resources:
+#' job$resources
+#'
+#' # Execute the job locally:
+#' execJob(job)
 makeJob = function(id, cache = NULL, reg = getDefaultRegistry()) {
   UseMethod("makeJob", object = reg)
 }
 
+
 #' @export
 makeJob.Registry = function(id, cache = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "resource.id"))
+  resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA, with = FALSE]$resources[[1L]] %??% list()
   Job$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
-    resources = filter(reg$resources, row)$resources)
+    resources = resources)
 }
 
 #' @export
 makeJob.ExperimentRegistry = function(id, cache = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "problem", "algorithm", "repl", "resource.id"))
+  resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA, with = FALSE]$resources[[1L]] %??% list()
   Experiment$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
-    repl = row$repl, resources = filter(reg$resources, row)$resources, prob.name = row$problem, algo.name = row$algorithm)
+    repl = row$repl, resources = resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
 getJob = function(jc, id, cache = NULL) {

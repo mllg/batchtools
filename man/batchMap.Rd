@@ -9,35 +9,37 @@ batchMap(fun, ..., args = list(), more.args = list(),
 }
 \arguments{
 \item{fun}{[\code{function}]\cr
-Function to map over \code{...}.}
+Function to map over arguments provided via \code{...}.}
 
 \item{...}{[any]\cr
 Arguments to vectorize over (list or vector).
-Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the maximum length).
-Mutually exclusive with \code{args}.}
+Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the longest length).
+Mutually exclusive with \code{args}.
+Note that although it is possible to iterate over large objects (e.g., lists of data frames or matrices), this usually
+hurts the overall performance and thus is discouraged.}
 
 \item{args}{[\code{list} | \code{data.frame}]\cr
 Arguments to vectorize over as (named) list or data frame.
-Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the maximum length).
+Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the longest length).
 Mutually exclusive with \code{...}.}
 
 \item{more.args}{[\code{list}]\cr
-A list of other arguments passed to \code{fun}.
+A list of further arguments passed to \code{fun}.
 Default is an empty list.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{\link{data.table}}]. Generated job ids are stored in the column \dQuote{job.id}.
-  See \code{\link{JoinTables}} for examples on working with job tables.
+[\code{\link{data.table}}] with ids of added jobs stored in column \dQuote{job.id}.
 }
 \description{
-A parallel \code{\link[base]{Map}} for batch systems.
-Note that this function only defines the jobs.
-The actual computation is started with \code{\link{submitJobs}} and results
-can be collected with \code{\link{reduceResultsList}}, \code{\link{reduceResults}} or
+A parallel and asynchronous \code{\link[base]{Map}} for batch systems.
+Note that this function only defines the computational jobs.
+The actual computation is started with \code{\link{submitJobs}}.
+Results and partial results can be collected with \code{\link{reduceResultsList}}, \code{\link{reduceResults}} or
 \code{\link{loadResult}}.
+
 For a synchronous \code{\link[base]{Map}}-like execution see \code{\link{btmapply}}.
 }
 \examples{
@@ -55,6 +57,12 @@ ids = batchMap(f, x = 1:3, y = 1:6, reg = tmp)
 getJobPars(reg = tmp)
 
 # example for an expand.grid()-like operation on parameters
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), more.args = list(sep = ""), reg = tmp)
+getJobPars(reg = tmp)
+testJob(6, reg = tmp)
+
+# example on how to deal with bulky objects
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), more.args = list(sep = ""), reg = tmp)
 getJobPars(reg = tmp)

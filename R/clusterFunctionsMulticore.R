@@ -1,6 +1,5 @@
 if (getRversion() < "3.3.2" && .Platform$OS.type != "windows") {
-  # Backport required to have retrieve job names
-  # Provided patch for upstream which is shipped with R >= 3.3.2
+  # Provided patch for upstream which is shipped with R >= 3.3.2:
   # https://stat.ethz.ch/pipermail/r-devel/2016-August/073035.html
   selectChildren = getFromNamespace("selectChildren", "parallel")
   readChild = getFromNamespace("readChild", "parallel")
@@ -72,16 +71,13 @@ Multicore = R6Class("Multicore",
 #' @title ClusterFunctions for Parallel Multicore Execution
 #'
 #' @description
-#' Jobs are spawned asynchronously using the packages \pkg{parallel}.
+#' Jobs are spawned asynchronously using the functions \code{\link[parallel]{mcparallel}} and \code{\link[parallel]{mccollect}}.
 #' Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
 #'
 #' @note
 #' Sets the number of threads internally used by \pkg{data.table} to 1 during initialization (via \code{data.table::setthreads}).
 #'
-#' @param ncpus [\code{integer(1)}]\cr
-#'   Number of VPUs of worker.
-#'   Default is to use all cores. The total number of cores "available" is given by option \code{mc.cores}
-#'   and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}.
+#' @template ncpus
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export

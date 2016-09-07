@@ -28,7 +28,8 @@ Use with care.
 }
 \seealso{
 Other debug: \code{\link{getErrorMessages}},
-  \code{\link{grepLogs}}, \code{\link{killJobs}},
-  \code{\link{showLog}}, \code{\link{testJob}}
+  \code{\link{getStatus}}, \code{\link{grepLogs}},
+  \code{\link{killJobs}}, \code{\link{showLog}},
+  \code{\link{testJob}}
 }
 

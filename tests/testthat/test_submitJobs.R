@@ -5,7 +5,7 @@ test_that("submitJobs", {
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, reg = reg)
 
-  silent(submitJobs(chunkIds(1:2, reg = reg), resources = list(foo = "bar"), reg = reg))
+  silent(submitJobs(chunkIds(1:2, n.chunks = 1, reg = reg), resources = list(foo = "bar"), reg = reg))
   checkTables(reg)
 
   expect_integer(reg$status[1:2, resource.id], any.missing = FALSE)

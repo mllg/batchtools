@@ -1,33 +1,30 @@
 #' @title Add Experiments to the Registry
 #'
 #' @description
-#' Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.
+#' Adds experiments (parametrized combinations of problems with algorithms) to the registry and thereby defines batch jobs.
+#'
 #' If multiple problem designs or algorithm designs are provided, they are combined via the Cartesian product.
 #' E.g., if you have two problems \code{p1} and \code{p2} and three algorithms \code{a1}, \code{a2} and \code{a3},
-#' \code{addExperiments} creates experiments for the combinations \code{(p1, a1)}, \code{(p1, a2)},
+#' \code{addExperiments} creates experiments for all parameters for the combinations \code{(p1, a1)}, \code{(p1, a2)},
 #' \code{(p1, a3)}, \code{(p2, a1)}, \code{(p2, a2)} and \code{(p2, a3)}.
 #'
-#' The combination of a single problem design with a single algorithm design (e.g., \code{p1, a1}) can be
-#' controlled via the parameter \code{combine}.
-#'
-#' @param prob.designs [named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
-#'   Named list of data frames. The name must match the problem name while the column names correspond to parameters
-#'   of the problem.
-#'   If \code{NULL}, adds experiments for all defined problems without any parameters set.
+#' @param prob.designs [named list of \code{\link[base]{data.frame}}]\cr
+#'   Named list of data frames (or \code{\link[data.table]{data.table}}).
+#'   The name must match the problem name while the column names correspond to parameters of the problem.
+#'   If \code{NULL}, experiments for all defined problems without any parameters are added.
 #' @param algo.designs [named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
-#'   Named list of data frames. The name must match the algorithm name while the column names correspond to parameters
-#'   of the algorithm.
-#'   If \code{NULL}, adds experiments for all defined algorithms without any parameters set.
+#'   Named list of data frames (or \code{\link[data.table]{data.table}}).
+#'   The name must match the algorithm name while the column names correspond to parameters of the algorithm.
+#'   If \code{NULL}, experiments for all defined algorithms without any parameters are added.
 #' @param repls [\code{integer(1)}]\cr
-#'   Number of replications for each distinct experiment.
+#'   Number of replications for each experiment.
 #' @param combine [\code{character(1)}]\cr
 #'   How to combine the rows of a single problem design with the rows of a single algorithm design?
 #'   Default is \dQuote{crossprod} which combines each row of the problem design which each row of the algorithm design
 #'   in a cross-product fashion. Set to \dQuote{bind} to just \code{\link[base]{cbind}} the tables of
 #'   problem and algorithm designs where the shorter table is repeated if necessary.
 #' @template expreg
-#' @return [\code{\link{data.table}}]. Generated job ids are stored in the column \dQuote{job.id}.
-#'   See \code{\link{JoinTables}} for examples on working with job tables.
+#' @return [\code{\link{data.table}}] with ids of added jobs stored in column \dQuote{job.id}.
 #' @export
 #' @family Experiment
 #' @examples

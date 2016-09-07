@@ -61,7 +61,6 @@ Registry. If not explicitly passed, uses the last created registry.}
     \item{problem}{Only for \code{\link{ExperimentRegistry}}: the problem identifier.}
     \item{algorithm}{Only for \code{\link{ExperimentRegistry}}: the algorithm identifier.}
   }
-  See \code{\link{JoinTables}} for examples on working with job tables.
 }
 \description{
 \code{getJobStatus} returns the internal table which stores information about the computational
@@ -78,10 +77,15 @@ batchMap(f, x = c(-1, 0, 1), reg = tmp)
 submitJobs(reg = tmp)
 waitForJobs(reg = tmp)
 
+# Complete table:
 getJobTable(reg = tmp, flatten = FALSE)
-getJobPars(reg = tmp)
+
+# Table with tags:
 addJobTags(1:2, "tag1", reg = tmp)
 addJobTags(2, "tag2", reg = tmp)
 getJobTags(reg = tmp)
+
+# Job parameters with tags right-joined:
+rjoin(getJobPars(reg = tmp), getJobTags(reg = tmp))
 }
 

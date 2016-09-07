@@ -25,11 +25,11 @@ ajoin(x, y)
 \arguments{
 \item{x}{[\code{\link{data.frame}} | \code{integer}]\cr
 Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
-or an integer vector fof job ids.}
+or an integer vector of job ids.}
 
 \item{y}{[\code{\link{data.frame}} | \code{integer}]\cr
 Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
-or an integer vector fof job ids.}
+or an integer vector of job ids.}
 }
 \value{
 [\code{\link{data.table}}] with key \dQuote{job.id}.
@@ -41,29 +41,29 @@ See \url{http://rpubs.com/ronasta/join_data_tables} for a overview of join opera
 data table or alternatively \pkg{dplyr}'s vignette on two table verbs.
 }
 \examples{
-# create two tables for demonstration
+# Create two tables for demonstration
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(identity, x = 1:6, reg = tmp)
 x = getJobPars(reg = tmp)
 y = findJobs(x >= 2 & x <= 5, reg = tmp)
 y$extra.col = head(letters, nrow(y))
 
-# inner join: similar to intersect() on ids, keep all columns of x and y
+# Inner join: similar to intersect() on ids, keep all columns of x and y
 ijoin(x, y)
 
-# left join: use all ids from x, keep all columns of x and y
+# Left join: use all ids from x, keep all columns of x and y
 ljoin(x, y)
 
-# right join: use all ids from y, keep all columns of x and y
+# Right join: use all ids from y, keep all columns of x and y
 rjoin(x, y)
 
-# outer join: similar to union() on ids, keep all columns of x and y
+# Outer join: similar to union() on ids, keep all columns of x and y
 ojoin(x, y)
 
-# semi join: similar to intersect() on ids, keep all columns of x
+# Semi join: similar to intersect() on ids, keep all columns of x
 sjoin(x, y)
 
-# anti join: similar to setdiff() on ids, keep all columns of x
+# Anti join: similar to setdiff() on ids, keep all columns of x
 ajoin(x, y)
 }
 

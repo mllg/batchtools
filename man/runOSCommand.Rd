@@ -11,8 +11,8 @@ runOSCommand(sys.cmd, sys.args = character(0L), nodename = "localhost",
 \item{sys.cmd}{[\code{character(1)}]\cr
 Command to run.}
 
-\item{sys.args}{[\code{character()}]\cr
-Arguments to \code{sys.cmd}.}
+\item{sys.args}{[\code{character}]\cr
+Arguments for \code{sys.cmd}.}
 
 \item{nodename}{[\code{character(1)}]\cr
 Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
@@ -27,7 +27,7 @@ If \code{TRUE}, the commands send to the OS are printed.}
 \description{
 This is a helper function to run arbitrary OS commands on local or remote machines.
 The interface is similar to \code{\link[base]{system2}}, but it always returns the exit status
-and the output.
+\emph{and} the output.
 }
 \examples{
 \dontrun{
@@ -41,6 +41,7 @@ Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
   \code{\link{cfHandleUnknownSubmitError}},
   \code{\link{cfKillJob}},
   \code{\link{cfReadBrewTemplate}},
+  \code{\link{makeClusterFunctions}},
   \code{\link{makeSubmitJobResult}}
 }
 

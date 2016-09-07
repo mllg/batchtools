@@ -83,21 +83,38 @@ jobs.
 }
 \examples{
 tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+
+# Definde one problem, two algorithms and add them with some parameters:
 addProblem(reg = tmp, "p1",
   fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
 addAlgorithm(reg = tmp, "a1", fun = function(job, data, instance, ...) mean(instance))
-addExperiments(reg = tmp, list(p1 = CJ(n = 100, mean = -3:3, sd = 1:5)), list(a1 = data.table()))
-submitJobs(reg = tmp)
+addAlgorithm(reg = tmp, "a2", fun = function(job, data, instance, ...) median(instance))
+ids = addExperiments(reg = tmp, list(p1 = CJ(n = c(50, 100), mean = -2:2, sd = 1:4)))
+
+# Overview over defined experiments:
+getProblemIds(reg = tmp)
+getAlgorithmIds(reg = tmp)
+summarizeExperiments(reg = tmp)
+summarizeExperiments(reg = tmp, by = c("problem", "algorithm", "n"))
+ids = findExperiments(prob.pars = (n == 50), reg = tmp)
+getJobPars(ids, reg = tmp)
+
+# Chunk jobs per algorithm and submit them:
+ids = chunkIds(getJobPars(reg = tmp), group.by = "algorithm", reg = tmp)
+submitJobs(ids, reg = tmp)
 waitForJobs(reg = tmp)
 
-# Reduce the results
-reduceResults(reg = tmp, fun = function(aggr, res, ...) c(aggr, res))
+# Reduce the results of algorithm a1
+ids.mean = findExperiments(algo.name = "a1", reg = tmp)
+reduceResults(ids.mean, fun = function(aggr, res, ...) c(aggr, res), reg = tmp)
 
-# Join info table with results
+# Join info table with all results and calculate mean of results
+# grouped by n and algorithm
 ids = findDone(reg = tmp)
-tab = getJobPars(reg = tmp, ids = ids)
-res = reduceResultsDataTable(reg = tmp, ids = ids)
-tab[res]
+pars = getJobPars(ids, reg = tmp)
+results = reduceResultsDataTable(ids, fun = function(res) list(res = res), reg = tmp)
+tab = ljoin(pars, results)
+tab[, list(mres = mean(res)), by = c("n", "algorithm")]
 }
 \seealso{
 Other Experiment: \code{\link{addExperiments}},

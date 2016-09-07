@@ -4,6 +4,10 @@ test_that("Job", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, reg = reg, more.args = list(x = 1))
+  silent({
+    submitJobs(1, resources = list(foo = "bar"), reg = reg)
+    waitForJobs(1, reg = reg)
+  })
 
   job = makeJob(reg = reg, i = 1)
   expect_is(job, "Job")
@@ -11,15 +15,17 @@ test_that("Job", {
   expect_equal(job$pars, list(i = 1L, x = 1))
   expect_count(job$seed)
   expect_list(job$resources, names = "named")
+  expect_equal(job$resources$foo, "bar")
   expect_function(job$fun)
 
-  jc = makeJobCollection(reg = reg)
+  jc = makeJobCollection(reg = reg, resources = list(foo = "bar"))
   job = getJob(jc, 1)
   expect_is(job, "Job")
   expect_identical(job$id, 1L)
   expect_equal(job$pars, list(i = 1L, x = 1))
   expect_count(job$seed)
   expect_list(job$resources, names = "named")
+  expect_equal(job$resources$foo, "bar")
   expect_function(job$fun)
 })
 

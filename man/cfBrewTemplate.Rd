@@ -14,8 +14,8 @@ Registry. If not explicitly passed, uses the last created registry.}
 String ready to be brewed. See \code{\link{cfReadBrewTemplate}} to read a template from the file system.}
 
 \item{jc}{[\code{\link{JobCollection})}]\cr
-JobCollection holding all essential information. Will be used as environment to look
-up variables.}
+Will be used as environment to brew the template file in. See \code{\link{JobCollection}} for a list of all
+available variables.}
 }
 \value{
 [\code{character(1)}]. File path to brewed template file.
@@ -25,13 +25,13 @@ This function is only intended for use in your own cluster functions implementat
 
 Calls brew silently on your template, any error will lead to an exception. If debug mode is
 enabled (via option \dQuote{batchtools.debug}), the file is stored at the same place as the corresponding
-R script in the \dQuote{jobs}-subdir of your files directory, otherwise in the temp dir via
-\code{\link{tempfile}}.
+job file in the \dQuote{jobs}-subdir of your files directory, otherwise as \code{\link{tempfile}} on the local system.
 }
 \seealso{
 Other ClusterFunctionsHelper: \code{\link{cfHandleUnknownSubmitError}},
   \code{\link{cfKillJob}},
   \code{\link{cfReadBrewTemplate}},
+  \code{\link{makeClusterFunctions}},
   \code{\link{makeSubmitJobResult}},
   \code{\link{runOSCommand}}
 }

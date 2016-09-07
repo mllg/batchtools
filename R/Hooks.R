@@ -23,7 +23,7 @@
 #'  See description.
 #' @return Return value of the called function, or \code{NULL} if there is no hook
 #'  with the specified ID.
-#' @aliases Hooks
+#' @aliases Hooks Hook
 #' @export
 runHook = function(obj, hook, ...) {
   UseMethod("runHook")

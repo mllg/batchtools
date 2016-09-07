@@ -1,18 +1,19 @@
 #' @title Define Problems and Algorithms for Experiments
 #'
 #' @description
-#' Problems may consist of up to two parts. A static, immutable part (\code{data} in \code{addProblem})
+#' Problems may consist of up to two parts: A static, immutable part (\code{data} in \code{addProblem})
 #' and a dynamic, stochastic part (\code{fun} in \code{addProblem}).
 #' For example, for statistical learning problems a data frame would be the static problem part while
 #' a resampling function would be the stochastic part which creates problem instance.
 #' This instance is then typically passed to a learning algorithm like a wrapper around a statistical model
 #' (\code{fun} in \code{addAlgorithm}).
 #'
-#' The functions serialize the components to the file system and register the respective problem or algorithm
+#' The functions serialize all components to the file system and register the respective problem or algorithm
 #' names in the \code{\link{ExperimentRegistry}}.
 #'
 #' \code{getProblemIds} and \code{getAlgorithmIds} can be used to retrieve the IDs of already defined problems
 #' and algorithms, respectively.
+#'
 #' @param name [\code{character(1)}]\cr
 #'   Unique identifier for the problem or algorithm.
 #' @param data [\code{ANY}]\cr
@@ -102,4 +103,52 @@ removeProblem = function(name, reg = getDefaultRegistry()) {
 getProblemIds = function(reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg)
   levels(reg$defs$problem)
+}
+
+#' @rdname ProblemAlgorithm
+#' @export
+addAlgorithm = function(name, fun = NULL, reg = getDefaultRegistry())  {
+  assertExperimentRegistry(reg, writeable = TRUE)
+  assertString(name, min.chars = 1L)
+  if (!stri_detect_regex(name, "^[[:alnum:]_.-]+$"))
+    stopf("Illegal characters in problem name: %s", name)
+  if (is.null(fun)) {
+    fun = function(job, data, instance, ...) instance
+  } else {
+    assert(checkFunction(fun, args = c("job", "data", "instance")), checkFunction(fun, args = "..."))
+  }
+
+  algo = setClasses(list(fun = fun, name = name), "Algorithm")
+  writeRDS(algo, file = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", name)))
+  reg$defs$algorithm = addlevel(reg$defs$algorithm, name)
+  saveRegistry(reg)
+  invisible(algo)
+}
+
+#' @export
+#' @rdname ProblemAlgorithm
+removeAlgorithm = function(name, reg = getDefaultRegistry()) {
+  assertExperimentRegistry(reg, writeable = TRUE, running.ok = FALSE)
+  assertString(name)
+  assertSubset(name, levels(reg$defs$algorithm))
+
+  fn = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", name))
+  algorithm = NULL
+  def.ids = reg$defs[algorithm == name, "def.id", with = FALSE]
+  job.ids = filter(def.ids, reg$status, "job.id")
+
+  info("Removing Algorithm '%s' and %i corresponding jobs ...", name, nrow(job.ids))
+  file.remove(fn)
+  reg$defs = reg$defs[!def.ids]
+  reg$status = reg$status[!job.ids]
+  reg$defs$algorithm = rmlevel(reg$defs$algorithm, name)
+  sweepRegistry(reg)
+  invisible(TRUE)
+}
+
+#' @export
+#' @rdname ProblemAlgorithm
+getAlgorithmIds = function(reg = getDefaultRegistry()) {
+  assertExperimentRegistry(reg)
+  levels(reg$defs$algorithm)
 }

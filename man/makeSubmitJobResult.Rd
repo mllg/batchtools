@@ -26,6 +26,8 @@ Optional error message in case \code{status} is not equal to 0. Default is \dQuo
   \code{status}, \code{batch.id} and \code{msg}.
 }
 \description{
+This function is only intended for use in your own cluster functions implementation.
+
 Use this function in your implementation of \code{\link{makeClusterFunctions}} to create a return
 value for the \code{submitJob} function.
 }
@@ -34,6 +36,7 @@ Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
   \code{\link{cfHandleUnknownSubmitError}},
   \code{\link{cfKillJob}},
   \code{\link{cfReadBrewTemplate}},
+  \code{\link{makeClusterFunctions}},
   \code{\link{runOSCommand}}
 }
 

@@ -28,21 +28,21 @@ extractLog = function(log, id) {
 #' @title Grep Log Files for a Pattern
 #'
 #' @description
-#' Crawls through log files and reports jobs with where lines matches the \code{pattern}.
+#' Crawls through log files and reports jobs with lines matching the \code{pattern}.
+#' See \code{\link{showLog}} for an example.
 #'
 #' @templateVar ids.default findStarted
 #' @template ids
 #' @param pattern [\code{character(1L)}]\cr
 #'  Regular expression or string (see \code{fixed}).
 #' @param ignore.case [\code{logical(1L)}]\cr
-#'  If \code{TRUE} the match will be performed case insensitive.
+#'  If \code{TRUE} the match will be performed case insensitively.
 #' @param fixed [\code{logical(1L)}]\cr
 #'  If \code{FALSE} (default), \code{pattern} is a regular expression and a fixed string otherwise.
 #' @template reg
 #' @export
 #' @family debug
-#' @return [\code{\link{data.table}}]. Matching job ids are stored in the column \dQuote{job.id}.
-#'   See \code{\link{JoinTables}} for examples on working with job tables.
+#' @return [\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{message}.
 grepLogs = function(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   assertString(pattern, min.chars = 1L)
@@ -87,6 +87,25 @@ grepLogs = function(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE, reg
 #' @export
 #' @family debug
 #' @return Nothing.
+#' @examples
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#'
+#' # Create some dummy jobs
+#' fun = function(i) {
+#'   if (i == 3) stop(i)
+#'   if (i %% 2 == 1) warning("That's odd.")
+#' }
+#' ids = batchMap(fun, i = 1:5, reg = tmp)
+#' submitJobs(reg = tmp)
+#' waitForJobs(reg = tmp)
+#' getStatus(reg = tmp)
+#'
+#' writeLines(getLog(ids[1], reg = tmp))
+#' \dontrun{
+#' showLog(ids[1], reg = tmp)
+#' }
+#'
+#' grepLogs(pattern = "warning", ignore.case = TRUE, reg = tmp)
 showLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   id = convertId(reg, id)

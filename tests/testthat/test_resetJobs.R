@@ -9,7 +9,7 @@ test_that("resetJobs", {
     defs = copy(reg$defs)
   )
   silent({
-    submitJobs(chunkIds(1:3, reg = reg), reg = reg)
+    submitJobs(chunkIds(1:3, n.chunks = 1, reg = reg), reg = reg)
     waitForJobs(reg = reg)
   })
 

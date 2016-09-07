@@ -8,12 +8,13 @@
 #' have the appropriate privileges to submit, delete and list jobs on the
 #' cluster (this is usually the case).
 #'
-#' The template file can access all arguments passed to the \code{submitJob}
-#' function, see here \code{\link{ClusterFunctions}}. It is the template file's
-#' job handle the desired resource allocations.
-#' Note that you have to specify the cluster name here (if you do not want to use the default),
-#' otherwise the commands for listing and killing jobs do not work.
-#' The value set can be accessed in the template via \dQuote{clusters}.
+#' The template file can access all resources passed to \code{\link{submitJobs}}
+#' as well as all variables stored in the \code{\link{JobCollection}}.
+#' It is the template file's job to choose a queue for the job and handle the desired resource
+#' allocations.
+#'
+#' Note that you might have to specify the cluster name here if you do not want to use the default,
+#' otherwise the commands for listing and killing jobs will not work.
 #'
 #' @templateVar cf.name slurm
 #' @template template

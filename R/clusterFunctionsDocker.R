@@ -1,16 +1,22 @@
 #' @title ClusterFunctions for Docker
 #'
 #' @description
-#' Experimental cluster functions for Docker/Docker Swarm.
+#' Cluster functions for Docker/Docker Swarm.
 #'
-#' The \code{submitJobs} function executes \code{docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]}.
-#' Arguments \code{docker.args}, \code{image.args} and \code{image} can be set via arguments on construction.
+#' The \code{submitJob} function executes \code{docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]}.
+#' Arguments \code{docker.args}, \code{image.args} and \code{image} can be set on construction.
 #' The \code{resources} part takes the named resources \code{ncpus} and \code{memory} from \code{\link{submitJobs}} and maps them to
 #' the arguments \code{--cpu-shares} and \code{--memory} (in Megabytes).
+#' To reliably identify jobs in the swarm, jobs are labeled with \dQuote{batchtools=[job.hash]} and named using the current login name and the job hash.
 #'
 #' \code{listJobsRunning} uses \code{docker [docker.args] ps --format=\{\{.ID\}\}} to filter for running jobs.
 #'
 #' \code{killJobs} uses \code{docker [docker.args] kill [batch.id]} to filter for running jobs.
+#'
+#' These cluster functions use a \link{Hook} to remove finished jobs before a new submit and every time the \link{Registry}
+#' is synchronized (using \code{\link{syncRegistry}}).
+#' This is currently required because docker does not remove exited containers automatically.
+#' Use \code{docker ps -a --filter 'label=batchtools' --filter 'status=exited'} to identify and remove terminated containers manually (or via a cron job).
 #'
 #' @param image [\code{character(1)}]\cr
 #'   Name of the docker image to run.

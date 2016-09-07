@@ -28,9 +28,9 @@ list of running jobs is retrieved using \code{bjobs -u $USER -w}. The user
 must have the appropriate privileges to submit, delete and list jobs on the
 cluster (this is usually the case).
 
-The template file can access all arguments passed to the \code{submitJob}
-function, see here \code{\link{ClusterFunctions}}. It is the template file's
-job to choose a queue for the job and handle the desired resource
+The template file can access all resources passed to \code{\link{submitJobs}}
+as well as all variables stored in the \code{\link{JobCollection}}.
+It is the template file's job to choose a queue for the job and handle the desired resource
 allocations.
 }
 \seealso{

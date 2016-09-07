@@ -18,7 +18,7 @@ If not set, defaults to the return value of \code{\link{findStarted}}.}
 Regular expression or string (see \code{fixed}).}
 
 \item{ignore.case}{[\code{logical(1L)}]\cr
-If \code{TRUE} the match will be performed case insensitive.}
+If \code{TRUE} the match will be performed case insensitively.}
 
 \item{fixed}{[\code{logical(1L)}]\cr
 If \code{FALSE} (default), \code{pattern} is a regular expression and a fixed string otherwise.}
@@ -27,15 +27,16 @@ If \code{FALSE} (default), \code{pattern} is a regular expression and a fixed st
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{\link{data.table}}]. Matching job ids are stored in the column \dQuote{job.id}.
-  See \code{\link{JoinTables}} for examples on working with job tables.
+[\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{message}.
 }
 \description{
-Crawls through log files and reports jobs with where lines matches the \code{pattern}.
+Crawls through log files and reports jobs with lines matching the \code{pattern}.
+See \code{\link{showLog}} for an example.
 }
 \seealso{
 Other debug: \code{\link{getErrorMessages}},
-  \code{\link{killJobs}}, \code{\link{resetJobs}},
-  \code{\link{showLog}}, \code{\link{testJob}}
+  \code{\link{getStatus}}, \code{\link{killJobs}},
+  \code{\link{resetJobs}}, \code{\link{showLog}},
+  \code{\link{testJob}}
 }
 

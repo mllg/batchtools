@@ -9,8 +9,8 @@ doJobCollection(jc, output = NULL)
 \arguments{
 \item{jc}{[\code{\link{JobCollection}}]\cr
 Either an object of class \dQuote{JobCollection} as returned by
-\code{\link{makeJobCollection}} or a string point to file containing a
-\dQuote{JobCollection} (saved with \code{\link[base]{saveRDS}}).}
+\code{\link{makeJobCollection}} or a string with the path to file
+containing a \dQuote{JobCollection} as RDS file (as stored by \code{\link{submitJobs}}).}
 
 \item{output}{[\code{character(1)}]\cr
 Path to a file to write the output to. Defaults to \code{NULL} which means

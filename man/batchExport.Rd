@@ -9,7 +9,7 @@ batchExport(x = list(), reg = getDefaultRegistry())
 \arguments{
 \item{x}{[\code{list}]\cr
 Named list of objects to export.
-Set to \code{NULL} to unexport the object.}
+Set to \code{NULL} to un-export objects.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
@@ -20,8 +20,8 @@ Registry. If not explicitly passed, uses the last created registry.}
 \description{
 Objects are saved in subdirectory \dQuote{exports} of the
 \dQuote{file.dir} of \code{reg}.
-They are automatically loaded and put into the global environment
-each time the registry is loaded on the master as well as on the slaves.
+They are automatically loaded and placed in the global environment
+each time the registry is loaded or a job collection is executed.
 }
 \examples{
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
@@ -30,7 +30,7 @@ tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 exports = batchExport(reg = tmp)
 print(exports)
 
-# add job depending on exports
+# add a job and required exports
 batchMap(function(x) x^2 + y + z, x = 1:3, reg = tmp)
 exports = batchExport(list(y = 99, z = 1), reg = tmp)
 print(exports)

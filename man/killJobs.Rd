@@ -18,20 +18,19 @@ Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
 [\code{\link{data.table}}] with columns \dQuote{job.id}, the corresponding \dQuote{batch.id} and
-  the flag \dQuote{killed} to indicate success.
-  See \code{\link{JoinTables}} for examples on working with job tables.
+  the logical flag \dQuote{killed} indicating success.
 }
 \description{
-Kill jobs which have already been submitted to the batch system.
-If a job is killed its internal state is reset as if it had not been submitted at all.
+Kill jobs which are currently running on the batch system.
 
 In case of an error when killing, the function tries - after a short sleep - to kill the remaining
-batch jobs again. If this fails again for some jobs, the function gives up. Only jobs that could be
-killed are reset in the DB.
+batch jobs again. If this fails three times for some jobs, the function gives up. Jobs that could be
+successfully killed are reset in the \link{Registry}.
 }
 \seealso{
 Other debug: \code{\link{getErrorMessages}},
-  \code{\link{grepLogs}}, \code{\link{resetJobs}},
-  \code{\link{showLog}}, \code{\link{testJob}}
+  \code{\link{getStatus}}, \code{\link{grepLogs}},
+  \code{\link{resetJobs}}, \code{\link{showLog}},
+  \code{\link{testJob}}
 }
 

@@ -24,9 +24,30 @@ Nothing.
 \code{showLog} opens the log in the pager. For customization, see \code{\link[base]{file.show}}.
 \code{getLog} returns the log as character vector.
 }
+\examples{
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+
+# Create some dummy jobs
+fun = function(i) {
+  if (i == 3) stop(i)
+  if (i \%\% 2 == 1) warning("That's odd.")
+}
+ids = batchMap(fun, i = 1:5, reg = tmp)
+submitJobs(reg = tmp)
+waitForJobs(reg = tmp)
+getStatus(reg = tmp)
+
+writeLines(getLog(ids[1], reg = tmp))
+\dontrun{
+showLog(ids[1], reg = tmp)
+}
+
+grepLogs(pattern = "warning", ignore.case = TRUE, reg = tmp)
+}
 \seealso{
 Other debug: \code{\link{getErrorMessages}},
-  \code{\link{grepLogs}}, \code{\link{killJobs}},
-  \code{\link{resetJobs}}, \code{\link{testJob}}
+  \code{\link{getStatus}}, \code{\link{grepLogs}},
+  \code{\link{killJobs}}, \code{\link{resetJobs}},
+  \code{\link{testJob}}
 }
 

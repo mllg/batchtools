@@ -1,45 +1,47 @@
 #' @title ClusterFunctions Constructor
 #'
 #' @description
-#' Use this function when you implement a back-end for a batch system. You must define the functions
-#' specified in the arguments.
+#' This is the constructor used to create \emph{custom} cluster functions.
+#' Note that some standard implementations for Torque, Slurm, LSF, SGE, etc. ship
+#' with the package.
 #'
 #' @param name [\code{character(1)}]\cr
 #'   Name of cluster functions.
 #' @param submitJob [\code{function(reg, jc, ...)}]\cr
 #'   Function to submit new jobs. Must return a \code{\link{SubmitJobResult}} object.
 #'   The arguments are \code{reg} (\code{\link{Registry}}) and \code{jobs} (\code{\link{JobCollection}}).
-#'   Set \code{submitJob} to \code{NULL} if killing jobs is not supported.
 #' @param killJob [\code{function(reg, batch.id)}]\cr
 #'   Function to kill a job on the batch system. Make sure that you definitely kill the job! Return
 #'   value is currently ignored. Must have the arguments \code{reg} (\code{\link{Registry}}) and
-#'   \code{batch.id} (\code{character(1)}, returned by \code{submitJob}).
+#'   \code{batch.id} (\code{character(1)} as returned by \code{submitJob}).
+#'   Note that there is a helper function \code{\link{cfKillJob}} to repeatedly try to kill jobs.
 #'   Set \code{killJob} to \code{NULL} if killing jobs cannot be supported.
 #' @param listJobsQueued [\code{function(reg)}]\cr
 #'   List all queued jobs on the batch system for the current user and registry.
 #'   Must return an character vector of batch ids, same format as they
-#'   are produced by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.
+#'   are returned by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.,
 #'   all for the current user instead of all for the current registry), but you have to include all
 #'   relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
-#'   Set \code{listJobsQueued} to \code{NULL} if listing queued jobs is not supported.
+#'   Set \code{listJobsQueued} to \code{NULL} if listing of queued jobs is not supported.
 #' @param listJobsRunning [\code{function(reg)}]\cr
 #'   List all running jobs on the batch system for the current user and registry. This includes
 #'   running, held, idle, etc. jobs. Must return an character vector of batch ids, same format as they
-#'   are produced by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.
+#'   are returned by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.
 #'   all for the current user instead of all for the current registry), but you have to include all
 #'   relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
-#'   Set \code{listJobsRunning} to \code{NULL} if listing jobs is not supported.
+#'   Set \code{listJobsRunning} to \code{NULL} if listing of running jobs is not supported.
 #' @param array.envir.var [\code{character(1)}]\cr
-#'   Name of the environment variable set by the scheduler to identify IDs of job arrays. Default is
-#'   \code{NA} for no array support.
+#'   Name of the environment variable set by the scheduler to identify IDs of job arrays.
+#'   Default is \code{NA} for no array support.
 #' @param store.job [\code{logical(1)}]\cr
 #'   Store the job on the file system before submitting? Default is \code{TRUE}.
 #' @param hooks [\code{list}]\cr
-#'   Experimental feature. Named list of functions which will we called on certain events like \dQuote{pre.submit}
-#'   or \dQuote{post.sync}. See \link{Hooks}.
+#'   Named list of functions which will we called on certain events like \dQuote{pre.submit} or \dQuote{post.sync}.
+#'   See \link{Hooks}.
 #' @export
 #' @aliases ClusterFunctions
 #' @family ClusterFunctions
+#' @family ClusterFunctionsHelper
 makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, array.envir.var = NA_character_, store.job = TRUE, hooks = list()) {
   assertString(name, min.chars = 1L)
   if (!is.null(submitJob))
@@ -78,8 +80,11 @@ print.ClusterFunctions = function(x, ...) {
 #' @title Create a SubmitJobResult
 #'
 #' @description
+#' This function is only intended for use in your own cluster functions implementation.
+#'
 #' Use this function in your implementation of \code{\link{makeClusterFunctions}} to create a return
 #' value for the \code{submitJob} function.
+#'
 #' @param status [\code{integer(1)}]\cr
 #'   Launch status of job. 0 means success, codes between 1 and 100 are temporary errors and any
 #'   error greater than 100 is a permanent failure.
@@ -120,7 +125,9 @@ print.SubmitJobResult = function(x, ...) {
 #'
 #' @description
 #' This function is only intended for use in your own cluster functions implementation.
-#' Simply reads your template and returns it as a character vector.
+#'
+#' This function is only intended for use in your own cluster functions implementation.
+#' Simply reads your template file and returns it as a character vector.
 #'
 #' @param template [\code{character(1)}]\cr
 #'   Path to template file or single string (containing newlines) which is then passed
@@ -158,15 +165,14 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 #'
 #' Calls brew silently on your template, any error will lead to an exception. If debug mode is
 #' enabled (via option \dQuote{batchtools.debug}), the file is stored at the same place as the corresponding
-#' R script in the \dQuote{jobs}-subdir of your files directory, otherwise in the temp dir via
-#' \code{\link{tempfile}}.
+#' job file in the \dQuote{jobs}-subdir of your files directory, otherwise as \code{\link{tempfile}} on the local system.
 #'
 #' @template reg
 #' @param text [\code{character(1)}]\cr
 #'   String ready to be brewed. See \code{\link{cfReadBrewTemplate}} to read a template from the file system.
 #' @param jc [\code{\link{JobCollection})}]\cr
-#'   JobCollection holding all essential information. Will be used as environment to look
-#'   up variables.
+#'   Will be used as environment to brew the template file in. See \code{\link{JobCollection}} for a list of all
+#'   available variables.
 #' @return [\code{character(1)}]. File path to brewed template file.
 #' @family ClusterFunctionsHelper
 #' @export
@@ -271,12 +277,12 @@ getBatchIds = function(reg, status = "all") {
 #' @description
 #' This is a helper function to run arbitrary OS commands on local or remote machines.
 #' The interface is similar to \code{\link[base]{system2}}, but it always returns the exit status
-#' and the output.
+#' \emph{and} the output.
 #'
 #' @param sys.cmd [\code{character(1)}]\cr
 #'   Command to run.
-#' @param sys.args [\code{character()}]\cr
-#'   Arguments to \code{sys.cmd}.
+#' @param sys.args [\code{character}]\cr
+#'   Arguments for \code{sys.cmd}.
 #' @param nodename [\code{character(1)}]\cr
 #'   Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
 #'   is not piped through SSH.

@@ -35,7 +35,7 @@ test_that("getJobTable.Registry", {
   checkTables(reg)
 
   silent({
-    submitJobs(reg = reg, ids = chunkIds(ids, reg = reg), resources = list(my.walltime = 42L))
+    submitJobs(reg = reg, ids = chunkIds(ids, n.chunks = 1, reg = reg), resources = list(my.walltime = 42L))
     waitForJobs(reg = reg)
   })
   addJobTags(2:3, "my_tag", reg = reg)

@@ -40,7 +40,8 @@ testJob(2, reg = tmp)
 }
 \seealso{
 Other debug: \code{\link{getErrorMessages}},
-  \code{\link{grepLogs}}, \code{\link{killJobs}},
-  \code{\link{resetJobs}}, \code{\link{showLog}}
+  \code{\link{getStatus}}, \code{\link{grepLogs}},
+  \code{\link{killJobs}}, \code{\link{resetJobs}},
+  \code{\link{showLog}}
 }
 

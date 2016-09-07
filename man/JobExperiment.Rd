@@ -13,7 +13,7 @@ makeJob(id, cache = NULL, reg = getDefaultRegistry())
 Single integer to specify the job or a \code{data.table} with column \code{job.id}
 and exactly one row.}
 
-\item{cache}{[\code{Cache}]\cr
+\item{cache}{[\code{Cache} | \code{NULL}]\cr
 Cache to retrieve files. Used internally.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -47,14 +47,24 @@ Jobs and Experiments hold these information:
 
 Note that the slots \dQuote{pars}, \dQuote{fun}, \dQuote{algorithm} and \dQuote{problem}
 lazy-load required files from the file system and construct the object on the first access.
-Each subsequent access returns a cached version from memory (except \dQuote{instance} which is not cached).
+The realizations are cached for all slots except \dQuote{instance} (which might be stochastic).
 
-Jobs and Experiments be executed with \code{\link{execJob}}.
+Jobs and Experiments can be executed manually with \code{\link{execJob}}.
 }
 \examples{
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
-batchMap(identity, 1:5, reg = tmp)
+batchMap(function(x, y) x + y, x = 1:2, more.args = list(y = 99), reg = tmp)
+submitJobs(resources = list(foo = "bar"), reg = tmp)
 job = makeJob(1, reg = tmp)
-names(job)
+print(job)
+
+# Get the parameters:
+job$pars
+
+# Get the job resources:
+job$resources
+
+# Execute the job locally:
+execJob(job)
 }
 

@@ -8,18 +8,18 @@ addExperiments(prob.designs = NULL, algo.designs = NULL, repls = 1L,
   combine = "crossprod", reg = getDefaultRegistry())
 }
 \arguments{
-\item{prob.designs}{[named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
-Named list of data frames. The name must match the problem name while the column names correspond to parameters
-of the problem.
-If \code{NULL}, adds experiments for all defined problems without any parameters set.}
+\item{prob.designs}{[named list of \code{\link[base]{data.frame}}]\cr
+Named list of data frames (or \code{\link[data.table]{data.table}}).
+The name must match the problem name while the column names correspond to parameters of the problem.
+If \code{NULL}, experiments for all defined problems without any parameters are added.}
 
 \item{algo.designs}{[named list of \code{\link[data.table]{data.table}} or \code{\link[base]{data.frame}}]\cr
-Named list of data frames. The name must match the algorithm name while the column names correspond to parameters
-of the algorithm.
-If \code{NULL}, adds experiments for all defined algorithms without any parameters set.}
+Named list of data frames (or \code{\link[data.table]{data.table}}).
+The name must match the algorithm name while the column names correspond to parameters of the algorithm.
+If \code{NULL}, experiments for all defined algorithms without any parameters are added.}
 
 \item{repls}{[\code{integer(1)}]\cr
-Number of replications for each distinct experiment.}
+Number of replications for each experiment.}
 
 \item{combine}{[\code{character(1)}]\cr
 How to combine the rows of a single problem design with the rows of a single algorithm design?
@@ -31,18 +31,15 @@ problem and algorithm designs where the shorter table is repeated if necessary.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{\link{data.table}}]. Generated job ids are stored in the column \dQuote{job.id}.
-  See \code{\link{JoinTables}} for examples on working with job tables.
+[\code{\link{data.table}}] with ids of added jobs stored in column \dQuote{job.id}.
 }
 \description{
-Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.
+Adds experiments (parametrized combinations of problems with algorithms) to the registry and thereby defines batch jobs.
+
 If multiple problem designs or algorithm designs are provided, they are combined via the Cartesian product.
 E.g., if you have two problems \code{p1} and \code{p2} and three algorithms \code{a1}, \code{a2} and \code{a3},
-\code{addExperiments} creates experiments for the combinations \code{(p1, a1)}, \code{(p1, a2)},
+\code{addExperiments} creates experiments for all parameters for the combinations \code{(p1, a1)}, \code{(p1, a2)},
 \code{(p1, a3)}, \code{(p2, a1)}, \code{(p2, a2)} and \code{(p2, a3)}.
-
-The combination of a single problem design with a single algorithm design (e.g., \code{p1, a1}) can be
-controlled via the parameter \code{combine}.
 }
 \examples{
 tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
