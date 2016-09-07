@@ -16,7 +16,7 @@ and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}
 [\code{\link{ClusterFunctions}}].
 }
 \description{
-Jobs are spawned asynchronously using the functions \code{\link[parallel]{mcparallel}} and \code{\link[parallel]{mccollect}}.
+Jobs are spawned asynchronously using the functions \code{mcparallel} and \code{mccollect} (both in \pkg{parallel}).
 Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
 }
 \note{
