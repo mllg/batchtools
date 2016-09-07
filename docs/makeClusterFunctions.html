@@ -66,48 +66,49 @@ Name of cluster functions.</dd>
       <dt>submitJob</dt>
       <dd>[<code>function(reg, jc, ...)</code>]
 Function to submit new jobs. Must return a <code><a href='makeSubmitJobResult.html'>SubmitJobResult</a></code> object.
-The arguments are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and <code>jobs</code> (<code><a href='JobCollection.html'>JobCollection</a></code>).
-Set <code>submitJob</code> to <code>NULL</code> if killing jobs is not supported.</dd>
+The arguments are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and <code>jobs</code> (<code><a href='JobCollection.html'>JobCollection</a></code>).</dd>
       <dt>killJob</dt>
       <dd>[<code>function(reg, batch.id)</code>]
 Function to kill a job on the batch system. Make sure that you definitely kill the job! Return
 value is currently ignored. Must have the arguments <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and
-<code>batch.id</code> (<code>character(1)</code>, returned by <code>submitJob</code>).
+<code>batch.id</code> (<code>character(1)</code> as returned by <code>submitJob</code>).
+Note that there is a helper function <code><a href='cfKillJob.html'>cfKillJob</a></code> to repeatedly try to kill jobs.
 Set <code>killJob</code> to <code>NULL</code> if killing jobs cannot be supported.</dd>
       <dt>listJobsQueued</dt>
       <dd>[<code>function(reg)</code>]
 List all queued jobs on the batch system for the current user and registry.
 Must return an character vector of batch ids, same format as they
-are produced by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.
+are returned by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.,
 all for the current user instead of all for the current registry), but you have to include all
 relevant ones. Must have the argument are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>).
-Set <code>listJobsQueued</code> to <code>NULL</code> if listing queued jobs is not supported.</dd>
+Set <code>listJobsQueued</code> to <code>NULL</code> if listing of queued jobs is not supported.</dd>
       <dt>listJobsRunning</dt>
       <dd>[<code>function(reg)</code>]
 List all running jobs on the batch system for the current user and registry. This includes
 running, held, idle, etc. jobs. Must return an character vector of batch ids, same format as they
-are produced by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.
+are returned by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.
 all for the current user instead of all for the current registry), but you have to include all
 relevant ones. Must have the argument are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>).
-Set <code>listJobsRunning</code> to <code>NULL</code> if listing jobs is not supported.</dd>
+Set <code>listJobsRunning</code> to <code>NULL</code> if listing of running jobs is not supported.</dd>
       <dt>array.envir.var</dt>
       <dd>[<code>character(1)</code>]
-Name of the environment variable set by the scheduler to identify IDs of job arrays. Default is
-<code>NA</code> for no array support.</dd>
+Name of the environment variable set by the scheduler to identify IDs of job arrays.
+Default is <code>NA</code> for no array support.</dd>
       <dt>store.job</dt>
       <dd>[<code>logical(1)</code>]
 Store the job on the file system before submitting? Default is <code>TRUE</code>.</dd>
       <dt>hooks</dt>
       <dd>[<code>list</code>]
-Experimental feature. Named list of functions which will we called on certain events like &#147;pre.submit&#148;
-or &#147;post.sync&#148;. See <a href='runHook.html'>Hooks</a>.</dd>
+Named list of functions which will we called on certain events like &#147;pre.submit&#148; or &#147;post.sync&#148;.
+See <a href='runHook.html'>Hooks</a>.</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Use this function when you implement a back-end for a batch system. You must define the functions
-specified in the arguments.</p>
+      <p>This is the constructor used to create <em>custom</em> cluster functions.
+Note that some standard implementations for Torque, Slurm, LSF, SGE, etc. ship
+with the package.</p>
 
     </div>
       </div>
@@ -130,6 +131,13 @@ specified in the arguments.</p>
   <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
   <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
   <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code></p>
+
+      <p>Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
+  <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
+  <code><a href='cfKillJob.html'>cfKillJob</a></code>,
+  <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
+  <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>,
+  <code><a href='runOSCommand.html'>runOSCommand</a></code></p>
 
     
 

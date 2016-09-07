@@ -69,9 +69,8 @@ If not set, defaults to the return value of <code><a href='findJobs.html'>findNo
 Computational  resources for the batch jobs. The elements of this list
 (e.g. something like &#147;walltime&#148; or &#147;nodes&#148;) depend on your template file.
 See notes for reserved special resource names.
-Defaults can be set in the <code><a href='Registry.html'>Registry</a></code> via the variable <code>default.resources</code> as a named list.
-The setting can be made permanent for all future registries by setting this variable in your configuration file.
-Individual settings set via <code>resources</code> <code>resources</code> overrule those in <code>default.resources</code>.</dd>
+Defaults can be stored in the configuration file by providing the named list <code>default.resources</code>.
+Settings in <code>resources</code> overwrite those in <code>default.resources</code>.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
@@ -90,16 +89,16 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Submits all jobs defined with <code><a href='batchMap.html'>batchMap</a></code> to the batch system.</p>
+      <p>Submits defined jobs to the batch system.</p>
 
       <p>If an additional column &#147;chunk&#148; is present in the table <code>ids</code>,
-the jobs will be grouped accordingly. See <code><a href='chunkIds.html'>chunkIds</a></code> for more
-information.</p>
+jobs will be grouped accordingly to be executed sequentially on the same slave.
+See <code><a href='chunkIds.html'>chunkIds</a></code> for more information.</p>
 
       <p>After submitting the jobs, you can use <code><a href='waitForJobs.html'>waitForJobs</a></code> to wait for the
-termination of jobs or immediately call <code><a href='reduceResultsList.html'>reduceResultsList</a></code>/<code><a href='reduceResults.html'>reduceResults</a></code>
+termination of jobs or call <code><a href='reduceResultsList.html'>reduceResultsList</a></code>/<code><a href='reduceResults.html'>reduceResults</a></code>
 to collect partial results.
-The progress can be monitored with <code><a href='getJobTable.html'>getJobStatus</a></code>.</p>
+The progress can be monitored with <code><a href='getStatus.html'>getStatus</a></code>.</p>
 
     </div>
 
@@ -118,17 +117,17 @@ If you set the resource &#147;pm.backend&#148; to &#147;multicore&#148;, &#147;s
 and <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStop'>parallelStop</a></code> is called after the last job terminated.
 This way, the used resources for inner parallelization are set in the same place as the resources for the outer parallelization and
 get automatically stored in the <code><a href='Registry.html'>Registry</a></code>.
-The user function just has to call <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></code> to start parallelization to use the configured backend.</p>
+The user function just has to call <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></code> to start parallelization using the preconfigured backend.</p>
 
       <p>You may set the resource <code>ncpus</code> to control the number of CPUs to use in <span class = "pkg">parallelMap</span>.
 <code>ncpus</code> defaults to the number of available CPUs (as reported by (see <code><a href='http://www.rdocumentation.org/packages/parallel/topics/detectCores'>detectCores</a></code>))
 on the executing machine for multicore and socket mode and defaults to the return value of <code><a href='http://www.rdocumentation.org/packages/Rmpi/topics/mpi.universe.size'>mpi.universe.size</a>-1</code> for MPI.
 You can pass further options like <code>level</code> to <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStart'>parallelStart</a></code> via the named list &#147;pm.opts&#148;.</p>
 
-      <p>Note that your template must be set up to handle the parallelization, e.g. start R with <code>mpirun</code> or request the correct number of CPUs.</p>
+      <p>Note that your template must be set up to handle the parallelization, e.g. start R with <code>mpirun</code> or request the right number of CPUs.</p>
 
       <p>Also note that if you have thousands of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
-can significantly increase the performance.</p>
+can significantly increase the performance of <code>submitJobs</code>.</p>
 
     </div>
     
@@ -166,39 +165,41 @@ can significantly increase the performance.</p>
 <strong class='message'>Syncing 4 files ...</strong>
 <div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">info</span><span class="keyword">)</span></div>
 <div class='output'>   job.id memory     n  p
-1:      1   45.5 1e+04 10
-2:      2   59.1 1e+05 10
-3:      3   51.5 1e+04 50
-4:      4  120.1 1e+05 50
+1:      1   46.3 1e+04 10
+2:      2   59.8 1e+05 10
+3:      3   52.3 1e+04 50
+4:      4  120.9 1e+05 50
 </div>
 <div class='input'>
 <span class="comment"># Combine job info with results -&gt; each job is aggregated using mean()</span>
 <span class="functioncall"><a href='JoinTables.html'>ijoin</a></span><span class="keyword">(</span><span class="symbol">info</span><span class="keyword">,</span> <span class="functioncall"><a href='reduceResultsList.html'>reduceResultsDataTable</a></span><span class="keyword">(</span><span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">res</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">res</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span><span class="keyword">(</span><span class="symbol">res</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>   job.id memory     n  p       res
-1:      1   45.5 1e+04 10 0.5007545
-2:      2   59.1 1e+05 10 0.5000026
-3:      3   51.5 1e+04 50 0.5001482
-4:      4  120.1 1e+05 50 0.4999100
+1:      1   46.3 1e+04 10 0.4987875
+2:      2   59.8 1e+05 10 0.4996464
+3:      3   52.3 1e+04 50 0.5000145
+4:      4  120.9 1e+05 50 0.5000366
 </div>
 <div class='input'>
+<span class="comment">### Example 2: Multicore execution on the slave</span>
+<span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<div class='input'>
+<span class="comment"># Function which sleeps 10 seconds, i-times</span>
+<span class="symbol">f</span> <span class="assignement">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">i</span><span class="keyword">)</span> <span class="keyword">{</span>
+  <span class="package">parallelMap</span><span class="keyword">::</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></span><span class="keyword">(</span><span class="symbol">Sys.sleep</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span><span class="keyword">(</span><span class="number">10</span><span class="keyword">,</span> <span class="symbol">i</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="keyword">}</span>
+
+<span class="comment"># Create one job with parameter i=4</span>
+<span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">f</span><span class="keyword">,</span> <span class="argument">i</span> <span class="argument">=</span> <span class="number">4</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 1 jobs ...</strong>
+<div class='input'>
+<span class="comment"># Set resources: Use parallelMap in multicore mode with 4 CPUs</span>
+<span class="comment"># batchtools internally loads the namespace of parallelMap and then</span>
+<span class="comment"># calls parallelStart() before the job and parallelStop() right</span>
+<span class="comment"># after the job last job in the chunk terminated.</span>
+<span class="symbol">res</span> <span class="assignement">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">pm.backend</span> <span class="argument">=</span> <span class="string">"multicore"</span><span class="keyword">,</span> <span class="argument">ncpus</span> <span class="argument">=</span> <span class="number">4</span><span class="keyword">)</span>
+
 <span class="comment">## Not run: ------------------------------------</span>
-<span class="comment"># ### Example 2: Multicore execution on the slave</span>
-<span class="comment"># tmp = makeRegistry(file.dir = NA, make.default = FALSE)</span>
-<span class="comment"># </span>
-<span class="comment"># # Function which sleeps 10 seconds, i-times</span>
-<span class="comment"># f = function(i) {</span>
-<span class="comment">#   parallelMap::parallelMap(Sys.sleep, rep(10, i))</span>
-<span class="comment"># }</span>
-<span class="comment"># </span>
-<span class="comment"># # Create one job with parameter i=4</span>
-<span class="comment"># ids = batchMap(f, i = 4, reg = tmp)</span>
-<span class="comment"># </span>
-<span class="comment"># # Set resources: Use parallelMap in multicore mode with 4 CPUs</span>
-<span class="comment"># # batchtools internally loads the namespace of parallelMap and then</span>
-<span class="comment"># # calls parallelStart() before the job and parallelStop() right</span>
-<span class="comment"># # after the job last job in the chunk terminated.</span>
-<span class="comment"># res = list(pm.backend = "multicore", ncpus = 4)</span>
-<span class="comment"># </span>
 <span class="comment"># # Submit both jobs and wait for them</span>
 <span class="comment"># submitJobs(resources = res, reg = tmp)</span>
 <span class="comment"># waitForJobs(reg = tmp)</span>

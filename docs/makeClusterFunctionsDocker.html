@@ -82,16 +82,22 @@ Additional arguments passed to &#147;docker run&#148; (e.g., to define mounts or
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Experimental cluster functions for Docker/Docker Swarm.</p>
+      <p>Cluster functions for Docker/Docker Swarm.</p>
 
-      <p>The <code>submitJobs</code> function executes <code>docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]</code>.
-Arguments <code>docker.args</code>, <code>image.args</code> and <code>image</code> can be set via arguments on construction.
+      <p>The <code>submitJob</code> function executes <code>docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]</code>.
+Arguments <code>docker.args</code>, <code>image.args</code> and <code>image</code> can be set on construction.
 The <code>resources</code> part takes the named resources <code>ncpus</code> and <code>memory</code> from <code><a href='submitJobs.html'>submitJobs</a></code> and maps them to
-the arguments <code>--cpu-shares</code> and <code>--memory</code> (in Megabytes).</p>
+the arguments <code>--cpu-shares</code> and <code>--memory</code> (in Megabytes).
+To reliably identify jobs in the swarm, jobs are labeled with &#147;batchtools=[job.hash]&#148; and named using the current login name and the job hash.</p>
 
       <p><code>listJobsRunning</code> uses <code>docker [docker.args] ps --format={{.ID}}</code> to filter for running jobs.</p>
 
       <p><code>killJobs</code> uses <code>docker [docker.args] kill [batch.id]</code> to filter for running jobs.</p>
+
+      <p>These cluster functions use a <a href='runHook.html'>Hook</a> to remove finished jobs before a new submit and every time the <a href='Registry.html'>Registry</a>
+is synchronized (using <code><a href='Registry.html'>syncRegistry</a></code>).
+This is currently required because docker does not remove exited containers automatically.
+Use <code>docker ps -a --filter &#39;label=batchtools&#39; --filter &#39;status=exited&#39;</code> to identify and remove terminated containers manually (or via a cron job).</p>
 
     </div>
       </div>

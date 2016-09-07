@@ -82,7 +82,7 @@ reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="
   <span class="dv">4</span> *<span class="st"> </span><span class="kw">mean</span>(d &lt;=<span class="st"> </span><span class="dv">1</span>)
 }
 <span class="kw">piApprox</span>(<span class="dv">1000</span>)</code></pre></div>
-<pre><code>## [1] 3.188</code></pre>
+<pre><code>## [1] 3.184</code></pre>
 <p>We now parallelize <code>piApprox()</code> with <code>batchtools</code>: We create 10 jobs, each doing a MC simulation with <span class="math inline">\(10^5\)</span> jobs. We use <a href="https://mllg.github.io/batchtools/batchMap.html"><code>batchMap()</code></a> to define the jobs (note that this does not yet start the calculation):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">batchMap</span>(<span class="dt">fun =</span> piApprox, <span class="dt">n =</span> <span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>))</code></pre></div>
 <pre><code>## Adding 10 jobs ...</code></pre>
@@ -114,10 +114,10 @@ reg =<span class="st"> </span><span class="kw">makeRegistry</span>(<span class="
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res =<span class="st"> </span><span class="kw">btlapply</span>(<span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>), piApprox)</code></pre></div>
 <pre><code>## Sourcing configuration file '~/.batchtools.conf.R' ...</code></pre>
 <pre><code>## Adding 10 jobs ...</code></pre>
-<pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
-<pre><code>## Syncing 10 files ...</code></pre>
+<pre><code>## Submitting 10 jobs in 1 chunks using cluster functions 'Interactive' ...</code></pre>
+<pre><code>## Syncing 1 files ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(<span class="kw">unlist</span>(res))</code></pre></div>
-<pre><code>## [1] 3.139868</code></pre>
+<pre><code>## [1] 3.142232</code></pre>
 <p><a href="https://mllg.github.io/batchtools/btlapply.html"><code>btlapply()</code></a> creates a temporary registry, calls <code>batchMap()</code>, wait for the jobs to terminate with <a href="https://mllg.github.io/batchtools/waitForJobs.html"><code>waitForJobs()</code></a> and then uses <a href="https://mllg.github.io/batchtools/reduceResultsList.html"><code>reduceResultsList()</code></a> to return the results.</p>
 
 

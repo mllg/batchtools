@@ -54,9 +54,11 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='btlapply.html'>btlapply</a></span><span class="keyword">(</span><span class="symbol">X</span><span class="keyword">,</span> <span class="symbol">fun</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">NA</span><span class="keyword">)</span><span class="keyword">)</span>
+    <pre><span class="functioncall"><a href='btlapply.html'>btlapply</a></span><span class="keyword">(</span><span class="symbol">X</span><span class="keyword">,</span> <span class="symbol">fun</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">resources</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">n.chunks</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
+  <span class="argument">chunk.size</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">NA</span><span class="keyword">)</span><span class="keyword">)</span>
 
 <span class="functioncall"><a href='btlapply.html'>btmapply</a></span><span class="keyword">(</span><span class="symbol">fun</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">more.args</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">simplify</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">use.names</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">,</span>
+  <span class="argument">resources</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">n.chunks</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">chunk.size</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
   <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">NA</span><span class="keyword">)</span><span class="keyword">)</span></pre>
     
     <h2>Arguments</h2>
@@ -70,6 +72,23 @@ Function to apply.</dd>
       <dt>...</dt>
       <dd>[<code>ANY</code>]
 Additional arguments passed to <code>fun</code> (<code>btlapply</code>) or vectors to map over (<code>btmapply</code>).</dd>
+      <dt>resources</dt>
+      <dd>[<code>named list</code>]
+Computational  resources for the batch jobs. The elements of this list
+(e.g. something like &#147;walltime&#148; or &#147;nodes&#148;) depend on your template file.
+See notes for reserved special resource names.
+Defaults can be stored in the configuration file by providing the named list <code>default.resources</code>.
+Settings in <code>resources</code> overwrite those in <code>default.resources</code>.</dd>
+      <dt>n.chunks</dt>
+      <dd>[<code>integer(1)</code>]
+Requested number of chunks.
+If more chunks than elements in <code>ids</code> are requested, empty chunks are ignored.
+Mutually exclusive with <code>chunks.size</code>.</dd>
+      <dt>chunk.size</dt>
+      <dd>[<code>integer(1)</code>]
+Requested number of elements in each chunk.
+If <code>ids</code> cannot be chunked evenly, some chunks will have less elements than others.
+Mutually exclusive with with <code>n.chunks</code>.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
@@ -96,15 +115,13 @@ Use names of the input to name the output?</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>This is a set of convenience functions as counterparts to the sequential
-apply functions in base R: <code>btlapply</code> for <code><a href='http://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></code> and
-<code>btmapply</code> for <code>link[base]{mapply}</code>.
-Internally the jobs are created in a temporary registry (see argument <code>file.dir</code> of
-<code><a href='Registry.html'>makeRegistry</a></code>) and <code><a href='batchMap.html'>batchMap</a></code> is called on the input vector(s).
-After <code><a href='waitForJobs.html'>waitForJobs</a></code> terminated, the result is reduced into a list.
-Because the result is only returned as soon as all jobs are terminated,
-the execution is called synchronized (in contrast to the usual asynchronous execution on
-classical batch systems).</p>
+      <p>This is a set of functions acting as counterparts to the sequential popular apply functions in base R:
+<code>btlapply</code> for <code><a href='http://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></code> and <code>btmapply</code> for <code>link[base]{mapply}</code>.</p>
+
+      <p>Internally, jobs are created using <code><a href='batchMap.html'>batchMap</a></code> on the provided registry.
+If no registry is provided, a temporary registry (see argument <code>file.dir</code> of <code><a href='Registry.html'>makeRegistry</a></code>) and <code><a href='batchMap.html'>batchMap</a></code>
+will be used.
+After all jobs are terminated (see <code><a href='waitForJobs.html'>waitForJobs</a></code>), the results are collected and returned as a list.</p>
 
       <p>Note that these functions are one suitable for short and fail-safe operations
 on batch system. If some jobs fail, you have to retrieve partial results from the
@@ -116,8 +133,8 @@ registry directory yourself.</p>
     <pre class="examples"><div class='input'><span class="functioncall"><a href='btlapply.html'>btlapply</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">x</span><span class="keyword">)</span> <span class="symbol">x</span><span class="keyword">^</span><span class="number">2</span><span class="keyword">)</span></div>
 <strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
 <strong class='message'>Adding 3 jobs ...</strong>
-<strong class='message'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Interactive&#39; ...</strong>
-<strong class='message'>Syncing 3 files ...</strong>
+<strong class='message'>Submitting 3 jobs in 1 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<strong class='message'>Syncing 1 files ...</strong>
 <div class='output'>[[1]]
 [1] 1
 
@@ -131,8 +148,8 @@ registry directory yourself.</p>
 <div class='input'><span class="functioncall"><a href='btlapply.html'>btmapply</a></span><span class="keyword">(</span><span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">x</span><span class="keyword">,</span> <span class="formalargs">y</span><span class="keyword">,</span> <span class="formalargs">z</span><span class="keyword">)</span> <span class="symbol">x</span> <span class="keyword">+</span> <span class="symbol">y</span> <span class="keyword">+</span> <span class="symbol">z</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">more.args</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">z</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">simplify</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span></div>
 <strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
 <strong class='message'>Adding 3 jobs ...</strong>
-<strong class='message'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Interactive&#39; ...</strong>
-<strong class='message'>Syncing 3 files ...</strong>
+<strong class='message'>Submitting 3 jobs in 1 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<strong class='message'>Syncing 1 files ...</strong>
 <div class='output'>[1] 3 5 7
 </div></pre>
   </div>

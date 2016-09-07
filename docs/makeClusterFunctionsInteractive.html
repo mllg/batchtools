@@ -60,7 +60,8 @@
     <dl>
       <dt>external</dt>
       <dd>[<code>logical(1)</code>]
-If set to <code>TRUE</code>, jobs are started in a fresh R session instead of currently active.
+If set to <code>TRUE</code>, jobs are started in a fresh R session instead of currently active but still
+waits for its termination.
 Default is <code>FALSE</code>.</dd>
       <dt>write.logs</dt>
       <dd>[<code>logical(1)</code>]
@@ -81,14 +82,12 @@ Default is <code>TRUE</code>.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>All jobs executed under these cluster functions are executed
-sequentially, in the same interactive R process that you currently are.
-That is, <code>submitJob</code> does not return until the
-job has finished. The main use of this <code>ClusterFunctions</code>
-implementation is to test and debug programs on a local computer.</p>
+      <p>All jobs are executed sequentially using the current R process in which <code><a href='submitJobs.html'>submitJobs</a></code> is called.
+Thus, <code>submitJob</code> blocks the session until the job has finished.
+The main use of this <code>ClusterFunctions</code> implementation is to test and debug programs on a local computer.</p>
 
       <p>Listing jobs returns an empty vector (as no jobs can be running when you call this)
-and <code>killJob</code> returns at once (for the same reason).</p>
+and <code>killJob</code> is not implemented for the same reasons.</p>
 
     </div>
       </div>

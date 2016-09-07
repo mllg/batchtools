@@ -61,20 +61,22 @@
     <dl>
       <dt>fun</dt>
       <dd>[<code>function</code>]
-Function to map over <code>...</code>.</dd>
+Function to map over arguments provided via <code>...</code>.</dd>
       <dt>...</dt>
       <dd>[any]
 Arguments to vectorize over (list or vector).
-Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the maximum length).
-Mutually exclusive with <code>args</code>.</dd>
+Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the longest length).
+Mutually exclusive with <code>args</code>.
+Note that although it is possible to iterate over large objects (e.g., lists of data frames or matrices), this usually
+hurts the overall performance and thus is discouraged.</dd>
       <dt>args</dt>
       <dd>[<code>list</code> | <code>data.frame</code>]
 Arguments to vectorize over as (named) list or data frame.
-Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the maximum length).
+Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the longest length).
 Mutually exclusive with <code>...</code>.</dd>
       <dt>more.args</dt>
       <dd>[<code>list</code>]
-A list of other arguments passed to <code>fun</code>.
+A list of further arguments passed to <code>fun</code>.
 Default is an empty list.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
@@ -85,8 +87,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]. Generated job ids are stored in the column &#147;job.id&#148;.
-  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
+[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with ids of added jobs stored in column &#147;job.id&#148;.
 </dl></p>
 
     </div>
@@ -94,12 +95,13 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>A parallel <code><a href='http://www.rdocumentation.org/packages/base/topics/funprog'>Map</a></code> for batch systems.
-Note that this function only defines the jobs.
-The actual computation is started with <code><a href='submitJobs.html'>submitJobs</a></code> and results
-can be collected with <code><a href='reduceResultsList.html'>reduceResultsList</a></code>, <code><a href='reduceResults.html'>reduceResults</a></code> or
-<code><a href='loadResult.html'>loadResult</a></code>.
-For a synchronous <code><a href='http://www.rdocumentation.org/packages/base/topics/funprog'>Map</a></code>-like execution see <code><a href='btlapply.html'>btmapply</a></code>.</p>
+      <p>A parallel and asynchronous <code><a href='http://www.rdocumentation.org/packages/base/topics/funprog'>Map</a></code> for batch systems.
+Note that this function only defines the computational jobs.
+The actual computation is started with <code><a href='submitJobs.html'>submitJobs</a></code>.
+Results and partial results can be collected with <code><a href='reduceResultsList.html'>reduceResultsList</a></code>, <code><a href='reduceResults.html'>reduceResults</a></code> or
+<code><a href='loadResult.html'>loadResult</a></code>.</p>
+
+      <p>For a synchronous <code><a href='http://www.rdocumentation.org/packages/base/topics/funprog'>Map</a></code>-like execution see <code><a href='btlapply.html'>btmapply</a></code>.</p>
 
     </div>
     
@@ -144,6 +146,27 @@ For a synchronous <code><a href='http://www.rdocumentation.org/packages/base/top
 </div>
 <div class='input'>
 <span class="comment"># example for an expand.grid()-like operation on parameters</span>
+<span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<div class='input'><span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">paste</span><span class="keyword">,</span> <span class="argument">args</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/J'>CJ</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="symbol">letters</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">]</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">more.args</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">sep</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 9 jobs ...</strong>
+<div class='input'><span class="functioncall"><a href='getJobTable.html'>getJobPars</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>   job.id x y
+1:      1 a 1
+2:      2 a 2
+3:      3 a 3
+4:      4 b 1
+5:      5 b 2
+6:      6 b 3
+7:      7 c 1
+8:      8 c 2
+9:      9 c 3
+</div>
+<div class='input'><span class="functioncall"><a href='testJob.html'>testJob</a></span><span class="keyword">(</span><span class="number">6</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='output'>[1] &quot;b3&quot;
+</div>
+<div class='input'>
+<span class="comment"># example on how to deal with bulky objects</span>
 <span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
 <strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
 <div class='input'><span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">paste</span><span class="keyword">,</span> <span class="argument">args</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/J'>CJ</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="symbol">letters</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">]</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">more.args</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">sep</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>

@@ -95,15 +95,27 @@ with the following variables:
 
       <p><dt>job.hash</dt><dd>Unique identifier of the job. Used to create names on the file system.</dd></p>
 
-      <p><dt>log.file</dt><dd>Location of the designated log file for this job.</dd></p>
+      <p><dt>jobs</dt><dd><code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> holding individual job information. See examples.</dd></p>
 
-      <p><dt>packages</dt><dd>Vector of packages to load on the slaves, see <a href='Registry.html'>Registry</a>.</dd></p>
+      <p><dt>log.file</dt><dd>Location of the designated log file for this job.</dd></p>
 
       <p><dt>resources:</dt><dd>Named list of of specified computational resources.</dd></p>
 
       <p><dt>uri</dt><dd>Location of the job description file (saved with <code>link[base]{saveRDS}</code> on the file system.</dd></p>
 
-      <p><dt>defs</dt><dd><code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> holding individual job information. See examples.</dd></p>
+      <p><dt>debug</dt><dd><code>logical(1)</code> Debug flag.</dd></p>
+
+      <p><dt>seed</dt><dd><code>integer(1)</code> Seed of the <a href='Registry.html'>Registry</a>.</dd></p>
+
+      <p><dt>packages</dt><dd><code>character</code> with required packages to load via <code><a href='http://www.rdocumentation.org/packages/base/topics/library'>require</a></code>.</dd></p>
+
+      <p><dt>namespaces</dt><dd>codecharacter with required packages to load via <code><a href='http://www.rdocumentation.org/packages/base/topics/ns-load'>requireNamespace</a></code>.</dd></p>
+
+      <p><dt>source</dt><dd><code>character</code> with list of files to source before execution.</dd></p>
+
+      <p><dt>load</dt><dd><code>character</code> with list of files to load before execution.</dd></p>
+
+      <p><dt>array.var</dt><dd><code>character(1)</code> of the array environment variable specified by the cluster functions.</dd></p>
 
       <p></dl></p>
 
@@ -113,38 +125,30 @@ a collection. Thus all variables available inside the job can be used in the tem
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
+    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">packages</span> <span class="argument">=</span> <span class="string">"methods"</span><span class="keyword">)</span></div>
 <strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
 <div class='input'><span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">identity</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
 <strong class='message'>Adding 5 jobs ...</strong>
-<div class='input'><span class="symbol">jc</span> <span class="assignement">=</span> <span class="functioncall"><a href='JobCollection.html'>makeJobCollection</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
-<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/ls'>ls</a></span><span class="keyword">(</span><span class="symbol">jc</span><span class="keyword">)</span></div>
-<div class='output'> [1] &quot;array.var&quot;  &quot;debug&quot;      &quot;file.dir&quot;   &quot;job.hash&quot;   &quot;jobs&quot;      
- [6] &quot;load&quot;       &quot;log.file&quot;   &quot;namespaces&quot; &quot;packages&quot;   &quot;resources&quot; 
-[11] &quot;seed&quot;       &quot;source&quot;     &quot;uri&quot;        &quot;work.dir&quot;  
-</div>
-<div class='input'><span class="symbol">jc</span><span class="keyword">$</span><span class="symbol">jobs</span></div>
-<div class='output'>   job.id   pars
-1:      1 &lt;list&gt;
-2:      2 &lt;list&gt;
-3:      3 &lt;list&gt;
-</div>
-<div class='input'><span class="symbol">jc</span><span class="keyword">$</span><span class="symbol">jobs</span><span class="keyword">$</span><span class="symbol">pars</span></div>
-<div class='output'>[[1]]
-[[1]][[1]]
-[1] 1
-
-
-[[2]]
-[[2]][[1]]
-[1] 2
-
-
-[[3]]
-[[3]][[1]]
-[1] 3
-
-
+<div class='input'><span class="comment"># resources are usually forwared from submitJobs()</span>
+<span class="symbol">jc</span> <span class="assignement">=</span> <span class="functioncall"><a href='JobCollection.html'>makeJobCollection</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">resources</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">foo</span> <span class="argument">=</span> <span class="string">"bar"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/utils/topics/ls_str'>ls.str</a></span><span class="keyword">(</span><span class="symbol">jc</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>array.var :  chr NA
+debug :  logi FALSE
+file.dir :  chr &quot;/tmp/RtmpIuATuI/registry280f6e262e29&quot;
+job.hash :  chr &quot;61469c512595f87d06d29e27bfbc09e6&quot;
+jobs : Classes ‘data.table’ and &#39;data.frame&#39;:	3 obs. of  2 variables:
+ $ job.id: int  1 2 3
+ $ pars  :List of 3
+load :  chr(0) 
+log.file :  chr &quot;/tmp/RtmpIuATuI/registry280f6e262e29/logs/61469c512595f87d06d29e27bfbc09e6.log&quot;
+namespaces :  chr(0) 
+packages :  chr &quot;methods&quot;
+resources : List of 1
+ $ foo: chr &quot;bar&quot;
+seed :  int 953185761
+source :  chr(0) 
+uri :  chr &quot;/tmp/RtmpIuATuI/registry280f6e262e29/jobs/61469c512595f87d06d29e27bfbc09e6.rds&quot;
+work.dir :  chr &quot;/home/michel/Projekte/batchtools&quot;
 </div></pre>
   </div>
   <div class="span4 sidebar">

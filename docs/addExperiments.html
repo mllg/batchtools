@@ -60,18 +60,18 @@
     <h2>Arguments</h2>
     <dl>
       <dt>prob.designs</dt>
-      <dd>[named list of <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> or <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]
-Named list of data frames. The name must match the problem name while the column names correspond to parameters
-of the problem.
-If <code>NULL</code>, adds experiments for all defined problems without any parameters set.</dd>
+      <dd>[named list of <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]
+Named list of data frames (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>).
+The name must match the problem name while the column names correspond to parameters of the problem.
+If <code>NULL</code>, experiments for all defined problems without any parameters are added.</dd>
       <dt>algo.designs</dt>
       <dd>[named list of <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> or <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]
-Named list of data frames. The name must match the algorithm name while the column names correspond to parameters
-of the algorithm.
-If <code>NULL</code>, adds experiments for all defined algorithms without any parameters set.</dd>
+Named list of data frames (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>).
+The name must match the algorithm name while the column names correspond to parameters of the algorithm.
+If <code>NULL</code>, experiments for all defined algorithms without any parameters are added.</dd>
       <dt>repls</dt>
       <dd>[<code>integer(1)</code>]
-Number of replications for each distinct experiment.</dd>
+Number of replications for each experiment.</dd>
       <dt>combine</dt>
       <dd>[<code>character(1)</code>]
 How to combine the rows of a single problem design with the rows of a single algorithm design?
@@ -87,8 +87,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]. Generated job ids are stored in the column &#147;job.id&#148;.
-  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
+[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with ids of added jobs stored in column &#147;job.id&#148;.
 </dl></p>
 
     </div>
@@ -96,14 +95,12 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Adds experiments for running algorithms on problems to the registry and thereby defines batch jobs.
-If multiple problem designs or algorithm designs are provided, they are combined via the Cartesian product.
-E.g., if you have two problems <code>p1</code> and <code>p2</code> and three algorithms <code>a1</code>, <code>a2</code> and <code>a3</code>,
-<code>addExperiments</code> creates experiments for the combinations <code>(p1, a1)</code>, <code>(p1, a2)</code>,
-<code>(p1, a3)</code>, <code>(p2, a1)</code>, <code>(p2, a2)</code> and <code>(p2, a3)</code>.</p>
+      <p>Adds experiments (parametrized combinations of problems with algorithms) to the registry and thereby defines batch jobs.</p>
 
-      <p>The combination of a single problem design with a single algorithm design (e.g., <code>p1, a1</code>) can be
-controlled via the parameter <code>combine</code>.</p>
+      <p>If multiple problem designs or algorithm designs are provided, they are combined via the Cartesian product.
+E.g., if you have two problems <code>p1</code> and <code>p2</code> and three algorithms <code>a1</code>, <code>a2</code> and <code>a3</code>,
+<code>addExperiments</code> creates experiments for all parameters for the combinations <code>(p1, a1)</code>, <code>(p1, a2)</code>,
+<code>(p1, a3)</code>, <code>(p2, a1)</code>, <code>(p2, a2)</code> and <code>(p2, a3)</code>.</p>
 
     </div>
     

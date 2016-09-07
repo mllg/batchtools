@@ -87,7 +87,8 @@
     <dl>
       <dt>expr</dt>
       <dd>[<code>expression</code>]
-Predicate expression evaluated in the job parameters.</dd>
+Predicate expression evaluated in the job parameters.
+Jobs for which <code>expr</code> evaluates to <code>TRUE</code> are returned.</dd>
       <dt>ids</dt>
       <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
 A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
@@ -125,8 +126,7 @@ Return jobs which are tagged with any of the tags provided.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]. Matching job ids are stored in the column &#147;job.id&#148;.
-  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
+[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with column &#147;job.id&#148; containing matched jobs.
 </dl></p>
 
     </div>
@@ -134,11 +134,12 @@ Return jobs which are tagged with any of the tags provided.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Use <code>findJobs</code> to query jobs for which a predicate expression, evaluated on the parameters, yields <code>TRUE</code>.
-The other functions can be used to query the computational status.
-Note that they do not synchronize the registry, thus you are advised to run <code><a href='Registry.html'>syncRegistry</a></code> yourself
-or, if you are really just interested in the status, use <code><a href='getStatus.html'>getStatus</a></code>.
-Note that <code>findOnSystem</code> and <code>findExpired</code> are somewhat heuristic and may report misleading results, depending on the state of the system.</p>
+      <p>These functions are used to find and filter jobs, depending on either their parameters (<code>findJobs</code> and
+<code>findExperiments</code>), their tags (<code>findTagged</code>), or their computational status (all other functions).</p>
+
+      <p>For a summarizing overview over the status, see <code><a href='getStatus.html'>getStatus</a></code>.
+Note that <code>findOnSystem</code> and <code>findExpired</code> are somewhat heuristic and may report misleading results,
+depending on the state of the system and the <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code> implementation.</p>
 
     </div>
     
@@ -182,6 +183,13 @@ Note that <code>findOnSystem</code> and <code>findExpired</code> are somewhat he
 <div class='output'>   job.id
 1:      2
 2:      3
+</div>
+<div class='input'>
+<span class="comment"># combine filter functions using joins</span>
+<span class="comment"># -&gt; jobs which are not done and not tagged (using an anti-join):</span>
+<span class="functioncall"><a href='JoinTables.html'>ajoin</a></span><span class="keyword">(</span><span class="functioncall"><a href='findJobs.html'>findNotDone</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='findJobs.html'>findTagged</a></span><span class="keyword">(</span><span class="string">"my_tag"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>   job.id
+1:      1
 </div></pre>
   </div>
   <div class="span4 sidebar">

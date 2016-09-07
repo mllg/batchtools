@@ -82,8 +82,8 @@
       <dd>[<code>character(1)</code>]
   Path where all files of the registry are saved.
   Default is directory &#147;registry&#148; in the current working directory.
-  Path will get normalized unless it is provided relative to the home directory
-  (i.e., starting with &#147;~&#148;).
+  The provided path will get normalized unless it is given relative to the home directory
+  (i.e., starting with &#147;~&#148;). Note that some templates do not handle relative paths well.
 
   If you pass <code>NA</code>, a temporary directory will be used.
   This way, you can create disposable registries for <code><a href='btlapply.html'>btlapply</a></code> or examples.
@@ -92,12 +92,13 @@
   you can set it in your configuration file by setting the variable <code>temp.dir</code>.</dd>
       <dt>work.dir</dt>
       <dd>[<code>character(1)</code>]
-Working directory for R process when experiment is executed.
-For <code>makeRegistry</code>, this defaults to the current working directory.
-<code>loadRegistry</code> uses the stored <code>work.dir</code>, but you may also explicitly provide one
-yourself.
-Path will get normalized unless it is provided relative to the home directory
-(i.e., starting with &#147;~&#148;).</dd>
+  Working directory for R process for running jobs.
+  Defaults to the working directory currently set during Registry construction (see <code><a href='http://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a></code>).
+  <code>loadRegistry</code> uses the stored <code>work.dir</code>, but you may also explicitly overwrite it,
+  e.g., after switching to another system.
+
+  The provided path will get normalized unless it is given relative to the home directory
+  (i.e., starting with &#147;~&#148;). Note that some templates do not handle relative paths well.</dd>
       <dt>conf.file</dt>
       <dd>[<code>character(1)</code>]
 Path to a configuration file which is sourced directly after the registry is created.
@@ -141,9 +142,9 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <dt>update.paths</dt>
       <dd>[<code>logical(1)</code>]
 If set to <code>TRUE</code>, the <code>file.dir</code> and <code>work.dir</code> will be updated in the registry. Note that this is
-likely to break computation on the system, only do this if no jobs are currently running. Default is <code>FALSE</code>.
+likely to break computation on the system! Only do this if no jobs are currently running. Default is <code>FALSE</code>.
 If the provided <code>file.dir</code> does not match the stored <code>file.dir</code>, <code>loadRegistry</code> will return a
-registry in an read-only mode.</dd>
+registry in read-only mode.</dd>
     </dl>
     
     <div class="Value">
@@ -156,7 +157,7 @@ registry in an read-only mode.</dd>
 
       <p><dt><code>work.dir</code> [path]:</dt><dd>Working directory.</dd></p>
 
-      <p><dt><code>temp.dir</code> [path]:</dt><dd>Temporary directory. Only used if <code>file.dir</code> is <code>NA</code>.</dd></p>
+      <p><dt><code>temp.dir</code> [path]:</dt><dd>Temporary directory. Used if <code>file.dir</code> is <code>NA</code>.</dd></p>
 
       <p><dt><code>packages</code> [character()]:</dt><dd>Packages to load on the slaves.</dd></p>
 
@@ -188,20 +189,24 @@ registry in an read-only mode.</dd>
       <h2>Description</h2>
 
       <p><code>makeRegistry</code> constructs the inter-communication object for all functions in <code>batchtools</code>.
-The registry created last is saved in the package namespace (unless <code>make.default</code> is set to
-<code>FALSE</code>) and can be retrieved via <code>getDefaultRegistry</code>.</p>
-
-      <p><code>saveRegistry</code> serializes the registry to the file system.
-<code>syncRegistry</code> refreshes the registry by parsing updates from remote jobs, merging job
-status information in the internal data base.
-Both functions are called internally whenever required.
+All communication transactions are processed via the file system:
+All information required to run a job is stored as <code><a href='JobCollection.html'>JobCollection</a></code> in a file in the
+a subdirectory of the <code>file.dir</code> directory.
+Each jobs stores its results as well as computational status information (start time, end time, error message, ...)
+also on the file system which is regular merged parsed by the master using <code>syncRegistry</code>.
+After integrating the new information into the Registry, the Registry is serialized to the file system via <code>saveRegistry</code>.
+Both <code>syncRegistry</code> and <code>saveRegistry</code> are called whenever required internally.
 Therefore it should be safe to quit the R session at any time.
 Work can later be resumed by calling <code>loadRegistry</code> which de-serializes the registry from
 the file system.</p>
 
-      <p>Canceled jobs and repeatedly submitted jobs leave in some cases stray files behind which can be
-swept using <code>sweepRegistry</code>.
-<code>clearRegistry</code> completely erases all jobs from a registry, including log files and results.</p>
+      <p>The registry created last is saved in the package namespace (unless <code>make.default</code> is set to
+<code>FALSE</code>) and can be retrieved via <code>getDefaultRegistry</code>.</p>
+
+      <p>Canceled jobs and repeatedly submitted jobs may leave stray files behind.
+These can be swept using <code>sweepRegistry</code>.
+<code>clearRegistry</code> completely erases all jobs from a registry, including log files and results,
+and thus allows you to start over.</p>
 
     </div>
     
@@ -211,10 +216,10 @@ swept using <code>sweepRegistry</code>.
 <div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">tmp</span><span class="keyword">)</span></div>
 <div class='output'>Job Registry
   ClusterFunctions: Interactive
-  File dir        : /tmp/RtmpKMSAKp/registry35ff26eb19ca
+  File dir        : /tmp/RtmpIuATuI/registry280f3168e981
   Work dir        : /home/michel/Projekte/batchtools
   Jobs            : 0
-  Seed            : 639900952
+  Seed            : 985706415
 </div>
 <div class='input'>
 <span class="comment"># Set cluster functions to interactive mode and start jobs in external R sessions</span>

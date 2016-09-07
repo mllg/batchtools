@@ -129,8 +129,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
 
       <p></dl></p>
 
-      <p>See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
-</dl></p>
+      <p></dl></p>
 
     </div>
 
@@ -159,37 +158,42 @@ with the resources which were set to submit the jobs, and <code>getJobTags</code
 <div class='output'>[1] FALSE
 </div>
 <div class='input'>
+<span class="comment"># Complete table:</span>
 <span class="functioncall"><a href='getJobTable.html'>getJobTable</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="argument">flatten</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
 <div class='output'>   job.id           submitted             started                done
-1:      1 2016-09-05 02:26:32 2016-09-05 02:26:32 2016-09-05 02:26:32
-2:      2 2016-09-05 02:26:32 2016-09-05 02:26:32 2016-09-05 02:26:32
-3:      3 2016-09-05 02:26:32 2016-09-05 02:26:32 2016-09-05 02:26:32
+1:      1 2016-09-07 13:42:12 2016-09-07 13:42:12 2016-09-07 13:42:12
+2:      2 2016-09-07 13:42:12 2016-09-07 13:42:12 2016-09-07 13:42:12
+3:      3 2016-09-07 13:42:12 2016-09-07 13:42:12 2016-09-07 13:42:12
                                      error memory      batch.id
 1: Error in (function (x)  : x must be &gt; 0     NA cfInteractive
 2:                                      NA     NA cfInteractive
 3:                                      NA     NA cfInteractive
                            job.hash time.queued time.running   pars resources
-1: 20c2072ccca95300c996d1c5d59a9788      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
-2: 8f22e1cc14b415be1413256188e86263      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
-3: 50247fac5fcfc3660782c6d8ba83666c      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+1: 9b05db51c97f8a4b95d61808812c07f9      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+2: aa55fd44b24ceb9d23a31c3e47c1dc52      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+3: ca814ce377b754edc556d340c8b6366c      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
    tags
 1:   NA
 2:   NA
 3:   NA
 </div>
-<div class='input'><span class="functioncall"><a href='getJobTable.html'>getJobPars</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
-<div class='output'>   job.id  x
-1:      1 -1
-2:      2  0
-3:      3  1
-</div>
-<div class='input'><span class="functioncall"><a href='Tags.html'>addJobTags</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="number">2</span><span class="keyword">,</span> <span class="string">"tag1"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<div class='input'>
+<span class="comment"># Table with tags:</span>
+<span class="functioncall"><a href='Tags.html'>addJobTags</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="number">2</span><span class="keyword">,</span> <span class="string">"tag1"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='Tags.html'>addJobTags</a></span><span class="keyword">(</span><span class="number">2</span><span class="keyword">,</span> <span class="string">"tag2"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='getJobTable.html'>getJobTags</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
 <div class='output'>   job.id      tags
 1:      1      tag1
 2:      2 tag1,tag2
 3:      3        NA
+</div>
+<div class='input'>
+<span class="comment"># Job parameters with tags right-joined:</span>
+<span class="functioncall"><a href='JoinTables.html'>rjoin</a></span><span class="keyword">(</span><span class="functioncall"><a href='getJobTable.html'>getJobPars</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='getJobTable.html'>getJobTags</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>   job.id  x      tags
+1:      1 -1      tag1
+2:      2  0 tag1,tag2
+3:      3  1        NA
 </div></pre>
   </div>
   <div class="span4 sidebar">

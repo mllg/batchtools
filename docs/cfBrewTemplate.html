@@ -66,8 +66,8 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
 String ready to be brewed. See <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code> to read a template from the file system.</dd>
       <dt>jc</dt>
       <dd>[<code><a href='JobCollection.html'>JobCollection</a>)</code>]
-JobCollection holding all essential information. Will be used as environment to look
-up variables.</dd>
+Will be used as environment to brew the template file in. See <code><a href='JobCollection.html'>JobCollection</a></code> for a list of all
+available variables.</dd>
     </dl>
     
     <div class="Value">
@@ -86,8 +86,7 @@ up variables.</dd>
 
       <p>Calls brew silently on your template, any error will lead to an exception. If debug mode is
 enabled (via option &#147;batchtools.debug&#148;), the file is stored at the same place as the corresponding
-R script in the &#147;jobs&#148;-subdir of your files directory, otherwise in the temp dir via
-<code><a href='http://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></code>.</p>
+job file in the &#147;jobs&#148;-subdir of your files directory, otherwise as <code><a href='http://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></code> on the local system.</p>
 
     </div>
       </div>
@@ -103,6 +102,7 @@ R script in the &#147;jobs&#148;-subdir of your files directory, otherwise in th
       <p>Other ClusterFunctionsHelper: <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
   <code><a href='cfKillJob.html'>cfKillJob</a></code>,
   <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
+  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>,
   <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>,
   <code><a href='runOSCommand.html'>runOSCommand</a></code></p>
 

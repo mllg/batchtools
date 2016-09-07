@@ -54,7 +54,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='loadResult.html'>loadResult</a></span><span class="keyword">(</span><span class="symbol">id</span><span class="keyword">,</span> <span class="argument">missing.val</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+    <pre><span class="functioncall"><a href='loadResult.html'>loadResult</a></span><span class="keyword">(</span><span class="symbol">id</span><span class="keyword">,</span> <span class="symbol">missing.val</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -64,7 +64,7 @@ Single integer to specify the job or a <code>data.table</code> with column <code
 and exactly one row.</dd>
       <dt>missing.val</dt>
       <dd>[<code>ANY</code>]
-Value to return if the result file is missing. Default is <code>NULL</code>.</dd>
+Value to return if the result file is missing (if not provided, an exception is raised).</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
@@ -83,7 +83,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>A function to simply load the results for a single job.</p>
+      <p>A function to simply load the result of a single job.</p>
 
     </div>
       </div>

@@ -61,7 +61,7 @@
       <dt>ncpus</dt>
       <dd>[<code>integer(1)</code>]
 Number of VPUs of worker.
-Default is to use all cores. The total number of cores &quot;available&quot; is given by option <code>mc.cores</code>
+Default is to use all cores. The total number of cores &quot;available&quot; can be set via the option <code>mc.cores</code>
 and defaults to the heuristic implemented in <code><a href='http://www.rdocumentation.org/packages/parallel/topics/detectCores'>detectCores</a></code>.</dd>
     </dl>
     
@@ -77,7 +77,7 @@ and defaults to the heuristic implemented in <code><a href='http://www.rdocument
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Jobs are spawned asynchronously using the packages <span class = "pkg">parallel</span>.
+      <p>Jobs are spawned asynchronously using the functions <code><a href='http://www.rdocumentation.org/packages/parallel/topics/mcparallel'>mcparallel</a></code> and <code><a href='http://www.rdocumentation.org/packages/parallel/topics/mcparallel'>mccollect</a></code>.
 Does not work on Windows, use <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code> instead.</p>
 
     </div>

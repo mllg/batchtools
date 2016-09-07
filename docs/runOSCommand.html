@@ -63,8 +63,8 @@
       <dd>[<code>character(1)</code>]
 Command to run.</dd>
       <dt>sys.args</dt>
-      <dd>[<code>character()</code>]
-Arguments to <code>sys.cmd</code>.</dd>
+      <dd>[<code>character</code>]
+Arguments for <code>sys.cmd</code>.</dd>
       <dt>nodename</dt>
       <dd>[<code>character(1)</code>]
 Name of the SSH node to run the command on. If set to &#147;localhost&#148; (default), the command
@@ -88,7 +88,7 @@ If <code>TRUE</code>, the commands send to the OS are printed.</dd>
 
       <p>This is a helper function to run arbitrary OS commands on local or remote machines.
 The interface is similar to <code><a href='http://www.rdocumentation.org/packages/base/topics/system2'>system2</a></code>, but it always returns the exit status
-and the output.</p>
+<em>and</em> the output.</p>
 
     </div>
     
@@ -112,6 +112,7 @@ and the output.</p>
   <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
   <code><a href='cfKillJob.html'>cfKillJob</a></code>,
   <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
+  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>,
   <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code></p>
 
     

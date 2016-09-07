@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>addAlgorithm. batchtools 0.1</title>
+<title>ProblemAlgorithm. batchtools 0.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -54,24 +54,27 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='ProblemAlgorithm.html'>addAlgorithm</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">fun</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
-
-<span class="functioncall"><a href='ProblemAlgorithm.html'>removeAlgorithm</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
-
-<span class="functioncall"><a href='ProblemAlgorithm.html'>getAlgorithmIds</a></span><span class="keyword">(</span><span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
-
-<span class="functioncall"><a href='ProblemAlgorithm.html'>addProblem</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">data</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">fun</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">seed</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
+    <pre><span class="functioncall"><a href='ProblemAlgorithm.html'>addProblem</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">data</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">fun</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">seed</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
   <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
 
 <span class="functioncall"><a href='ProblemAlgorithm.html'>removeProblem</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
 
-<span class="functioncall"><a href='ProblemAlgorithm.html'>getProblemIds</a></span><span class="keyword">(</span><span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+<span class="functioncall"><a href='ProblemAlgorithm.html'>getProblemIds</a></span><span class="keyword">(</span><span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='ProblemAlgorithm.html'>addAlgorithm</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">fun</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='ProblemAlgorithm.html'>removeAlgorithm</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='ProblemAlgorithm.html'>getAlgorithmIds</a></span><span class="keyword">(</span><span class="argument">reg</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='Registry.html'>getDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>name</dt>
       <dd>[<code>character(1)</code>]
 Unique identifier for the problem or algorithm.</dd>
+      <dt>data</dt>
+      <dd>[<code>ANY</code>]
+Static problem part. Default is <code>NULL</code>.</dd>
       <dt>fun</dt>
       <dd>[<code>function</code>]
   For <code>addProblem</code>, the function defining the stochastic problem part.
@@ -84,12 +87,6 @@ Unique identifier for the problem or algorithm.</dd>
   Therefore, your function must have the formal arguments &#147;job&#148;, &#147;data&#148; and &#147;instance&#148; (or dots <code>...</code>).
 
   If you do not provide a function, it defaults to a function which just returns the data part (Problem) or the instance (Algorithm).</dd>
-      <dt>reg</dt>
-      <dd>[<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>]
-Registry. If not explicitly passed, uses the last created registry.</dd>
-      <dt>data</dt>
-      <dd>[<code>ANY</code>]
-Static problem part. Default is <code>NULL</code>.</dd>
       <dt>seed</dt>
       <dd>[<code>integer(1)</code>]
 Start seed for this problem. This allows the &#147;synchronization&#148; of a stochastic
@@ -102,6 +99,9 @@ instantiated. (3) From now on the usual experiment seed of the registry is used,
 see <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>.
 If <code>seed</code> is set to <code>NULL</code> (default), the job seed is used to instantiate the problem and
 different algorithms see different stochastic instances of the same problem.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
     </dl>
     
     <div class="Value">
@@ -116,14 +116,14 @@ different algorithms see different stochastic instances of the same problem.</dd
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Problems may consist of up to two parts. A static, immutable part (<code>data</code> in <code>addProblem</code>)
+      <p>Problems may consist of up to two parts: A static, immutable part (<code>data</code> in <code>addProblem</code>)
 and a dynamic, stochastic part (<code>fun</code> in <code>addProblem</code>).
 For example, for statistical learning problems a data frame would be the static problem part while
 a resampling function would be the stochastic part which creates problem instance.
 This instance is then typically passed to a learning algorithm like a wrapper around a statistical model
 (<code>fun</code> in <code>addAlgorithm</code>).</p>
 
-      <p>The functions serialize the components to the file system and register the respective problem or algorithm
+      <p>The functions serialize all components to the file system and register the respective problem or algorithm
 names in the <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>.</p>
 
       <p><code>getProblemIds</code> and <code>getAlgorithmIds</code> can be used to retrieve the IDs of already defined problems

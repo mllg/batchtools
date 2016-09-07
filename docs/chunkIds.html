@@ -68,17 +68,18 @@ If not set, defaults to all jobs.</dd>
       <dt>n.chunks</dt>
       <dd>[<code>integer(1)</code>]
 Requested number of chunks.
-If more chunks than elements in <code>ids</code> are requested, empty chunks are
-dropped. Cannot be used in combination with <code>chunks.size</code>.</dd>
+If more chunks than elements in <code>ids</code> are requested, empty chunks are ignored.
+Mutually exclusive with <code>chunks.size</code>.</dd>
       <dt>chunk.size</dt>
       <dd>[<code>integer(1)</code>]
 Requested number of elements in each chunk.
-Cannot be used in combination with <code>n.chunks</code>.
-If <code>ids</code> cannot be chunked evenly, some chunks will have less elements.</dd>
+If <code>ids</code> cannot be chunked evenly, some chunks will have less elements than others.
+Mutually exclusive with with <code>n.chunks</code>.</dd>
       <dt>group.by</dt>
       <dd>[<code>character(0)</code>]
-If <code>ids</code> is a <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> with additional columns (besides &#147;job.id&#148;),
-then the chunking is done in subgroups defined by the columns <code>group.by</code>.
+If <code>ids</code> is a <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> with additional columns
+(in addition to the required column &#147;job.id&#148;), then the chunking is performed using
+subgroups defined by the columns set in <code>group.by</code>.
 See example.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
@@ -90,7 +91,6 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
 
       <p><dl>
 [<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with columns &#147;job.id&#148; and &#147;chunk&#148;.
-  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
 </dl></p>
 
     </div>
@@ -101,7 +101,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <p>Partition jobs into &#147;chunks&#148; which will be executed together on the nodes.</p>
 
       <p>Chunks are submitted via <code><a href='submitJobs.html'>submitJobs</a></code> by simply providing
-a data frame with columns &#147;job.id&#148; and &#147;chunk&#148;.
+a data frame with columns &#147;job.id&#148; and corresponding &#147;chunk&#148; (both integer).
 All jobs with the same chunk number will be grouped together on one node as a single
 computational job.</p>
 
@@ -111,35 +111,35 @@ computational job.</p>
     <pre class="examples"><div class='input'><span class="comment"># chunking for Registry</span>
 <span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
 <strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
-<div class='input'><span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">identity</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">25</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<div class='input'><span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">identity</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">25</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
 <strong class='message'>Adding 25 jobs ...</strong>
-<div class='input'><span class="symbol">ids</span> <span class="assignement">=</span> <span class="symbol">ids</span><span class="keyword">[</span><span class="functioncall"><a href='chunkIds.html'>chunkIds</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="argument">chunk.size</span> <span class="argument">=</span> <span class="number">10</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">]</span>
+<div class='input'><span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='chunkIds.html'>chunkIds</a></span><span class="keyword">(</span><span class="argument">chunk.size</span> <span class="argument">=</span> <span class="number">10</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">)</span></div>
 <div class='output'>    job.id chunk
- 1:      1     2
- 2:      2     1
- 3:      3     2
+ 1:      1     1
+ 2:      2     2
+ 3:      3     1
  4:      4     1
- 5:      5     1
- 6:      6     2
- 7:      7     3
+ 5:      5     3
+ 6:      6     1
+ 7:      7     2
  8:      8     3
- 9:      9     3
-10:     10     1
-11:     11     2
-12:     12     2
-13:     13     3
+ 9:      9     2
+10:     10     2
+11:     11     1
+12:     12     1
+13:     13     2
 14:     14     3
-15:     15     2
-16:     16     2
+15:     15     3
+16:     16     3
 17:     17     1
-18:     18     2
+18:     18     3
 19:     19     3
-20:     20     1
+20:     20     2
 21:     21     1
-22:     22     3
-23:     23     3
-24:     24     1
+22:     22     2
+23:     23     2
+24:     24     3
 25:     25     1
     job.id chunk
 </div>
@@ -156,63 +156,56 @@ computational job.</p>
 <span class="symbol">prob</span> <span class="assignement">=</span> <span class="functioncall"><a href='ProblemAlgorithm.html'>addProblem</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="string">"prob2"</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">Titanic</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">job</span><span class="keyword">,</span> <span class="formalargs">data</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span><span class="keyword">(</span><span class="symbol">data</span><span class="keyword">)</span><span class="keyword">)</span>
 <span class="symbol">algo</span> <span class="assignement">=</span> <span class="functioncall"><a href='ProblemAlgorithm.html'>addAlgorithm</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="string">"algo"</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">job</span><span class="keyword">,</span> <span class="formalargs">data</span><span class="keyword">,</span> <span class="formalargs">instance</span><span class="keyword">,</span> <span class="formalargs">i</span><span class="keyword">,</span> <span class="formalargs">...</span><span class="keyword">)</span> <span class="symbol">problem</span><span class="keyword">)</span>
 <span class="symbol">prob.designs</span> <span class="assignement">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">prob1</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">prob2</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">2</span><span class="keyword">)</span><span class="keyword">)</span>
-<span class="symbol">algo.designs</span> <span class="assignement">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">algo</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span><span class="keyword">(</span><span class="argument">i</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">)</span><span class="keyword">)</span>
-<span class="functioncall"><a href='addExperiments.html'>addExperiments</a></span><span class="keyword">(</span><span class="symbol">prob.designs</span><span class="keyword">,</span> <span class="symbol">algo.designs</span><span class="keyword">,</span> <span class="argument">repls</span> <span class="argument">=</span> <span class="number">10</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
-<strong class='message'>Adding 50 experiments (&#39;prob1&#39;[1] x &#39;algo&#39;[5] x repls[10]) ...</strong>
-<strong class='message'>Adding 100 experiments (&#39;prob2&#39;[2] x &#39;algo&#39;[5] x repls[10]) ...</strong>
+<span class="symbol">algo.designs</span> <span class="assignement">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">algo</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span><span class="keyword">(</span><span class="argument">i</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="functioncall"><a href='addExperiments.html'>addExperiments</a></span><span class="keyword">(</span><span class="symbol">prob.designs</span><span class="keyword">,</span> <span class="symbol">algo.designs</span><span class="keyword">,</span> <span class="argument">repls</span> <span class="argument">=</span> <span class="number">3</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 9 experiments (&#39;prob1&#39;[1] x &#39;algo&#39;[3] x repls[3]) ...</strong>
+<strong class='message'>Adding 18 experiments (&#39;prob2&#39;[2] x &#39;algo&#39;[3] x repls[3]) ...</strong>
 <div class='input'>
-<span class="comment"># -&gt; group into chunks of 5 jobs, but do not mix problems</span>
+<span class="comment"># group into chunks of 5 jobs, but do not put multiple problems into a single chunk</span>
+<span class="comment"># -&gt; only one problem has to be loaded per chunk, and only once because it is then cached.</span>
 <span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='getJobTable.html'>getJobTable</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">[</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/plyr/topics/quoted'>.</a></span><span class="keyword">(</span><span class="symbol">job.id</span><span class="keyword">,</span> <span class="symbol">problem</span><span class="keyword">,</span> <span class="symbol">algorithm</span><span class="keyword">)</span><span class="keyword">]</span>
-<span class="symbol">ids</span> <span class="assignement">=</span> <span class="symbol">ids</span><span class="keyword">[</span><span class="functioncall"><a href='chunkIds.html'>chunkIds</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="argument">chunk.size</span> <span class="argument">=</span> <span class="number">5</span><span class="keyword">,</span> <span class="argument">group.by</span> <span class="argument">=</span> <span class="string">"problem"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">]</span>
-<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">)</span></div>
-<div class='output'>     job.id problem algorithm chunk
-  1:      1   prob1      algo     1
-  2:      2   prob1      algo     2
-  3:      3   prob1      algo     3
-  4:      4   prob1      algo     2
-  5:      5   prob1      algo     4
- ---                               
-146:    146   prob2      algo    26
-147:    147   prob2      algo    30
-148:    148   prob2      algo    15
-149:    149   prob2      algo    25
-150:    150   prob2      algo    12
+<span class="symbol">chunked</span> <span class="assignement">=</span> <span class="functioncall"><a href='chunkIds.html'>chunkIds</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="argument">chunk.size</span> <span class="argument">=</span> <span class="number">5</span><span class="keyword">,</span> <span class="argument">group.by</span> <span class="argument">=</span> <span class="string">"problem"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">chunked</span><span class="keyword">)</span></div>
+<div class='output'>    job.id chunk
+ 1:      1     1
+ 2:      2     2
+ 3:      3     2
+ 4:      4     1
+ 5:      5     1
+ 6:      6     1
+ 7:      7     2
+ 8:      8     1
+ 9:      9     2
+10:     10     3
+11:     11     4
+12:     12     5
+13:     13     5
+14:     14     4
+15:     15     3
+16:     16     6
+17:     17     5
+18:     18     3
+19:     19     4
+20:     20     6
+21:     21     5
+22:     22     4
+23:     23     3
+24:     24     5
+25:     25     6
+26:     26     4
+27:     27     6
+    job.id chunk
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/dcast.data.table'>dcast</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="symbol">chunk</span> <span class="keyword">~</span> <span class="symbol">problem</span><span class="keyword">)</span></div>
+<div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/dcast.data.table'>dcast</a></span><span class="keyword">(</span><span class="functioncall"><a href='JoinTables.html'>ijoin</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="symbol">chunked</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">chunk</span> <span class="keyword">~</span> <span class="symbol">problem</span><span class="keyword">)</span></div>
 <strong class='message'>Using &#39;chunk&#39; as value column. Use &#39;value.var&#39; to override</strong>
 <strong class='message'>Aggregate function missing, defaulting to &#39;length&#39;</strong>
-<div class='output'>    chunk prob1 prob2
- 1:     1     5     0
- 2:     2     5     0
- 3:     3     5     0
- 4:     4     5     0
- 5:     5     5     0
- 6:     6     5     0
- 7:     7     5     0
- 8:     8     5     0
- 9:     9     5     0
-10:    10     5     0
-11:    11     0     5
-12:    12     0     5
-13:    13     0     5
-14:    14     0     5
-15:    15     0     5
-16:    16     0     5
-17:    17     0     5
-18:    18     0     5
-19:    19     0     5
-20:    20     0     5
-21:    21     0     5
-22:    22     0     5
-23:    23     0     5
-24:    24     0     5
-25:    25     0     5
-26:    26     0     5
-27:    27     0     5
-28:    28     0     5
-29:    29     0     5
-30:    30     0     5
-    chunk prob1 prob2
+<div class='output'>   chunk prob1 prob2
+1:     1     5     0
+2:     2     4     0
+3:     3     0     4
+4:     4     0     5
+5:     5     0     5
+6:     6     0     4
 </div></pre>
   </div>
   <div class="span4 sidebar">

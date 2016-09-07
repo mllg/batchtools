@@ -81,11 +81,48 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>This function gives an encompassing overview over the computational status
-on your system.</p>
+      <p>This function gives an encompassing overview over the computational status on your system.</p>
 
     </div>
-      </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
+<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<div class='input'><span class="symbol">fun</span> <span class="assignement">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">i</span><span class="keyword">)</span> <span class="keyword">if</span> <span class="keyword">(</span><span class="symbol">i</span> == <span class="number">3</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/stop'>stop</a></span><span class="keyword">(</span><span class="symbol">i</span><span class="keyword">)</span> <span class="keyword">else</span> <span class="symbol">i</span>
+<span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">fun</span><span class="keyword">,</span> <span class="argument">i</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Adding 5 jobs ...</strong>
+<div class='input'><span class="functioncall"><a href='submitJobs.html'>submitJobs</a></span><span class="keyword">(</span><span class="argument">ids</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">4</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Submitting 4 jobs in 4 chunks using cluster functions &#39;Interactive&#39; ...</strong>
+<div class='input'><span class="functioncall"><a href='waitForJobs.html'>waitForJobs</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Syncing 4 files ...</strong>
+<div class='output'>[1] FALSE
+</div>
+<div class='input'>
+<span class="symbol">tab</span> <span class="assignement">=</span> <span class="functioncall"><a href='getStatus.html'>getStatus</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
+<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">tab</span><span class="keyword">)</span></div>
+<div class='output'>Status for 5 jobs:
+  Submitted : 4 ( 80.0%)
+  Queued    : 0 (  0.0%)
+  Started   : 4 ( 80.0%)
+  Running   : 0 (  0.0%)
+  Done      : 3 ( 60.0%)
+  Error     : 1 ( 20.0%)
+  Expired   : 0 (  0.0%)
+</div>
+<div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/utils/topics/str'>str</a></span><span class="keyword">(</span><span class="symbol">tab</span><span class="keyword">)</span></div>
+<div class='output'>Classes ‘Status’, ‘data.table’ and &#39;data.frame&#39;:	1 obs. of  9 variables:
+ $ defined  : int 5
+ $ submitted: int 4
+ $ started  : int 4
+ $ done     : int 3
+ $ error    : int 1
+ $ queued   : int 0
+ $ running  : int 0
+ $ expired  : int 0
+ $ system   : int 0
+ - attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt; 
+</div></pre>
+  </div>
   <div class="span4 sidebar">
     <!-- <ul>
       <li>getStatus</li>
@@ -94,7 +131,13 @@ on your system.</p>
       
     </ul> -->
 
+    <h2>See also</h2>
+      <p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
+  <code><a href='grepLogs.html'>grepLogs</a></code>, <code><a href='killJobs.html'>killJobs</a></code>,
+  <code><a href='resetJobs.html'>resetJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
+  <code><a href='testJob.html'>testJob</a></code></p>
 
+    
 
 
   </div>

@@ -67,8 +67,8 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of <code><a href='findJobs.html'>findErrors</a></code>.</dd>
       <dt>missing.as.error</dt>
       <dd>[<code>logical(1)</code>]
-Treat missing results as errors? If <code>TRUE</code>, an error message is imputed for jobs
-which are not terminated. Default is <code>FALSE</code></dd>
+Treat missing results as errors? If <code>TRUE</code>, the error message &#147;[not terminated]&#148; is imputed
+for jobs which have not terminated. Default is <code>FALSE</code></dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
@@ -78,9 +78,8 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]. Table with columns &#147;job.id&#148;, &#147;terminated&#148; (logical),
+[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with columns &#147;job.id&#148;, &#147;terminated&#148; (logical),
   &#147;error&#148; (logical) and &#147;message&#148; (string).
-  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
 </dl></p>
 
     </div>
@@ -88,8 +87,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Extracts error messages from the internal data base and returns them in a compact table.
-For further investigation of logs, use <code><a href='showLog.html'>showLog</a></code>.</p>
+      <p>Extracts error messages from the internal data base and returns them in a table.</p>
 
     </div>
     
@@ -119,7 +117,7 @@ For further investigation of logs, use <code><a href='showLog.html'>showLog</a><
 2:      2       TRUE FALSE                          NA
 3:      3       TRUE  TRUE Error in (function (i)  : 3
 4:      4       TRUE FALSE                          NA
-5:      5      FALSE  TRUE              Not terminated
+5:      5      FALSE  TRUE            [not terminated]
 </div></pre>
   </div>
   <div class="span4 sidebar">
@@ -131,9 +129,10 @@ For further investigation of logs, use <code><a href='showLog.html'>showLog</a><
     </ul> -->
 
     <h2>See also</h2>
-      <p>Other debug: <code><a href='grepLogs.html'>grepLogs</a></code>,
-  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='resetJobs.html'>resetJobs</a></code>,
-  <code><a href='showLog.html'>showLog</a></code>, <code><a href='testJob.html'>testJob</a></code></p>
+      <p>Other debug: <code><a href='getStatus.html'>getStatus</a></code>,
+  <code><a href='grepLogs.html'>grepLogs</a></code>, <code><a href='killJobs.html'>killJobs</a></code>,
+  <code><a href='resetJobs.html'>resetJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
+  <code><a href='testJob.html'>testJob</a></code></p>
 
     
 

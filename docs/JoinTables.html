@@ -71,11 +71,11 @@
       <dt>x</dt>
       <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> | <code>integer</code>]
 Either a <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>/<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> with integer column &#147;job.id&#148;
-or an integer vector fof job ids.</dd>
+or an integer vector of job ids.</dd>
       <dt>y</dt>
       <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> | <code>integer</code>]
 Either a <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>/<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> with integer column &#147;job.id&#148;
-or an integer vector fof job ids.</dd>
+or an integer vector of job ids.</dd>
     </dl>
     
     <div class="Value">
@@ -98,7 +98,7 @@ data table or alternatively <span class = "pkg">dplyr</span>&#39;s vignette on t
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment"># create two tables for demonstration</span>
+    <pre class="examples"><div class='input'><span class="comment"># Create two tables for demonstration</span>
 <span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
 <strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
 <div class='input'><span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">identity</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">6</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
@@ -107,7 +107,7 @@ data table or alternatively <span class = "pkg">dplyr</span>&#39;s vignette on t
 <span class="symbol">y</span> <span class="assignement">=</span> <span class="functioncall"><a href='findJobs.html'>findJobs</a></span><span class="keyword">(</span><span class="symbol">x</span> <span class="keyword">&gt;=</span> <span class="number">2</span> <span class="keyword">&amp;</span> <span class="symbol">x</span> &lt;= <span class="number">5</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="symbol">y</span><span class="keyword">$</span><span class="symbol">extra.col</span> <span class="assignement">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/utils/topics/head'>head</a></span><span class="keyword">(</span><span class="symbol">letters</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span><span class="keyword">(</span><span class="symbol">y</span><span class="keyword">)</span><span class="keyword">)</span>
 
-<span class="comment"># inner join: similar to intersect() on ids, keep all columns of x and y</span>
+<span class="comment"># Inner join: similar to intersect() on ids, keep all columns of x and y</span>
 <span class="functioncall"><a href='JoinTables.html'>ijoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
 <div class='output'>   job.id x extra.col
 1:      2 2         a
@@ -116,7 +116,7 @@ data table or alternatively <span class = "pkg">dplyr</span>&#39;s vignette on t
 4:      5 5         d
 </div>
 <div class='input'>
-<span class="comment"># left join: use all ids from x, keep all columns of x and y</span>
+<span class="comment"># Left join: use all ids from x, keep all columns of x and y</span>
 <span class="functioncall"><a href='JoinTables.html'>ljoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
 <div class='output'>   job.id extra.col x
 1:      1        NA 1
@@ -127,7 +127,7 @@ data table or alternatively <span class = "pkg">dplyr</span>&#39;s vignette on t
 6:      6        NA 6
 </div>
 <div class='input'>
-<span class="comment"># right join: use all ids from y, keep all columns of x and y</span>
+<span class="comment"># Right join: use all ids from y, keep all columns of x and y</span>
 <span class="functioncall"><a href='JoinTables.html'>rjoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
 <div class='output'>   job.id x extra.col
 1:      2 2         a
@@ -136,7 +136,7 @@ data table or alternatively <span class = "pkg">dplyr</span>&#39;s vignette on t
 4:      5 5         d
 </div>
 <div class='input'>
-<span class="comment"># outer join: similar to union() on ids, keep all columns of x and y</span>
+<span class="comment"># Outer join: similar to union() on ids, keep all columns of x and y</span>
 <span class="functioncall"><a href='JoinTables.html'>ojoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
 <div class='output'>   job.id x extra.col
 1:      1 1        NA
@@ -147,7 +147,7 @@ data table or alternatively <span class = "pkg">dplyr</span>&#39;s vignette on t
 6:      6 6        NA
 </div>
 <div class='input'>
-<span class="comment"># semi join: similar to intersect() on ids, keep all columns of x</span>
+<span class="comment"># Semi join: similar to intersect() on ids, keep all columns of x</span>
 <span class="functioncall"><a href='JoinTables.html'>sjoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
 <div class='output'>   job.id x
 1:      2 2
@@ -156,7 +156,7 @@ data table or alternatively <span class = "pkg">dplyr</span>&#39;s vignette on t
 4:      5 5
 </div>
 <div class='input'>
-<span class="comment"># anti join: similar to setdiff() on ids, keep all columns of x</span>
+<span class="comment"># Anti join: similar to setdiff() on ids, keep all columns of x</span>
 <span class="functioncall"><a href='JoinTables.html'>ajoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
 <div class='output'>   job.id x
 1:      1 1

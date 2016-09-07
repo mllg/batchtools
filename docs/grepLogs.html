@@ -70,7 +70,7 @@ If not set, defaults to the return value of <code><a href='findJobs.html'>findSt
 Regular expression or string (see <code>fixed</code>).</dd>
       <dt>ignore.case</dt>
       <dd>[<code>logical(1L)</code>]
-If <code>TRUE</code> the match will be performed case insensitive.</dd>
+If <code>TRUE</code> the match will be performed case insensitively.</dd>
       <dt>fixed</dt>
       <dd>[<code>logical(1L)</code>]
 If <code>FALSE</code> (default), <code>pattern</code> is a regular expression and a fixed string otherwise.</dd>
@@ -83,8 +83,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]. Matching job ids are stored in the column &#147;job.id&#148;.
-  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
+[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with columns &#147;job.id&#148; and &#147;message&#148;.
 </dl></p>
 
     </div>
@@ -92,7 +91,8 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Crawls through log files and reports jobs with where lines matches the <code>pattern</code>.</p>
+      <p>Crawls through log files and reports jobs with lines matching the <code>pattern</code>.
+See <code><a href='showLog.html'>showLog</a></code> for an example.</p>
 
     </div>
       </div>
@@ -106,8 +106,9 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
 
     <h2>See also</h2>
       <p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
-  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='resetJobs.html'>resetJobs</a></code>,
-  <code><a href='showLog.html'>showLog</a></code>, <code><a href='testJob.html'>testJob</a></code></p>
+  <code><a href='getStatus.html'>getStatus</a></code>, <code><a href='killJobs.html'>killJobs</a></code>,
+  <code><a href='resetJobs.html'>resetJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
+  <code><a href='testJob.html'>testJob</a></code></p>
 
     
 

@@ -64,14 +64,16 @@ Single integer to specify the job or a <code>data.table</code> with column <code
 and exactly one row.</dd>
       <dt>external</dt>
       <dd>[<code>logical(1)</code>]
-Run the job in an external R session? If <code>TRUE</code>, starts a fresh R
-session on the local machine to execute the with <code><a href='execJob.html'>execJob</a></code>.
-You will not be able to use debug tools like <code><a href='http://www.rdocumentation.org/packages/base/topics/traceback'>traceback</a></code>
-or <code><a href='http://www.rdocumentation.org/packages/base/topics/browser'>browser</a></code>.
-If <code>external</code> is set to <code>FALSE</code> (default), <code>testJob</code> will
-execute the job in the current R session, and you are unable to spot
-missing variable declarations (possibly resolved in the global environment) as well
-as forgotten package dependencies.</dd>
+ Run the job in an external R session? If <code>TRUE</code>, starts a fresh R
+ session on the local machine to execute the with <code><a href='execJob.html'>execJob</a></code>.
+ You will not be able to use debug tools like <code><a href='http://www.rdocumentation.org/packages/base/topics/traceback'>traceback</a></code>
+ or <code><a href='http://www.rdocumentation.org/packages/base/topics/browser'>browser</a></code>.
+
+ If <code>external</code> is set to <code>FALSE</code> (default) on the other hand,
+ <code>testJob</code> will execute the job in the current R session and the usual
+ debugging tools work. However, spotting missing variable declarations (as they
+ are possibly resolved in the global environment) is impossible.
+ Same holds for missing package dependency declarations.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
@@ -81,7 +83,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[ANY]. Returns the result of the job if successful.
+Returns the result of the job if successful.
 </dl></p>
 
     </div>
@@ -102,7 +104,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
 <div class='output'>[1] 1
 </div>
 <div class='input'><span class="comment">## Not run: ------------------------------------</span>
-<span class="comment">#  testJob(2, reg = tmp)</span>
+<span class="comment"># testJob(2, reg = tmp)</span>
 <span class="comment">## ---------------------------------------------</span></div></pre>
   </div>
   <div class="span4 sidebar">
@@ -115,8 +117,9 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
 
     <h2>See also</h2>
       <p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
-  <code><a href='grepLogs.html'>grepLogs</a></code>, <code><a href='killJobs.html'>killJobs</a></code>,
-  <code><a href='resetJobs.html'>resetJobs</a></code>, <code><a href='showLog.html'>showLog</a></code></p>
+  <code><a href='getStatus.html'>getStatus</a></code>, <code><a href='grepLogs.html'>grepLogs</a></code>,
+  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='resetJobs.html'>resetJobs</a></code>,
+  <code><a href='showLog.html'>showLog</a></code></p>
 
     
 

@@ -61,7 +61,7 @@
       <dt>x</dt>
       <dd>[<code>list</code>]
 Named list of objects to export.
-Set to <code>NULL</code> to unexport the object.</dd>
+Set to <code>NULL</code> to un-export objects.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
@@ -81,8 +81,8 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
 
       <p>Objects are saved in subdirectory &#147;exports&#148; of the
 &#147;file.dir&#148; of <code>reg</code>.
-They are automatically loaded and put into the global environment
-each time the registry is loaded on the master as well as on the slaves.</p>
+They are automatically loaded and placed in the global environment
+each time the registry is loaded or a job collection is executed.</p>
 
     </div>
     
@@ -98,14 +98,14 @@ each time the registry is loaded on the master as well as on the slaves.</p>
 <div class='output'>NULL
 </div>
 <div class='input'>
-<span class="comment"># add job depending on exports</span>
+<span class="comment"># add a job and required exports</span>
 <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">x</span><span class="keyword">)</span> <span class="symbol">x</span><span class="keyword">^</span><span class="number">2</span> <span class="keyword">+</span> <span class="symbol">y</span> <span class="keyword">+</span> <span class="symbol">z</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
 <strong class='message'>Adding 3 jobs ...</strong>
 <div class='input'><span class="symbol">exports</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchExport.html'>batchExport</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">y</span> <span class="argument">=</span> <span class="number">99</span><span class="keyword">,</span> <span class="argument">z</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">exports</span><span class="keyword">)</span></div>
-<div class='output'>   name                                               uri
-1:    y /tmp/RtmpKMSAKp/registry35ffb342bdf/exports/y.rds
-2:    z /tmp/RtmpKMSAKp/registry35ffb342bdf/exports/z.rds
+<div class='output'>   name                                                uri
+1:    y /tmp/RtmpIuATuI/registry280f79959fe1/exports/y.rds
+2:    z /tmp/RtmpIuATuI/registry280f79959fe1/exports/z.rds
 </div>
 <div class='input'>
 <span class="functioncall"><a href='submitJobs.html'>submitJobs</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
@@ -119,10 +119,11 @@ each time the registry is loaded on the master as well as on the slaves.</p>
 </div>
 <div class='input'>
 <span class="comment"># Un-export z</span>
-<span class="symbol">exports</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchExport.html'>batchExport</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">z</span> <span class="argument">=</span> NULL<span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
-<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">exports</span><span class="keyword">)</span></div>
-<div class='output'>   name                                               uri
-1:    y /tmp/RtmpKMSAKp/registry35ffb342bdf/exports/y.rds
+<span class="symbol">exports</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchExport.html'>batchExport</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">z</span> <span class="argument">=</span> NULL<span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
+<strong class='message'>Un-exporting exported objects: &#39;z&#39;</strong>
+<div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">exports</span><span class="keyword">)</span></div>
+<div class='output'>   name                                                uri
+1:    y /tmp/RtmpIuATuI/registry280f79959fe1/exports/y.rds
 </div></pre>
   </div>
   <div class="span4 sidebar">

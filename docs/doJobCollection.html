@@ -61,8 +61,8 @@
       <dt>jc</dt>
       <dd>[<code><a href='JobCollection.html'>JobCollection</a></code>]
 Either an object of class &#147;JobCollection&#148; as returned by
-<code><a href='JobCollection.html'>makeJobCollection</a></code> or a string point to file containing a
-&#147;JobCollection&#148; (saved with <code><a href='http://www.rdocumentation.org/packages/base/topics/readRDS'>saveRDS</a></code>).</dd>
+<code><a href='JobCollection.html'>makeJobCollection</a></code> or a string with the path to file
+containing a &#147;JobCollection&#148; as RDS file (as stored by <code><a href='submitJobs.html'>submitJobs</a></code>).</dd>
       <dt>output</dt>
       <dd>[<code>character(1)</code>]
 Path to a file to write the output to. Defaults to <code>NULL</code> which means
@@ -93,16 +93,16 @@ This function is intended to be called on the slave.</p>
 <strong class='message'>Adding 2 jobs ...</strong>
 <div class='input'><span class="symbol">jc</span> <span class="assignement">=</span> <span class="functioncall"><a href='JobCollection.html'>makeJobCollection</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="number">2</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='doJobCollection.html'>doJobCollection</a></span><span class="keyword">(</span><span class="symbol">jc</span><span class="keyword">)</span></div>
-<div class='output'>### [bt 2016-09-05 02:26:31]: Starting calculation of 2 jobs
-### [bt 2016-09-05 02:26:31]: Setting working directory to &#39;/home/michel/Projekte/batchtools&#39;
-### [bt 2016-09-05 02:26:31]: Memory measurement disabled
-### [bt 2016-09-05 02:26:31]: Starting job [batchtools job.id=1]
+<div class='output'>### [bt 2016-09-07 13:42:11]: Starting calculation of 2 jobs
+### [bt 2016-09-07 13:42:11]: Setting working directory to &#39;/home/michel/Projekte/batchtools&#39;
+### [bt 2016-09-07 13:42:11]: Memory measurement disabled
+### [bt 2016-09-07 13:42:11]: Starting job [batchtools job.id=1]
 
-### [bt 2016-09-05 02:26:31]: Job terminated successfully [batchtools job.id=1]
-### [bt 2016-09-05 02:26:31]: Starting job [batchtools job.id=2]
+### [bt 2016-09-07 13:42:11]: Job terminated successfully [batchtools job.id=1]
+### [bt 2016-09-07 13:42:11]: Starting job [batchtools job.id=2]
 
-### [bt 2016-09-05 02:26:31]: Job terminated successfully [batchtools job.id=2]
-### [bt 2016-09-05 02:26:31]: Calculation finished!
+### [bt 2016-09-07 13:42:11]: Job terminated successfully [batchtools job.id=2]
+### [bt 2016-09-07 13:42:11]: Calculation finished!
 </div></pre>
   </div>
   <div class="span4 sidebar">
