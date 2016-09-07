@@ -376,9 +376,10 @@ clearRegistry = function(reg = getDefaultRegistry()) {
 }
 
 loadRegistryDependencies = function(x, switch.wd = TRUE) {
-  ok = vlapply(x$packages, require, character.only = TRUE)
+  pkgs = union(x$packages, "methods")
+  ok = vlapply(pkgs, require, character.only = TRUE)
   if (!all(ok))
-    stopf("Failed to load packages: %s", stri_join(x$packages[!ok], collapse = ", "))
+    stopf("Failed to load packages: %s", stri_join(pkgs[!ok], collapse = ", "))
 
   ok = vlapply(x$namespaces, requireNamespace)
   if (!all(ok))
