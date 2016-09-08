@@ -6,8 +6,8 @@
 \title{ClusterFunctions Constructor}
 \usage{
 makeClusterFunctions(name, submitJob, killJob = NULL, listJobsQueued = NULL,
-  listJobsRunning = NULL, array.envir.var = NA_character_,
-  store.job = TRUE, hooks = list())
+  listJobsRunning = NULL, array.var = NA_character_, store.job = TRUE,
+  hooks = list())
 }
 \arguments{
 \item{name}{[\code{character(1)}]\cr
@@ -40,7 +40,7 @@ all for the current user instead of all for the current registry), but you have 
 relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
 Set \code{listJobsRunning} to \code{NULL} if listing of running jobs is not supported.}
 
-\item{array.envir.var}{[\code{character(1)}]\cr
+\item{array.var}{[\code{character(1)}]\cr
 Name of the environment variable set by the scheduler to identify IDs of job arrays.
 Default is \code{NA} for no array support.}
 

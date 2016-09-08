@@ -44,21 +44,26 @@ Setting the resource \code{measure.memory} to \code{TRUE} turns on memory measur
 and after the job and the difference is stored in the internal database. Note that this is just a rough estimate and does
 neither work reliably for external code like C/C++ nor in combination with threading.
 
+If your cluster supports array jobs, you can set the resource \code{chunks.as.arrayjobs} to \code{TRUE} in order
+to execute chunks as job arrays. To do so, the job must be repeated \code{n.array.jobs} times via the cluster functions template
+(\code{n.array.jobs} is automatically available while brewing the template).
+The function \code{\link{doJobCollection}} (which is called on the slave) now retrieves the repetition number from the environment
+and restricts the computation to the respective job in the \code{\link{JobCollection}}.
+
 Furthermore, the package provides support for inner parallelization using threading, sockets or MPI via the
 package \pkg{parallelMap}.
 If you set the resource \dQuote{pm.backend} to \dQuote{multicore}, \dQuote{socket} or \dQuote{mpi},
 \code{\link[parallelMap]{parallelStart}} is called on the slave before the first job in the chunk is started
 and \code{\link[parallelMap]{parallelStop}} is called after the last job terminated.
-This way, the used resources for inner parallelization are set in the same place as the resources for the outer parallelization and
-get automatically stored in the \code{\link{Registry}}.
+This way, the used resources for inner parallelization are set in the same place as the resources for the outer parallelization done by
+\pkg{batchtools} and all resources get stored together in the \code{\link{Registry}}.
 The user function just has to call \code{\link[parallelMap]{parallelMap}} to start parallelization using the preconfigured backend.
 
-You may set the resource \code{ncpus} to control the number of CPUs to use in \pkg{parallelMap}.
+Note that you should set the resource \code{ncpus} to control the number of CPUs to use in \pkg{parallelMap}.
 \code{ncpus} defaults to the number of available CPUs (as reported by (see \code{\link[parallel]{detectCores}}))
 on the executing machine for multicore and socket mode and defaults to the return value of \code{\link[Rmpi]{mpi.universe.size}-1} for MPI.
-You can pass further options like \code{level} to \code{\link[parallelMap]{parallelStart}} via the named list \dQuote{pm.opts}.
-
-Note that your template must be set up to handle the parallelization, e.g. start R with \code{mpirun} or request the right number of CPUs.
+Your template must be set up to handle the parallelization, e.g. start R with \code{mpirun} or request the right number of CPUs.
+You may pass further options like \code{level} to \code{\link[parallelMap]{parallelStart}} via the named list \dQuote{pm.opts}.
 
 Also note that if you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
 can significantly increase the performance of \code{submitJobs}.

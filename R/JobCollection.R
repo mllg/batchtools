@@ -59,7 +59,7 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$source       = reg$source
   jc$load         = reg$load
   jc$resources    = resources
-  jc$array.var    = reg$cluster.functions$array.envir.var
+  jc$array.var    = reg$cluster.functions$array.var
   jc$n.array.jobs = if (isTRUE(resources$chunks.as.arrayjobs)) nrow(jobs) else 1L
 
   hooks = reg$cluster.functions$hooks

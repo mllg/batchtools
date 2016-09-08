@@ -30,7 +30,7 @@
 #'   all for the current user instead of all for the current registry), but you have to include all
 #'   relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
 #'   Set \code{listJobsRunning} to \code{NULL} if listing of running jobs is not supported.
-#' @param array.envir.var [\code{character(1)}]\cr
+#' @param array.var [\code{character(1)}]\cr
 #'   Name of the environment variable set by the scheduler to identify IDs of job arrays.
 #'   Default is \code{NA} for no array support.
 #' @param store.job [\code{logical(1)}]\cr
@@ -42,7 +42,7 @@
 #' @aliases ClusterFunctions
 #' @family ClusterFunctions
 #' @family ClusterFunctionsHelper
-makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, array.envir.var = NA_character_, store.job = TRUE, hooks = list()) {
+makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, array.var = NA_character_, store.job = TRUE, hooks = list()) {
   assertString(name, min.chars = 1L)
   if (!is.null(submitJob))
     assertFunction(submitJob, c("reg", "jc"))
@@ -52,7 +52,7 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
     assertFunction(listJobsQueued, "reg")
   if (!is.null(listJobsRunning))
     assertFunction(listJobsRunning, "reg")
-  assertString(array.envir.var, na.ok = TRUE)
+  assertString(array.var, na.ok = TRUE)
   assertFlag(store.job)
   assertList(hooks, types = "function", names = "unique")
   assertSubset(names(hooks), batchtools$hooks$name)
@@ -63,7 +63,7 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
       killJob = killJob,
       listJobsQueued = listJobsQueued,
       listJobsRunning = listJobsRunning,
-      array.envir.var = array.envir.var,
+      array.var = array.var,
       store.job = store.job,
       hooks = hooks),
     "ClusterFunctions")

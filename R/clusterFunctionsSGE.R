@@ -58,5 +58,5 @@ makeClusterFunctionsSGE = function(template = findTemplateFile("sge")) { # nocov
   }
 
   makeClusterFunctions(name = "SGE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, array.envir.var = "SGE_TASK_ID", store.job = TRUE)
+    listJobsRunning = listJobsRunning, array.var = "SGE_TASK_ID", store.job = TRUE)
 } # nocov end
