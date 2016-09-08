@@ -10,43 +10,78 @@ test_that("joins", {
   res = ijoin(x, y)
   expect_data_table(res, key = "job.id", ncol = 3, any.missing = FALSE)
   expect_identical(res$job.id, 2:5)
+  expect_copied(res, x)
 
   res = ljoin(x, y)
   expect_data_table(res, key = "job.id", ncol = 3)
   expect_identical(res$job.id, 1:5)
   expect_true(anyMissing(res$extra.col))
+  expect_copied(res, x)
 
   res = rjoin(x, y)
   expect_data_table(res, key = "job.id", ncol = 3, any.missing = FALSE)
   expect_identical(res$job.id, 2:5)
+  expect_copied(res, x)
 
   res = rjoin(y, x)
   expect_data_table(res, key = "job.id", ncol = 3)
   expect_identical(res$job.id, 1:5)
   expect_true(anyMissing(res$extra.col))
+  expect_copied(res, x)
 
   res = ojoin(x, y)
   expect_data_table(res, key = "job.id", ncol = 3)
   expect_identical(res$job.id, 1:5)
   expect_true(anyMissing(res$extra.col))
+  expect_copied(res, x)
 
   res = sjoin(x, y)
   expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
   expect_identical(res$job.id, 2:5)
+  expect_copied(res, x)
+
+  res = sjoin(y, x)
+  expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
+  expect_identical(res$job.id, 2:5)
+  expect_copied(res, x)
 
   res = ajoin(x, y)
   expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
   expect_identical(res$job.id, 1L)
+  expect_copied(res, x)
 
   res = ijoin(x, 2:4)
   expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
   expect_identical(res$job.id, 2:4)
+  expect_copied(res, x)
 
   res = ijoin(2:4, x)
   expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
   expect_identical(res$job.id, 2:4)
+  expect_copied(res, x)
 
   res = ajoin(as.data.frame(x), y)
   expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
   expect_identical(res$job.id, 1L)
+  expect_copied(res, x)
+
+  res = ujoin(x, y)
+  expect_equivalent(res, x)
+  expect_copied(res, x)
+
+  yy = copy(y)
+  yy$x = 10:13
+  res = ujoin(x, yy)
+  expect_data_table(res, key = "job.id", ncol = ncol(x), any.missing = FALSE)
+  expect_identical(res$job.id, 1:5)
+  expect_identical(res$x, c(1L, 10:13))
+  expect_copied(res, x)
+
+
+  res = ujoin(x, yy, all.y = TRUE)
+  expect_data_table(res, key = "job.id", ncol = 3)
+  expect_identical(res$job.id, 1:5)
+  expect_identical(res$x, c(1L, 10:13))
+  expect_identical(res$extra.col, c(NA, letters[1:4]))
+  expect_copied(res, x)
 })

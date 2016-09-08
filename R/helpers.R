@@ -6,12 +6,14 @@ noIds = function() {
   data.table(job.id = integer(0L), key = "job.id")
 }
 
-castIds = function(ids, setkey = TRUE) {
+castIds = function(ids, setkey = TRUE, ensure.copy = FALSE) {
   if (is.data.table(ids)) {
     qassert(ids$job.id, "X", .var.name = "column 'job.id'")
     if (setkey && !identical(key(ids), "job.id")) {
       ids = copy(ids)
       setkeyv(ids, "job.id")
+    } else if (ensure.copy) {
+      ids = copy(ids)
     }
   } else if (is.data.frame(ids)) {
     qassert(ids$job.id, "X", .var.name = "column 'job.id'")

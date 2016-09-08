@@ -23,7 +23,7 @@
 #' y = findJobs(x >= 2 & x <= 5, reg = tmp)
 #' y$extra.col = head(letters, nrow(y))
 #'
-#' # Inner join: similar to intersect() on ids, keep all columns of x and y
+#' # Inner join: similar to intersect(): keep all columns of x and y with common matches
 #' ijoin(x, y)
 #'
 #' # Left join: use all ids from x, keep all columns of x and y
@@ -32,14 +32,17 @@
 #' # Right join: use all ids from y, keep all columns of x and y
 #' rjoin(x, y)
 #'
-#' # Outer join: similar to union() on ids, keep all columns of x and y
+#' # Outer join: similar to union(): keep all columns of x and y with matches in x or y
 #' ojoin(x, y)
 #'
-#' # Semi join: similar to intersect() on ids, keep all columns of x
+#' # Semi join: filter x with matches in y
 #' sjoin(x, y)
 #'
-#' # Anti join: similar to setdiff() on ids, keep all columns of x
+#' # Anti join: filter x with matches not in y
 #' ajoin(x, y)
+#'
+#' # Updating join: Replace values in x with values in y
+#' ujoin(x, y)
 ijoin = function(x, y) {
   x = castIds(x)
   y = castIds(y)
@@ -75,7 +78,7 @@ ojoin = function(x, y) {
 sjoin = function(x, y) {
   x = castIds(x)
   y = castIds(y)
-  w = unique(x[y, on = "job.id", which = TRUE, allow.cartesian = TRUE])
+  w = unique(x[y, on = "job.id", nomatch = 0L, which = TRUE, allow.cartesian = TRUE])
   x[w]
 }
 
@@ -87,4 +90,19 @@ ajoin = function(x, y) {
   setkeyv(x[!y, on = "job.id"], "job.id")[]
 }
 
-# FIXME: ujoin -> inserting/updating join?
+#' @rdname JoinTables
+#' @param all.y [logical(1)]\cr
+#'   Keep columns of \code{y} which are not in \code{x}?
+#' @export
+ujoin = function(x, y, all.y = FALSE) {
+  assertFlag(all.y)
+  x = castIds(x, ensure.copy = TRUE)
+  y = castIds(y)
+
+  cn = setdiff(names(y), "job.id")
+  if (!all.y)
+    cn = intersect(names(x), cn)
+  if (length(cn) == 0L)
+    return(x)
+  x[y, cn := mget(sprintf("i.%s", cn)), on = "job.id", nomatch = 0L, with = FALSE][]
+}

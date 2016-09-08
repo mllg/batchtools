@@ -8,6 +8,7 @@
 \alias{ojoin}
 \alias{rjoin}
 \alias{sjoin}
+\alias{ujoin}
 \title{Inner, Left, Right, Outer, Semi and Anti Join for Job Tables}
 \usage{
 ijoin(x, y)
@@ -21,6 +22,8 @@ ojoin(x, y)
 sjoin(x, y)
 
 ajoin(x, y)
+
+ujoin(x, y, all.y = FALSE)
 }
 \arguments{
 \item{x}{[\code{\link{data.frame}} | \code{integer}]\cr
@@ -30,6 +33,9 @@ or an integer vector of job ids.}
 \item{y}{[\code{\link{data.frame}} | \code{integer}]\cr
 Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
 or an integer vector of job ids.}
+
+\item{all.y}{[logical(1)]\cr
+Keep columns of \code{y} not in \code{x}?}
 }
 \value{
 [\code{\link{data.table}}] with key \dQuote{job.id}.
@@ -65,5 +71,8 @@ sjoin(x, y)
 
 # Anti join: similar to setdiff() on ids, keep all columns of x
 ajoin(x, y)
+
+# Updating join: Replace values in x with values in y (additional columns of y are ignored)
+ujoin(x, y)
 }
 

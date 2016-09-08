@@ -467,10 +467,9 @@ syncRegistry = function(reg = getDefaultRegistry()) {
   updates = rbindlist(updates)
 
   if (nrow(updates) > 0L) {
-    i.started = i.done = i.error = i.memory = NULL
-    reg$status[updates,
-      c("started", "done", "error", "memory") := list(i.started, i.done, i.error, i.memory),
-      on = "job.id", nomatch = 0L
+    cols = c("started", "done", "error", "memory")
+    reg$status[updates, cols := mget(sprintf("i.%s", cols)),
+      on = "job.id", nomatch = 0L, with = FALSE
     ]
     saveRegistry(reg)
     unlink(fns[!failed])
