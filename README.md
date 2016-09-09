@@ -17,8 +17,8 @@ devtools::install_github("mllg/batchtools")
 ```
 
 ## Resources
-* [Migration from BatchJobs/BatchExperiments](https://github.com/mllg/batchtools/wiki/Migration-from-BatchJobs)
-* [Setup](https://github.com/mllg/batchtools/wiki/Setup)
+* [Migration from BatchJobs/BatchExperiments](https://github.com/mllg/batchtools/wiki/Migration)
+* [Setup](https://mllg.github.io/batchtools/vignettes/Setup)
 * [Documentation and Vignettes](https://mllg.github.io/batchtools/)
-* [Function reference](https://mllg.github.io/batchtools/reference.html)
+* [Function reference](https://mllg.github.io/batchtools/reference)
 * [Paper on BatchJobs/BatchExperiments](http://www.jstatsoft.org/v64/i11)
