@@ -35,7 +35,7 @@ Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} wit
 or an integer vector of job ids.}
 
 \item{all.y}{[logical(1)]\cr
-Keep columns of \code{y} not in \code{x}?}
+Keep columns of \code{y} which are not in \code{x}?}
 }
 \value{
 [\code{\link{data.table}}] with key \dQuote{job.id}.
@@ -54,7 +54,7 @@ x = getJobPars(reg = tmp)
 y = findJobs(x >= 2 & x <= 5, reg = tmp)
 y$extra.col = head(letters, nrow(y))
 
-# Inner join: similar to intersect() on ids, keep all columns of x and y
+# Inner join: similar to intersect(): keep all columns of x and y with common matches
 ijoin(x, y)
 
 # Left join: use all ids from x, keep all columns of x and y
@@ -63,16 +63,16 @@ ljoin(x, y)
 # Right join: use all ids from y, keep all columns of x and y
 rjoin(x, y)
 
-# Outer join: similar to union() on ids, keep all columns of x and y
+# Outer join: similar to union(): keep all columns of x and y with matches in x or y
 ojoin(x, y)
 
-# Semi join: similar to intersect() on ids, keep all columns of x
+# Semi join: filter x with matches in y
 sjoin(x, y)
 
-# Anti join: similar to setdiff() on ids, keep all columns of x
+# Anti join: filter x with matches not in y
 ajoin(x, y)
 
-# Updating join: Replace values in x with values in y (additional columns of y are ignored)
+# Updating join: Replace values in x with values in y
 ujoin(x, y)
 }
 
