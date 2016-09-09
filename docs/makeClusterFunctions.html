@@ -55,8 +55,8 @@
   <div class="span8">
     <h2>Usage</h2>
     <pre><span class="functioncall"><a href='makeClusterFunctions.html'>makeClusterFunctions</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="symbol">submitJob</span><span class="keyword">,</span> <span class="argument">killJob</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">listJobsQueued</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
-  <span class="argument">listJobsRunning</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">array.envir.var</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">NA_character_</span><span class="keyword">,</span>
-  <span class="argument">store.job</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">hooks</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+  <span class="argument">listJobsRunning</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">array.var</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">NA_character_</span><span class="keyword">,</span> <span class="argument">store.job</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">,</span>
+  <span class="argument">hooks</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -90,7 +90,7 @@ are returned by <code>submitJob</code>. It does not matter if you return a few j
 all for the current user instead of all for the current registry), but you have to include all
 relevant ones. Must have the argument are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>).
 Set <code>listJobsRunning</code> to <code>NULL</code> if listing of running jobs is not supported.</dd>
-      <dt>array.envir.var</dt>
+      <dt>array.var</dt>
       <dd>[<code>character(1)</code>]
 Name of the environment variable set by the scheduler to identify IDs of job arrays.
 Default is <code>NA</code> for no array support.</dd>

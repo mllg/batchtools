@@ -64,7 +64,9 @@
 
 <span class="functioncall"><a href='JoinTables.html'>sjoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span>
 
-<span class="functioncall"><a href='JoinTables.html'>ajoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></pre>
+<span class="functioncall"><a href='JoinTables.html'>ajoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='JoinTables.html'>ujoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">,</span> <span class="argument">all.y</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">)</span></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -76,6 +78,9 @@ or an integer vector of job ids.</dd>
       <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> | <code>integer</code>]
 Either a <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>/<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> with integer column &#147;job.id&#148;
 or an integer vector of job ids.</dd>
+      <dt>all.y</dt>
+      <dd>[logical(1)]
+Keep columns of <code>y</code> which are not in <code>x</code>?</dd>
     </dl>
     
     <div class="Value">
@@ -107,7 +112,7 @@ data table or alternatively <span class = "pkg">dplyr</span>&#39;s vignette on t
 <span class="symbol">y</span> <span class="assignement">=</span> <span class="functioncall"><a href='findJobs.html'>findJobs</a></span><span class="keyword">(</span><span class="symbol">x</span> <span class="keyword">&gt;=</span> <span class="number">2</span> <span class="keyword">&amp;</span> <span class="symbol">x</span> &lt;= <span class="number">5</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="symbol">y</span><span class="keyword">$</span><span class="symbol">extra.col</span> <span class="assignement">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/utils/topics/head'>head</a></span><span class="keyword">(</span><span class="symbol">letters</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span><span class="keyword">(</span><span class="symbol">y</span><span class="keyword">)</span><span class="keyword">)</span>
 
-<span class="comment"># Inner join: similar to intersect() on ids, keep all columns of x and y</span>
+<span class="comment"># Inner join: similar to intersect(): keep all columns of x and y with common matches</span>
 <span class="functioncall"><a href='JoinTables.html'>ijoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
 <div class='output'>   job.id x extra.col
 1:      2 2         a
@@ -136,7 +141,7 @@ data table or alternatively <span class = "pkg">dplyr</span>&#39;s vignette on t
 4:      5 5         d
 </div>
 <div class='input'>
-<span class="comment"># Outer join: similar to union() on ids, keep all columns of x and y</span>
+<span class="comment"># Outer join: similar to union(): keep all columns of x and y with matches in x or y</span>
 <span class="functioncall"><a href='JoinTables.html'>ojoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
 <div class='output'>   job.id x extra.col
 1:      1 1        NA
@@ -147,7 +152,7 @@ data table or alternatively <span class = "pkg">dplyr</span>&#39;s vignette on t
 6:      6 6        NA
 </div>
 <div class='input'>
-<span class="comment"># Semi join: similar to intersect() on ids, keep all columns of x</span>
+<span class="comment"># Semi join: filter x with matches in y</span>
 <span class="functioncall"><a href='JoinTables.html'>sjoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
 <div class='output'>   job.id x
 1:      2 2
@@ -156,16 +161,27 @@ data table or alternatively <span class = "pkg">dplyr</span>&#39;s vignette on t
 4:      5 5
 </div>
 <div class='input'>
-<span class="comment"># Anti join: similar to setdiff() on ids, keep all columns of x</span>
+<span class="comment"># Anti join: filter x with matches not in y</span>
 <span class="functioncall"><a href='JoinTables.html'>ajoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
 <div class='output'>   job.id x
 1:      1 1
 2:      6 6
+</div>
+<div class='input'>
+<span class="comment"># Updating join: Replace values in x with values in y</span>
+<span class="functioncall"><a href='JoinTables.html'>ujoin</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
+<div class='output'>   job.id x
+1:      1 1
+2:      2 2
+3:      3 3
+4:      4 4
+5:      5 5
+6:      6 6
 </div></pre>
   </div>
   <div class="span4 sidebar">
     <!-- <ul>
-      <li>JoinTables</li><li>ajoin</li><li>ijoin</li><li>ljoin</li><li>ojoin</li><li>rjoin</li><li>sjoin</li>
+      <li>JoinTables</li><li>ajoin</li><li>ijoin</li><li>ljoin</li><li>ojoin</li><li>rjoin</li><li>sjoin</li><li>ujoin</li>
     </ul>
     <ul>
       

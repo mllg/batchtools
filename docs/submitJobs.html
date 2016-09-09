@@ -80,8 +80,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]. Table with columns &#147;job.id&#148; and &#147;chunk&#148;.
-  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.
+[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with columns &#147;job.id&#148; and &#147;chunk&#148;.
 </dl></p>
 
     </div>
@@ -110,21 +109,26 @@ The progress can be monitored with <code><a href='getStatus.html'>getStatus</a><
 and after the job and the difference is stored in the internal database. Note that this is just a rough estimate and does
 neither work reliably for external code like C/C++ nor in combination with threading.</p>
 
+      <p>If your cluster supports array jobs, you can set the resource <code>chunks.as.arrayjobs</code> to <code>TRUE</code> in order
+to execute chunks as job arrays. To do so, the job must be repeated <code>n.array.jobs</code> times via the cluster functions template
+(<code>n.array.jobs</code> is automatically available while brewing the template).
+The function <code><a href='doJobCollection.html'>doJobCollection</a></code> (which is called on the slave) now retrieves the repetition number from the environment
+and restricts the computation to the respective job in the <code><a href='JobCollection.html'>JobCollection</a></code>.</p>
+
       <p>Furthermore, the package provides support for inner parallelization using threading, sockets or MPI via the
 package <span class = "pkg">parallelMap</span>.
 If you set the resource &#147;pm.backend&#148; to &#147;multicore&#148;, &#147;socket&#148; or &#147;mpi&#148;,
 <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStart'>parallelStart</a></code> is called on the slave before the first job in the chunk is started
 and <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStop'>parallelStop</a></code> is called after the last job terminated.
-This way, the used resources for inner parallelization are set in the same place as the resources for the outer parallelization and
-get automatically stored in the <code><a href='Registry.html'>Registry</a></code>.
+This way, the used resources for inner parallelization are set in the same place as the resources for the outer parallelization done by
+<span class = "pkg">batchtools</span> and all resources get stored together in the <code><a href='Registry.html'>Registry</a></code>.
 The user function just has to call <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></code> to start parallelization using the preconfigured backend.</p>
 
-      <p>You may set the resource <code>ncpus</code> to control the number of CPUs to use in <span class = "pkg">parallelMap</span>.
+      <p>Note that you should set the resource <code>ncpus</code> to control the number of CPUs to use in <span class = "pkg">parallelMap</span>.
 <code>ncpus</code> defaults to the number of available CPUs (as reported by (see <code><a href='http://www.rdocumentation.org/packages/parallel/topics/detectCores'>detectCores</a></code>))
 on the executing machine for multicore and socket mode and defaults to the return value of <code><a href='http://www.rdocumentation.org/packages/Rmpi/topics/mpi.universe.size'>mpi.universe.size</a>-1</code> for MPI.
-You can pass further options like <code>level</code> to <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStart'>parallelStart</a></code> via the named list &#147;pm.opts&#148;.</p>
-
-      <p>Note that your template must be set up to handle the parallelization, e.g. start R with <code>mpirun</code> or request the right number of CPUs.</p>
+Your template must be set up to handle the parallelization, e.g. start R with <code>mpirun</code> or request the right number of CPUs.
+You may pass further options like <code>level</code> to <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStart'>parallelStart</a></code> via the named list &#147;pm.opts&#148;.</p>
 
       <p>Also note that if you have thousands of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
 can significantly increase the performance of <code>submitJobs</code>.</p>
@@ -165,8 +169,8 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
 <strong class='message'>Syncing 4 files ...</strong>
 <div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">info</span><span class="keyword">)</span></div>
 <div class='output'>   job.id memory     n  p
-1:      1   46.3 1e+04 10
-2:      2   59.8 1e+05 10
+1:      1   46.4 1e+04 10
+2:      2   59.9 1e+05 10
 3:      3   52.3 1e+04 50
 4:      4  120.9 1e+05 50
 </div>
@@ -174,8 +178,8 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
 <span class="comment"># Combine job info with results -&gt; each job is aggregated using mean()</span>
 <span class="functioncall"><a href='JoinTables.html'>ijoin</a></span><span class="keyword">(</span><span class="symbol">info</span><span class="keyword">,</span> <span class="functioncall"><a href='reduceResultsList.html'>reduceResultsDataTable</a></span><span class="keyword">(</span><span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">res</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">res</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span><span class="keyword">(</span><span class="symbol">res</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>   job.id memory     n  p       res
-1:      1   46.3 1e+04 10 0.4987875
-2:      2   59.8 1e+05 10 0.4996464
+1:      1   46.4 1e+04 10 0.4987875
+2:      2   59.9 1e+05 10 0.4996464
 3:      3   52.3 1e+04 50 0.5000145
 4:      4  120.9 1e+05 50 0.5000366
 </div>
