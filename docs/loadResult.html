@@ -64,10 +64,10 @@ Single integer to specify the job or a <code>data.table</code> with column <code
 and exactly one row.</dd>
       <dt>missing.val</dt>
       <dd>[<code>ANY</code>]
-Value to return if the result file is missing (if not provided, an exception is raised).</dd>
+Value to return if the result file is missing (if not provided and a result file is not found, an exception is raised).</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the last created registry.</dd>
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -96,7 +96,8 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     </ul> -->
 
     <h2>See also</h2>
-      <p>Other Results: <code><a href='reduceResultsList.html'>reduceResultsList</a></code>,
+      <p>Other Results: <code><a href='batchMapResults.html'>batchMapResults</a></code>,
+  <code><a href='reduceResultsList.html'>reduceResultsList</a></code>,
   <code><a href='reduceResults.html'>reduceResults</a></code></p>
 
     

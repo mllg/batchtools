@@ -83,7 +83,7 @@ subgroups defined by the columns set in <code>group.by</code>.
 See example.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the last created registry.</dd>
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -116,31 +116,31 @@ computational job.</p>
 <div class='input'><span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='chunkIds.html'>chunkIds</a></span><span class="keyword">(</span><span class="argument">chunk.size</span> <span class="argument">=</span> <span class="number">10</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">)</span></div>
 <div class='output'>    job.id chunk
- 1:      1     1
- 2:      2     2
+ 1:      1     2
+ 2:      2     1
  3:      3     1
  4:      4     1
- 5:      5     3
+ 5:      5     2
  6:      6     1
- 7:      7     2
+ 7:      7     3
  8:      8     3
  9:      9     2
 10:     10     2
 11:     11     1
-12:     12     1
-13:     13     2
-14:     14     3
+12:     12     3
+13:     13     3
+14:     14     1
 15:     15     3
 16:     16     3
 17:     17     1
-18:     18     3
-19:     19     3
-20:     20     2
-21:     21     1
-22:     22     2
+18:     18     1
+19:     19     2
+20:     20     3
+21:     21     2
+22:     22     1
 23:     23     2
-24:     24     3
-25:     25     1
+24:     24     2
+25:     25     3
     job.id chunk
 </div>
 <div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/table'>table</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">$</span><span class="symbol">chunk</span><span class="keyword">)</span><span class="keyword">)</span></div>
@@ -168,31 +168,31 @@ computational job.</p>
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">chunked</span><span class="keyword">)</span></div>
 <div class='output'>    job.id chunk
  1:      1     1
- 2:      2     2
- 3:      3     2
+ 2:      2     1
+ 3:      3     1
  4:      4     1
- 5:      5     1
- 6:      6     1
+ 5:      5     2
+ 6:      6     2
  7:      7     2
- 8:      8     1
+ 8:      8     2
  9:      9     2
 10:     10     3
-11:     11     4
-12:     12     5
-13:     13     5
-14:     14     4
-15:     15     3
-16:     16     6
+11:     11     3
+12:     12     4
+13:     13     4
+14:     14     5
+15:     15     6
+16:     16     3
 17:     17     5
-18:     18     3
+18:     18     5
 19:     19     4
 20:     20     6
-21:     21     5
-22:     22     4
-23:     23     3
+21:     21     3
+22:     22     5
+23:     23     4
 24:     24     5
 25:     25     6
-26:     26     4
+26:     26     6
 27:     27     6
     job.id chunk
 </div>
@@ -200,12 +200,12 @@ computational job.</p>
 <strong class='message'>Using &#39;chunk&#39; as value column. Use &#39;value.var&#39; to override</strong>
 <strong class='message'>Aggregate function missing, defaulting to &#39;length&#39;</strong>
 <div class='output'>   chunk prob1 prob2
-1:     1     5     0
-2:     2     4     0
+1:     1     4     0
+2:     2     5     0
 3:     3     0     4
-4:     4     0     5
+4:     4     0     4
 5:     5     0     5
-6:     6     0     4
+6:     6     0     5
 </div></pre>
   </div>
   <div class="span4 sidebar">

@@ -64,7 +64,7 @@ Named list of objects to export.
 Set to <code>NULL</code> to un-export objects.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the last created registry.</dd>
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -104,8 +104,8 @@ each time the registry is loaded or a job collection is executed.</p>
 <div class='input'><span class="symbol">exports</span> <span class="assignement">=</span> <span class="functioncall"><a href='batchExport.html'>batchExport</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">y</span> <span class="argument">=</span> <span class="number">99</span><span class="keyword">,</span> <span class="argument">z</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">exports</span><span class="keyword">)</span></div>
 <div class='output'>   name                                         uri
-1:    y /scratch/registry2b26320a6330/exports/y.rds
-2:    z /scratch/registry2b26320a6330/exports/z.rds
+1:    y /scratch/registry44cf3b955bda/exports/y.rds
+2:    z /scratch/registry44cf3b955bda/exports/z.rds
 </div>
 <div class='input'>
 <span class="functioncall"><a href='submitJobs.html'>submitJobs</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
@@ -123,7 +123,7 @@ each time the registry is loaded or a job collection is executed.</p>
 <strong class='message'>Un-exporting exported objects: &#39;z&#39;</strong>
 <div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">exports</span><span class="keyword">)</span></div>
 <div class='output'>   name                                         uri
-1:    y /scratch/registry2b26320a6330/exports/y.rds
+1:    y /scratch/registry44cf3b955bda/exports/y.rds
 </div></pre>
   </div>
   <div class="span4 sidebar">

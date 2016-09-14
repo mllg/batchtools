@@ -138,7 +138,7 @@ off if you work with multiple registries simultaneously.
 Default is <code>TRUE</code>.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the last created registry.</dd>
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
       <dt>update.paths</dt>
       <dd>[<code>logical(1)</code>]
 If set to <code>TRUE</code>, the <code>file.dir</code> and <code>work.dir</code> will be updated in the registry. Note that this is
@@ -215,11 +215,11 @@ and thus allows you to start over.</p>
 <strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
 <div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">tmp</span><span class="keyword">)</span></div>
 <div class='output'>Job Registry
-  ClusterFunctions: Interactive
-  File dir        : /scratch/registry2b2630afdce1
-  Work dir        : /home/lang/Projekte/packages/batchtools
-  Jobs            : 0
-  Seed            : 985706415
+  Name    : Interactive
+  File dir: /scratch/registry44cf54f23a
+  Work dir: /home/lang/Projekte/batchtools
+  Jobs    : 0
+  Seed    : 835685515
 </div>
 <div class='input'>
 <span class="comment"># Set cluster functions to interactive mode and start jobs in external R sessions</span>

@@ -232,13 +232,13 @@ jobs.</p>
 <span class="comment"># Reduce the results of algorithm a1</span>
 <span class="symbol">ids.mean</span> <span class="assignement">=</span> <span class="functioncall"><a href='findJobs.html'>findExperiments</a></span><span class="keyword">(</span><span class="argument">algo.name</span> <span class="argument">=</span> <span class="string">"a1"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='reduceResults.html'>reduceResults</a></span><span class="keyword">(</span><span class="symbol">ids.mean</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">aggr</span><span class="keyword">,</span> <span class="formalargs">res</span><span class="keyword">,</span> <span class="formalargs">...</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="symbol">aggr</span><span class="keyword">,</span> <span class="symbol">res</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
-<div class='output'> [1] -1.87118191 -2.07165569 -2.46139078 -1.52808001 -1.14850137 -0.24149129
- [7] -0.31573543 -1.15024847  0.17409788 -0.04869745 -0.05638040 -0.22039286
-[13]  1.12842536  0.87291254  0.10291752  1.11473297  1.79748146  2.33358280
-[19]  1.03147673  2.60224625 -1.94465990 -1.75404684 -1.89712835 -1.49131618
-[25] -0.89583441 -1.00183580 -0.71951934 -1.09869146  0.18101142 -0.17375623
-[31] -0.16627573 -0.68608543  1.17893382  0.86179747  0.73571015  0.98042737
-[37]  2.06152336  1.80280290  2.30558731  2.23633754
+<div class='output'> [1] -2.10721200 -1.56313552 -2.48174907 -2.06456938 -0.89416632 -1.29922053
+ [7] -0.73809669 -1.44490273  0.18821548 -0.35873496 -0.27857637  0.23479080
+[13]  0.97416525  1.11815504  0.85800482  0.15485102  2.00269052  2.32312536
+[19]  2.45669226  2.45373586 -2.04040293 -1.88875542 -1.90418965 -1.90481743
+[25] -0.96826933 -0.96816640 -1.41970156 -0.75332400 -0.04073006  0.13771157
+[31]  0.38800224  0.25990098  0.88220028  0.85763272  1.33261610  0.48901450
+[37]  2.09314764  1.55070200  1.93824982  2.74455441
 </div>
 <div class='input'>
 <span class="comment"># Join info table with all results and calculate mean of results</span>
@@ -248,11 +248,11 @@ jobs.</p>
 <span class="symbol">results</span> <span class="assignement">=</span> <span class="functioncall"><a href='reduceResultsList.html'>reduceResultsDataTable</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">res</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">res</span> <span class="argument">=</span> <span class="symbol">res</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="symbol">tab</span> <span class="assignement">=</span> <span class="functioncall"><a href='JoinTables.html'>ljoin</a></span><span class="keyword">(</span><span class="symbol">pars</span><span class="keyword">,</span> <span class="symbol">results</span><span class="keyword">)</span>
 <span class="symbol">tab</span><span class="keyword">[</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">mres</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span><span class="keyword">(</span><span class="symbol">res</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">by</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"n"</span><span class="keyword">,</span> <span class="string">"algorithm"</span><span class="keyword">)</span><span class="keyword">]</span></div>
-<div class='output'>     n algorithm         mres
-1:  50        a1  0.002205892
-2: 100        a1  0.025749083
-3:  50        a2 -0.013293394
-4: 100        a2 -0.048315516
+<div class='output'>     n algorithm        mres
+1:  50        a1 -0.02329686
+2: 100        a1  0.03926877
+3:  50        a2  0.16787783
+4: 100        a2  0.02302469
 </div></pre>
   </div>
   <div class="span4 sidebar">

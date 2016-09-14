@@ -66,7 +66,7 @@ Single integer to specify the job or a <code>data.table</code> with column <code
 and exactly one row.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the last created registry.</dd>
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -119,13 +119,13 @@ That&#39;s odd.</strong>
 </div>
 <div class='input'>
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/writeLines'>writeLines</a></span><span class="keyword">(</span><span class="functioncall"><a href='showLog.html'>getLog</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">]</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">)</span></div>
-<div class='output'>### [bt 2016-09-09 14:49:32]: Starting calculation of 1 jobs
-### [bt 2016-09-09 14:49:32]: Setting working directory to &#39;/home/lang/Projekte/packages/batchtools&#39;
-### [bt 2016-09-09 14:49:32]: Memory measurement disabled
-### [bt 2016-09-09 14:49:32]: Starting job [batchtools job.id=1]
+<div class='output'>### [bt 2016-09-14 16:10:25]: Starting calculation of 1 jobs
+### [bt 2016-09-14 16:10:25]: Setting working directory to &#39;/home/lang/Projekte/batchtools&#39;
+### [bt 2016-09-14 16:10:25]: Memory measurement disabled
+### [bt 2016-09-14 16:10:25]: Starting job [batchtools job.id=1]
 
-### [bt 2016-09-09 14:49:32]: Job terminated successfully [batchtools job.id=1]
-### [bt 2016-09-09 14:49:32]: Calculation finished!
+### [bt 2016-09-14 16:10:25]: Job terminated successfully [batchtools job.id=1]
+### [bt 2016-09-14 16:10:25]: Calculation finished!
 </div>
 <div class='input'><span class="comment">## Not run: ------------------------------------</span>
 <span class="comment"># showLog(ids[1], reg = tmp)</span>

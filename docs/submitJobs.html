@@ -73,7 +73,7 @@ Defaults can be stored in the configuration file by providing the named list <co
 Settings in <code>resources</code> overwrite those in <code>default.resources</code>.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the last created registry.</dd>
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -169,19 +169,19 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
 <strong class='message'>Syncing 4 files ...</strong>
 <div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">info</span><span class="keyword">)</span></div>
 <div class='output'>   job.id memory     n  p
-1:      1   46.4 1e+04 10
-2:      2   59.9 1e+05 10
-3:      3   52.3 1e+04 50
-4:      4  120.9 1e+05 50
+1:      1   46.5 1e+04 10
+2:      2   60.1 1e+05 10
+3:      3   52.5 1e+04 50
+4:      4  121.1 1e+05 50
 </div>
 <div class='input'>
 <span class="comment"># Combine job info with results -&gt; each job is aggregated using mean()</span>
 <span class="functioncall"><a href='JoinTables.html'>ijoin</a></span><span class="keyword">(</span><span class="symbol">info</span><span class="keyword">,</span> <span class="functioncall"><a href='reduceResultsList.html'>reduceResultsDataTable</a></span><span class="keyword">(</span><span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">res</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">res</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span><span class="keyword">(</span><span class="symbol">res</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>   job.id memory     n  p       res
-1:      1   46.4 1e+04 10 0.4987875
-2:      2   59.9 1e+05 10 0.4996464
-3:      3   52.3 1e+04 50 0.5000145
-4:      4  120.9 1e+05 50 0.5000366
+1:      1   46.5 1e+04 10 0.5017799
+2:      2   60.1 1e+05 10 0.4997882
+3:      3   52.5 1e+04 50 0.4997683
+4:      4  121.1 1e+05 50 0.5000192
 </div>
 <div class='input'>
 <span class="comment">### Example 2: Multicore execution on the slave</span>
