@@ -70,13 +70,13 @@ makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), con
 #' @export
 print.ExperimentRegistry = function(x, ...) {
   cat("Experiment Registry\n")
-  catf("  ClusterFunctions: %s", x$cluster.functions$name)
-  catf("  File dir   : %s", x$file.dir)
-  catf("  Work dir   : %s", x$work.dir)
-  catf("  Jobs       : %i", nrow(x$status))
-  catf("  Problems   : %i", nlevels(x$defs$problem))
-  catf("  Algorithms : %i", nlevels(x$defs$algorithm))
-  catf("  Seed       : %i", x$seed)
+  catf("  Name      : %s", x$cluster.functions$name)
+  catf("  File dir  : %s", x$file.dir)
+  catf("  Work dir  : %s", x$work.dir)
+  catf("  Jobs      : %i", nrow(x$status))
+  catf("  Problems  : %i", nlevels(x$defs$problem))
+  catf("  Algorithms: %i", nlevels(x$defs$algorithm))
+  catf("  Seed      : %i", x$seed)
 }
 
 assertExperimentRegistry = function(reg, writeable = FALSE, sync = FALSE, running.ok = TRUE) {
