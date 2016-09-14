@@ -1,6 +1,8 @@
 ---
 title: "A short example for the usage of batchtools: Approximation of Pi"
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    toc: false
 vignette: >
   %\VignetteIndexEntry{Example 1}
   %\VignetteEngine{knitr::rmarkdown}

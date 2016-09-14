@@ -1,6 +1,8 @@
 ---
 title: "Error handling"
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    toc: false
 vignette: >
   %\VignetteIndexEntry{Example/ErrorHandling}
   %\VignetteEngine{knitr::rmarkdown}
