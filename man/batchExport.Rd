@@ -4,12 +4,15 @@
 \alias{batchExport}
 \title{Export Objects to the Slaves}
 \usage{
-batchExport(x = list(), reg = getDefaultRegistry())
+batchExport(export = list(), unexport = character(0L),
+  reg = getDefaultRegistry())
 }
 \arguments{
-\item{x}{[\code{list}]\cr
-Named list of objects to export.
-Set to \code{NULL} to un-export objects.}
+\item{export}{[\code{list}]\cr
+Named list of objects to export.}
+
+\item{unexport}{[\code{character}]\cr
+Vector of object names to un-export.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
@@ -32,15 +35,15 @@ print(exports)
 
 # add a job and required exports
 batchMap(function(x) x^2 + y + z, x = 1:3, reg = tmp)
-exports = batchExport(list(y = 99, z = 1), reg = tmp)
+exports = batchExport(export = list(y = 99, z = 1), reg = tmp)
 print(exports)
 
 submitJobs(reg = tmp)
 waitForJobs(reg = tmp)
-loadResult(1, reg = tmp)
+stopifnot(loadResult(1, reg = tmp) == 101)
 
 # Un-export z
-exports = batchExport(list(z = NULL), reg = tmp)
+exports = batchExport(unexport = "z", reg = tmp)
 print(exports)
 }
 

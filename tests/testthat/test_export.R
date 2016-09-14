@@ -15,7 +15,7 @@ test_that("export works", {
   expect_set_equal(names(x), c("name", "uri"))
   expect_equal(x$name, "exported_obj")
 
-  x = batchExport(list(exported_obj = NULL), reg = reg)
+  x = batchExport(unexport = "exported_obj", reg = reg)
   expect_data_table(x, nrow = 0, ncol = 2)
   expect_set_equal(names(x), c("name", "uri"))
   expect_false(file.exists(file.path(reg$file.dir, "exports", "exported_obj.rds")))
