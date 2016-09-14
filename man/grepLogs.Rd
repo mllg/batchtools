@@ -24,7 +24,7 @@ If \code{TRUE} the match will be performed case insensitively.}
 If \code{FALSE} (default), \code{pattern} is a regular expression and a fixed string otherwise.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
 [\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{message}.

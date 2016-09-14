@@ -14,7 +14,7 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
 [\code{\link[data.table]{data.table}}] (with class \dQuote{Status} for printing).

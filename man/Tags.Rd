@@ -24,7 +24,7 @@ If not set, defaults to all jobs.}
 Tags to add or remove as strings. May use letters, numbers, underscore and dots (pattern \dQuote{^[[:alnum:]_.]+}).}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
 [\code{\link[data.table]{data.table}}] with job ids affected (invisible).

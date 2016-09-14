@@ -21,9 +21,7 @@
 #'   Arguments to vectorize over as (named) list or data frame.
 #'   Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the longest length).
 #'   Mutually exclusive with \code{...}.
-#' @param more.args [\code{list}]\cr
-#'   A list of further arguments passed to \code{fun}.
-#'   Default is an empty list.
+#' @template more.args
 #' @template reg
 #' @return [\code{\link{data.table}}] with ids of added jobs stored in column \dQuote{job.id}.
 #' @export

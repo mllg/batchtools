@@ -17,7 +17,7 @@ and exactly one row.}
 Cache to retrieve files. Used internally.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
 [\code{Job} | \code{Experiment}].

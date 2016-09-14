@@ -28,7 +28,7 @@ A list of further arguments passed to \code{fun}.
 Default is an empty list.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
 [\code{\link{data.table}}] with ids of added jobs stored in column \dQuote{job.id}.

@@ -95,7 +95,7 @@ off if you work with multiple registries simultaneously.
 Default is \code{TRUE}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 
 \item{update.paths}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, the \code{file.dir} and \code{work.dir} will be updated in the registry. Note that this is

@@ -67,6 +67,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
   return(init)
 }
 
+
 #' @title Apply Functions on Results
 #'
 #' @description
@@ -119,6 +120,8 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
   assertFlag(fill)
 
   results = .reduceResultsList(ids = ids, fun = fun, ..., reg = reg)
+  if (length(results) == 0L)
+    return(noIds())
   if (!qtestr(results, "d"))
     results = lapply(results, as.data.table)
   results = rbindlist(results, fill = fill, idcol = "job.id")
@@ -152,29 +155,4 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
     pb$tick()
   }
   return(results)
-}
-
-#' @title Load the Result of a Single Job
-#'
-#' @description
-#' A function to simply load the result of a single job.
-#'
-#' @template id
-#' @param missing.val [\code{ANY}]\cr
-#'   Value to return if the result file is missing (if not provided, an exception is raised).
-#' @template reg
-#' @return [\code{ANY}]. The saved result or \code{missing.val} if result file
-#'   is not found.
-#' @family Results
-#' @export
-loadResult = function(id, missing.val, reg = getDefaultRegistry()) {
-  assertRegistry(reg)
-  id = convertId(reg, id)
-  fn = file.path(reg$file.dir, "results", sprintf("%i.rds", id$job.id))
-  if (!file.exists(fn)) {
-    if (missing(missing.val))
-      stopf("Result for job with id=%i not found in %s", id$job.id, fn)
-    return(missing.val)
-  }
-  return(readRDS(fn))
 }

@@ -58,7 +58,7 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 
 \item{prob.name}{[\code{character}]\cr
 Whitelist of problem names.

@@ -19,7 +19,7 @@ Treat missing results as errors? If \code{TRUE}, the error message \dQuote{[not 
 for jobs which have not terminated. Default is \code{FALSE}}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
 [\code{\link{data.table}}] with columns \dQuote{job.id}, \dQuote{terminated} (logical),

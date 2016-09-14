@@ -14,7 +14,7 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of \code{\link{findOnSystem}}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
 [\code{\link{data.table}}] with columns \dQuote{job.id}, the corresponding \dQuote{batch.id} and

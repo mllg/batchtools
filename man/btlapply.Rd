@@ -40,7 +40,7 @@ If \code{ids} cannot be chunked evenly, some chunks will have less elements than
 Mutually exclusive with with \code{n.chunks}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 
 \item{more.args}{[\code{list}]\cr
 Additional arguments passed to \code{fun}.}

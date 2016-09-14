@@ -40,7 +40,7 @@ for a \code{\link{Registry}} and prefixes \dQuote{prob.par.} and \dQuote{algo.pa
 the columns of a \code{\link{ExperimentRegistry}}. Resources are prefixed with \dQuote{res.}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
 [\code{\link{data.table}}] with the following columns (not necessarily in this order):

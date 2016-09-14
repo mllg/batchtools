@@ -24,7 +24,7 @@ and exactly one row.}
  Same holds for missing package dependency declarations.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
 Returns the result of the job if successful.

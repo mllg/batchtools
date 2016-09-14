@@ -8,7 +8,7 @@ cfKillJob(reg, cmd, args = character(0L), max.tries = 3L)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 
 \item{cmd}{[\code{character(1)}]\cr
 OS command, e.g. \dQuote{qdel}.}

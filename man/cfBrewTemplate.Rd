@@ -8,7 +8,7 @@ cfBrewTemplate(reg, text, jc)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
-Registry. If not explicitly passed, uses the last created registry.}
+Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 
 \item{text}{[\code{character(1)}]\cr
 String ready to be brewed. See \code{\link{cfReadBrewTemplate}} to read a template from the file system.}
