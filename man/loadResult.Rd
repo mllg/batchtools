@@ -12,7 +12,7 @@ Single integer to specify the job or a \code{data.table} with column \code{job.i
 and exactly one row.}
 
 \item{missing.val}{[\code{ANY}]\cr
-Value to return if the result file is missing (if not provided and a result file is not found, an exception is raised).}
+Value to impute if the result file is missing (if not provided and a result file is not found, an exception is raised).}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}

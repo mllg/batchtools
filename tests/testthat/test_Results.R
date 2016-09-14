@@ -80,7 +80,8 @@ test_that("reduceResultsDataTable", {
 
 test_that("batchMapResults", {
   target = makeRegistry(NA, make.default = FALSE)
-  batchtools:::batchMapResults(target = target, function(x, c, d) x$a+x$b + c + d, c = 11:13, source = reg, more.args = list(d = 2))
+  x = batchMapResults(target = target, function(x, c, d) x$a+x$b + c + d, c = 11:13, source = reg, more.args = list(d = 2))
+  expect_data_table(x, nrow = 3, key = "job.id")
   expect_data_table(target$status, nrow = 3)
   silent({
     submitJobs(ids = chunkIds(n.chunks = 1, reg = target), reg = target)

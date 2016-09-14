@@ -9,7 +9,7 @@
 #'   Function which takes the result as first (unnamed) argument.
 #' @template ids
 #' @param ... [any]\cr
-#'   Arguments to vectorize over (list or vector). Passed to \code{\link{batchMap}}<`3`>.
+#'   Arguments to vectorize over (list or vector). Passed to \code{\link{batchMap}}.
 #' @template missing.val
 #' @template more.args
 #' @param target [\code{\link{Registry}}]\cr
@@ -20,20 +20,23 @@
 #' @export
 #' @family Results
 #' @examples
-#' # source registry: calculate squre of some numbers
+#' # Source registry: calculate squre of some numbers
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(function(x) list(square = x^2), x = 1:10, reg = tmp)
 #' submitJobs(reg = tmp)
 #' waitForJobs(reg = tmp)
 #'
-#' # target registry: map results of first registry and calculate the square root
+#' # Target registry: map some results of first registry to calculate the square root
 #' target = makeRegistry(file.dir = NA, make.default = FALSE)
-#' batchMapResults(fun = function(x, y) list(sqrt = sqrt(x$square)), target = target, source = tmp)
-#' getStatus(reg = target)
+#' batchMapResults(fun = function(x, y) list(sqrt = sqrt(x$square)), ids = 4:8, target = target, source = tmp)
 #' submitJobs(reg = target)
 #' waitForJobs(reg = target)
 #'
-#' rjoin(reduceResultsDataTable(reg = tmp), reduceResultsDataTable(reg = target))
+#' # Map old to new ids. First, get a table with results and parameters
+#' results = rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target))
+#'
+#' # Parameter '..id' points to job.id in 'source'. Use an inner join to combine:
+#' results[reduceResultsDataTable(reg = tmp), on = c("..id" = "job.id"), nomatch = 0L]
 batchMapResults = function(fun, ids = NULL, ..., missing.val, more.args = list(), target, source = getDefaultRegistry()) {
   assertRegistry(source, sync = TRUE)
   assertRegistry(target, sync = TRUE)
@@ -44,14 +47,14 @@ batchMapResults = function(fun, ids = NULL, ..., missing.val, more.args = list()
   if (nrow(target$status) > 0L)
     stop("Target registry 'target' must be empty")
 
-  more.args = c(list(..file.dir = source$file.dir, ..ids = ids, ..fun = fun), more.args)
+  more.args = c(list(..file.dir = source$file.dir, ..fun = fun), more.args)
   if (!missing(missing.val))
     more.args["..missing.val"] = list(missing.val)
-  args = c(list(..i = seq_row(ids)), list(...))
+  args = c(list(..id = ids$job.id), list(...))
 
   batchMap(batchMapResultsWrapper, args = args, more.args = more.args, reg = target)
 }
 
-batchMapResultsWrapper = function(..file.dir, ..fun, ..ids, ..i, ..missing.val, ...) {
-  ..fun(.loadResult(..file.dir, ..ids[..i], ..missing.val), ...)
+batchMapResultsWrapper = function(..fun, ..file.dir, ..id, ..missing.val, ...) {
+  ..fun(.loadResult(..file.dir, ..id, ..missing.val), ...)
 }

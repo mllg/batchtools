@@ -18,10 +18,10 @@ Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of \code{\link{findDone}}.}
 
 \item{...}{[any]\cr
-Arguments to vectorize over (list or vector). Passed to \code{\link{batchMap}}<`3`>.}
+Arguments to vectorize over (list or vector). Passed to \code{\link{batchMap}}.}
 
 \item{missing.val}{[\code{ANY}]\cr
-Value to return if the result file is missing (if not provided and a result file is not found, an exception is raised).}
+Value to impute if the result file is missing (if not provided and a result file is not found, an exception is raised).}
 
 \item{more.args}{[\code{list}]\cr
 A list of further arguments passed to \code{fun}.
@@ -41,20 +41,23 @@ This function allows you to create new computational jobs (just like \code{\link
 a \code{\link{Registry}}.
 }
 \examples{
-# source registry: calculate squre of some numbers
+# Source registry: calculate squre of some numbers
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(function(x) list(square = x^2), x = 1:10, reg = tmp)
 submitJobs(reg = tmp)
 waitForJobs(reg = tmp)
 
-# target registry: map results of first registry and calculate the square root
+# Target registry: map some results of first registry to calculate the square root
 target = makeRegistry(file.dir = NA, make.default = FALSE)
-batchMapResults(fun = function(x, y) list(sqrt = sqrt(x$square)), target = target, source = tmp)
-getStatus(reg = target)
+batchMapResults(fun = function(x, y) list(sqrt = sqrt(x$square)), ids = 4:8, target = target, source = tmp)
 submitJobs(reg = target)
 waitForJobs(reg = target)
 
-rjoin(reduceResultsDataTable(reg = tmp), reduceResultsDataTable(reg = target))
+# Map old to new ids. First, get a table with results and parameters
+results = rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target))
+
+# Parameter '..id' points to job.id in 'source'. Use an inner join to combine:
+results[reduceResultsDataTable(reg = tmp), on = c("..id" = "job.id"), nomatch = 0L]
 }
 \seealso{
 Other Results: \code{\link{loadResult}},
