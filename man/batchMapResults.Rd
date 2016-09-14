@@ -49,7 +49,8 @@ waitForJobs(reg = tmp)
 
 # Target registry: map some results of first registry to calculate the square root
 target = makeRegistry(file.dir = NA, make.default = FALSE)
-batchMapResults(fun = function(x, y) list(sqrt = sqrt(x$square)), ids = 4:8, target = target, source = tmp)
+batchMapResults(fun = function(x, y) list(sqrt = sqrt(x$square)), ids = 4:8,
+  target = target, source = tmp)
 submitJobs(reg = target)
 waitForJobs(reg = target)
 
