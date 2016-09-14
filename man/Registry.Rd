@@ -2,7 +2,6 @@
 % Please edit documentation in R/Registry.R
 \name{Registry}
 \alias{Registry}
-\alias{clearDefaultRegistry}
 \alias{clearRegistry}
 \alias{getDefaultRegistry}
 \alias{loadRegistry}
@@ -21,8 +20,6 @@ makeRegistry(file.dir = "registry", work.dir = getwd(),
 getDefaultRegistry()
 
 setDefaultRegistry(reg)
-
-clearDefaultRegistry()
 
 loadRegistry(file.dir = getwd(), work.dir = NULL,
   conf.file = findConfFile(), make.default = TRUE, update.paths = FALSE)
@@ -104,7 +101,8 @@ If the provided \code{file.dir} does not match the stored \code{file.dir}, \code
 registry in read-only mode.}
 }
 \value{
-[\code{Registry}]. An environment with the following slots:
+\code{makeRegistry}, \code{loadRegistry}, \code{getDefaultRegistry} and \code{setDefaultRegistry}
+  return an environment of class \dQuote{Registry} with the following slots:
   \describe{
     \item{\code{file.dir} [path]:}{File directory.}
     \item{\code{work.dir} [path]:}{Working directory.}
@@ -120,6 +118,8 @@ registry in read-only mode.}
     \item{\code{resources} [data.table]:}{Table holding information about the computational resources used for the job. Also see \code{\link{getJobResources}}.}
     \item{\code{tags} [data.table]:}{Table holding information about tags. See \link{Tags}.}
   }
+  The other functions \code{saveRegistry}, \code{syncRegistry}, \code{sweepRegistry} and \code{clearRegistry} return \code{TRUE}
+  if the registry has been altered and successfully stored on the file system.
 }
 \description{
 \code{makeRegistry} constructs the inter-communication object for all functions in \code{batchtools}.
