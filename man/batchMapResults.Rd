@@ -58,7 +58,7 @@ waitForJobs(reg = target)
 results = rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target))
 
 # Parameter '..id' points to job.id in 'source'. Use an inner join to combine:
-results[reduceResultsDataTable(reg = tmp), on = c("..id" = "job.id"), nomatch = 0L]
+ijoin(results, reduceResultsDataTable(reg = tmp), by = c("..id" = "job.id"))
 }
 \seealso{
 Other Results: \code{\link{loadResult}},
