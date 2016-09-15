@@ -52,8 +52,9 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     options(warn = 1L)
   }
 
+  # setup output connection
   if (!is.null(output)) {
-    assertString(output)
+    assertPathForOutput(output)
     fp = file(output, open = "wt")
     sink(file = fp)
     sink(file = fp, type = "message")
@@ -84,6 +85,12 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   setwd(jc$work.dir)
   on.exit(setwd(prev.wd), add = TRUE)
 
+  # load registry dependencies: packages, source files, ...
+  # note that this should happen _before_ parallelMap is initialized
+  ok = try(loadRegistryDependencies(jc, switch.wd = FALSE), silent = TRUE)
+  if (is.error(ok))
+    return(error("Error loading registry dependencies: %s", as.character(ok)))
+
   # setup inner parallelization
   if (!is.null(jc$resources$pm.backend)) {
     if (!requireNamespace("parallelMap", quietly = TRUE))
@@ -95,14 +102,12 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     catf("### [bt %s]: Using %i CPUs for parallelMap/%s on level '%s'", s, pm.opts$cpus, pm.opts$mode, if (is.na(pm.opts$level)) "default" else pm.opts$level)
   }
 
+  # setup memory measurement
   measure.memory = isTRUE(jc$resources$measure.memory)
   catf("### [bt %s]: Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"))
 
-  # try to pre-fetch some objects from the file system and load registry dependencies
+  # try to pre-fetch some objects from the file system
   cache = Cache$new(jc$file.dir)
-  ok = try(loadRegistryDependencies(jc, switch.wd = FALSE), silent = TRUE)
-  if (is.error(ok))
-    return(error("Error loading registry dependencies: %s", as.character(ok)))
   buf = UpdateBuffer$new(jc$jobs$job.id)
 
   runHook(jc, "pre.do.collection", cache = cache)
