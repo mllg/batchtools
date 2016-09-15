@@ -12,13 +12,13 @@ test_that("joins", {
   expect_identical(res$job.id, 2:5)
   expect_copied(res, x)
 
-  res = ljoin(x, y)
+  res = ljoin(as.data.frame(x), y)
   expect_data_table(res, key = "job.id", ncol = 3)
   expect_identical(res$job.id, 1:5)
   expect_true(anyMissing(res$extra.col))
   expect_copied(res, x)
 
-  res = rjoin(x, y)
+  res = rjoin(as.data.frame(x), y)
   expect_data_table(res, key = "job.id", ncol = 3, any.missing = FALSE)
   expect_identical(res$job.id, 2:5)
   expect_copied(res, x)
@@ -50,12 +50,12 @@ test_that("joins", {
   expect_identical(res$job.id, 1L)
   expect_copied(res, x)
 
-  res = ijoin(x, 2:4)
+  res = ijoin(x, data.frame(job.id = 2:4))
   expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
   expect_identical(res$job.id, 2:4)
   expect_copied(res, x)
 
-  res = ijoin(2:4, x)
+  res = ijoin(data.frame(job.id = 2:4), x)
   expect_data_table(res, key = "job.id", ncol = 2, any.missing = FALSE)
   expect_identical(res$job.id, 2:4)
   expect_copied(res, x)

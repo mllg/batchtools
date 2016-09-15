@@ -9,40 +9,50 @@
 \alias{rjoin}
 \alias{sjoin}
 \alias{ujoin}
-\title{Inner, Left, Right, Outer, Semi and Anti Join for Job Tables}
+\title{Inner, Left, Right, Outer, Semi and Anti Join for Data Tables}
 \usage{
-ijoin(x, y)
+ijoin(x, y, by = NULL)
 
-ljoin(x, y)
+ljoin(x, y, by = NULL)
 
-rjoin(x, y)
+rjoin(x, y, by = NULL)
 
-ojoin(x, y)
+ojoin(x, y, by = NULL)
 
-sjoin(x, y)
+sjoin(x, y, by = NULL)
 
-ajoin(x, y)
+ajoin(x, y, by = NULL)
 
-ujoin(x, y, all.y = FALSE)
+ujoin(x, y, all.y = FALSE, by = NULL)
 }
 \arguments{
-\item{x}{[\code{\link{data.frame}} | \code{integer}]\cr
-Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
-or an integer vector of job ids.}
+\item{x}{[\code{\link{data.frame}}]\cr
+First data.frame to join.}
 
-\item{y}{[\code{\link{data.frame}} | \code{integer}]\cr
-Either a \code{\link[data.table]{data.table}}/\code{\link[base]{data.frame}} with integer column \dQuote{job.id}
-or an integer vector of job ids.}
+\item{y}{[\code{\link{data.frame}}]\cr
+Second data.frame to join.}
+
+\item{by}{[\code{character}]\cr
+Column name(s) of variables used to match rows in \code{x} and \code{y}.
+If not provided, a heuristic similar to the one described in the \pkg{dplyr} vignette is used:
+\enumerate{
+  \item If \code{x} is keyed, the existing key will be used if \code{y} has the same column(s).
+  \item If \code{x} is not keyed, the intersect of common columns names is used if not empty.
+  \item Raise an exception.
+}
+You may pass a named character vector to merge on columns with different names in \code{x} and
+\code{y}: \code{by = c("x.id" = "y.id")} will match \code{x}'s \dQuote{x.id} column with \code{y}\'s
+\dQuote{y.id} column.}
 
 \item{all.y}{[logical(1)]\cr
 Keep columns of \code{y} which are not in \code{x}?}
 }
 \value{
-[\code{\link{data.table}}] with key \dQuote{job.id}.
+[\code{\link{data.table}}] with key identical to \code{by}.
 }
 \description{
-These helper functions perform join operations on job tables.
-They are basically one-liners with additional argument checks for sanity.
+These helper functions perform join operations on data tables.
+Most of them are basically one-liners.
 See \url{http://rpubs.com/ronasta/join_data_tables} for a overview of join operations in
 data table or alternatively \pkg{dplyr}'s vignette on two table verbs.
 }
