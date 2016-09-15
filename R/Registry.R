@@ -70,7 +70,8 @@
 #'   namespace and acts as default registry. You might want to switch this
 #'   off if you work with multiple registries simultaneously.
 #'   Default is \code{TRUE}.
-#' @return [\code{Registry}]. An environment with the following slots:
+#' @return \code{makeRegistry}, \code{loadRegistry}, \code{getDefaultRegistry} and \code{setDefaultRegistry}
+#'   return an environment of class \dQuote{Registry} with the following slots:
 #'   \describe{
 #'     \item{\code{file.dir} [path]:}{File directory.}
 #'     \item{\code{work.dir} [path]:}{Working directory.}
@@ -86,6 +87,8 @@
 #'     \item{\code{resources} [data.table]:}{Table holding information about the computational resources used for the job. Also see \code{\link{getJobResources}}.}
 #'     \item{\code{tags} [data.table]:}{Table holding information about tags. See \link{Tags}.}
 #'   }
+#'   The other functions \code{saveRegistry}, \code{syncRegistry}, \code{sweepRegistry} and \code{clearRegistry} return \code{TRUE}
+#'   if the registry has been altered and successfully stored on the file system.
 #' @aliases Registry
 #' @name Registry
 #' @rdname Registry
@@ -165,7 +168,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   loadRegistryDependencies(list(file.dir = file.dir, work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
 
-  setattr(reg, "class", "Registry")
+  class(reg) = "Registry"
   saveRegistry(reg)
   if (make.default)
     batchtools$default.registry = reg
@@ -199,15 +202,9 @@ getDefaultRegistry = function() {
 #' @export
 #' @rdname Registry
 setDefaultRegistry = function(reg) {
-  assertRegistry(reg)
+  if (!is.null(reg))
+    assertRegistry(reg)
   batchtools$default.registry = reg
-}
-
-#' @export
-#' @rdname Registry
-clearDefaultRegistry = function() {
-  batchtools$default.registry = NULL
-  invisible(TRUE)
 }
 
 #' @export
@@ -298,14 +295,12 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
 saveRegistry = function(reg = getDefaultRegistry()) {
   if (reg$writeable) {
     debug("Saving Registry")
-    # do not save system specific stuff
-    massign = function(x, ee) .mapply(assign, list(x = names(x), value = x), MoreArgs = list(envir = ee))
-    extracted = mget(c("cluster.functions", "default.resources", "temp.dir"), reg)
-    on.exit(massign(extracted, reg))
-    rm(list = names(extracted), envir = reg)
 
     fn = file.path(reg$file.dir, c("registry.new.rds", "registry.rds"))
-    writeRDS(reg, file = fn[1L], wait = TRUE)
+    ee = new.env(parent = asNamespace("batchtools"))
+    list2env(mget(setdiff(ls(reg), c("cluster.functions", "default.resources", "temp.dir")), reg), ee)
+    class(ee) = class(reg)
+    writeRDS(ee, file = fn[1L], wait = TRUE)
     file.rename(fn[1L], fn[2L])
   } else {
     debug("Skipping saveRegistry (read-only)")
@@ -316,11 +311,14 @@ saveRegistry = function(reg = getDefaultRegistry()) {
 #' @rdname Registry
 #' @export
 sweepRegistry = function(reg = getDefaultRegistry()) {
+  store = FALSE
+
   result.files = list.files(file.path(reg$file.dir, "results"), pattern = "\\.rds$")
   i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% .findDone(reg = reg)$job.id)
   if (length(i) > 0L) {
     info("Removing %i obsolete result files", length(i))
     file.remove(file.path(reg$file.dir, "results", result.files[i]))
+    store = TRUE
   }
 
   log.files = list.files(file.path(reg$file.dir, "logs"), pattern = "\\.log$")
@@ -328,6 +326,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   if (length(i) > 0L) {
     info("Removing %i obsolete log files", length(i))
     file.remove(file.path(reg$file.dir, "logs", log.files[i]))
+    store = TRUE
   }
 
   job.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.rds$")
@@ -335,27 +334,31 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   if (length(i) > 0L) {
     info("Removing %i obsolete job files", length(i))
     file.remove(file.path(reg$file.dir, "jobs", job.files[i]))
+    store = TRUE
   }
 
   job.desc.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.job$")
   if (length(job.desc.files) > 0L) {
     info("Removing %i job description files", length(i))
     file.remove(file.path(reg$file.dir, "jobs", job.desc.files))
+    store = TRUE
   }
 
   i = reg$resources[!reg$status, on = "resource.id", which = TRUE]
   if (length(i) > 0L) {
     info("Removing %i resource specifications", length(i))
     reg$resources = reg$resources[-i]
+    store = TRUE
   }
 
   i = reg$tags[!reg$status, on = "job.id", which = TRUE]
   if (length(i) > 0L) {
     info("Removing %i tags", length(i))
     reg$tags = reg$tags[-i]
+    store = TRUE
   }
 
-  saveRegistry(reg)
+  if (store) saveRegistry(reg) else FALSE
 }
 
 
@@ -453,7 +456,7 @@ syncRegistry = function(reg = getDefaultRegistry()) {
     info("Syncing %i files ...", length(fns))
   } else {
     info("Skipping %i updates in read-only mode ...", length(fns))
-    return(invisible(TRUE))
+    return(invisible(FALSE))
   }
 
   runHook(reg, "pre.sync", fns = fns)

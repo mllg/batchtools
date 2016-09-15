@@ -33,7 +33,7 @@ test_that("reading conf file", {
 
 test_that("make.default does work", {
   if (!interactive()) {
-    clearDefaultRegistry()
+    setDefaultRegistry(NULL)
     expect_error(getDefaultRegistry(), "No default")
     reg = makeRegistry(file.dir = NA, make.default = TRUE, seed = 123)
     expect_equal(reg$seed, 123L)
@@ -41,7 +41,7 @@ test_that("make.default does work", {
     expect_equal(reg$seed, 124L)
     expect_equal(getDefaultRegistry()$seed, 123L)
 
-    expect_true(clearDefaultRegistry())
+    expect_null(setDefaultRegistry(NULL))
     expect_error(getDefaultRegistry(), "No default")
     setDefaultRegistry(reg)
     expect_class(getDefaultRegistry(), "Registry")
@@ -76,7 +76,7 @@ test_that("extra files are loaded", {
 test_that("loadRegistry", {
   reg1 = makeRegistry(file.dir = NA, make.default = FALSE)
   fd = reg1$file.dir
-  clearDefaultRegistry()
+  setDefaultRegistry(NULL)
   reg2 = loadRegistry(fd, make.default = FALSE)
   checkTables(reg2)
   expect_equal(reg1, reg2)

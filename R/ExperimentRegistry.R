@@ -61,8 +61,8 @@ makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), con
   reg$status$repl = integer(0L)
   reg$defs$problem = factor(character(0L))
   reg$defs$algorithm = factor(character(0L))
+  class(reg) = c("ExperimentRegistry", "Registry")
 
-  setattr(reg, "class", c("ExperimentRegistry", class(reg)))
   saveRegistry(reg)
   return(reg)
 }
