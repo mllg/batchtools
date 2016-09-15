@@ -328,3 +328,14 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
 
   return(list(exit.code = exit.code, output = output))
 }
+
+
+findTemplateFile = function(name) {
+  uris = c(
+    sprintf("batchtools.%s.tmpl", name),
+    file.path("~", sprintf(".batchtools.%s.tmpl", name)),
+    system.file("templates", sprintf("%s.default.tmpl", name), package = "batchtools")
+  )
+  i = wf(nzchar(uris) & file.exists(uris))
+  if (length(i) == 0L) character(0L) else npath(uris[i])
+}

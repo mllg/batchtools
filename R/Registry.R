@@ -481,3 +481,10 @@ syncRegistry = function(reg = getDefaultRegistry()) {
   runHook(reg, "post.sync", updates = updates)
   invisible(TRUE)
 }
+
+findConfFile = function() {
+  uris = file.path(c(".", "~"), c("batchtools.conf.R", ".batchtools.conf.R"))
+  i = wf(file.exists(uris))
+  if (length(i) == 0L) character(0L) else npath(uris[i])
+}
+
