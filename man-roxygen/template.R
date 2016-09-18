@@ -3,7 +3,9 @@
 #'   Alternatively, the template as a single string (including at least one newline \dQuote{\\n}).
 #'   Defaults to a heuristic which looks for a template file in the following locations and picks
 #'   the first one found:
-#'   (1) \dQuote{batchtools.<%= cf.name %>.tmpl} in the current working directory,
-#'   (2) \dQuote{.batchtools.<%= cf.name %>.tmpl} in the home directory and finally
-#'   (3) \dQuote{<%= cf.name %>.default.tmpl} in the package installation directory
-#'   in the subfolder \dQuote{templates}.
+#'   \enumerate{
+#'     \item \dQuote{batchtools.<%= cf.name %>.tmpl} in the current working directory.
+#'     \item \dQuote{<%= cf.name %>.tmpl} in the user config directory (see \code{\link[rappdirs]{user_config_dir}}); on linux is is usually \dQuote{~/.config/batchtools/<%= cf.name %>.tmpl}.
+#'     \item \dQuote{.batchtools.<%= cf.name %>.tmpl} in the home directory.
+#'     \item \dQuote{<%= cf.name %>.default.tmpl} in the package installation directory in the subfolder \dQuote{templates} (this probably does not exist for your cluster system or needs adaptation).
+#'   }

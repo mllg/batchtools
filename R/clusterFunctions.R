@@ -331,11 +331,21 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
 
 
 findTemplateFile = function(name) {
-  uris = c(
-    sprintf("batchtools.%s.tmpl", name),
-    file.path("~", sprintf(".batchtools.%s.tmpl", name)),
-    system.file("templates", sprintf("%s.default.tmpl", name), package = "batchtools")
-  )
-  i = wf(nzchar(uris) & file.exists(uris))
-  if (length(i) == 0L) character(0L) else npath(uris[i])
+  x = sprintf("batchtools.%s.tmpl", name)
+  if (file.exists(x))
+    return(npath(x))
+
+  x = file.path(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", name))
+  if (file.exists(x))
+    return(x)
+
+  x = file.path("~", sprintf(".batchtools.%s.tmpl", name))
+  if (file.exists(x))
+    return(npath(x))
+
+  x = system.file("templates", sprintf("%s.default.tmpl", name), package = "batchtools")
+  if (file.exists(x))
+    return(x)
+
+  return(character(0L))
 }

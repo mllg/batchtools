@@ -28,13 +28,13 @@ Imports:
     parallel,
     progress,
     R6,
+    rappdirs,
     stats,
     stringi,
     utils
 Suggests:
     e1071,
     knitr,
-    methods,
     parallelMap,
     ranger,
     rmarkdown,

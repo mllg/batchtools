@@ -13,10 +13,12 @@ Path to a brew template file that can be used for the job description.
 Alternatively, the template as a single string (including at least one newline \dQuote{\\n}).
 Defaults to a heuristic which looks for a template file in the following locations and picks
 the first one found:
-(1) \dQuote{batchtools.slurm.tmpl} in the current working directory,
-(2) \dQuote{.batchtools.slurm.tmpl} in the home directory and finally
-(3) \dQuote{slurm.default.tmpl} in the package installation directory
-in the subfolder \dQuote{templates}.}
+\enumerate{
+  \item \dQuote{batchtools.slurm.tmpl} in the current working directory.
+  \item \dQuote{slurm.tmpl} in the user config directory (see \code{\link[rappdirs]{user_config_dir}}); on linux is is usually \dQuote{~/.config/batchtools/slurm.tmpl}.
+  \item \dQuote{.batchtools.slurm.tmpl} in the home directory.
+  \item \dQuote{slurm.default.tmpl} in the package installation directory in the subfolder \dQuote{templates} (this probably does not exist for your cluster system or needs adaptation).
+}}
 
 \item{clusters}{[\code{character(1)}]\cr
 If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.

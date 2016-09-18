@@ -55,13 +55,18 @@ syncRegistry(reg = getDefaultRegistry())
   (i.e., starting with \dQuote{~}). Note that some templates do not handle relative paths well.}
 
 \item{conf.file}{[\code{character(1)}]\cr
-Path to a configuration file which is sourced directly after the registry is created.
-For example, you can set cluster functions or default resources in it.
-The script is executed inside the registry environment, thus you can directly set
-all slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.
-Defaults to a heuristic which first looks for \dQuote{batchtools.conf.R} in the current working directory
-and then tries \dQuote{.batchtools.conf.R} in the home directory.
-Set to \code{character(0)} if you want to disable this lookup.}
+  Path to a configuration file which is sourced while the registry is created.
+  For example, you can set cluster functions or default resources in it.
+  The script is executed inside the environment of the registry after the defaults for all variables are set,
+  thus you can set and overwrite slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.
+
+  The file lookup defaults to a heuristic which first tries to read \dQuote{batchtools.conf.R} in the current working directory.
+  If not found, it looks for a configuration file \dQuote{config.R} in the OS dependent user configuration directory
+  as reported by via \code{rappdirs::user_config_dir("batchtools", expand = FALSE)} (e.g., on linux this
+  usually resolves to \dQuote{~/.config/batchtools/config.R}).
+  If this file is also not found, the heuristic finally tries to read the file \dQuote{.batchtools.conf.R} in the
+  home directory (\dQuote{~}).
+  Set to \code{character(0)} if you want to disable this heuristic.}
 
 \item{packages}{[\code{character}]\cr
 Packages that will always be loaded on each node.

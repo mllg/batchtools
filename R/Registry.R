@@ -41,13 +41,18 @@
 #'   The provided path will get normalized unless it is given relative to the home directory
 #'   (i.e., starting with \dQuote{~}). Note that some templates do not handle relative paths well.
 #' @param conf.file [\code{character(1)}]\cr
-#'   Path to a configuration file which is sourced directly after the registry is created.
+#'   Path to a configuration file which is sourced while the registry is created.
 #'   For example, you can set cluster functions or default resources in it.
-#'   The script is executed inside the registry environment, thus you can directly set
-#'   all slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.
-#'   Defaults to a heuristic which first looks for \dQuote{batchtools.conf.R} in the current working directory
-#'   and then tries \dQuote{.batchtools.conf.R} in the home directory.
-#'   Set to \code{character(0)} if you want to disable this lookup.
+#'   The script is executed inside the environment of the registry after the defaults for all variables are set,
+#'   thus you can set and overwrite slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.
+#'
+#'   The file lookup defaults to a heuristic which first tries to read \dQuote{batchtools.conf.R} in the current working directory.
+#'   If not found, it looks for a configuration file \dQuote{config.R} in the OS dependent user configuration directory
+#'   as reported by via \code{rappdirs::user_config_dir("batchtools", expand = FALSE)} (e.g., on linux this
+#'   usually resolves to \dQuote{~/.config/batchtools/config.R}).
+#'   If this file is also not found, the heuristic finally tries to read the file \dQuote{.batchtools.conf.R} in the
+#'   home directory (\dQuote{~}).
+#'   Set to \code{character(0)} if you want to disable this heuristic.
 #' @param packages [\code{character}]\cr
 #'   Packages that will always be loaded on each node.
 #'   Uses \code{\link[base]{require}} internally.
@@ -483,8 +488,17 @@ syncRegistry = function(reg = getDefaultRegistry()) {
 }
 
 findConfFile = function() {
-  uris = file.path(c(".", "~"), c("batchtools.conf.R", ".batchtools.conf.R"))
-  i = wf(file.exists(uris))
-  if (length(i) == 0L) character(0L) else npath(uris[i])
-}
+  x = "batchtools.conf.R"
+  if (file.exists(x))
+    return(npath(x))
 
+  x = file.path(user_config_dir("batchtools", expand = FALSE), "config.R")
+  if (file.exists(x))
+    return(x)
+
+  x = npath(file.path("~", "batchtools.conf.R"), must.work = FALSE)
+  if (file.exists(x))
+    return(npath(x))
+
+  return(character(0L))
+}

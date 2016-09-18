@@ -20,6 +20,7 @@
 #' @import backports
 #' @importFrom R6 R6Class
 #' @importFrom progress progress_bar
+#' @importFrom rappdirs user_config_dir
 #' @importFrom stats runif
 #' @importFrom utils head tail getFromNamespace
 "_PACKAGE"
@@ -30,6 +31,6 @@ batchtools$hooks = data.table(
   remote = c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE)
 )
 
-.onUnload <- function (libpath) {
+.onUnload = function (libpath) {
   library.dynam.unload("batchtools", libpath) # nocov
 }
