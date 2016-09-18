@@ -128,7 +128,7 @@ a collection. Thus all variables available inside the job can be used in the tem
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">packages</span> <span class="argument">=</span> <span class="string">"methods"</span><span class="keyword">)</span></div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong>
 <div class='input'><span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">identity</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
 <strong class='message'>Adding 5 jobs ...</strong>
 <div class='input'><span class="comment"># resources are usually forwared from submitJobs()</span>
@@ -136,22 +136,22 @@ a collection. Thus all variables available inside the job can be used in the tem
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/utils/topics/ls_str'>ls.str</a></span><span class="keyword">(</span><span class="symbol">jc</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>array.var :  chr NA
 debug :  logi FALSE
-file.dir :  chr &quot;/scratch/registry44cf35676ee6&quot;
-job.hash :  chr &quot;94f81450612d5486de2d698e6bcf5dca&quot;
+file.dir :  chr &quot;/tmp/RtmpNmnfd8/registry5f6234105777&quot;
+job.hash :  chr &quot;50b708ebb830f9f1cfa34b0d7f7172a0&quot;
 jobs : Classes ‘data.table’ and &#39;data.frame&#39;:	3 obs. of  2 variables:
  $ job.id: int  1 2 3
  $ pars  :List of 3
 load :  chr(0) 
-log.file :  chr &quot;/scratch/registry44cf35676ee6/logs/94f81450612d5486de2d698e6bcf5dca.log&quot;
+log.file :  chr &quot;/tmp/RtmpNmnfd8/registry5f6234105777/logs/50b708ebb830f9f1cfa34b0d7f7172a0.log&quot;
 namespaces :  chr(0) 
 n.array.jobs :  int 1
 packages :  chr &quot;methods&quot;
 resources : List of 1
  $ foo: chr &quot;bar&quot;
-seed :  int 662406963
+seed :  int 705443900
 source :  chr(0) 
-uri :  chr &quot;/scratch/registry44cf35676ee6/jobs/94f81450612d5486de2d698e6bcf5dca.rds&quot;
-work.dir :  chr &quot;/home/lang/Projekte/batchtools&quot;
+uri :  chr &quot;/tmp/RtmpNmnfd8/registry5f6234105777/jobs/50b708ebb830f9f1cfa34b0d7f7172a0.rds&quot;
+work.dir :  chr &quot;/home/michel/Projekte/batchtools&quot;
 </div></pre>
   </div>
   <div class="span4 sidebar">

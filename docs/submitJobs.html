@@ -138,7 +138,7 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'><span class="comment">### Example 1: Using memory measurement</span>
 <span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong>
 <div class='input'>
 <span class="comment"># Toy function which creates a large matrix and returns the column sums</span>
 <span class="symbol">fun</span> <span class="assignement">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">n</span><span class="keyword">,</span> <span class="formalargs">p</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/colSums'>colMeans</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span><span class="keyword">(</span><span class="symbol">n</span><span class="keyword">*</span><span class="symbol">p</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">,</span> <span class="symbol">p</span><span class="keyword">)</span><span class="keyword">)</span>
@@ -169,24 +169,24 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
 <strong class='message'>Syncing 4 files ...</strong>
 <div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">info</span><span class="keyword">)</span></div>
 <div class='output'>   job.id memory     n  p
-1:      1   46.5 1e+04 10
-2:      2   60.1 1e+05 10
-3:      3   52.5 1e+04 50
-4:      4  121.1 1e+05 50
+1:      1   47.2 1e+04 10
+2:      2   60.8 1e+05 10
+3:      3   53.2 1e+04 50
+4:      4  121.8 1e+05 50
 </div>
 <div class='input'>
 <span class="comment"># Combine job info with results -&gt; each job is aggregated using mean()</span>
 <span class="functioncall"><a href='JoinTables.html'>ijoin</a></span><span class="keyword">(</span><span class="symbol">info</span><span class="keyword">,</span> <span class="functioncall"><a href='reduceResultsList.html'>reduceResultsDataTable</a></span><span class="keyword">(</span><span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">res</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">res</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span><span class="keyword">(</span><span class="symbol">res</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>   job.id memory     n  p       res
-1:      1   46.5 1e+04 10 0.5017799
-2:      2   60.1 1e+05 10 0.4997882
-3:      3   52.5 1e+04 50 0.4997683
-4:      4  121.1 1e+05 50 0.5000192
+1:      1   47.2 1e+04 10 0.4997378
+2:      2   60.8 1e+05 10 0.4996549
+3:      3   53.2 1e+04 50 0.5004494
+4:      4  121.8 1e+05 50 0.5001814
 </div>
 <div class='input'>
 <span class="comment">### Example 2: Multicore execution on the slave</span>
 <span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong>
 <div class='input'>
 <span class="comment"># Function which sleeps 10 seconds, i-times</span>
 <span class="symbol">f</span> <span class="assignement">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">i</span><span class="keyword">)</span> <span class="keyword">{</span>

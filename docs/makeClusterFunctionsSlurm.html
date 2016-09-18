@@ -65,10 +65,17 @@ Path to a brew template file that can be used for the job description.
 Alternatively, the template as a single string (including at least one newline &#147;\n&#148;).
 Defaults to a heuristic which looks for a template file in the following locations and picks
 the first one found:
-(1) &#147;batchtools.slurm.tmpl&#148; in the current working directory,
-(2) &#147;.batchtools.slurm.tmpl&#148; in the home directory and finally
-(3) &#147;slurm.default.tmpl&#148; in the package installation directory
-in the subfolder &#147;templates&#148;.</dd>
+<ol>
+<li> &#147;batchtools.slurm.tmpl&#148; in the current working directory.
+  </li>
+<li> &#147;slurm.tmpl&#148; in the user config directory (see <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>user_config_dir</a></code>); on linux is is usually &#147;~/.config/batchtools/slurm.tmpl&#148;.
+  </li>
+<li> &#147;.batchtools.slurm.tmpl&#148; in the home directory.
+  </li>
+<li> &#147;slurm.default.tmpl&#148; in the package installation directory in the subfolder &#147;templates&#148; (this probably does not exist for your cluster system or needs adaptation).
+</li>
+</ol>
+</dd>
       <dt>clusters</dt>
       <dd>[<code>character(1)</code>]
 If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.

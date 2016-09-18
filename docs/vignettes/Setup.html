@@ -225,37 +225,37 @@ div.tocify {
 
 <div id="cluster-functions" class="section level1">
 <h1>Cluster Functions</h1>
-<p>The communication with the batch system is managed via the cluster functions. They are created with the constructor <a href="https://mllg.github.io/batchtools/makeClusterFunctions.html">makeClusterFunctions</a> where you must provide a function which submits a job to your system. Furthermore, you may provide functions to list queued/running jobs and to kill jobs.</p>
+<p>The communication with the batch system is managed via the cluster functions. They are created with the constructor <a href="https://mllg.github.io/batchtools/makeClusterFunctions">makeClusterFunctions</a> where you must provide a function which submits a job to your system. Furthermore, you may provide functions to list queued/running jobs and to kill jobs.</p>
 <p>Usually you do not have to start from scratch but can just use one of the cluster functions which ship with the package:</p>
 <ul>
-<li>DockerSwarm: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsDocker.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsDocker.R">implementation</a></li>
-<li>Load Sharing Facility (LSF): <a href="https://mllg.github.io/batchtools/makeClusterFunctionsLSF.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsLSF.R">implementation</a></li>
-<li>OpenLava: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsOpenLava.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsOpenLava.R">implementation</a></li>
-<li>Makeshift SSH cluster: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSSH.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSSH.R">implementation</a></li>
-<li>Sun Grid Engine (SGE): <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSGE.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSGE.R">implementation</a></li>
-<li>Slurm: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSlurm.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSlurm.R">implementation</a></li>
-<li>Torque/OpenPBS: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsTorque.html">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsTorque.R">implementation</a></li>
+<li>DockerSwarm: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsDocker">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsDocker.R">implementation</a></li>
+<li>Load Sharing Facility (LSF): <a href="https://mllg.github.io/batchtools/makeClusterFunctionsLSF">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsLSF.R">implementation</a></li>
+<li>OpenLava: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsOpenLava">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsOpenLava.R">implementation</a></li>
+<li>Makeshift SSH cluster: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSSH">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSSH.R">implementation</a></li>
+<li>Sun Grid Engine (SGE): <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSGE">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSGE.R">implementation</a></li>
+<li>Slurm: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSlurm">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSlurm.R">implementation</a></li>
+<li>Torque/OpenPBS: <a href="https://mllg.github.io/batchtools/makeClusterFunctionsTorque">docs</a>, <a href="https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsTorque.R">implementation</a></li>
 </ul>
-<p>To use the package with the socket cluster functions, you would call the respective constructor <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSocket.html">makeClusterFunctionsSocket()</a>:</p>
+<p>To use the package with the socket cluster functions, you would call the respective constructor <a href="https://mllg.github.io/batchtools/makeClusterFunctionsSocket">makeClusterFunctionsSocket()</a>:</p>
 <pre class="r"><code>reg = makeRegistry(NA)</code></pre>
-<pre><code>## Sourcing configuration file '~/.batchtools.conf.R' ...</code></pre>
+<pre><code>## Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</code></pre>
 <pre class="r"><code>reg$cluster.functions = makeClusterFunctionsSocket(2)</code></pre>
 <p>To make your cluster function selection permanent for a specific system across R sessions, you can set up a configuration file (see below).</p>
 </div>
 <div id="template-files" class="section level1">
 <h1>Template files</h1>
 <p>Many cluster functions require a template file as argument. These templates are used to communicate with the scheduler and contain placeholders to evaluate arbitrary R expressions. Internally, the <a href="https://cran.r-project.org/package=brew">brew package</a> is used for this purpose. Some exemplary template files can be found <a href="https://github.com/mllg/batchtools/tree/master/inst/templates">here</a>. It would be great if you would help growing this collection to cover more corner cases for exotic configurations. To do so, please send your template via <a href="mailto:michellang@gmail.com">mail</a> or open a new pull request.</p>
-<p>All variables defined in a <a href="https://mllg.github.io/batchtools/JobCollection.html">JobCollection</a> can be used inside the template. ``<code>If you need to pass extra variables, you can set them via the argument</code>resources` of <a href="https://mllg.github.io/batchtools/submitJobs.html">submitJobs</a>.</p>
-<p>If the flexibility which comes with templating is not sufficient, you can still construct a custom cluster function implementation yourself using the provided <a href="https://mllg.github.io/batchtools/makeClusterFunctions.html">constructor</a>.</p>
+<p>All variables defined in a <a href="https://mllg.github.io/batchtools/JobCollection">JobCollection</a> can be used inside the template. If you need to pass extra variables, you can set them via the argument <code>resources</code> of <a href="https://mllg.github.io/batchtools/submitJobs">submitJobs</a>.</p>
+<p>If the flexibility which comes with templating is not sufficient, you can still construct a custom cluster function implementation yourself using the provided <a href="https://mllg.github.io/batchtools/makeClusterFunctions">constructor</a>.</p>
 </div>
 <div id="configuration-file" class="section level1">
 <h1>Configuration file</h1>
-<p>The configuration file, usually located in your home directory as <code>~/.batchtools.conf.R</code>, can be used to set system specific options. For example, to set the cluster function implementation, you would generate a file with the following content:</p>
+<p>The configuration file can be used to set system specific options. Its default location depends on the operating system (see <a href="https://mllg.github.io/batchtools/Registry">Registry</a>), but for the first time setup you can put one in the current working directory (as reported by <code>getwd()</code>). In order to set the cluster function implementation, you would generate a file with the following content:</p>
 <pre class="r"><code>cluster.functions = makeClusterFunctionsInteractive()</code></pre>
-<p>The configuration file is parsed when you create your <a href="https://mllg.github.io/batchtools/Registry.html">Registry</a>. It is sourced inside of your registry which has the advantage that you can (a) access all of the parameters which are passed to <a href="https://mllg.github.io/batchtools/Registry.html">makeRegistry</a> and (b) you can also directly change them. Lets say you always want your working directory be relative to your home directory and you always want to load the <code>checkmate</code> package on the nodes, you can just append these lines:</p>
+<p>The configuration file is parsed when you create your <a href="https://mllg.github.io/batchtools/Registry">Registry</a>. It is sourced inside of your registry which has the advantage that you can (a) access all of the parameters which are passed to <a href="https://mllg.github.io/batchtools/Registry">makeRegistry</a> and (b) you can also directly change them. Lets say you always want your working directory be relative to your home directory and you always want to load the <code>checkmate</code> package on the nodes, you can just append these lines:</p>
 <pre class="r"><code>work.dir = &quot;~&quot;
 packages = union(packages, &quot;checkmate&quot;)</code></pre>
-<p>See the documentation on <a href="https://mllg.github.io/batchtools/Registry.html">Registry</a> for a more complete list of supported configuration options.</p>
+<p>See the documentation on <a href="https://mllg.github.io/batchtools/Registry">Registry</a> for a more complete list of supported configuration options.</p>
 </div>
 
 

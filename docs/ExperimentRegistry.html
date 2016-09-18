@@ -84,13 +84,18 @@
   (i.e., starting with &#147;~&#148;). Note that some templates do not handle relative paths well.</dd>
       <dt>conf.file</dt>
       <dd>[<code>character(1)</code>]
-Path to a configuration file which is sourced directly after the registry is created.
-For example, you can set cluster functions or default resources in it.
-The script is executed inside the registry environment, thus you can directly set
-all slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.
-Defaults to a heuristic which first looks for &#147;batchtools.conf.R&#148; in the current working directory
-and then tries &#147;.batchtools.conf.R&#148; in the home directory.
-Set to <code>character(0)</code> if you want to disable this lookup.</dd>
+  Path to a configuration file which is sourced while the registry is created.
+  For example, you can set cluster functions or default resources in it.
+  The script is executed inside the environment of the registry after the defaults for all variables are set,
+  thus you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.
+
+  The file lookup defaults to a heuristic which first tries to read &#147;batchtools.conf.R&#148; in the current working directory.
+  If not found, it looks for a configuration file &#147;config.R&#148; in the OS dependent user configuration directory
+  as reported by via <code>rappdirs::user_config_dir(&quot;batchtools&quot;, expand = FALSE)</code> (e.g., on linux this
+  usually resolves to &#147;~/.config/batchtools/config.R&#148;).
+  If this file is also not found, the heuristic finally tries to read the file &#147;.batchtools.conf.R&#148; in the
+  home directory (&#147;~&#148;).
+  Set to <code>character(0)</code> if you want to disable this heuristic.</dd>
       <dt>packages</dt>
       <dd>[<code>character</code>]
 Packages that will always be loaded on each node.
@@ -144,7 +149,7 @@ jobs.</p>
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong>
 <div class='input'>
 <span class="comment"># Definde one problem, two algorithms and add them with some parameters:</span>
 <span class="functioncall"><a href='ProblemAlgorithm.html'>addProblem</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="string">"p1"</span><span class="keyword">,</span>
@@ -232,13 +237,13 @@ jobs.</p>
 <span class="comment"># Reduce the results of algorithm a1</span>
 <span class="symbol">ids.mean</span> <span class="assignement">=</span> <span class="functioncall"><a href='findJobs.html'>findExperiments</a></span><span class="keyword">(</span><span class="argument">algo.name</span> <span class="argument">=</span> <span class="string">"a1"</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='reduceResults.html'>reduceResults</a></span><span class="keyword">(</span><span class="symbol">ids.mean</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">aggr</span><span class="keyword">,</span> <span class="formalargs">res</span><span class="keyword">,</span> <span class="formalargs">...</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="symbol">aggr</span><span class="keyword">,</span> <span class="symbol">res</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
-<div class='output'> [1] -2.10721200 -1.56313552 -2.48174907 -2.06456938 -0.89416632 -1.29922053
- [7] -0.73809669 -1.44490273  0.18821548 -0.35873496 -0.27857637  0.23479080
-[13]  0.97416525  1.11815504  0.85800482  0.15485102  2.00269052  2.32312536
-[19]  2.45669226  2.45373586 -2.04040293 -1.88875542 -1.90418965 -1.90481743
-[25] -0.96826933 -0.96816640 -1.41970156 -0.75332400 -0.04073006  0.13771157
-[31]  0.38800224  0.25990098  0.88220028  0.85763272  1.33261610  0.48901450
-[37]  2.09314764  1.55070200  1.93824982  2.74455441
+<div class='output'> [1] -1.91433603 -1.51182725 -1.98742936 -2.36910443 -0.98787171 -1.27022246
+ [7] -1.25992955 -1.34513502 -0.15700077 -0.23088698  0.07027429  0.87552783
+[13]  0.96372348  1.01272758  1.21870563  1.09210651  2.32384233  2.21704556
+[19]  2.89319252  2.39510729 -1.97107549 -1.60247254 -1.72943243 -1.13280855
+[25] -0.96364419 -1.02812339 -0.77289340 -1.46904223  0.02351158  0.17083372
+[31]  0.18285818  0.08181464  1.03563515  0.74558157  0.85903262  0.90236768
+[37]  2.06103503  1.88740822  1.88288169  1.96829931
 </div>
 <div class='input'>
 <span class="comment"># Join info table with all results and calculate mean of results</span>
@@ -248,11 +253,11 @@ jobs.</p>
 <span class="symbol">results</span> <span class="assignement">=</span> <span class="functioncall"><a href='reduceResultsList.html'>reduceResultsDataTable</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">res</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">res</span> <span class="argument">=</span> <span class="symbol">res</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="symbol">tab</span> <span class="assignement">=</span> <span class="functioncall"><a href='JoinTables.html'>ljoin</a></span><span class="keyword">(</span><span class="symbol">pars</span><span class="keyword">,</span> <span class="symbol">results</span><span class="keyword">)</span>
 <span class="symbol">tab</span><span class="keyword">[</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">mres</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span><span class="keyword">(</span><span class="symbol">res</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">by</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"n"</span><span class="keyword">,</span> <span class="string">"algorithm"</span><span class="keyword">)</span><span class="keyword">]</span></div>
-<div class='output'>     n algorithm        mres
-1:  50        a1 -0.02329686
-2: 100        a1  0.03926877
-3:  50        a2  0.16787783
-4: 100        a2  0.02302469
+<div class='output'>     n algorithm       mres
+1:  50        a1 0.10142547
+2: 100        a1 0.05658836
+3:  50        a2 0.13367759
+4: 100        a2 0.03343343
 </div></pre>
   </div>
   <div class="span4 sidebar">

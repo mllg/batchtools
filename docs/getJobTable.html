@@ -147,7 +147,7 @@ with the resources which were set to submit the jobs, and <code>getJobTags</code
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong>
 <div class='input'><span class="symbol">f</span> <span class="assignement">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">x</span><span class="keyword">)</span> <span class="keyword">if</span> <span class="keyword">(</span><span class="symbol">x</span> <span class="keyword">&lt;</span> <span class="number">0</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/stop'>stop</a></span><span class="keyword">(</span><span class="string">"x must be &gt; 0"</span><span class="keyword">)</span> <span class="keyword">else</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/MathFun'>sqrt</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span>
 <span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">f</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="keyword">-</span><span class="number">1</span><span class="keyword">,</span> <span class="number">0</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
 <strong class='message'>Adding 3 jobs ...</strong>
@@ -161,17 +161,17 @@ with the resources which were set to submit the jobs, and <code>getJobTags</code
 <span class="comment"># Complete table:</span>
 <span class="functioncall"><a href='getJobTable.html'>getJobTable</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="argument">flatten</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
 <div class='output'>   job.id           submitted             started                done
-1:      1 2016-09-14 16:10:22 2016-09-14 16:10:22 2016-09-14 16:10:22
-2:      2 2016-09-14 16:10:22 2016-09-14 16:10:22 2016-09-14 16:10:22
-3:      3 2016-09-14 16:10:22 2016-09-14 16:10:22 2016-09-14 16:10:22
+1:      1 2016-09-18 12:01:10 2016-09-18 12:01:10 2016-09-18 12:01:10
+2:      2 2016-09-18 12:01:10 2016-09-18 12:01:10 2016-09-18 12:01:10
+3:      3 2016-09-18 12:01:10 2016-09-18 12:01:10 2016-09-18 12:01:10
                                      error memory      batch.id
 1: Error in (function (x)  : x must be &gt; 0     NA cfInteractive
 2:                                      NA     NA cfInteractive
 3:                                      NA     NA cfInteractive
                            job.hash time.queued time.running   pars resources
-1: 279559ac9fc946dc2a35554c41642980      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
-2: 6c9587e72c4a40f00082a7cb795e721c      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
-3: c91b5c31119e2d15b598d79184f18098      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+1: 0979fac7106c35e78c6f5bd817fbe49c      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+2: 7d1a3c24b8f61d8f7c93973195037e28      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+3: 0374ef724001b9f042e1626ee906a864      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
    tags
 1:   NA
 2:   NA

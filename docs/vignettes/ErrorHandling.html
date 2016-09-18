@@ -161,14 +161,14 @@ batchMap(flakeyFunction, 1:10)</code></pre>
 ## 2:      9       TRUE  TRUE Error in (function (value)  : Ooops.</code></pre>
 <p>If we want to peek into the R log file of a job to see more context for the error we can use <a href="https://mllg.github.io/batchtools/showLog"><code>showLog()</code></a> which opens a pager or use <a href="https://mllg.github.io/batchtools/showLog"><code>getLog()</code></a> to get the log as character vector:</p>
 <pre class="r"><code>writeLines(getLog(id = 9))</code></pre>
-<pre><code>## ### [bt 2016-09-14 16:10:28]: Starting calculation of 1 jobs
-## ### [bt 2016-09-14 16:10:28]: Setting working directory to '/home/lang/Projekte/batchtools/vignettes'
-## ### [bt 2016-09-14 16:10:28]: Memory measurement disabled
-## ### [bt 2016-09-14 16:10:28]: Starting job [batchtools job.id=9]
+<pre><code>## ### [bt 2016-09-18 12:01:15]: Starting calculation of 1 jobs
+## ### [bt 2016-09-18 12:01:15]: Setting working directory to '/home/michel/Projekte/batchtools/vignettes'
+## ### [bt 2016-09-18 12:01:15]: Memory measurement disabled
+## ### [bt 2016-09-18 12:01:15]: Starting job [batchtools job.id=9]
 ## Error in (function (value)  : Ooops.
 ## 
-## ### [bt 2016-09-14 16:10:28]: Job terminated with an exception [batchtools job.id=9]
-## ### [bt 2016-09-14 16:10:28]: Calculation finished!</code></pre>
+## ### [bt 2016-09-18 12:01:15]: Job terminated with an exception [batchtools job.id=9]
+## ### [bt 2016-09-18 12:01:15]: Calculation finished!</code></pre>
 <p>You can also grep for error or warning messages:</p>
 <pre class="r"><code>ids = grepLogs(pattern = &quot;ooops&quot;, ignore.case = TRUE)
 print(ids)</code></pre>

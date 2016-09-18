@@ -63,8 +63,6 @@
 
 <span class="functioncall"><a href='Registry.html'>setDefaultRegistry</a></span><span class="keyword">(</span><span class="symbol">reg</span><span class="keyword">)</span>
 
-<span class="functioncall"><a href='Registry.html'>clearDefaultRegistry</a></span><span class="keyword">(</span><span class="keyword">)</span>
-
 <span class="functioncall"><a href='Registry.html'>loadRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">work.dir</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
   <span class="argument">conf.file</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall">findConfFile</span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">make.default</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">update.paths</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">)</span>
 
@@ -101,13 +99,18 @@
   (i.e., starting with &#147;~&#148;). Note that some templates do not handle relative paths well.</dd>
       <dt>conf.file</dt>
       <dd>[<code>character(1)</code>]
-Path to a configuration file which is sourced directly after the registry is created.
-For example, you can set cluster functions or default resources in it.
-The script is executed inside the registry environment, thus you can directly set
-all slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.
-Defaults to a heuristic which first looks for &#147;batchtools.conf.R&#148; in the current working directory
-and then tries &#147;.batchtools.conf.R&#148; in the home directory.
-Set to <code>character(0)</code> if you want to disable this lookup.</dd>
+  Path to a configuration file which is sourced while the registry is created.
+  For example, you can set cluster functions or default resources in it.
+  The script is executed inside the environment of the registry after the defaults for all variables are set,
+  thus you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.
+
+  The file lookup defaults to a heuristic which first tries to read &#147;batchtools.conf.R&#148; in the current working directory.
+  If not found, it looks for a configuration file &#147;config.R&#148; in the OS dependent user configuration directory
+  as reported by via <code>rappdirs::user_config_dir(&quot;batchtools&quot;, expand = FALSE)</code> (e.g., on linux this
+  usually resolves to &#147;~/.config/batchtools/config.R&#148;).
+  If this file is also not found, the heuristic finally tries to read the file &#147;.batchtools.conf.R&#148; in the
+  home directory (&#147;~&#148;).
+  Set to <code>character(0)</code> if you want to disable this heuristic.</dd>
       <dt>packages</dt>
       <dd>[<code>character</code>]
 Packages that will always be loaded on each node.
@@ -151,7 +154,8 @@ registry in read-only mode.</dd>
       <h2>Value</h2>
 
       <p><dl>
-[<code>Registry</code>]. An environment with the following slots:
+<code>makeRegistry</code>, <code>loadRegistry</code>, <code>getDefaultRegistry</code> and <code>setDefaultRegistry</code>
+  return an environment of class &#147;Registry&#148; with the following slots:
   <dl>
     <dt><code>file.dir</code> [path]:</dt><dd>File directory.</dd></p>
 
@@ -181,7 +185,9 @@ registry in read-only mode.</dd>
 
       <p></dl></p>
 
-      <p></dl></p>
+      <p>The other functions <code>saveRegistry</code>, <code>syncRegistry</code>, <code>sweepRegistry</code> and <code>clearRegistry</code> return <code>TRUE</code>
+  if the registry has been altered and successfully stored on the file system.
+</dl></p>
 
     </div>
 
@@ -212,14 +218,14 @@ and thus allows you to start over.</p>
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'><span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong>
 <div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">tmp</span><span class="keyword">)</span></div>
 <div class='output'>Job Registry
   Name    : Interactive
-  File dir: /scratch/registry44cf54f23a
-  Work dir: /home/lang/Projekte/batchtools
+  File dir: /tmp/RtmpNmnfd8/registry5f6214bdb2d7
+  Work dir: /home/michel/Projekte/batchtools
   Jobs    : 0
-  Seed    : 835685515
+  Seed    : 874666013
 </div>
 <div class='input'>
 <span class="comment"># Set cluster functions to interactive mode and start jobs in external R sessions</span>
@@ -231,7 +237,7 @@ and thus allows you to start over.</p>
   </div>
   <div class="span4 sidebar">
     <!-- <ul>
-      <li>Registry</li><li>clearDefaultRegistry</li><li>clearRegistry</li><li>getDefaultRegistry</li><li>loadRegistry</li><li>makeRegistry</li><li>saveRegistry</li><li>setDefaultRegistry</li><li>sweepRegistry</li><li>syncRegistry</li>
+      <li>Registry</li><li>clearRegistry</li><li>getDefaultRegistry</li><li>loadRegistry</li><li>makeRegistry</li><li>saveRegistry</li><li>setDefaultRegistry</li><li>sweepRegistry</li><li>syncRegistry</li>
     </ul>
     <ul>
       

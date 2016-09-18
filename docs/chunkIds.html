@@ -110,37 +110,37 @@ computational job.</p>
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'><span class="comment"># chunking for Registry</span>
 <span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='Registry.html'>makeRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong>
 <div class='input'><span class="functioncall"><a href='batchMap.html'>batchMap</a></span><span class="keyword">(</span><span class="symbol">identity</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">25</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span></div>
 <strong class='message'>Adding 25 jobs ...</strong>
 <div class='input'><span class="symbol">ids</span> <span class="assignement">=</span> <span class="functioncall"><a href='chunkIds.html'>chunkIds</a></span><span class="keyword">(</span><span class="argument">chunk.size</span> <span class="argument">=</span> <span class="number">10</span><span class="keyword">,</span> <span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">)</span>
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">)</span></div>
 <div class='output'>    job.id chunk
- 1:      1     2
- 2:      2     1
- 3:      3     1
+ 1:      1     3
+ 2:      2     2
+ 3:      3     3
  4:      4     1
- 5:      5     2
- 6:      6     1
- 7:      7     3
- 8:      8     3
- 9:      9     2
-10:     10     2
-11:     11     1
-12:     12     3
-13:     13     3
-14:     14     1
-15:     15     3
-16:     16     3
+ 5:      5     3
+ 6:      6     3
+ 7:      7     1
+ 8:      8     2
+ 9:      9     1
+10:     10     1
+11:     11     2
+12:     12     2
+13:     13     2
+14:     14     3
+15:     15     2
+16:     16     1
 17:     17     1
 18:     18     1
-19:     19     2
+19:     19     1
 20:     20     3
 21:     21     2
-22:     22     1
-23:     23     2
-24:     24     2
-25:     25     3
+22:     22     2
+23:     23     3
+24:     24     3
+25:     25     1
     job.id chunk
 </div>
 <div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/table'>table</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">$</span><span class="symbol">chunk</span><span class="keyword">)</span><span class="keyword">)</span></div>
@@ -151,7 +151,7 @@ computational job.</p>
 <div class='input'>
 <span class="comment"># Creating chunks for an ExperimentRegistry</span>
 <span class="symbol">tmp</span> <span class="assignement">=</span> <span class="functioncall"><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span><span class="keyword">(</span><span class="argument">file.dir</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">make.default</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></div>
-<strong class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</strong>
+<strong class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong>
 <div class='input'><span class="symbol">prob</span> <span class="assignement">=</span> <span class="functioncall"><a href='ProblemAlgorithm.html'>addProblem</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="string">"prob1"</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">iris</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">job</span><span class="keyword">,</span> <span class="formalargs">data</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span><span class="keyword">(</span><span class="symbol">data</span><span class="keyword">)</span><span class="keyword">)</span>
 <span class="symbol">prob</span> <span class="assignement">=</span> <span class="functioncall"><a href='ProblemAlgorithm.html'>addProblem</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="string">"prob2"</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">Titanic</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">job</span><span class="keyword">,</span> <span class="formalargs">data</span><span class="keyword">)</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span><span class="keyword">(</span><span class="symbol">data</span><span class="keyword">)</span><span class="keyword">)</span>
 <span class="symbol">algo</span> <span class="assignement">=</span> <span class="functioncall"><a href='ProblemAlgorithm.html'>addAlgorithm</a></span><span class="keyword">(</span><span class="argument">reg</span> <span class="argument">=</span> <span class="symbol">tmp</span><span class="keyword">,</span> <span class="string">"algo"</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">job</span><span class="keyword">,</span> <span class="formalargs">data</span><span class="keyword">,</span> <span class="formalargs">instance</span><span class="keyword">,</span> <span class="formalargs">i</span><span class="keyword">,</span> <span class="formalargs">...</span><span class="keyword">)</span> <span class="symbol">problem</span><span class="keyword">)</span>
@@ -168,43 +168,43 @@ computational job.</p>
 <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/print'>print</a></span><span class="keyword">(</span><span class="symbol">chunked</span><span class="keyword">)</span></div>
 <div class='output'>    job.id chunk
  1:      1     1
- 2:      2     1
+ 2:      2     2
  3:      3     1
  4:      4     1
  5:      5     2
  6:      6     2
- 7:      7     2
- 8:      8     2
+ 7:      7     1
+ 8:      8     1
  9:      9     2
 10:     10     3
-11:     11     3
-12:     12     4
-13:     13     4
+11:     11     4
+12:     12     5
+13:     13     5
 14:     14     5
-15:     15     6
-16:     16     3
-17:     17     5
-18:     18     5
-19:     19     4
+15:     15     4
+16:     16     6
+17:     17     3
+18:     18     6
+19:     19     3
 20:     20     6
 21:     21     3
-22:     22     5
-23:     23     4
-24:     24     5
-25:     25     6
+22:     22     4
+23:     23     3
+24:     24     6
+25:     25     4
 26:     26     6
-27:     27     6
+27:     27     5
     job.id chunk
 </div>
 <div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/data.table/topics/dcast.data.table'>dcast</a></span><span class="keyword">(</span><span class="functioncall"><a href='JoinTables.html'>ijoin</a></span><span class="keyword">(</span><span class="symbol">ids</span><span class="keyword">,</span> <span class="symbol">chunked</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">chunk</span> <span class="keyword">~</span> <span class="symbol">problem</span><span class="keyword">)</span></div>
 <strong class='message'>Using &#39;chunk&#39; as value column. Use &#39;value.var&#39; to override</strong>
 <strong class='message'>Aggregate function missing, defaulting to &#39;length&#39;</strong>
 <div class='output'>   chunk prob1 prob2
-1:     1     4     0
-2:     2     5     0
-3:     3     0     4
+1:     1     5     0
+2:     2     4     0
+3:     3     0     5
 4:     4     0     4
-5:     5     0     5
+5:     5     0     4
 6:     6     0     5
 </div></pre>
   </div>
