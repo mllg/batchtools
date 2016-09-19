@@ -71,7 +71,7 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
     seed = asCount(seed, positive = TRUE)
 
   prob = setClasses(list(name = name, seed = seed, data = data, fun = fun), "Problem")
-  writeRDS(prob, file = file.path(reg$file.dir, "problems", sprintf("%s.rds", name)))
+  writeRDS(prob, file = file.path(reg$file.dir, "problems", sprintf("%s.rds", digest(name))))
   reg$defs$problem = addlevel(reg$defs$problem, name)
   saveRegistry(reg)
   invisible(prob)
@@ -84,13 +84,12 @@ removeProblem = function(name, reg = getDefaultRegistry()) {
   assertString(name)
   assertSubset(name, levels(reg$defs$problem))
 
-  fn = file.path(reg$file.dir, "problems", sprintf("%s.rds", name))
   problem = NULL
   def.ids = reg$defs[problem == name, "def.id", with = FALSE]
   job.ids = filter(def.ids, reg$status, "job.id")
 
   info("Removing Problem '%s' and %i corresponding jobs ...", name, nrow(job.ids))
-  file.remove(fn)
+  file.remove(file.path(reg$file.dir, "problems", sprintf("%s.rds", digest(name))))
   reg$defs = reg$defs[!def.ids]
   reg$status = reg$status[!job.ids]
   reg$defs$problem = rmlevel(reg$defs$problem, name)
@@ -119,7 +118,7 @@ addAlgorithm = function(name, fun = NULL, reg = getDefaultRegistry())  {
   }
 
   algo = setClasses(list(fun = fun, name = name), "Algorithm")
-  writeRDS(algo, file = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", name)))
+  writeRDS(algo, file = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", digest(name))))
   reg$defs$algorithm = addlevel(reg$defs$algorithm, name)
   saveRegistry(reg)
   invisible(algo)
@@ -132,13 +131,12 @@ removeAlgorithm = function(name, reg = getDefaultRegistry()) {
   assertString(name)
   assertSubset(name, levels(reg$defs$algorithm))
 
-  fn = file.path(reg$file.dir, "algorithms", sprintf("%s.rds", name))
   algorithm = NULL
   def.ids = reg$defs[algorithm == name, "def.id", with = FALSE]
   job.ids = filter(def.ids, reg$status, "job.id")
 
   info("Removing Algorithm '%s' and %i corresponding jobs ...", name, nrow(job.ids))
-  file.remove(fn)
+  file.remove(file.path(reg$file.dir, "algorithms", sprintf("%s.rds", digest(name))))
   reg$defs = reg$defs[!def.ids]
   reg$status = reg$status[!job.ids]
   reg$defs$algorithm = rmlevel(reg$defs$algorithm, name)

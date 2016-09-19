@@ -1,3 +1,30 @@
+Cache = R6Class("Cache",
+  cloneable = FALSE,
+  public = list(
+    cache = list(),
+    file.dir = NA_character_,
+    initialize = function(file.dir) {
+      self$file.dir = file.dir
+    },
+
+    get = function(id) {
+      if (is.null(self$cache[[id]])) {
+        path = file.path(self$file.dir, sprintf("%s.rds", id))
+        self$cache[[id]] = list(id = id, obj = if (file.exists(path)) readRDS(path) else NULL)
+      }
+      return(self$cache[[id]]$obj)
+    },
+
+    experiment_get = function(id, subdir, slot = id) {
+      if (is.null(self$cache[[slot]]) || self$cache[[slot]]$id != id) {
+        path = file.path(self$file.dir, subdir, sprintf("%s.rds", digest(id)))
+        self$cache[[slot]] = list(id = id, obj = if (file.exists(path)) readRDS(path) else NULL)
+      }
+      return(self$cache[[slot]]$obj)
+    }
+  )
+)
+
 Job = R6Class("Job",
   cloneable = FALSE,
   public = list(
@@ -44,8 +71,8 @@ Experiment = R6Class("Experiment",
     allow.access.to.instance = TRUE
   ),
   active = list(
-    problem = function() self$cache$get(id = "..problem..", file.path("problems", self$prob.name)),
-    algorithm = function() self$cache$get(file.path("algorithms", self$algo.name)),
+    problem = function() self$cache$experiment_get(id = self$prob.name, subdir = "problems", slot = "..problem.."),
+    algorithm = function() self$cache$experiment_get(id = self$algo.name, subdir = "algorithms"),
     instance = function() {
       if (!self$allow.access.to.instance)
         stop("You cannot access 'job$instance' in the problem generation or algorithm function")
