@@ -40,7 +40,7 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
     fn.tmpl = system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE)
 
     writeRDS(makeJobCollection(id, reg = reg), file = fn.jc, wait = TRUE)
-    brew::brew(file = fn.tmpl, output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))
+    brew(file = fn.tmpl, output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))
     res = runOSCommand(Rscript(), fn.r)
 
     writeLines(res$output)

@@ -184,7 +184,7 @@ cfBrewTemplate = function(reg, text, jc) {
   parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
 
-  z = try(brew::brew(text = text, output = outfile, envir = jc), silent = TRUE)
+  z = try(brew(text = text, output = outfile, envir = jc), silent = TRUE)
   if (is.error(z))
     stopf("Error brewing template: %s", as.character(z))
   return(outfile)

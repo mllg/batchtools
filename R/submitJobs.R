@@ -140,7 +140,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   assertFlag(resources$measure.memory, null.ok = TRUE)
   assertFlag(resources$chunks.as.arrayjobs, null.ok = TRUE)
 
-  res.hash = digest::digest(resources)
+  res.hash = digest(resources)
   resource.hash = NULL
   res.id = reg$resources[resource.hash == res.hash, "resource.id", with = FALSE]$resource.id
   if (length(res.id) == 0L) {

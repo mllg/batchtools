@@ -19,6 +19,8 @@
 #' @import stringi
 #' @import backports
 #' @importFrom R6 R6Class
+#' @importFrom digest digest
+#' @importFrom brew brew
 #' @importFrom progress progress_bar
 #' @importFrom rappdirs user_config_dir
 #' @importFrom stats runif

@@ -113,7 +113,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
         algorithm = an)
 
       # create hash of each row of tab
-      tab$pars.hash = unlist(.mapply(function(...) digest::digest(list(...)), tab, list()))
+      tab$pars.hash = unlist(.mapply(function(...) digest(list(...)), tab, list()))
 
       # merge with already defined experiments to get def.ids
       tab = merge(reg$defs[, !c("pars", "problem", "algorithm"), with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)

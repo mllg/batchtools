@@ -86,7 +86,7 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
     def.id = ids,
     pars   = .mapply(list, dots = ddd, MoreArgs = list()),
     key    = "def.id")
-  reg$defs$pars.hash = vcapply(reg$defs$pars, digest::digest)
+  reg$defs$pars.hash = vcapply(reg$defs$pars, digest)
 
   reg$status = data.table(
     job.id      = ids,
