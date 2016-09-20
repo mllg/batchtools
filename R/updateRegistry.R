@@ -1,5 +1,3 @@
-#' @export
-#' @keywords internal
 updateRegistry = function(reg = getDefaultRegistry()) {
   if (!is.data.table(reg$tags))
     reg$tags = data.table( job.id = integer(0L), tag = character(0L), key = "job.id")
