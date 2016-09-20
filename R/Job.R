@@ -7,7 +7,7 @@ Cache = R6Class("Cache",
       self$file.dir = file.dir
     },
 
-    get = function(id) {
+    sget = function(id) { # simple get w/o slots and subdirs
       if (is.null(self$cache[[id]])) {
         path = file.path(self$file.dir, sprintf("%s.rds", id))
         self$cache[[id]] = list(id = id, obj = if (file.exists(path)) readRDS(path) else NULL)
@@ -15,7 +15,7 @@ Cache = R6Class("Cache",
       return(self$cache[[id]]$obj)
     },
 
-    experiment_get = function(id, subdir, slot = id) {
+    get = function(id, subdir, slot = id) {
       if (is.null(self$cache[[slot]]) || self$cache[[slot]]$id != id) {
         path = file.path(self$file.dir, subdir, sprintf("%s_%s.rds", id, digest(id)))
         self$cache[[slot]] = list(id = id, obj = if (file.exists(path)) readRDS(path) else NULL)
@@ -42,8 +42,8 @@ Job = R6Class("Job",
     cache = NULL
   ),
   active = list(
-    pars = function() c(self$job.pars, self$cache$get("more.args")),
-    fun = function() self$cache$get("user.function")
+    pars = function() c(self$job.pars, self$cache$sget("more.args")),
+    fun = function() self$cache$sget("user.function")
   )
 )
 
@@ -71,8 +71,8 @@ Experiment = R6Class("Experiment",
     allow.access.to.instance = TRUE
   ),
   active = list(
-    problem = function() self$cache$experiment_get(id = self$prob.name, subdir = "problems", slot = "..problem.."),
-    algorithm = function() self$cache$experiment_get(id = self$algo.name, subdir = "algorithms"),
+    problem = function() self$cache$get(id = self$prob.name, subdir = "problems", slot = "..problem.."),
+    algorithm = function() self$cache$get(id = self$algo.name, subdir = "algorithms"),
     instance = function() {
       if (!self$allow.access.to.instance)
         stop("You cannot access 'job$instance' in the problem generation or algorithm function")
