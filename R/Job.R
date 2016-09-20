@@ -17,7 +17,7 @@ Cache = R6Class("Cache",
 
     experiment_get = function(id, subdir, slot = id) {
       if (is.null(self$cache[[slot]]) || self$cache[[slot]]$id != id) {
-        path = file.path(self$file.dir, subdir, sprintf("%s.rds", digest(id)))
+        path = file.path(self$file.dir, subdir, sprintf("%s_%s.rds", id, digest(id)))
         self$cache[[slot]] = list(id = id, obj = if (file.exists(path)) readRDS(path) else NULL)
       }
       return(self$cache[[slot]]$obj)
