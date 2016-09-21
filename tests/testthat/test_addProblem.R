@@ -24,7 +24,7 @@ test_that("addProblem", {
   ids = addExperiments(prob.designs, algo.designs, repls = 2, reg = reg)
   expect_integer(ids$job.id, len = 4L)
 
-  removeProblem(reg = reg, "p1")
+  removeProblems(reg = reg, "p1")
   expect_integer(reg$status$job.id, len = 2L)
   expect_set_equal(levels(reg$defs$problem), "p2")
   expect_set_equal(getProblemIds(reg), "p2")

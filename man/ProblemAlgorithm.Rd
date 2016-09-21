@@ -8,20 +8,20 @@
 \alias{addProblem}
 \alias{getAlgorithmIds}
 \alias{getProblemIds}
-\alias{removeAlgorithm}
-\alias{removeProblem}
+\alias{removeAlgorithms}
+\alias{removeProblems}
 \title{Define Problems and Algorithms for Experiments}
 \usage{
 addProblem(name, data = NULL, fun = NULL, seed = NULL,
   reg = getDefaultRegistry())
 
-removeProblem(name, reg = getDefaultRegistry())
+removeProblems(name, reg = getDefaultRegistry())
 
 getProblemIds(reg = getDefaultRegistry())
 
 addAlgorithm(name, fun = NULL, reg = getDefaultRegistry())
 
-removeAlgorithm(name, reg = getDefaultRegistry())
+removeAlgorithms(name, reg = getDefaultRegistry())
 
 getAlgorithmIds(reg = getDefaultRegistry())
 }
@@ -85,7 +85,7 @@ getProblemIds(reg = tmp)
 addAlgorithm("a1", fun = function(job, data, instance) instance, reg = tmp)
 getAlgorithmIds(reg = tmp)
 
-removeAlgorithm("a1", reg = tmp)
+removeAlgorithms("a1", reg = tmp)
 getAlgorithmIds(reg = tmp)
 }
 

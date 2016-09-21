@@ -55,7 +55,7 @@
 #' addAlgorithm("a1", fun = function(job, data, instance) instance, reg = tmp)
 #' getAlgorithmIds(reg = tmp)
 #'
-#' removeAlgorithm("a1", reg = tmp)
+#' removeAlgorithms("a1", reg = tmp)
 #' getAlgorithmIds(reg = tmp)
 addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
@@ -79,20 +79,23 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
 
 #' @export
 #' @rdname ProblemAlgorithm
-removeProblem = function(name, reg = getDefaultRegistry()) {
+removeProblems = function(name, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE, running.ok = FALSE)
-  assertString(name)
+  assertCharacter(name, any.missing = FALSE)
   assertSubset(name, levels(reg$defs$problem))
 
   problem = NULL
-  def.ids = reg$defs[problem == name, "def.id", with = FALSE]
-  job.ids = filter(def.ids, reg$status, "job.id")
+  for (nn in name) {
+    def.ids = reg$defs[problem == nn, "def.id", with = FALSE]
+    job.ids = filter(def.ids, reg$status, "job.id")
 
-  info("Removing Problem '%s' and %i corresponding jobs ...", name, nrow(job.ids))
-  file.remove(getProblemURI(reg, name))
-  reg$defs = reg$defs[!def.ids]
-  reg$status = reg$status[!job.ids]
-  reg$defs$problem = rmlevel(reg$defs$problem, name)
+    info("Removing Problem '%s' and %i corresponding jobs ...", nn, nrow(job.ids))
+    file.remove(getProblemURI(reg, nn))
+    reg$defs = reg$defs[!def.ids]
+    reg$status = reg$status[!job.ids]
+    reg$defs$problem = rmlevel(reg$defs$problem, nn)
+  }
+
   sweepRegistry(reg)
   invisible(TRUE)
 }
@@ -130,20 +133,23 @@ addAlgorithm = function(name, fun = NULL, reg = getDefaultRegistry())  {
 
 #' @export
 #' @rdname ProblemAlgorithm
-removeAlgorithm = function(name, reg = getDefaultRegistry()) {
+removeAlgorithms = function(name, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE, running.ok = FALSE)
-  assertString(name)
+  assertCharacter(name, any.missing = FALSE)
   assertSubset(name, levels(reg$defs$algorithm))
 
   algorithm = NULL
-  def.ids = reg$defs[algorithm == name, "def.id", with = FALSE]
-  job.ids = filter(def.ids, reg$status, "job.id")
+  for (nn in name) {
+    def.ids = reg$defs[algorithm == nn, "def.id", with = FALSE]
+    job.ids = filter(def.ids, reg$status, "job.id")
 
-  info("Removing Algorithm '%s' and %i corresponding jobs ...", name, nrow(job.ids))
-  file.remove(getAlgorithmURI(reg, name))
-  reg$defs = reg$defs[!def.ids]
-  reg$status = reg$status[!job.ids]
-  reg$defs$algorithm = rmlevel(reg$defs$algorithm, name)
+    info("Removing Algorithm '%s' and %i corresponding jobs ...", nn, nrow(job.ids))
+    file.remove(getAlgorithmURI(reg, nn))
+    reg$defs = reg$defs[!def.ids]
+    reg$status = reg$status[!job.ids]
+    reg$defs$algorithm = rmlevel(reg$defs$algorithm, nn)
+  }
+
   sweepRegistry(reg)
   invisible(TRUE)
 }

@@ -13,7 +13,7 @@ test_that("addAlgorithm", {
   ids = addExperiments(list(p1 = data.table()), algo.designs = list(a1 = data.table(), a2 = data.table()), repls = 2, reg = reg)
   expect_integer(ids$job.id, len = 4L)
 
-  removeAlgorithm(reg = reg, "a1")
+  removeAlgorithms(reg = reg, "a1")
   expect_integer(reg$status$job.id, len = 2L)
   expect_set_equal(levels(reg$defs$algorithm), "a2")
   expect_set_equal(getAlgorithmIds(reg), "a2")
