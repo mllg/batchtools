@@ -30,8 +30,6 @@ Multicore = R6Class("Multicore",
     ncpus = NA_integer_,
 
     initialize = function(ncpus) {
-      if (packageVersion("data.table") > "1.9.6")
-        setthreads(1L) # FIXME: reset threads
       self$jobs = data.table(pid = integer(0L), count = integer(0L))
       self$ncpus = ncpus
       reg.finalizer(self, function(e) mccollect(self$procs$pid, timeout = 1), onexit = FALSE)

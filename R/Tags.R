@@ -44,7 +44,7 @@ addJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
   assertCharacter(tags, any.missing = FALSE, pattern = "^[[:alnum:]_.]+$", min.len = 1L)
 
   for (cur in tags) {
-    ids[, "tag" := cur, with = FALSE]
+    ids[, ("tag") := cur]
     reg$tags = rbind(reg$tags, ids)
   }
   reg$tags = setkeyv(unique(reg$tags, by = NULL), "job.id")

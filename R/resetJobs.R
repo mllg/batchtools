@@ -18,7 +18,8 @@ resetJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids, default = noIds())
 
   info("Resetting %i jobs in DB.", nrow(ids))
-  reg$status[ids, c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash") := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_), with = FALSE]
+  cols = c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash")
+  reg$status[ids, (cols) := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_)]
 
   sweepRegistry(reg)
   invisible(ids)

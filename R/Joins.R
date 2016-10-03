@@ -131,7 +131,7 @@ ujoin = function(x, y, all.y = FALSE, by = NULL) {
     cn = intersect(names(x), cn)
   if (length(cn) == 0L)
     return(x)
-  setKey(x[y, cn := mget(sprintf("i.%s", cn)), on = "job.id", nomatch = 0L, with = FALSE], by)
+  setKey(x[y, (cn) := mget(sprintf("i.%s", cn)), on = "job.id"], by)
 }
 
 guessBy = function(x, y, by = NULL) {

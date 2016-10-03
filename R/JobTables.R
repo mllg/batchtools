@@ -120,7 +120,7 @@ getJobPars.Registry = function(ids = NULL, flatten = NULL, prefix = FALSE, reg =
         setnames(new.cols, names(new.cols), stri_join("par.", names(new.cols)))
       tab[, names(new.cols) := new.cols]
     }
-    tab[, "pars" := NULL, with = FALSE]
+    tab[, ("pars") := NULL]
   }
 
   setkeyv(tab, "job.id")[]
