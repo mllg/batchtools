@@ -20,8 +20,8 @@ suppressAll = function (expr) {
 
 checkTables = function(reg, ...) {
   if (class(reg)[1L] == "Registry") {
-    cols = c("def.id", "pars", "pars.hash")
-    types = c("integer", "list", "character")
+    cols = c("def.id", "pars")
+    types = c("integer", "list")
   } else {
     cols = c("def.id", "pars", "problem", "algorithm", "pars.hash")
     types = c("integer", "list", "factor", "factor", "character")
