@@ -1,6 +1,6 @@
 # batchtools
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/batchtools)](http://cran.r-project.org/package=batchtools)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/batchtools)](https://cran.r-project.org/package=batchtools)
 [![Build Status](https://travis-ci.org/mllg/batchtools.svg?branch=master)](https://travis-ci.org/mllg/batchtools)
 [![Build status](https://ci.appveyor.com/api/projects/status/ypp14tiiqfhnv92k?svg=true)](https://ci.appveyor.com/project/mllg/batchtools/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/mllg/batchtools.svg)](https://coveralls.io/r/mllg/batchtools?branch=master)
@@ -11,7 +11,7 @@ Moreover, the package provides an abstraction mechanism to define large-scale co
 The development is still in beta.
 
 ## Installation
-Install via [devtools](http://cran.r-project.org/package=devtools):
+Install via [devtools](https://cran.r-project.org/package=devtools):
 ```{R}
 devtools::install_github("mllg/batchtools")
 ```
