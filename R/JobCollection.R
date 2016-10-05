@@ -44,15 +44,6 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
   UseMethod("makeJobCollection", reg)
 }
 
-getRandomHash = function(reg) {
-  job.hash = NULL
-  repeat {
-    hash = digest(list(runif(1L), Sys.time()))
-    if (reg$status[job.hash %in% hash, .N] == 0L)
-      return(hash)
-  }
-}
-
 createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()) {
   jc              = new.env(parent = emptyenv())
   jc$jobs         = setkeyv(jobs, "job.id")
@@ -60,7 +51,7 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$file.dir     = reg$file.dir
   jc$work.dir     = reg$work.dir
   jc$seed         = reg$seed
-  jc$job.hash     = getRandomHash(reg)
+  jc$job.hash     = digest(list(runif(1L), format(Sys.time(), "%H:%M%OS6")))
   jc$uri          = file.path(reg$file.dir, "jobs", sprintf("%s.rds", jc$job.hash))
   jc$log.file     = file.path(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
   jc$packages     = reg$packages

@@ -131,7 +131,9 @@ ujoin = function(x, y, all.y = FALSE, by = NULL) {
     cn = intersect(names(x), cn)
   if (length(cn) == 0L)
     return(x)
-  setKey(x[y, (cn) := mget(sprintf("i.%s", cn)), on = "job.id"], by)
+
+  expr = parse(text = stri_join("`:=`(", stri_join(sprintf("%1$s = i.%1$s", cn), collapse = ","), ")"))
+  setKey(x[y, eval(expr), on = "job.id"], by)
 }
 
 guessBy = function(x, y, by = NULL) {

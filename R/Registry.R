@@ -166,7 +166,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   if (is.na(file.dir))
     reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
-  for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs")))
+  for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "external")))
     dir.create(d, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)
 
@@ -477,8 +477,8 @@ syncRegistry = function(reg = getDefaultRegistry()) {
   updates = rbindlist(updates)
 
   if (nrow(updates) > 0L) {
-    cols = c("started", "done", "error", "memory")
-    reg$status[updates, (cols) := mget(sprintf("i.%s", cols)), on = "job.id"]
+    expr = quote(`:=`(started = i.started, done = i.done, error = i.error, memory = i.memory))
+    reg$status[updates, eval(expr), on = "job.id"]
     saveRegistry(reg)
     unlink(fns[!failed])
   }

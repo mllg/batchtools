@@ -90,7 +90,7 @@ getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = get
   tab = merge(filter(reg$status, ids, c("job.id", "resource.id")), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", "resources"), with = FALSE]
   if (flatten %??% qtestr(tab$resources, c("v", "0"), depth = 2L)) {
     tab = rbindlist(.mapply(function(job.id, resources) c(list(job.id = job.id), resources), tab, list()), fill = TRUE)
-    if (prefix && nrow(tab) >= 2L) {
+    if (prefix && ncol(tab) >= 2L) {
       nn = setdiff(names(tab), "job.id")
       setnames(tab, nn, stri_join("res.", nn))
     }
