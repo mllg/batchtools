@@ -14,10 +14,10 @@
 #'     Set to \code{TRUE} to switch to debug mode.
 #'   }
 #' }
+#' @import backports
 #' @import checkmate
 #' @import data.table
 #' @import stringi
-#' @import backports
 #' @importFrom R6 R6Class
 #' @importFrom digest digest
 #' @importFrom brew brew

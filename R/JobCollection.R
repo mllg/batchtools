@@ -45,10 +45,10 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
 }
 
 getRandomHash = function(reg) {
-  reserved = reg$status[!is.na(job.hash), get("job.hash")]
+  job.hash = NULL
   repeat {
     hash = digest(list(runif(1L), Sys.time()))
-    if (hash %nin% reserved)
+    if (reg$status[job.hash %in% hash, .N] == 0L)
       return(hash)
   }
 }

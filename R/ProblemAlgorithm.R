@@ -108,7 +108,7 @@ getProblemIds = function(reg = getDefaultRegistry()) {
 }
 
 getProblemURI = function(reg, name) {
-  file.path(reg$file.dir, "problems", sprintf("%s_%s.rds", name, digest(name)))
+  file.path(reg$file.dir, "problems", sprintf("%s.rds", digest(name)))
 }
 
 #' @rdname ProblemAlgorithm
@@ -162,5 +162,5 @@ getAlgorithmIds = function(reg = getDefaultRegistry()) {
 }
 
 getAlgorithmURI = function(reg, name) {
-  file.path(reg$file.dir, "algorithms", sprintf("%s_%s.rds", name, digest(name)))
+  file.path(reg$file.dir, "algorithms", sprintf("%s.rds", digest(name)))
 }
