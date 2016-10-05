@@ -60,6 +60,16 @@
 #' summarizeExperiments(reg = tmp)
 #' getJobPars(reg = tmp)
 addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, combine = "crossprod", reg = getDefaultRegistry()) {
+  convertDesigns = function(type, designs, keywords) {
+    Map(function(id, design) {
+      design = as.data.table(design)
+      i = wf(keywords %in% names(design))
+      if (length(i) > 0L)
+        stopf("%s design %s contains reserved keyword '%s'", type, id, keywords[i])
+      design
+    }, id = names(designs), design = designs)
+  }
+
   assertExperimentRegistry(reg, writeable = TRUE)
   if (is.null(prob.designs)) {
     probs = levels(reg$defs$problem)
@@ -68,7 +78,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
   } else {
     assertList(prob.designs, types = "data.frame", names = "named")
     assertSubset(names(prob.designs), levels(reg$defs$problem))
-    prob.designs = lapply(prob.designs, as.data.table)
+    prob.designs = convertDesigns("Problem", prob.designs, c("job", "data"))
   }
   if (is.null(algo.designs)) {
     algos = levels(reg$defs$algorithm)
@@ -77,7 +87,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
   } else {
     assertList(algo.designs, types = "data.frame", names = "named")
     assertSubset(names(algo.designs), levels(reg$defs$algorithm))
-    algo.designs = lapply(algo.designs, as.data.table)
+    algo.designs = convertDesigns("Algorithm", algo.designs, c("job", "data", "instance"))
   }
   repls = asCount(repls)
   assertChoice(combine, c("crossprod", "bind"))

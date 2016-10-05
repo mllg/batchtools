@@ -57,3 +57,34 @@ test_that("Experiment", {
   expect_is(job$algorithm, "Algorithm")
   expect_identical(job$instance, list(data = NULL, i = 1L))
 })
+
+test_that("External directory is created", {
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  addProblem(reg = reg, "p1", fun = function(job, data, ...) list(data = data, ...))
+  addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) job$external.dir)
+  ids = addExperiments(list(p1 = data.table(i = 1:3)), list(a1 = data.table()), reg = reg)
+
+  silent({
+    submitJobs(reg = reg, ids = chunkIds(ids = c(1, 3), n.chunks = 1, reg = reg))
+    waitForJobs(reg = reg)
+  })
+
+  paths = reduceResultsList(1:3, reg = reg)
+  expect_directory_exists(paths[[1]])
+  expect_true(dir.exists(file.path(reg$file.dir, "external", "1")))
+  expect_null(paths[[2]])
+  expect_false(dir.exists(file.path(reg$file.dir, "external", "2")))
+  expect_directory_exists(paths[[3]])
+  expect_true(dir.exists(file.path(reg$file.dir, "external", "3")))
+  expect_equal(reduceResultsList(1:3, fun = function(job, ...) job$external.dir, reg = reg), paths)
+
+
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  fun = function(..., .job) .job$external.dir
+  ids = batchMap(fun, i = 1:3, reg = reg, more.args = list(x = 1))
+  silent({
+    submitJobs(reg = reg, ids = chunkIds(n.chunks = 1, reg = reg))
+    waitForJobs(reg = reg)
+  })
+  expect_directory_exists(reduceResultsDataTable(1:3, reg = reg)[[2]])
+})

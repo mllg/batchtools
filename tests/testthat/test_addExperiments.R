@@ -48,6 +48,9 @@ test_that("addExperiments / user provided designs", {
   expect_equal(pars$a, rep(1L, 9))
   expect_equal(pars$b, rep(2:4, 3))
   expect_equal(pars$c, c(3:8, rep(NA, 3)))
+
+  expect_error(addExperiments(reg = reg, prob.designs = list(p1 = data.table(job = 2))), "reserved keyword 'job'")
+  expect_error(addExperiments(reg = reg, algo.designs = list(a2 = data.table(instance = "foo"))), "reserved keyword 'instance'")
 })
 
 if (FALSE) {

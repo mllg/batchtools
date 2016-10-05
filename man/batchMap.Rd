@@ -9,7 +9,10 @@ batchMap(fun, ..., args = list(), more.args = list(),
 }
 \arguments{
 \item{fun}{[\code{function}]\cr
-Function to map over arguments provided via \code{...}.}
+Function to map over arguments provided via \code{...}.
+Parameters given via \code{args} or \code{...} are passed as-is, in the respective order and possibly named.
+If the function has the named formal argument \dQuote{.job}, the \code{\link{Job}} is passed to the function
+on the slave.}
 
 \item{...}{[any]\cr
 Arguments to vectorize over (list or vector).

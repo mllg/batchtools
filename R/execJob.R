@@ -32,7 +32,11 @@ execJob.JobCollection = function(job) {
 
 #' @export
 execJob.Job = function(job) {
-  with_seed(job$seed, do.call(job$fun, job$pars, envir = .GlobalEnv))
+  if (".job" %in% names(formals(job$fun))) {
+    with_seed(job$seed, do.call(job$fun, c(job$pars, list(.job = job)), envir = .GlobalEnv))
+  } else {
+    with_seed(job$seed, do.call(job$fun, job$pars, envir = .GlobalEnv))
+  }
 }
 
 #' @export

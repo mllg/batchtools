@@ -322,7 +322,6 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   if (length(i) > 0L) {
     info("Removing %i obsolete result files", length(i))
     file.remove(file.path(reg$file.dir, "results", result.files[i]))
-    store = TRUE
   }
 
   log.files = list.files(file.path(reg$file.dir, "logs"), pattern = "\\.log$")
@@ -330,7 +329,6 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   if (length(i) > 0L) {
     info("Removing %i obsolete log files", length(i))
     file.remove(file.path(reg$file.dir, "logs", log.files[i]))
-    store = TRUE
   }
 
   job.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.rds$")
@@ -338,14 +336,19 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   if (length(i) > 0L) {
     info("Removing %i obsolete job files", length(i))
     file.remove(file.path(reg$file.dir, "jobs", job.files[i]))
-    store = TRUE
   }
 
   job.desc.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.job$")
   if (length(job.desc.files) > 0L) {
     info("Removing %i job description files", length(i))
     file.remove(file.path(reg$file.dir, "jobs", job.desc.files))
-    store = TRUE
+  }
+
+  external.dirs = list.files(file.path(reg$file.dir, "external"), pattern = "^[0-9]+$")
+  i = which(as.integer(external.dirs) %nin% .findSubmitted(reg = reg)$job.id)
+  if (length(i) > 0L) {
+    info("Removing %i external directories of unsubmitted jobs", length(i))
+    unlink(file.path(reg$file.dir, "external", external.dirs[i]), recursive = TRUE)
   }
 
   i = reg$resources[!reg$status, on = "resource.id", which = TRUE]

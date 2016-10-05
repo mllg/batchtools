@@ -11,6 +11,9 @@
 #'
 #' @param fun [\code{function}]\cr
 #'   Function to map over arguments provided via \code{...}.
+#'   Parameters given via \code{args} or \code{...} are passed as-is, in the respective order and possibly named.
+#'   If the function has the named formal argument \dQuote{.job}, the \code{\link{Job}} is passed to the function
+#'   on the slave.
 #' @param ... [any]\cr
 #'   Arguments to vectorize over (list or vector).
 #'   Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the longest length).
@@ -72,6 +75,9 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
   } else {
     ddd = list2dt(list(...))
   }
+
+  if (".job" %in% names(ddd))
+    stop("Name '.job' not allowed as parameter name (reserved keyword)")
 
   if (any(dim(ddd) == 0L))
     return(noIds())
