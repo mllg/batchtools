@@ -44,7 +44,9 @@ To make your cluster function selection permanent for a specific system across R
 Many cluster functions require a template file as argument.
 These templates are used to communicate with the scheduler and contain placeholders to evaluate arbitrary R expressions.
 Internally, the [brew package](https://cran.r-project.org/package=brew) is used for this purpose.
-Some exemplary template files can be found [here](https://github.com/mllg/batchtools/tree/master/inst/templates). It would be great if you would help growing this collection to cover more corner cases for exotic configurations. To do so, please send your template via [mail](mailto:michellang@gmail.com) or open a new pull request.
+Some exemplary template files can be found [here](https://github.com/mllg/batchtools/tree/master/inst/templates).
+It would be great if you would help expand this collection to cover more exotic configurations.
+To do so, please send your template via [mail](mailto:michellang@gmail.com) or open a new pull request.
 
 All variables defined in a [JobCollection](https://mllg.github.io/batchtools/JobCollection) can be used inside the template.
 If you need to pass extra variables, you can set them via the argument `resources` of [submitJobs](https://mllg.github.io/batchtools/submitJobs).
