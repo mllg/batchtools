@@ -315,10 +315,11 @@ saveRegistry = function(reg = getDefaultRegistry()) {
 #' @rdname Registry
 #' @export
 sweepRegistry = function(reg = getDefaultRegistry()) {
+  assertRegistry(reg, sync = TRUE, writeable = TRUE)
   store = FALSE
 
   result.files = list.files(file.path(reg$file.dir, "results"), pattern = "\\.rds$")
-  i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% .findDone(reg = reg)$job.id)
+  i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% .findSubmitted(reg = reg)$job.id)
   if (length(i) > 0L) {
     info("Removing %i obsolete result files", length(i))
     file.remove(file.path(reg$file.dir, "results", result.files[i]))
