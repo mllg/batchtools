@@ -1,6 +1,4 @@
-# batchtools v0.1
-
-Initial release on CRAN.
+# batchtools 0.1
 
 The packages [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) have been merged for the following reasons:
 * The packages are tightly connected which makes maintaining difficult, because the changes have to be synchronized and tested against the current CRAN versions for compatibility.

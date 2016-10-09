@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Home. batchtools</title>
+<title>summarizeExperiments. batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -21,8 +21,8 @@
 
 
 <!-- pkgdown -->
-<link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
 <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -45,21 +45,21 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">batchtools</a>
+      <a class="navbar-brand" href="../index.html">batchtools</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
+  <a href="../index.html">Home</a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="articles/index.html">Articles</a>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
-  <a href="news/index.html">News</a>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -76,27 +76,51 @@
       
       </header>
 
-      <div class="row">
+      <div class="page-header">
+  <h1>Quick Summary over Experiments</h1>
+</div>
+
+<div class="row">
   <div class="col-md-9">
     
-<h1 id="batchtools">batchtools</h1>
-<p><a href="https://cran.r-project.org/package=batchtools"><img src="http://www.r-pkg.org/badges/version/batchtools" alt="CRAN_Status_Badge"></a> <a href="https://travis-ci.org/mllg/batchtools"><img src="https://travis-ci.org/mllg/batchtools.svg?branch=master" alt="Build Status"></a> <a href="https://ci.appveyor.com/project/mllg/batchtools/branch/master"><img src="https://ci.appveyor.com/api/projects/status/ypp14tiiqfhnv92k?svg=true" alt="Build status"></a> <a href="https://coveralls.io/r/mllg/batchtools?branch=master"><img src="https://img.shields.io/coveralls/mllg/batchtools.svg" alt="Coverage Status"></a></p>
-<p>As a successor of the packages <a href="https://github.com/tudo-r/BatchJobs">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a>, batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Torque, or SGE. Moreover, the package provides an abstraction mechanism to define large-scale computer experiments in a well-organized and reproducible way.</p>
-<p>The development is still in beta.</p>
-<h2 id="installation">Installation</h2>
-<p>Install via <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
-<pre class="{r}"><code>devtools::install_github("mllg/batchtools")</code></pre>
-<h2 id="resources">Resources</h2>
-<ul>
-<li>
-<a href="https://github.com/mllg/batchtools/blob/master/NEWS.md">NEWS</a> including a comparison with <a href="https://github.com/tudo-r/BatchJobs">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a>
-</li>
-<li><a href="https://mllg.github.io/batchtools/vignettes/Setup">Setup</a></li>
-<li><a href="https://mllg.github.io/batchtools/">Documentation and Vignettes</a></li>
-<li><a href="https://mllg.github.io/batchtools/reference">Function reference</a></li>
-<li><a href="http://www.jstatsoft.org/v64/i11">Paper on BatchJobs/BatchExperiments</a></li>
-</ul>
+    <p>Returns a frequency table of defined experiments.
+See <code>ExperimentRegistry</code> for an example.</p>
+    
 
+    <pre><span class='fu'>summarizeExperiments</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"problem"</span>, <span class='st'>"algorithm"</span>),
+  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+    
+    <h2>Arguments</h2>
+    <dl class="dl-horizontal">
+      <dt>ids</dt>
+      <dd>[<code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
+with a column named &#8220;job.id&#8221;.
+Alternatively, you may also pass a vector of integerish job ids.
+If not set, defaults to all jobs.</dd>
+      <dt>by</dt>
+      <dd>[<code>character</code>]
+Split the resulting table by columns of <code>getJobPars</code>.</dd>
+      <dt>reg</dt>
+      <dd>[<code>ExperimentRegistry</code>]
+Registry. If not explicitly passed, uses the last created registry.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p>[<code>data.table</code>] of frequencies.</p>
+    </div>
+
+    <div class="See also">
+      <h2>See also</h2>
+
+      <p>Other Experiment: <code>ExperimentRegistry</code>,
+  <code>addExperiments</code>,
+  <code>removeExperiments</code></p>
+    </div>
+      </div>
+  <div class="col-md-3">
   </div>
 </div>
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Home. batchtools</title>
+<title>makeSubmitJobResult. batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -21,8 +21,8 @@
 
 
 <!-- pkgdown -->
-<link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
 <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -45,21 +45,21 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">batchtools</a>
+      <a class="navbar-brand" href="../index.html">batchtools</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
+  <a href="../index.html">Home</a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="articles/index.html">Articles</a>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
-  <a href="news/index.html">News</a>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -76,27 +76,57 @@
       
       </header>
 
-      <div class="row">
+      <div class="page-header">
+  <h1>Create a SubmitJobResult</h1>
+</div>
+
+<div class="row">
   <div class="col-md-9">
     
-<h1 id="batchtools">batchtools</h1>
-<p><a href="https://cran.r-project.org/package=batchtools"><img src="http://www.r-pkg.org/badges/version/batchtools" alt="CRAN_Status_Badge"></a> <a href="https://travis-ci.org/mllg/batchtools"><img src="https://travis-ci.org/mllg/batchtools.svg?branch=master" alt="Build Status"></a> <a href="https://ci.appveyor.com/project/mllg/batchtools/branch/master"><img src="https://ci.appveyor.com/api/projects/status/ypp14tiiqfhnv92k?svg=true" alt="Build status"></a> <a href="https://coveralls.io/r/mllg/batchtools?branch=master"><img src="https://img.shields.io/coveralls/mllg/batchtools.svg" alt="Coverage Status"></a></p>
-<p>As a successor of the packages <a href="https://github.com/tudo-r/BatchJobs">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a>, batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Torque, or SGE. Moreover, the package provides an abstraction mechanism to define large-scale computer experiments in a well-organized and reproducible way.</p>
-<p>The development is still in beta.</p>
-<h2 id="installation">Installation</h2>
-<p>Install via <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
-<pre class="{r}"><code>devtools::install_github("mllg/batchtools")</code></pre>
-<h2 id="resources">Resources</h2>
-<ul>
-<li>
-<a href="https://github.com/mllg/batchtools/blob/master/NEWS.md">NEWS</a> including a comparison with <a href="https://github.com/tudo-r/BatchJobs">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a>
-</li>
-<li><a href="https://mllg.github.io/batchtools/vignettes/Setup">Setup</a></li>
-<li><a href="https://mllg.github.io/batchtools/">Documentation and Vignettes</a></li>
-<li><a href="https://mllg.github.io/batchtools/reference">Function reference</a></li>
-<li><a href="http://www.jstatsoft.org/v64/i11">Paper on BatchJobs/BatchExperiments</a></li>
-</ul>
+    <p>This function is only intended for use in your own cluster functions implementation.</p>
 
+    <p>Use this function in your implementation of <code>makeClusterFunctions</code> to create a return
+value for the <code>submitJob</code> function.</p>
+    
+
+    <pre><span class='fu'>makeSubmitJobResult</span>(<span class='no'>status</span>, <span class='no'>batch.id</span>, <span class='kw'>msg</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>)</pre>
+    
+    <h2>Arguments</h2>
+    <dl class="dl-horizontal">
+      <dt>status</dt>
+      <dd>[<code>integer(1)</code>]
+Launch status of job. 0 means success, codes between 1 and 100 are temporary errors and any
+error greater than 100 is a permanent failure.</dd>
+      <dt>batch.id</dt>
+      <dd>[<code>character(1)</code>]
+Unique id of this job on batch system. Note that this is not the usual job id.
+Must be globally unique so that the job can be terminated using just this
+information.</dd>
+      <dt>msg</dt>
+      <dd>[<code>character(1)</code>]
+Optional error message in case <code>status</code> is not equal to 0. Default is &#8220;OK&#8221;,
+&#8220;TEMPERROR&#8221;, &#8220;ERROR&#8221;, depending on <code>status</code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p>[<code>SubmitJobResult</code>]. A list, containing
+  <code>status</code>, <code>batch.id</code> and <code>msg</code>.</p>
+    </div>
+
+    <div class="See also">
+      <h2>See also</h2>
+
+      <p>Other ClusterFunctionsHelper: <code>cfBrewTemplate</code>,
+  <code>cfHandleUnknownSubmitError</code>,
+  <code>cfKillJob</code>,
+  <code>cfReadBrewTemplate</code>,
+  <code>makeClusterFunctions</code>,
+  <code>runOSCommand</code></p>
+    </div>
+      </div>
+  <div class="col-md-3">
   </div>
 </div>
 
