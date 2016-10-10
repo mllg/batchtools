@@ -28,12 +28,22 @@ test_that("convertIds", {
   expect_equal(tab$job.id, 8:10)
   expect_copied(tab, reg$status)
 
-  expect_error(convertIds(reg, c(2, 2)), "Duplicated ids")
-
   tab = convertIds(reg, 10:8, keep.order = TRUE)
   expect_data_table(tab, ncol = 1, nrow = 3)
   expect_equal(tab$job.id, 10:8)
 
+  ids = findJobs(reg = reg)
+  ids$chunk = 9:1
+  tab = convertIds(reg, ids, keep.order = TRUE, keep.extra = "chunk")
+  expect_data_table(tab, ncol = 2, nrow = 9, key = "job.id") # keep index if possible
+
+  setorderv(ids, "chunk")
+  tab = convertIds(reg, ids, keep.order = TRUE, keep.extra = "chunk")
+  expect_data_table(tab, ncol = 2, nrow = 9)
+  expect_null(key(tab))
+  expect_equal(tab$job.id, setdiff(10:1, 3L))
+
+  expect_error(convertIds(reg, c(2, 2)), "Duplicated ids")
   expect_error(convertIds(reg, as.character(1:3)), "not recognized")
 
   # issue #40

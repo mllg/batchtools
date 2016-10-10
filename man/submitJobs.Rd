@@ -29,9 +29,12 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 \description{
 Submits defined jobs to the batch system.
 
-If an additional column \dQuote{chunk} is present in the table \code{ids},
+If an additional column \dQuote{chunk} is found in the table \code{ids},
 jobs will be grouped accordingly to be executed sequentially on the same slave.
-See \code{\link{chunkIds}} for more information.
+The utility function \code{\link{chunkIds}} can assist in grouping jobs.
+Jobs are submitted in the order of chunks, i.e. jobs which have chunk number
+\code{unique(ids$chunk)[1]} first, then jobs with chunk number \code{unique(ids$chunk)[2]}
+and so on. If no chunks are provided, jobs are submitted in the order of \code{ids$job.id}.
 
 After submitting the jobs, you can use \code{\link{waitForJobs}} to wait for the
 termination of jobs or call \code{\link{reduceResultsList}}/\code{\link{reduceResults}}

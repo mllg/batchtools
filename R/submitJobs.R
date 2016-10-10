@@ -3,9 +3,12 @@
 #' @description
 #' Submits defined jobs to the batch system.
 #'
-#' If an additional column \dQuote{chunk} is present in the table \code{ids},
+#' If an additional column \dQuote{chunk} is found in the table \code{ids},
 #' jobs will be grouped accordingly to be executed sequentially on the same slave.
-#' See \code{\link{chunkIds}} for more information.
+#' The utility function \code{\link{chunkIds}} can assist in grouping jobs.
+#' Jobs are submitted in the order of chunks, i.e. jobs which have chunk number
+#' \code{unique(ids$chunk)[1]} first, then jobs with chunk number \code{unique(ids$chunk)[2]}
+#' and so on. If no chunks are provided, jobs are submitted in the order of \code{ids$job.id}.
 #'
 #' After submitting the jobs, you can use \code{\link{waitForJobs}} to wait for the
 #' termination of jobs or call \code{\link{reduceResultsList}}/\code{\link{reduceResults}}
@@ -111,18 +114,28 @@
 submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, sync = TRUE)
   assertList(resources, names = "strict")
+  resources = insert(reg$default.resources, resources)
+  if (!is.null(resources$pm.backend))
+    assertChoice(resources$pm.backend, c("local", "multicore", "socket", "mpi"))
+  assertList(resources$pm.opts, names = "unique", null.ok = TRUE)
+  assertCount(resources$ncpus, positive = TRUE, null.ok = TRUE)
+  assertFlag(resources$measure.memory, null.ok = TRUE)
+  assertFlag(resources$chunks.as.arrayjobs, null.ok = TRUE)
 
-  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = c("job.id", "chunk"))
+  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk", keep.order = TRUE)
   if (nrow(ids) == 0L)
     return(noIds())
 
+  # handle chunks
   if (is.null(ids$chunk)) {
     chunks = ids$chunk = seq_row(ids)
   } else {
     assertInteger(ids$chunk, any.missing = FALSE)
-    chunks = sort(unique(ids$chunk))
+    chunks = unique(ids$chunk)
   }
+  setkeyv(ids, "job.id")
 
+  # check for jobs already on system
   on.sys = .findOnSystem(reg = reg)
   max.concurrent.jobs = NA_integer_
   if (on.sys[ids, .N, nomatch = 0L] > 0L)
@@ -132,14 +145,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
       max.concurrent.jobs = reg$max.concurrent.jobs
   }
 
-  resources = insert(reg$default.resources, resources)
-  if (!is.null(resources$pm.backend))
-    assertChoice(resources$pm.backend, c("local", "multicore", "socket", "mpi"))
-  assertList(resources$pm.opts, names = "unique", null.ok = TRUE)
-  assertCount(resources$ncpus, positive = TRUE, null.ok = TRUE)
-  assertFlag(resources$measure.memory, null.ok = TRUE)
-  assertFlag(resources$chunks.as.arrayjobs, null.ok = TRUE)
-
+  # handle resources
   res.hash = digest(resources)
   resource.hash = NULL
   res.id = reg$resources[resource.hash == res.hash, "resource.id", with = FALSE]$resource.id

@@ -113,7 +113,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   runHook(jc, "pre.do.collection", cache = cache)
 
   for (i in seq_len(n.jobs)) {
-    job = getJob(jc, jc$jobs$job.id[i], cache = cache)
+    job = getJob(jc, jc$jobs[i], cache = cache)
     id = job$id
 
     catf("### [bt %s]: Starting job [batchtools job.id=%i]", now(), id)
