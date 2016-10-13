@@ -83,11 +83,11 @@
 <div class="row">
   <div class="col-md-9">
     
-    <p><code>makeExperimentRegistry</code> constructs a special <code>Registry</code> which
+    <p><code>makeExperimentRegistry</code> constructs a special <code><a href='Registry.html'>Registry</a></code> which
 is suitable for the definition of large scale computer experiments.</p>
 
-    <p>Each experiments consists of a <code>Problem</code> and an <code>Algorithm</code>.
-These can be parametrized with <code>addExperiments</code> to actually define computational
+    <p>Each experiments consists of a <code><a href='ProblemAlgorithm.html'>Problem</a></code> and an <code><a href='ProblemAlgorithm.html'>Algorithm</a></code>.
+These can be parametrized with <code><a href='addExperiments.html'>addExperiments</a></code> to actually define computational
 jobs.</p>
     
 
@@ -106,7 +106,7 @@ jobs.</p>
   (i.e., starting with &#8220;~&#8221;). Note that some templates do not handle relative paths well.
 
   If you pass <code>NA</code>, a temporary directory will be used.
-  This way, you can create disposable registries for <code>btlapply</code> or examples.
+  This way, you can create disposable registries for <code><a href='btlapply.html'>btlapply</a></code> or examples.
   By default, the temporary directory <code><a href='http://www.rdocumentation.org/packages/tempfile/topics/base'>tempdir</a>()</code> will be used.
   If you want to use another directory, e.g. a directory which is shared between nodes,
   you can set it in your configuration file by setting the variable <code>temp.dir</code>.</dd>
@@ -172,32 +172,32 @@ Default is <code>TRUE</code>.</dd>
     <div class="See also">
       <h2>See also</h2>
 
-      <p>Other Experiment: <code>addExperiments</code>,
-  <code>removeExperiments</code>,
-  <code>summarizeExperiments</code></p>
+      <p>Other Experiment: <code><a href='addExperiments.html'>addExperiments</a></code>,
+  <code><a href='removeExperiments.html'>removeExperiments</a></code>,
+  <code><a href='summarizeExperiments.html'>summarizeExperiments</a></code></p>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeExperimentRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeExperimentRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'>
 <span class='co'># Definde one problem, two algorithms and add them with some parameters:</span>
-<span class='fu'>addProblem</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"p1"</span>,
+<span class='fu'><a href='ProblemAlgorithm.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"p1"</span>,
   <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>...</span>) <span class='fu'>rnorm</span>(<span class='no'>n</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>sd</span>))
-<span class='fu'>addAlgorithm</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"a1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>mean</span>(<span class='no'>instance</span>))
-<span class='fu'>addAlgorithm</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"a2"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>median</span>(<span class='no'>instance</span>))
-<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>addExperiments</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='fu'>list</span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fu'>CJ</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>50</span>, <span class='fl'>100</span>), <span class='kw'>mean</span> <span class='kw'>=</span> -<span class='fl'>2</span>:<span class='fl'>2</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>)))</div><div class='output'><strong class='text-info'>Adding 40 experiments (&#39;p1&#39;[40] x &#39;a1&#39;[1] x repls[1]) ...</strong></div><div class='output'><strong class='text-info'>Adding 40 experiments (&#39;p1&#39;[40] x &#39;a2&#39;[1] x repls[1]) ...</strong></div><div class='input'>
+<span class='fu'><a href='ProblemAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"a1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>mean</span>(<span class='no'>instance</span>))
+<span class='fu'><a href='ProblemAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"a2"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>median</span>(<span class='no'>instance</span>))
+<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='fu'>list</span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fu'>CJ</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>50</span>, <span class='fl'>100</span>), <span class='kw'>mean</span> <span class='kw'>=</span> -<span class='fl'>2</span>:<span class='fl'>2</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>)))</div><div class='output'><strong class='text-info'>Adding 40 experiments (&#39;p1&#39;[40] x &#39;a1&#39;[1] x repls[1]) ...</strong></div><div class='output'><strong class='text-info'>Adding 40 experiments (&#39;p1&#39;[40] x &#39;a2&#39;[1] x repls[1]) ...</strong></div><div class='input'>
 <span class='co'># Overview over defined experiments:</span>
-<span class='fu'>getProblemIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] &quot;p1&quot;
-#&gt; </div><div class='input'><span class='fu'>getAlgorithmIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] &quot;a1&quot; &quot;a2&quot;
-#&gt; </div><div class='input'><span class='fu'>summarizeExperiments</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    problem algorithm .count
+<span class='fu'><a href='ProblemAlgorithm.html'>getProblemIds</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] &quot;p1&quot;
+#&gt; </div><div class='input'><span class='fu'><a href='ProblemAlgorithm.html'>getAlgorithmIds</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] &quot;a1&quot; &quot;a2&quot;
+#&gt; </div><div class='input'><span class='fu'><a href='summarizeExperiments.html'>summarizeExperiments</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    problem algorithm .count
 #&gt; 1:      p1        a1     40
 #&gt; 2:      p1        a2     40
-#&gt; </div><div class='input'><span class='fu'>summarizeExperiments</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"problem"</span>, <span class='st'>"algorithm"</span>, <span class='st'>"n"</span>))</div><div class='output co'>#&gt;    problem algorithm   n .count
+#&gt; </div><div class='input'><span class='fu'><a href='summarizeExperiments.html'>summarizeExperiments</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"problem"</span>, <span class='st'>"algorithm"</span>, <span class='st'>"n"</span>))</div><div class='output co'>#&gt;    problem algorithm   n .count
 #&gt; 1:      p1        a1  50     20
 #&gt; 2:      p1        a1 100     20
 #&gt; 3:      p1        a2  50     20
 #&gt; 4:      p1        a2 100     20
-#&gt; </div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>findExperiments</span>(<span class='kw'>prob.pars</span> <span class='kw'>=</span> (<span class='no'>n</span> <span class='kw'>==</span> <span class='fl'>50</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>getJobPars</span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;     job.id problem algorithm  n mean sd
+#&gt; </div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='findJobs.html'>findExperiments</a></span>(<span class='kw'>prob.pars</span> <span class='kw'>=</span> (<span class='no'>n</span> <span class='kw'>==</span> <span class='fl'>50</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;     job.id problem algorithm  n mean sd
 #&gt;  1:      1      p1        a1 50   -2  1
 #&gt;  2:      2      p1        a1 50   -2  2
 #&gt;  3:      3      p1        a1 50   -2  3
@@ -241,12 +241,12 @@ Default is <code>TRUE</code>.</dd>
 #&gt;     job.id problem algorithm  n mean sd
 #&gt; </div><div class='input'>
 <span class='co'># Chunk jobs per algorithm and submit them:</span>
-<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>chunkIds</span>(<span class='fu'>getJobPars</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='kw'>group.by</span> <span class='kw'>=</span> <span class='st'>"algorithm"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 80 jobs in 2 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='input'><span class='fu'>waitForJobs</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 2 files ...</strong></div><div class='output co'>#&gt; [1] TRUE
+<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='chunkIds.html'>chunkIds</a></span>(<span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='kw'>group.by</span> <span class='kw'>=</span> <span class='st'>"algorithm"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 80 jobs in 2 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 2 files ...</strong></div><div class='output co'>#&gt; [1] TRUE
 #&gt; </div><div class='input'>
 <span class='co'># Reduce the results of algorithm a1</span>
-<span class='no'>ids.mean</span> <span class='kw'>=</span> <span class='fu'>findExperiments</span>(<span class='kw'>algo.name</span> <span class='kw'>=</span> <span class='st'>"a1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>reduceResults</span>(<span class='no'>ids.mean</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>aggr</span>, <span class='no'>res</span>, <span class='no'>...</span>) <span class='fu'>c</span>(<span class='no'>aggr</span>, <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;  [1] -1.91433603 -1.51182725 -1.98742936 -2.36910443 -0.98787171 -1.27022246
+<span class='no'>ids.mean</span> <span class='kw'>=</span> <span class='fu'><a href='findJobs.html'>findExperiments</a></span>(<span class='kw'>algo.name</span> <span class='kw'>=</span> <span class='st'>"a1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'><a href='reduceResults.html'>reduceResults</a></span>(<span class='no'>ids.mean</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>aggr</span>, <span class='no'>res</span>, <span class='no'>...</span>) <span class='fu'>c</span>(<span class='no'>aggr</span>, <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;  [1] -1.91433603 -1.51182725 -1.98742936 -2.36910443 -0.98787171 -1.27022246
 #&gt;  [7] -1.25992955 -1.34513502 -0.15700077 -0.23088698  0.07027429  0.87552783
 #&gt; [13]  0.96372348  1.01272758  1.21870563  1.09210651  2.32384233  2.21704556
 #&gt; [19]  2.89319252  2.39510729 -1.97107549 -1.60247254 -1.72943243 -1.13280855
@@ -256,10 +256,10 @@ Default is <code>TRUE</code>.</dd>
 #&gt; </div><div class='input'>
 <span class='co'># Join info table with all results and calculate mean of results</span>
 <span class='co'># grouped by n and algorithm</span>
-<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>findDone</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='no'>pars</span> <span class='kw'>=</span> <span class='fu'>getJobPars</span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='no'>results</span> <span class='kw'>=</span> <span class='fu'>reduceResultsDataTable</span>(<span class='no'>ids</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='no'>tab</span> <span class='kw'>=</span> <span class='fu'>ljoin</span>(<span class='no'>pars</span>, <span class='no'>results</span>)
+<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='findJobs.html'>findDone</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='no'>pars</span> <span class='kw'>=</span> <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='no'>results</span> <span class='kw'>=</span> <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='no'>ids</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='no'>tab</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ljoin</a></span>(<span class='no'>pars</span>, <span class='no'>results</span>)
 <span class='no'>tab</span>[, <span class='fu'>list</span>(<span class='kw'>mres</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"n"</span>, <span class='st'>"algorithm"</span>)]</div><div class='output co'>#&gt;      n algorithm       mres
 #&gt; 1:  50        a1 0.10142547
 #&gt; 2: 100        a1 0.05658836

@@ -83,7 +83,7 @@
 <div class="row">
   <div class="col-md-9">
     
-    <p>Executes a single job (as created by <code>makeJob</code>) and returns
+    <p>Executes a single job (as created by <code><a href='makeJob.html'>makeJob</a></code>) and returns
 its result. Also works for Experiments.</p>
     
 
@@ -92,7 +92,7 @@ its result. Also works for Experiments.</p>
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
       <dt>job</dt>
-      <dd>[<code>Job</code> | <code>Experiment</code>]
+      <dd>[<code><a href='makeJob.html'>Job</a></code> | <code><a href='makeJob.html'>Experiment</a></code>]
 Job/Experiment to execute.</dd>
     </dl>
     
@@ -103,7 +103,7 @@ Job/Experiment to execute.</dd>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>batchMap</span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 2 jobs ...</strong></div><div class='input'><span class='no'>job</span> <span class='kw'>=</span> <span class='fu'>makeJob</span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 2 jobs ...</strong></div><div class='input'><span class='no'>job</span> <span class='kw'>=</span> <span class='fu'><a href='makeJob.html'>makeJob</a></span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>execJob</span>(<span class='no'>job</span>)</div><div class='output co'>#&gt; [1] 1
 #&gt; </div></pre>
   </div>

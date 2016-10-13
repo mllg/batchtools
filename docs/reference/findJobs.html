@@ -86,39 +86,39 @@
     <p>These functions are used to find and filter jobs, depending on either their parameters (<code>findJobs</code> and
 <code>findExperiments</code>), their tags (<code>findTagged</code>), or their computational status (all other functions).</p>
 
-    <p>For a summarizing overview over the status, see <code>getStatus</code>.
+    <p>For a summarizing overview over the status, see <code><a href='getStatus.html'>getStatus</a></code>.
 Note that <code>findOnSystem</code> and <code>findExpired</code> are somewhat heuristic and may report misleading results,
-depending on the state of the system and the <code>ClusterFunctions</code> implementation.</p>
+depending on the state of the system and the <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code> implementation.</p>
     
 
-    <pre><span class='fu'>findJobs</span>(<span class='no'>expr</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+    <pre><span class='fu'>findJobs</span>(<span class='no'>expr</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
 <span class='fu'>findExperiments</span>(<span class='kw'>prob.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>algo.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>prob.pars</span>, <span class='no'>algo.pars</span>,
-  <span class='kw'>repls</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+  <span class='kw'>repls</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findSubmitted</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>findSubmitted</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findNotSubmitted</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>findNotSubmitted</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findStarted</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>findStarted</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findNotStarted</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>findNotStarted</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findDone</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>findDone</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findNotDone</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>findNotDone</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findErrors</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>findErrors</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findOnSystem</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>findOnSystem</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findRunning</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>findRunning</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findQueued</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>findQueued</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findExpired</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>findExpired</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>findTagged</span>(<span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+<span class='fu'>findTagged</span>(<span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -133,8 +133,8 @@ with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
       <dt>prob.name</dt>
       <dd>[<code>character</code>]
 Whitelist of problem names.
@@ -166,7 +166,7 @@ Return jobs which are tagged with any of the tags provided.</dd>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>batchMap</span>(<span class='no'>identity</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 3 jobs ...</strong></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>findNotSubmitted</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 3 jobs ...</strong></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>findNotSubmitted</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
 <span class='co'># get all jobs:</span>
 <span class='fu'>findJobs</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id
@@ -187,14 +187,14 @@ Return jobs which are tagged with any of the tags provided.</dd>
 #&gt; 3:      3
 #&gt; </div><div class='input'>
 <span class='co'># filter on tags</span>
-<span class='fu'>addJobTags</span>(<span class='fl'>2</span>:<span class='fl'>3</span>, <span class='st'>"my_tag"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>2</span>:<span class='fl'>3</span>, <span class='st'>"my_tag"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>findTagged</span>(<span class='kw'>tags</span> <span class='kw'>=</span> <span class='st'>"my_tag"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id
 #&gt; 1:      2
 #&gt; 2:      3
 #&gt; </div><div class='input'>
 <span class='co'># combine filter functions using joins</span>
 <span class='co'># -&gt; jobs which are not done and not tagged (using an anti-join):</span>
-<span class='fu'>ajoin</span>(<span class='fu'>findNotDone</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='fu'>findTagged</span>(<span class='st'>"my_tag"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt;    job.id
+<span class='fu'><a href='JoinTables.html'>ajoin</a></span>(<span class='fu'>findNotDone</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='fu'>findTagged</span>(<span class='st'>"my_tag"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt;    job.id
 #&gt; 1:      1
 #&gt; </div></pre>
   </div>

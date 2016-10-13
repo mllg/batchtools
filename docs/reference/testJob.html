@@ -86,7 +86,7 @@
     <p>Starts a single job on the local machine.</p>
     
 
-    <pre><span class='fu'>testJob</span>(<span class='no'>id</span>, <span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+    <pre><span class='fu'>testJob</span>(<span class='no'>id</span>, <span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -97,7 +97,7 @@ and exactly one row.</dd>
       <dt>external</dt>
       <dd>[<code>logical(1)</code>]
  Run the job in an external R session? If <code>TRUE</code>, starts a fresh R
- session on the local machine to execute the with <code>execJob</code>.
+ session on the local machine to execute the with <code><a href='execJob.html'>execJob</a></code>.
  You will not be able to use debug tools like <code><a href='http://www.rdocumentation.org/packages/traceback/topics/base'>traceback</a></code>
  or <code><a href='http://www.rdocumentation.org/packages/browser/topics/base'>browser</a></code>.
 
@@ -107,8 +107,8 @@ and exactly one row.</dd>
  are possibly resolved in the global environment) is impossible.
  Same holds for missing package dependency declarations.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -120,14 +120,14 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
     <div class="See also">
       <h2>See also</h2>
 
-      <p>Other debug: <code>getErrorMessages</code>,
-  <code>getStatus</code>, <code>grepLogs</code>,
-  <code>killJobs</code>, <code>resetJobs</code>,
-  <code>showLog</code></p>
+      <p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
+  <code><a href='getStatus.html'>getStatus</a></code>, <code><a href='grepLogs.html'>grepLogs</a></code>,
+  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='resetJobs.html'>resetJobs</a></code>,
+  <code><a href='showLog.html'>showLog</a></code></p>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>batchMap</span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>2</span>) <span class='no'>xxx</span> <span class='kw'>else</span> <span class='no'>x</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 2 jobs ...</strong></div><div class='input'><span class='fu'>testJob</span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] 1
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>2</span>) <span class='no'>xxx</span> <span class='kw'>else</span> <span class='no'>x</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 2 jobs ...</strong></div><div class='input'><span class='fu'>testJob</span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] 1
 #&gt; </div><div class='input'><span class='co'>## Not run: ------------------------------------</span>
 <span class='co'># testJob(2, reg = tmp)</span>
 <span class='co'>## ---------------------------------------------</span></div></pre>

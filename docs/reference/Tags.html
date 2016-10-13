@@ -86,11 +86,11 @@
     <p>Add and remove arbitrary tags to jobs.</p>
     
 
-    <pre><span class='fu'>addJobTags</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>tags</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+    <pre><span class='fu'>addJobTags</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>tags</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>removeJobTags</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>tags</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>removeJobTags</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>tags</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>getUsedJobTags</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+<span class='fu'>getUsedJobTags</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -104,8 +104,8 @@ If not set, defaults to all jobs.</dd>
       <dd>[<code>character</code>]
 Tags to add or remove as strings. May use letters, numbers, underscore and dots (pattern &#8220;^[[:alnum:]_.]+&#8221;).</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -115,10 +115,10 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>batchMap</span>(<span class='no'>sqrt</span>, <span class='kw'>x</span> <span class='kw'>=</span> -<span class='fl'>3</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 7 jobs ...</strong></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>sqrt</span>, <span class='kw'>x</span> <span class='kw'>=</span> -<span class='fl'>3</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 7 jobs ...</strong></div><div class='input'>
 <span class='co'># Add new tag to all ids</span>
 <span class='fu'>addJobTags</span>(<span class='no'>ids</span>, <span class='st'>"needs.computation"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>getJobTags</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id              tags
+<span class='fu'><a href='getJobTable.html'>getJobTags</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id              tags
 #&gt; 1:      1 needs.computation
 #&gt; 2:      2 needs.computation
 #&gt; 3:      3 needs.computation
@@ -128,9 +128,9 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
 #&gt; 7:      7 needs.computation
 #&gt; </div><div class='input'>
 <span class='co'># Add more tags</span>
-<span class='fu'>addJobTags</span>(<span class='fu'>findJobs</span>(<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='st'>"x.neg"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>addJobTags</span>(<span class='fu'>findJobs</span>(<span class='no'>x</span> <span class='kw'>&gt;</span> <span class='fl'>0</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='st'>"x.pos"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>getJobTags</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id                    tags
+<span class='fu'>addJobTags</span>(<span class='fu'><a href='findJobs.html'>findJobs</a></span>(<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='st'>"x.neg"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'>addJobTags</span>(<span class='fu'><a href='findJobs.html'>findJobs</a></span>(<span class='no'>x</span> <span class='kw'>&gt;</span> <span class='fl'>0</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='st'>"x.pos"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'><a href='getJobTable.html'>getJobTags</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id                    tags
 #&gt; 1:      1 needs.computation,x.neg
 #&gt; 2:      2 needs.computation,x.neg
 #&gt; 3:      3 needs.computation,x.neg
@@ -140,11 +140,11 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
 #&gt; 7:      7 needs.computation,x.pos
 #&gt; </div><div class='input'>
 <span class='co'># Submit first 5 jobs and remove tag if successful</span>
-<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>submitJobs</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 5 jobs in 5 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='output'><strong class='text-warning'>Warning message:
+<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 5 jobs in 5 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='output'><strong class='text-warning'>Warning message:
 NaNs produced</strong></div><div class='output'><strong class='text-warning'>Warning message:
 NaNs produced</strong></div><div class='output'><strong class='text-warning'>Warning message:
-NaNs produced</strong></div><div class='input'><span class='kw'>if</span> (<span class='fu'>waitForJobs</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
-  <span class='fu'>removeJobTags</span>(<span class='no'>ids</span>, <span class='st'>"needs.computation"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 5 files ...</strong></div><div class='input'><span class='fu'>getJobTags</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id                    tags
+NaNs produced</strong></div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
+  <span class='fu'>removeJobTags</span>(<span class='no'>ids</span>, <span class='st'>"needs.computation"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 5 files ...</strong></div><div class='input'><span class='fu'><a href='getJobTable.html'>getJobTags</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id                    tags
 #&gt; 1:      1                   x.neg
 #&gt; 2:      2                   x.neg
 #&gt; 3:      3                   x.neg
@@ -154,8 +154,8 @@ NaNs produced</strong></div><div class='input'><span class='kw'>if</span> (<span
 #&gt; 7:      7 needs.computation,x.pos
 #&gt; </div><div class='input'>
 <span class='co'># Grep for warning message and add a tag</span>
-<span class='fu'>addJobTags</span>(<span class='fu'>grepLogs</span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"NaNs produced"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='st'>"div.zero"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>getJobTags</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id                    tags
+<span class='fu'>addJobTags</span>(<span class='fu'><a href='grepLogs.html'>grepLogs</a></span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"NaNs produced"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='st'>"div.zero"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'><a href='getJobTable.html'>getJobTags</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id                    tags
 #&gt; 1:      1                   x.neg
 #&gt; 2:      2                   x.neg
 #&gt; 3:      3                   x.neg
@@ -165,7 +165,7 @@ NaNs produced</strong></div><div class='input'><span class='kw'>if</span> (<span
 #&gt; 7:      7 needs.computation,x.pos
 #&gt; </div><div class='input'>
 <span class='co'># All tags where tag x.neg is set:</span>
-<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>findTagged</span>(<span class='st'>"x.neg"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='findJobs.html'>findTagged</a></span>(<span class='st'>"x.neg"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>getUsedJobTags</span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] &quot;x.neg&quot;
 #&gt; </div></pre>
   </div>

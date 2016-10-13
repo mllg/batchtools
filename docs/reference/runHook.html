@@ -84,7 +84,7 @@
   <div class="col-md-9">
     
     <p>Hooks allow to trigger functions calls on specific events.
-They can be specified via the <code>ClusterFunctions</code> and are trigged on the following events:
+They can be specified via the <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code> and are trigged on the following events:
 <dl class='dl-horizontal'>
   <dt><code>pre.sync</code></dt><dd><code>function(reg, fns, ...)</code>: Run before synchronizing the registry on the master. <code>fn</code> is the character vector of paths to the update files.</dd>
   <dt><code>post.sync</code></dt><dd><code>function(reg, updates, ...)</code>: Run after synchronizing the registry on the master. <code>updates</code> is the data.table of processed updates.</dd>
@@ -100,9 +100,9 @@ They can be specified via the <code>ClusterFunctions</code> and are trigged on t
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
       <dt>obj</dt>
-      <dd>[Registry | JobCollection]
-Registry which contains the ClusterFunctions with element &#8220;hooks&#8221;
-or a JobCollection which holds the subset of functions which are executed
+      <dd>[<a href='Registry.html'>Registry</a> | <a href='makeJobCollection.html'>JobCollection</a>]
+Registry which contains the <a href='makeClusterFunctions.html'>ClusterFunctions</a> with element &#8220;hooks&#8221;
+or a <a href='makeJobCollection.html'>JobCollection</a> which holds the subset of functions which are executed
 remotely.</dd>
       <dt>hook</dt>
       <dd>[<code>character(1)</code>]

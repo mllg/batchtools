@@ -85,7 +85,7 @@
     
     <p><code>makeRegistry</code> constructs the inter-communication object for all functions in <code>batchtools</code>.
 All communication transactions are processed via the file system:
-All information required to run a job is stored as <code>JobCollection</code> in a file in the
+All information required to run a job is stored as <code><a href='makeJobCollection.html'>JobCollection</a></code> in a file in the
 a subdirectory of the <code>file.dir</code> directory.
 Each jobs stores its results as well as computational status information (start time, end time, error message, ...)
 also on the file system which is regular merged parsed by the master using <code>syncRegistry</code>.
@@ -134,7 +134,7 @@ and thus allows you to start over.</p>
   (i.e., starting with &#8220;~&#8221;). Note that some templates do not handle relative paths well.
 
   If you pass <code>NA</code>, a temporary directory will be used.
-  This way, you can create disposable registries for <code>btlapply</code> or examples.
+  This way, you can create disposable registries for <code><a href='btlapply.html'>btlapply</a></code> or examples.
   By default, the temporary directory <code><a href='http://www.rdocumentation.org/packages/tempfile/topics/base'>tempdir</a>()</code> will be used.
   If you want to use another directory, e.g. a directory which is shared between nodes,
   you can set it in your configuration file by setting the variable <code>temp.dir</code>.</dd>
@@ -212,28 +212,28 @@ registry in read-only mode.</dd>
     <dt><code>packages</code> [character()]:</dt><dd>Packages to load on the slaves.</dd>
     <dt><code>namespaces</code> [character()]:</dt><dd>Namespaces to load on the slaves.</dd>
     <dt><code>seed</code> [integer(1)]:</dt><dd>Registry seed. Before each job is executed, the seed <code>seed + job.id</code> is set.</dd>
-    <dt><code>cluster.functions</code> [cluster.functions]:</dt><dd>Usually set in your <code>conf.file</code>. Set via a call to <code>makeClusterFunctions</code>. See example.</dd>
+    <dt><code>cluster.functions</code> [cluster.functions]:</dt><dd>Usually set in your <code>conf.file</code>. Set via a call to <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>. See example.</dd>
     <dt><code>default.resources</code> [named list()]:</dt><dd>Usually set in your <code>conf.file</code>. Named list of default resources.</dd>
-    <dt><code>max.concurrent.jobs</code> [integer(1)]:</dt><dd>Usually set in your <code>conf.file</code>. Maximum number of concurrent jobs for a single user on the system. <code>submitJobs</code> will try to respect this setting.</dd>
+    <dt><code>max.concurrent.jobs</code> [integer(1)]:</dt><dd>Usually set in your <code>conf.file</code>. Maximum number of concurrent jobs for a single user on the system. <code><a href='submitJobs.html'>submitJobs</a></code> will try to respect this setting.</dd>
     <dt><code>defs</code> [data.table]:</dt><dd>Table with job definitions (i.e. parameters).</dd>
-    <dt><code>status</code> [data.table]:</dt><dd>Table holding information about the computational status. Also see <code>getJobStatus</code>.</dd>
-    <dt><code>resources</code> [data.table]:</dt><dd>Table holding information about the computational resources used for the job. Also see <code>getJobResources</code>.</dd>
-    <dt><code>tags</code> [data.table]:</dt><dd>Table holding information about tags. See Tags.</dd>
+    <dt><code>status</code> [data.table]:</dt><dd>Table holding information about the computational status. Also see <code><a href='getJobTable.html'>getJobStatus</a></code>.</dd>
+    <dt><code>resources</code> [data.table]:</dt><dd>Table holding information about the computational resources used for the job. Also see <code><a href='getJobTable.html'>getJobResources</a></code>.</dd>
+    <dt><code>tags</code> [data.table]:</dt><dd>Table holding information about tags. See <a href='Tags.html'>Tags</a>.</dd>
   </dl></p>
       <p>The other functions <code>saveRegistry</code>, <code>syncRegistry</code>, <code>sweepRegistry</code> and <code>clearRegistry</code> return <code>TRUE</code>
   if the registry has been altered and successfully stored on the file system.</p>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
 #&gt;   Name    : Interactive
-#&gt;   File dir: /tmp/Rtmpq7T2ot/registry5ac14e5f949c
-#&gt;   Work dir: /home/michel/Projekte/batchtools/docs/reference
+#&gt;   File dir: /scratch/registry15b25ea5f3e7
+#&gt;   Work dir: /home/lang/Projekte/batchtools/docs/reference
 #&gt;   Jobs    : 0
 #&gt;   Seed    : 874666013
 #&gt; </div><div class='input'>
 <span class='co'># Set cluster functions to interactive mode and start jobs in external R sessions</span>
-<span class='no'>tmp</span>$<span class='no'>cluster.functions</span> <span class='kw'>=</span> <span class='fu'>makeClusterFunctionsInteractive</span>(<span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>tmp</span>$<span class='no'>cluster.functions</span> <span class='kw'>=</span> <span class='fu'><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></span>(<span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Change packages to load</span>
 <span class='no'>tmp</span>$<span class='no'>packages</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"MASS"</span>)

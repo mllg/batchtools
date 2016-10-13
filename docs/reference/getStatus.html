@@ -86,7 +86,7 @@
     <p>This function gives an encompassing overview over the computational status on your system.</p>
     
 
-    <pre><span class='fu'>getStatus</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+    <pre><span class='fu'>getStatus</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -97,8 +97,8 @@ with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -110,15 +110,15 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
     <div class="See also">
       <h2>See also</h2>
 
-      <p>Other debug: <code>getErrorMessages</code>,
-  <code>grepLogs</code>, <code>killJobs</code>,
-  <code>resetJobs</code>, <code>showLog</code>,
-  <code>testJob</code></p>
+      <p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
+  <code><a href='grepLogs.html'>grepLogs</a></code>, <code><a href='killJobs.html'>killJobs</a></code>,
+  <code><a href='resetJobs.html'>resetJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
+  <code><a href='testJob.html'>testJob</a></code></p>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) <span class='kw'>if</span> (<span class='no'>i</span> <span class='kw'>==</span> <span class='fl'>3</span>) <span class='fu'>stop</span>(<span class='no'>i</span>) <span class='kw'>else</span> <span class='no'>i</span>
-<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>batchMap</span>(<span class='no'>fun</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 5 jobs ...</strong></div><div class='input'><span class='fu'>submitJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 4 jobs in 4 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='input'><span class='fu'>waitForJobs</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 4 files ...</strong></div><div class='output co'>#&gt; [1] FALSE
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) <span class='kw'>if</span> (<span class='no'>i</span> <span class='kw'>==</span> <span class='fl'>3</span>) <span class='fu'>stop</span>(<span class='no'>i</span>) <span class='kw'>else</span> <span class='no'>i</span>
+<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>fun</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 5 jobs ...</strong></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 4 jobs in 4 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 4 files ...</strong></div><div class='output co'>#&gt; [1] FALSE
 #&gt; </div><div class='input'>
 <span class='no'>tab</span> <span class='kw'>=</span> <span class='fu'>getStatus</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='no'>tab</span>)</div><div class='output co'>#&gt; Status for 5 jobs:

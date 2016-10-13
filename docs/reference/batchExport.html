@@ -90,7 +90,7 @@ each time the registry is loaded or a job collection is executed.</p>
     
 
     <pre><span class='fu'>batchExport</span>(<span class='kw'>export</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>unexport</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>),
-  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -101,8 +101,8 @@ Named list of objects to export.</dd>
       <dd>[<code>character</code>]
 Vector of object names to un-export.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -112,23 +112,23 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'>
 <span class='co'># list exports</span>
 <span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt; Empty data.table (0 rows) of 2 cols: name,uri
 #&gt; </div><div class='output co'>#&gt; NULL
 #&gt; </div><div class='input'>
 <span class='co'># add a job and required exports</span>
-<span class='fu'>batchMap</span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span> + <span class='no'>y</span> + <span class='no'>z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 3 jobs ...</strong></div><div class='input'><span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>export</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>99</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Exporting new objects: &#39;y&#39;,&#39;z&#39;</strong></div><div class='input'><span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt;    name                                                uri
-#&gt; 1:    y /tmp/Rtmpq7T2ot/registry5ac162ddfb2a/exports/y.rds
-#&gt; 2:    z /tmp/Rtmpq7T2ot/registry5ac162ddfb2a/exports/z.rds
+<span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span> + <span class='no'>y</span> + <span class='no'>z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 3 jobs ...</strong></div><div class='input'><span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>export</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>99</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Exporting new objects: &#39;y&#39;,&#39;z&#39;</strong></div><div class='input'><span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt;    name                                         uri
+#&gt; 1:    y /scratch/registry15b26c4076ea/exports/y.rds
+#&gt; 2:    z /scratch/registry15b26c4076ea/exports/z.rds
 #&gt; </div><div class='input'>
-<span class='fu'>submitJobs</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='input'><span class='fu'>waitForJobs</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 3 files ...</strong></div><div class='output co'>#&gt; [1] TRUE
-#&gt; </div><div class='input'><span class='fu'>stopifnot</span>(<span class='fu'>loadResult</span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>) <span class='kw'>==</span> <span class='fl'>101</span>)
+<span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 3 files ...</strong></div><div class='output co'>#&gt; [1] TRUE
+#&gt; </div><div class='input'><span class='fu'>stopifnot</span>(<span class='fu'><a href='loadResult.html'>loadResult</a></span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>) <span class='kw'>==</span> <span class='fl'>101</span>)
 
 <span class='co'># Un-export z</span>
-<span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>unexport</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Un-exporting exported objects: &#39;z&#39;</strong></div><div class='input'><span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt;    name                                                uri
-#&gt; 1:    y /tmp/Rtmpq7T2ot/registry5ac162ddfb2a/exports/y.rds
+<span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>unexport</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Un-exporting exported objects: &#39;z&#39;</strong></div><div class='input'><span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt;    name                                         uri
+#&gt; 1:    y /scratch/registry15b26c4076ea/exports/y.rds
 #&gt; </div></pre>
   </div>
   <div class="col-md-3">

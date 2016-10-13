@@ -84,30 +84,30 @@
   <div class="col-md-9">
     
     <p>Jobs and Experiments are abstract objects which hold all information necessary to execute a single computational
-job for a <code>Registry</code> or <code>ExperimentRegistry</code>, respectively.</p>
+job for a <code><a href='Registry.html'>Registry</a></code> or <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>, respectively.</p>
 
     <p>They can be created using the constructor <code>makeJob</code> which takes a single job id.
-Jobs and Experiments are passed to reduce functions like <code>reduceResults</code>.
-Furthermore, Experiments can be used in the functions of the <code>Problem</code> and <code>Algorithm</code>.
+Jobs and Experiments are passed to reduce functions like <code><a href='reduceResults.html'>reduceResults</a></code>.
+Furthermore, Experiments can be used in the functions of the <code><a href='ProblemAlgorithm.html'>Problem</a></code> and <code><a href='ProblemAlgorithm.html'>Algorithm</a></code>.
 Jobs and Experiments hold these information:
 <dl class='dl-horizontal'>
  <dt><code>job.id</code></dt><dd>Job ID as integer.</dd>
  <dt><code>pars</code></dt><dd>
    Job parameters as named list.
-   For <code>ExperimentRegistry</code>, the parameters are divided into the sublists &#8220;prob.pars&#8221; and &#8220;algo.pars&#8221;.
+   For <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>, the parameters are divided into the sublists &#8220;prob.pars&#8221; and &#8220;algo.pars&#8221;.
  </dd>
- <dt><code>seed</code></dt><dd>Seed which is set via <code>doJobCollection</code> as scalar integer.</dd>
+ <dt><code>seed</code></dt><dd>Seed which is set via <code><a href='doJobCollection.html'>doJobCollection</a></code> as scalar integer.</dd>
  <dt><code>resources</code></dt><dd>Computational resources which were set for this job as named list.</dd>
  <dt><code>external.dir</code></dt><dd>
    Path to a directory which is created exclusively for this job. You can store external files here.
-   Directory is persistent between multiple restarts of the job and can be cleaned by calling <code>resetJobs</code>.
+   Directory is persistent between multiple restarts of the job and can be cleaned by calling <code><a href='resetJobs.html'>resetJobs</a></code>.
  </dd>
- <dt><code>fun</code></dt><dd>Job only: User function passed to <code>batchMap</code>.</dd>
+ <dt><code>fun</code></dt><dd>Job only: User function passed to <code><a href='batchMap.html'>batchMap</a></code>.</dd>
  <dt><code>prob.name</code></dt><dd>Experiments only: Problem id.</dd>
  <dt><code>algo.name</code></dt><dd>Experiments only: Algorithm id.</dd>
- <dt><code>problem</code></dt><dd>Experiments only: <code>Problem</code>.</dd>
+ <dt><code>problem</code></dt><dd>Experiments only: <code><a href='ProblemAlgorithm.html'>Problem</a></code>.</dd>
  <dt><code>instance</code></dt><dd>Experiments only: Problem instance.</dd>
- <dt><code>algorithm</code></dt><dd>Experiments only: <code>Algorithm</code>.</dd>
+ <dt><code>algorithm</code></dt><dd>Experiments only: <code><a href='ProblemAlgorithm.html'>Algorithm</a></code>.</dd>
  <dt><code>repl</code></dt><dd>Experiments only: Replication number.</dd>
 </dl></p>
 
@@ -115,10 +115,10 @@ Jobs and Experiments hold these information:
 lazy-load required files from the file system and construct the object on the first access.
 The realizations are cached for all slots except &#8220;instance&#8221; (which might be stochastic).</p>
 
-    <p>Jobs and Experiments can be executed manually with <code>execJob</code>.</p>
+    <p>Jobs and Experiments can be executed manually with <code><a href='execJob.html'>execJob</a></code>.</p>
     
 
-    <pre><span class='fu'>makeJob</span>(<span class='no'>id</span>, <span class='kw'>cache</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+    <pre><span class='fu'>makeJob</span>(<span class='no'>id</span>, <span class='kw'>cache</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -130,8 +130,8 @@ and exactly one row.</dd>
       <dd>[<code>Cache</code> | <code>NULL</code>]
 Cache to retrieve files. Used internally.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -141,7 +141,7 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>batchMap</span>(<span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>) <span class='no'>x</span> + <span class='no'>y</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>more.args</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>99</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 2 jobs ...</strong></div><div class='input'><span class='fu'>submitJobs</span>(<span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>foo</span> <span class='kw'>=</span> <span class='st'>"bar"</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 2 jobs in 2 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='input'><span class='no'>job</span> <span class='kw'>=</span> <span class='fu'>makeJob</span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>) <span class='no'>x</span> + <span class='no'>y</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>more.args</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>99</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 2 jobs ...</strong></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>foo</span> <span class='kw'>=</span> <span class='st'>"bar"</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 2 jobs in 2 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='input'><span class='no'>job</span> <span class='kw'>=</span> <span class='fu'>makeJob</span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='no'>job</span>)</div><div class='output co'>#&gt; &lt;Job&gt;
 #&gt;   Public:
 #&gt;     cache: Cache, R6
@@ -168,7 +168,7 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
 #&gt; 
 #&gt; </div><div class='input'>
 <span class='co'># Execute the job locally:</span>
-<span class='fu'>execJob</span>(<span class='no'>job</span>)</div><div class='output co'>#&gt; [1] 100
+<span class='fu'><a href='execJob.html'>execJob</a></span>(<span class='no'>job</span>)</div><div class='output co'>#&gt; [1] 100
 #&gt; </div></pre>
   </div>
   <div class="col-md-3">

@@ -99,14 +99,14 @@ with the package.</p>
 Name of cluster functions.</dd>
       <dt>submitJob</dt>
       <dd>[<code>function(reg, jc, ...)</code>]
-Function to submit new jobs. Must return a <code>SubmitJobResult</code> object.
-The arguments are <code>reg</code> (<code>Registry</code>) and <code>jobs</code> (<code>JobCollection</code>).</dd>
+Function to submit new jobs. Must return a <code><a href='makeSubmitJobResult.html'>SubmitJobResult</a></code> object.
+The arguments are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and <code>jobs</code> (<code><a href='makeJobCollection.html'>JobCollection</a></code>).</dd>
       <dt>killJob</dt>
       <dd>[<code>function(reg, batch.id)</code>]
 Function to kill a job on the batch system. Make sure that you definitely kill the job! Return
-value is currently ignored. Must have the arguments <code>reg</code> (<code>Registry</code>) and
+value is currently ignored. Must have the arguments <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and
 <code>batch.id</code> (<code>character(1)</code> as returned by <code>submitJob</code>).
-Note that there is a helper function <code>cfKillJob</code> to repeatedly try to kill jobs.
+Note that there is a helper function <code><a href='cfKillJob.html'>cfKillJob</a></code> to repeatedly try to kill jobs.
 Set <code>killJob</code> to <code>NULL</code> if killing jobs cannot be supported.</dd>
       <dt>listJobsQueued</dt>
       <dd>[<code>function(reg)</code>]
@@ -114,7 +114,7 @@ List all queued jobs on the batch system for the current user and registry.
 Must return an character vector of batch ids, same format as they
 are returned by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.,
 all for the current user instead of all for the current registry), but you have to include all
-relevant ones. Must have the argument are <code>reg</code> (<code>Registry</code>).
+relevant ones. Must have the argument are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>).
 Set <code>listJobsQueued</code> to <code>NULL</code> if listing of queued jobs is not supported.</dd>
       <dt>listJobsRunning</dt>
       <dd>[<code>function(reg)</code>]
@@ -122,7 +122,7 @@ List all running jobs on the batch system for the current user and registry. Thi
 running, held, idle, etc. jobs. Must return an character vector of batch ids, same format as they
 are returned by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.
 all for the current user instead of all for the current registry), but you have to include all
-relevant ones. Must have the argument are <code>reg</code> (<code>Registry</code>).
+relevant ones. Must have the argument are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>).
 Set <code>listJobsRunning</code> to <code>NULL</code> if listing of running jobs is not supported.</dd>
       <dt>array.var</dt>
       <dd>[<code>character(1)</code>]
@@ -134,28 +134,28 @@ Store the job on the file system before submitting? Default is <code>TRUE</code>
       <dt>hooks</dt>
       <dd>[<code>list</code>]
 Named list of functions which will we called on certain events like &#8220;pre.submit&#8221; or &#8220;post.sync&#8221;.
-See Hooks.</dd>
+See <a href='runHook.html'>Hooks</a>.</dd>
     </dl>
     
     <div class="See also">
       <h2>See also</h2>
 
-      <p>Other ClusterFunctions: <code>makeClusterFunctionsDocker</code>,
-  <code>makeClusterFunctionsInteractive</code>,
-  <code>makeClusterFunctionsLSF</code>,
-  <code>makeClusterFunctionsMulticore</code>,
-  <code>makeClusterFunctionsOpenLava</code>,
-  <code>makeClusterFunctionsSGE</code>,
-  <code>makeClusterFunctionsSSH</code>,
-  <code>makeClusterFunctionsSlurm</code>,
-  <code>makeClusterFunctionsSocket</code>,
-  <code>makeClusterFunctionsTorque</code></p>
-      <p>Other ClusterFunctionsHelper: <code>cfBrewTemplate</code>,
-  <code>cfHandleUnknownSubmitError</code>,
-  <code>cfKillJob</code>,
-  <code>cfReadBrewTemplate</code>,
-  <code>makeSubmitJobResult</code>,
-  <code>runOSCommand</code></p>
+      <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+  <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
+  <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
+  <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
+  <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
+  <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
+  <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>,
+  <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
+  <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
+  <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code></p>
+      <p>Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
+  <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
+  <code><a href='cfKillJob.html'>cfKillJob</a></code>,
+  <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
+  <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>,
+  <code><a href='runOSCommand.html'>runOSCommand</a></code></p>
     </div>
       </div>
   <div class="col-md-3">

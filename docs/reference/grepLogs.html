@@ -84,11 +84,11 @@
   <div class="col-md-9">
     
     <p>Crawls through log files and reports jobs with lines matching the <code>pattern</code>.
-See <code>showLog</code> for an example.</p>
+See <code><a href='showLog.html'>showLog</a></code> for an example.</p>
     
 
     <pre><span class='fu'>grepLogs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>pattern</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -97,7 +97,7 @@ See <code>showLog</code> for an example.</p>
 A <code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to the return value of <code>findStarted</code>.</dd>
+If not set, defaults to the return value of <code><a href='findJobs.html'>findStarted</a></code>.</dd>
       <dt>pattern</dt>
       <dd>[<code>character(1L)</code>]
 Regular expression or string (see <code>fixed</code>).</dd>
@@ -108,8 +108,8 @@ If <code>TRUE</code> the match will be performed case insensitively.</dd>
       <dd>[<code>logical(1L)</code>]
 If <code>FALSE</code> (default), <code>pattern</code> is a regular expression and a fixed string otherwise.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -121,10 +121,10 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
     <div class="See also">
       <h2>See also</h2>
 
-      <p>Other debug: <code>getErrorMessages</code>,
-  <code>getStatus</code>, <code>killJobs</code>,
-  <code>resetJobs</code>, <code>showLog</code>,
-  <code>testJob</code></p>
+      <p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
+  <code><a href='getStatus.html'>getStatus</a></code>, <code><a href='killJobs.html'>killJobs</a></code>,
+  <code><a href='resetJobs.html'>resetJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
+  <code><a href='testJob.html'>testJob</a></code></p>
     </div>
       </div>
   <div class="col-md-3">

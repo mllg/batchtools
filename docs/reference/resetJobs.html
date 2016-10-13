@@ -83,13 +83,13 @@
 <div class="row">
   <div class="col-md-9">
     
-    <p>Resets the computational state of jobs in the <code>Registry</code>.
+    <p>Resets the computational state of jobs in the <code><a href='Registry.html'>Registry</a></code>.
 This function automatically checks if any of the jobs to reset is either pending or running.
 However, if the implemented heuristic fails, this can lead to inconsistencies in the data base.
 Use with care while jobs are running.</p>
     
 
-    <pre><span class='fu'>resetJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+    <pre><span class='fu'>resetJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -100,24 +100,24 @@ with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to no job.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p>[<code>data.table</code>] of job ids which have been reset.
-  See <code>JoinTables</code> for examples on working with job tables.</p>
+  See <code><a href='JoinTables.html'>JoinTables</a></code> for examples on working with job tables.</p>
     </div>
 
     <div class="See also">
       <h2>See also</h2>
 
-      <p>Other debug: <code>getErrorMessages</code>,
-  <code>getStatus</code>, <code>grepLogs</code>,
-  <code>killJobs</code>, <code>showLog</code>,
-  <code>testJob</code></p>
+      <p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
+  <code><a href='getStatus.html'>getStatus</a></code>, <code><a href='grepLogs.html'>grepLogs</a></code>,
+  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
+  <code><a href='testJob.html'>testJob</a></code></p>
     </div>
       </div>
   <div class="col-md-3">

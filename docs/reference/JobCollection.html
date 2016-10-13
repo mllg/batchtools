@@ -84,18 +84,18 @@
   <div class="col-md-9">
     
     <p><code>makeJobCollection</code> takes multiple job ids and creates an object of class &#8220;JobCollection&#8221; which holds all
-necessary information for the calculation with <code>doJobCollection</code>. It is implemented as an environment
+necessary information for the calculation with <code><a href='doJobCollection.html'>doJobCollection</a></code>. It is implemented as an environment
 with the following variables:
 <dl class='dl-horizontal'>
- <dt>file.dir</dt><dd><code>file.dir</code> of the Registry.</dd>
- <dt>work.dir:</dt><dd><code>work.dir</code> of the Registry.</dd>
+ <dt>file.dir</dt><dd><code>file.dir</code> of the <a href='Registry.html'>Registry</a>.</dd>
+ <dt>work.dir:</dt><dd><code>work.dir</code> of the <a href='Registry.html'>Registry</a>.</dd>
  <dt>job.hash</dt><dd>Unique identifier of the job. Used to create names on the file system.</dd>
  <dt>jobs</dt><dd><code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> holding individual job information. See examples.</dd>
  <dt>log.file</dt><dd>Location of the designated log file for this job.</dd>
  <dt>resources:</dt><dd>Named list of of specified computational resources.</dd>
  <dt>uri</dt><dd>Location of the job description file (saved with <code>link[base]{saveRDS}</code> on the file system.</dd>
  <dt>debug</dt><dd><code>logical(1)</code> Debug flag.</dd>
- <dt>seed</dt><dd><code>integer(1)</code> Seed of the Registry.</dd>
+ <dt>seed</dt><dd><code>integer(1)</code> Seed of the <a href='Registry.html'>Registry</a>.</dd>
  <dt>packages</dt><dd><code>character</code> with required packages to load via <code><a href='http://www.rdocumentation.org/packages/library/topics/base'>require</a></code>.</dd>
  <dt>namespaces</dt><dd>codecharacter with required packages to load via <code><a href='http://www.rdocumentation.org/packages/ns-load/topics/base'>requireNamespace</a></code>.</dd>
  <dt>source</dt><dd><code>character</code> with list of files to source before execution.</dd>
@@ -104,12 +104,12 @@ with the following variables:
  <dt>n.array.jobs</dt><dd><code>integer(1)</code> of the number of array jobs (i.e., the number of jobs in chunk if <code>chunks.as.arrayjobs</code> is <code>TRUE</code> and 1 otherwise.</dd>
 </dl></p>
 
-    <p>If your ClusterFunctions uses a template, <code><a href='http://www.rdocumentation.org/packages/brew/topics/brew'>brew</a></code> will be executed in the environment of such
+    <p>If your <a href='makeClusterFunctions.html'>ClusterFunctions</a> uses a template, <code><a href='http://www.rdocumentation.org/packages/brew/topics/brew'>brew</a></code> will be executed in the environment of such
 a collection. Thus all variables available inside the job can be used in the template.</p>
     
 
     <pre><span class='fu'>makeJobCollection</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(),
-  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -123,8 +123,8 @@ If not set, defaults to all jobs.</dd>
       <dd>[<code>list</code>]
 Named list of resources. Default is <code>list()</code>.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -136,21 +136,21 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
     <div class="See also">
       <h2>See also</h2>
 
-      <p>Other JobCollection: <code>doJobCollection</code></p>
+      <p>Other JobCollection: <code><a href='doJobCollection.html'>doJobCollection</a></code></p>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>batchMap</span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 5 jobs ...</strong></div><div class='input'><span class='co'># resources are usually forwared from submitJobs()</span>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 5 jobs ...</strong></div><div class='input'><span class='co'># resources are usually forwared from submitJobs()</span>
 <span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'>makeJobCollection</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>foo</span> <span class='kw'>=</span> <span class='st'>"bar"</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='fu'>ls.str</span>(<span class='no'>jc</span>))</div><div class='output co'>#&gt; array.var :  chr NA
 #&gt; debug :  logi FALSE
-#&gt; file.dir :  chr &quot;/tmp/Rtmpq7T2ot/registry5ac142a2cb53&quot;
-#&gt; job.hash :  chr &quot;0648e8d2692da3ccc282a3db18027804&quot;
+#&gt; file.dir :  chr &quot;/scratch/registry15b26e5c5ea6&quot;
+#&gt; job.hash :  chr &quot;7cd093ed54291edd6f61dd018530251b&quot;
 #&gt; jobs : Classes ‘data.table’ and &#39;data.frame&#39;:	3 obs. of  2 variables:
 #&gt;  $ job.id: int  1 2 3
 #&gt;  $ pars  :List of 3
 #&gt; load :  chr(0) 
-#&gt; log.file :  chr &quot;/tmp/Rtmpq7T2ot/registry5ac142a2cb53/logs/0648e8d2692da3ccc282a3db18027804.log&quot;
+#&gt; log.file :  chr &quot;/scratch/registry15b26e5c5ea6/logs/7cd093ed54291edd6f61dd018530251b.log&quot;
 #&gt; namespaces :  chr(0) 
 #&gt; n.array.jobs :  int 1
 #&gt; packages :  chr &quot;methods&quot;
@@ -158,8 +158,8 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
 #&gt;  $ foo: chr &quot;bar&quot;
 #&gt; seed :  int 705443900
 #&gt; source :  chr(0) 
-#&gt; uri :  chr &quot;/tmp/Rtmpq7T2ot/registry5ac142a2cb53/jobs/0648e8d2692da3ccc282a3db18027804.rds&quot;
-#&gt; work.dir :  chr &quot;/home/michel/Projekte/batchtools/docs/reference&quot;
+#&gt; uri :  chr &quot;/scratch/registry15b26e5c5ea6/jobs/7cd093ed54291edd6f61dd018530251b.rds&quot;
+#&gt; work.dir :  chr &quot;/home/lang/Projekte/batchtools/docs/reference&quot;
 #&gt; </div></pre>
   </div>
   <div class="col-md-3">

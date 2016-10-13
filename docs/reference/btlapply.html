@@ -86,10 +86,10 @@
     <p>This is a set of functions acting as counterparts to the sequential popular apply functions in base R:
 <code>btlapply</code> for <code><a href='http://www.rdocumentation.org/packages/lapply/topics/base'>lapply</a></code> and <code>btmapply</code> for <code>link[base]{mapply}</code>.</p>
 
-    <p>Internally, jobs are created using <code>batchMap</code> on the provided registry.
-If no registry is provided, a temporary registry (see argument <code>file.dir</code> of <code>makeRegistry</code>) and <code>batchMap</code>
+    <p>Internally, jobs are created using <code><a href='batchMap.html'>batchMap</a></code> on the provided registry.
+If no registry is provided, a temporary registry (see argument <code>file.dir</code> of <code><a href='Registry.html'>makeRegistry</a></code>) and <code><a href='batchMap.html'>batchMap</a></code>
 will be used.
-After all jobs are terminated (see <code>waitForJobs</code>), the results are collected and returned as a list.</p>
+After all jobs are terminated (see <code><a href='waitForJobs.html'>waitForJobs</a></code>), the results are collected and returned as a list.</p>
 
     <p>Note that these functions are one suitable for short and fail-safe operations
 on batch system. If some jobs fail, you have to retrieve partial results from the
@@ -97,11 +97,11 @@ registry directory yourself.</p>
     
 
     <pre><span class='fu'>btlapply</span>(<span class='no'>X</span>, <span class='no'>fun</span>, <span class='no'>...</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>))
+  <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>))
 
 <span class='fu'>btmapply</span>(<span class='no'>fun</span>, <span class='no'>...</span>, <span class='kw'>more.args</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>use.names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>))</pre>
+  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>))</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -132,8 +132,8 @@ Requested number of elements in each chunk.
 If <code>ids</code> cannot be chunked evenly, some chunks will have less elements than others.
 Mutually exclusive with with <code>n.chunks</code>.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
       <dt>more.args</dt>
       <dd>[<code>list</code>]
 Additional arguments passed to <code>fun</code>.</dd>
@@ -152,7 +152,7 @@ Use names of the input to name the output?</dd>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>btlapply</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='output'><strong class='text-info'>Adding 3 jobs ...</strong></div><div class='output'><strong class='text-info'>Submitting 3 jobs in 1 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='output'><strong class='text-info'>Syncing 1 files ...</strong></div><div class='output co'>#&gt; [[1]]
+    <pre class="examples"><div class='input'><span class='fu'>btlapply</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='output'><strong class='text-info'>Adding 3 jobs ...</strong></div><div class='output'><strong class='text-info'>Submitting 3 jobs in 1 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='output'><strong class='text-info'>Syncing 1 files ...</strong></div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1
 #&gt; 
 #&gt; [[2]]
@@ -161,7 +161,7 @@ Use names of the input to name the output?</dd>
 #&gt; [[3]]
 #&gt; [1] 9
 #&gt; 
-#&gt; </div><div class='input'><span class='fu'>btmapply</span>(<span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>z</span>) <span class='no'>x</span> + <span class='no'>y</span> + <span class='no'>z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>more.args</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='output'><strong class='text-info'>Adding 3 jobs ...</strong></div><div class='output'><strong class='text-info'>Submitting 3 jobs in 1 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='output'><strong class='text-info'>Syncing 1 files ...</strong></div><div class='output co'>#&gt; [1] 3 5 7
+#&gt; </div><div class='input'><span class='fu'>btmapply</span>(<span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>z</span>) <span class='no'>x</span> + <span class='no'>y</span> + <span class='no'>z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>more.args</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='output'><strong class='text-info'>Adding 3 jobs ...</strong></div><div class='output'><strong class='text-info'>Submitting 3 jobs in 1 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='output'><strong class='text-info'>Syncing 1 files ...</strong></div><div class='output co'>#&gt; [1] 3 5 7
 #&gt; </div></pre>
   </div>
   <div class="col-md-3">

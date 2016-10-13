@@ -83,7 +83,7 @@
 <div class="row">
   <div class="col-md-9">
     
-    <p>Executes every job in a <code>JobCollection</code>.
+    <p>Executes every job in a <code><a href='makeJobCollection.html'>JobCollection</a></code>.
 This function is intended to be called on the slave.</p>
     
 
@@ -92,10 +92,10 @@ This function is intended to be called on the slave.</p>
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
       <dt>jc</dt>
-      <dd>[<code>JobCollection</code>]
+      <dd>[<code><a href='makeJobCollection.html'>JobCollection</a></code>]
 Either an object of class &#8220;JobCollection&#8221; as returned by
-<code>makeJobCollection</code> or a string with the path to file
-containing a &#8220;JobCollection&#8221; as RDS file (as stored by <code>submitJobs</code>).</dd>
+<code><a href='makeJobCollection.html'>makeJobCollection</a></code> or a string with the path to file
+containing a &#8220;JobCollection&#8221; as RDS file (as stored by <code><a href='submitJobs.html'>submitJobs</a></code>).</dd>
       <dt>output</dt>
       <dd>[<code>character(1)</code>]
 Path to a file to write the output to. Defaults to <code>NULL</code> which means
@@ -105,27 +105,27 @@ that output is written to the active <code><a href='http://www.rdocumentation.or
     <div class="Value">
       <h2>Value</h2>
 
-      <p>[<code>character(1)</code>]: Hash of the <code>JobCollection</code> executed.</p>
+      <p>[<code>character(1)</code>]: Hash of the <code><a href='makeJobCollection.html'>JobCollection</a></code> executed.</p>
     </div>
 
     <div class="See also">
       <h2>See also</h2>
 
-      <p>Other JobCollection: <code>makeJobCollection</code></p>
+      <p>Other JobCollection: <code><a href='makeJobCollection.html'>makeJobCollection</a></code></p>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>batchMap</span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 2 jobs ...</strong></div><div class='input'><span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'>makeJobCollection</span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>doJobCollection</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt; ### [bt 2016-10-09 23:15:29]: Starting calculation of 2 jobs
-#&gt; ### [bt 2016-10-09 23:15:29]: Setting working directory to &#39;/home/michel/Projekte/batchtools/docs/reference&#39;
-#&gt; ### [bt 2016-10-09 23:15:29]: Memory measurement disabled
-#&gt; ### [bt 2016-10-09 23:15:29]: Starting job [batchtools job.id=1]
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 2 jobs ...</strong></div><div class='input'><span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'><a href='makeJobCollection.html'>makeJobCollection</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'>doJobCollection</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt; ### [bt 2016-10-13 13:46:55]: Starting calculation of 2 jobs
+#&gt; ### [bt 2016-10-13 13:46:55]: Setting working directory to &#39;/home/lang/Projekte/batchtools/docs/reference&#39;
+#&gt; ### [bt 2016-10-13 13:46:55]: Memory measurement disabled
+#&gt; ### [bt 2016-10-13 13:46:55]: Starting job [batchtools job.id=1]
 #&gt; 
-#&gt; ### [bt 2016-10-09 23:15:29]: Job terminated successfully [batchtools job.id=1]
-#&gt; ### [bt 2016-10-09 23:15:29]: Starting job [batchtools job.id=2]
+#&gt; ### [bt 2016-10-13 13:46:55]: Job terminated successfully [batchtools job.id=1]
+#&gt; ### [bt 2016-10-13 13:46:55]: Starting job [batchtools job.id=2]
 #&gt; 
-#&gt; ### [bt 2016-10-09 23:15:29]: Job terminated successfully [batchtools job.id=2]
-#&gt; ### [bt 2016-10-09 23:15:29]: Calculation finished!
+#&gt; ### [bt 2016-10-13 13:46:55]: Job terminated successfully [batchtools job.id=2]
+#&gt; ### [bt 2016-10-13 13:46:55]: Calculation finished!
 #&gt; </div></pre>
   </div>
   <div class="col-md-3">

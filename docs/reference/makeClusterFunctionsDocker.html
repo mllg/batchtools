@@ -87,7 +87,7 @@
 
     <p>The <code>submitJob</code> function executes <code>docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]</code>.
 Arguments <code>docker.args</code>, <code>image.args</code> and <code>image</code> can be set on construction.
-The <code>resources</code> part takes the named resources <code>ncpus</code> and <code>memory</code> from <code>submitJobs</code> and maps them to
+The <code>resources</code> part takes the named resources <code>ncpus</code> and <code>memory</code> from <code><a href='submitJobs.html'>submitJobs</a></code> and maps them to
 the arguments <code>--cpu-shares</code> and <code>--memory</code> (in Megabytes).
 To reliably identify jobs in the swarm, jobs are labeled with &#8220;batchtools=[job.hash]&#8221; and named using the current login name and the job hash.</p>
 
@@ -95,8 +95,8 @@ To reliably identify jobs in the swarm, jobs are labeled with &#8220;batchtools=
 
     <p><code>killJobs</code> uses <code>docker [docker.args] kill [batch.id]</code> to filter for running jobs.</p>
 
-    <p>These cluster functions use a Hook to remove finished jobs before a new submit and every time the Registry
-is synchronized (using <code>syncRegistry</code>).
+    <p>These cluster functions use a <a href='runHook.html'>Hook</a> to remove finished jobs before a new submit and every time the <a href='Registry.html'>Registry</a>
+is synchronized (using <code><a href='Registry.html'>syncRegistry</a></code>).
 This is currently required because docker does not remove exited containers automatically.
 Use <code>docker ps -a --filter &#39;label=batchtools&#39; --filter &#39;status=exited&#39;</code> to identify and remove terminated containers manually (or via a cron job).</p>
     
@@ -120,22 +120,22 @@ Additional arguments passed to &#8220;docker run&#8221; (e.g., to define mounts 
     <div class="Value">
       <h2>Value</h2>
 
-      <p>[<code>ClusterFunctions</code>].</p>
+      <p>[<code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>].</p>
     </div>
 
     <div class="See also">
       <h2>See also</h2>
 
-      <p>Other ClusterFunctions: <code>makeClusterFunctionsInteractive</code>,
-  <code>makeClusterFunctionsLSF</code>,
-  <code>makeClusterFunctionsMulticore</code>,
-  <code>makeClusterFunctionsOpenLava</code>,
-  <code>makeClusterFunctionsSGE</code>,
-  <code>makeClusterFunctionsSSH</code>,
-  <code>makeClusterFunctionsSlurm</code>,
-  <code>makeClusterFunctionsSocket</code>,
-  <code>makeClusterFunctionsTorque</code>,
-  <code>makeClusterFunctions</code></p>
+      <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
+  <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
+  <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
+  <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
+  <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
+  <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>,
+  <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
+  <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
+  <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code>,
+  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p>
     </div>
       </div>
   <div class="col-md-3">

@@ -87,9 +87,9 @@
 <code>getLog</code> returns the log as character vector.</p>
     
 
-    <pre><span class='fu'>showLog</span>(<span class='no'>id</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+    <pre><span class='fu'>showLog</span>(<span class='no'>id</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>getLog</span>(<span class='no'>id</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+<span class='fu'>getLog</span>(<span class='no'>id</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -98,8 +98,8 @@
 Single integer to specify the job or a <code>data.table</code> with column <code>job.id</code>
 and exactly one row.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -111,23 +111,23 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
     <div class="See also">
       <h2>See also</h2>
 
-      <p>Other debug: <code>getErrorMessages</code>,
-  <code>getStatus</code>, <code>grepLogs</code>,
-  <code>killJobs</code>, <code>resetJobs</code>,
-  <code>testJob</code></p>
+      <p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
+  <code><a href='getStatus.html'>getStatus</a></code>, <code><a href='grepLogs.html'>grepLogs</a></code>,
+  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='resetJobs.html'>resetJobs</a></code>,
+  <code><a href='testJob.html'>testJob</a></code></p>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'>
 <span class='co'># Create some dummy jobs</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
   <span class='kw'>if</span> (<span class='no'>i</span> <span class='kw'>==</span> <span class='fl'>3</span>) <span class='fu'>stop</span>(<span class='no'>i</span>)
   <span class='kw'>if</span> (<span class='no'>i</span> <span class='kw'>%%</span> <span class='fl'>2</span> <span class='kw'>==</span> <span class='fl'>1</span>) <span class='fu'>warning</span>(<span class='st'>"That's odd."</span>)
 }
-<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>batchMap</span>(<span class='no'>fun</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 5 jobs ...</strong></div><div class='input'><span class='fu'>submitJobs</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 5 jobs in 5 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='output'><strong class='text-warning'>Warning message:
+<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>fun</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 5 jobs ...</strong></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 5 jobs in 5 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='output'><strong class='text-warning'>Warning message:
 That&#39;s odd.</strong></div><div class='output'><strong class='text-warning'>Warning message:
-That&#39;s odd.</strong></div><div class='input'><span class='fu'>waitForJobs</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 5 files ...</strong></div><div class='output co'>#&gt; [1] FALSE
-#&gt; </div><div class='input'><span class='fu'>getStatus</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; Status for 5 jobs:
+That&#39;s odd.</strong></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 5 files ...</strong></div><div class='output co'>#&gt; [1] FALSE
+#&gt; </div><div class='input'><span class='fu'><a href='getStatus.html'>getStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; Status for 5 jobs:
 #&gt;   Submitted : 5 (100.0%)
 #&gt;   Queued    : 0 (  0.0%)
 #&gt;   Started   : 5 (100.0%)
@@ -136,18 +136,18 @@ That&#39;s odd.</strong></div><div class='input'><span class='fu'>waitForJobs</s
 #&gt;   Error     : 1 ( 20.0%)
 #&gt;   Expired   : 0 (  0.0%)
 #&gt; </div><div class='input'>
-<span class='fu'>writeLines</span>(<span class='fu'>getLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; ### [bt 2016-10-09 23:15:32]: Starting calculation of 1 jobs
-#&gt; ### [bt 2016-10-09 23:15:32]: Setting working directory to &#39;/home/michel/Projekte/batchtools/docs/reference&#39;
-#&gt; ### [bt 2016-10-09 23:15:32]: Memory measurement disabled
-#&gt; ### [bt 2016-10-09 23:15:32]: Starting job [batchtools job.id=1]
+<span class='fu'>writeLines</span>(<span class='fu'>getLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; ### [bt 2016-10-13 13:46:57]: Starting calculation of 1 jobs
+#&gt; ### [bt 2016-10-13 13:46:57]: Setting working directory to &#39;/home/lang/Projekte/batchtools/docs/reference&#39;
+#&gt; ### [bt 2016-10-13 13:46:57]: Memory measurement disabled
+#&gt; ### [bt 2016-10-13 13:46:57]: Starting job [batchtools job.id=1]
 #&gt; 
-#&gt; ### [bt 2016-10-09 23:15:32]: Job terminated successfully [batchtools job.id=1]
-#&gt; ### [bt 2016-10-09 23:15:32]: Calculation finished!
+#&gt; ### [bt 2016-10-13 13:46:57]: Job terminated successfully [batchtools job.id=1]
+#&gt; ### [bt 2016-10-13 13:46:57]: Calculation finished!
 #&gt; </div><div class='input'><span class='co'>## Not run: ------------------------------------</span>
 <span class='co'># showLog(ids[1], reg = tmp)</span>
 <span class='co'>## ---------------------------------------------</span>
 
-<span class='fu'>grepLogs</span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"warning"</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; Empty data.table (0 rows) of 2 cols: job.id,matches
+<span class='fu'><a href='grepLogs.html'>grepLogs</a></span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"warning"</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; Empty data.table (0 rows) of 2 cols: job.id,matches
 #&gt; </div></pre>
   </div>
   <div class="col-md-3">

@@ -83,11 +83,11 @@
 <div class="row">
   <div class="col-md-9">
     
-    <p>A version of <code><a href='http://www.rdocumentation.org/packages/funprog/topics/base'>Reduce</a></code> for <code>Registry</code> objects
+    <p>A version of <code><a href='http://www.rdocumentation.org/packages/funprog/topics/base'>Reduce</a></code> for <code><a href='Registry.html'>Registry</a></code> objects
 which iterates over finished jobs and aggregates them.</p>
     
 
-    <pre><span class='fu'>reduceResults</span>(<span class='no'>fun</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>init</span>, <span class='no'>...</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+    <pre><span class='fu'>reduceResults</span>(<span class='no'>fun</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>init</span>, <span class='no'>...</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -97,14 +97,14 @@ A function to reduce the results. The result of previous iterations (or
 the <code>init</code>) will be passed as first argument, the result of of the
 i-th iteration as second. See <code><a href='http://www.rdocumentation.org/packages/funprog/topics/base'>Reduce</a></code> for some
 examples.
-If the function has the formal argument &#8220;job&#8221;, the <code>Job</code>/<code>Experiment</code>
+If the function has the formal argument &#8220;job&#8221;, the <code><a href='makeJob.html'>Job</a></code>/<code><a href='makeJob.html'>Experiment</a></code>
 is also passed to the function.</dd>
       <dt>ids</dt>
       <dd>[<code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code> or <code>integer</code>]
 A <code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to the return value of <code>findDone</code>.</dd>
+If not set, defaults to the return value of <code><a href='findJobs.html'>findDone</a></code>.</dd>
       <dt>init</dt>
       <dd>[<code>ANY</code>]
 Initial element, as used in <code><a href='http://www.rdocumentation.org/packages/funprog/topics/base'>Reduce</a></code>.
@@ -113,8 +113,8 @@ Default is the first result.</dd>
       <dd>[<code>ANY</code>]
 Additional arguments passed to to function <code>fun</code>.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -135,12 +135,12 @@ can significantly increase the performance.</p>
     <div class="See also">
       <h2>See also</h2>
 
-      <p>Other Results: <code>batchMapResults</code>,
-  <code>loadResult</code>, <code>reduceResultsList</code></p>
+      <p>Other Results: <code><a href='batchMapResults.html'>batchMapResults</a></code>,
+  <code><a href='loadResult.html'>loadResult</a></code>, <code><a href='reduceResultsList.html'>reduceResultsList</a></code></p>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>batchMap</span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 10 jobs ...</strong></div><div class='input'><span class='fu'>submitJobs</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 10 jobs in 10 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='input'><span class='fu'>waitForJobs</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 10 files ...</strong></div><div class='output co'>#&gt; [1] TRUE
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 10 jobs ...</strong></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 10 jobs in 10 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 10 files ...</strong></div><div class='output co'>#&gt; [1] TRUE
 #&gt; </div><div class='input'><span class='fu'>reduceResults</span>(<span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>) <span class='fu'>c</span>(<span class='no'>x</span>, <span class='no'>y</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;  [1]   1   4   9  16  25  36  49  64  81 100
 #&gt; </div><div class='input'><span class='fu'>reduceResults</span>(<span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>) <span class='fu'>c</span>(<span class='no'>x</span>, <span class='fu'>sqrt</span>(<span class='no'>y</span>)), <span class='kw'>init</span> <span class='kw'>=</span> <span class='fu'>numeric</span>(<span class='fl'>0</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
 #&gt; </div></pre>

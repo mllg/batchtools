@@ -91,24 +91,24 @@ This instance is then typically passed to a learning algorithm like a wrapper ar
 (<code>fun</code> in <code>addAlgorithm</code>).</p>
 
     <p>The functions serialize all components to the file system and register the respective problem or algorithm
-names in the <code>ExperimentRegistry</code>.</p>
+names in the <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>.</p>
 
     <p><code>getProblemIds</code> and <code>getAlgorithmIds</code> can be used to retrieve the IDs of already defined problems
 and algorithms, respectively.</p>
     
 
     <pre><span class='fu'>addProblem</span>(<span class='no'>name</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>removeProblems</span>(<span class='no'>name</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>removeProblems</span>(<span class='no'>name</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>getProblemIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>getProblemIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>addAlgorithm</span>(<span class='no'>name</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>addAlgorithm</span>(<span class='no'>name</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>removeAlgorithms</span>(<span class='no'>name</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
+<span class='fu'>removeAlgorithms</span>(<span class='no'>name</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>getAlgorithmIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+<span class='fu'>getAlgorithmIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -121,12 +121,12 @@ Static problem part. Default is <code>NULL</code>.</dd>
       <dt>fun</dt>
       <dd>[<code>function</code>]
   For <code>addProblem</code>, the function defining the stochastic problem part.
-  The static part is passed to this function with name &#8220;data&#8221; and the <code>Job</code>/<code>Experiment</code>
+  The static part is passed to this function with name &#8220;data&#8221; and the <code><a href='makeJob.html'>Job</a></code>/<code><a href='makeJob.html'>Experiment</a></code>
   is passed as &#8220;job&#8221;.
   Therefore, your function must have the formal arguments &#8220;job&#8221; and &#8220;data&#8221; (or dots <code>...</code>).
 
   For <code>addAlgorithm</code>, the algorithm function. The static part is passed as &#8220;data&#8221;, the generated
-  problem instance is passed as &#8220;instance&#8221; and the <code>Job</code>/<code>Experiment</code> as &#8220;job&#8221;.
+  problem instance is passed as &#8220;instance&#8221; and the <code><a href='makeJob.html'>Job</a></code>/<code><a href='makeJob.html'>Experiment</a></code> as &#8220;job&#8221;.
   Therefore, your function must have the formal arguments &#8220;job&#8221;, &#8220;data&#8221; and &#8220;instance&#8221; (or dots <code>...</code>).
 
   If you do not provide a function, it defaults to a function which just returns the data part (Problem) or the instance (Algorithm).</dd>
@@ -139,11 +139,11 @@ If the problem seed is defined, the seeding mechanism works as follows:
 the seed of the problem + [replication number] - 1 is set, i.e. the first
 replication uses the problem seed. (2) The stochastic part of the problem is
 instantiated. (3) From now on the usual experiment seed of the registry is used,
-see <code>ExperimentRegistry</code>.
+see <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>.
 If <code>seed</code> is set to <code>NULL</code> (default), the job seed is used to instantiate the problem and
 different algorithms see different stochastic instances of the same problem.</dd>
       <dt>reg</dt>
-      <dd>[<code>ExperimentRegistry</code>]
+      <dd>[<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
     </dl>
     
@@ -154,7 +154,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeExperimentRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>addProblem</span>(<span class='st'>"p1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='no'>data</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>addProblem</span>(<span class='st'>"p1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='no'>data</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>addProblem</span>(<span class='st'>"p2"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='no'>job</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>getProblemIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] &quot;p1&quot; &quot;p2&quot;
 #&gt; </div><div class='input'>

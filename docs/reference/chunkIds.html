@@ -85,14 +85,14 @@
     
     <p>Partition jobs into &#8220;chunks&#8221; which will be executed together on the nodes.</p>
 
-    <p>Chunks are submitted via <code>submitJobs</code> by simply providing
+    <p>Chunks are submitted via <code><a href='submitJobs.html'>submitJobs</a></code> by simply providing
 a data frame with columns &#8220;job.id&#8221; and corresponding &#8220;chunk&#8221; (both integer).
 All jobs with the same chunk number will be grouped together on one node as a single
 computational job.</p>
     
 
     <pre><span class='fu'>chunkIds</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>group.by</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+  <span class='kw'>group.by</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -119,8 +119,8 @@ If <code>ids</code> is a <code>data.frame</code> with additional columns
 subgroups defined by the columns set in <code>group.by</code>.
 See example.</dd>
       <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
+      <dd>[<code><a href='Registry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <div class="Value">
@@ -131,7 +131,7 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># chunking for Registry</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>batchMap</span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>25</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 25 jobs ...</strong></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>chunkIds</span>(<span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>25</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 25 jobs ...</strong></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>chunkIds</span>(<span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='no'>ids</span>)</div><div class='output co'>#&gt;     job.id chunk
 #&gt;  1:      1     3
 #&gt;  2:      2     2
@@ -164,15 +164,15 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
 #&gt; 9 8 8 
 #&gt; </div><div class='input'>
 <span class='co'># Creating chunks for an ExperimentRegistry</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeExperimentRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'>addProblem</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob1"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))
-<span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'>addProblem</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob2"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Titanic</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))
-<span class='no'>algo</span> <span class='kw'>=</span> <span class='fu'>addAlgorithm</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"algo"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>i</span>, <span class='no'>...</span>) <span class='no'>problem</span>)
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='ProblemAlgorithm.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob1"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))
+<span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='ProblemAlgorithm.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob2"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Titanic</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))
+<span class='no'>algo</span> <span class='kw'>=</span> <span class='fu'><a href='ProblemAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"algo"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>i</span>, <span class='no'>...</span>) <span class='no'>problem</span>)
 <span class='no'>prob.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>prob1</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(), <span class='kw'>prob2</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>))
 <span class='no'>algo.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>algo</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>))
-<span class='fu'>addExperiments</span>(<span class='no'>prob.designs</span>, <span class='no'>algo.designs</span>, <span class='kw'>repls</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 9 experiments (&#39;prob1&#39;[1] x &#39;algo&#39;[3] x repls[3]) ...</strong></div><div class='output'><strong class='text-info'>Adding 18 experiments (&#39;prob2&#39;[2] x &#39;algo&#39;[3] x repls[3]) ...</strong></div><div class='input'>
+<span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='no'>prob.designs</span>, <span class='no'>algo.designs</span>, <span class='kw'>repls</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 9 experiments (&#39;prob1&#39;[1] x &#39;algo&#39;[3] x repls[3]) ...</strong></div><div class='output'><strong class='text-info'>Adding 18 experiments (&#39;prob2&#39;[2] x &#39;algo&#39;[3] x repls[3]) ...</strong></div><div class='input'>
 <span class='co'># group into chunks of 5 jobs, but do not put multiple problems into a single chunk</span>
 <span class='co'># -&gt; only one problem has to be loaded per chunk, and only once because it is then cached.</span>
-<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>getJobTable</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>problem</span>, <span class='no'>algorithm</span>)]
+<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='getJobTable.html'>getJobTable</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>problem</span>, <span class='no'>algorithm</span>)]
 <span class='no'>chunked</span> <span class='kw'>=</span> <span class='fu'>chunkIds</span>(<span class='no'>ids</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>group.by</span> <span class='kw'>=</span> <span class='st'>"problem"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='no'>chunked</span>)</div><div class='output co'>#&gt;     job.id chunk
 #&gt;  1:      1     1
@@ -203,7 +203,7 @@ Registry. If not explicitly passed, uses the default registry (see <code>setDefa
 #&gt; 26:     26     6
 #&gt; 27:     27     5
 #&gt;     job.id chunk
-#&gt; </div><div class='input'><span class='fu'>dcast</span>(<span class='fu'>ijoin</span>(<span class='no'>ids</span>, <span class='no'>chunked</span>), <span class='no'>chunk</span> ~ <span class='no'>problem</span>)</div><div class='output'><strong class='text-info'>Using &#39;chunk&#39; as value column. Use &#39;value.var&#39; to override</strong></div><div class='output'><strong class='text-info'>Aggregate function missing, defaulting to &#39;length&#39;</strong></div><div class='output co'>#&gt;    chunk prob1 prob2
+#&gt; </div><div class='input'><span class='fu'>dcast</span>(<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>ids</span>, <span class='no'>chunked</span>), <span class='no'>chunk</span> ~ <span class='no'>problem</span>)</div><div class='output'><strong class='text-info'>Using &#39;chunk&#39; as value column. Use &#39;value.var&#39; to override</strong></div><div class='output'><strong class='text-info'>Aggregate function missing, defaulting to &#39;length&#39;</strong></div><div class='output co'>#&gt;    chunk prob1 prob2
 #&gt; 1:     1     5     0
 #&gt; 2:     2     4     0
 #&gt; 3:     3     0     5
