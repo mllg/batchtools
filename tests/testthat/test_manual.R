@@ -1,4 +1,4 @@
-context("expensive tests")
+context("manual expensive tests")
 
 test_that("rscimark", {
   skip_if_not_installed("rscimark")
@@ -17,5 +17,7 @@ test_that("rscimark", {
   batchMap(Sys.sleep, rep(3, 4), reg = reg)
   submitJobs(reg = reg)
   waitForJobs(reg = reg)
-  getJobTable(reg = reg)
+  tab = getJobTable(reg = reg)
+  expect_true(all(as.numeric(diff(range(tab$started))) <= 2))
+  expect_true(all(as.numeric(diff(range(tab$done))) <= 2))
 })
