@@ -38,8 +38,6 @@ batchExport = function(export = list(), unexport = character(0L), reg = getDefau
   assertCharacter(unexport, any.missing = FALSE, min.chars = 1L)
 
   path = file.path(reg$file.dir, "exports")
-  if (!dir.exists(path))
-    dir.create(path)
 
   if (length(export) > 0L) {
     nn = names(export)

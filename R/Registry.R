@@ -132,6 +132,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   reg$load = load
   reg$seed = seed
   reg$writeable = TRUE
+  reg$version = packageVersion("batchtools")
 
   reg$defs = data.table(
     def.id    = integer(0L),
@@ -166,7 +167,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   if (is.na(file.dir))
     reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
-  for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "external")))
+  for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
     dir.create(d, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)
 
@@ -281,10 +282,10 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
     reg$work.dir = npath(work.dir)
   }
 
-  if (!dir.exists(reg$work.dir))
+  wd.exists = dir.exists(reg$work.dir)
+  if (!wd.exists)
     warningf("The work.dir '%s' does not exist, jobs might fail to run on this system.", reg$work.dir)
-
-  loadRegistryDependencies(reg, switch.wd = TRUE)
+  loadRegistryDependencies(reg, switch.wd = wd.exists)
   reg$cluster.functions = makeClusterFunctionsInteractive()
   setSystemConf(reg, conf.file)
   if (make.default)
@@ -419,13 +420,12 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
   }
 
   path = file.path(x$file.dir, "exports")
-  if (dir.exists(path)) {
-    fns = list.files(path, pattern = "\\.rds$")
-    if (length(fns) > 0L)
-      ee = .GlobalEnv
-      Map(function(name, fn) {
-        assign(x = name, value = readRDS(fn), envir = ee)
-      }, name = basename(stri_sub(fns, to = -5L)), fn = file.path(path, fns))
+  fns = list.files(path, pattern = "\\.rds$")
+  if (length(fns) > 0L) {
+    ee = .GlobalEnv
+    Map(function(name, fn) {
+      assign(x = name, value = readRDS(fn), envir = ee)
+    }, name = basename(stri_sub(fns, to = -5L)), fn = file.path(path, fns))
   }
 
   invisible(TRUE)
