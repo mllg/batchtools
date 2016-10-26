@@ -92,7 +92,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     return(error("Error loading registry dependencies: %s", as.character(ok)))
 
   # setup inner parallelization
-  if (!is.null(jc$resources$pm.backend)) {
+  if (hasName(jc$resources, "pm.backend")) {
     if (!requireNamespace("parallelMap", quietly = TRUE))
       return(error("parallelMap not installed"))
     pm.opts = filterNull(insert(list(mode = jc$resources$pm.backend, cpus = jc$resources$ncpus, show.info = FALSE), jc$resources$pm.opts))

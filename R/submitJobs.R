@@ -115,23 +115,27 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   assertRegistry(reg, writeable = TRUE, sync = TRUE)
   assertList(resources, names = "strict")
   resources = insert(reg$default.resources, resources)
-  if (!is.null(resources$pm.backend))
+  if (hasName(resources, "pm.backend"))
     assertChoice(resources$pm.backend, c("local", "multicore", "socket", "mpi"))
-  assertList(resources$pm.opts, names = "unique", null.ok = TRUE)
-  assertCount(resources$ncpus, positive = TRUE, null.ok = TRUE)
-  assertFlag(resources$measure.memory, null.ok = TRUE)
-  assertFlag(resources$chunks.as.arrayjobs, null.ok = TRUE)
+  if (hasName(resources, "pm.opts"))
+    assertList(resources$pm.opts, names = "unique")
+  if (hasName(resources, "ncpus"))
+    assertCount(resources$ncpus, positive = TRUE)
+  if (hasName(resources, "measure.memory"))
+    assertFlag(resources$measure.memory)
+  if (hasName(resources, "chunks.as.arrayjobs"))
+    assertFlag(resources$chunks.as.arrayjobs)
 
   ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk", keep.order = TRUE)
   if (nrow(ids) == 0L)
     return(noIds())
 
   # handle chunks
-  if (is.null(ids$chunk)) {
-    chunks = ids$chunk = seq_row(ids)
-  } else {
+  if (hasName(ids, "chunk")) {
     assertInteger(ids$chunk, any.missing = FALSE)
     chunks = unique(ids$chunk)
+  } else {
+    chunks = ids$chunk = seq_row(ids)
   }
   setkeyv(ids, "job.id")
 
@@ -140,7 +144,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   max.concurrent.jobs = NA_integer_
   if (on.sys[ids, .N, nomatch = 0L] > 0L)
     stopf("Some jobs are already on the system, e.g. %s", stri_join(head(on.sys[ids, nomatch = 0L]$job.id, 1L), collapse = ", "))
-  if (!is.null(reg$max.concurrent.jobs)) {
+  if (hasName(reg, "max.concurrent.jobs")) {
     if (nrow(on.sys) + length(chunks) > reg$max.concurrent.jobs)
       max.concurrent.jobs = reg$max.concurrent.jobs
   }
