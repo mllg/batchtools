@@ -30,9 +30,9 @@ If not set, defaults to all jobs.}
 
 \item{flatten}{[\code{logical(1)}]\cr
 Transform the job parameters and/or resource specifications to data frame columns?
-Defaults to \code{TRUE} if all elements parameters or resources are atomics,
+Defaults to \code{TRUE} if all parameters or resources are atomics,
 \code{FALSE} otherwise where each row of the column will hold a named list.
-New columns will be named, depending on the value of \code{prefix}.}
+New columns will be named using \code{prefix}.}
 
 \item{prefix}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, the prefix \dQuote{par.} is used to name column names of parameters

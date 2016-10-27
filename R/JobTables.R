@@ -12,9 +12,9 @@
 #' @template ids
 #' @param flatten [\code{logical(1)}]\cr
 #'   Transform the job parameters and/or resource specifications to data frame columns?
-#'   Defaults to \code{TRUE} if all elements parameters or resources are atomics,
+#'   Defaults to \code{TRUE} if all parameters or resources are atomics,
 #'   \code{FALSE} otherwise where each row of the column will hold a named list.
-#'   New columns will be named, depending on the value of \code{prefix}.
+#'   New columns will be named using \code{prefix}.
 #' @param prefix [\code{logical(1)}]\cr
 #'   If set to \code{TRUE}, the prefix \dQuote{par.} is used to name column names of parameters
 #'   for a \code{\link{Registry}} and prefixes \dQuote{prob.par.} and \dQuote{algo.par.} are used to name
@@ -88,7 +88,7 @@ getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = get
 
   ids = convertIds(reg, ids)
   tab = merge(filter(reg$status, ids, c("job.id", "resource.id")), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", "resources"), with = FALSE]
-  if (flatten %??% qtestr(tab$resources, c("v", "0"), depth = 2L)) {
+  if (flatten %??% qtestr(tab$resources, c("v1", "L", "0"), depth = 2L)) {
     tab = rbindlist(.mapply(function(job.id, resources) c(list(job.id = job.id), resources), tab, list()), fill = TRUE)
     if (prefix && ncol(tab) >= 2L) {
       nn = setdiff(names(tab), "job.id")
@@ -113,7 +113,7 @@ getJobPars.Registry = function(ids = NULL, flatten = NULL, prefix = FALSE, reg =
   ids = convertIds(reg, ids)
   tab = mergedJobs(reg, ids, c("job.id", "pars"))
 
-  if (flatten %??% qtestr(tab$pars, c("v", "L"), depth = 2L)) {
+  if (flatten %??% qtestr(tab$pars, c("v1", "L"), depth = 2L)) {
     new.cols = rbindlist(tab$pars)
     if (ncol(new.cols) > 0L) {
       if (prefix)
@@ -132,7 +132,7 @@ getJobPars.ExperimentRegistry = function(ids = NULL, flatten = NULL, prefix = FA
   ids = convertIds(reg, ids)
   tab = mergedJobs(reg, ids, c("job.id", "pars", "problem", "algorithm"))
 
-  if (flatten %??% qtestr(tab$pars, c("v", "L"), depth = 2L)) {
+  if (flatten %??% qtestr(tab$pars, c("v1", "L"), depth = 2L)) {
     new.cols = rbindlist(lapply(tab$pars, unlist, recursive = FALSE), fill = TRUE)
     if (ncol(new.cols) > 0L) {
       pattern = "^(prob|algo)\\.pars\\."
