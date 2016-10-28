@@ -1,7 +1,7 @@
 # internal function for early adopters.
 # if everything works as intended, this routine is not
 # needed in the future.
-updateRegistry = function(reg = getDefaultRegistry()) {
+updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
   if (!is.data.table(reg$tags)) {
     info("Adding tags table")
     reg$tags = data.table( job.id = integer(0L), tag = character(0L), key = "job.id")
@@ -36,4 +36,4 @@ updateRegistry = function(reg = getDefaultRegistry()) {
   }
 
   saveRegistry(reg)
-}
+} # nocov end

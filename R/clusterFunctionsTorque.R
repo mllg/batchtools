@@ -60,6 +60,6 @@ makeClusterFunctionsTorque = function(template = findTemplateFile("torque")) { #
     listJobs(reg, c("qselect", "-u $USER", "-s EHRT"))
   }
 
-  makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    listJobsQueued = listJobsQueued, array.var = "PBS_ARRAYID", store.job = TRUE)
+  makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
+    listJobsRunning = listJobsRunning, store.job = TRUE, array.var = "PBS_ARRAYID")
 } # nocov end

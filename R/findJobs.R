@@ -213,11 +213,11 @@ findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {
   .findOnSystem(reg, convertIds(reg, ids))
 }
 
-.findOnSystem = function(reg, ids = NULL, status = "all", batch.ids = getBatchIds(reg, status = status)) {
+.findOnSystem = function(reg, ids = NULL, status = "all", cols = "job.id", batch.ids = getBatchIds(reg, status = status)) {
   if (length(batch.ids) == 0L)
     return(noIds())
   submitted = done = batch.id = NULL
-  filter(reg$status, ids, c("job.id", "submitted", "done", "batch.id"))[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids$batch.id, "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "submitted", "done", "batch.id"))[!is.na(submitted) & is.na(done) & batch.id %in% batch.ids$batch.id, cols, with = FALSE]
 }
 
 

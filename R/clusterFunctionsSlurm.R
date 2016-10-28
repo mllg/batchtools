@@ -84,5 +84,5 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
   }
 
   makeClusterFunctions(name = "Slurm", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    listJobsQueued = listJobsQueued, array.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE)
+    listJobsQueued = listJobsQueued, store.job = TRUE, array.var = "SLURM_ARRAY_TASK_ID")
 } # nocov end

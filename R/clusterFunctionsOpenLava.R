@@ -68,5 +68,5 @@ makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"))
   }
 
   makeClusterFunctions(name = "OpenLava", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, array.var = "LSB_JOBINDEX", store.job = TRUE)
+    listJobsRunning = listJobsRunning, store.job = TRUE, array.var = "LSB_JOBINDEX")
 } # nocov end

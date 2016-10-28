@@ -19,7 +19,7 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
 
   kill = reg$cluster.functions$killJob
   if (is.null(kill))
-    stop("ClusterFunction implementation does not support the killing of jobs")
+    stop("ClusterFunctions implementation does not support the killing of jobs")
 
   ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
   tab = reg$status[.findOnSystem(ids = ids, reg = reg), c("job.id", "started", "batch.id"), with = FALSE]

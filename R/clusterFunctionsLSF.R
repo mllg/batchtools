@@ -67,5 +67,5 @@ makeClusterFunctionsLSF = function(template = findTemplateFile("lsf")) { # nocov
   }
 
   makeClusterFunctions(name = "LSF", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, array.var = "LSB_JOBINDEX", store.job = TRUE)
+    listJobsRunning = listJobsRunning, store.job = TRUE, array.var = "LSB_JOBINDEX")
 } # nocov end

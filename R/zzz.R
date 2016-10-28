@@ -24,7 +24,7 @@
 #' @importFrom progress progress_bar
 #' @importFrom rappdirs user_config_dir
 #' @importFrom stats runif
-#' @importFrom utils head tail getFromNamespace
+#' @importFrom utils head tail getFromNamespace packageVersion
 "_PACKAGE"
 
 batchtools = new.env(parent = emptyenv())

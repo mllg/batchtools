@@ -140,13 +140,19 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   setkeyv(ids, "job.id")
 
   # check for jobs already on system
-  on.sys = .findOnSystem(reg = reg)
+  on.sys = .findOnSystem(reg = reg, cols = c("job.id", "batch.id"))
+  ids.on.sys = on.sys[ids, nomatch = 0L, on = "job.id"]
+  if (nrow(ids.on.sys) > 0L)
+    stopf("Some jobs are already on the system, e.g. %i", ids.on.sys[1L, ]$job.id)
+
+  # handle max.concurrent.jobs
   max.concurrent.jobs = NA_integer_
-  if (on.sys[ids, .N, nomatch = 0L] > 0L)
-    stopf("Some jobs are already on the system, e.g. %s", stri_join(head(on.sys[ids, nomatch = 0L]$job.id, 1L), collapse = ", "))
   if (hasName(reg, "max.concurrent.jobs")) {
-    if (nrow(on.sys) + length(chunks) > reg$max.concurrent.jobs)
+    assertInt(reg$max.concurrent.jobs, lower = 0L)
+    if (uniqueN(on.sys, by = "batch.id") + length(chunks) > reg$max.concurrent.jobs) {
+      debug("Limiting the number of concurrent jobs to %i", reg$max.concurrent.jobs)
       max.concurrent.jobs = reg$max.concurrent.jobs
+    }
   }
 
   # handle resources
@@ -177,7 +183,12 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
     if (!is.na(max.concurrent.jobs)) {
       # count chunks or job.id
-      while (uniqueN(ids[.findOnSystem(reg = reg), on = "job.id", nomatch = 0L], by = "job.id") >= max.concurrent.jobs) {
+      repeat {
+        n.on.sys = uniqueN(getBatchIds(reg), by = "batch.id")
+        debug("Detected %i batch jobs on system (%i allowed concurrently)", n.on.sys, max.concurrent.jobs)
+
+        if (n.on.sys < max.concurrent.jobs)
+          break
         pb$tick(0, tokens = list(status = "Waiting   "))
         Sys.sleep(wait)
         wait = wait * 1.025

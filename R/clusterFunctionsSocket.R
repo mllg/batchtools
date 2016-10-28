@@ -70,5 +70,5 @@ makeClusterFunctionsSocket = function(ncpus = NA_integer_) {
   }
 
   makeClusterFunctions(name = "Socket", submitJob = submitJob, listJobsRunning = listJobsRunning,
-    hooks = list(pre.sync = function(reg, fns) p$list()), store.job = FALSE)
+    store.job = FALSE, hooks = list(pre.sync = function(reg, fns) p$list()))
 }

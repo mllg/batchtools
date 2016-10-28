@@ -31,6 +31,7 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
   assertString(image)
   assertCharacter(docker.args, any.missing = FALSE)
   assertCharacter(image.args, any.missing = FALSE)
+  user = Sys.info()["user"]
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
@@ -43,7 +44,8 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
       sprintf("-c %i", jc$resources$ncpus),
       sprintf("-m %im", jc$resources$memory),
       sprintf("--label batchtools=%s", jc$job.hash),
-      sprintf("--name=%s_bt_%s", Sys.info()["user"], jc$job.hash),
+      sprintf("--label user=%s", user),
+      sprintf("--name=%s_bt_%s", user, jc$job.hash),
       image, timeout, "Rscript", stri_join("-e", shQuote(sprintf("batchtools::doJobCollection('%s', '%s')", jc$uri, jc$log.file)), sep = " "))
     res = runOSCommand(cmd[1L], cmd[-1L])
 
@@ -79,12 +81,13 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
 
   listJobsRunning = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    res = runOSCommand("docker", c(docker.args, "ps", "--format={{.ID}}", "--filter 'label=batchtools'"))
+    args = c(docker.args, "ps", "--format={{.ID}}", "--filter 'label=batchtools'", sprintf("--filter 'user=%s'", user))
+    res = runOSCommand("docker", args)
     if (res$exit.code == 0L)
       return(res$output)
     stop("docker returned non-zero exit code")
   }
 
-  makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning, store.job = TRUE,
-    hooks = list(pre.submit = housekeeping, post.sync = housekeeping))
+  makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
+    store.job = TRUE, hooks = list(pre.submit = housekeeping, post.sync = housekeeping))
 } # nocov end

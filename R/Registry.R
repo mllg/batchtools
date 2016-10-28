@@ -86,7 +86,8 @@
 #'     \item{\code{seed} [integer(1)]:}{Registry seed. Before each job is executed, the seed \code{seed + job.id} is set.}
 #'     \item{\code{cluster.functions} [cluster.functions]:}{Usually set in your \code{conf.file}. Set via a call to \code{\link{makeClusterFunctions}}. See example.}
 #'     \item{\code{default.resources} [named list()]:}{Usually set in your \code{conf.file}. Named list of default resources.}
-#'     \item{\code{max.concurrent.jobs} [integer(1)]:}{Usually set in your \code{conf.file}. Maximum number of concurrent jobs for a single user on the system. \code{\link{submitJobs}} will try to respect this setting.}
+#'     \item{\code{max.concurrent.jobs} [integer(1)]:}{Usually set in your \code{conf.file}. Maximum number of concurrent jobs for a single user and current registry on the system.
+#'       \code{\link{submitJobs}} will try to respect this setting.}
 #'     \item{\code{defs} [data.table]:}{Table with job definitions (i.e. parameters).}
 #'     \item{\code{status} [data.table]:}{Table holding information about the computational status. Also see \code{\link{getJobStatus}}.}
 #'     \item{\code{resources} [data.table]:}{Table holding information about the computational resources used for the job. Also see \code{\link{getJobResources}}.}
@@ -167,6 +168,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   if (is.na(file.dir))
     reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
+  info("Creating directories in '%s'", reg$file.dir)
   for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
     dir.create(d, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)

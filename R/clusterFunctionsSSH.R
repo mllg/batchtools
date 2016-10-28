@@ -62,6 +62,5 @@ makeClusterFunctionsSSH = function(workers) { # nocov start
     unlist(lapply(workers, function(w) w$list(reg)), use.names = FALSE)
   }
 
-  makeClusterFunctions(name = "SSH", submitJob = submitJob, killJob = killJob,
-    listJobsRunning = listJobsRunning, store.job = TRUE)
+  makeClusterFunctions(name = "SSH", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning, store.job = TRUE)
 } # nocov end

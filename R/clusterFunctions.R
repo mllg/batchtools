@@ -17,15 +17,13 @@
 #'   Note that there is a helper function \code{\link{cfKillJob}} to repeatedly try to kill jobs.
 #'   Set \code{killJob} to \code{NULL} if killing jobs cannot be supported.
 #' @param listJobsQueued [\code{function(reg)}]\cr
-#'   List all queued jobs on the batch system for the current user and registry.
+#'   List all queued jobs on the batch system for the current user.
 #'   Must return an character vector of batch ids, same format as they
-#'   are returned by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.,
-#'   all for the current user instead of all for the current registry), but you have to include all
-#'   relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
+#'   are returned by \code{submitJob}.
 #'   Set \code{listJobsQueued} to \code{NULL} if listing of queued jobs is not supported.
 #' @param listJobsRunning [\code{function(reg)}]\cr
-#'   List all running jobs on the batch system for the current user and registry. This includes
-#'   running, held, idle, etc. jobs. Must return an character vector of batch ids, same format as they
+#'   List all running jobs on the batch system for the current user.
+#'   Must return an character vector of batch ids, same format as they
 #'   are returned by \code{submitJob}. It does not matter if you return a few job ids too many (e.g.
 #'   all for the current user instead of all for the current registry), but you have to include all
 #'   relevant ones. Must have the argument are \code{reg} (\code{\link{Registry}}).
@@ -34,7 +32,8 @@
 #'   Name of the environment variable set by the scheduler to identify IDs of job arrays.
 #'   Default is \code{NA} for no array support.
 #' @param store.job [\code{logical(1)}]\cr
-#'   Store the job on the file system before submitting? Default is \code{TRUE}.
+#'   Flag to indicate that the cluster function implementation of \code{submitJob} can not directly handle \code{\link{JobCollection}} objects.
+#'   If set to \code{FALSE}, the \code{\link{JobCollection}} is serialized to the file system before submitting the job.
 #' @param hooks [\code{list}]\cr
 #'   Named list of functions which will we called on certain events like \dQuote{pre.submit} or \dQuote{post.sync}.
 #'   See \link{Hooks}.
@@ -42,7 +41,8 @@
 #' @aliases ClusterFunctions
 #' @family ClusterFunctions
 #' @family ClusterFunctionsHelper
-makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL, array.var = NA_character_, store.job = TRUE, hooks = list()) {
+makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL,
+  array.var = NA_character_, store.job = FALSE, hooks = list()) {
   assertString(name, min.chars = 1L)
   if (!is.null(submitJob))
     assertFunction(submitJob, c("reg", "jc"))
@@ -75,6 +75,7 @@ print.ClusterFunctions = function(x, ...) {
   catf("  List queued Jobs : %s", !is.null(x$listJobsQueued))
   catf("  List running Jobs: %s", !is.null(x$listJobsRunning))
   catf("  Kill Jobs        : %s", !is.null(x$killJob))
+  catf("  Hooks            : %s", if (length(x$hooks)) stri_paste(names(x$hooks), collapse = ",") else "-")
 }
 
 #' @title Create a SubmitJobResult
