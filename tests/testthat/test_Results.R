@@ -112,7 +112,7 @@ test_that("multiRowResults", {
 })
 
 suppressMessages({
-  reg = makeExperimentRegistry(file.dir = NA, make.default = TRUE)
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   prob = addProblem(reg = reg, "p1", fun = function(job, data, ...) 2, seed = 42)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq) instance^sq)
   ids = addExperiments(list(p1 = data.table()), list(a1 = data.table(sq = 1:3)), reg = reg)
