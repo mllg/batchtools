@@ -29,6 +29,7 @@ r_binary_packages:
   - stringi
   - e1071
   - parallelmap
+  - knitr
   - ranger
   - rappdirs
   - rmarkdown
