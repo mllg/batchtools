@@ -13,14 +13,17 @@
 ## Or else the script may fail as it will execute in your top level home directory /home/username
 #$ -cwd
 
-## use environment variables
+## Use environment variables
 #$ -V
 
-## use correct queue
+## Use correct queue
 #$ -q <%= resources$queue %>
 
-## use job arrays
+## Use job arrays
 #$ -t 1-<%= n.array.jobs %>
+
+## Export value of DEBUGME environemnt var to slave
+export DEBUGME=<%= Sys.getenv("DEBUGME") %>
 
 Rscript -e 'batchtools::doJobCollection("<%= uri %>")'
 exit 0

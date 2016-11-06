@@ -61,7 +61,7 @@ makeClusterFunctionsSocket = function(ncpus = NA_integer_) {
     assertClass(jc, "JobCollection")
 
     p$spawn(jc)
-    makeSubmitJobResult(status = 0L, batch.id = jc$job.hash, msg = "")
+    makeSubmitJobResult(status = 0L, batch.id = jc$job.hash)
   }
 
   listJobsRunning = function(reg) {

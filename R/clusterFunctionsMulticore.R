@@ -92,7 +92,7 @@ makeClusterFunctionsMulticore = function(ncpus = NA_integer_) {
   submitJob = function(reg, jc) {
     force(jc)
     pid = p$spawn(jc)
-    makeSubmitJobResult(status = 0L, batch.id = pid, msg = "")
+    makeSubmitJobResult(status = 0L, batch.id = pid)
   }
 
   listJobsRunning = function(reg) {

@@ -34,10 +34,7 @@ test_that("find[Status]", {
   expect_equal(findQueued(reg = reg), none)
   expect_equal(findExpired(reg = reg), none)
 
-  silent({
-    submitJobs(reg = reg, ids = chunkIds(ids, n.chunks = 1, reg = reg))
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg, ids)
 
   expect_equal(findJobs(reg = reg), all)
   expect_equal(findSubmitted(reg = reg), all)
@@ -57,10 +54,7 @@ test_that("Subsetting", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(i) if (i == 3) stop(i) else i
   ids = batchMap(fun, i = 1:5, reg = reg)
-  silent({
-    submitJobs(reg = reg, ids = chunkIds(ids, n.chunks = 1, reg = reg))
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg, ids)
   all = reg$status[, "job.id", with = FALSE]
 
   expect_equal(findJobs(ids = 1:3, reg = reg), all[1:3])

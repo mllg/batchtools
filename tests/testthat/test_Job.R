@@ -4,10 +4,7 @@ test_that("Job", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, reg = reg, more.args = list(x = 1))
-  silent({
-    submitJobs(1, resources = list(foo = "bar"), reg = reg)
-    waitForJobs(1, reg = reg)
-  })
+  submitAndWait(reg, 1, resources = list(foo = "bar"))
 
   job = makeJob(reg = reg, i = 1)
   expect_is(job, "Job")
@@ -62,10 +59,7 @@ test_that("External directory is created", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(..., .job) .job$external.dir
   ids = batchMap(fun, i = 1:3, reg = reg, more.args = list(x = 1))
-  silent({
-    submitJobs(reg = reg, ids = chunkIds(n.chunks = 1, reg = reg))
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg)
   expect_directory_exists(reduceResultsDataTable(1:3, reg = reg)[[2]])
 
 
@@ -77,10 +71,7 @@ test_that("External directory is created", {
   })
   ids = addExperiments(list(p1 = data.table(i = 1:3)), list(a1 = data.table()), reg = reg)
 
-  silent({
-    submitJobs(reg = reg, ids = chunkIds(ids = c(1, 3), n.chunks = 1, reg = reg))
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg, c(1, 3))
   paths = reduceResultsList(1:3, reg = reg)
   expect_directory_exists(paths[[1]])
   expect_true(file.exists(file.path(reg$file.dir, "external", "1", "1.rds")))
@@ -97,11 +88,9 @@ test_that("External directory is created", {
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) {
     list.files(job$external.dir)
   })
-  silent({
-    submitJobs(reg = reg, ids = 1)
-    sweepRegistry(reg = reg)
-    waitForJobs(ids = 1, reg = reg)
-  })
+
+  submitAndWait(reg, 1)
+  sweepRegistry(reg = reg)
   expect_true(file.exists(file.path(reg$file.dir, "external", "1", "1.rds")))
   expect_identical(loadResult(1, reg = reg), "1.rds")
 })

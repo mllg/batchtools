@@ -32,11 +32,17 @@ runHook = function(obj, hook, ...) {
 #' @export
 runHook.Registry = function(obj, hook, ...) {
   f = obj$cluster.functions$hooks[[hook]]
-  if (is.null(f)) NULL else f(obj, ...)
+  if (is.null(f))
+    return(NULL)
+  "!DEBUG Running hook '`hook`'"
+  f(obj, ...)
 }
 
 #' @export
 runHook.JobCollection = function(obj, hook, ...) {
   f = obj$hooks[[hook]]
-  if (is.null(f)) NULL else f(obj, ...)
+  if (is.null(f))
+    return(NULL)
+  "!DEBUG Running hook '`hook`'"
+  f(obj, ...)
 }

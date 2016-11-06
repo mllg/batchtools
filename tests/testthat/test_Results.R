@@ -4,10 +4,7 @@ suppressMessages({
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(...) list(...)
   ids = batchMap(fun, a = 1:4, b = 4:1, reg = reg)
-  silent({
-    submitJobs(ids = chunkIds(1:3, n.chunks = 1, reg = reg), reg = reg)
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg, 1:3)
 })
 
 test_that("reduceResults", {
@@ -103,10 +100,7 @@ test_that("multiRowResults", {
     reg = makeRegistry(file.dir = NA, make.default = FALSE)
     fun = function(a) data.table(y1 = rep(a, 3), y2 = rep(a/2, 3))
     ids = batchMap(fun, a = c(10, 100), reg = reg)
-    silent({
-      submitJobs(ids, reg = reg)
-      waitForJobs(reg = reg)
-    })
+    submitAndWait(reg, ids)
     expect_error(reduceResultsDataTable(reg = reg), "one row")
   })
 })

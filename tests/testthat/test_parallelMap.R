@@ -11,10 +11,7 @@ test_that("pm/multicore", {
   if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
     skip("Nested Parallelization not supported")
 
-  silent({
-    submitJobs(chunkIds(ids, n.chunks = 1, reg = reg), resources = list(pm.backend = "multicore", ncpus = 2), reg = reg)
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg, resources = list(pm.backend = "multicore", ncpus = 2))
   expect_true(nrow(findDone(reg = reg)) == 4)
 })
 
@@ -25,10 +22,7 @@ test_that("pm/socket", {
     if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
       skip("Nested Parallelization not supported")
 
-    silent({
-      submitJobs(chunkIds(ids, n.chunks = 1, reg = reg), resources = list(pm.backend = "socket", ncpus = 2), reg = reg)
-      waitForJobs(reg = reg)
-    })
+    submitAndWait(reg, resources = list(pm.backend = "socket", ncpus = 2))
     expect_true(nrow(findDone(reg = reg)) == 4)
 })
 
@@ -42,10 +36,7 @@ if (FALSE) {
     if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
       skip("Nested Parallelization not supported")
 
-    silent({
-      submitJobs(chunkIds(ids, n.chunks = 1, reg = reg), resources = list(pm.backend = "mpi", ncpus = 2), reg = reg)
-      waitForJobs(reg = reg)
-    })
+    submitAndWait(reg, resources = list(pm.backend = "mpi", ncpus = 2))
     expect_true(nrow(findDone(reg = reg)) == 4)
 })
 }

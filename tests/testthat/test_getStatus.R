@@ -4,10 +4,7 @@ test_that("getStatus", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(i) if (i == 4) stop("4!") else i
   ids = batchMap(fun, i = 1:10, reg = reg)
-  silent({
-    submitJobs(ids = chunkIds(1:5, n.chunks = 1, reg = reg), reg = reg)
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg, 1:5)
 
   stat = getStatus(reg = reg)
   expect_data_table(stat, any.missing = FALSE, types = "integer", nrows = 1L)

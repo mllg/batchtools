@@ -13,6 +13,17 @@ silent = function(expr) {
   with_options(list(batchtools.progress = FALSE, batchtools.verbose = FALSE), expr)
 }
 
+submitAndWait = function(reg, ids = NULL, ...) {
+  if (is.null(ids))
+    ids = findNotSubmitted(reg = reg)
+  if ("chunk" %nin% names(ids))
+    ids = chunkIds(ids, n.chunks = 1L, reg = reg)
+  silent({
+    ids = submitJobs(ids = ids, ..., reg = reg)
+    waitForJobs(ids, reg = reg)
+  })
+}
+
 suppressAll = function (expr) {
   silent(capture.output({z = suppressWarnings(suppressMessages(suppressPackageStartupMessages(force(expr))))}))
   invisible(z)

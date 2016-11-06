@@ -111,6 +111,7 @@ makeSubmitJobResult = function(status, batch.id, msg = NA_character_) {
     else
       "ERROR"
   }
+  "!DEBUG SubmitJobResult for batch.id '`batch.id`': `status` (`msg`)"
   setClasses(list(status = status, batch.id = batch.id, msg = msg), "SubmitJobResult")
 }
 
@@ -144,8 +145,10 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
     stop("No template found")
 
   if (stri_detect_regex(template, "\n")) {
+    "!DEBUG Parsing template from string"
     lines = stri_trim_both(stri_split_lines(template)[[1L]])
   } else if (testFileExists(template, "r")) {
+    "!DEBUG Parsing template form file '`template`'"
     lines = stri_trim_both(readLines(template))
   } else {
     stop("Argument 'template' must non point to a template file or provide the template as string (containing at least one newline)")
@@ -165,7 +168,8 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 #' This function is only intended for use in your own cluster functions implementation.
 #'
 #' Calls brew silently on your template, any error will lead to an exception. If debug mode is
-#' enabled (via option \dQuote{batchtools.debug}), the file is stored at the same place as the corresponding
+#' enabled (via environment variable \dQuote{DEBUGME} set to \dQuote{batchtools}),
+#' the file is stored at the same place as the corresponding
 #' job file in the \dQuote{jobs}-subdir of your files directory, otherwise as \code{\link{tempfile}} on the local system.
 #'
 #' @template reg
@@ -180,10 +184,10 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 cfBrewTemplate = function(reg, text, jc) {
   assertString(text)
 
-  debug = getOption("batchtools.debug", FALSE)
-  outfile = if (isTRUE(debug)) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
+  outfile = if (batchtools$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
   parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
+  "!DEBUG Brewing template to file '`outfile`'"
 
   z = try(brew(text = text, output = outfile, envir = jc), silent = TRUE)
   if (is.error(z))
@@ -259,15 +263,17 @@ getBatchIds = function(reg, status = "all") {
   batch.id = NULL
 
   if (status %in% c("all", "running") && !is.null(cf$listJobsRunning)) {
-    x = cf$listJobsRunning(reg)
+    "!DEBUG Getting running Jobs"
+    x = unique(cf$listJobsRunning(reg))
     if (length(x) > 0L)
-      tab = rbind(tab, data.table(batch.id = unique(x), status = "running"))
+      tab = rbind(tab, data.table(batch.id = x, status = "running"))
   }
 
   if (status %in% c("all", "queued") && !is.null(cf$listJobsQueued)) {
-    x = setdiff(cf$listJobsQueued(reg), tab$batch.id)
+    "!DEBUG Getting queued Jobs"
+    x = unique(setdiff(cf$listJobsQueued(reg), tab$batch.id))
     if (length(x) > 0L)
-      tab = rbind(tab, data.table(batch.id = unique(x), status = "queued"))
+      tab = rbind(tab, data.table(batch.id = x, status = "queued"))
   }
 
   tab[batch.id %in% reg$status$batch.id]
@@ -287,8 +293,6 @@ getBatchIds = function(reg, status = "all") {
 #' @param nodename [\code{character(1)}]\cr
 #'   Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
 #'   is not piped through SSH.
-#' @param debug [\code{logical(1)}]\cr
-#'   If \code{TRUE}, the commands send to the OS are printed.
 #' @return [\code{named list}] with \dQuote{exit.code} (integer) and \dQuote{output} (character).
 #' @export
 #' @family ClusterFunctionsHelper
@@ -298,7 +302,7 @@ getBatchIds = function(reg, status = "all") {
 #' runOSCommand("ls", "-al")
 #' runOSCommand("notfound")
 #' }
-runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost", debug = getOption("batchtools.debug", FALSE)) {
+runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost") {
   assertCharacter(sys.cmd, any.missing = FALSE, len = 1L)
   assertCharacter(sys.args, any.missing = FALSE)
   assertString(nodename, min.chars = 1L)
@@ -310,8 +314,7 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
       sys.args = ""
   }
 
-  if (isTRUE(debug))
-    info("OS cmd: %s %s", sys.cmd, stri_join(sys.args, collapse = " "))
+  "!DEBUG OS cmd: `sys.cmd` `stri_join(sys.args, collapse = ' ')`"
 
   if (nzchar(Sys.which(sys.cmd))) {
     res = suppressWarnings(system2(command = sys.cmd, args = sys.args, stdout = TRUE, stderr = TRUE, wait = TRUE))
@@ -322,10 +325,8 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
     exit.code = 127L
   }
 
-  if (isTRUE(debug)) {
-    catf("OS result (exit code %i):", exit.code)
-    print(output)
-  }
+  "!DEBUG OS result (exit code `exit.code`):"
+  "!DEBUG `cat(output, sep = \"\n\")`"
 
   return(list(exit.code = exit.code, output = output))
 }

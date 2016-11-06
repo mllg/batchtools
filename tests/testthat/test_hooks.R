@@ -15,13 +15,10 @@ test_that("hooks", {
   fn.ps = file.path(reg$file.dir, "post.sync.txt")
   expect_false(file.exists(fn.ps))
 
-  silent({
-    batchMap(identity, 1, reg = reg)
-    submitJobs(1, reg = reg)
-    waitForJobs(1, reg = reg)
-  })
-  syncRegistry(reg = reg)
+  batchMap(identity, 1, reg = reg)
+  submitAndWait(reg, 1)
 
+  syncRegistry(reg = reg)
   expect_true(file.exists(fn.ps))
 
   lines = getLog(1, reg = reg)

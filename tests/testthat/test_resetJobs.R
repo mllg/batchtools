@@ -8,10 +8,7 @@ test_that("resetJobs", {
     status = copy(reg$status),
     defs = copy(reg$defs)
   )
-  silent({
-    submitJobs(chunkIds(1:3, n.chunks = 1, reg = reg), reg = reg)
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg, 1:3)
 
   expect_true(file.exists(file.path(reg$file.dir, "logs", sprintf("%s.log", reg$status[.(3), job.hash]))))
   expect_false(identical(reg$status$submitted, before$status$submitted))

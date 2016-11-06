@@ -12,7 +12,6 @@
 #'  \item{log.file}{Location of the designated log file for this job.}
 #'  \item{resources:}{Named list of of specified computational resources.}
 #'  \item{uri}{Location of the job description file (saved with \code{link[base]{saveRDS}} on the file system.}
-#'  \item{debug}{\code{logical(1)} Debug flag.}
 #'  \item{seed}{\code{integer(1)} Seed of the \link{Registry}.}
 #'  \item{packages}{\code{character} with required packages to load via \code{\link[base]{require}}.}
 #'  \item{namespaces}{code{character} with required packages to load via \code{\link[base]{requireNamespace}}.}
@@ -47,7 +46,6 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
 createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()) {
   jc              = new.env(parent = emptyenv())
   jc$jobs         = setkeyv(jobs, "job.id")
-  jc$debug        = getOption("batchtools.debug", FALSE)
   jc$file.dir     = reg$file.dir
   jc$work.dir     = reg$work.dir
   jc$seed         = reg$seed

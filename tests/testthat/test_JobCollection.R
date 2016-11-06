@@ -9,7 +9,6 @@ test_that("makeJobCollection", {
   expect_environment(jc, c("file.dir", "job.hash", "jobs", "log.file", "packages", "resources", "uri", "work.dir"))
 
   expect_directory(jc$file.dir)
-  expect_flag(jc$debug)
   expect_string(jc$job.hash)
   expect_data_table(jc$jobs, key = "job.id")
   expect_string(jc$log.file)

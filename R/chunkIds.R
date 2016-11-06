@@ -8,6 +8,9 @@
 #' All jobs with the same chunk number will be grouped together on one node as a single
 #' computational job.
 #'
+#' If neither \code{n.chunks} nor \code{chunk.size} are provided, each job will be assigned
+#' to its own chunk.
+#'
 #' @templateVar ids.default all
 #' @template ids
 #' @param chunk.size [\code{integer(1)}]\cr
@@ -69,7 +72,7 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
   if (x == 0L) {
     stop("Either 'n.chunks' or 'chunk.size' must be set")
   } else if (x == 2L) {
-    chunk.size = nrow(ids)
+    n.chunks = nrow(ids)
   } else {
     if (!is.null(n.chunks))
       n.chunks = asCount(n.chunks, positive = TRUE)

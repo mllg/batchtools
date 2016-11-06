@@ -38,6 +38,11 @@ Worker = R6Class("Worker",
         stop("Windows is not supported by the Worker Class")
 
       self$nodename = assertString(nodename)
+      if (!is.null(ncpus))
+        ncpus = asCount(ncpus)
+      if (!is.null(max.load))
+        assertNumber(max.load)
+
       if (nodename == "localhost") {
         self$script = system.file("bin", "linux-helper", package = "batchtools")
       } else {
@@ -45,10 +50,12 @@ Worker = R6Class("Worker",
         self$script = tail(runOSCommand("Rscript", args, nodename = nodename)$output, 1L)
       }
 
-      if (is.null(ncpus) || is.null(max.load))
-        detected.cpus = as.numeric(runOSCommand(self$script, "number-of-cpus")$output)
-      self$ncpus = as.integer(assertInt(ncpus, lower = 0L, null.ok = TRUE) %??% detected.cpus)
-      self$max.load = assertNumber(max.load, lower = 0, null.ok = TRUE) %??% detected.cpus
+      if (is.null(ncpus) || is.null(max.load)) {
+        detected.cpus = as.integer(runOSCommand(self$script, "number-of-cpus")$output)
+        "!DEBUG Detected `detected.cpus` number of CPUs"
+      }
+      self$ncpus = ncpus %??% detected.cpus
+      self$max.load = max.load %??% detected.cpus
     },
 
     list = function(reg) {
@@ -65,6 +72,7 @@ Worker = R6Class("Worker",
     },
 
     update = function(reg) {
+      "!DEBUG Updating Worker '`self$nodename`'"
       res = runOSCommand(self$script, c("status", reg$file.dir), nodename = self$nodename)
       res = as.numeric(stri_split_regex(res$output, "\\s+")[[1L]])
       names(res) = c("load", "n.rprocs", "n.rprocs.50", "n.jobs")

@@ -8,4 +8,7 @@
 #BSUB-W <%= resources$walltime %>                   # Walltime in minutes
 #BSUB-M <%= resources$memory %>                     # Memory requirements in Kbytes
 
+## Export value of DEBUGME environemnt var to slave
+export DEBUGME=<%= Sys.getenv("DEBUGME") %>
+
 Rscript -e 'batchtools::doJobCollection("<%= uri %>")'

@@ -31,3 +31,11 @@ test_that("chunkIds", {
   expect_equal(as.numeric(tab[1, ]), rep(c(10, 0), c(3, 6)))
   expect_equal(as.numeric(tab[2, ]), rep(c(0, 10), c(3, 6)))
 })
+
+test_that("chunkIds with defaults", {
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  batchMap(identity, 1:10, reg = reg)
+  ids = chunkIds(reg = reg)
+  expect_data_table(ids, key = "job.id", nrow = 10, any.missing = FALSE)
+  expect_set_equal(ids$chunk, 1:10)
+})

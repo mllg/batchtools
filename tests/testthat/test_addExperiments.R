@@ -14,10 +14,7 @@ test_that("addExperiments handles parameters correctly", {
   ids = addExperiments(prob.designs, algo.designs, repls = repls + 1L, reg = reg)
   expect_data_table(ids, nrow = 2, key = "job.id")
 
-  silent({
-    submitJobs(reg = reg, ids = chunkIds(n.chunks = 1, reg = reg))
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg, ids)
   expect_true(nrow(findErrors(reg = reg)) == 0)
 })
 

@@ -10,10 +10,10 @@
 #'   \item{\code{batchtools.verbose}}{
 #'     Verbosity. Set to \code{FALSE} to suppress info messages and progress bars.
 #'   }
-#'   \item{\code{batchtools.debug}}{
-#'     Set to \code{TRUE} to switch to debug mode.
-#'   }
 #' }
+#' Furthermore, you may enable a debug mode using the \pkg{debugme} package by
+#' setting the environment variable \dQuote{DEBUGME} to \dQuote{batchtools} before
+#' loading \pkg{batchtools}.
 #' @import backports
 #' @import checkmate
 #' @import data.table
@@ -28,10 +28,18 @@
 "_PACKAGE"
 
 batchtools = new.env(parent = emptyenv())
+batchtools$debug = FALSE
 batchtools$hooks = data.table(
   name =   c("pre.sync", "post.sync", "pre.do.collection", "post.do.collection", "pre.submit", "post.submit"),
   remote = c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE)
 )
+
+.onLoad = function(libname, pkgname) {
+  if (requireNamespace("debugme", quietly = TRUE) && "batchtools" %in% strsplit(Sys.getenv("DEBUGME"), ",", fixed = TRUE)[[1L]]) {
+    debugme::debugme()
+    batchtools$debug = TRUE
+  }
+}
 
 .onUnload = function (libpath) {
   library.dynam.unload("batchtools", libpath) # nocov

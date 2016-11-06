@@ -4,8 +4,7 @@
 \alias{runOSCommand}
 \title{Run OS Commands on Local or Remote Machines}
 \usage{
-runOSCommand(sys.cmd, sys.args = character(0L), nodename = "localhost",
-  debug = getOption("batchtools.debug", FALSE))
+runOSCommand(sys.cmd, sys.args = character(0L), nodename = "localhost")
 }
 \arguments{
 \item{sys.cmd}{[\code{character(1)}]\cr
@@ -17,9 +16,6 @@ Arguments for \code{sys.cmd}.}
 \item{nodename}{[\code{character(1)}]\cr
 Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
 is not piped through SSH.}
-
-\item{debug}{[\code{logical(1)}]\cr
-If \code{TRUE}, the commands send to the OS are printed.}
 }
 \value{
 [\code{named list}] with \dQuote{exit.code} (integer) and \dQuote{output} (character).

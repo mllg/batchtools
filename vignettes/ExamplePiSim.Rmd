@@ -74,7 +74,7 @@ After jobs have successfully terminated, we can load their results on the master
 This can be done in a simple fashion by using either [`loadResult()`](https://mllg.github.io/batchtools/reference/loadResult), which returns a single result exactly in the form it was calculated during mapping, or by using [`reduceResults()`](https://mllg.github.io/batchtools/reference/reduceResults), which is a version of `Reduce()` from the base package for registry objects.
 ```{r}
 mean(sapply(1:10, loadResult))
-mean(reduceResults(function(x, y) c(x, y)))
+reduceResults(function(x, y) x + y) / 10
 ```
 
 If you are absolutely sure that your function works, you can take a shortcut and use *batchtools* in an `lapply` fashion using [`btlapply()`](https://mllg.github.io/batchtools/reference/btlapply).

@@ -1,21 +1,18 @@
 context("grepLogs")
 
-silent({
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
-  ids = batchMap(reg = reg, function(x) {
-    if (x == 1) {
-      print("FOOBAR: AAA")
-    } else if (x == 2) {
-      cat("FOOBAR: BBB")
-    } else {
-      message("FOOBAR: CCC")
-    }
-    invisible(NULL)
-  }, x = 1:5)
-  ids$chunk = as.integer(c(1, 1, 2, 3, 4))
-  submitJobs(reg = reg, ids = ids[1:4])
-  waitForJobs(reg = reg)
-})
+reg = makeRegistry(file.dir = NA, make.default = FALSE)
+ids = batchMap(reg = reg, function(x) {
+  if (x == 1) {
+    print("FOOBAR: AAA")
+  } else if (x == 2) {
+    cat("FOOBAR: BBB")
+  } else {
+    message("FOOBAR: CCC")
+  }
+  invisible(NULL)
+}, x = 1:5)
+ids$chunk = as.integer(c(1, 1, 2, 3, 4))
+submitAndWait(reg, ids[1:4])
 
 test_that("grepLogs", {
   expect_true(any(grepl("AAA", getLog(1, reg = reg))))

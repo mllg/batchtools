@@ -61,6 +61,10 @@ module add <%= modules %>
 ## create our own temp dir and clean it up later, lido does not do this automatically
 mkdir /scratch/${USER}-${PBS_JOBID}
 export TMPDIR=/scratch/${USER}-${PBS_JOBID}
+
+## export value of DEBUGME environemnt var to slave
+export DEBUGME=<%= Sys.getenv("DEBUGME") %>
+
 ## run R
 cd "<%= %>"
 <%= if (use.mpi) "mpirun -np 1 " else "" %>Rscript -e 'batchtools::doJobCollection("<%= uri %>")'

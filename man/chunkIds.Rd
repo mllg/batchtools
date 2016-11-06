@@ -43,6 +43,9 @@ Chunks are submitted via \code{\link{submitJobs}} by simply providing
 a data frame with columns \dQuote{job.id} and corresponding \dQuote{chunk} (both integer).
 All jobs with the same chunk number will be grouped together on one node as a single
 computational job.
+
+If neither \code{n.chunks} nor \code{chunk.size} are provided, each job will be assigned
+to its own chunk.
 }
 \examples{
 # chunking for Registry

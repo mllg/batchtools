@@ -5,11 +5,8 @@ test_that("showLog/getLog", {
   batchMap(function(x) print("GREPME"), 1:2, reg = reg)
   expect_error(showLog(id = 1, reg = reg), "not available")
   expect_error(readLog(id = 1, reg = reg), "not available")
-  ids = chunkIds(1:2, n.chunks = 1, reg = reg)
-  silent({
-    submitJobs(reg = reg, ids = ids)
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg)
+
   lines = getLog(id = 1, reg = reg)
   expect_character(lines, min.len = 3L, any.missing = FALSE)
   expect_equal(sum(stri_detect_fixed(lines, "GREPME")), 1L)
@@ -33,10 +30,7 @@ test_that("showLog/getLog", {
 test_that("empty log files", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(identity, 1, reg = reg)
-  silent({
-    submitJobs(reg = reg)
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg)
 
   # overwrite log file
   log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", reg$status[1, job.hash]))

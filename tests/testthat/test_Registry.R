@@ -89,13 +89,9 @@ test_that("sweepRegistry", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(identity, 1, reg = reg)
 
-  silent({
-    submitJobs(1, reg = reg, resources = list(foo = 1))
-    waitForJobs(reg = reg)
-    submitJobs(1, reg = reg, resources = list(foo = 2))
-    waitForJobs(reg = reg)
-    writeRDS(makeJobCollection(1, reg = reg), file.path(reg$file.dir, "jobs", "test.rds"))
-  })
+  submitAndWait(reg, 1, resources = list(foo = 1))
+  submitAndWait(reg, 1, resources = list(foo = 2))
+  writeRDS(makeJobCollection(1, reg = reg), file.path(reg$file.dir, "jobs", "test.rds"))
 
   expect_data_table(reg$resources, nrow = 2)
   expect_character(list.files(file.path(reg$file.dir, "logs")), len = 2L)
@@ -116,10 +112,7 @@ test_that("clearRegistry", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   reg$foo = TRUE
   batchMap(identity, 1:3, reg = reg)
-  silent({
-    submitJobs(chunkIds(reg =reg, n.chunks = 2), reg = reg)
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg, chunkIds(reg = reg, n.chunks = 2))
 
   clearRegistry(reg)
   checkTables(reg, nrow = 0L)

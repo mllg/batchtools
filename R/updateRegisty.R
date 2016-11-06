@@ -2,6 +2,7 @@
 # if everything works as intended, this routine is not
 # needed in the future.
 updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
+  "!DEBUG Running updateRegistry"
   if (!is.data.table(reg$tags)) {
     info("Adding tags table")
     reg$tags = data.table( job.id = integer(0L), tag = character(0L), key = "job.id")

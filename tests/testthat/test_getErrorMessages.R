@@ -4,10 +4,7 @@ test_that("getErrorMessages", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(i) if (i == 3) stop("foobar") else i
   ids = batchMap(fun, i = 1:5, reg = reg)
-  silent({
-    submitJobs(chunkIds(1:4, n.chunks = 1, reg=reg), reg = reg)
-    waitForJobs(1:4, reg = reg)
-  })
+  submitAndWait(reg, 1:4)
 
   tab = getErrorMessages(ids, reg = reg)
   expect_data_table(tab, nrow = 5, ncol = 4, key = "job.id")

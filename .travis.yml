@@ -30,12 +30,10 @@ r_binary_packages:
   - e1071
   - parallelmap
   - ranger
+  - rappdirs
   - rmarkdown
   - snow
   - testthat
-
-r_github_packages:
-  - mllg/checkmate
 
 after_success:
   - Rscript -e 'covr::coveralls()'

@@ -28,10 +28,7 @@ test_that("Problem and Algorithm seed", {
   repls = 3
   ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
 
-  silent({
-    submitJobs(chunkIds(ids, n.chunks = 1, reg = reg), reg = reg)
-    waitForJobs(ids, reg = reg)
-  })
+  submitAndWait(reg, ids)
 
   set.seed(1); p1 = runif(1)
   set.seed(2); p2 = runif(1)

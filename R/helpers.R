@@ -84,12 +84,6 @@ info = function(...) {
     message(sprintf(...))
 }
 
-# formating debug message
-debug = function(...) {
-  if (getOption("batchtools.debug", FALSE))
-    message(sprintf(...))
-}
-
 # formating cat()
 catf = function (..., con = "") {
   cat(stri_join(sprintf(...), collapse = "\n"), "\n", sep = "", file = con)

@@ -22,10 +22,7 @@ test_that("export works", {
 
   x = batchExport(list(exported_obj = 43L), reg = reg)
   batchMap(function(x) exported_obj + x, 1L, reg = reg)
-  silent({
-    submitJobs(reg = reg)
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg)
   expect_equal(loadResult(1, reg = reg), 44L)
   rm("exported_obj", envir = .GlobalEnv)
 })

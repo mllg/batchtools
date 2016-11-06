@@ -301,7 +301,7 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
 #' @template reg
 saveRegistry = function(reg = getDefaultRegistry()) {
   if (reg$writeable) {
-    debug("Saving Registry")
+    "!DEBUG Saving Registry"
 
     fn = file.path(reg$file.dir, c("registry.new.rds", "registry.rds"))
     ee = new.env(parent = asNamespace("batchtools"))
@@ -310,7 +310,7 @@ saveRegistry = function(reg = getDefaultRegistry()) {
     writeRDS(ee, file = fn[1L], wait = TRUE)
     file.rename(fn[1L], fn[2L])
   } else {
-    debug("Skipping saveRegistry (read-only)")
+    "!DEBUG Skipping saveRegistry (read-only)"
   }
   invisible(reg$writeable)
 }
@@ -320,6 +320,7 @@ saveRegistry = function(reg = getDefaultRegistry()) {
 sweepRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE, writeable = TRUE)
   store = FALSE
+  "!DEBUG Running sweepRegistry"
 
   result.files = list.files(file.path(reg$file.dir, "results"), pattern = "\\.rds$")
   i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% .findSubmitted(reg = reg)$job.id)
@@ -390,6 +391,7 @@ clearRegistry = function(reg = getDefaultRegistry()) {
 }
 
 loadRegistryDependencies = function(x, switch.wd = TRUE) {
+  "!DEBUG Loading Registry dependencies"
   pkgs = union(x$packages, "methods")
   ok = vlapply(pkgs, require, character.only = TRUE)
   if (!all(ok))
@@ -435,7 +437,7 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
 
 assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, running.ok = TRUE) {
   assertClass(reg, "Registry", ordered = strict)
-  if (isTRUE(getOption("batchtools.debug", FALSE))) {
+  if (batchtools$debug) {
     if (!identical(key(reg$status), "job.id"))
       stop("Key of reg$job.id lost")
     if (!identical(key(reg$defs), "def.id"))
@@ -458,6 +460,7 @@ assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, 
 #' @rdname Registry
 #' @export
 syncRegistry = function(reg = getDefaultRegistry()) {
+  "!DEBUG Triggered syncRegistry"
   fns = list.files(file.path(reg$file.dir, "updates"), full.names = TRUE)
   if (length(fns) == 0L)
     return(invisible(TRUE))

@@ -67,3 +67,16 @@ test_that("brew", {
   expect_equal(brewed[1], "!!!")
   expect_equal(brewed[2], sprintf("foo=%s", jc$job.hash))
 })
+
+test_that("Export of environment variable DEBUGME", {
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  batchMap(function(i) Sys.getenv("DEBUGME"), i = 1, reg = reg)
+
+  prev = Sys.getenv("DEBUGME")
+  on.exit(Sys.setenv(DEBUGME = prev))
+  Sys.setenv(DEBUGME = "grepme")
+  submitAndWait(reg, 1)
+
+  res = loadResult(1, reg = reg)
+  expect_string(res, min.chars = 1, fixed = "grepme")
+})
