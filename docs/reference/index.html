@@ -6,11 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference. batchtools</title>
+<title>Function reference • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-index">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,9 +49,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -62,6 +58,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mllg/batchtools">
@@ -73,129 +70,297 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>Function reference <small>version&nbsp;0.1</small></h1>
-</div>
-
-<div class="row">
+      <div class="row">
   <div class="col-md-9">
-    <div class="section ">
-      <h2>All functions</h2>
+    <div class="page-header">
+      <h1>Function reference</h1>
+      <h4>version&nbsp;0.9.0</h4>
+    </div>
+
+    <div class="contents">
+      <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
       <p class="section-desc"></p>
 
-      <dl class="dl-horizontal">
-        <dt><a href="addExperiments.html">addExperiments</a></dt>
-        <dd>Add Experiments to the Registry</dd>
-        <dt><a href="batchExport.html">batchExport</a></dt>
-        <dd>Export Objects to the Slaves</dd>
-        <dt><a href="batchMap.html">batchMap</a></dt>
-        <dd>Map Operation for Batch Systems</dd>
-        <dt><a href="batchMapResults.html">batchMapResults</a></dt>
-        <dd>Map Over Results to Create New Jobs</dd>
-        <dt><a href="batchtools-package.html">batchtools</a></dt><dt><a href="batchtools-package.html">batchtools-package</a></dt>
-        <dd>Tools for Computation on Batch Systems</dd>
-        <dt><a href="btlapply.html">btlapply</a></dt><dt><a href="btlapply.html">btmapply</a></dt>
-        <dd>Synchronous Apply Functions</dd>
-        <dt><a href="cfBrewTemplate.html">cfBrewTemplate</a></dt>
-        <dd>Cluster Functions Helper to Write Job Description Files</dd>
-        <dt><a href="cfHandleUnknownSubmitError.html">cfHandleUnknownSubmitError</a></dt>
-        <dd>Cluster Functions Helper to Handle Unknown Errors</dd>
-        <dt><a href="cfKillJob.html">cfKillJob</a></dt>
-        <dd>Cluster Functions Helper to Kill Batch Jobs</dd>
-        <dt><a href="cfReadBrewTemplate.html">cfReadBrewTemplate</a></dt>
-        <dd>Cluster Functions Helper to Parse a Brew Template</dd>
-        <dt><a href="chunkIds.html">chunkIds</a></dt>
-        <dd>Chunk Jobs for Sequential Execution</dd>
-        <dt><a href="doJobCollection.html">doJobCollection</a></dt>
-        <dd>Execute Jobs of a JobCollection</dd>
-        <dt><a href="execJob.html">execJob</a></dt>
-        <dd>Execute a Single Jobs</dd>
-        <dt><a href="ExperimentRegistry.html">ExperimentRegistry</a></dt><dt><a href="ExperimentRegistry.html">makeExperimentRegistry</a></dt>
-        <dd>ExperimentRegistry Constructor</dd>
-        <dt><a href="findJobs.html">findDone</a></dt><dt><a href="findJobs.html">findErrors</a></dt><dt><a href="findJobs.html">findExperiments</a></dt><dt><a href="findJobs.html">findExpired</a></dt><dt><a href="findJobs.html">findJobs</a></dt><dt><a href="findJobs.html">findNotDone</a></dt><dt><a href="findJobs.html">findNotStarted</a></dt><dt><a href="findJobs.html">findNotSubmitted</a></dt><dt><a href="findJobs.html">findOnSystem</a></dt><dt><a href="findJobs.html">findQueued</a></dt><dt><a href="findJobs.html">findRunning</a></dt><dt><a href="findJobs.html">findStarted</a></dt><dt><a href="findJobs.html">findSubmitted</a></dt><dt><a href="findJobs.html">findTagged</a></dt>
-        <dd>Find and Filter Jobs</dd>
-        <dt><a href="getErrorMessages.html">getErrorMessages</a></dt>
-        <dd>Retrieve Error Messages</dd>
-        <dt><a href="getJobTable.html">getJobPars</a></dt><dt><a href="getJobTable.html">getJobResources</a></dt><dt><a href="getJobTable.html">getJobStatus</a></dt><dt><a href="getJobTable.html">getJobTable</a></dt><dt><a href="getJobTable.html">getJobTags</a></dt>
-        <dd>Query Job Information</dd>
-        <dt><a href="getStatus.html">getStatus</a></dt>
-        <dd>Summarize the Computational Status</dd>
-        <dt><a href="grepLogs.html">grepLogs</a></dt>
-        <dd>Grep Log Files for a Pattern</dd>
-        <dt><a href="JobCollection.html">JobCollection</a></dt><dt><a href="JobCollection.html">makeJobCollection</a></dt>
-        <dd>JobCollection Constructor</dd>
-        <dt><a href="JobExperiment.html">Experiment</a></dt><dt><a href="JobExperiment.html">Job</a></dt><dt><a href="JobExperiment.html">makeJob</a></dt>
-        <dd>Jobs and Experiments</dd>
-        <dt><a href="JoinTables.html">JoinTables</a></dt><dt><a href="JoinTables.html">ajoin</a></dt><dt><a href="JoinTables.html">ijoin</a></dt><dt><a href="JoinTables.html">ljoin</a></dt><dt><a href="JoinTables.html">ojoin</a></dt><dt><a href="JoinTables.html">rjoin</a></dt><dt><a href="JoinTables.html">sjoin</a></dt><dt><a href="JoinTables.html">ujoin</a></dt>
-        <dd>Inner, Left, Right, Outer, Semi and Anti Join for Data Tables</dd>
-        <dt><a href="killJobs.html">killJobs</a></dt>
-        <dd>Kill Jobs</dd>
-        <dt><a href="loadResult.html">loadResult</a></dt>
-        <dd>Load the Result of a Single Job</dd>
-        <dt><a href="makeClusterFunctionsDocker.html">makeClusterFunctionsDocker</a></dt>
-        <dd>ClusterFunctions for Docker</dd>
-        <dt><a href="makeClusterFunctionsInteractive.html">makeClusterFunctionsInteractive</a></dt>
-        <dd>ClusterFunctions for Sequential Execution in the Running R Session</dd>
-        <dt><a href="makeClusterFunctionsLSF.html">makeClusterFunctionsLSF</a></dt>
-        <dd>ClusterFunctions for LSF Systems</dd>
-        <dt><a href="makeClusterFunctionsMulticore.html">makeClusterFunctionsMulticore</a></dt>
-        <dd>ClusterFunctions for Parallel Multicore Execution</dd>
-        <dt><a href="makeClusterFunctionsOpenLava.html">makeClusterFunctionsOpenLava</a></dt>
-        <dd>ClusterFunctions for OpenLava</dd>
-        <dt><a href="makeClusterFunctions.html">ClusterFunctions</a></dt><dt><a href="makeClusterFunctions.html">makeClusterFunctions</a></dt>
-        <dd>ClusterFunctions Constructor</dd>
-        <dt><a href="makeClusterFunctionsSGE.html">makeClusterFunctionsSGE</a></dt>
-        <dd>ClusterFunctions for SGE Systems</dd>
-        <dt><a href="makeClusterFunctionsSlurm.html">makeClusterFunctionsSlurm</a></dt>
-        <dd>ClusterFunctions for Slurm Systems</dd>
-        <dt><a href="makeClusterFunctionsSocket.html">makeClusterFunctionsSocket</a></dt>
-        <dd>ClusterFunctions for Parallel Socket Execution</dd>
-        <dt><a href="makeClusterFunctionsSSH.html">makeClusterFunctionsSSH</a></dt>
-        <dd>ClusterFunctions for Remote SSH Execution</dd>
-        <dt><a href="makeClusterFunctionsTorque.html">makeClusterFunctionsTorque</a></dt>
-        <dd>ClusterFunctions for OpenPBS/Torque Systems</dd>
-        <dt><a href="makeSubmitJobResult.html">SubmitJobResult</a></dt><dt><a href="makeSubmitJobResult.html">makeSubmitJobResult</a></dt>
-        <dd>Create a SubmitJobResult</dd>
-        <dt><a href="ProblemAlgorithm.html">Algorithm</a></dt><dt><a href="ProblemAlgorithm.html">Problem</a></dt><dt><a href="ProblemAlgorithm.html">ProblemAlgorithm</a></dt><dt><a href="ProblemAlgorithm.html">addAlgorithm</a></dt><dt><a href="ProblemAlgorithm.html">addProblem</a></dt><dt><a href="ProblemAlgorithm.html">getAlgorithmIds</a></dt><dt><a href="ProblemAlgorithm.html">getProblemIds</a></dt><dt><a href="ProblemAlgorithm.html">removeAlgorithms</a></dt><dt><a href="ProblemAlgorithm.html">removeProblems</a></dt>
-        <dd>Define Problems and Algorithms for Experiments</dd>
-        <dt><a href="reduceResultsList.html">reduceResultsDataTable</a></dt><dt><a href="reduceResultsList.html">reduceResultsList</a></dt>
-        <dd>Apply Functions on Results</dd>
-        <dt><a href="reduceResults.html">reduceResults</a></dt>
-        <dd>Reduce Results</dd>
-        <dt><a href="Registry.html">Registry</a></dt><dt><a href="Registry.html">clearRegistry</a></dt><dt><a href="Registry.html">getDefaultRegistry</a></dt><dt><a href="Registry.html">loadRegistry</a></dt><dt><a href="Registry.html">makeRegistry</a></dt><dt><a href="Registry.html">saveRegistry</a></dt><dt><a href="Registry.html">setDefaultRegistry</a></dt><dt><a href="Registry.html">sweepRegistry</a></dt><dt><a href="Registry.html">syncRegistry</a></dt>
-        <dd>Registry Constructor</dd>
-        <dt><a href="removeExperiments.html">removeExperiments</a></dt>
-        <dd>Remove Experiments</dd>
-        <dt><a href="resetJobs.html">resetJobs</a></dt>
-        <dd>Reset the Computational State of Jobs</dd>
-        <dt><a href="runHook.html">Hook</a></dt><dt><a href="runHook.html">Hooks</a></dt><dt><a href="runHook.html">runHook</a></dt>
-        <dd>Trigger Evaluation of Custom Function</dd>
-        <dt><a href="runOSCommand.html">runOSCommand</a></dt>
-        <dd>Run OS Commands on Local or Remote Machines</dd>
-        <dt><a href="showLog.html">getLog</a></dt><dt><a href="showLog.html">showLog</a></dt>
-        <dd>Inspect Log Files</dd>
-        <dt><a href="submitJobs.html">submitJobs</a></dt>
-        <dd>Submit Jobs to the Batch Systems</dd>
-        <dt><a href="summarizeExperiments.html">summarizeExperiments</a></dt>
-        <dd>Quick Summary over Experiments</dd>
-        <dt><a href="Tags.html">Tags</a></dt><dt><a href="Tags.html">addJobTags</a></dt><dt><a href="Tags.html">getUsedJobTags</a></dt><dt><a href="Tags.html">removeJobTags</a></dt>
-        <dd>Add or Remove Job Tags</dd>
-        <dt><a href="testJob.html">testJob</a></dt>
-        <dd>Run Jobs Interactively</dd>
-        <dt><a href="waitForJobs.html">waitForJobs</a></dt>
-        <dd>Wait for Termination of Jobs</dd>
-        <dt><a href="Worker.html">Worker</a></dt>
-        <dd>Create a Linux-Worker</dd>
-      </dl>
+      
+      <p><a href="addExperiments.html">Add Experiments to the Registry</a></p>
+      <ul>
+        <li><code><a href="addExperiments.html">addExperiments</a></code></li>
+      </ul>
+      
+      <p><a href="batchExport.html">Export Objects to the Slaves</a></p>
+      <ul>
+        <li><code><a href="batchExport.html">batchExport</a></code></li>
+      </ul>
+      
+      <p><a href="batchMap.html">Map Operation for Batch Systems</a></p>
+      <ul>
+        <li><code><a href="batchMap.html">batchMap</a></code></li>
+      </ul>
+      
+      <p><a href="batchMapResults.html">Map Over Results to Create New Jobs</a></p>
+      <ul>
+        <li><code><a href="batchMapResults.html">batchMapResults</a></code></li>
+      </ul>
+      
+      <p><a href="batchtools-package.html">Tools for Computation on Batch Systems</a></p>
+      <ul>
+        <li><code><a href="batchtools-package.html">batchtools</a></code></li><li><code><a href="batchtools-package.html">batchtools-package</a></code></li>
+      </ul>
+      
+      <p><a href="btlapply.html">Synchronous Apply Functions</a></p>
+      <ul>
+        <li><code><a href="btlapply.html">btlapply</a></code></li><li><code><a href="btlapply.html">btmapply</a></code></li>
+      </ul>
+      
+      <p><a href="cfBrewTemplate.html">Cluster Functions Helper to Write Job Description Files</a></p>
+      <ul>
+        <li><code><a href="cfBrewTemplate.html">cfBrewTemplate</a></code></li>
+      </ul>
+      
+      <p><a href="cfHandleUnknownSubmitError.html">Cluster Functions Helper to Handle Unknown Errors</a></p>
+      <ul>
+        <li><code><a href="cfHandleUnknownSubmitError.html">cfHandleUnknownSubmitError</a></code></li>
+      </ul>
+      
+      <p><a href="cfKillJob.html">Cluster Functions Helper to Kill Batch Jobs</a></p>
+      <ul>
+        <li><code><a href="cfKillJob.html">cfKillJob</a></code></li>
+      </ul>
+      
+      <p><a href="cfReadBrewTemplate.html">Cluster Functions Helper to Parse a Brew Template</a></p>
+      <ul>
+        <li><code><a href="cfReadBrewTemplate.html">cfReadBrewTemplate</a></code></li>
+      </ul>
+      
+      <p><a href="chunkIds.html">Chunk Jobs for Sequential Execution</a></p>
+      <ul>
+        <li><code><a href="chunkIds.html">chunkIds</a></code></li>
+      </ul>
+      
+      <p><a href="doJobCollection.html">Execute Jobs of a JobCollection</a></p>
+      <ul>
+        <li><code><a href="doJobCollection.html">doJobCollection</a></code></li>
+      </ul>
+      
+      <p><a href="execJob.html">Execute a Single Jobs</a></p>
+      <ul>
+        <li><code><a href="execJob.html">execJob</a></code></li>
+      </ul>
+      
+      <p><a href="ExperimentRegistry.html">ExperimentRegistry Constructor</a></p>
+      <ul>
+        <li><code><a href="ExperimentRegistry.html">ExperimentRegistry</a></code></li><li><code><a href="ExperimentRegistry.html">makeExperimentRegistry</a></code></li>
+      </ul>
+      
+      <p><a href="findJobs.html">Find and Filter Jobs</a></p>
+      <ul>
+        <li><code><a href="findJobs.html">findDone</a></code></li><li><code><a href="findJobs.html">findErrors</a></code></li><li><code><a href="findJobs.html">findExperiments</a></code></li><li><code><a href="findJobs.html">findExpired</a></code></li><li><code><a href="findJobs.html">findJobs</a></code></li><li><code><a href="findJobs.html">findNotDone</a></code></li><li><code><a href="findJobs.html">findNotStarted</a></code></li><li><code><a href="findJobs.html">findNotSubmitted</a></code></li><li><code><a href="findJobs.html">findOnSystem</a></code></li><li><code><a href="findJobs.html">findQueued</a></code></li><li><code><a href="findJobs.html">findRunning</a></code></li><li><code><a href="findJobs.html">findStarted</a></code></li><li><code><a href="findJobs.html">findSubmitted</a></code></li><li><code><a href="findJobs.html">findTagged</a></code></li>
+      </ul>
+      
+      <p><a href="getErrorMessages.html">Retrieve Error Messages</a></p>
+      <ul>
+        <li><code><a href="getErrorMessages.html">getErrorMessages</a></code></li>
+      </ul>
+      
+      <p><a href="getJobTable.html">Query Job Information</a></p>
+      <ul>
+        <li><code><a href="getJobTable.html">getJobPars</a></code></li><li><code><a href="getJobTable.html">getJobResources</a></code></li><li><code><a href="getJobTable.html">getJobStatus</a></code></li><li><code><a href="getJobTable.html">getJobTable</a></code></li><li><code><a href="getJobTable.html">getJobTags</a></code></li>
+      </ul>
+      
+      <p><a href="getStatus.html">Summarize the Computational Status</a></p>
+      <ul>
+        <li><code><a href="getStatus.html">getStatus</a></code></li>
+      </ul>
+      
+      <p><a href="grepLogs.html">Grep Log Files for a Pattern</a></p>
+      <ul>
+        <li><code><a href="grepLogs.html">grepLogs</a></code></li>
+      </ul>
+      
+      <p><a href="JobCollection.html">JobCollection Constructor</a></p>
+      <ul>
+        <li><code><a href="JobCollection.html">JobCollection</a></code></li><li><code><a href="JobCollection.html">makeJobCollection</a></code></li>
+      </ul>
+      
+      <p><a href="JobExperiment.html">Jobs and Experiments</a></p>
+      <ul>
+        <li><code><a href="JobExperiment.html">Experiment</a></code></li><li><code><a href="JobExperiment.html">Job</a></code></li><li><code><a href="JobExperiment.html">makeJob</a></code></li>
+      </ul>
+      
+      <p><a href="JoinTables.html">Inner, Left, Right, Outer, Semi and Anti Join for Data Tables</a></p>
+      <ul>
+        <li><code><a href="JoinTables.html">JoinTables</a></code></li><li><code><a href="JoinTables.html">ajoin</a></code></li><li><code><a href="JoinTables.html">ijoin</a></code></li><li><code><a href="JoinTables.html">ljoin</a></code></li><li><code><a href="JoinTables.html">ojoin</a></code></li><li><code><a href="JoinTables.html">rjoin</a></code></li><li><code><a href="JoinTables.html">sjoin</a></code></li><li><code><a href="JoinTables.html">ujoin</a></code></li>
+      </ul>
+      
+      <p><a href="killJobs.html">Kill Jobs</a></p>
+      <ul>
+        <li><code><a href="killJobs.html">killJobs</a></code></li>
+      </ul>
+      
+      <p><a href="loadResult.html">Load the Result of a Single Job</a></p>
+      <ul>
+        <li><code><a href="loadResult.html">loadResult</a></code></li>
+      </ul>
+      
+      <p><a href="makeClusterFunctions.html">ClusterFunctions Constructor</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctions.html">ClusterFunctions</a></code></li><li><code><a href="makeClusterFunctions.html">makeClusterFunctions</a></code></li>
+      </ul>
+      
+      <p><a href="makeClusterFunctionsDocker.html">ClusterFunctions for Docker</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctionsDocker.html">makeClusterFunctionsDocker</a></code></li>
+      </ul>
+      
+      <p><a href="makeClusterFunctionsInteractive.html">ClusterFunctions for Sequential Execution in the Running R Session</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctionsInteractive.html">makeClusterFunctionsInteractive</a></code></li>
+      </ul>
+      
+      <p><a href="makeClusterFunctionsLSF.html">ClusterFunctions for LSF Systems</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctionsLSF.html">makeClusterFunctionsLSF</a></code></li>
+      </ul>
+      
+      <p><a href="makeClusterFunctionsMulticore.html">ClusterFunctions for Parallel Multicore Execution</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctionsMulticore.html">makeClusterFunctionsMulticore</a></code></li>
+      </ul>
+      
+      <p><a href="makeClusterFunctionsOpenLava.html">ClusterFunctions for OpenLava</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctionsOpenLava.html">makeClusterFunctionsOpenLava</a></code></li>
+      </ul>
+      
+      <p><a href="makeClusterFunctionsSGE.html">ClusterFunctions for SGE Systems</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctionsSGE.html">makeClusterFunctionsSGE</a></code></li>
+      </ul>
+      
+      <p><a href="makeClusterFunctionsSlurm.html">ClusterFunctions for Slurm Systems</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctionsSlurm.html">makeClusterFunctionsSlurm</a></code></li>
+      </ul>
+      
+      <p><a href="makeClusterFunctionsSocket.html">ClusterFunctions for Parallel Socket Execution</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctionsSocket.html">makeClusterFunctionsSocket</a></code></li>
+      </ul>
+      
+      <p><a href="makeClusterFunctionsSSH.html">ClusterFunctions for Remote SSH Execution</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctionsSSH.html">makeClusterFunctionsSSH</a></code></li>
+      </ul>
+      
+      <p><a href="makeClusterFunctionsTorque.html">ClusterFunctions for OpenPBS/Torque Systems</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctionsTorque.html">makeClusterFunctionsTorque</a></code></li>
+      </ul>
+      
+      <p><a href="makeSubmitJobResult.html">Create a SubmitJobResult</a></p>
+      <ul>
+        <li><code><a href="makeSubmitJobResult.html">SubmitJobResult</a></code></li><li><code><a href="makeSubmitJobResult.html">makeSubmitJobResult</a></code></li>
+      </ul>
+      
+      <p><a href="ProblemAlgorithm.html">Define Problems and Algorithms for Experiments</a></p>
+      <ul>
+        <li><code><a href="ProblemAlgorithm.html">Algorithm</a></code></li><li><code><a href="ProblemAlgorithm.html">Problem</a></code></li><li><code><a href="ProblemAlgorithm.html">ProblemAlgorithm</a></code></li><li><code><a href="ProblemAlgorithm.html">addAlgorithm</a></code></li><li><code><a href="ProblemAlgorithm.html">addProblem</a></code></li><li><code><a href="ProblemAlgorithm.html">getAlgorithmIds</a></code></li><li><code><a href="ProblemAlgorithm.html">getProblemIds</a></code></li><li><code><a href="ProblemAlgorithm.html">removeAlgorithms</a></code></li><li><code><a href="ProblemAlgorithm.html">removeProblems</a></code></li>
+      </ul>
+      
+      <p><a href="reduceResults.html">Reduce Results</a></p>
+      <ul>
+        <li><code><a href="reduceResults.html">reduceResults</a></code></li>
+      </ul>
+      
+      <p><a href="reduceResultsList.html">Apply Functions on Results</a></p>
+      <ul>
+        <li><code><a href="reduceResultsList.html">reduceResultsDataTable</a></code></li><li><code><a href="reduceResultsList.html">reduceResultsList</a></code></li>
+      </ul>
+      
+      <p><a href="Registry.html">Registry Constructor</a></p>
+      <ul>
+        <li><code><a href="Registry.html">Registry</a></code></li><li><code><a href="Registry.html">clearRegistry</a></code></li><li><code><a href="Registry.html">getDefaultRegistry</a></code></li><li><code><a href="Registry.html">loadRegistry</a></code></li><li><code><a href="Registry.html">makeRegistry</a></code></li><li><code><a href="Registry.html">saveRegistry</a></code></li><li><code><a href="Registry.html">setDefaultRegistry</a></code></li><li><code><a href="Registry.html">sweepRegistry</a></code></li><li><code><a href="Registry.html">syncRegistry</a></code></li>
+      </ul>
+      
+      <p><a href="removeExperiments.html">Remove Experiments</a></p>
+      <ul>
+        <li><code><a href="removeExperiments.html">removeExperiments</a></code></li>
+      </ul>
+      
+      <p><a href="resetJobs.html">Reset the Computational State of Jobs</a></p>
+      <ul>
+        <li><code><a href="resetJobs.html">resetJobs</a></code></li>
+      </ul>
+      
+      <p><a href="runHook.html">Trigger Evaluation of Custom Function</a></p>
+      <ul>
+        <li><code><a href="runHook.html">Hook</a></code></li><li><code><a href="runHook.html">Hooks</a></code></li><li><code><a href="runHook.html">runHook</a></code></li>
+      </ul>
+      
+      <p><a href="runOSCommand.html">Run OS Commands on Local or Remote Machines</a></p>
+      <ul>
+        <li><code><a href="runOSCommand.html">runOSCommand</a></code></li>
+      </ul>
+      
+      <p><a href="showLog.html">Inspect Log Files</a></p>
+      <ul>
+        <li><code><a href="showLog.html">getLog</a></code></li><li><code><a href="showLog.html">showLog</a></code></li>
+      </ul>
+      
+      <p><a href="submitJobs.html">Submit Jobs to the Batch Systems</a></p>
+      <ul>
+        <li><code><a href="submitJobs.html">submitJobs</a></code></li>
+      </ul>
+      
+      <p><a href="summarizeExperiments.html">Quick Summary over Experiments</a></p>
+      <ul>
+        <li><code><a href="summarizeExperiments.html">summarizeExperiments</a></code></li>
+      </ul>
+      
+      <p><a href="Tags.html">Add or Remove Job Tags</a></p>
+      <ul>
+        <li><code><a href="Tags.html">Tags</a></code></li><li><code><a href="Tags.html">addJobTags</a></code></li><li><code><a href="Tags.html">getUsedJobTags</a></code></li><li><code><a href="Tags.html">removeJobTags</a></code></li>
+      </ul>
+      
+      <p><a href="testJob.html">Run Jobs Interactively</a></p>
+      <ul>
+        <li><code><a href="testJob.html">testJob</a></code></li>
+      </ul>
+      
+      <p><a href="waitForJobs.html">Wait for Termination of Jobs</a></p>
+      <ul>
+        <li><code><a href="waitForJobs.html">waitForJobs</a></code></li>
+      </ul>
+      
+      <p><a href="Worker.html">Create a Linux-Worker</a></p>
+      <ul>
+        <li><code><a href="Worker.html">Worker</a></code></li>
+      </ul>
+    
     </div>
+  </div>
+
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#section-all-functions">All functions</a></li>
+    </ul>
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Michel Lang, Bernd Bischl.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

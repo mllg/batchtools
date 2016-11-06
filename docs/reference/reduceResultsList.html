@@ -6,11 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>reduceResultsList. batchtools</title>
+<title>Apply Functions on Results — reduceResultsList • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,9 +49,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -62,6 +58,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mllg/batchtools">
@@ -73,20 +70,21 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>Apply Functions on Results</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Apply Functions on Results</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>Applies a function on the results of your finished jobs and thereby collects
-them in a <code><a href='http://www.rdocumentation.org/packages/list/topics/base'>list</a></code> or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>.
+them in a <code><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></code> or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>.
 The later requires the provided function to return a list (or <code>data.frame</code>) of scalar values.
-See <code><a href='http://www.rdocumentation.org/packages/rbindlist/topics/data.table'>rbindlist</a></code> for features and limitations of the aggregation.</p>
+See <code><a href='http://www.rdocumentation.org/packages/data.table/topics/rbindlist'>rbindlist</a></code> for features and limitations of the aggregation.</p>
     
 
     <pre><span class='fu'>reduceResultsList</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
@@ -94,11 +92,11 @@ See <code><a href='http://www.rdocumentation.org/packages/rbindlist/topics/data.
 <span class='fu'>reduceResultsDataTable</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>ids</dt>
-      <dd>[<code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code> or <code>integer</code>]
-A <code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
+      <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of <code><a href='findJobs.html'>findDone</a></code>.</dd>
@@ -115,36 +113,30 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
       <dt>fill</dt>
       <dd>[<code>logical(1)</code>]
 In <code>reduceResultsDataTable</code>: This flag is passed down to
-<code><a href='http://www.rdocumentation.org/packages/rbindlist/topics/data.table'>rbindlist</a></code> which is used to convert the results
+<code><a href='http://www.rdocumentation.org/packages/data.table/topics/rbindlist'>rbindlist</a></code> which is used to convert the results
 to a <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>.</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p><code>reduceResultsList</code> returns a list of the results in the same order as the provided ids.
+    <p><code>reduceResultsList</code> returns a list of the results in the same order as the provided ids.
   <code>reduceResultsDataTable</code> returns a <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> with columns &#8220;job.id&#8221; and additional result columns
-  created via <code><a href='http://www.rdocumentation.org/packages/rbindlist/topics/data.table'>rbindlist</a></code>, sorted by &#8220;job.id&#8221;.</p>
-    </div>
-
-    <div class="Note">
-      <h2>Note</h2>
-
-      <p>If you have thousands of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
-can significantly increase the performance.</p>
-    </div>
-
-    <div class="See also">
-      <h2>See also</h2>
-
-      <p><code><a href='reduceResults.html'>reduceResults</a></code>.</p>
-      <p>Other Results: <code><a href='batchMapResults.html'>batchMapResults</a></code>,
-  <code><a href='loadResult.html'>loadResult</a></code>, <code><a href='reduceResults.html'>reduceResults</a></code></p>
-    </div>
+  created via <code><a href='http://www.rdocumentation.org/packages/data.table/topics/rbindlist'>rbindlist</a></code>, sorted by &#8220;job.id&#8221;.</p>
     
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 10 jobs ...</strong></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 10 jobs in 10 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 10 files ...</strong></div><div class='output co'>#&gt; [1] TRUE
-#&gt; </div><div class='input'><span class='fu'>reduceResultsList</span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>sqrt</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [[1]]
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>If you have thousands of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
+can significantly increase the performance.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><code><a href='reduceResults.html'>reduceResults</a></code>.</p>
+    <p>Other Results: <code><a href='batchMapResults.html'>batchMapResults</a></code>,
+  <code><a href='loadResult.html'>loadResult</a></code>, <code><a href='reduceResults.html'>reduceResults</a></code></p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='output co'>#&gt; <span class='message'>Creating directories in &#39;/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmphrwhkr/registry142dc1e984434&#39;</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 10 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 10 jobs in 10 chunks using cluster functions &#39;Interactive&#39; ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 10 files ...</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>reduceResultsList</span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>sqrt</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1
 #&gt; 
 #&gt; [[2]]
@@ -173,15 +165,34 @@ can significantly increase the performance.</p>
 #&gt; 
 #&gt; [[10]]
 #&gt; [1] 10
-#&gt; 
 #&gt; </div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Michel Lang, Bernd Bischl.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

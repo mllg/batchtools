@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load the Result of a Single Job — loadResult • batchtools</title>
+<title>Authors • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -20,9 +20,9 @@
 
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="jquery.sticky-kit.min.js"></script>
+<script src="pkgdown.js"></script>
 
 <!-- mathjax -->
 <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -34,7 +34,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-authors">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -44,18 +44,18 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <a class="navbar-brand" href="index.html">batchtools</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="articles/index.html">Articles</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="news/index.html">News</a>
 </li>
       </ul>
       
@@ -75,56 +75,30 @@
       </header>
 
       <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-12">
     <div class="page-header">
-    <h1>Load the Result of a Single Job</h1>
+      <h1>Authors</h1>
     </div>
 
-    
-    <p>A function to simply load the result of a single job.</p>
-    
-
-    <pre><span class='fu'>loadResult</span>(<span class='no'>id</span>, <span class='no'>missing.val</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>id</dt>
-      <dd>[<code>integer(1)</code> or <code>data.table</code>]
-Single integer to specify the job or a <code>data.table</code> with column <code>job.id</code>
-and exactly one row.</dd>
-      <dt>missing.val</dt>
-      <dd>[<code>ANY</code>]
-Value to impute if the result file is missing (if not provided and a result file is not found, an exception is raised).</dd>
-      <dt>reg</dt>
-      <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
-    </dl>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>[<code>ANY</code>]. The saved result or <code>missing.val</code> if result file
-  is not found.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p>Other Results: <code><a href='batchMapResults.html'>batchMapResults</a></code>,
-  <code><a href='reduceResultsList.html'>reduceResultsList</a></code>,
-  <code><a href='reduceResults.html'>reduceResults</a></code></p>
-    
+    <ul class="list-unstyled">
+      <li>
+        <p><strong>Michel Lang</strong>. Maintainer, author.
+        </p>
+      </li>
+      <li>
+        <p><strong>Bernd Bischl</strong>. Author.
+        </p>
+      </li>
+      <li>
+        <p><strong>Dirk Surmann</strong>. Contributor.
+        </p>
+      </li>
+    </ul>
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
 
-      <li><a href="#see-also">See also</a></li>
-          </ul>
-
-  </div>
 </div>
+
 
       <footer>
       <div class="copyright">

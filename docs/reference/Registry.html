@@ -6,11 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Registry. batchtools</title>
+<title>Registry Constructor — Registry • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,9 +49,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -62,6 +58,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mllg/batchtools">
@@ -73,15 +70,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>Registry Constructor</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Registry Constructor</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p><code>makeRegistry</code> constructs the inter-communication object for all functions in <code>batchtools</code>.
 All communication transactions are processed via the file system:
@@ -124,7 +122,7 @@ and thus allows you to start over.</p>
 
 <span class='fu'>syncRegistry</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>file.dir</dt>
       <dd>[<code>character(1)</code>]
@@ -135,13 +133,13 @@ and thus allows you to start over.</p>
 
   If you pass <code>NA</code>, a temporary directory will be used.
   This way, you can create disposable registries for <code><a href='btlapply.html'>btlapply</a></code> or examples.
-  By default, the temporary directory <code><a href='http://www.rdocumentation.org/packages/tempfile/topics/base'>tempdir</a>()</code> will be used.
+  By default, the temporary directory <code><a href='http://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a>()</code> will be used.
   If you want to use another directory, e.g. a directory which is shared between nodes,
   you can set it in your configuration file by setting the variable <code>temp.dir</code>.</dd>
       <dt>work.dir</dt>
       <dd>[<code>character(1)</code>]
   Working directory for R process for running jobs.
-  Defaults to the working directory currently set during Registry construction (see <code><a href='http://www.rdocumentation.org/packages/getwd/topics/base'>getwd</a></code>).
+  Defaults to the working directory currently set during Registry construction (see <code><a href='http://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a></code>).
   <code>loadRegistry</code> uses the stored <code>work.dir</code>, but you may also explicitly overwrite it,
   e.g., after switching to another system.
 
@@ -164,21 +162,21 @@ and thus allows you to start over.</p>
       <dt>packages</dt>
       <dd>[<code>character</code>]
 Packages that will always be loaded on each node.
-Uses <code><a href='http://www.rdocumentation.org/packages/library/topics/base'>require</a></code> internally.
+Uses <code><a href='http://www.rdocumentation.org/packages/base/topics/library'>require</a></code> internally.
 Default is <code>character(0)</code>.</dd>
       <dt>namespaces</dt>
       <dd>[<code>character</code>]
 Same as <code>packages</code>, but the packages will not be attached.
-Uses <code><a href='http://www.rdocumentation.org/packages/ns-load/topics/base'>requireNamespace</a></code> internally.
+Uses <code><a href='http://www.rdocumentation.org/packages/base/topics/ns-load'>requireNamespace</a></code> internally.
 Default is <code>character(0)</code>.</dd>
       <dt>source</dt>
       <dd>[<code>character</code>]
 Files which should be sourced on the slaves prior to executing a job.
-Calls <code><a href='http://www.rdocumentation.org/packages/sys.source/topics/base'>sys.source</a></code> using the <code><a href='http://www.rdocumentation.org/packages/environment/topics/base'>.GlobalEnv</a></code>.</dd>
+Calls <code><a href='http://www.rdocumentation.org/packages/base/topics/sys.source'>sys.source</a></code> using the <code><a href='http://www.rdocumentation.org/packages/base/topics/environment'>.GlobalEnv</a></code>.</dd>
       <dt>load</dt>
       <dd>[<code>character</code>]
 Files which should be loaded on the slaves prior to executing a job.
-Calls <code><a href='http://www.rdocumentation.org/packages/load/topics/base'>load</a></code> using the <code><a href='http://www.rdocumentation.org/packages/environment/topics/base'>.GlobalEnv</a></code>.</dd>
+Calls <code><a href='http://www.rdocumentation.org/packages/base/topics/load'>load</a></code> using the <code><a href='http://www.rdocumentation.org/packages/base/topics/environment'>.GlobalEnv</a></code>.</dd>
       <dt>seed</dt>
       <dd>[<code>integer(1)</code>]
 Start seed for jobs. Each job uses the (<code>seed</code> + <code>job.id</code>) as seed.
@@ -200,10 +198,9 @@ If the provided <code>file.dir</code> does not match the stored <code>file.dir</
 registry in read-only mode.</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p><code>makeRegistry</code>, <code>loadRegistry</code>, <code>getDefaultRegistry</code> and <code>setDefaultRegistry</code>
+    <p><code>makeRegistry</code>, <code>loadRegistry</code>, <code>getDefaultRegistry</code> and <code>setDefaultRegistry</code>
   return an environment of class &#8220;Registry&#8221; with the following slots:
   <dl class='dl-horizontal'>
     <dt><code>file.dir</code> [path]:</dt><dd>File directory.</dd>
@@ -214,24 +211,24 @@ registry in read-only mode.</dd>
     <dt><code>seed</code> [integer(1)]:</dt><dd>Registry seed. Before each job is executed, the seed <code>seed + job.id</code> is set.</dd>
     <dt><code>cluster.functions</code> [cluster.functions]:</dt><dd>Usually set in your <code>conf.file</code>. Set via a call to <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>. See example.</dd>
     <dt><code>default.resources</code> [named list()]:</dt><dd>Usually set in your <code>conf.file</code>. Named list of default resources.</dd>
-    <dt><code>max.concurrent.jobs</code> [integer(1)]:</dt><dd>Usually set in your <code>conf.file</code>. Maximum number of concurrent jobs for a single user on the system. <code><a href='submitJobs.html'>submitJobs</a></code> will try to respect this setting.</dd>
+    <dt><code>max.concurrent.jobs</code> [integer(1)]:</dt><dd>Usually set in your <code>conf.file</code>. Maximum number of concurrent jobs for a single user and current registry on the system.
+      <code><a href='submitJobs.html'>submitJobs</a></code> will try to respect this setting.</dd>
     <dt><code>defs</code> [data.table]:</dt><dd>Table with job definitions (i.e. parameters).</dd>
     <dt><code>status</code> [data.table]:</dt><dd>Table holding information about the computational status. Also see <code><a href='getJobTable.html'>getJobStatus</a></code>.</dd>
     <dt><code>resources</code> [data.table]:</dt><dd>Table holding information about the computational resources used for the job. Also see <code><a href='getJobTable.html'>getJobResources</a></code>.</dd>
     <dt><code>tags</code> [data.table]:</dt><dd>Table holding information about tags. See <a href='Tags.html'>Tags</a>.</dd>
   </dl></p>
-      <p>The other functions <code>saveRegistry</code>, <code>syncRegistry</code>, <code>sweepRegistry</code> and <code>clearRegistry</code> return <code>TRUE</code>
+    <p>The other functions <code>saveRegistry</code>, <code>syncRegistry</code>, <code>sweepRegistry</code> and <code>clearRegistry</code> return <code>TRUE</code>
   if the registry has been altered and successfully stored on the file system.</p>
-    </div>
     
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='output co'>#&gt; <span class='message'>Creating directories in &#39;/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmphrwhkr/registry142dc505494ca&#39;</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
 #&gt;   Name    : Interactive
-#&gt;   File dir: /scratch/registry15b25ea5f3e7
-#&gt;   Work dir: /home/lang/Projekte/batchtools/docs/reference
+#&gt;   File dir: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/Rtmphrwhkr/registry142dc505494ca
+#&gt;   Work dir: /Users/michel/Projekte/batchtools/docs/reference
 #&gt;   Jobs    : 0
-#&gt;   Seed    : 874666013
-#&gt; </div><div class='input'>
+#&gt;   Seed    : 394416534</div><div class='input'>
 <span class='co'># Set cluster functions to interactive mode and start jobs in external R sessions</span>
 <span class='no'>tmp</span>$<span class='no'>cluster.functions</span> <span class='kw'>=</span> <span class='fu'><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></span>(<span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
@@ -239,12 +236,28 @@ registry in read-only mode.</dd>
 <span class='no'>tmp</span>$<span class='no'>packages</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"MASS"</span>)
 <span class='fu'>saveRegistry</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Michel Lang, Bernd Bischl.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

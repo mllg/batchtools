@@ -6,11 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>addExperiments. batchtools</title>
+<title>Add Experiments to the Registry — addExperiments • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,9 +49,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -62,6 +58,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mllg/batchtools">
@@ -73,15 +70,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>Add Experiments to the Registry</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Add Experiments to the Registry</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>Adds experiments (parametrized combinations of problems with algorithms) to the registry and thereby defines batch jobs.</p>
 
@@ -94,15 +92,15 @@ E.g., if you have two problems <code>p1</code> and <code>p2</code> and three alg
     <pre><span class='fu'>addExperiments</span>(<span class='kw'>prob.designs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>algo.designs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>repls</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
   <span class='kw'>combine</span> <span class='kw'>=</span> <span class='st'>"crossprod"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>prob.designs</dt>
-      <dd>[named list of <code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code>]
+      <dd>[named list of <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]
 Named list of data frames (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>).
 The name must match the problem name while the column names correspond to parameters of the problem.
 If <code>NULL</code>, experiments for all defined problems without any parameters are added.</dd>
       <dt>algo.designs</dt>
-      <dd>[named list of <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> or <code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code>]
+      <dd>[named list of <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> or <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]
 Named list of data frames (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>).
 The name must match the algorithm name while the column names correspond to parameters of the algorithm.
 If <code>NULL</code>, experiments for all defined algorithms without any parameters are added.</dd>
@@ -113,29 +111,26 @@ Number of replications for each experiment.</dd>
       <dd>[<code>character(1)</code>]
 How to combine the rows of a single problem design with the rows of a single algorithm design?
 Default is &#8220;crossprod&#8221; which combines each row of the problem design which each row of the algorithm design
-in a cross-product fashion. Set to &#8220;bind&#8221; to just <code><a href='http://www.rdocumentation.org/packages/cbind/topics/base'>cbind</a></code> the tables of
+in a cross-product fashion. Set to &#8220;bind&#8221; to just <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code> the tables of
 problem and algorithm designs where the shorter table is repeated if necessary.</dd>
       <dt>reg</dt>
       <dd>[<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p>[<code>data.table</code>] with ids of added jobs stored in column &#8220;job.id&#8221;.</p>
-    </div>
+    <p>[<code>data.table</code>] with ids of added jobs stored in column &#8220;job.id&#8221;.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class="See also">
-      <h2>See also</h2>
-
-      <p>Other Experiment: <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>,
+    <p>Other Experiment: <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>,
   <code><a href='removeExperiments.html'>removeExperiments</a></code>,
   <code><a href='summarizeExperiments.html'>summarizeExperiments</a></code></p>
-    </div>
     
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='output co'>#&gt; <span class='message'>Creating directories in &#39;/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmphrwhkr/registry142dc1582b042&#39;</span></div><div class='input'>
 <span class='co'># add first problem</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>...</span>) <span class='fu'>rnorm</span>(<span class='no'>n</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>sd</span>)
 <span class='fu'><a href='ProblemAlgorithm.html'>addProblem</a></span>(<span class='st'>"p1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
@@ -160,14 +155,13 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
 <span class='no'>algo.designs</span>$<span class='no'>a2</span> <span class='kw'>=</span> <span class='fu'>data.table</span>()
 
 <span class='co'># add experiments</span>
-<span class='fu'>addExperiments</span>(<span class='no'>prob.designs</span>, <span class='no'>algo.designs</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 30 experiments (&#39;p1&#39;[15] x &#39;a1&#39;[2] x repls[1]) ...</strong></div><div class='output'><strong class='text-info'>Adding 15 experiments (&#39;p1&#39;[15] x &#39;a2&#39;[1] x repls[1]) ...</strong></div><div class='output'><strong class='text-info'>Adding 10 experiments (&#39;p2&#39;[5] x &#39;a1&#39;[2] x repls[1]) ...</strong></div><div class='output'><strong class='text-info'>Adding 5 experiments (&#39;p2&#39;[5] x &#39;a2&#39;[1] x repls[1]) ...</strong></div><div class='input'>
+<span class='fu'>addExperiments</span>(<span class='no'>prob.designs</span>, <span class='no'>algo.designs</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 30 experiments (&#39;p1&#39;[15] x &#39;a1&#39;[2] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 15 experiments (&#39;p1&#39;[15] x &#39;a2&#39;[1] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 10 experiments (&#39;p2&#39;[5] x &#39;a1&#39;[2] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 5 experiments (&#39;p2&#39;[5] x &#39;a2&#39;[1] x repls[1]) ...</span></div><div class='input'>
 <span class='co'># check what has been created</span>
 <span class='fu'><a href='summarizeExperiments.html'>summarizeExperiments</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    problem algorithm .count
 #&gt; 1:      p1        a1     30
 #&gt; 2:      p1        a2     15
 #&gt; 3:      p2        a1     10
-#&gt; 4:      p2        a2      5
-#&gt; </div><div class='input'><span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;     job.id problem algorithm   n mean sd method lambda
+#&gt; 4:      p2        a2      5</div><div class='input'><span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;     job.id problem algorithm   n mean sd method lambda
 #&gt;  1:      1      p1        a1 100   -1  1   mean     NA
 #&gt;  2:      2      p1        a1 100   -1  1 median     NA
 #&gt;  3:      3      p1        a1 100    0  1   mean     NA
@@ -228,15 +222,32 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
 #&gt; 58:     58      p2        a2  NA   NA NA     NA      3
 #&gt; 59:     59      p2        a2  NA   NA NA     NA      4
 #&gt; 60:     60      p2        a2  NA   NA NA     NA      5
-#&gt;     job.id problem algorithm   n mean sd method lambda
-#&gt; </div></pre>
+#&gt;     job.id problem algorithm   n mean sd method lambda</div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Michel Lang, Bernd Bischl.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

@@ -6,11 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Worker. batchtools</title>
+<title>Create a Linux-Worker — Worker • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,9 +49,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -62,6 +58,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mllg/batchtools">
@@ -73,70 +70,85 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>Create a Linux-Worker</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Create a Linux-Worker</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
-    <p><code><a href='http://www.rdocumentation.org/packages/R6Class/topics/R6'>R6Class</a></code> to create local and remote linux workers.</p>
+    <p><code><a href='http://www.rdocumentation.org/packages/R6/topics/R6Class'>R6Class</a></code> to create local and remote linux workers.</p>
     
 
     <pre><span class='no'>Worker</span></pre>
         
-    <div class="Format">
-      <h2>Format</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-      <p>An <code>R6Class</code> generator object</p>
-    </div>
+    <p>An <code>R6Class</code> generator object</p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <div class="Value">
-      <h2>Value</h2>
+    <p>[<code>Worker</code>].</p>
+    
+    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
-      <p>[<code>Worker</code>].</p>
-    </div>
-
-    <div class="Fields">
-      <h2>Fields</h2>
-
-      <p></p>
-      <p><dl class='dl-horizontal'>
+    <p></p>
+    <p><dl class='dl-horizontal'>
 <dt><code>nodename</code></dt><dd>Host name. Set via constructor.</dd></p>
-      <p><dt><code>ncpus</code></dt><dd>Number of VPUs of worker. Set via constructor and defaults to the number of CPUs of the machine.</dd></p>
-      <p><dt><code>max.load</code></dt><dd>Maximum load average (of the last 5 min). Set via constructor and defaults to the number of CPUs of the machine.</dd></p>
-      <p><dt><code>status</code></dt><dd>Status of the worker; one of &#8220;unknown&#8221;, &#8220;available&#8221;, &#8220;max.cpus&#8221; and &#8220;max.load&#8221;.</dd>
+    <p><dt><code>ncpus</code></dt><dd>Number of VPUs of worker. Set via constructor and defaults to the number of CPUs of the machine.</dd></p>
+    <p><dt><code>max.load</code></dt><dd>Maximum load average (of the last 5 min). Set via constructor and defaults to the number of CPUs of the machine.</dd></p>
+    <p><dt><code>status</code></dt><dd>Status of the worker; one of &#8220;unknown&#8221;, &#8220;available&#8221;, &#8220;max.cpus&#8221; and &#8220;max.load&#8221;.</dd>
 </dl></p>
-    </div>
+    
+    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
-    <div class="Methods">
-      <h2>Methods</h2>
-
-      <p></p>
-      <p><dl class='dl-horizontal'>
+    <p></p>
+    <p><dl class='dl-horizontal'>
  <dt><code>new(nodename, ncpus, max.load)</code></dt><dd>Constructor.</dd>
  <dt><code>update(reg)</code></dt><dd>Update the worker status.</dd>
  <dt><code>list(reg)</code></dt><dd>List running jobs.</dd>
  <dt><code>start(reg, fn, outfile)</code></dt><dd>Start job collection in file &#8220;fn&#8221; and output to &#8220;outfile&#8221;.</dd>
  <dt><code>kill(reg, batch.id)</code></dt><dd>Kill job matching the &#8220;batch.id&#8221;.</dd>
 </dl></p>
-    </div>
     
-    <h2 id="examples">Examples</h2>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
 <span class='co'># # create a worker for the local machine and use 4 CPUs.</span>
 <span class='co'># Worker$new("localhost", ncpus = 4)</span>
 <span class='co'>## ---------------------------------------------</span></div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      
+      <li><a href="#format">Format</a></li>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#fields">Fields</a></li>
+
+      <li><a href="#methods">Methods</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Michel Lang, Bernd Bischl.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

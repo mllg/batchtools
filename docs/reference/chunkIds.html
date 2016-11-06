@@ -6,11 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>chunkIds. batchtools</title>
+<title>Chunk Jobs for Sequential Execution — chunkIds • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,9 +49,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -62,6 +58,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mllg/batchtools">
@@ -73,15 +70,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>Chunk Jobs for Sequential Execution</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Chunk Jobs for Sequential Execution</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>Partition jobs into &#8220;chunks&#8221; which will be executed together on the nodes.</p>
 
@@ -89,16 +87,19 @@
 a data frame with columns &#8220;job.id&#8221; and corresponding &#8220;chunk&#8221; (both integer).
 All jobs with the same chunk number will be grouped together on one node as a single
 computational job.</p>
+
+    <p>If neither <code>n.chunks</code> nor <code>chunk.size</code> are provided, each job will be assigned
+to its own chunk.</p>
     
 
     <pre><span class='fu'>chunkIds</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>group.by</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>ids</dt>
-      <dd>[<code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code> or <code>integer</code>]
-A <code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
+      <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.</dd>
@@ -123,53 +124,50 @@ See example.</dd>
 Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p>[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with columns &#8220;job.id&#8221; and &#8220;chunk&#8221;.</p>
-    </div>
+    <p>[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with columns &#8220;job.id&#8221; and &#8220;chunk&#8221;.</p>
     
-    <h2 id="examples">Examples</h2>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># chunking for Registry</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>25</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 25 jobs ...</strong></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>chunkIds</span>(<span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='output co'>#&gt; <span class='message'>Creating directories in &#39;/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmphrwhkr/registry142dc5ff542c&#39;</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>25</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 25 jobs ...</span></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>chunkIds</span>(<span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='no'>ids</span>)</div><div class='output co'>#&gt;     job.id chunk
-#&gt;  1:      1     3
+#&gt;  1:      1     2
 #&gt;  2:      2     2
-#&gt;  3:      3     3
-#&gt;  4:      4     1
+#&gt;  3:      3     1
+#&gt;  4:      4     3
 #&gt;  5:      5     3
 #&gt;  6:      6     3
-#&gt;  7:      7     1
-#&gt;  8:      8     2
+#&gt;  7:      7     2
+#&gt;  8:      8     1
 #&gt;  9:      9     1
 #&gt; 10:     10     1
-#&gt; 11:     11     2
-#&gt; 12:     12     2
+#&gt; 11:     11     3
+#&gt; 12:     12     3
 #&gt; 13:     13     2
-#&gt; 14:     14     3
-#&gt; 15:     15     2
-#&gt; 16:     16     1
+#&gt; 14:     14     2
+#&gt; 15:     15     1
+#&gt; 16:     16     2
 #&gt; 17:     17     1
-#&gt; 18:     18     1
-#&gt; 19:     19     1
-#&gt; 20:     20     3
-#&gt; 21:     21     2
+#&gt; 18:     18     3
+#&gt; 19:     19     3
+#&gt; 20:     20     1
+#&gt; 21:     21     1
 #&gt; 22:     22     2
 #&gt; 23:     23     3
-#&gt; 24:     24     3
-#&gt; 25:     25     1
-#&gt;     job.id chunk
-#&gt; </div><div class='input'><span class='fu'>print</span>(<span class='fu'>table</span>(<span class='no'>ids</span>$<span class='no'>chunk</span>))</div><div class='output co'>#&gt; 
+#&gt; 24:     24     1
+#&gt; 25:     25     2
+#&gt;     job.id chunk</div><div class='input'><span class='fu'>print</span>(<span class='fu'>table</span>(<span class='no'>ids</span>$<span class='no'>chunk</span>))</div><div class='output co'>#&gt; 
 #&gt; 1 2 3 
-#&gt; 9 8 8 
-#&gt; </div><div class='input'>
+#&gt; 9 8 8 </div><div class='input'>
 <span class='co'># Creating chunks for an ExperimentRegistry</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='ProblemAlgorithm.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob1"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='output co'>#&gt; <span class='message'>Creating directories in &#39;/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmphrwhkr/registry142dc3def17c7&#39;</span></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='ProblemAlgorithm.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob1"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))
 <span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='ProblemAlgorithm.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob2"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Titanic</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))
 <span class='no'>algo</span> <span class='kw'>=</span> <span class='fu'><a href='ProblemAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"algo"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>i</span>, <span class='no'>...</span>) <span class='no'>problem</span>)
 <span class='no'>prob.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>prob1</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(), <span class='kw'>prob2</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>))
 <span class='no'>algo.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>algo</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>))
-<span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='no'>prob.designs</span>, <span class='no'>algo.designs</span>, <span class='kw'>repls</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 9 experiments (&#39;prob1&#39;[1] x &#39;algo&#39;[3] x repls[3]) ...</strong></div><div class='output'><strong class='text-info'>Adding 18 experiments (&#39;prob2&#39;[2] x &#39;algo&#39;[3] x repls[3]) ...</strong></div><div class='input'>
+<span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='no'>prob.designs</span>, <span class='no'>algo.designs</span>, <span class='kw'>repls</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 9 experiments (&#39;prob1&#39;[1] x &#39;algo&#39;[3] x repls[3]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 18 experiments (&#39;prob2&#39;[2] x &#39;algo&#39;[3] x repls[3]) ...</span></div><div class='input'>
 <span class='co'># group into chunks of 5 jobs, but do not put multiple problems into a single chunk</span>
 <span class='co'># -&gt; only one problem has to be loaded per chunk, and only once because it is then cached.</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='getJobTable.html'>getJobTable</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>problem</span>, <span class='no'>algorithm</span>)]
@@ -182,42 +180,56 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt;  5:      5     2
 #&gt;  6:      6     2
 #&gt;  7:      7     1
-#&gt;  8:      8     1
+#&gt;  8:      8     2
 #&gt;  9:      9     2
 #&gt; 10:     10     3
 #&gt; 11:     11     4
-#&gt; 12:     12     5
+#&gt; 12:     12     3
 #&gt; 13:     13     5
-#&gt; 14:     14     5
-#&gt; 15:     15     4
-#&gt; 16:     16     6
-#&gt; 17:     17     3
+#&gt; 14:     14     4
+#&gt; 15:     15     6
+#&gt; 16:     16     5
+#&gt; 17:     17     5
 #&gt; 18:     18     6
 #&gt; 19:     19     3
-#&gt; 20:     20     6
-#&gt; 21:     21     3
-#&gt; 22:     22     4
-#&gt; 23:     23     3
-#&gt; 24:     24     6
+#&gt; 20:     20     4
+#&gt; 21:     21     5
+#&gt; 22:     22     6
+#&gt; 23:     23     6
+#&gt; 24:     24     4
 #&gt; 25:     25     4
 #&gt; 26:     26     6
-#&gt; 27:     27     5
-#&gt;     job.id chunk
-#&gt; </div><div class='input'><span class='fu'>dcast</span>(<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>ids</span>, <span class='no'>chunked</span>), <span class='no'>chunk</span> ~ <span class='no'>problem</span>)</div><div class='output'><strong class='text-info'>Using &#39;chunk&#39; as value column. Use &#39;value.var&#39; to override</strong></div><div class='output'><strong class='text-info'>Aggregate function missing, defaulting to &#39;length&#39;</strong></div><div class='output co'>#&gt;    chunk prob1 prob2
-#&gt; 1:     1     5     0
-#&gt; 2:     2     4     0
-#&gt; 3:     3     0     5
-#&gt; 4:     4     0     4
+#&gt; 27:     27     3
+#&gt;     job.id chunk</div><div class='input'><span class='fu'>dcast</span>(<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>ids</span>, <span class='no'>chunked</span>), <span class='no'>chunk</span> ~ <span class='no'>problem</span>)</div><div class='output co'>#&gt; <span class='message'>Using &#39;chunk&#39; as value column. Use &#39;value.var&#39; to override</span></div><div class='output co'>#&gt; <span class='message'>Aggregate function missing, defaulting to &#39;length&#39;</span></div><div class='output co'>#&gt;    chunk prob1 prob2
+#&gt; 1:     1     4     0
+#&gt; 2:     2     5     0
+#&gt; 3:     3     0     4
+#&gt; 4:     4     0     5
 #&gt; 5:     5     0     4
-#&gt; 6:     6     0     5
-#&gt; </div></pre>
+#&gt; 6:     6     0     5</div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Michel Lang, Bernd Bischl.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

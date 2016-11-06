@@ -6,11 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tags. batchtools</title>
+<title>Add or Remove Job Tags — Tags • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,9 +49,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -62,6 +58,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mllg/batchtools">
@@ -73,15 +70,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>Add or Remove Job Tags</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Add or Remove Job Tags</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>Add and remove arbitrary tags to jobs.</p>
     
@@ -92,11 +90,11 @@
 
 <span class='fu'>getUsedJobTags</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>ids</dt>
-      <dd>[<code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code> or <code>integer</code>]
-A <code><a href='http://www.rdocumentation.org/packages/data.frame/topics/base'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
+      <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to all jobs.</dd>
@@ -108,14 +106,13 @@ Tags to add or remove as strings. May use letters, numbers, underscore and dots 
 Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p>[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with job ids affected (invisible).</p>
-    </div>
+    <p>[<code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>] with job ids affected (invisible).</p>
     
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>sqrt</span>, <span class='kw'>x</span> <span class='kw'>=</span> -<span class='fl'>3</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 7 jobs ...</strong></div><div class='input'>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='output co'>#&gt; <span class='message'>Creating directories in &#39;/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmphrwhkr/registry142dc483a8f22&#39;</span></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>sqrt</span>, <span class='kw'>x</span> <span class='kw'>=</span> -<span class='fl'>3</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 7 jobs ...</span></div><div class='input'>
 <span class='co'># Add new tag to all ids</span>
 <span class='fu'>addJobTags</span>(<span class='no'>ids</span>, <span class='st'>"needs.computation"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'><a href='getJobTable.html'>getJobTags</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id              tags
@@ -125,8 +122,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt; 4:      4 needs.computation
 #&gt; 5:      5 needs.computation
 #&gt; 6:      6 needs.computation
-#&gt; 7:      7 needs.computation
-#&gt; </div><div class='input'>
+#&gt; 7:      7 needs.computation</div><div class='input'>
 <span class='co'># Add more tags</span>
 <span class='fu'>addJobTags</span>(<span class='fu'><a href='findJobs.html'>findJobs</a></span>(<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='st'>"x.neg"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>addJobTags</span>(<span class='fu'><a href='findJobs.html'>findJobs</a></span>(<span class='no'>x</span> <span class='kw'>&gt;</span> <span class='fl'>0</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='st'>"x.pos"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
@@ -137,22 +133,17 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt; 4:      4       needs.computation
 #&gt; 5:      5 needs.computation,x.pos
 #&gt; 6:      6 needs.computation,x.pos
-#&gt; 7:      7 needs.computation,x.pos
-#&gt; </div><div class='input'>
+#&gt; 7:      7 needs.computation,x.pos</div><div class='input'>
 <span class='co'># Submit first 5 jobs and remove tag if successful</span>
-<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Submitting 5 jobs in 5 chunks using cluster functions &#39;Interactive&#39; ...</strong></div><div class='output'><strong class='text-warning'>Warning message:
-NaNs produced</strong></div><div class='output'><strong class='text-warning'>Warning message:
-NaNs produced</strong></div><div class='output'><strong class='text-warning'>Warning message:
-NaNs produced</strong></div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
-  <span class='fu'>removeJobTags</span>(<span class='no'>ids</span>, <span class='st'>"needs.computation"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Syncing 5 files ...</strong></div><div class='input'><span class='fu'><a href='getJobTable.html'>getJobTags</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id                    tags
+<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 5 jobs in 5 chunks using cluster functions &#39;Interactive&#39; ...</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
+  <span class='fu'>removeJobTags</span>(<span class='no'>ids</span>, <span class='st'>"needs.computation"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 5 files ...</span></div><div class='input'><span class='fu'><a href='getJobTable.html'>getJobTags</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id                    tags
 #&gt; 1:      1                   x.neg
 #&gt; 2:      2                   x.neg
 #&gt; 3:      3                   x.neg
 #&gt; 4:      4                      NA
 #&gt; 5:      5                   x.pos
 #&gt; 6:      6 needs.computation,x.pos
-#&gt; 7:      7 needs.computation,x.pos
-#&gt; </div><div class='input'>
+#&gt; 7:      7 needs.computation,x.pos</div><div class='input'>
 <span class='co'># Grep for warning message and add a tag</span>
 <span class='fu'>addJobTags</span>(<span class='fu'><a href='grepLogs.html'>grepLogs</a></span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"NaNs produced"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='st'>"div.zero"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'><a href='getJobTable.html'>getJobTags</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id                    tags
@@ -162,19 +153,33 @@ NaNs produced</strong></div><div class='input'><span class='kw'>if</span> (<span
 #&gt; 4:      4                      NA
 #&gt; 5:      5                   x.pos
 #&gt; 6:      6 needs.computation,x.pos
-#&gt; 7:      7 needs.computation,x.pos
-#&gt; </div><div class='input'>
+#&gt; 7:      7 needs.computation,x.pos</div><div class='input'>
 <span class='co'># All tags where tag x.neg is set:</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='findJobs.html'>findTagged</a></span>(<span class='st'>"x.neg"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>getUsedJobTags</span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] &quot;x.neg&quot;
-#&gt; </div></pre>
+<span class='fu'>getUsedJobTags</span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] &quot;x.neg&quot;</div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Michel Lang, Bernd Bischl.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

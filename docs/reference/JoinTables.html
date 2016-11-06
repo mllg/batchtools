@@ -6,11 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>JoinTables. batchtools</title>
+<title>Inner, Left, Right, Outer, Semi and Anti Join for Data Tables — JoinTables • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,9 +49,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -62,6 +58,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mllg/batchtools">
@@ -73,15 +70,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>Inner, Left, Right, Outer, Semi and Anti Join for Data Tables</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Inner, Left, Right, Outer, Semi and Anti Join for Data Tables</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>These helper functions perform join operations on data tables.
 Most of them are basically one-liners.
@@ -103,7 +101,7 @@ data table or alternatively <span class="pkg">dplyr</span>&#39;s vignette on two
 
 <span class='fu'>ujoin</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>all.y</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>x</dt>
       <dd>[<code>data.frame</code>]
@@ -132,15 +130,14 @@ You may pass a named character vector to merge on columns with different names i
 Keep columns of <code>y</code> which are not in <code>x</code>?</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p>[<code>data.table</code>] with key identical to <code>by</code>.</p>
-    </div>
+    <p>[<code>data.table</code>] with key identical to <code>by</code>.</p>
     
-    <h2 id="examples">Examples</h2>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Create two tables for demonstration</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>6</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 6 jobs ...</strong></div><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='output co'>#&gt; <span class='message'>Creating directories in &#39;/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmphrwhkr/registry142dc4d9f8671&#39;</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>6</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 6 jobs ...</span></div><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='no'>y</span> <span class='kw'>=</span> <span class='fu'><a href='findJobs.html'>findJobs</a></span>(<span class='no'>x</span> <span class='kw'>&gt;=</span> <span class='fl'>2</span> <span class='kw'>&amp;</span> <span class='no'>x</span> <span class='kw'>&lt;=</span> <span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='no'>y</span>$<span class='no'>extra.col</span> <span class='kw'>=</span> <span class='fu'>head</span>(<span class='no'>letters</span>, <span class='fu'>nrow</span>(<span class='no'>y</span>))
 
@@ -149,8 +146,7 @@ Keep columns of <code>y</code> which are not in <code>x</code>?</dd>
 #&gt; 1:      2 2         a
 #&gt; 2:      3 3         b
 #&gt; 3:      4 4         c
-#&gt; 4:      5 5         d
-#&gt; </div><div class='input'>
+#&gt; 4:      5 5         d</div><div class='input'>
 <span class='co'># Left join: use all ids from x, keep all columns of x and y</span>
 <span class='fu'>ljoin</span>(<span class='no'>x</span>, <span class='no'>y</span>)</div><div class='output co'>#&gt;    job.id extra.col x
 #&gt; 1:      1        NA 1
@@ -158,15 +154,13 @@ Keep columns of <code>y</code> which are not in <code>x</code>?</dd>
 #&gt; 3:      3         b 3
 #&gt; 4:      4         c 4
 #&gt; 5:      5         d 5
-#&gt; 6:      6        NA 6
-#&gt; </div><div class='input'>
+#&gt; 6:      6        NA 6</div><div class='input'>
 <span class='co'># Right join: use all ids from y, keep all columns of x and y</span>
 <span class='fu'>rjoin</span>(<span class='no'>x</span>, <span class='no'>y</span>)</div><div class='output co'>#&gt;    job.id x extra.col
 #&gt; 1:      2 2         a
 #&gt; 2:      3 3         b
 #&gt; 3:      4 4         c
-#&gt; 4:      5 5         d
-#&gt; </div><div class='input'>
+#&gt; 4:      5 5         d</div><div class='input'>
 <span class='co'># Outer join: similar to union(): keep all columns of x and y with matches in x or y</span>
 <span class='fu'>ojoin</span>(<span class='no'>x</span>, <span class='no'>y</span>)</div><div class='output co'>#&gt;    job.id x extra.col
 #&gt; 1:      1 1        NA
@@ -174,20 +168,17 @@ Keep columns of <code>y</code> which are not in <code>x</code>?</dd>
 #&gt; 3:      3 3         b
 #&gt; 4:      4 4         c
 #&gt; 5:      5 5         d
-#&gt; 6:      6 6        NA
-#&gt; </div><div class='input'>
+#&gt; 6:      6 6        NA</div><div class='input'>
 <span class='co'># Semi join: filter x with matches in y</span>
 <span class='fu'>sjoin</span>(<span class='no'>x</span>, <span class='no'>y</span>)</div><div class='output co'>#&gt;    job.id x
 #&gt; 1:      2 2
 #&gt; 2:      3 3
 #&gt; 3:      4 4
-#&gt; 4:      5 5
-#&gt; </div><div class='input'>
+#&gt; 4:      5 5</div><div class='input'>
 <span class='co'># Anti join: filter x with matches not in y</span>
 <span class='fu'>ajoin</span>(<span class='no'>x</span>, <span class='no'>y</span>)</div><div class='output co'>#&gt;    job.id x
 #&gt; 1:      1 1
-#&gt; 2:      6 6
-#&gt; </div><div class='input'>
+#&gt; 2:      6 6</div><div class='input'>
 <span class='co'># Updating join: Replace values in x with values in y</span>
 <span class='fu'>ujoin</span>(<span class='no'>x</span>, <span class='no'>y</span>)</div><div class='output co'>#&gt;    job.id x
 #&gt; 1:      1 1
@@ -195,15 +186,30 @@ Keep columns of <code>y</code> which are not in <code>x</code>?</dd>
 #&gt; 3:      3 3
 #&gt; 4:      4 4
 #&gt; 5:      5 5
-#&gt; 6:      6 6
-#&gt; </div></pre>
+#&gt; 6:      6 6</div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Michel Lang, Bernd Bischl.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

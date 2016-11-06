@@ -6,11 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>makeClusterFunctionsTorque. batchtools</title>
+<title>ClusterFunctions for OpenPBS/Torque Systems — makeClusterFunctionsTorque • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,9 +49,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -62,6 +58,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mllg/batchtools">
@@ -73,15 +70,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>ClusterFunctions for OpenPBS/Torque Systems</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>ClusterFunctions for OpenPBS/Torque Systems</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>Job files are created based on the brew template <code>template.file</code>. This file is processed
 with brew and then submitted to the queue using the <code>qsub</code> command. Jobs are killed using
@@ -97,7 +95,7 @@ allocations.</p>
 
     <pre><span class='fu'>makeClusterFunctionsTorque</span>(<span class='kw'>template</span> <span class='kw'>=</span> <span class='fu'>findTemplateFile</span>(<span class='st'>"torque"</span>))</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>template</dt>
       <dd>[<code>character(1)</code>]
@@ -108,7 +106,7 @@ the first one found:
 <ol>
 <li> &#8220;batchtools.torque.tmpl&#8221; in the current working directory.
   </li>
-<li> &#8220;torque.tmpl&#8221; in the user config directory (see <code><a href='http://www.rdocumentation.org/packages/user_data_dir/topics/rappdirs'>user_config_dir</a></code>); on linux is is usually &#8220;~/.config/batchtools/torque.tmpl&#8221;.
+<li> &#8220;torque.tmpl&#8221; in the user config directory (see <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>user_config_dir</a></code>); on linux is is usually &#8220;~/.config/batchtools/torque.tmpl&#8221;.
   </li>
 <li> &#8220;.batchtools.torque.tmpl&#8221; in the home directory.
   </li>
@@ -118,16 +116,13 @@ the first one found:
 </dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p>[<code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>].</p>
-    </div>
+    <p>[<code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>].</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class="See also">
-      <h2>See also</h2>
-
-      <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+    <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
   <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
   <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
   <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
@@ -137,14 +132,31 @@ the first one found:
   <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
   <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
   <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p>
-    </div>
-      </div>
-  <div class="col-md-3">
+    
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
+
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Michel Lang, Bernd Bischl.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

@@ -6,11 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>makeClusterFunctions. batchtools</title>
+<title>ClusterFunctions Constructor — makeClusterFunctions • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,9 +49,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -62,6 +58,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mllg/batchtools">
@@ -73,15 +70,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>ClusterFunctions Constructor</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>ClusterFunctions Constructor</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>This is the constructor used to create <em>custom</em> cluster functions.
 Note that some standard implementations for Torque, Slurm, LSF, SGE, etc. ship
@@ -89,10 +87,10 @@ with the package.</p>
     
 
     <pre><span class='fu'>makeClusterFunctions</span>(<span class='no'>name</span>, <span class='no'>submitJob</span>, <span class='kw'>killJob</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>listJobsQueued</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>listJobsRunning</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>array.var</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>store.job</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>listJobsRunning</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>array.var</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>store.job</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>hooks</span> <span class='kw'>=</span> <span class='fu'>list</span>())</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>name</dt>
       <dd>[<code>character(1)</code>]
@@ -110,16 +108,14 @@ Note that there is a helper function <code><a href='cfKillJob.html'>cfKillJob</a
 Set <code>killJob</code> to <code>NULL</code> if killing jobs cannot be supported.</dd>
       <dt>listJobsQueued</dt>
       <dd>[<code>function(reg)</code>]
-List all queued jobs on the batch system for the current user and registry.
+List all queued jobs on the batch system for the current user.
 Must return an character vector of batch ids, same format as they
-are returned by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.,
-all for the current user instead of all for the current registry), but you have to include all
-relevant ones. Must have the argument are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>).
+are returned by <code>submitJob</code>.
 Set <code>listJobsQueued</code> to <code>NULL</code> if listing of queued jobs is not supported.</dd>
       <dt>listJobsRunning</dt>
       <dd>[<code>function(reg)</code>]
-List all running jobs on the batch system for the current user and registry. This includes
-running, held, idle, etc. jobs. Must return an character vector of batch ids, same format as they
+List all running jobs on the batch system for the current user.
+Must return an character vector of batch ids, same format as they
 are returned by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.
 all for the current user instead of all for the current registry), but you have to include all
 relevant ones. Must have the argument are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>).
@@ -130,17 +126,17 @@ Name of the environment variable set by the scheduler to identify IDs of job arr
 Default is <code>NA</code> for no array support.</dd>
       <dt>store.job</dt>
       <dd>[<code>logical(1)</code>]
-Store the job on the file system before submitting? Default is <code>TRUE</code>.</dd>
+Flag to indicate that the cluster function implementation of <code>submitJob</code> can not directly handle <code><a href='makeJobCollection.html'>JobCollection</a></code> objects.
+If set to <code>FALSE</code>, the <code><a href='makeJobCollection.html'>JobCollection</a></code> is serialized to the file system before submitting the job.</dd>
       <dt>hooks</dt>
       <dd>[<code>list</code>]
 Named list of functions which will we called on certain events like &#8220;pre.submit&#8221; or &#8220;post.sync&#8221;.
 See <a href='runHook.html'>Hooks</a>.</dd>
     </dl>
     
-    <div class="See also">
-      <h2>See also</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-      <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+    <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
   <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
   <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
   <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
@@ -150,20 +146,35 @@ See <a href='runHook.html'>Hooks</a>.</dd>
   <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
   <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
   <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code></p>
-      <p>Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
+    <p>Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
   <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
   <code><a href='cfKillJob.html'>cfKillJob</a></code>,
   <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
   <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>,
   <code><a href='runOSCommand.html'>runOSCommand</a></code></p>
-    </div>
-      </div>
-  <div class="col-md-3">
+    
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#see-also">See also</a></li>
+          </ul>
+
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Michel Lang, Bernd Bischl.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

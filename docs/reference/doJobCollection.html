@@ -6,11 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>doJobCollection. batchtools</title>
+<title>Execute Jobs of a JobCollection — doJobCollection • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,9 +49,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -62,6 +58,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mllg/batchtools">
@@ -73,15 +70,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>Execute Jobs of a JobCollection</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Execute Jobs of a JobCollection</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>Executes every job in a <code><a href='makeJobCollection.html'>JobCollection</a></code>.
 This function is intended to be called on the slave.</p>
@@ -89,7 +87,7 @@ This function is intended to be called on the slave.</p>
 
     <pre><span class='fu'>doJobCollection</span>(<span class='no'>jc</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>jc</dt>
       <dd>[<code><a href='makeJobCollection.html'>JobCollection</a></code>]
@@ -99,41 +97,55 @@ containing a &#8220;JobCollection&#8221; as RDS file (as stored by <code><a href
       <dt>output</dt>
       <dd>[<code>character(1)</code>]
 Path to a file to write the output to. Defaults to <code>NULL</code> which means
-that output is written to the active <code><a href='http://www.rdocumentation.org/packages/sink/topics/base'>sink</a></code>.</dd>
+that output is written to the active <code><a href='http://www.rdocumentation.org/packages/base/topics/sink'>sink</a></code>.</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p>[<code>character(1)</code>]: Hash of the <code><a href='makeJobCollection.html'>JobCollection</a></code> executed.</p>
-    </div>
-
-    <div class="See also">
-      <h2>See also</h2>
-
-      <p>Other JobCollection: <code><a href='makeJobCollection.html'>makeJobCollection</a></code></p>
-    </div>
+    <p>[<code>character(1)</code>]: Hash of the <code><a href='makeJobCollection.html'>JobCollection</a></code> executed.</p>
     
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output'><strong class='text-info'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</strong></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output'><strong class='text-info'>Adding 2 jobs ...</strong></div><div class='input'><span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'><a href='makeJobCollection.html'>makeJobCollection</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>doJobCollection</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt; ### [bt 2016-10-13 13:46:55]: Starting calculation of 2 jobs
-#&gt; ### [bt 2016-10-13 13:46:55]: Setting working directory to &#39;/home/lang/Projekte/batchtools/docs/reference&#39;
-#&gt; ### [bt 2016-10-13 13:46:55]: Memory measurement disabled
-#&gt; ### [bt 2016-10-13 13:46:55]: Starting job [batchtools job.id=1]
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p>Other JobCollection: <code><a href='makeJobCollection.html'>makeJobCollection</a></code></p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='output co'>#&gt; <span class='message'>Creating directories in &#39;/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmphrwhkr/registry142dc677f6701&#39;</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 jobs ...</span></div><div class='input'><span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'><a href='makeJobCollection.html'>makeJobCollection</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'>doJobCollection</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt; ### [bt 2016-11-06 19:01:14]: Starting calculation of 2 jobs
+#&gt; ### [bt 2016-11-06 19:01:14]: Setting working directory to &#39;/Users/michel/Projekte/batchtools/docs/reference&#39;
+#&gt; ### [bt 2016-11-06 19:01:14]: Memory measurement disabled
+#&gt; ### [bt 2016-11-06 19:01:14]: Starting job [batchtools job.id=1]
 #&gt; 
-#&gt; ### [bt 2016-10-13 13:46:55]: Job terminated successfully [batchtools job.id=1]
-#&gt; ### [bt 2016-10-13 13:46:55]: Starting job [batchtools job.id=2]
+#&gt; ### [bt 2016-11-06 19:01:14]: Job terminated successfully [batchtools job.id=1]
+#&gt; ### [bt 2016-11-06 19:01:14]: Starting job [batchtools job.id=2]
 #&gt; 
-#&gt; ### [bt 2016-10-13 13:46:55]: Job terminated successfully [batchtools job.id=2]
-#&gt; ### [bt 2016-10-13 13:46:55]: Calculation finished!
-#&gt; </div></pre>
+#&gt; ### [bt 2016-11-06 19:01:14]: Job terminated successfully [batchtools job.id=2]
+#&gt; ### [bt 2016-11-06 19:01:14]: Calculation finished!</div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Michel Lang, Bernd Bischl.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 
