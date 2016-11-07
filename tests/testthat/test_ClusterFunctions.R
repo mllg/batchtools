@@ -19,6 +19,8 @@ test_that("clusterFunctions constructor", {
   check(makeClusterFunctionsTorque(system.file(file.path("templates", "torque_lido.tmpl"), package = "batchtools")))
   check(makeClusterFunctionsSlurm(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools")))
   check(makeClusterFunctionsDocker("image"))
+
+  expect_error(makeClusterFunctionsLSF(), "No template")
 })
 
 

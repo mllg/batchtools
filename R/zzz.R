@@ -34,12 +34,12 @@ batchtools$hooks = data.table(
   remote = c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE)
 )
 
-.onLoad = function(libname, pkgname) {
+.onLoad = function(libname, pkgname) { # nocov start
   if (requireNamespace("debugme", quietly = TRUE) && "batchtools" %in% strsplit(Sys.getenv("DEBUGME"), ",", fixed = TRUE)[[1L]]) {
     debugme::debugme()
     batchtools$debug = TRUE
   }
-}
+} # nocov end
 
 .onUnload = function (libpath) {
   library.dynam.unload("batchtools", libpath) # nocov

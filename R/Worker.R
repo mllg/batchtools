@@ -47,7 +47,7 @@ Worker = R6Class("Worker",
         self$script = system.file("bin", "linux-helper", package = "batchtools")
       } else {
         args = c("-e", shQuote("message(system.file('bin/linux-helper', package = 'batchtools'))"))
-        self$script = tail(runOSCommand("Rscript", args, nodename = nodename)$output, 1L)
+        self$script = tail(runOSCommand(Rscript(), args, nodename = nodename)$output, 1L)
       }
 
       if (is.null(ncpus) || is.null(max.load)) {

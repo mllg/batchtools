@@ -77,11 +77,27 @@ test_that("joins", {
   expect_identical(res$x, c(1L, 10:13))
   expect_copied(res, x)
 
-
   res = ujoin(x, yy, all.y = TRUE)
   expect_data_table(res, key = "job.id", ncol = 3)
   expect_identical(res$job.id, 1:5)
   expect_identical(res$x, c(1L, 10:13))
   expect_identical(res$extra.col, c(NA, letters[1:4]))
   expect_copied(res, x)
+})
+
+test_that("guessBy", {
+  x = data.frame(id = 1:3, x = 1:3)
+  y = data.frame(jid = 1:3, y = 3:1)
+
+  expect_error(guessBy(x, y), "explicitly")
+  expect_error(guessBy(x, y, by = "id"), "subset of")
+
+  by = guessBy(x, y, by = c(id = "jid"))
+  expect_equal(unname(by), "jid")
+  expect_equal(names(by), "id")
+
+  y$id = y$jid
+  by = guessBy(x, y, by = "id")
+  expect_equal(unname(by), "id")
+  expect_equal(names(by), NULL)
 })

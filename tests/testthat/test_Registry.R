@@ -104,14 +104,24 @@ test_that("sweepRegistry", {
   expect_character(list.files(file.path(reg$file.dir, "logs")), len = 1L)
   if (reg$cluster.functions$store.job)
     expect_character(list.files(file.path(reg$file.dir, "jobs")), len = 0L)
-
   checkTables(reg)
+
+
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
+  addExperiments(prob.designs = list(p1 = data.table(i = 1:10)), reg = reg)
+  addJobTags(6:10, "foo", reg = reg)
+  expect_data_table(reg$tags, nrow = 5, any.missing = FALSE)
+  removeExperiments(ids = 6:10, reg = reg)
+  expect_data_table(reg$tags, nrow = 0)
 })
 
 test_that("clearRegistry", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   reg$foo = TRUE
   batchMap(identity, 1:3, reg = reg)
+  addJobTags(1:2, "bar", reg = reg)
   submitAndWait(reg, chunkIds(reg = reg, n.chunks = 2))
 
   clearRegistry(reg)

@@ -84,7 +84,7 @@ makeClusterFunctionsMulticore = function(ncpus = NA_integer_) {
     stop("ClusterFunctionsMulticore do not support Windows. Use makeClusterFunctionsSocket instead.")
   ncpus = asCount(ncpus, na.ok = TRUE, positive = TRUE)
   if (is.na(ncpus)) {
-    ncpus = max(getOption("mc.cores", parallel::detectCores()), 1L)
+    ncpus = max(getOption("mc.cores", parallel::detectCores()), 1L, na.rm = TRUE)
     info("Auto-detected %i CPUs", ncpus)
   }
   p = Multicore$new(ncpus)
