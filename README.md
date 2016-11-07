@@ -8,10 +8,8 @@
 As a successor of the packages [BatchJobs](https://github.com/tudo-r/BatchJobs) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments), batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Torque, or SGE.
 Moreover, the package provides an abstraction mechanism to define large-scale computer experiments in a well-organized and reproducible way.
 
-The development is still in beta.
-
 ## Installation
-Install via [devtools](https://cran.r-project.org/package=devtools):
+Install the development version via [devtools](https://cran.r-project.org/package=devtools):
 ```{R}
 devtools::install_github("mllg/batchtools")
 ```
