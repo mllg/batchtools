@@ -14,6 +14,7 @@
 #' Furthermore, you may enable a debug mode using the \pkg{debugme} package by
 #' setting the environment variable \dQuote{DEBUGME} to \dQuote{batchtools} before
 #' loading \pkg{batchtools}.
+#' @import utils
 #' @import backports
 #' @import checkmate
 #' @import data.table
@@ -24,7 +25,6 @@
 #' @importFrom progress progress_bar
 #' @importFrom rappdirs user_config_dir
 #' @importFrom stats runif
-#' @importFrom utils head tail getFromNamespace packageVersion
 "_PACKAGE"
 
 batchtools = new.env(parent = emptyenv())

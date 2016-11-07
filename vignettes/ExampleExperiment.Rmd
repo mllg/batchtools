@@ -41,7 +41,7 @@ Therefore the function [`addProblem()`](https://mllg.github.io/batchtools/refere
 For `data`, any R object can be used.
 If only `data` is given, the generated instance is `data`.
 The argument `fun` has to be a function with the arguments `data` and `job` (and optionally other arbitrary parameters).
-The argument `job` is an object of type [`Job`](https://mllg.github.io/batchtools/reference/makeJob) which holds additional information about the job.
+The argument `job` is an object of type [`Job`](https://mllg.github.io/batchtools/reference/JobExperiment) which holds additional information about the job.
 
 We want to split the iris data set into a training set and test set.
 In this example we use use subsampling which just randomly takes a fraction of the observations as training set.
