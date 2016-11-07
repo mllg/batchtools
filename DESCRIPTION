@@ -8,8 +8,13 @@ Authors@R: c(
     )
 Description: As a successor of the packages BatchJobs and BatchExperiments,
     batchtools provides a parallel implementation of the Map function
-    for high performance computing systems managed by schedulers (LSF, OpenLava,
-    SGE, Slurm, Torque, Docker Swarm).
+    for high performance computing systems managed by schedulers (IBM LSF
+    <http://www-03.ibm.com/systems/spectrum-computing/products/lsf/>,
+    OpenLava <http://www.openlava.org/>, Univia Grid Engine
+    <http://www.univa.com/> (formerly Sun Grid Engine and Oracle Grid Engine),
+    Slurm <http://slurm.schedmd.com/>, Torque/PBS
+    <http://www.adaptivecomputing.com/products/open-source/torque/>, and Docker
+    Swarm <https://docs.docker.com/swarm/>).
     A multicore and socket mode allow the parallelization on a local machines,
     and multiple machines can be hooked up via SSH to create a makeshift cluster.
     Moreover, the package provides an abstraction mechanism to define
