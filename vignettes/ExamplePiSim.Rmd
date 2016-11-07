@@ -17,17 +17,15 @@ There are two different types of registry objects: First, a regular [`Registry`]
 Second, an [`ExperimentRegistry`](https://mllg.github.io/batchtools/reference/ExperimentRegistry) which provides an alternative way to define computational jobs and thereby is tailored for a broad range of large scale computer experiments (see one of the other vignettes for an example).
 Here, we use a temporary registry which is stored in the temp directory of the system and gets automatically deleted if you close the R session.
 
-```{r, eval = FALSE}
+```{r, message = FALSE}
 library(batchtools)
-reg = makeRegistry(file.dir = NA)
+reg = makeRegistry(file.dir = NA, seed = 1)
 ```
-```{r, include = FALSE}
-library(batchtools)
-fd = file.path(dirname(tempdir()), "batchtools", "ExamplePiSim")
-unlink(fd, recursive = TRUE)
-dir.create(dirname(fd), recursive = TRUE, showWarnings = FALSE)
-reg = makeRegistry(file.dir = fd, seed = 1)
+```{r,include=FALSE}
+if (dir.exists("/tmp"))
+  reg$work.dir = "/tmp"
 ```
+
 For a permanent registry, set the `file.dir` to a valid path.
 It can then be reused later, e.g., when you login to the system again, by calling the function `loadRegistry(file.dir)`.
 

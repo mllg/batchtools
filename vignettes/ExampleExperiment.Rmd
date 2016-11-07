@@ -20,16 +20,13 @@ First, we create a registry, the central meta-data object which records technica
 We use an [`ExperimentRegistry`](https://mllg.github.io/batchtools/reference/ExperimentRegistry) where the job definition is split into creating problems and algorithms.
 See the paper on [BatchJobs and BatchExperiments](http://www.jstatsoft.org/article/view/v064i11) for a detailed explanation.
 Again, we use a temporary registry and make it the default registry.
-```{r, eval = FALSE, message = FALSE}
+```{r, message = FALSE}
 library(batchtools)
-reg = makeExperimentRegistry(file.dir = NA)
+reg = makeExperimentRegistry(file.dir = NA, seed = 1)
 ```
-```{r, include = FALSE}
-library(batchtools)
-fd = file.path(dirname(tempdir()), "batchtools", "ExampleExperiment")
-unlink(fd, recursive = TRUE)
-dir.create(dirname(fd), recursive = TRUE, showWarnings = FALSE)
-reg = makeExperimentRegistry(file.dir = fd, seed = 1)
+```{r,include=FALSE}
+if (dir.exists("/tmp"))
+  reg$work.dir = "/tmp"
 ```
 
 # Problems and algorithms

@@ -152,7 +152,7 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>### Example 1: Using memory measurement</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='output co'>#&gt; <span class='message'>Creating directories in &#39;/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpkMssuO/registry126b41f89ef9c&#39;</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'>
 <span class='co'># Toy function which creates a large matrix and returns the column sums</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>n</span>, <span class='no'>p</span>) <span class='fu'>colMeans</span>(<span class='fu'>matrix</span>(<span class='fu'>runif</span>(<span class='no'>n</span>*<span class='no'>p</span>), <span class='no'>n</span>, <span class='no'>p</span>))
 
@@ -183,7 +183,7 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
 #&gt; 3:      3   52.6 1e+04 50 0.5000622
 #&gt; 4:      4  121.2 1e+05 50 0.4997433</div><div class='input'>
 <span class='co'>### Example 2: Multicore execution on the slave</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='output co'>#&gt; <span class='message'>Creating directories in &#39;/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpkMssuO/registry126b418d1faf1&#39;</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'>
 <span class='co'># Function which sleeps 10 seconds, i-times</span>
 <span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
   <span class='kw'>parallelMap</span><span class='kw'>::</span><span class='fu'>parallelMap</span>(<span class='no'>Sys.sleep</span>, <span class='fu'>rep</span>(<span class='fl'>10</span>, <span class='no'>i</span>))

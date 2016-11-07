@@ -168,7 +168,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   if (is.na(file.dir))
     reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
-  info("Creating directories in '%s'", reg$file.dir)
+  "!DEBUG Creating directories in '`reg$file.dir`'"
   for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
     dir.create(d, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)

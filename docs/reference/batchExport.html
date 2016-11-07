@@ -109,7 +109,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='output co'>#&gt; <span class='message'>Creating directories in &#39;/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpkMssuO/registry126b475bfa2ef&#39;</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'>
 <span class='co'># list exports</span>
 <span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt; Empty data.table (0 rows) of 2 cols: name,uri</div><div class='output co'>#&gt; NULL</div><div class='input'>
@@ -118,15 +118,15 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt; 1:    y
 #&gt; 2:    z
 #&gt;                                                                                                        uri
-#&gt; 1: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpkMssuO/registry126b475bfa2ef/exports/y.rds
-#&gt; 2: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpkMssuO/registry126b475bfa2ef/exports/z.rds</div><div class='input'>
+#&gt; 1: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/Rtmp6tpA9X/registry1523f5d5b5c32/exports/y.rds
+#&gt; 2: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/Rtmp6tpA9X/registry1523f5d5b5c32/exports/z.rds</div><div class='input'>
 <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Interactive&#39; ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 3 files ...</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>stopifnot</span>(<span class='fu'><a href='loadResult.html'>loadResult</a></span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>) <span class='kw'>==</span> <span class='fl'>101</span>)
 
 <span class='co'># Un-export z</span>
 <span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>unexport</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Un-exporting exported objects: &#39;z&#39;</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt;    name
 #&gt; 1:    y
 #&gt;                                                                                                        uri
-#&gt; 1: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpkMssuO/registry126b475bfa2ef/exports/y.rds</div></pre>
+#&gt; 1: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/Rtmp6tpA9X/registry1523f5d5b5c32/exports/y.rds</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -19,16 +19,13 @@ If you do not set `external`, the job is executed is in the currently running R 
 
 By way of illustration here is a small example.
 First, we create a temporary registry.
-```{r, message = FALSE, eval = FALSE}
+```{r, message = FALSE}
 library(batchtools)
-reg = makeRegistry(file.dir = NA, work.dir = "/tmp")
+reg = makeRegistry(file.dir = NA, seed = 1)
 ```
-```{r, include = FALSE}
-library(batchtools)
-fd = file.path(dirname(tempdir()), "batchtools", "ErrorHandling")
-unlink(fd, recursive = TRUE)
-dir.create(dirname(fd), recursive = TRUE, showWarnings = FALSE)
-reg = makeRegistry(file.dir = fd, seed = 1)
+```{r,include=FALSE}
+if (dir.exists("/tmp"))
+  reg$work.dir = "/tmp"
 ```
 Ten jobs are created, two of them will throw an exception.
 ```{r}

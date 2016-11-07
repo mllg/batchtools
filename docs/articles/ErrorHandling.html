@@ -49,7 +49,7 @@
 <p>Therefore, before you submit anything you should use <a href="https://mllg.github.io/batchtools/reference/testJob"><code><a href="../reference/testJob.html">testJob()</a></code></a> to catch errors that are easy to spot because they are raised in many or all jobs. If <code>external</code> is set, this function runs the job without side effects in an independent R process on your local machine via <code>Rscript</code> similar as on the slave, redirects the output of the process to your R console, loads the job result and returns it. If you do not set <code>external</code>, the job is executed is in the currently running R session, with the drawback that you might be unable to catch missing variable declarations or missing package dependencies.</p>
 <p>By way of illustration here is a small example. First, we create a temporary registry.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
-reg =<span class="st"> </span><span class="kw"><a href="../reference/Registry.html">makeRegistry</a></span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>, <span class="dt">work.dir =</span> <span class="st">"/tmp"</span>)</code></pre></div>
+reg =<span class="st"> </span><span class="kw"><a href="../reference/Registry.html">makeRegistry</a></span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</code></pre></div>
 <p>Ten jobs are created, two of them will throw an exception.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">flakeyFunction &lt;-<span class="st"> </span>function(value) {
   if (value %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">9</span>)) <span class="kw">stop</span>(<span class="st">"Ooops."</span>)
@@ -87,14 +87,14 @@ reg =<span class="st"> </span><span class="kw"><a href="../reference/Registry.ht
 ## 2:      9       TRUE  TRUE Error in (function (value)  : Ooops.</code></pre>
 <p>If we want to peek into the R log file of a job to see more context for the error we can use <a href="https://mllg.github.io/batchtools/reference/showLog"><code><a href="../reference/showLog.html">showLog()</a></code></a> which opens a pager or use <a href="https://mllg.github.io/batchtools/reference/showLog"><code><a href="../reference/showLog.html">getLog()</a></code></a> to get the log as character vector:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">writeLines</span>(<span class="kw"><a href="../reference/showLog.html">getLog</a></span>(<span class="dt">id =</span> <span class="dv">9</span>))</code></pre></div>
-<pre><code>## ### [bt 2016-11-07 18:44:54]: Starting calculation of 1 jobs
-## ### [bt 2016-11-07 18:44:54]: Setting working directory to '/Users/michel/Projekte/batchtools/docs/articles'
-## ### [bt 2016-11-07 18:44:54]: Memory measurement disabled
-## ### [bt 2016-11-07 18:44:54]: Starting job [batchtools job.id=9]
+<pre><code>## ### [bt 2016-11-08 00:06:17]: Starting calculation of 1 jobs
+## ### [bt 2016-11-08 00:06:17]: Setting working directory to '/tmp'
+## ### [bt 2016-11-08 00:06:17]: Memory measurement disabled
+## ### [bt 2016-11-08 00:06:17]: Starting job [batchtools job.id=9]
 ## Error in (function (value)  : Ooops.
 ## 
-## ### [bt 2016-11-07 18:44:54]: Job terminated with an exception [batchtools job.id=9]
-## ### [bt 2016-11-07 18:44:54]: Calculation finished!</code></pre>
+## ### [bt 2016-11-08 00:06:17]: Job terminated with an exception [batchtools job.id=9]
+## ### [bt 2016-11-08 00:06:17]: Calculation finished!</code></pre>
 <p>You can also grep for error or warning messages:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids =<span class="st"> </span><span class="kw"><a href="../reference/grepLogs.html">grepLogs</a></span>(<span class="dt">pattern =</span> <span class="st">"ooops"</span>, <span class="dt">ignore.case =</span> <span class="ot">TRUE</span>)
 <span class="kw">print</span>(ids)</code></pre></div>
