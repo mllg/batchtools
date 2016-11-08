@@ -23,6 +23,8 @@ the first one found:
 [\code{\link{ClusterFunctions}}].
 }
 \description{
+Cluster functions for OpenLava (\url{http://www.openlava.org/}).
+
 Job files are created based on the brew template \code{template}. This
 file is processed with brew and then submitted to the queue using the
 \code{bsub} command. Jobs are killed using the \code{bkill} command and the

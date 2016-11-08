@@ -29,6 +29,8 @@ Note that you should not select the cluster in your template file via \code{#SBA
 [\code{\link{ClusterFunctions}}].
 }
 \description{
+Cluster functions for Slurm (\url{http://slurm.schedmd.com/}).
+
 Job files are created based on the brew template \code{template.file}. This
 file is processed with brew and then submitted to the queue using the
 \code{sbatch} command. Jobs are killed using the \code{scancel} command and

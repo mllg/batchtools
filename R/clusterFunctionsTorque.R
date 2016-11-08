@@ -1,6 +1,8 @@
 #' @title ClusterFunctions for OpenPBS/Torque Systems
 #'
 #' @description
+#' Cluster functions for Torque/PBS (\url{http://www.adaptivecomputing.com/products/open-source/torque/}).
+#'
 #' Job files are created based on the brew template \code{template.file}. This file is processed
 #' with brew and then submitted to the queue using the \code{qsub} command. Jobs are killed using
 #' the \code{qdel} command and the list of running jobs is retrieved using \code{qselect}. The user

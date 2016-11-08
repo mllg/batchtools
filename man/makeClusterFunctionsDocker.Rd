@@ -21,7 +21,7 @@ Additional arguments passed to \dQuote{docker run} (e.g., to define mounts or en
 [\code{\link{ClusterFunctions}}].
 }
 \description{
-Cluster functions for Docker/Docker Swarm.
+Cluster functions for Docker/Docker Swarm (\url{https://docs.docker.com/swarm/}).
 
 The \code{submitJob} function executes \code{docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]}.
 Arguments \code{docker.args}, \code{image.args} and \code{image} can be set on construction.

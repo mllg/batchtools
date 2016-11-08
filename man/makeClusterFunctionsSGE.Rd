@@ -23,6 +23,9 @@ the first one found:
 [\code{\link{ClusterFunctions}}].
 }
 \description{
+Cluster functions for Univia Grid Engine / Oracle Grid Engine /
+Sun Grid Engine (\url{http://www.univa.com/}).
+
 Job files are created based on the brew template \code{template}. This
 file is processed with brew and then submitted to the queue using the
 \code{qsub} command. Jobs are killed using the \code{qdel} command and the

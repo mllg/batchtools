@@ -6,10 +6,15 @@
 [![Coverage Status](https://img.shields.io/coveralls/mllg/batchtools.svg)](https://coveralls.io/r/mllg/batchtools?branch=master)
 
 As a successor of the packages [BatchJobs](https://github.com/tudo-r/BatchJobs) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments), batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Torque, or SGE.
+For a complete list, see the [Setup vignette](https://mllg.github.io/batchtools/articles/Setup).
 Moreover, the package provides an abstraction mechanism to define large-scale computer experiments in a well-organized and reproducible way.
 
 ## Installation
-Install the development version via [devtools](https://cran.r-project.org/package=devtools):
+Install the stable version from CRAN:
+```{R}
+install.packages("batchtools")
+```
+For the development version, use [devtools](https://cran.r-project.org/package=devtools):
 ```{R}
 devtools::install_github("mllg/batchtools")
 ```
