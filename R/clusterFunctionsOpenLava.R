@@ -36,7 +36,7 @@ makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"))
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)
     } else {
-      batch.id = stri_extract_first_regex(stri_join(res$output, collapse = " "), "\\d+")
+      batch.id = stri_extract_first_regex(stri_flatten(res$output, " "), "\\d+")
       makeSubmitJobResult(status = 0L, batch.id = batch.id)
     }
   }
@@ -46,7 +46,7 @@ makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"))
     if (res$exit.code == 255L && stri_detect_fixed(res$output, "No unfinished job found"))
       return(character(0L))
     if (res$exit.code > 0L)
-      stopf("Command '%s' produced exit code: %i; output: %s", stri_join(cmd, collapse = " "), res$exit.code, res$output)
+      stopf("Command '%s' produced exit code: %i; output: %s", stri_flatten(cmd, " "), res$exit.code, res$output)
 
     stri_extract_first_regex(tail(res$output, -1L), "\\d+")
   }

@@ -75,7 +75,7 @@ print.ClusterFunctions = function(x, ...) {
   catf("  List queued Jobs : %s", !is.null(x$listJobsQueued))
   catf("  List running Jobs: %s", !is.null(x$listJobsRunning))
   catf("  Kill Jobs        : %s", !is.null(x$killJob))
-  catf("  Hooks            : %s", if (length(x$hooks)) stri_paste(names(x$hooks), collapse = ",") else "-")
+  catf("  Hooks            : %s", if (length(x$hooks)) stri_flatten(names(x$hooks), ",") else "-")
 }
 
 #' @title Create a SubmitJobResult
@@ -159,7 +159,7 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
     lines = lines[!stri_startswith_fixed(lines, comment.string)]
   if (length(lines) == 0L)
     stopf("Error reading template '%s' or empty template", template)
-  return(stri_join(lines, collapse = "\n"))
+  return(stri_flatten(lines, "\n"))
 }
 
 #' @title Cluster Functions Helper to Write Job Description Files
@@ -217,7 +217,7 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
   assertString(cmd, min.chars = 1L)
   exit.code = asInt(exit.code)
   assertCharacter(output, any.missing = FALSE)
-  msg = sprintf("Command '%s' produced exit code %i. Output: '%s'", cmd, exit.code, stri_join(output, collapse = "\n"))
+  msg = sprintf("Command '%s' produced exit code %i. Output: '%s'", cmd, exit.code, stri_flatten(output, "\n"))
   makeSubmitJobResult(status = 101L, batch.id = NA_character_, msg = msg)
 }
 
@@ -254,7 +254,7 @@ cfKillJob = function(reg, cmd, args = character(0L), max.tries = 3L) {
   }
 
   stopf("Really tried to kill job, but failed %i times with '%s'.\nMessage: %s",
-    max.tries, stri_join(c(cmd, args), collapse = " "), stri_join(res$output, collapse = "\n"))
+    max.tries, stri_flatten(c(cmd, args), " "), stri_flatten(res$output, "\n"))
 }
 
 getBatchIds = function(reg, status = "all") {
@@ -308,13 +308,13 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost
   assertString(nodename, min.chars = 1L)
 
   if (nodename != "localhost") {
-    sys.args = c(nodename, shQuote(stri_join(c(sys.cmd, sys.args), collapse = " ")))
+    sys.args = c(nodename, shQuote(stri_flatten(c(sys.cmd, sys.args), " ")))
     sys.cmd = "ssh"
   } else if (length(sys.args) == 0L) {
       sys.args = ""
   }
 
-  "!DEBUG OS cmd: `sys.cmd` `stri_join(sys.args, collapse = ' ')`"
+  "!DEBUG OS cmd: `sys.cmd` `stri_flatten(sys.args, ' ')`"
 
   if (nzchar(Sys.which(sys.cmd))) {
     res = suppressWarnings(system2(command = sys.cmd, args = sys.args, stdout = TRUE, stderr = TRUE, wait = TRUE))

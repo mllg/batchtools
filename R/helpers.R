@@ -86,7 +86,7 @@ info = function(...) {
 
 # formating cat()
 catf = function (..., con = "") {
-  cat(stri_join(sprintf(...), collapse = "\n"), "\n", sep = "", file = con)
+  cat(stri_flatten(sprintf(...), "\n"), "\n", sep = "", file = con)
 }
 
 # formating waring()

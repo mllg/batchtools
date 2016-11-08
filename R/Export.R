@@ -44,9 +44,9 @@ batchExport = function(export = list(), unexport = character(0L), reg = getDefau
     fn = file.path(path, sprintf("%s.rds", nn))
     found = file.exists(fn)
     if (any(!found))
-      info("Exporting new objects: '%s'", stri_join(nn[!found], collapse = "','"))
+      info("Exporting new objects: '%s'", stri_flatten(nn[!found], "','"))
     if (any(found))
-      info("Overwriting previously exported object: '%s'", stri_join(nn[found], collapse = "','"))
+      info("Overwriting previously exported object: '%s'", stri_flatten(nn[found], "','"))
     Map(writeRDS, object = export, file = fn)
   }
 
@@ -54,7 +54,7 @@ batchExport = function(export = list(), unexport = character(0L), reg = getDefau
     fn = file.path(path, sprintf("%s.rds", unexport))
     found = file.exists(fn)
     if (any(found))
-      info("Un-exporting exported objects: '%s'", stri_join(unexport[found], collapse = "','"))
+      info("Un-exporting exported objects: '%s'", stri_flatten(unexport[found], "','"))
     unlink(fn[found])
   }
 

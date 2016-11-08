@@ -28,7 +28,7 @@ makeClusterFunctionsTorque = function(template = findTemplateFile("torque")) { #
     res = runOSCommand("qsub", outfile)
 
     max.jobs.msg = "Maximum number of jobs already in queue"
-    output = stri_join(res$output, collapse = "\n")
+    output = stri_flatten(res$output, "\n")
 
     if (stri_detect_fixed(max.jobs.msg, output)) {
       makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = max.jobs.msg)

@@ -395,11 +395,11 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
   pkgs = union(x$packages, "methods")
   ok = vlapply(pkgs, require, character.only = TRUE)
   if (!all(ok))
-    stopf("Failed to load packages: %s", stri_join(pkgs[!ok], collapse = ", "))
+    stopf("Failed to load packages: %s", stri_flatten(pkgs[!ok], ", "))
 
   ok = vlapply(x$namespaces, requireNamespace)
   if (!all(ok))
-    stopf("Failed to load namespaces: %s", stri_join(x$namespaces[!ok], collapse = ", "))
+    stopf("Failed to load namespaces: %s", stri_flatten(x$namespaces[!ok], ", "))
 
   if (switch.wd) {
     wd = getwd()

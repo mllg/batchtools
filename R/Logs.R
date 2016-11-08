@@ -70,7 +70,7 @@ grepLogs = function(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE, reg
       lines = extractLog(log, tab[i])
       m = matcher(lines, pattern, case_insensitive = ignore.case)
       if (any(m))
-        set(res, i, "matches", stri_join(lines[m], collapse = "\n"))
+        set(res, i, "matches", stri_flatten(lines[m], "\n"))
     }
   }
 

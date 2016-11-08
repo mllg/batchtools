@@ -153,5 +153,5 @@ getJobTags = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   ids = convertIds(reg, ids, default = allIds(reg))
   tag = NULL
-  reg$tags[ids, on = "job.id"][, list(tags = stri_join(sort(tag, na.last = TRUE), collapse = ",")), by = "job.id"]
+  reg$tags[ids, on = "job.id"][, list(tags = stri_flatten(sort(tag, na.last = TRUE), ",")), by = "job.id"]
 }

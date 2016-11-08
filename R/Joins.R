@@ -132,7 +132,7 @@ ujoin = function(x, y, all.y = FALSE, by = NULL) {
   if (length(cn) == 0L)
     return(x)
 
-  expr = parse(text = stri_join("`:=`(", stri_join(sprintf("%1$s = i.%1$s", cn), collapse = ","), ")"))
+  expr = parse(text = stri_join("`:=`(", stri_flatten(sprintf("%1$s = i.%1$s", cn), ","), ")"))
   setKey(x[y, eval(expr), on = "job.id"], by)
 }
 
