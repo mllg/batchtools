@@ -9,6 +9,9 @@ authors:
  - name: Michel Lang
    orcid: 0000-0001-9754-0393
    affiliation: TU Dortmund University
+ - name: Bernd Bischl
+   orcid: 0000-0001-6002-6980
+   affiliation: LMU Munich
 date: 9 November 2016
 bibliography: paper.bib
 ---
