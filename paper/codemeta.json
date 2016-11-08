@@ -1,0 +1,23 @@
+{
+  "@context": "https://raw.githubusercontent.com/mbjones/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+    {
+      "@id": "http://orcid.org/0000-0001-9754-0393",
+      "@type": "Person",
+      "email": "lang@statistik.tu-dortmund.de",
+      "name": "Michel Lang",
+      "affiliation": "TU Dortmund University"
+    }
+  ],
+  "identifier": "",
+  "codeRepository": "https://github.com/mllg/batchtools",
+  "datePublished": "2016-11-07",
+  "dateModified": "2016-11-07",
+  "dateCreated": "2016-11-07",
+  "description": "Tools to work on managed batch systems",
+  "keywords": "r,high-performance computing,batch systems",
+  "license": "GPL v3.0",
+  "title": "batchtools",
+  "version": "v0.9.0"
+}
