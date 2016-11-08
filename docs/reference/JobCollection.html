@@ -137,13 +137,13 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'><span class='co'># resources are usually forwared from submitJobs()</span>
 <span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'>makeJobCollection</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>foo</span> <span class='kw'>=</span> <span class='st'>"bar"</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='fu'>ls.str</span>(<span class='no'>jc</span>))</div><div class='output co'>#&gt; array.var :  chr NA
-#&gt; file.dir :  chr &quot;/private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/Rtmp6tpA9X/registry1523f13cdd82&quot;
-#&gt; job.hash :  chr &quot;39f90b6d2b0ace24cd7d8e2f4bb25fa2&quot;
+#&gt; file.dir :  chr &quot;/private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/Rtmpv5gA5U/registry51e04d168346&quot;
+#&gt; job.hash :  chr &quot;7a8c9e6784b3afba337be1eac8138bff&quot;
 #&gt; jobs : Classes ‘data.table’ and &#39;data.frame&#39;:	3 obs. of  2 variables:
 #&gt;  $ job.id: int  1 2 3
 #&gt;  $ pars  :List of 3
 #&gt; load :  chr(0) 
-#&gt; log.file :  chr &quot;/private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/Rtmp6tpA9X/registry1523f13cdd82/logs/39f90b6d2b0ace24cd7d8e2f4bb25fa2.&quot;| __truncated__
+#&gt; log.file :  chr &quot;/private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/Rtmpv5gA5U/registry51e04d168346/logs/7a8c9e6784b3afba337be1eac8138bff.&quot;| __truncated__
 #&gt; n.array.jobs :  int 1
 #&gt; namespaces :  chr(0) 
 #&gt; packages :  chr &quot;methods&quot;
@@ -151,7 +151,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt;  $ foo: chr &quot;bar&quot;
 #&gt; seed :  int 4314782
 #&gt; source :  chr(0) 
-#&gt; uri :  chr &quot;/private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/Rtmp6tpA9X/registry1523f13cdd82/jobs/39f90b6d2b0ace24cd7d8e2f4bb25fa2.&quot;| __truncated__
+#&gt; uri :  chr &quot;/private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/Rtmpv5gA5U/registry51e04d168346/jobs/7a8c9e6784b3afba337be1eac8138bff.&quot;| __truncated__
 #&gt; work.dir :  chr &quot;/Users/michel/Projekte/batchtools/docs/reference&quot;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
