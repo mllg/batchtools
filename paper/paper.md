@@ -39,10 +39,13 @@ Jobs can be chunked (i.e., merged into one technical cluster job) to be executed
 All in all, the provided tools allow to work with many thousands or even millions of jobs in an organized and efficient manner.
 
 The `batchtools` package also comes with an abstraction mechanism to assist in conducting large-scale computer experiments, especially suited for (but not restricted to) benchmarking and exploration of algorithm performance.
-The mechanism is similar to [BatchExperiments](https://github.com/tudo-r/BatchExperiments) [@batchtools_2015] which `batchtools` now also supersedes:
+The mechanism is similar to [`BatchExperiments`](https://github.com/tudo-r/BatchExperiments) [@batchtools_2015] which `batchtools` now also supersedes:
 After defining the building blocks of most computer experiments, problems and algorithms, both can be parametrized to define jobs which are then in a second step submitted to one of the parallel backends.
 
 `batchtools` can also be controlled through the [`parallelMap`](https://github.com/berndbischl/parallelMap) package which mainly focuses on enabling `R` users to conveniently write flexible parallel loops / mapping operations in their own `R` packages.
+
+Important changes to its predecessors are summarized in the NEWS file to help users of [`BatchJobs`](https://github.com/tudo-r/BatchJobs)/[`BatchExperiments`](https://github.com/tudo-r/BatchExperiments) migrating their cluster configuration and switch to `batchtools`.
+
 
 # References
 
