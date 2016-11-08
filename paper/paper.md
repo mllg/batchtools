@@ -47,6 +47,7 @@ After defining problems and algorithms, both can be parametrized with arbitrary 
 `batchtools` can also be controlled through the [`parallelMap`](https://github.com/berndbischl/parallelMap) package, and is offered as a backend in that package, which mainly focuses on enabling R users to easily write flexible parallel loops / mapping operations in their own R packages.
 
 todo: dirk fehlt?
+todo: WICHTIG: wir sollten wirklich die seite verlinken wo der migrationsprozess erklärt wird!!
 
 # References
 
