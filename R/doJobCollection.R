@@ -27,8 +27,9 @@ doJobCollection = function(jc, output = NULL) {
 #' @export
 doJobCollection.character = function(jc, output = NULL) {
   obj = readRDS(jc)
-  if (!batchtools$debug)
-    file.remove(jc)
+  ## TODO: Should be removed when all batch jobs finished
+  # if (!batchtools$debug)
+  #   file.remove(jc)
   doJobCollection.JobCollection(obj, output = output)
 }
 
@@ -165,7 +166,8 @@ UpdateBuffer = R6Class("UpdateBuffer",
       i = self$updates[!written & !is.na(started), which = TRUE]
       if (length(i) > 0L) {
         self$count = self$count + 1L
-        writeRDS(self$updates[i, !"written", with = FALSE], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, self$count)), wait = TRUE)
+        ## TODO: added unique(self$updates$job.id) here. OK?
+        writeRDS(self$updates[i, !"written", with = FALSE], file = file.path(jc$file.dir, "updates", sprintf("%s-%i-%i.rds", jc$job.hash, unique(self$updates$job.id), self$count)), wait = TRUE)
         self$updates[i, "written" := TRUE]
       }
     },
