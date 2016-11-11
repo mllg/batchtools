@@ -1,3 +1,6 @@
+# batchtools 0.9.1
+* Deactivated swap for clusterFunctionsDocker.
+
 # batchtools 0.9.0
 
 The packages [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) have been merged for the following reasons:

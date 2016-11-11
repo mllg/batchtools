@@ -44,6 +44,7 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
       sprintf("-e DEBUGME=%s", Sys.getenv("DEBUGME")),
       sprintf("-c %i", jc$resources$ncpus),
       sprintf("-m %im", jc$resources$memory),
+      sprintf("--memory-swap %im", jc$resources$memory),
       sprintf("--label batchtools=%s", jc$job.hash),
       sprintf("--label user=%s", user),
       sprintf("--name=%s_bt_%s", user, jc$job.hash),
