@@ -12,6 +12,9 @@ authors:
  - name: Bernd Bischl
    orcid: 0000-0001-6002-6980
    affiliation: LMU Munich
+ - name: Dirk Surmann
+   orcid: 0000-0003-0873-137X
+   affiliation: TU Dortmund University
 date: 9 November 2016
 bibliography: paper.bib
 ---
