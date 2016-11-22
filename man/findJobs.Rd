@@ -19,8 +19,9 @@
 \usage{
 findJobs(expr, ids = NULL, reg = getDefaultRegistry())
 
-findExperiments(prob.name = NULL, algo.name = NULL, prob.pars, algo.pars,
-  repls = NULL, ids = NULL, reg = getDefaultRegistry())
+findExperiments(prob.name = NA_character_, prob.pattern = NA_character_,
+  algo.name = NA_character_, algo.pattern = NA_character_, prob.pars,
+  algo.pars, repls = NULL, ids = NULL, reg = getDefaultRegistry())
 
 findSubmitted(ids = NULL, reg = getDefaultRegistry())
 
@@ -61,13 +62,19 @@ If not set, defaults to all jobs.}
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 
 \item{prob.name}{[\code{character}]\cr
-Whitelist of problem names.
-If the string starts with \dQuote{~}, it is treated as regular expression.
+Fixed string to match problem names.
+If not provided, all problems are matched.}
+
+\item{prob.pattern}{[\code{character}]\cr
+Regular expression pattern to match problem names.
 If not provided, all problems are matched.}
 
 \item{algo.name}{[\code{character}]\cr
-Whitelist of algorithm names.
-If the string starts with \dQuote{~}, it is treated as regular expression.
+Fixed string to match algorithm names.
+If not provided, all algorithms are matched.}
+
+\item{algo.pattern}{[\code{character}]\cr
+Regular expression pattern to match algorithm names.
 If not provided, all algorithms are matched.}
 
 \item{prob.pars}{[\code{expression}]\cr

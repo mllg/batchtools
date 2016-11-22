@@ -105,16 +105,15 @@ test_that("findExperiments", {
   tab = findExperiments(reg = reg, prob.name = "p1")
   expect_data_table(tab, nrow = 60, ncol = 1, key = "job.id")
 
-  tab = findExperiments(reg = reg, prob.name = c("p1", "p2"))
+  expect_error(findExperiments(reg = reg, prob.name = c("p1", "p2")), "length 1")
+
+  tab = findExperiments(reg = reg, prob.pattern = "p.")
   expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
 
-  tab = findExperiments(reg = reg, prob.name = "~p.")
-  expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
-
-  tab = findExperiments(reg = reg, prob.name = "~2$")
+  tab = findExperiments(reg = reg, prob.pattern = "2$")
   expect_data_table(tab, nrow = 30, ncol = 1, key = "job.id")
 
-  tab = findExperiments(reg = reg, prob.name = c("~^p"))
+  tab = findExperiments(reg = reg, prob.pattern = c("^p"))
   expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
 
   tab = findExperiments(reg = reg, prob.name = "p2")
@@ -135,7 +134,7 @@ test_that("findExperiments", {
   tab = findExperiments(reg = reg, algo.name = "a1")
   expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
 
-  tab = findExperiments(reg = reg, algo.name = "~a.")
+  tab = findExperiments(reg = reg, algo.pattern = "a.")
   expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
 
   tab = findExperiments(reg = reg, algo.name = "a.")

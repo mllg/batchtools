@@ -54,12 +54,16 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
 #' @export
 #' @rdname findJobs
 #' @param prob.name [\code{character}]\cr
-#'   Whitelist of problem names.
-#'   If the string starts with \dQuote{~}, it is treated as regular expression.
+#'   Fixed string to match problem names.
+#'   If not provided, all problems are matched.
+#' @param prob.pattern [\code{character}]\cr
+#'   Regular expression pattern to match problem names.
 #'   If not provided, all problems are matched.
 #' @param algo.name [\code{character}]\cr
-#'   Whitelist of algorithm names.
-#'   If the string starts with \dQuote{~}, it is treated as regular expression.
+#'   Fixed string to match algorithm names.
+#'   If not provided, all algorithms are matched.
+#' @param algo.pattern [\code{character}]\cr
+#'   Regular expression pattern to match algorithm names.
 #'   If not provided, all algorithms are matched.
 #' @param prob.pars [\code{expression}]\cr
 #'   Predicate expression evaluated in the problem parameters.
@@ -67,28 +71,39 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
 #'   Predicate expression evaluated in the algorithm parameters.
 #' @param repls [\code{integer}]\cr
 #'   Whitelist of replication numbers. If not provided, all replications are matched.
-findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.pars, repls = NULL, ids = NULL, reg = getDefaultRegistry()) {
-  strmatch = function(x, pattern) {
-    y = split(pattern, ifelse(stri_startswith_fixed(pattern, "~"), "regex", "table"))
-    for (p in y$regex)
-      y$table = union(y$table, stri_subset_regex(levels(x), stri_sub(p, 2L)))
-    x %in% y$table
-  }
-
+findExperiments = function(prob.name = NA_character_, prob.pattern = NA_character_, algo.name = NA_character_, algo.pattern = NA_character_, prob.pars, algo.pars, repls = NULL, ids = NULL, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, sync = TRUE)
+  assertString(prob.name, na.ok = TRUE, min.chars = 1L)
+  assertString(prob.pattern, na.ok = TRUE, min.chars = 1L)
+  assertString(algo.name, na.ok = TRUE, min.chars = 1L)
+  assertString(algo.pattern, na.ok = TRUE, min.chars = 1L)
   ee = parent.frame()
   tab = mergedJobs(reg, convertIds(reg, ids), c("job.id", "pars", "problem", "algorithm", "repl"))
 
-  if (!is.null(prob.name)) {
-    assertCharacter(prob.name, any.missing = FALSE, min.chars = 1L)
+  if (!is.na(prob.name)) {
     problem = NULL
-    tab = tab[strmatch(problem, prob.name)]
+    tab = tab[stri_detect_fixed(problem, prob.name)]
   }
 
-  if (!is.null(algo.name)) {
-    assertCharacter(algo.name, any.missing = FALSE, min.chars = 1L)
+  if (!is.na(prob.pattern)) {
+    problem = NULL
+    tab = tab[stri_detect_regex(problem, prob.pattern)]
+  }
+
+  if (!is.na(algo.name)) {
     algorithm = NULL
-    tab = tab[strmatch(algorithm, algo.name)]
+    tab = tab[stri_detect_fixed(algorithm, algo.name)]
+  }
+
+  if (!is.na(algo.pattern)) {
+    algorithm = NULL
+    tab = tab[stri_detect_regex(algorithm, algo.pattern)]
+  }
+
+  if (!is.null(repls)) {
+    repls = asInteger(repls, any.missing = FALSE)
+    repl = NULL
+    tab = tab[repl %in% repls]
   }
 
   if (!missing(prob.pars)) {
@@ -103,12 +118,6 @@ findExperiments = function(prob.name = NULL, algo.name = NULL, prob.pars, algo.p
     fun = function(pars) eval(expr, pars$algo.pars, enclos = ee)
     pars = NULL
     tab = tab[vlapply(pars, fun)]
-  }
-
-  if (!is.null(repls)) {
-    repls = asInteger(repls, any.missing = FALSE)
-    repl = NULL
-    tab = tab[repl %in% repls]
   }
 
   setkeyv(tab[, "job.id", with = FALSE], "job.id")[]
