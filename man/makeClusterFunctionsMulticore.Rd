@@ -19,9 +19,6 @@ and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}
 Jobs are spawned asynchronously using the functions \code{mcparallel} and \code{mccollect} (both in \pkg{parallel}).
 Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
 }
-\note{
-Sets the number of threads internally used by \pkg{data.table} to 1 during initialization (via \code{data.table::setthreads}).
-}
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsInteractive}},

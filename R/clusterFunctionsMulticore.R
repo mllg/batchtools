@@ -72,9 +72,6 @@ Multicore = R6Class("Multicore",
 #' Jobs are spawned asynchronously using the functions \code{mcparallel} and \code{mccollect} (both in \pkg{parallel}).
 #' Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
 #'
-#' @note
-#' Sets the number of threads internally used by \pkg{data.table} to 1 during initialization (via \code{data.table::setthreads}).
-#'
 #' @template ncpus
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
