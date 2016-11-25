@@ -87,7 +87,7 @@ getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = get
   assertFlag(prefix)
 
   ids = convertIds(reg, ids)
-  tab = merge(filter(reg$status, ids, c("job.id", "resource.id")), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", "resources"), with = FALSE]
+  tab = merge(filter(reg$status, ids, c("job.id", "resource.id")), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", "resources")]
   if (flatten %??% qtestr(tab$resources, c("v1", "L", "0"), depth = 2L)) {
     tab = rbindlist(.mapply(function(job.id, resources) c(list(job.id = job.id), resources), tab, list()), fill = TRUE)
     if (prefix && ncol(tab) >= 2L) {

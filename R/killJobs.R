@@ -22,7 +22,7 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
     stop("ClusterFunctions implementation does not support the killing of jobs")
 
   ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
-  tab = reg$status[.findOnSystem(ids = ids, reg = reg), c("job.id", "started", "batch.id"), with = FALSE]
+  tab = reg$status[.findOnSystem(ids = ids, reg = reg), c("job.id", "started", "batch.id")]
 
   if (nrow(tab) == 0L)
     return(data.table(job.id = integer(0L), batch.id = character(0L), killed = logical(0L)))
@@ -52,5 +52,5 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   reg$status[tab[tab$killed], (cols) := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_)]
 
   saveRegistry(reg)
-  tab[, c("job.id", "batch.id", "killed"), with = FALSE]
+  tab[, c("job.id", "batch.id", "killed")]
 }

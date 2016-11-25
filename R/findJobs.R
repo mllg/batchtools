@@ -48,7 +48,7 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   ee = parent.frame()
   fun = function(pars) eval(expr, pars, enclos = ee)
   pars = NULL
-  setkeyv(mergedJobs(reg, ids, c("job.id", "pars"))[vlapply(pars, fun), "job.id", with = FALSE], "job.id")[]
+  setkeyv(mergedJobs(reg, ids, c("job.id", "pars"))[vlapply(pars, fun), "job.id"], "job.id")
 }
 
 #' @export
@@ -120,7 +120,7 @@ findExperiments = function(prob.name = NA_character_, prob.pattern = NA_characte
     tab = tab[vlapply(pars, fun)]
   }
 
-  setkeyv(tab[, "job.id", with = FALSE], "job.id")[]
+  setkeyv(tab[, "job.id"], "job.id")[]
 }
 
 
@@ -133,7 +133,7 @@ findSubmitted = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findSubmitted = function(reg, ids = NULL) {
   submitted = NULL
-  filter(reg$status, ids, c("job.id", "submitted"))[!is.na(submitted), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "submitted"))[!is.na(submitted), "job.id"]
 }
 
 
@@ -146,7 +146,7 @@ findNotSubmitted = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findNotSubmitted = function(reg, ids = NULL) {
   submitted = NULL
-  filter(reg$status, ids, c("job.id", "submitted"))[is.na(submitted), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "submitted"))[is.na(submitted), "job.id"]
 }
 
 
@@ -159,7 +159,7 @@ findStarted = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findStarted = function(reg, ids = NULL) {
   started = NULL
-  filter(reg$status, ids, c("job.id", "started"))[!is.na(started), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "started"))[!is.na(started), "job.id"]
 }
 
 
@@ -172,7 +172,7 @@ findNotStarted = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findNotStarted = function(reg, ids = NULL) {
   started = NULL
-  filter(reg$status, ids, c("job.id", "started"))[is.na(started), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "started"))[is.na(started), "job.id"]
 }
 
 
@@ -185,7 +185,7 @@ findDone = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findDone = function(reg, ids = NULL) {
   done = error = NULL
-  filter(reg$status, ids, c("job.id", "done", "error"))[!is.na(done) & is.na(error), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "done", "error"))[!is.na(done) & is.na(error), "job.id"]
 }
 
 
@@ -198,7 +198,7 @@ findNotDone = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findNotDone = function(reg, ids = NULL) {
   done = error = NULL
-  filter(reg$status, ids, c("job.id", "done", "error"))[is.na(done) | !is.na(error), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "done", "error"))[is.na(done) | !is.na(error), "job.id"]
 }
 
 
@@ -211,7 +211,7 @@ findErrors = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findErrors = function(reg, ids = NULL) {
   error = NULL
-  filter(reg$status, ids, c("job.id", "error"))[!is.na(error), "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "error"))[!is.na(error), "job.id"]
 }
 
 
@@ -253,7 +253,7 @@ findExpired = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findExpired = function(reg, ids = NULL, batch.ids = getBatchIds(reg)) {
   submitted = done = batch.id = NULL
-  filter(reg$status, ids, c("job.id", "submitted", "done", "batch.id"))[!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids$batch.id, "job.id", with = FALSE]
+  filter(reg$status, ids, c("job.id", "submitted", "done", "batch.id"))[!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids$batch.id, "job.id"]
 }
 
 #' @export
@@ -266,5 +266,5 @@ findTagged = function(tags = character(0L), ids = NULL, reg = getDefaultRegistry
   assertCharacter(tags, any.missing = FALSE, pattern = "^[[:alnum:]_.]+$", min.len = 1L)
   tag = NULL
 
-  ids[unique(reg$tags[tag %in% tags, "job.id", with = FALSE], by = "job.id")]
+  ids[unique(reg$tags[tag %in% tags, "job.id"], by = "job.id")]
 }

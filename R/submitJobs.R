@@ -137,7 +137,6 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   } else {
     chunks = ids$chunk = seq_row(ids)
   }
-  setkeyv(ids, "job.id")
 
   # check for jobs already on system
   on.sys = .findOnSystem(reg = reg, cols = c("job.id", "batch.id"))
@@ -158,7 +157,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   # handle resources
   res.hash = digest(resources)
   resource.hash = NULL
-  res.id = reg$resources[resource.hash == res.hash, "resource.id", with = FALSE]$resource.id
+  res.id = reg$resources[resource.hash == res.hash, "resource.id"]$resource.id
   if (length(res.id) == 0L) {
     res.id = auto_increment(reg$resources$resource.id)
     reg$resources = rbind(reg$resources, data.table(resource.id = res.id, resource.hash = res.hash, resources = list(resources)))
@@ -176,7 +175,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   for (ch in chunks) {
     wait = default.wait
-    ids.chunk = ids[chunk == ch, "job.id", with = FALSE]
+    ids.chunk = ids[chunk == ch, "job.id"]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
       writeRDS(jc, file = jc$uri, wait = TRUE)

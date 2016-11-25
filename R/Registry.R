@@ -264,10 +264,7 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
   alloc.col(reg$status, ncol(reg$status))
   alloc.col(reg$defs, ncol(reg$defs))
   alloc.col(reg$resources, ncol(reg$resources))
-  if (is.data.table(reg$tags)) # FIXME: remove on release
-    alloc.col(reg$tags, ncol(reg$tags))
-  else
-    reg$tags = data.table(job.id = integer(0L), tag = character(0L), key = "job.id")
+  alloc.col(reg$tags, ncol(reg$tags))
 
   file.dir = npath(file.dir)
   if (!update.paths) {

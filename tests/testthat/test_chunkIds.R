@@ -9,7 +9,7 @@ test_that("chunkIds", {
   algo.designs = list(a1 = data.table(sq = 1:3))
   repls = 10
   ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
-  ids = getJobPars(reg = reg)[, c("job.id", "problem"), with = FALSE]
+  ids = getJobPars(reg = reg)[, c("job.id", "problem")]
 
   expect_error(chunkIds(1:3, chunk.size = 1, n.chunks = 1, reg = reg), "Either")
 

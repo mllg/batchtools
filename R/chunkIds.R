@@ -89,5 +89,5 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
     ids[, "chunk" := chunk(job.id, n.chunks = n.chunks, chunk.size = chunk.size)]
   }
 
-  return(ids[, c("job.id", "chunk"), with = FALSE])
+  return(ids[, c("job.id", "chunk")])
 }

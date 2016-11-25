@@ -86,7 +86,7 @@ removeProblems = function(name, reg = getDefaultRegistry()) {
 
   problem = NULL
   for (nn in name) {
-    def.ids = reg$defs[problem == nn, "def.id", with = FALSE]
+    def.ids = reg$defs[problem == nn, "def.id"]
     job.ids = filter(def.ids, reg$status, "job.id")
 
     info("Removing Problem '%s' and %i corresponding jobs ...", nn, nrow(job.ids))
@@ -140,7 +140,7 @@ removeAlgorithms = function(name, reg = getDefaultRegistry()) {
 
   algorithm = NULL
   for (nn in name) {
-    def.ids = reg$defs[algorithm == nn, "def.id", with = FALSE]
+    def.ids = reg$defs[algorithm == nn, "def.id"]
     job.ids = filter(def.ids, reg$status, "job.id")
 
     info("Removing Algorithm '%s' and %i corresponding jobs ...", nn, nrow(job.ids))

@@ -1,5 +1,5 @@
 allIds = function(reg) {
-  reg$status[, "job.id", with = FALSE]
+  reg$status[, "job.id"]
 }
 
 noIds = function() {
@@ -52,7 +52,7 @@ convertIds = function(reg, ids, default = NULL, keep.extra = character(0L), keep
     keep.extra = intersect(keep.extra, names(ids))
     return(merge(ids, reg$status, all = FALSE, sort = sort, by = "job.id")[, union("job.id", keep.extra), with = FALSE])
   }
-  return(reg$status[ids, "job.id", on = "job.id", nomatch = 0L, with = FALSE])
+  return(reg$status[ids, "job.id", on = "job.id", nomatch = 0L])
 }
 
 convertId = function(reg, id) {

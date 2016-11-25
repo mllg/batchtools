@@ -154,7 +154,7 @@ makeJob = function(id, cache = NULL, reg = getDefaultRegistry()) {
 #' @export
 makeJob.Registry = function(id, cache = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "resource.id"))
-  resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA, with = FALSE]$resources[[1L]] %??% list()
+  resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
   Job$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     resources = resources)
 }
@@ -162,7 +162,7 @@ makeJob.Registry = function(id, cache = NULL, reg = getDefaultRegistry()) {
 #' @export
 makeJob.ExperimentRegistry = function(id, cache = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "problem", "algorithm", "repl", "resource.id"))
-  resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA, with = FALSE]$resources[[1L]] %??% list()
+  resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
   Experiment$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     repl = row$repl, resources = resources, prob.name = row$problem, algo.name = row$algorithm)
 }

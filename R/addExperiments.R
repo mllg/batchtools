@@ -126,7 +126,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
       tab$pars.hash = unlist(.mapply(function(...) digest(list(...)), tab, list()))
 
       # merge with already defined experiments to get def.ids
-      tab = merge(reg$defs[, !c("pars", "problem", "algorithm"), with = FALSE], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
+      tab = merge(reg$defs[, !c("pars", "problem", "algorithm")], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 
       # generate def ids for new experiments
       w = which(is.na(tab$def.id))
