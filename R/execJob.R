@@ -26,7 +26,7 @@ execJob.character = function(job) {
 execJob.JobCollection = function(job) {
   if (nrow(job$jobs) != 1L)
     stop("You must provide a JobCollection with exactly one job")
-  execJob(getJob(job, id = job$jobs))
+  execJob(getJob(job, i = 1L))
 }
 
 #' @export

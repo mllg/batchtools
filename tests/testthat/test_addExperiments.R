@@ -69,4 +69,6 @@ if (FALSE) {
   algo.designs = list(a1 = data.table(y = 1:20), a2 = data.table(y = 1:20))
   repls = 2
   profvis(addExperiments(prob.designs, algo.designs = algo.designs, repls = repls, reg = reg))
+  ids = findExperiments(reg = reg)
+  profvis(submitJobs(ids = chunkIds(ids, n.chunks = 1, reg = reg), reg = reg))
 }

@@ -113,11 +113,11 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   runHook(jc, "pre.do.collection", cache = cache)
 
   for (i in seq_len(n.jobs)) {
-    job = getJob(jc, jc$jobs[i], cache = cache)
+    job = getJob(jc, i, cache = cache)
     id = job$id
 
-    catf("### [bt %s]: Starting job [batchtools job.id=%i]", now(), id)
     update = list(started = ustamp(), done = NA_integer_, error = NA_character_, memory = NA_real_)
+    catf("### [bt %s]: Starting job [batchtools job.id=%i]", now(), id)
     if (measure.memory) {
       gc(reset = TRUE)
       result = try(execJob(job))
@@ -134,7 +134,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
       catf("\n### [bt %s]: Job terminated successfully [batchtools job.id=%i]", now(), id)
       writeRDS(result, file = file.path(jc$file.dir, "results", sprintf("%i.rds", id)))
     }
-    buf$add(id, update)
+    buf$add(i, update)
     buf$flush(jc)
   }
 
@@ -157,21 +157,21 @@ UpdateBuffer = R6Class("UpdateBuffer",
       self$next.update = ustamp() + as.integer(runif(1L, 300, 1800))
     },
 
-    add = function(id, x) {
-      self$updates[list(id), names(x) := x]
+    add = function(i, x) {
+      set(self$updates, i, names(x), x)
     },
 
     save = function(jc) {
-      i = self$updates[!written & !is.na(started), which = TRUE]
+      i = self$updates[!is.na(started) & !written, which = TRUE]
       if (length(i) > 0L) {
         self$count = self$count + 1L
         writeRDS(self$updates[i, !"written"], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, self$count)), wait = TRUE)
-        self$updates[i, "written" := TRUE]
+        set(self$updates, i, "written", TRUE)
       }
     },
 
     flush = function(jc) {
-      if (ustamp() > self$next.update) {
+      if (ustamp() > self$next.update || TRUE) {
         self$save(jc)
         self$next.update = ustamp() + as.integer(runif(1L, 300, 1800))
       }

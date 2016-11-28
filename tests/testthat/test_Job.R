@@ -16,7 +16,7 @@ test_that("Job", {
   expect_function(job$fun)
 
   jc = makeJobCollection(reg = reg, resources = list(foo = "bar"))
-  job = getJob(jc, data.table(job.id = 1L))
+  job = getJob(jc, i = 1L)
   expect_is(job, "Job")
   expect_identical(job$id, 1L)
   expect_equal(job$pars, list(i = 1L, x = 1))
@@ -44,7 +44,7 @@ test_that("Experiment", {
   expect_identical(job$instance, list(data = NULL, i = 1L))
 
   jc = makeJobCollection(reg = reg)
-  job = getJob(jc, data.table(job.id = 1))
+  job = getJob(jc, i = 1L)
   expect_is(job, "Experiment")
   expect_identical(job$id, 1L)
   expect_equal(job$pars, list(prob.pars = list(i = 1), algo.pars = list()))

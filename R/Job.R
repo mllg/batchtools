@@ -167,18 +167,18 @@ makeJob.ExperimentRegistry = function(id, cache = NULL, reg = getDefaultRegistry
     repl = row$repl, resources = resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
-getJob = function(jc, id, cache = NULL) {
+getJob = function(jc, i, cache = NULL) {
   UseMethod("getJob")
 }
 
-getJob.JobCollection = function(jc, id, cache = NULL) {
-  row = filter(jc$jobs, id)
+getJob.JobCollection = function(jc, i, cache = NULL) {
+  row = jc$jobs[i]
   Job$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     resources = jc$resources)
 }
 
-getJob.ExperimentCollection = function(jc, id, cache = NULL) {
-  row = filter(jc$jobs, id)
+getJob.ExperimentCollection = function(jc, i, cache = NULL) {
+  row = jc$jobs[i]
   Experiment$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     repl = row$repl, resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm)
 }
