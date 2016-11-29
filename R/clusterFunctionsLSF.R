@@ -49,7 +49,7 @@ makeClusterFunctionsLSF = function(template = findTemplateFile("lsf")) { # nocov
   }
 
   listJobs = function(reg, cmd) {
-    res = runOSCommand(cmd[1L], cmd[-1L])$output
+    res = runOSCommand(cmd[1L], cmd[-1L])
     if (res$exit.code == 255L && stri_detect_fixed(res$output, "No unfinished job found"))
       return(character(0L))
     if (res$exit.code > 0L)
