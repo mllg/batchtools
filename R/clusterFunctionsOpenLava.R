@@ -44,8 +44,8 @@ makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"))
   }
 
   listJobs = function(reg, cmd) {
-    res = runOSCommand(cmd[1L], cmd[-1L])$output
-    if (res$exit.code == 255L && stri_detect_fixed(res$output, "No unfinished job found"))
+    res = runOSCommand(cmd[1L], cmd[-1L])
+    if (res$exit.code == 255L && stri_detect_regex(res$output, "No (unfinished|pending) job found"))
       return(character(0L))
     if (res$exit.code > 0L)
       stopf("Command '%s' produced exit code: %i; output: %s", stri_flatten(cmd, " "), res$exit.code, res$output)

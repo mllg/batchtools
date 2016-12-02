@@ -2,6 +2,7 @@
 * Deactivated swap for clusterFunctionsDocker.
 * `findExperiments` now has two additional arguments to match for regular expressions.
   The possibility to prefix a string with "~" to enable regular expression matching has been removed.
+* Fixed listing of jobs for `ClusterFunctionsLSF` and `ClusterFunctionsOpenLava` (thanks to @phaverty).
 
 # batchtools 0.9.0
 
