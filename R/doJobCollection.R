@@ -150,11 +150,11 @@ UpdateBuffer = R6Class("UpdateBuffer",
   cloneable = FALSE,
   public = list(
     updates = NULL,
-    next.update = NA_integer_,
+    next.update = NA_real_,
     count = 0L,
     initialize = function(ids) {
       self$updates = data.table(job.id = ids, started = NA_integer_, done = NA_integer_, error = NA_character_, memory = NA_real_, written = FALSE, key = "job.id")
-      self$next.update = ustamp() + as.integer(runif(1L, 300, 1800))
+      self$next.update = as.numeric(Sys.time()) + runif(1L, 300, 1800)
     },
 
     add = function(i, x) {
@@ -171,9 +171,9 @@ UpdateBuffer = R6Class("UpdateBuffer",
     },
 
     flush = function(jc) {
-      if (ustamp() > self$next.update || TRUE) {
+      if (Sys.time() > self$next.update || TRUE) {
         self$save(jc)
-        self$next.update = ustamp() + as.integer(runif(1L, 300, 1800))
+        self$next.update = Sys.time() + runif(1L, 300, 1800)
       }
     }
 
