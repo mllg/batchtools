@@ -88,7 +88,7 @@ ojoin = function(x, y, by = NULL) {
   by = guessBy(x, y, by)
 
   res = if (is.null(names(by)))
-    merge(x, y, all = TRUE, by = "job.id")
+    merge(x, y, all = TRUE, by = by)
   else
     merge(x, y, all = TRUE, by.x = names(by), by.y = by)
 
@@ -102,7 +102,7 @@ sjoin = function(x, y, by = NULL) {
   y = as.data.table(y)
   by = guessBy(x, y, by)
 
-  w = unique(x[y, on = "job.id", nomatch = 0L, which = TRUE, allow.cartesian = TRUE])
+  w = unique(x[y, on = by, nomatch = 0L, which = TRUE, allow.cartesian = TRUE])
   setKey(x[w], by)
 }
 
@@ -113,7 +113,7 @@ ajoin = function(x, y, by = NULL) {
   y = as.data.table(y)
   by = guessBy(x, y, by)
 
-  setKey(x[!y, on = "job.id"], by)
+  setKey(x[!y, on = by], by)
 }
 
 #' @rdname JoinTables
@@ -126,14 +126,14 @@ ujoin = function(x, y, all.y = FALSE, by = NULL) {
   y = as.data.table(y)
   by = guessBy(x, y, by)
 
-  cn = setdiff(names(y), "job.id")
+  cn = setdiff(names(y), by)
   if (!all.y)
     cn = intersect(names(x), cn)
   if (length(cn) == 0L)
     return(x)
 
-  expr = parse(text = stri_join("`:=`(", stri_flatten(sprintf("%1$s = i.%1$s", cn), ","), ")"))
-  setKey(x[y, eval(expr), on = "job.id"], by)
+  expr = parse(text = stri_join("`:=`(", stri_flatten(sprintf("%1$s=i.%1$s", cn), ","), ")"))
+  setKey(x[y, eval(expr), on = by], by)
 }
 
 guessBy = function(x, y, by = NULL) {
@@ -164,5 +164,5 @@ setKey = function(res, by) {
   by = names(by) %??% unname(by)
   if (!identical(key(res), by))
     setkeyv(res, by)
-  res
+  res[]
 }

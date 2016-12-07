@@ -322,47 +322,47 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   result.files = list.files(file.path(reg$file.dir, "results"), pattern = "\\.rds$")
   i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% .findSubmitted(reg = reg)$job.id)
   if (length(i) > 0L) {
-    info("Removing %i obsolete result files", length(i))
+    info("Removing %i obsolete result files ...", length(i))
     file.remove(file.path(reg$file.dir, "results", result.files[i]))
   }
 
   log.files = list.files(file.path(reg$file.dir, "logs"), pattern = "\\.log$")
   i = which(stri_replace_last_fixed(log.files, ".log", "") %nin% reg$status$job.hash)
   if (length(i) > 0L) {
-    info("Removing %i obsolete log files", length(i))
+    info("Removing %i obsolete log files ...", length(i))
     file.remove(file.path(reg$file.dir, "logs", log.files[i]))
   }
 
   job.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.rds$")
   i = which(stri_replace_last_fixed(job.files, ".rds", "") %nin% reg$status$job.hash)
   if (length(i) > 0L) {
-    info("Removing %i obsolete job files", length(i))
+    info("Removing %i obsolete job files ...", length(i))
     file.remove(file.path(reg$file.dir, "jobs", job.files[i]))
   }
 
   job.desc.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.job$")
   if (length(job.desc.files) > 0L) {
-    info("Removing %i job description files", length(i))
+    info("Removing %i job description files ...", length(i))
     file.remove(file.path(reg$file.dir, "jobs", job.desc.files))
   }
 
   external.dirs = list.files(file.path(reg$file.dir, "external"), pattern = "^[0-9]+$")
   i = which(as.integer(external.dirs) %nin% .findSubmitted(reg = reg)$job.id)
   if (length(i) > 0L) {
-    info("Removing %i external directories of unsubmitted jobs", length(i))
+    info("Removing %i external directories of unsubmitted jobs ...", length(i))
     unlink(file.path(reg$file.dir, "external", external.dirs[i]), recursive = TRUE)
   }
 
   i = reg$resources[!reg$status, on = "resource.id", which = TRUE]
   if (length(i) > 0L) {
-    info("Removing %i resource specifications", length(i))
+    info("Removing %i resource specifications ...", length(i))
     reg$resources = reg$resources[-i]
     store = TRUE
   }
 
   i = reg$tags[!reg$status, on = "job.id", which = TRUE]
   if (length(i) > 0L) {
-    info("Removing %i tags", length(i))
+    info("Removing %i tags ...", length(i))
     reg$tags = reg$tags[-i]
     store = TRUE
   }
@@ -375,13 +375,13 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
 #' @export
 clearRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, running.ok = FALSE, sync = TRUE)
-  info("Removing %i jobs", nrow(reg$status))
+  info("Removing %i jobs ...", nrow(reg$status))
   reg$status = reg$status[FALSE]
   reg$defs = reg$defs[FALSE]
   reg$resources = reg$resources[FALSE]
   user.fun = file.path(reg$file.dir, "user.function.rds")
   if (file.exists(user.fun)) {
-    info("Removing user function")
+    info("Removing user function ...")
     file.remove(user.fun)
   }
   sweepRegistry(reg = reg)

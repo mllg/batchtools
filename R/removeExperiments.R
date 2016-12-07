@@ -16,12 +16,12 @@ removeExperiments = function(ids = NULL, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE, running.ok = FALSE)
   ids = convertIds(reg, ids, default = noIds())
 
-  info("Removing %i Experiments", nrow(ids))
+  info("Removing %i Experiments ...", nrow(ids))
   reg$status = reg$status[!ids]
 
   i = reg$defs[!reg$status, on = "def.id", which = TRUE]
   if (length(i) > 0L) {
-    info("Cleaning up %i job definitions", length(i))
+    info("Cleaning up %i job definitions ...", length(i))
     reg$defs = reg$defs[-i]
   }
 

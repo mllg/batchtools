@@ -17,7 +17,7 @@ resetJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, sync = TRUE, running.ok = FALSE)
   ids = convertIds(reg, ids, default = noIds())
 
-  info("Resetting %i jobs in DB.", nrow(ids))
+  info("Resetting %i jobs in DB ...", nrow(ids))
   cols = c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash")
   reg$status[ids, (cols) := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_), on = "job.id"]
 
