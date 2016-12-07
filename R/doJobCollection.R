@@ -138,10 +138,10 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     buf$flush(jc)
   }
 
+  runHook(jc, "post.do.collection", updates = buf$updates, cache = cache)
   buf$save(jc)
-
   catf("### [bt %s]: Calculation finished!", now())
-  runHook(jc, "post.do.collection", cache = cache)
+
   invisible(jc$job.hash)
 }
 

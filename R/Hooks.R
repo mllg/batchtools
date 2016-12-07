@@ -8,8 +8,11 @@
 #'   \item{\code{post.sync}}{\code{function(reg, updates, ...)}: Run after synchronizing the registry on the master. \code{updates} is the data.table of processed updates.}
 #'   \item{\code{pre.submit}}{\code{function(reg, ...)}: Run before a job is successfully submitted to the scheduler on the master.}
 #'   \item{\code{post.submit}}{\code{function(reg, ...)}: Run after a job is successfully submitted to the scheduler on the master.}
-#'   \item{\code{pre.do.collection}}{\code{function(reg, cache, ...)}: Run before starting the job collection on the slave. \code{cache} is an internal cache object.}
-#'   \item{\code{post.do.collection}}{\code{function(reg, cache, ...)}: Run before terminating the job on the slave. \code{cache} is an internal cache object.}
+#'   \item{\code{pre.do.collection}}{\code{function(reg, cache, ...)}: Run before starting the job collection on the slave.
+#'     \code{cache} is an internal cache object.}
+#'   \item{\code{post.do.collection}}{\code{function(reg, updates, cache, ...)}: Run after all jobs in the chunk are terminated on the slave.
+#'     \code{updates} is a \code{\link{data.table}} of updates which will be merged with the \code{\link{Registry}} by the master.
+#'     \code{cache} is an internal cache object.}
 #' }
 #'
 #' @param obj [\link{Registry} | \link{JobCollection}]\cr
