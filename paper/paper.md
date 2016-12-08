@@ -8,13 +8,18 @@ tags:
 authors:
  - name: Michel Lang
    orcid: 0000-0001-9754-0393
-   affiliation: TU Dortmund University
+   affiliation: 1
  - name: Bernd Bischl
    orcid: 0000-0001-6002-6980
-   affiliation: LMU Munich
+   affiliation: 2
  - name: Dirk Surmann
    orcid: 0000-0003-0873-137X
-   affiliation: TU Dortmund University
+   affiliation: 1
+affiliations:
+ - name: TU Dortmund University
+   index: 1
+ - name: LMU Munich
+   index: 2
 date: 9 November 2016
 bibliography: paper.bib
 ---
