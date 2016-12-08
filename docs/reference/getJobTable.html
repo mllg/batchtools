@@ -153,17 +153,17 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>f</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Interactive&#39; ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 3 files ...</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
 <span class='co'># Complete table:</span>
 <span class='fu'>getJobTable</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;    job.id           submitted             started                done
-#&gt; 1:      1 2016-12-08 14:47:59 2016-12-08 14:47:59 2016-12-08 14:47:59
-#&gt; 2:      2 2016-12-08 14:47:59 2016-12-08 14:47:59 2016-12-08 14:47:59
-#&gt; 3:      3 2016-12-08 14:47:59 2016-12-08 14:47:59 2016-12-08 14:47:59
+#&gt; 1:      1 2016-12-08 14:50:24 2016-12-08 14:50:24 2016-12-08 14:50:24
+#&gt; 2:      2 2016-12-08 14:50:24 2016-12-08 14:50:24 2016-12-08 14:50:24
+#&gt; 3:      3 2016-12-08 14:50:24 2016-12-08 14:50:24 2016-12-08 14:50:24
 #&gt;                                      error memory      batch.id
 #&gt; 1: Error in (function (x)  : x must be &gt; 0     NA cfInteractive
 #&gt; 2:                                      NA     NA cfInteractive
 #&gt; 3:                                      NA     NA cfInteractive
 #&gt;                            job.hash time.queued time.running   pars resources
-#&gt; 1: 54bb945264c3c03250d9fbaf4b8705cd      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
-#&gt; 2: d83d83e54e3fbdf6c11a42696fafc2e7      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
-#&gt; 3: c64faaea34e26c7185328b036c67a81e      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+#&gt; 1: 8a893b06d44843009e7ad53f31522efc      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+#&gt; 2: 4ca69c5c98cb750cff048c8cb6c02070      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
+#&gt; 3: c5a4030c4a76f0cb5a5c732231431814      0 secs       0 secs &lt;list&gt;    &lt;list&gt;
 #&gt;    tags
 #&gt; 1:   NA
 #&gt; 2:   NA
