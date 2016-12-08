@@ -68,7 +68,7 @@ waitForJobs(reg = tmp)
 # - x has no effect on the runtime
 # - If y is "a" or "b", the runtimes are really high
 runtime = function(algorithm, x, y) {
-  ifelse(algorithm == "nrow", 100L, 500L) + 10000L * (y \%in\% letters[1:2])
+  ifelse(algorithm == "nrow", 100L, 500L) + 1000L * (y \%in\% letters[1:2])
 }
 tmp$status[ids, done := done + tab[ids, runtime(algorithm, x, y)]]
 rjoin(sjoin(tab, ids), getJobStatus(ids, reg = tmp)[, c("job.id", "time.running")])
@@ -80,9 +80,23 @@ rjoin(tab, est$runtimes)
 print(est, n = 10)
 
 # Submit jobs with longest runtime first:
-\dontrun{
 ids = est$runtimes[type == "estimated"][order(runtime, decreasing = TRUE)]
+print(ids)
+\dontrun{
 submitJobs(ids, reg = tmp)
 }
+
+# Group jobs into chunks with runtime < 1h
+ids = est$runtimes[type == "estimated"]
+ids[, chunk := binpack(runtime, 3600)]
+print(ids)
+print(ids[, sum(runtime), by = chunk])
+\dontrun{
+submitJobs(ids, reg = tmp)
+}
+
+
+# Group jobs into a fixed number of chunks with similar runtime
+
 }
 

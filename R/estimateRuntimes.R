@@ -47,7 +47,7 @@
 #' # - x has no effect on the runtime
 #' # - If y is "a" or "b", the runtimes are really high
 #' runtime = function(algorithm, x, y) {
-#'   ifelse(algorithm == "nrow", 100L, 500L) + 10000L * (y %in% letters[1:2])
+#'   ifelse(algorithm == "nrow", 100L, 500L) + 1000L * (y %in% letters[1:2])
 #' }
 #' tmp$status[ids, done := done + tab[ids, runtime(algorithm, x, y)]]
 #' rjoin(sjoin(tab, ids), getJobStatus(ids, reg = tmp)[, c("job.id", "time.running")])
@@ -59,10 +59,24 @@
 #' print(est, n = 10)
 #'
 #' # Submit jobs with longest runtime first:
-#' \dontrun{
 #' ids = est$runtimes[type == "estimated"][order(runtime, decreasing = TRUE)]
+#' print(ids)
+#' \dontrun{
 #' submitJobs(ids, reg = tmp)
 #' }
+#'
+#' # Group jobs into chunks with runtime < 1h
+#' ids = est$runtimes[type == "estimated"]
+#' ids[, chunk := binpack(runtime, 3600)]
+#' print(ids)
+#' print(ids[, sum(runtime), by = chunk])
+#' \dontrun{
+#' submitJobs(ids, reg = tmp)
+#' }
+#'
+#'
+#' # Group jobs into a fixed number of chunks with similar runtime
+#'
 estimateRuntimes = function(tab, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   data = copy(convertIds(reg, tab, keep.extra = names(tab)))
@@ -114,4 +128,87 @@ print.RuntimeEstimate = function(x, n = 1L, ...) {
     catf("  Parallel : %s", ps(max(vnapply(split(rt, lpt(rt, n)), sum)), nc = nc))
   }
   catf("  Total    : %s", ps(total, nc = nc))
+}
+
+
+#' Simple Binpack Solver
+#'
+#' @description
+#' Maps numeric items in \code{x} into groups with sum less or equal than \code{capacity}.
+#' A very simple greedy algorithm is used, which is not really optimized for speed.
+#' If an element of \code{x} exceeds \code{capacity}, an error is thrown.
+#'
+#' @param x [\code{numeric}]\cr
+#'   Numeric vector of elements to group.
+#' @param capacity [\code{numeric(1)}]\cr
+#'   Maximum capacity of each bin, i.e., elements will be grouped so their sum does not exceed this limit.
+#' @return [\code{integer}] with values \dQuote{1} to \dQuote{n.bins} indicating bin membership.
+#' @export
+#' @seealso lpt estimateRuntimes
+#' @examples
+#' x = 1:10
+#' bp = binpack(x, 11)
+#' xs = split(x, bp)
+#' print(xs)
+#' print(sapply(xs, sum))
+binpack = function(x, capacity) {
+  assertNumeric(x, min.len = 1L, lower = 0, any.missing = FALSE, finite = TRUE)
+  assertNumber(capacity)
+
+  too.big = wf(x > capacity, use.names = FALSE)
+  if (length(too.big))
+    stopf("Capacity not sufficient. Item %i (x=%f) does not fit", too.big, x[too.big])
+
+  ord = order(x, decreasing = TRUE)
+  grp = integer(length(x))
+  sums = numeric(1L)
+  bin.count = 1L
+
+  for(j in ord) {
+    new.sums = sums + x[j]
+    pos = wf(new.sums <= capacity, use.names = FALSE)
+    if (length(pos)) {
+      grp[j] = pos
+      sums[pos] = new.sums[pos]
+    } else {
+      bin.count = bin.count + 1L
+      grp[j] = bin.count
+      sums[bin.count] = x[j]
+    }
+  }
+  grp
+}
+
+
+#' Simple LPT Solver
+#'
+#' @description
+#' Maps numeric items in \code{x} into a fixed number of groups whose elements sum up to a similar value.
+#' A very simple greedy algorithm is used, which is not really optimized for speed.
+#'
+#' @param x [\code{numeric}]\cr
+#'   Numeric vector of elements to group.
+#' @param bins [\code{numeric(1)}]\cr
+#'   Number of bins.
+#' @return [\code{integer}] with values \dQuote{1} to \dQuote{bins} indicating bin membership.
+#' @export
+#' @seealso binpack estimateRuntimes
+#' @examples
+#' x = 1:10
+#' bp = lpt(x, 3)
+#' xs = split(x, bp)
+#' print(xs)
+#' print(sapply(xs, sum))
+lpt = function(x, ncpus = 1L) {
+  assertNumeric(x, min.len = 1L, lower = 0, any.missing = FALSE, finite = TRUE)
+  assertCount(ncpus, positive = TRUE)
+  bin = integer(length(x))
+  tta = double(ncpus)
+
+  for (xi in order(x, decreasing = TRUE)) {
+    i = which.min(tta)
+    bin[xi] = i
+    tta[i] = tta[i] + x[xi]
+  }
+  bin
 }
