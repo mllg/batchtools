@@ -4,6 +4,7 @@
   The possibility to prefix a string with "~" to enable regular expression matching has been removed.
 * Fixed listing of jobs for `ClusterFunctionsLSF` and `ClusterFunctionsOpenLava` (thanks to @phaverty).
 * Fixed wrong key lookup in join functions
+* Fixed a bug where `getJobTable()` returned `difftimes` with the wrong unit (e.g., in minutes instead of seconds).
 
 # batchtools 0.9.0
 

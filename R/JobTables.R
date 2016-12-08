@@ -73,8 +73,8 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   tab[, "submitted" := as.POSIXct(submitted, origin = "1970-01-01")]
   tab[, "started" := as.POSIXct(started, origin = "1970-01-01")]
   tab[, "done" := as.POSIXct(done, origin = "1970-01-01")]
-  tab[, "time.queued" := as.difftime(started - submitted, units = "secs")]
-  tab[, "time.running" := as.difftime(done - started, units = "secs")]
+  tab[, "time.queued" := difftime(started, submitted, units = "secs")]
+  tab[, "time.running" := difftime(done, started, units = "secs")]
   tab[]
 }
 
