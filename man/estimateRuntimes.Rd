@@ -5,7 +5,7 @@
 \alias{print.RuntimeEstimate}
 \title{Estimate Remaining Runtimes}
 \usage{
-estimateRuntimes(tab, reg = getDefaultRegistry())
+estimateRuntimes(tab, ..., reg = getDefaultRegistry())
 
 \method{print}{RuntimeEstimate}(x, n = 1L, ...)
 }
@@ -16,8 +16,14 @@ Observed runtimes will be looked up in the registry and serve as dependent varia
 All columns in \code{tab} except \dQuote{job.id} will be passed to \code{\link[ranger]{ranger}} as
 independent variables to fit the model.}
 
+\item{...}{[any]\cr
+Additional parameters passed to \code{\link[ranger]{ranger}}. Ignored for the \code{print} method.}
+
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
+
+\item{x}{[\code{RuntimeEstimate}]\cr
+Object to print.}
 
 \item{n}{[\code{integer(1)}]\cr
 Number of parallel jobs to assume for runtime estimation.}
@@ -57,7 +63,7 @@ setkeyv(ids, "job.id")
 submitJobs(ids, reg = tmp)
 waitForJobs(reg = tmp)
 
-# We "simulate" some more realistic runtimes here to demonstrate the functionality.
+# We "simulate" some more realistic runtimes here to demonstrate the functionality:
 # - Algorithm "ncol" is 5 times more expensive than "nrow"
 # - x has no effect on the runtime
 # - If y is "a" or "b", the runtimes are really high
@@ -65,11 +71,18 @@ runtime = function(algorithm, x, y) {
   ifelse(algorithm == "nrow", 100L, 500L) + 10000L * (y \%in\% letters[1:2])
 }
 tmp$status[ids, done := done + tab[ids, runtime(algorithm, x, y)]]
-print(ijoin(tab[ids], getJobStatus(ids, reg = tmp)[, c("job.id", "time.running")]))
+rjoin(sjoin(tab, ids), getJobStatus(ids, reg = tmp)[, c("job.id", "time.running")])
 
+# Estimate runtimes:
 est = estimateRuntimes(tab, reg = tmp)
 print(est)
-est$runtimes
+rjoin(tab, est$runtimes)
 print(est, n = 10)
+
+# Submit jobs with longest runtime first:
+\dontrun{
+ids = est$runtimes[type == "estimated"][order(runtime, decreasing = TRUE)]
+submitJobs(ids, reg = tmp)
+}
 }
 

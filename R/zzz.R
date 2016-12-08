@@ -24,7 +24,7 @@
 #' @importFrom brew brew
 #' @importFrom progress progress_bar
 #' @importFrom rappdirs user_config_dir
-#' @importFrom stats runif
+#' @importFrom stats runif predict
 "_PACKAGE"
 
 batchtools = new.env(parent = emptyenv())

@@ -14,6 +14,8 @@
 #'   Observed runtimes will be looked up in the registry and serve as dependent variable.
 #'   All columns in \code{tab} except \dQuote{job.id} will be passed to \code{\link[ranger]{ranger}} as
 #'   independent variables to fit the model.
+#' @param ... [any]\cr
+#'   Additional parameters passed to \code{\link[ranger]{ranger}}. Ignored for the \code{print} method.
 #' @template reg
 #' @return [\code{RuntimeEstimate}] which is a \code{list} with two named elements:
 #'  \dQuote{runtimes} is a \code{\link{data.table}} with columns \dQuote{job.id},
@@ -40,7 +42,7 @@
 #' submitJobs(ids, reg = tmp)
 #' waitForJobs(reg = tmp)
 #'
-#' # We "simulate" some more realistic runtimes here to demonstrate the functionality.
+#' # We "simulate" some more realistic runtimes here to demonstrate the functionality:
 #' # - Algorithm "ncol" is 5 times more expensive than "nrow"
 #' # - x has no effect on the runtime
 #' # - If y is "a" or "b", the runtimes are really high
@@ -48,13 +50,20 @@
 #'   ifelse(algorithm == "nrow", 100L, 500L) + 10000L * (y %in% letters[1:2])
 #' }
 #' tmp$status[ids, done := done + tab[ids, runtime(algorithm, x, y)]]
-#' print(ijoin(tab[ids], getJobStatus(ids, reg = tmp)[, c("job.id", "time.running")]))
+#' rjoin(sjoin(tab, ids), getJobStatus(ids, reg = tmp)[, c("job.id", "time.running")])
 #'
+#' # Estimate runtimes:
 #' est = estimateRuntimes(tab, reg = tmp)
 #' print(est)
-#' est$runtimes
+#' rjoin(tab, est$runtimes)
 #' print(est, n = 10)
-estimateRuntimes = function(tab, reg = getDefaultRegistry()) {
+#'
+#' # Submit jobs with longest runtime first:
+#' \dontrun{
+#' ids = est$runtimes[type == "estimated"][order(runtime, decreasing = TRUE)]
+#' submitJobs(ids, reg = tmp)
+#' }
+estimateRuntimes = function(tab, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   data = copy(convertIds(reg, tab, keep.extra = names(tab)))
 
@@ -67,7 +76,7 @@ estimateRuntimes = function(tab, reg = getDefaultRegistry()) {
   if (all(i))
     stop("No training data available. Some jobs must be finished before estimating runtimes.")
 
-  rf = ranger::ranger(runtime ~ ., data = data[!i, !"job.id"])
+  rf = ranger::ranger(runtime ~ ., data = data[!i, !"job.id"], ...)
   data[i, "runtime" := predict(rf, .SD)$predictions, .SDcols = setdiff(names(data), c("job.id", "runtime"))]
   data$type = factor(ifelse(i, "estimated", "observed"), levels = c("observed", "estimated"))
   setClasses(list(runtimes = data[, c("job.id", "type", "runtime")], model = rf), c("RuntimeEstimate", class(data)))
@@ -75,6 +84,8 @@ estimateRuntimes = function(tab, reg = getDefaultRegistry()) {
 
 
 #' @rdname estimateRuntimes
+#' @param x [\code{RuntimeEstimate}]\cr
+#'   Object to print.
 #' @param n [\code{integer(1)}]\cr
 #'   Number of parallel jobs to assume for runtime estimation.
 #' @export

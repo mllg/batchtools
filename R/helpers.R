@@ -163,8 +163,6 @@ with_seed = function(seed, expr) {
 
 # simple longest processing time scheduler
 lpt = function(x, ncpus = 1L) {
-  assertNumeric(x, any.missing = FALSE)
-  assertCount(ncpus)
   bin = integer(length(x))
   tta = double(ncpus)
 
