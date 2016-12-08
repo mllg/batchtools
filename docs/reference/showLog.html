@@ -113,7 +113,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</span></div><div class='input'>
 <span class='co'># Create some dummy jobs</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
   <span class='kw'>if</span> (<span class='no'>i</span> <span class='kw'>==</span> <span class='fl'>3</span>) <span class='fu'>stop</span>(<span class='no'>i</span>)
@@ -127,13 +127,13 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt;   Done      : 4 ( 80.0%)
 #&gt;   Error     : 1 ( 20.0%)
 #&gt;   Expired   : 0 (  0.0%)</div><div class='input'>
-<span class='fu'>writeLines</span>(<span class='fu'>getLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; ### [bt 2016-11-08 09:30:46]: Starting calculation of 1 jobs
-#&gt; ### [bt 2016-11-08 09:30:46]: Setting working directory to &#39;/Users/michel/Projekte/batchtools/docs/reference&#39;
-#&gt; ### [bt 2016-11-08 09:30:46]: Memory measurement disabled
-#&gt; ### [bt 2016-11-08 09:30:46]: Starting job [batchtools job.id=1]
+<span class='fu'>writeLines</span>(<span class='fu'>getLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; ### [bt 2016-12-08 14:48:01]: Starting calculation of 1 jobs
+#&gt; ### [bt 2016-12-08 14:48:01]: Setting working directory to &#39;/home/lang/Projekte/batchtools/docs/reference&#39;
+#&gt; ### [bt 2016-12-08 14:48:01]: Memory measurement disabled
+#&gt; ### [bt 2016-12-08 14:48:01]: Starting job [batchtools job.id=1]
 #&gt; 
-#&gt; ### [bt 2016-11-08 09:30:46]: Job terminated successfully [batchtools job.id=1]
-#&gt; ### [bt 2016-11-08 09:30:46]: Calculation finished!</div><div class='input'><span class='co'>## Not run: ------------------------------------</span>
+#&gt; ### [bt 2016-12-08 14:48:01]: Job terminated successfully [batchtools job.id=1]
+#&gt; ### [bt 2016-12-08 14:48:01]: Calculation finished!</div><div class='input'><span class='co'>## Not run: ------------------------------------</span>
 <span class='co'># showLog(ids[1], reg = tmp)</span>
 <span class='co'>## ---------------------------------------------</span>
 

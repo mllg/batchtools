@@ -88,8 +88,11 @@ They can be specified via the <code><a href='makeClusterFunctions.html'>ClusterF
   <dt><code>post.sync</code></dt><dd><code>function(reg, updates, ...)</code>: Run after synchronizing the registry on the master. <code>updates</code> is the data.table of processed updates.</dd>
   <dt><code>pre.submit</code></dt><dd><code>function(reg, ...)</code>: Run before a job is successfully submitted to the scheduler on the master.</dd>
   <dt><code>post.submit</code></dt><dd><code>function(reg, ...)</code>: Run after a job is successfully submitted to the scheduler on the master.</dd>
-  <dt><code>pre.do.collection</code></dt><dd><code>function(reg, cache, ...)</code>: Run before starting the job collection on the slave. <code>cache</code> is an internal cache object.</dd>
-  <dt><code>post.do.collection</code></dt><dd><code>function(reg, cache, ...)</code>: Run before terminating the job on the slave. <code>cache</code> is an internal cache object.</dd>
+  <dt><code>pre.do.collection</code></dt><dd><code>function(reg, cache, ...)</code>: Run before starting the job collection on the slave.
+    <code>cache</code> is an internal cache object.</dd>
+  <dt><code>post.do.collection</code></dt><dd><code>function(reg, updates, cache, ...)</code>: Run after all jobs in the chunk are terminated on the slave.
+    <code>updates</code> is a <code>data.table</code> of updates which will be merged with the <code><a href='Registry.html'>Registry</a></code> by the master.
+    <code>cache</code> is an internal cache object.</dd>
 </dl></p>
     
 
