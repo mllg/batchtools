@@ -160,3 +160,18 @@ with_seed = function(seed, expr) {
   }
   eval.parent(expr)
 }
+
+# simple longest processing time scheduler
+lpt = function(x, ncpus = 1L) {
+  assertNumeric(x, any.missing = FALSE)
+  assertCount(ncpus)
+  bin = integer(length(x))
+  tta = double(ncpus)
+
+  for (xi in order(x, decreasing = TRUE)) {
+    i = which.min(tta)
+    bin[xi] = i
+    tta[i] = tta[i] + x[xi]
+  }
+  bin
+}
