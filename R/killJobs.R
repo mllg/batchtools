@@ -49,7 +49,7 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   # reset killed jobs
   syncRegistry(reg = reg)
   cols = c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash")
-  reg$status[tab[tab$killed], (cols) := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_)]
+  reg$status[tab[tab$killed], (cols) := list(NA_real_, NA_real_, NA_real_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_)]
 
   saveRegistry(reg)
   tab[, c("job.id", "batch.id", "killed")]

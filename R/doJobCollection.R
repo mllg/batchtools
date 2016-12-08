@@ -153,7 +153,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
     next.update = NA_real_,
     count = 0L,
     initialize = function(ids) {
-      self$updates = data.table(job.id = ids, started = NA_integer_, done = NA_integer_, error = NA_character_, memory = NA_real_, written = FALSE, key = "job.id")
+      self$updates = data.table(job.id = ids, started = NA_real_, done = NA_real_, error = NA_character_, memory = NA_real_, written = FALSE, key = "job.id")
       self$next.update = as.numeric(Sys.time()) + runif(1L, 300, 1800)
     },
 
