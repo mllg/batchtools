@@ -135,47 +135,21 @@ chunk = function(x, n.chunks = NULL, chunk.size = NULL) {
 }
 
 #' @rdname chunk
+#' @useDynLib batchtools c_lpt
 #' @export
 lpt = function(x, n.chunks = 1L) {
   assertNumeric(x, min.len = 1L, lower = 0, any.missing = FALSE, finite = TRUE)
   assertCount(n.chunks, positive = TRUE)
-  bin = integer(length(x))
-  tta = double(n.chunks)
 
-  for (xi in order(x, decreasing = TRUE)) {
-    i = which.min(tta)
-    bin[xi] = i
-    tta[i] = tta[i] + x[xi]
-  }
-  bin
+  .Call(c_lpt, as.numeric(x), order(x, decreasing = TRUE), as.integer(n.chunks))
 }
 
 #' @rdname chunk
+#' @useDynLib batchtools c_binpack
 #' @export
 binpack = function(x, chunk.size = max(x)) {
   assertNumeric(x, min.len = 1L, lower = 0, any.missing = FALSE, finite = TRUE)
-  assertCount(chunk.size, positive = TRUE)
+  assertNumber(chunk.size, lower = 0)
 
-  too.big = wf(x > chunk.size, use.names = FALSE)
-  if (length(too.big))
-    stopf("Capacity not sufficient. Item %i (x=%f) does not fit in any chunk", too.big, x[too.big])
-
-  ord = order(x, decreasing = TRUE)
-  grp = integer(length(x))
-  sums = numeric(1L)
-  bin.count = 1L
-
-  for(j in ord) {
-    new.sums = sums + x[j]
-    pos = wf(new.sums <= chunk.size, use.names = FALSE)
-    if (length(pos)) {
-      grp[j] = pos
-      sums[pos] = new.sums[pos]
-    } else {
-      bin.count = bin.count + 1L
-      grp[j] = bin.count
-      sums[bin.count] = x[j]
-    }
-  }
-  grp
+  .Call(c_binpack, as.numeric(x), order(x, decreasing = TRUE), as.double(chunk.size))
 }
