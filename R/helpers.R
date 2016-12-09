@@ -10,7 +10,7 @@ auto_increment = function(ids, n = 1L) {
 }
 
 ustamp = function() {
-  round(as.numeric(Sys.time(), 3L))
+  round(as.numeric(Sys.time(), 4L))
 }
 
 npath = function(path, must.work = TRUE) {
