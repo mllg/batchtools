@@ -143,9 +143,9 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   reg$status = data.table(
     job.id      = integer(0L),
     def.id      = integer(0L),
-    submitted   = integer(0L),
-    started     = integer(0L),
-    done        = integer(0L),
+    submitted   = double(0L),
+    started     = double(0L),
+    done        = double(0L),
     error       = character(0L),
     memory      = double(0L),
     resource.id = integer(0L),
@@ -180,22 +180,6 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   if (make.default)
     batchtools$default.registry = reg
   return(reg)
-}
-
-setSystemConf = function(reg, conf.file) {
-  reg$cluster.functions = makeClusterFunctionsInteractive()
-  reg$default.resources = list()
-  reg$temp.dir = tempdir()
-
-  if (length(conf.file) > 0L) {
-    assertString(conf.file)
-    info("Sourcing configuration file '%s' ...", conf.file)
-    sys.source(conf.file, envir = reg, keep.source = FALSE)
-
-    assertClass(reg$cluster.functions, "ClusterFunctions")
-    assertList(reg$default.resources, names = "unique")
-    assertDirectoryExists(reg$temp.dir, access = "w")
-  }
 }
 
 #' @export
@@ -275,6 +259,8 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
     }
   }
   reg$file.dir = file.dir
+  if (reg$writeable)
+    updateRegistry(reg)
 
   if (!is.null(work.dir)) {
     assertString(work.dir)
@@ -284,6 +270,7 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
   wd.exists = dir.exists(reg$work.dir)
   if (!wd.exists)
     warningf("The work.dir '%s' does not exist, jobs might fail to run on this system.", reg$work.dir)
+
   loadRegistryDependencies(reg, switch.wd = wd.exists)
   reg$cluster.functions = makeClusterFunctionsInteractive()
   setSystemConf(reg, conf.file)
@@ -293,9 +280,10 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
   return(reg)
 }
 
+
 #' @rdname Registry
-#' @export
 #' @template reg
+#' @export
 saveRegistry = function(reg = getDefaultRegistry()) {
   if (reg$writeable) {
     "!DEBUG Saving Registry"
@@ -310,81 +298,6 @@ saveRegistry = function(reg = getDefaultRegistry()) {
     "!DEBUG Skipping saveRegistry (read-only)"
   }
   invisible(reg$writeable)
-}
-
-#' @rdname Registry
-#' @export
-sweepRegistry = function(reg = getDefaultRegistry()) {
-  assertRegistry(reg, sync = TRUE, writeable = TRUE)
-  store = FALSE
-  "!DEBUG Running sweepRegistry"
-
-  result.files = list.files(file.path(reg$file.dir, "results"), pattern = "\\.rds$")
-  i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% .findSubmitted(reg = reg)$job.id)
-  if (length(i) > 0L) {
-    info("Removing %i obsolete result files ...", length(i))
-    file.remove(file.path(reg$file.dir, "results", result.files[i]))
-  }
-
-  log.files = list.files(file.path(reg$file.dir, "logs"), pattern = "\\.log$")
-  i = which(stri_replace_last_fixed(log.files, ".log", "") %nin% reg$status$job.hash)
-  if (length(i) > 0L) {
-    info("Removing %i obsolete log files ...", length(i))
-    file.remove(file.path(reg$file.dir, "logs", log.files[i]))
-  }
-
-  job.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.rds$")
-  i = which(stri_replace_last_fixed(job.files, ".rds", "") %nin% reg$status$job.hash)
-  if (length(i) > 0L) {
-    info("Removing %i obsolete job files ...", length(i))
-    file.remove(file.path(reg$file.dir, "jobs", job.files[i]))
-  }
-
-  job.desc.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.job$")
-  if (length(job.desc.files) > 0L) {
-    info("Removing %i job description files ...", length(i))
-    file.remove(file.path(reg$file.dir, "jobs", job.desc.files))
-  }
-
-  external.dirs = list.files(file.path(reg$file.dir, "external"), pattern = "^[0-9]+$")
-  i = which(as.integer(external.dirs) %nin% .findSubmitted(reg = reg)$job.id)
-  if (length(i) > 0L) {
-    info("Removing %i external directories of unsubmitted jobs ...", length(i))
-    unlink(file.path(reg$file.dir, "external", external.dirs[i]), recursive = TRUE)
-  }
-
-  i = reg$resources[!reg$status, on = "resource.id", which = TRUE]
-  if (length(i) > 0L) {
-    info("Removing %i resource specifications ...", length(i))
-    reg$resources = reg$resources[-i]
-    store = TRUE
-  }
-
-  i = reg$tags[!reg$status, on = "job.id", which = TRUE]
-  if (length(i) > 0L) {
-    info("Removing %i tags ...", length(i))
-    reg$tags = reg$tags[-i]
-    store = TRUE
-  }
-
-  if (store) saveRegistry(reg) else FALSE
-}
-
-
-#' @rdname Registry
-#' @export
-clearRegistry = function(reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE, running.ok = FALSE, sync = TRUE)
-  info("Removing %i jobs ...", nrow(reg$status))
-  reg$status = reg$status[FALSE]
-  reg$defs = reg$defs[FALSE]
-  reg$resources = reg$resources[FALSE]
-  user.fun = file.path(reg$file.dir, "user.function.rds")
-  if (file.exists(user.fun)) {
-    info("Removing user function ...")
-    file.remove(user.fun)
-  }
-  sweepRegistry(reg = reg)
 }
 
 loadRegistryDependencies = function(x, switch.wd = TRUE) {
@@ -504,4 +417,20 @@ findConfFile = function() {
     return(npath(x))
 
   return(character(0L))
+}
+
+setSystemConf = function(reg, conf.file) {
+  reg$cluster.functions = makeClusterFunctionsInteractive()
+  reg$default.resources = list()
+  reg$temp.dir = tempdir()
+
+  if (length(conf.file) > 0L) {
+    assertString(conf.file)
+    info("Sourcing configuration file '%s' ...", conf.file)
+    sys.source(conf.file, envir = reg, keep.source = FALSE)
+
+    assertClass(reg$cluster.functions, "ClusterFunctions")
+    assertList(reg$default.resources, names = "unique")
+    assertDirectoryExists(reg$temp.dir, access = "w")
+  }
 }

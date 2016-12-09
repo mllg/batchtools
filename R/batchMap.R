@@ -96,9 +96,9 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
   reg$status = data.table(
     job.id      = ids,
     def.id      = ids,
-    submitted   = NA_integer_,
-    started     = NA_integer_,
-    done        = NA_integer_,
+    submitted   = NA_real_,
+    started     = NA_real_,
+    done        = NA_real_,
     error       = NA_character_,
     memory      = NA_real_,
     resource.id = NA_integer_,
