@@ -30,14 +30,10 @@ Defaults can be stored in the configuration file by providing the named list \co
 Settings in \code{resources} overwrite those in \code{default.resources}.}
 
 \item{n.chunks}{[\code{integer(1)}]\cr
-Requested number of chunks.
-If more chunks than elements in \code{ids} are requested, empty chunks are ignored.
-Mutually exclusive with \code{chunks.size}.}
+Passed to \code{\link{chunk}} before \code{\link{submitJobs}}.}
 
 \item{chunk.size}{[\code{integer(1)}]\cr
-Requested number of elements in each chunk.
-If \code{ids} cannot be chunked evenly, some chunks will have less elements than others.
-Mutually exclusive with with \code{n.chunks}.}
+Passed to \code{\link{chunk}} before \code{\link{submitJobs}}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}

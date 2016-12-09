@@ -120,9 +120,10 @@ test_that("sweepRegistry", {
 test_that("clearRegistry", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   reg$foo = TRUE
-  batchMap(identity, 1:3, reg = reg)
+  ids = batchMap(identity, 1:3, reg = reg)
   addJobTags(1:2, "bar", reg = reg)
-  submitAndWait(reg, chunkIds(reg = reg, n.chunks = 2))
+  ids[, chunk := chunk(job.id, n.chunks = 2)]
+  submitAndWait(reg, ids)
 
   clearRegistry(reg)
   checkTables(reg, nrow = 0L)

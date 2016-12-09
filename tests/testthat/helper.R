@@ -13,11 +13,15 @@ silent = function(expr) {
   with_options(list(batchtools.progress = FALSE, batchtools.verbose = FALSE), expr)
 }
 
+s.chunk = function(ids) {
+  ids$chunk = 1L
+  ids
+}
+
 submitAndWait = function(reg, ids = NULL, ...) {
-  if (is.null(ids))
-    ids = findNotSubmitted(reg = reg)
+  ids = if (is.null(ids)) findNotSubmitted(reg = reg) else convertIds(reg, ids, keep.extra = names(ids))
   if ("chunk" %nin% names(ids))
-    ids = chunkIds(ids, n.chunks = 1L, reg = reg)
+    ids = s.chunk(ids)
   silent({
     ids = submitJobs(ids = ids, ..., reg = reg)
     waitForJobs(ids, reg = reg)

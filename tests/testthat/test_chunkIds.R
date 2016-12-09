@@ -11,7 +11,7 @@ test_that("chunkIds", {
   ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
   ids = getJobPars(reg = reg)[, c("job.id", "problem")]
 
-  expect_error(chunkIds(1:3, chunk.size = 1, n.chunks = 1, reg = reg), "Either")
+  expect_error(chunkIds(1:3, chunk.size = 1, n.chunks = 1, reg = reg), "either")
 
   res = chunkIds(ids, n.chunks = 1, reg = reg)
   expect_data_table(res, ncol = 2L, any.missing = FALSE, key = "job.id")
@@ -35,7 +35,5 @@ test_that("chunkIds", {
 test_that("chunkIds with defaults", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(identity, 1:10, reg = reg)
-  ids = chunkIds(reg = reg)
-  expect_data_table(ids, key = "job.id", nrow = 10, any.missing = FALSE)
-  expect_set_equal(ids$chunk, 1:10)
+  expect_error(chunkIds(reg = reg))
 })

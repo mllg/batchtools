@@ -27,6 +27,14 @@
 #' @importFrom stats runif predict
 "_PACKAGE"
 
+#' @title Deprecated function in the batchtools package
+#' @rdname batchtools-deprecated
+#' @name batchtools-deprecated
+#' \tabular{rl}{
+#'   \code{chunkIds}: \tab deprecated in favor of \code{\link{chunk}}, \code{\link{lpt}} and \code{\link{binpack}}\cr
+#' }
+NULL
+
 batchtools = new.env(parent = emptyenv())
 batchtools$debug = FALSE
 batchtools$hooks = data.table(

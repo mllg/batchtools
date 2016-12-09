@@ -11,7 +11,7 @@ test_that("estimateRuntimes", {
 
   ids = tab[, .SD[sample(nrow(.SD), 4)], by = c("problem", "algorithm", "y")]
   setkeyv(ids, "job.id")
-  submitJobs(chunkIds(ids, n.chunks = 1, reg = reg), reg = reg)
+  submitJobs(s.chunk(ids), reg = reg)
   waitForJobs(reg = reg)
 
   # "simulate" runtimes

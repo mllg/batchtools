@@ -90,13 +90,17 @@ submitJobs(ids, reg = tmp)
 ids = est$runtimes[type == "estimated"]
 ids[, chunk := binpack(runtime, 3600)]
 print(ids)
-print(ids[, sum(runtime), by = chunk])
+print(ids[, list(runtime = sum(runtime)), by = chunk])
 \dontrun{
 submitJobs(ids, reg = tmp)
 }
 
-
-# Group jobs into a fixed number of chunks with similar runtime
-
+# Group jobs into 10 chunks with similar runtime
+ids = est$runtimes[type == "estimated"]
+ids[, chunk := lpt(runtime, 10)]
+print(ids[, list(runtime = sum(runtime)), by = chunk])
+}
+\seealso{
+lpt binpack
 }
 

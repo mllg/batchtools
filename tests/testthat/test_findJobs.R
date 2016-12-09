@@ -82,7 +82,7 @@ test_that("findOnSystem", {
     skip("Test requires listJobsRunning")
   silent({
     ids = batchMap(reg = reg, Sys.sleep, c(10, 10))
-    submitJobs(reg = reg, ids = chunkIds(ids, n.chunks = 1, reg = reg))
+    submitJobs(reg = reg, ids = s.chunk(ids))
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
     expect_equal(findExpired(reg = reg), none)
     waitForJobs(reg = reg)
