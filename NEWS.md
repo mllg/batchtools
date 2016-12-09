@@ -5,6 +5,7 @@
 * Fixed listing of jobs for `ClusterFunctionsLSF` and `ClusterFunctionsOpenLava` (thanks to @phaverty).
 * Fixed broken key lookup in some join functions.
 * Fixed a bug where `getJobTable()` returned `difftimes` with the wrong unit (e.g., in minutes instead of seconds).
+* Timestamps are now stored with sub-second accuracy.
 
 # batchtools 0.9.0
 
