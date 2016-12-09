@@ -3,10 +3,10 @@
 \name{batchtools-deprecated}
 \alias{batchtools-deprecated}
 \title{Deprecated function in the batchtools package}
-\section{Details}{
-
+\description{
+The following functions have been deprecated:
 \tabular{rl}{
-  \code{chunkIds}: \tab deprecated in favor of \code{\link{chunk}}, \code{\link{lpt}} and \code{\link{binpack}}\cr
+  \code{chunkIds} \tab deprecated in favor of \code{\link{chunk}}, \code{\link{lpt}} and \code{\link{binpack}}\cr
 }
 }
 

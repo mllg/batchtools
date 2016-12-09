@@ -30,8 +30,10 @@
 #' @title Deprecated function in the batchtools package
 #' @rdname batchtools-deprecated
 #' @name batchtools-deprecated
+#' @description
+#' The following functions have been deprecated:
 #' \tabular{rl}{
-#'   \code{chunkIds}: \tab deprecated in favor of \code{\link{chunk}}, \code{\link{lpt}} and \code{\link{binpack}}\cr
+#'   \code{chunkIds} \tab deprecated in favor of \code{\link{chunk}}, \code{\link{lpt}} and \code{\link{binpack}}\cr
 #' }
 NULL
 

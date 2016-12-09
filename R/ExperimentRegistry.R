@@ -33,8 +33,7 @@
 #' ids = findExperiments(prob.pars = (n == 50), reg = tmp)
 #' getJobPars(ids, reg = tmp)
 #'
-#' # Chunk jobs per algorithm and submit them:
-#' ids = chunkIds(getJobPars(reg = tmp), group.by = "algorithm", reg = tmp)
+#' # Submit jobs
 #' submitJobs(ids, reg = tmp)
 #' waitForJobs(reg = tmp)
 #'
