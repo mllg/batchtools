@@ -45,11 +45,11 @@ checkTables = function(reg, ...) {
   expect_equal(anyDuplicated(reg$defs, by = "def.id"), 0L)
 
   if (class(reg)[1L] == "Registry") {
-    cols = c("job.id", "def.id", "submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash")
-    types = c("integer", "integer", "integer", "integer", "integer", "character", "numeric", "integer", "character", "character")
+    cols  = c("job.id",  "def.id",  "submitted", "started", "done",   "error",     "memory",  "resource.id", "batch.id",  "job.hash")
+    types = c("integer", "integer", "numeric",    "numeric",  "numeric", "character", "numeric", "integer",     "character", "character")
   } else {
-    cols = c("job.id", "def.id", "submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash", "repl")
-    types = c("integer", "integer", "integer", "integer", "integer", "character", "numeric", "integer", "character", "character", "integer")
+    cols  = c("job.id",  "def.id",  "submitted", "started", "done",   "error",     "memory",  "resource.id", "batch.id",  "job.hash",  "repl")
+    types = c("integer", "integer", "numeric",    "numeric",  "numeric", "character", "numeric", "integer",     "character", "character", "integer")
   }
   expect_is(reg$status, "data.table")
   expect_data_table(reg$status, ncols = length(cols), ...)

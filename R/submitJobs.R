@@ -166,7 +166,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   on.exit(saveRegistry(reg))
 
   info("Submitting %i jobs in %i chunks using cluster functions '%s' ...", nrow(ids), length(chunks), reg$cluster.functions$name)
-  update = data.table(submitted = NA_integer_, started = NA_integer_, done = NA_integer_, error = NA_character_,
+  update = data.table(submitted = NA_real_, started = NA_real_, done = NA_real_, error = NA_character_,
     memory = NA_real_, resource.id = res.id, batch.id = NA_character_, job.hash = NA_character_)
 
   default.wait = 5
