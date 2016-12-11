@@ -24,3 +24,9 @@ devtools::install_github("mllg/batchtools")
 * [Setup](https://mllg.github.io/batchtools/articles/Setup)
 * [Documentation and Vignettes](https://mllg.github.io/batchtools/)
 * [Paper on BatchJobs/BatchExperiments](http://www.jstatsoft.org/v64/i11)
+
+
+## Related Software
+* The [High Performance Computing Task View](https://cran.r-project.org/web/views/HighPerformanceComputing.html) lists the most relevant packages for scientific computing with R
+* [batch](https://cran.r-project.org/package=batch) assists in splitting and submitting jobs to LSF and MOSIX clusters
+* [flowr](https://cran.r-project.org/package=flowr) supports LSF, Slurm, Torque and Moab and provides a scatter-gather approach to define computational jobs
