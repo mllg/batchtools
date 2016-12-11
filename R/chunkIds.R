@@ -138,7 +138,7 @@ chunk = function(x, n.chunks = NULL, chunk.size = NULL) {
 #' @useDynLib batchtools c_lpt
 #' @export
 lpt = function(x, n.chunks = 1L) {
-  assertNumeric(x, min.len = 1L, lower = 0, any.missing = FALSE, finite = TRUE)
+  assertNumeric(x, lower = 0, any.missing = FALSE, finite = TRUE)
   assertCount(n.chunks, positive = TRUE)
 
   .Call(c_lpt, as.numeric(x), order(x, decreasing = TRUE), as.integer(n.chunks))
@@ -148,8 +148,10 @@ lpt = function(x, n.chunks = 1L) {
 #' @useDynLib batchtools c_binpack
 #' @export
 binpack = function(x, chunk.size = max(x)) {
-  assertNumeric(x, min.len = 1L, lower = 0, any.missing = FALSE, finite = TRUE)
+  assertNumeric(x, lower = 0, any.missing = FALSE, finite = TRUE)
   assertNumber(chunk.size, lower = 0)
+  if (length(x) == 0L)
+    return(integer(0L))
 
   .Call(c_binpack, as.numeric(x), order(x, decreasing = TRUE), as.double(chunk.size))
 }
