@@ -34,7 +34,7 @@
 #' getJobPars(ids, reg = tmp)
 #'
 #' # Submit jobs
-#' submitJobs(ids, reg = tmp)
+#' submitJobs(reg = tmp)
 #' waitForJobs(reg = tmp)
 #'
 #' # Reduce the results of algorithm a1
