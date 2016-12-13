@@ -19,8 +19,17 @@ For the development version, use [devtools](https://cran.r-project.org/package=d
 devtools::install_github("mllg/batchtools")
 ```
 
+## Why batchtools?
+The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) is discontinued because of the following reasons:
+
+* Maintainability: The packages [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) are tightly connected which makes maintaining difficult. Changes have to be synchronized and tested against the current CRAN versions for compatibility. Furthermore, BatchExperiments violates CRAN policies by calling internal functions of BatchJobs.
+* Data base issues: Although we invested weeks to mitigate issues with locks of the SQLite data base or file system (staged queries, file system timeouts, ...), `BatchJobs` kept working unreliable on some systems with high latency or specific file systems. This made `BatchJobs` unusable for many users.
+
+[BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) will remain on CRAN, but new features are unlikely to be ported back.
+Changes are covered in the [NEWS](https://github.com/mllg/batchtools/blob/master/NEWS.md).
+
 ## Resources
-* [NEWS](https://github.com/mllg/batchtools/blob/master/NEWS.md) including a comparison with [BatchJobs](https://github.com/tudo-r/BatchJobs) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments)
+* [NEWS](https://github.com/mllg/batchtools/blob/master/NEWS.md)
 * [Setup](https://mllg.github.io/batchtools/articles/Setup)
 * [Documentation and Vignettes](https://mllg.github.io/batchtools/)
 * [Paper on BatchJobs/BatchExperiments](http://www.jstatsoft.org/v64/i11)
