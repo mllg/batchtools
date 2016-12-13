@@ -1,0 +1,65 @@
+title: batchtools
+
+templates:
+  params:
+    bootswatch: readable
+
+reference:
+  - title: Overview
+    contents:
+      - batchtools
+  - title: Registry handling
+    contents:
+      - Registry
+      - ExperimentRegistry
+      - removeExperiments
+  - title: Jobs, Experiments, and additional objects
+    contents:
+      - batchMap
+      - batchMapResults
+      - ProblemAlgorithm
+      - Experiment
+      - btlapply
+      - addExperiments
+      - JobCollection
+      - findJobs
+      - resetJobs
+      - batchExport
+      - getJobPars
+      - summarizeExperiments
+      - Tags
+      - testJob
+  - title: Cluster interaction
+    contents:
+      - chunkIds
+      - execJob
+      - submitJobs
+      - waitForJobs
+      - killJobs
+      - cfKillJob
+      - cfBrewTemplate
+      - cfReadBrewTemplate
+      - cfHandleUnknownSubmitError
+      - doJobCollection
+  - title: Cluster helper functions
+    contents:
+      - ClusterFunctions
+      - starts_with("makeCluster")
+      - SubmitJobResult
+      - Hook
+      - Worker
+  - title: Log evaluation
+    contents:
+      - getStatus
+      - getLog
+      - getErrorMessages
+      - grepLogs
+  - title: Reduce and load Results
+    contents:
+      - reduceResults
+      - reduceResultsDataTable
+      - loadResult
+  - title: Miscellaneous
+    contents:
+      - JoinTables
+      - runOSCommand
