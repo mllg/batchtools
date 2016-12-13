@@ -11,8 +11,8 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/readable/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -82,7 +82,33 @@
     </div>
 
     <div class="contents">
-      <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+      <h2 id="section-overview" class="hasAnchor"><a href="#section-overview" class="anchor"></a>Overview</h2>
+      <p class="section-desc"></p>
+
+      
+      <p><a href="batchtools-package.html">Tools for Computation on Batch Systems</a></p>
+      <ul>
+        <li><code><a href="batchtools-package.html">batchtools</a></code></li><li><code><a href="batchtools-package.html">batchtools-package</a></code></li>
+      </ul>
+          <h2 id="section-registry-handling" class="hasAnchor"><a href="#section-registry-handling" class="anchor"></a>Registry handling</h2>
+      <p class="section-desc"></p>
+
+      
+      <p><a href="ExperimentRegistry.html">ExperimentRegistry Constructor</a></p>
+      <ul>
+        <li><code><a href="ExperimentRegistry.html">ExperimentRegistry</a></code></li><li><code><a href="ExperimentRegistry.html">makeExperimentRegistry</a></code></li>
+      </ul>
+      
+      <p><a href="Registry.html">Registry Constructor</a></p>
+      <ul>
+        <li><code><a href="Registry.html">Registry</a></code></li><li><code><a href="Registry.html">clearRegistry</a></code></li><li><code><a href="Registry.html">getDefaultRegistry</a></code></li><li><code><a href="Registry.html">loadRegistry</a></code></li><li><code><a href="Registry.html">makeRegistry</a></code></li><li><code><a href="Registry.html">saveRegistry</a></code></li><li><code><a href="Registry.html">setDefaultRegistry</a></code></li><li><code><a href="Registry.html">sweepRegistry</a></code></li><li><code><a href="Registry.html">syncRegistry</a></code></li>
+      </ul>
+      
+      <p><a href="removeExperiments.html">Remove Experiments</a></p>
+      <ul>
+        <li><code><a href="removeExperiments.html">removeExperiments</a></code></li>
+      </ul>
+          <h2 id="section-jobs-experiments-and-additional-objects" class="hasAnchor"><a href="#section-jobs-experiments-and-additional-objects" class="anchor"></a>Jobs, Experiments, and additional objects</h2>
       <p class="section-desc"></p>
 
       
@@ -106,15 +132,58 @@
         <li><code><a href="batchMapResults.html">batchMapResults</a></code></li>
       </ul>
       
-      <p><a href="batchtools-package.html">Tools for Computation on Batch Systems</a></p>
-      <ul>
-        <li><code><a href="batchtools-package.html">batchtools</a></code></li><li><code><a href="batchtools-package.html">batchtools-package</a></code></li>
-      </ul>
-      
       <p><a href="btlapply.html">Synchronous Apply Functions</a></p>
       <ul>
         <li><code><a href="btlapply.html">btlapply</a></code></li><li><code><a href="btlapply.html">btmapply</a></code></li>
       </ul>
+      
+      <p><a href="findJobs.html">Find and Filter Jobs</a></p>
+      <ul>
+        <li><code><a href="findJobs.html">findDone</a></code></li><li><code><a href="findJobs.html">findErrors</a></code></li><li><code><a href="findJobs.html">findExperiments</a></code></li><li><code><a href="findJobs.html">findExpired</a></code></li><li><code><a href="findJobs.html">findJobs</a></code></li><li><code><a href="findJobs.html">findNotDone</a></code></li><li><code><a href="findJobs.html">findNotStarted</a></code></li><li><code><a href="findJobs.html">findNotSubmitted</a></code></li><li><code><a href="findJobs.html">findOnSystem</a></code></li><li><code><a href="findJobs.html">findQueued</a></code></li><li><code><a href="findJobs.html">findRunning</a></code></li><li><code><a href="findJobs.html">findStarted</a></code></li><li><code><a href="findJobs.html">findSubmitted</a></code></li><li><code><a href="findJobs.html">findTagged</a></code></li>
+      </ul>
+      
+      <p><a href="getJobTable.html">Query Job Information</a></p>
+      <ul>
+        <li><code><a href="getJobTable.html">getJobPars</a></code></li><li><code><a href="getJobTable.html">getJobResources</a></code></li><li><code><a href="getJobTable.html">getJobStatus</a></code></li><li><code><a href="getJobTable.html">getJobTable</a></code></li><li><code><a href="getJobTable.html">getJobTags</a></code></li>
+      </ul>
+      
+      <p><a href="JobCollection.html">JobCollection Constructor</a></p>
+      <ul>
+        <li><code><a href="JobCollection.html">JobCollection</a></code></li><li><code><a href="JobCollection.html">makeJobCollection</a></code></li>
+      </ul>
+      
+      <p><a href="JobExperiment.html">Jobs and Experiments</a></p>
+      <ul>
+        <li><code><a href="JobExperiment.html">Experiment</a></code></li><li><code><a href="JobExperiment.html">Job</a></code></li><li><code><a href="JobExperiment.html">makeJob</a></code></li>
+      </ul>
+      
+      <p><a href="ProblemAlgorithm.html">Define Problems and Algorithms for Experiments</a></p>
+      <ul>
+        <li><code><a href="ProblemAlgorithm.html">Algorithm</a></code></li><li><code><a href="ProblemAlgorithm.html">Problem</a></code></li><li><code><a href="ProblemAlgorithm.html">ProblemAlgorithm</a></code></li><li><code><a href="ProblemAlgorithm.html">addAlgorithm</a></code></li><li><code><a href="ProblemAlgorithm.html">addProblem</a></code></li><li><code><a href="ProblemAlgorithm.html">getAlgorithmIds</a></code></li><li><code><a href="ProblemAlgorithm.html">getProblemIds</a></code></li><li><code><a href="ProblemAlgorithm.html">removeAlgorithms</a></code></li><li><code><a href="ProblemAlgorithm.html">removeProblems</a></code></li>
+      </ul>
+      
+      <p><a href="resetJobs.html">Reset the Computational State of Jobs</a></p>
+      <ul>
+        <li><code><a href="resetJobs.html">resetJobs</a></code></li>
+      </ul>
+      
+      <p><a href="summarizeExperiments.html">Quick Summary over Experiments</a></p>
+      <ul>
+        <li><code><a href="summarizeExperiments.html">summarizeExperiments</a></code></li>
+      </ul>
+      
+      <p><a href="Tags.html">Add or Remove Job Tags</a></p>
+      <ul>
+        <li><code><a href="Tags.html">Tags</a></code></li><li><code><a href="Tags.html">addJobTags</a></code></li><li><code><a href="Tags.html">getUsedJobTags</a></code></li><li><code><a href="Tags.html">removeJobTags</a></code></li>
+      </ul>
+      
+      <p><a href="testJob.html">Run Jobs Interactively</a></p>
+      <ul>
+        <li><code><a href="testJob.html">testJob</a></code></li>
+      </ul>
+          <h2 id="section-cluster-interaction" class="hasAnchor"><a href="#section-cluster-interaction" class="anchor"></a>Cluster interaction</h2>
+      <p class="section-desc"></p>
+
       
       <p><a href="cfBrewTemplate.html">Cluster Functions Helper to Write Job Description Files</a></p>
       <ul>
@@ -151,59 +220,27 @@
         <li><code><a href="execJob.html">execJob</a></code></li>
       </ul>
       
-      <p><a href="ExperimentRegistry.html">ExperimentRegistry Constructor</a></p>
-      <ul>
-        <li><code><a href="ExperimentRegistry.html">ExperimentRegistry</a></code></li><li><code><a href="ExperimentRegistry.html">makeExperimentRegistry</a></code></li>
-      </ul>
-      
-      <p><a href="findJobs.html">Find and Filter Jobs</a></p>
-      <ul>
-        <li><code><a href="findJobs.html">findDone</a></code></li><li><code><a href="findJobs.html">findErrors</a></code></li><li><code><a href="findJobs.html">findExperiments</a></code></li><li><code><a href="findJobs.html">findExpired</a></code></li><li><code><a href="findJobs.html">findJobs</a></code></li><li><code><a href="findJobs.html">findNotDone</a></code></li><li><code><a href="findJobs.html">findNotStarted</a></code></li><li><code><a href="findJobs.html">findNotSubmitted</a></code></li><li><code><a href="findJobs.html">findOnSystem</a></code></li><li><code><a href="findJobs.html">findQueued</a></code></li><li><code><a href="findJobs.html">findRunning</a></code></li><li><code><a href="findJobs.html">findStarted</a></code></li><li><code><a href="findJobs.html">findSubmitted</a></code></li><li><code><a href="findJobs.html">findTagged</a></code></li>
-      </ul>
-      
-      <p><a href="getErrorMessages.html">Retrieve Error Messages</a></p>
-      <ul>
-        <li><code><a href="getErrorMessages.html">getErrorMessages</a></code></li>
-      </ul>
-      
-      <p><a href="getJobTable.html">Query Job Information</a></p>
-      <ul>
-        <li><code><a href="getJobTable.html">getJobPars</a></code></li><li><code><a href="getJobTable.html">getJobResources</a></code></li><li><code><a href="getJobTable.html">getJobStatus</a></code></li><li><code><a href="getJobTable.html">getJobTable</a></code></li><li><code><a href="getJobTable.html">getJobTags</a></code></li>
-      </ul>
-      
-      <p><a href="getStatus.html">Summarize the Computational Status</a></p>
-      <ul>
-        <li><code><a href="getStatus.html">getStatus</a></code></li>
-      </ul>
-      
-      <p><a href="grepLogs.html">Grep Log Files for a Pattern</a></p>
-      <ul>
-        <li><code><a href="grepLogs.html">grepLogs</a></code></li>
-      </ul>
-      
-      <p><a href="JobCollection.html">JobCollection Constructor</a></p>
-      <ul>
-        <li><code><a href="JobCollection.html">JobCollection</a></code></li><li><code><a href="JobCollection.html">makeJobCollection</a></code></li>
-      </ul>
-      
-      <p><a href="JobExperiment.html">Jobs and Experiments</a></p>
-      <ul>
-        <li><code><a href="JobExperiment.html">Experiment</a></code></li><li><code><a href="JobExperiment.html">Job</a></code></li><li><code><a href="JobExperiment.html">makeJob</a></code></li>
-      </ul>
-      
-      <p><a href="JoinTables.html">Inner, Left, Right, Outer, Semi and Anti Join for Data Tables</a></p>
-      <ul>
-        <li><code><a href="JoinTables.html">JoinTables</a></code></li><li><code><a href="JoinTables.html">ajoin</a></code></li><li><code><a href="JoinTables.html">ijoin</a></code></li><li><code><a href="JoinTables.html">ljoin</a></code></li><li><code><a href="JoinTables.html">ojoin</a></code></li><li><code><a href="JoinTables.html">rjoin</a></code></li><li><code><a href="JoinTables.html">sjoin</a></code></li><li><code><a href="JoinTables.html">ujoin</a></code></li>
-      </ul>
-      
       <p><a href="killJobs.html">Kill Jobs</a></p>
       <ul>
         <li><code><a href="killJobs.html">killJobs</a></code></li>
       </ul>
       
-      <p><a href="loadResult.html">Load the Result of a Single Job</a></p>
+      <p><a href="submitJobs.html">Submit Jobs to the Batch Systems</a></p>
       <ul>
-        <li><code><a href="loadResult.html">loadResult</a></code></li>
+        <li><code><a href="submitJobs.html">submitJobs</a></code></li>
+      </ul>
+      
+      <p><a href="waitForJobs.html">Wait for Termination of Jobs</a></p>
+      <ul>
+        <li><code><a href="waitForJobs.html">waitForJobs</a></code></li>
+      </ul>
+          <h2 id="section-cluster-helper-functions" class="hasAnchor"><a href="#section-cluster-helper-functions" class="anchor"></a>Cluster helper functions</h2>
+      <p class="section-desc"></p>
+
+      
+      <p><a href="makeClusterFunctions.html">ClusterFunctions Constructor</a></p>
+      <ul>
+        <li><code><a href="makeClusterFunctions.html">ClusterFunctions</a></code></li><li><code><a href="makeClusterFunctions.html">makeClusterFunctions</a></code></li>
       </ul>
       
       <p><a href="makeClusterFunctionsDocker.html">ClusterFunctions for Docker</a></p>
@@ -229,11 +266,6 @@
       <p><a href="makeClusterFunctionsOpenLava.html">ClusterFunctions for OpenLava</a></p>
       <ul>
         <li><code><a href="makeClusterFunctionsOpenLava.html">makeClusterFunctionsOpenLava</a></code></li>
-      </ul>
-      
-      <p><a href="makeClusterFunctions.html">ClusterFunctions Constructor</a></p>
-      <ul>
-        <li><code><a href="makeClusterFunctions.html">ClusterFunctions</a></code></li><li><code><a href="makeClusterFunctions.html">makeClusterFunctions</a></code></li>
       </ul>
       
       <p><a href="makeClusterFunctionsSGE.html">ClusterFunctions for SGE Systems</a></p>
@@ -266,14 +298,45 @@
         <li><code><a href="makeSubmitJobResult.html">SubmitJobResult</a></code></li><li><code><a href="makeSubmitJobResult.html">makeSubmitJobResult</a></code></li>
       </ul>
       
-      <p><a href="ProblemAlgorithm.html">Define Problems and Algorithms for Experiments</a></p>
+      <p><a href="runHook.html">Trigger Evaluation of Custom Function</a></p>
       <ul>
-        <li><code><a href="ProblemAlgorithm.html">Algorithm</a></code></li><li><code><a href="ProblemAlgorithm.html">Problem</a></code></li><li><code><a href="ProblemAlgorithm.html">ProblemAlgorithm</a></code></li><li><code><a href="ProblemAlgorithm.html">addAlgorithm</a></code></li><li><code><a href="ProblemAlgorithm.html">addProblem</a></code></li><li><code><a href="ProblemAlgorithm.html">getAlgorithmIds</a></code></li><li><code><a href="ProblemAlgorithm.html">getProblemIds</a></code></li><li><code><a href="ProblemAlgorithm.html">removeAlgorithms</a></code></li><li><code><a href="ProblemAlgorithm.html">removeProblems</a></code></li>
+        <li><code><a href="runHook.html">Hook</a></code></li><li><code><a href="runHook.html">Hooks</a></code></li><li><code><a href="runHook.html">runHook</a></code></li>
       </ul>
       
-      <p><a href="reduceResultsList.html">Apply Functions on Results</a></p>
+      <p><a href="Worker.html">Create a Linux-Worker</a></p>
       <ul>
-        <li><code><a href="reduceResultsList.html">reduceResultsDataTable</a></code></li><li><code><a href="reduceResultsList.html">reduceResultsList</a></code></li>
+        <li><code><a href="Worker.html">Worker</a></code></li>
+      </ul>
+          <h2 id="section-log-evaluation" class="hasAnchor"><a href="#section-log-evaluation" class="anchor"></a>Log evaluation</h2>
+      <p class="section-desc"></p>
+
+      
+      <p><a href="getErrorMessages.html">Retrieve Error Messages</a></p>
+      <ul>
+        <li><code><a href="getErrorMessages.html">getErrorMessages</a></code></li>
+      </ul>
+      
+      <p><a href="getStatus.html">Summarize the Computational Status</a></p>
+      <ul>
+        <li><code><a href="getStatus.html">getStatus</a></code></li>
+      </ul>
+      
+      <p><a href="grepLogs.html">Grep Log Files for a Pattern</a></p>
+      <ul>
+        <li><code><a href="grepLogs.html">grepLogs</a></code></li>
+      </ul>
+      
+      <p><a href="showLog.html">Inspect Log Files</a></p>
+      <ul>
+        <li><code><a href="showLog.html">getLog</a></code></li><li><code><a href="showLog.html">showLog</a></code></li>
+      </ul>
+          <h2 id="section-reduce-and-load-results" class="hasAnchor"><a href="#section-reduce-and-load-results" class="anchor"></a>Reduce and load Results</h2>
+      <p class="section-desc"></p>
+
+      
+      <p><a href="loadResult.html">Load the Result of a Single Job</a></p>
+      <ul>
+        <li><code><a href="loadResult.html">loadResult</a></code></li>
       </ul>
       
       <p><a href="reduceResults.html">Reduce Results</a></p>
@@ -281,64 +344,22 @@
         <li><code><a href="reduceResults.html">reduceResults</a></code></li>
       </ul>
       
-      <p><a href="Registry.html">Registry Constructor</a></p>
+      <p><a href="reduceResultsList.html">Apply Functions on Results</a></p>
       <ul>
-        <li><code><a href="Registry.html">Registry</a></code></li><li><code><a href="Registry.html">clearRegistry</a></code></li><li><code><a href="Registry.html">getDefaultRegistry</a></code></li><li><code><a href="Registry.html">loadRegistry</a></code></li><li><code><a href="Registry.html">makeRegistry</a></code></li><li><code><a href="Registry.html">saveRegistry</a></code></li><li><code><a href="Registry.html">setDefaultRegistry</a></code></li><li><code><a href="Registry.html">sweepRegistry</a></code></li><li><code><a href="Registry.html">syncRegistry</a></code></li>
+        <li><code><a href="reduceResultsList.html">reduceResultsDataTable</a></code></li><li><code><a href="reduceResultsList.html">reduceResultsList</a></code></li>
       </ul>
+          <h2 id="section-miscellaneous" class="hasAnchor"><a href="#section-miscellaneous" class="anchor"></a>Miscellaneous</h2>
+      <p class="section-desc"></p>
+
       
-      <p><a href="removeExperiments.html">Remove Experiments</a></p>
+      <p><a href="JoinTables.html">Inner, Left, Right, Outer, Semi and Anti Join for Data Tables</a></p>
       <ul>
-        <li><code><a href="removeExperiments.html">removeExperiments</a></code></li>
-      </ul>
-      
-      <p><a href="resetJobs.html">Reset the Computational State of Jobs</a></p>
-      <ul>
-        <li><code><a href="resetJobs.html">resetJobs</a></code></li>
-      </ul>
-      
-      <p><a href="runHook.html">Trigger Evaluation of Custom Function</a></p>
-      <ul>
-        <li><code><a href="runHook.html">Hook</a></code></li><li><code><a href="runHook.html">Hooks</a></code></li><li><code><a href="runHook.html">runHook</a></code></li>
+        <li><code><a href="JoinTables.html">JoinTables</a></code></li><li><code><a href="JoinTables.html">ajoin</a></code></li><li><code><a href="JoinTables.html">ijoin</a></code></li><li><code><a href="JoinTables.html">ljoin</a></code></li><li><code><a href="JoinTables.html">ojoin</a></code></li><li><code><a href="JoinTables.html">rjoin</a></code></li><li><code><a href="JoinTables.html">sjoin</a></code></li><li><code><a href="JoinTables.html">ujoin</a></code></li>
       </ul>
       
       <p><a href="runOSCommand.html">Run OS Commands on Local or Remote Machines</a></p>
       <ul>
         <li><code><a href="runOSCommand.html">runOSCommand</a></code></li>
-      </ul>
-      
-      <p><a href="showLog.html">Inspect Log Files</a></p>
-      <ul>
-        <li><code><a href="showLog.html">getLog</a></code></li><li><code><a href="showLog.html">showLog</a></code></li>
-      </ul>
-      
-      <p><a href="submitJobs.html">Submit Jobs to the Batch Systems</a></p>
-      <ul>
-        <li><code><a href="submitJobs.html">submitJobs</a></code></li>
-      </ul>
-      
-      <p><a href="summarizeExperiments.html">Quick Summary over Experiments</a></p>
-      <ul>
-        <li><code><a href="summarizeExperiments.html">summarizeExperiments</a></code></li>
-      </ul>
-      
-      <p><a href="Tags.html">Add or Remove Job Tags</a></p>
-      <ul>
-        <li><code><a href="Tags.html">Tags</a></code></li><li><code><a href="Tags.html">addJobTags</a></code></li><li><code><a href="Tags.html">getUsedJobTags</a></code></li><li><code><a href="Tags.html">removeJobTags</a></code></li>
-      </ul>
-      
-      <p><a href="testJob.html">Run Jobs Interactively</a></p>
-      <ul>
-        <li><code><a href="testJob.html">testJob</a></code></li>
-      </ul>
-      
-      <p><a href="waitForJobs.html">Wait for Termination of Jobs</a></p>
-      <ul>
-        <li><code><a href="waitForJobs.html">waitForJobs</a></code></li>
-      </ul>
-      
-      <p><a href="Worker.html">Create a Linux-Worker</a></p>
-      <ul>
-        <li><code><a href="Worker.html">Worker</a></code></li>
       </ul>
     
     </div>
@@ -347,7 +368,14 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-overview">Overview</a></li>
+      <li><a href="#section-registry-handling">Registry handling</a></li>
+      <li><a href="#section-jobs-experiments-and-additional-objects">Jobs, Experiments, and additional objects</a></li>
+      <li><a href="#section-cluster-interaction">Cluster interaction</a></li>
+      <li><a href="#section-cluster-helper-functions">Cluster helper functions</a></li>
+      <li><a href="#section-log-evaluation">Log evaluation</a></li>
+      <li><a href="#section-reduce-and-load-results">Reduce and load Results</a></li>
+      <li><a href="#section-miscellaneous">Miscellaneous</a></li>
     </ul>
   </div>
 </div>

@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>JobCollection Constructor — makeJobCollection • batchtools</title>
+<title>JobCollection Constructor � makeJobCollection • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/readable/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -134,25 +134,26 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'><span class='co'># resources are usually forwared from submitJobs()</span>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)
+<span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'><span class='co'># resources are usually forwared from submitJobs()</span>
 <span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'>makeJobCollection</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>foo</span> <span class='kw'>=</span> <span class='st'>"bar"</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='fu'>ls.str</span>(<span class='no'>jc</span>))</div><div class='output co'>#&gt; array.var :  chr NA
-#&gt; file.dir :  chr &quot;/scratch/registry577050f646ea&quot;
-#&gt; job.hash :  chr &quot;b877c5be6afc6a18a407561ea623f101&quot;
-#&gt; jobs : Classes ‘data.table’ and &#39;data.frame&#39;:	3 obs. of  2 variables:
+#&gt; file.dir :  chr &quot;C:/Users/surmann/AppData/Local/Temp/RtmpYb9wpb/registry12845acd5e5d&quot;
+#&gt; job.hash :  chr &quot;dae768638a18c24029554cfa629bfa2e&quot;
+#&gt; jobs : Classes &#39;data.table&#39; and &#39;data.frame&#39;:	3 obs. of  2 variables:
 #&gt;  $ job.id: int  1 2 3
 #&gt;  $ pars  :List of 3
 #&gt; load :  chr(0) 
-#&gt; log.file :  chr &quot;/scratch/registry577050f646ea/logs/b877c5be6afc6a18a407561ea623f101.log&quot;
-#&gt; namespaces :  chr(0) 
+#&gt; log.file :  chr &quot;C:/Users/surmann/AppData/Local/Temp/RtmpYb9wpb/registry12845acd5e5d/logs/dae768638a18c24029554cfa629bfa2e.log&quot;
 #&gt; n.array.jobs :  int 1
+#&gt; namespaces :  chr(0) 
 #&gt; packages :  chr &quot;methods&quot;
 #&gt; resources : List of 1
 #&gt;  $ foo: chr &quot;bar&quot;
-#&gt; seed :  int 242782402
+#&gt; seed :  int 4314782
 #&gt; source :  chr(0) 
-#&gt; uri :  chr &quot;/scratch/registry577050f646ea/jobs/b877c5be6afc6a18a407561ea623f101.rds&quot;
-#&gt; work.dir :  chr &quot;/home/lang/Projekte/batchtools/docs/reference&quot;</div></pre>
+#&gt; uri :  chr &quot;C:/Users/surmann/AppData/Local/Temp/RtmpYb9wpb/registry12845acd5e5d/jobs/dae768638a18c24029554cfa629bfa2e.rds&quot;
+#&gt; work.dir :  chr &quot;C:/Users/surmann/Documents/Repositories/batchtools/docs/reference&quot;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
