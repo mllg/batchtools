@@ -1,4 +1,12 @@
-#' @rdname Registry
+#' @title Check Consistency and Remove Obsolete Information
+#'
+#' @description
+#' Canceled jobs and jobs submitted multiple times may leave stray files behind.
+#' This function checks the registry for consistency and removes obsolete files
+#' and data base informations.
+#'
+#' @template reg
+#' @family Registry
 #' @export
 sweepRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE, writeable = TRUE)
@@ -55,5 +63,3 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
 
   if (store) saveRegistry(reg) else FALSE
 }
-
-

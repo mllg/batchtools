@@ -4,58 +4,72 @@ reference:
   - title: Overview
     contents:
       - batchtools
-  - title: Registry handling
+  - title: Registry
     contents:
       - Registry
       - ExperimentRegistry
-      - removeExperiments
-  - title: Jobs, Experiments, and additional objects
+      - loadRegistry
+      - saveRegistry
+      - syncRegistry
+      - sweepRegistry
+      - getDefaultRegistry
+  - title: Define Jobs
     contents:
       - batchMap
       - batchMapResults
-      - ProblemAlgorithm
-      - Experiment
-      - btlapply
+      - Problem
+      - Algorithm
       - addExperiments
-      - JobCollection
-      - findJobs
-      - resetJobs
+  - title: Submit Jobs
+    contents:
+      - submitJobs
       - batchExport
+      - waitForJobs
+      - chunkIds
+  - title: Query Job Information
+    contents:
+      - getStatus
+      - findJobs
       - getJobPars
       - summarizeExperiments
-      - Tags
-      - testJob
-  - title: Cluster interaction
+  - title: Retrieve Results
     contents:
-      - chunkIds
-      - execJob
-      - submitJobs
-      - waitForJobs
+      - reduceResults
+      - reduceResultsDataTable
+      - loadResult
+  - title: Debugging
+    contents:
+      - resetJobs
+      - testJob
+      - getLog
+      - getErrorMessages
+      - grepLogs
+  - title: Remove Jobs
+    contents:
       - killJobs
+      - clearRegistry
+      - removeExperiments
+  - title: Additional objects
+    contents:
+      - Job
+      - Experiment
+      - JobCollection
+  - title: Cluster Functions
+    contents:
       - cfKillJob
       - cfBrewTemplate
       - cfReadBrewTemplate
       - cfHandleUnknownSubmitError
-      - doJobCollection
-  - title: Cluster helper functions
-    contents:
       - ClusterFunctions
       - starts_with("makeCluster")
       - SubmitJobResult
       - Hook
       - Worker
-  - title: Log evaluation
-    contents:
-      - getStatus
-      - getLog
-      - getErrorMessages
-      - grepLogs
-  - title: Reduce and load Results
-    contents:
-      - reduceResults
-      - reduceResultsDataTable
-      - loadResult
   - title: Miscellaneous
     contents:
+      - Tags
+      - btlapply
       - JoinTables
       - runOSCommand
+      - execJob
+      - doJobCollection

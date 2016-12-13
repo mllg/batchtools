@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ClusterFunctions Constructor � makeClusterFunctions • batchtools</title>
+<title>ClusterFunctions Constructor — makeClusterFunctions • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/readable/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -98,11 +98,11 @@ Name of cluster functions.</dd>
       <dt>submitJob</dt>
       <dd>[<code>function(reg, jc, ...)</code>]
 Function to submit new jobs. Must return a <code><a href='makeSubmitJobResult.html'>SubmitJobResult</a></code> object.
-The arguments are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and <code>jobs</code> (<code><a href='makeJobCollection.html'>JobCollection</a></code>).</dd>
+The arguments are <code>reg</code> (<code><a href='makeRegistry.html'>Registry</a></code>) and <code>jobs</code> (<code><a href='makeJobCollection.html'>JobCollection</a></code>).</dd>
       <dt>killJob</dt>
       <dd>[<code>function(reg, batch.id)</code>]
 Function to kill a job on the batch system. Make sure that you definitely kill the job! Return
-value is currently ignored. Must have the arguments <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and
+value is currently ignored. Must have the arguments <code>reg</code> (<code><a href='makeRegistry.html'>Registry</a></code>) and
 <code>batch.id</code> (<code>character(1)</code> as returned by <code>submitJob</code>).
 Note that there is a helper function <code><a href='cfKillJob.html'>cfKillJob</a></code> to repeatedly try to kill jobs.
 Set <code>killJob</code> to <code>NULL</code> if killing jobs cannot be supported.</dd>
@@ -118,7 +118,7 @@ List all running jobs on the batch system for the current user.
 Must return an character vector of batch ids, same format as they
 are returned by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.
 all for the current user instead of all for the current registry), but you have to include all
-relevant ones. Must have the argument are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>).
+relevant ones. Must have the argument are <code>reg</code> (<code><a href='makeRegistry.html'>Registry</a></code>).
 Set <code>listJobsRunning</code> to <code>NULL</code> if listing of running jobs is not supported.</dd>
       <dt>array.var</dt>
       <dd>[<code>character(1)</code>]

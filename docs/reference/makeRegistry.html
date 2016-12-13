@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Registry Constructor � Registry • batchtools</title>
+<title>Registry Constructor — makeRegistry • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/readable/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -86,41 +86,26 @@ All communication transactions are processed via the file system:
 All information required to run a job is stored as <code><a href='makeJobCollection.html'>JobCollection</a></code> in a file in the
 a subdirectory of the <code>file.dir</code> directory.
 Each jobs stores its results as well as computational status information (start time, end time, error message, ...)
-also on the file system which is regular merged parsed by the master using <code>syncRegistry</code>.
-After integrating the new information into the Registry, the Registry is serialized to the file system via <code>saveRegistry</code>.
-Both <code>syncRegistry</code> and <code>saveRegistry</code> are called whenever required internally.
+also on the file system which is regular merged parsed by the master using <code><a href='syncRegistry.html'>syncRegistry</a></code>.
+After integrating the new information into the Registry, the Registry is serialized to the file system via <code><a href='saveRegistry.html'>saveRegistry</a></code>.
+Both <code><a href='syncRegistry.html'>syncRegistry</a></code> and <code><a href='saveRegistry.html'>saveRegistry</a></code> are called whenever required internally.
 Therefore it should be safe to quit the R session at any time.
-Work can later be resumed by calling <code>loadRegistry</code> which de-serializes the registry from
+Work can later be resumed by calling <code><a href='loadRegistry.html'>loadRegistry</a></code> which de-serializes the registry from
 the file system.</p>
 
     <p>The registry created last is saved in the package namespace (unless <code>make.default</code> is set to
-<code>FALSE</code>) and can be retrieved via <code>getDefaultRegistry</code>.</p>
+<code>FALSE</code>) and can be retrieved via <code><a href='getDefaultRegistry.html'>getDefaultRegistry</a></code>.</p>
 
-    <p>Canceled jobs and repeatedly submitted jobs may leave stray files behind.
-These can be swept using <code>sweepRegistry</code>.
-<code>clearRegistry</code> completely erases all jobs from a registry, including log files and results,
+    <p>Canceled jobs and jobs submitted multiple times may leave stray files behind.
+These can be swept using <code><a href='sweepRegistry.html'>sweepRegistry</a></code>.
+<code><a href='clearRegistry.html'>clearRegistry</a></code> completely erases all jobs from a registry, including log files and results,
 and thus allows you to start over.</p>
     
 
     <pre><span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='st'>"registry"</span>, <span class='kw'>work.dir</span> <span class='kw'>=</span> <span class='fu'>getwd</span>(),
   <span class='kw'>conf.file</span> <span class='kw'>=</span> <span class='fu'>findConfFile</span>(), <span class='kw'>packages</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>),
   <span class='kw'>namespaces</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>source</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>),
-  <span class='kw'>load</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-
-<span class='fu'>getDefaultRegistry</span>()
-
-<span class='fu'>setDefaultRegistry</span>(<span class='no'>reg</span>)
-
-<span class='fu'>loadRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fu'>getwd</span>(), <span class='kw'>work.dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>conf.file</span> <span class='kw'>=</span> <span class='fu'>findConfFile</span>(), <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>update.paths</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='fu'>saveRegistry</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
-
-<span class='fu'>syncRegistry</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
-
-<span class='fu'>clearRegistry</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())
-
-<span class='fu'>sweepRegistry</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'>getDefaultRegistry</span>())</pre>
+  <span class='kw'>load</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -187,21 +172,11 @@ If set to <code>TRUE</code>, the created registry is saved inside the package
 namespace and acts as default registry. You might want to switch this
 off if you work with multiple registries simultaneously.
 Default is <code>TRUE</code>.</dd>
-      <dt>reg</dt>
-      <dd>[<code>Registry</code>]
-Registry. If not explicitly passed, uses the default registry (see <code>setDefaultRegistry</code>).</dd>
-      <dt>update.paths</dt>
-      <dd>[<code>logical(1)</code>]
-If set to <code>TRUE</code>, the <code>file.dir</code> and <code>work.dir</code> will be updated in the registry. Note that this is
-likely to break computation on the system! Only do this if no jobs are currently running. Default is <code>FALSE</code>.
-If the provided <code>file.dir</code> does not match the stored <code>file.dir</code>, <code>loadRegistry</code> will return a
-registry in read-only mode.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>makeRegistry</code>, <code>loadRegistry</code>, <code>getDefaultRegistry</code> and <code>setDefaultRegistry</code>
-  return an environment of class &#8220;Registry&#8221; with the following slots:
+    <p>[<code>environment</code>] of class &#8220;Registry&#8221; with the following slots:
   <dl class='dl-horizontal'>
     <dt><code>file.dir</code> [path]:</dt><dd>File directory.</dd>
     <dt><code>work.dir</code> [path]:</dt><dd>Working directory.</dd>
@@ -218,24 +193,28 @@ registry in read-only mode.</dd>
     <dt><code>resources</code> [data.table]:</dt><dd>Table holding information about the computational resources used for the job. Also see <code><a href='getJobTable.html'>getJobResources</a></code>.</dd>
     <dt><code>tags</code> [data.table]:</dt><dd>Table holding information about tags. See <a href='Tags.html'>Tags</a>.</dd>
   </dl></p>
-    <p>The other functions <code>saveRegistry</code>, <code>syncRegistry</code>, <code>sweepRegistry</code> and <code>clearRegistry</code> return <code>TRUE</code>
-  if the registry has been altered and successfully stored on the file system.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p>Other Registry: <code><a href='clearRegistry.html'>clearRegistry</a></code>,
+  <code><a href='getDefaultRegistry.html'>getDefaultRegistry</a></code>,
+  <code><a href='loadRegistry.html'>loadRegistry</a></code>, <code><a href='saveRegistry.html'>saveRegistry</a></code>,
+  <code><a href='sweepRegistry.html'>sweepRegistry</a></code>, <code><a href='syncRegistry.html'>syncRegistry</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
 #&gt;   Name    : Interactive
-#&gt;   File dir: C:/Users/surmann/AppData/Local/Temp/RtmpYb9wpb/registry128468be3335
-#&gt;   Work dir: C:/Users/surmann/Documents/Repositories/batchtools/docs/reference
+#&gt;   File dir: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmprWVTdb/registry15d8912693f7d
+#&gt;   Work dir: /Users/michel/Projekte/batchtools/docs/reference
 #&gt;   Jobs    : 0
-#&gt;   Seed    : 394416534</div><div class='input'>
+#&gt;   Seed    : 41247767</div><div class='input'>
 <span class='co'># Set cluster functions to interactive mode and start jobs in external R sessions</span>
 <span class='no'>tmp</span>$<span class='no'>cluster.functions</span> <span class='kw'>=</span> <span class='fu'><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></span>(<span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Change packages to load</span>
 <span class='no'>tmp</span>$<span class='no'>packages</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"MASS"</span>)
-<span class='fu'>saveRegistry</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div></pre>
+<span class='fu'><a href='saveRegistry.html'>saveRegistry</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -243,6 +222,8 @@ registry in read-only mode.</dd>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
