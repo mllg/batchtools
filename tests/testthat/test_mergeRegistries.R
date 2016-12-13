@@ -11,8 +11,8 @@ test_that("mergeRegistries", {
   file.dir = file.path(td, basename(target$file.dir))
   source = loadRegistry(file.dir, update.paths = TRUE)
 
-  submitJobs(data.table(job.id = 1:4, chunk = 1L), reg = target)
-  submitJobs(data.table(job.id = 6:9, chunk = c(1L, 1L, 1L, 2L)), reg = source)
+  submitAndWait(target, data.table(job.id = 1:4, chunk = 1L))
+  submitAndWait(source, data.table(job.id = 6:9, chunk = c(1L, 1L, 1L, 2L)))
 
   mergeRegistries(source, target)
   expect_data_table(findDone(reg = target), nrow = 8)
