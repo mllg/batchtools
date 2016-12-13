@@ -10,3 +10,4 @@
 ^\.Rproj\.user$
 ^docs$
 ^paper$
+^_pkgdown.yml$
