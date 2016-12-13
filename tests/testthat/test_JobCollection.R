@@ -9,7 +9,7 @@ test_that("makeJobCollection", {
   expect_environment(jc, c("file.dir", "job.hash", "jobs", "log.file", "packages", "resources", "uri", "work.dir"))
 
   expect_directory(jc$file.dir)
-  expect_string(jc$job.hash)
+  expect_string(jc$job.hash, pattern = "^job[[:alnum:]]{32}$")
   expect_data_table(jc$jobs, key = "job.id")
   expect_string(jc$log.file)
   expect_character(jc$packages, any.missing = FALSE)
@@ -32,7 +32,7 @@ test_that("makeJobCollection.ExperimentCollection", {
   jc = makeJobCollection(ids, resources = list(foo = 42), reg = reg)
 
   expect_directory(jc$file.dir)
-  expect_string(jc$job.hash)
+  expect_string(jc$job.hash, pattern = "^job[[:alnum:]]{32}$")
   expect_data_table(jc$jobs, key = "job.id")
   expect_string(jc$log.file)
   expect_character(jc$packages, any.missing = FALSE)
