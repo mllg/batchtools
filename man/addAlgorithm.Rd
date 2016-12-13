@@ -26,9 +26,6 @@ Unique identifier for the algorithm.}
 
 \item{reg}{[\code{\link{ExperimentRegistry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
-
-\item{data}{[\code{ANY}]\cr
-Static problem part. Default is \code{NULL}.}
 }
 \value{
 [\code{Algorithm}]. Object of class \dQuote{Algorithm}.

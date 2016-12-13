@@ -11,8 +11,6 @@
 #'
 #' @param name [\code{character(1)}]\cr
 #'   Unique identifier for the algorithm.
-#' @param data [\code{ANY}]\cr
-#'   Static problem part. Default is \code{NULL}.
 #' @param fun [\code{function}]\cr
 #'   The algorithm function. The static problem part is passed as \dQuote{data}, the generated
 #'   problem instance is passed as \dQuote{instance} and the \code{\link{Job}}/\code{\link{Experiment}} as \dQuote{job}.
