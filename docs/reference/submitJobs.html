@@ -172,13 +172,13 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
 <span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions &#39;Interactive&#39; ...</span></div><div class='input'>
 <span class='co'># Retrive information about memory, combine with parameters</span>
 <span class='no'>info</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='fu'><a href='getJobTable.html'>getJobStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>memory</span>)], <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; <span class='message'>Syncing 4 files ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>info</span>)</div><div class='output co'>#&gt;    job.id memory     n  p
-#&gt; 1:      1   49.5 1e+04 10
+#&gt; 1:      1   49.4 1e+04 10
 #&gt; 2:      2   61.6 1e+05 10
 #&gt; 3:      3   54.3 1e+04 50
 #&gt; 4:      4  122.6 1e+05 50</div><div class='input'>
 <span class='co'># Combine job info with results -&gt; each job is aggregated using mean()</span>
 <span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt;    job.id memory     n  p       res
-#&gt; 1:      1   49.5 1e+04 10 0.4999160
+#&gt; 1:      1   49.4 1e+04 10 0.4999160
 #&gt; 2:      2   61.6 1e+05 10 0.4999073
 #&gt; 3:      3   54.3 1e+04 50 0.5008563
 #&gt; 4:      4  122.6 1e+05 50 0.5003273</div><div class='input'>

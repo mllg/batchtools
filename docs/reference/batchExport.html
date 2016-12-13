@@ -118,15 +118,15 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt; 1:    y
 #&gt; 2:    z
 #&gt;                                                                                                        uri
-#&gt; 1: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmprWVTdb/registry15d892f2022e1/exports/y.rds
-#&gt; 2: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmprWVTdb/registry15d892f2022e1/exports/z.rds</div><div class='input'>
+#&gt; 1: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpTva1M2/registry1684e228f3805/exports/y.rds
+#&gt; 2: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpTva1M2/registry1684e228f3805/exports/z.rds</div><div class='input'>
 <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Interactive&#39; ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 3 files ...</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>stopifnot</span>(<span class='fu'><a href='loadResult.html'>loadResult</a></span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>) <span class='kw'>==</span> <span class='fl'>101</span>)
 
 <span class='co'># Un-export z</span>
 <span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>unexport</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Un-exporting exported objects: &#39;z&#39; ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt;    name
 #&gt; 1:    y
 #&gt;                                                                                                        uri
-#&gt; 1: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmprWVTdb/registry15d892f2022e1/exports/y.rds</div></pre>
+#&gt; 1: /private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpTva1M2/registry1684e228f3805/exports/y.rds</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
