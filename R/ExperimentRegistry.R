@@ -8,13 +8,11 @@
 #' These can be parametrized with \code{\link{addExperiments}} to actually define computational
 #' jobs.
 #'
-#' @inheritParams Registry
+#' @inheritParams makeRegistry
 #' @aliases ExperimentRegistry
 #' @return [\code{ExperimentRegistry}].
-#' @name ExperimentRegistry
-#' @rdname ExperimentRegistry
 #' @export
-#' @family Experiment
+#' @family Registry Experiment
 #' @examples
 #' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #'

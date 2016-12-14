@@ -14,7 +14,7 @@ For background information, see [Wikipedia](https://en.wikipedia.org/wiki/Monte_
 
 First, a so-called registry object has to be created, which defines a directory where all relevant information, files and results of the computational jobs will be stored.
 There are two different types of registry objects: First, a regular [`Registry`](https://mllg.github.io/batchtools/reference/Registry) which we will use in this example.
-Second, an [`ExperimentRegistry`](https://mllg.github.io/batchtools/reference/ExperimentRegistry) which provides an alternative way to define computational jobs and thereby is tailored for a broad range of large scale computer experiments (see one of the other vignettes for an example).
+Second, an [`ExperimentRegistry`](https://mllg.github.io/batchtools/reference/ExperimentRegistry) which provides an alternative way to define computational jobs and thereby is tailored for a broad range of large scale computer experiments (see, for example, [this vignette](ExampleExperiment.html)).
 Here, we use a temporary registry which is stored in the temp directory of the system and gets automatically deleted if you close the R session.
 
 ```{r, message = FALSE}

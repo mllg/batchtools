@@ -6,19 +6,19 @@
 #' All information required to run a job is stored as \code{\link{JobCollection}} in a file in the
 #' a subdirectory of the \code{file.dir} directory.
 #' Each jobs stores its results as well as computational status information (start time, end time, error message, ...)
-#' also on the file system which is regular merged parsed by the master using \code{syncRegistry}.
-#' After integrating the new information into the Registry, the Registry is serialized to the file system via \code{saveRegistry}.
-#' Both \code{syncRegistry} and \code{saveRegistry} are called whenever required internally.
+#' also on the file system which is regular merged parsed by the master using \code{\link{syncRegistry}}.
+#' After integrating the new information into the Registry, the Registry is serialized to the file system via \code{\link{saveRegistry}}.
+#' Both \code{\link{syncRegistry}} and \code{\link{saveRegistry}} are called whenever required internally.
 #' Therefore it should be safe to quit the R session at any time.
-#' Work can later be resumed by calling \code{loadRegistry} which de-serializes the registry from
+#' Work can later be resumed by calling \code{\link{loadRegistry}} which de-serializes the registry from
 #' the file system.
 #'
 #' The registry created last is saved in the package namespace (unless \code{make.default} is set to
-#' \code{FALSE}) and can be retrieved via \code{getDefaultRegistry}.
+#' \code{FALSE}) and can be retrieved via \code{\link{getDefaultRegistry}}.
 #'
-#' Canceled jobs and repeatedly submitted jobs may leave stray files behind.
-#' These can be swept using \code{sweepRegistry}.
-#' \code{clearRegistry} completely erases all jobs from a registry, including log files and results,
+#' Canceled jobs and jobs submitted multiple times may leave stray files behind.
+#' These can be swept using \code{\link{sweepRegistry}}.
+#' \code{\link{clearRegistry}} completely erases all jobs from a registry, including log files and results,
 #' and thus allows you to start over.
 #'
 #' @param file.dir [\code{character(1)}]\cr
@@ -75,8 +75,7 @@
 #'   namespace and acts as default registry. You might want to switch this
 #'   off if you work with multiple registries simultaneously.
 #'   Default is \code{TRUE}.
-#' @return \code{makeRegistry}, \code{loadRegistry}, \code{getDefaultRegistry} and \code{setDefaultRegistry}
-#'   return an environment of class \dQuote{Registry} with the following slots:
+#' @return [\code{environment}] of class \dQuote{Registry} with the following slots:
 #'   \describe{
 #'     \item{\code{file.dir} [path]:}{File directory.}
 #'     \item{\code{work.dir} [path]:}{Working directory.}
@@ -93,11 +92,8 @@
 #'     \item{\code{resources} [data.table]:}{Table holding information about the computational resources used for the job. Also see \code{\link{getJobResources}}.}
 #'     \item{\code{tags} [data.table]:}{Table holding information about tags. See \link{Tags}.}
 #'   }
-#'   The other functions \code{saveRegistry}, \code{syncRegistry}, \code{sweepRegistry} and \code{clearRegistry} return \code{TRUE}
-#'   if the registry has been altered and successfully stored on the file system.
 #' @aliases Registry
-#' @name Registry
-#' @rdname Registry
+#' @family Registry
 #' @export
 #' @examples
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
@@ -183,22 +179,6 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 }
 
 #' @export
-#' @rdname Registry
-getDefaultRegistry = function() {
-  if (is.null(batchtools$default.registry))
-    stop("No default registry defined")
-  batchtools$default.registry
-}
-
-#' @export
-#' @rdname Registry
-setDefaultRegistry = function(reg) {
-  if (!is.null(reg))
-    assertRegistry(reg)
-  batchtools$default.registry = reg
-}
-
-#' @export
 print.Registry = function(x, ...) {
   cat("Job Registry\n")
   catf("  Name    : %s", x$cluster.functions$name)
@@ -208,96 +188,26 @@ print.Registry = function(x, ...) {
   catf("  Seed    : %i", x$seed)
 }
 
-#' @export
-#' @param update.paths [\code{logical(1)}]\cr
-#'   If set to \code{TRUE}, the \code{file.dir} and \code{work.dir} will be updated in the registry. Note that this is
-#'   likely to break computation on the system! Only do this if no jobs are currently running. Default is \code{FALSE}.
-#'   If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
-#'   registry in read-only mode.
-#' @rdname Registry
-loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findConfFile(), make.default = TRUE, update.paths = FALSE) {
-  assertString(file.dir)
-  assertFlag(make.default)
-  assertFlag(update.paths)
-
-  readRegistry = function() {
-    fn.old = file.path(file.dir, "registry.rds")
-    fn.new = file.path(file.dir, "registry.new.rds")
-
-    if (file.exists(fn.new)) {
-      reg = try(readRDS(fn.new), silent = TRUE)
-      if (!is.error(reg)) {
-        file.rename(fn.new, fn.old)
-        return(reg)
-      } else {
-        warning("Latest version of registry seems to be corrupted, trying backup ...")
-      }
-    }
-
-    if (file.exists(fn.old)) {
-      reg = try(readRDS(fn.old), silent = TRUE)
-      if (!is.error(reg))
-        return(reg)
-      stop("Could not load the registry, files seem to be corrupt")
-    }
-
-    stopf("No registry found in '%s'", file.dir)
+assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, running.ok = TRUE) {
+  assertClass(reg, "Registry", ordered = strict)
+  if (batchtools$debug) {
+    if (!identical(key(reg$status), "job.id"))
+      stop("Key of reg$job.id lost")
+    if (!identical(key(reg$defs), "def.id"))
+      stop("Key of reg$defs lost")
+    if (!identical(key(reg$resources), "resource.id"))
+      stop("Key of reg$resources lost")
   }
-
-  reg = readRegistry()
-  alloc.col(reg$status, ncol(reg$status))
-  alloc.col(reg$defs, ncol(reg$defs))
-  alloc.col(reg$resources, ncol(reg$resources))
-  alloc.col(reg$tags, ncol(reg$tags))
-
-  file.dir = npath(file.dir)
-  if (!update.paths) {
-    before = npath(reg$file.dir, must.work = FALSE)
-    if (before != file.dir) {
-      warningf("The absolute path of the file.dir has changed (before '%s', now '%s'). Enabling read-only mode for the registry.", before, file.dir)
-      reg$writeable = FALSE
-    }
-  }
-  reg$file.dir = file.dir
-  if (reg$writeable)
-    updateRegistry(reg)
-
-  if (!is.null(work.dir)) {
-    assertString(work.dir)
-    reg$work.dir = npath(work.dir)
-  }
-
-  wd.exists = dir.exists(reg$work.dir)
-  if (!wd.exists)
-    warningf("The work.dir '%s' does not exist, jobs might fail to run on this system.", reg$work.dir)
-
-  loadRegistryDependencies(reg, switch.wd = wd.exists)
-  reg$cluster.functions = makeClusterFunctionsInteractive()
-  setSystemConf(reg, conf.file)
-  if (make.default)
-    batchtools$default.registry = reg
-  syncRegistry(reg = reg)
-  return(reg)
-}
-
-
-#' @rdname Registry
-#' @template reg
-#' @export
-saveRegistry = function(reg = getDefaultRegistry()) {
   if (reg$writeable) {
-    "!DEBUG Saving Registry"
-
-    fn = file.path(reg$file.dir, c("registry.new.rds", "registry.rds"))
-    ee = new.env(parent = asNamespace("batchtools"))
-    list2env(mget(setdiff(ls(reg), c("cluster.functions", "default.resources", "temp.dir")), reg), ee)
-    class(ee) = class(reg)
-    writeRDS(ee, file = fn[1L], wait = TRUE)
-    file.rename(fn[1L], fn[2L])
+    if (sync)
+      syncRegistry(reg)
   } else {
-    "!DEBUG Skipping saveRegistry (read-only)"
+    if (writeable)
+      stop("Registry must be writeable")
   }
-  invisible(reg$writeable)
+  if (!running.ok && nrow(.findOnSystem(reg = reg)) > 0L)
+    stop("This operation is not allowed while jobs are running on the system")
+  invisible(TRUE)
 }
 
 loadRegistryDependencies = function(x, switch.wd = TRUE) {
@@ -343,94 +253,4 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
   }
 
   invisible(TRUE)
-}
-
-assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, running.ok = TRUE) {
-  assertClass(reg, "Registry", ordered = strict)
-  if (batchtools$debug) {
-    if (!identical(key(reg$status), "job.id"))
-      stop("Key of reg$job.id lost")
-    if (!identical(key(reg$defs), "def.id"))
-      stop("Key of reg$defs lost")
-    if (!identical(key(reg$resources), "resource.id"))
-      stop("Key of reg$resources lost")
-  }
-  if (reg$writeable) {
-    if (sync)
-      syncRegistry(reg)
-  } else {
-    if (writeable)
-      stop("Registry must be writeable")
-  }
-  if (!running.ok && nrow(.findOnSystem(reg = reg)) > 0L)
-    stop("This operation is not allowed while jobs are running on the system")
-  invisible(TRUE)
-}
-
-#' @rdname Registry
-#' @export
-syncRegistry = function(reg = getDefaultRegistry()) {
-  "!DEBUG Triggered syncRegistry"
-  fns = list.files(file.path(reg$file.dir, "updates"), full.names = TRUE)
-  if (length(fns) == 0L)
-    return(invisible(TRUE))
-
-  if (reg$writeable) {
-    info("Syncing %i files ...", length(fns))
-  } else {
-    info("Skipping %i updates in read-only mode ...", length(fns))
-    return(invisible(FALSE))
-  }
-
-  runHook(reg, "pre.sync", fns = fns)
-
-  updates = lapply(fns, function(fn) {
-    x = try(readRDS(fn), silent = TRUE)
-    if (is.error(x)) NULL else x
-  })
-
-  failed = vlapply(updates, is.null)
-  updates = rbindlist(updates)
-
-  if (nrow(updates) > 0L) {
-    expr = quote(`:=`(started = i.started, done = i.done, error = i.error, memory = i.memory))
-    reg$status[updates, eval(expr), on = "job.id"]
-    saveRegistry(reg)
-    unlink(fns[!failed])
-  }
-
-  runHook(reg, "post.sync", updates = updates)
-  invisible(TRUE)
-}
-
-findConfFile = function() {
-  x = "batchtools.conf.R"
-  if (file.exists(x))
-    return(npath(x))
-
-  x = file.path(user_config_dir("batchtools", expand = FALSE), "config.R")
-  if (file.exists(x))
-    return(x)
-
-  x = npath(file.path("~", ".batchtools.conf.R"), must.work = FALSE)
-  if (file.exists(x))
-    return(npath(x))
-
-  return(character(0L))
-}
-
-setSystemConf = function(reg, conf.file) {
-  reg$cluster.functions = makeClusterFunctionsInteractive()
-  reg$default.resources = list()
-  reg$temp.dir = tempdir()
-
-  if (length(conf.file) > 0L) {
-    assertString(conf.file)
-    info("Sourcing configuration file '%s' ...", conf.file)
-    sys.source(conf.file, envir = reg, keep.source = FALSE)
-
-    assertClass(reg$cluster.functions, "ClusterFunctions")
-    assertList(reg$default.resources, names = "unique")
-    assertDirectoryExists(reg$temp.dir, access = "w")
-  }
 }

@@ -1,0 +1,75 @@
+title: batchtools
+
+reference:
+  - title: Overview
+    contents:
+      - batchtools
+  - title: Registry
+    contents:
+      - Registry
+      - ExperimentRegistry
+      - loadRegistry
+      - saveRegistry
+      - syncRegistry
+      - sweepRegistry
+      - getDefaultRegistry
+  - title: Define Jobs
+    contents:
+      - batchMap
+      - batchMapResults
+      - Problem
+      - Algorithm
+      - addExperiments
+  - title: Submit Jobs
+    contents:
+      - submitJobs
+      - batchExport
+      - waitForJobs
+      - chunkIds
+  - title: Query Job Information
+    contents:
+      - getStatus
+      - findJobs
+      - getJobPars
+      - summarizeExperiments
+  - title: Retrieve Results
+    contents:
+      - reduceResults
+      - reduceResultsDataTable
+      - loadResult
+  - title: Debugging
+    contents:
+      - resetJobs
+      - testJob
+      - getLog
+      - getErrorMessages
+      - grepLogs
+  - title: Remove Jobs
+    contents:
+      - killJobs
+      - clearRegistry
+      - removeExperiments
+  - title: Additional objects
+    contents:
+      - Job
+      - Experiment
+      - JobCollection
+  - title: Cluster Functions
+    contents:
+      - cfKillJob
+      - cfBrewTemplate
+      - cfReadBrewTemplate
+      - cfHandleUnknownSubmitError
+      - ClusterFunctions
+      - starts_with("makeCluster")
+      - SubmitJobResult
+      - Hook
+      - Worker
+  - title: Miscellaneous
+    contents:
+      - Tags
+      - btlapply
+      - JoinTables
+      - runOSCommand
+      - execJob
+      - doJobCollection

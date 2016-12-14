@@ -50,11 +50,11 @@
 <p>We stick to a rather simple, but not unrealistic example to explain some further functionalities: Applying two classification learners to the famous iris data set (Anderson 1935), vary a few hyperparameters and evaluate the effect on the classification performance.</p>
 <p>First, we create a registry, the central meta-data object which records technical details and the setup of the experiments. We use an <a href="https://mllg.github.io/batchtools/reference/ExperimentRegistry"><code>ExperimentRegistry</code></a> where the job definition is split into creating problems and algorithms. See the paper on <a href="http://www.jstatsoft.org/article/view/v064i11">BatchJobs and BatchExperiments</a> for a detailed explanation. Again, we use a temporary registry and make it the default registry.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
-reg =<span class="st"> </span><span class="kw"><a href="../reference/ExperimentRegistry.html">makeExperimentRegistry</a></span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</code></pre></div>
+reg =<span class="st"> </span><span class="kw"><a href="../reference/makeExperimentRegistry.html">makeExperimentRegistry</a></span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</code></pre></div>
 </div>
 <div id="problems-and-algorithms" class="section level1">
 <h1 class="hasAnchor"><html><body><a href="#problems-and-algorithms" class="anchor"> </a></body></html>Problems and algorithms</h1>
-<p>By adding a problem to the registry, we can define the data on which certain computational jobs shall work. This can be a matrix, data frame or array that always stays the same for all subsequent experiments. But it can also be of a more dynamic nature, e.g., subsamples of a dataset or random numbers drawn from a probability distribution . Therefore the function <a href="https://mllg.github.io/batchtools/reference/ProblemAlgorithm"><code><a href="../reference/ProblemAlgorithm.html">addProblem()</a></code></a> accepts static parts in its <code>data</code> argument, which is passed to the argument <code>fun</code> which generates a (possibly stochastic) problem instance. For <code>data</code>, any R object can be used. If only <code>data</code> is given, the generated instance is <code>data</code>. The argument <code>fun</code> has to be a function with the arguments <code>data</code> and <code>job</code> (and optionally other arbitrary parameters). The argument <code>job</code> is an object of type <a href="https://mllg.github.io/batchtools/reference/JobExperiment"><code>Job</code></a> which holds additional information about the job.</p>
+<p>By adding a problem to the registry, we can define the data on which certain computational jobs shall work. This can be a matrix, data frame or array that always stays the same for all subsequent experiments. But it can also be of a more dynamic nature, e.g., subsamples of a dataset or random numbers drawn from a probability distribution . Therefore the function <a href="https://mllg.github.io/batchtools/reference/addProblem"><code><a href="../reference/addProblem.html">addProblem()</a></code></a> accepts static parts in its <code>data</code> argument, which is passed to the argument <code>fun</code> which generates a (possibly stochastic) problem instance. For <code>data</code>, any R object can be used. If only <code>data</code> is given, the generated instance is <code>data</code>. The argument <code>fun</code> has to be a function with the arguments <code>data</code> and <code>job</code> (and optionally other arbitrary parameters). The argument <code>job</code> is an object of type <a href="https://mllg.github.io/batchtools/reference/JobExperiment"><code>Job</code></a> which holds additional information about the job.</p>
 <p>We want to split the iris data set into a training set and test set. In this example we use use subsampling which just randomly takes a fraction of the observations as training set. We define a problem function which returns the indices of the respective training and test set for a split with <code>ratio</code>% of the observations being in the test set:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subsample =<span class="st"> </span>function(data, job, ratio, ...) {
   n =<span class="st"> </span><span class="kw">nrow</span>(data)
@@ -62,18 +62,18 @@ reg =<span class="st"> </span><span class="kw"><a href="../reference/ExperimentR
   test =<span class="st"> </span><span class="kw">setdiff</span>(<span class="kw">seq_len</span>(n), train)
   <span class="kw">list</span>(<span class="dt">test =</span> test, <span class="dt">train =</span> train)
 }</code></pre></div>
-<p><a href="https://mllg.github.io/batchtools/reference/ProblemAlgorithm"><code><a href="../reference/ProblemAlgorithm.html">addProblem()</a></code></a> files the problem to the file system and the problem gets recorded in the registry.</p>
+<p><a href="https://mllg.github.io/batchtools/reference/addProblem"><code><a href="../reference/addProblem.html">addProblem()</a></code></a> files the problem to the file system and the problem gets recorded in the registry.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">"iris"</span>, <span class="dt">package =</span> <span class="st">"datasets"</span>)
-<span class="kw"><a href="../reference/ProblemAlgorithm.html">addProblem</a></span>(<span class="dt">name =</span> <span class="st">"iris"</span>, <span class="dt">data =</span> iris, <span class="dt">fun =</span> subsample, <span class="dt">seed =</span> <span class="dv">42</span>)</code></pre></div>
+<span class="kw"><a href="../reference/addProblem.html">addProblem</a></span>(<span class="dt">name =</span> <span class="st">"iris"</span>, <span class="dt">data =</span> iris, <span class="dt">fun =</span> subsample, <span class="dt">seed =</span> <span class="dv">42</span>)</code></pre></div>
 <p>The function call will be evaluated at a later stage on the workers. In this process, the <code>data</code> part will be loaded and passed to the function. Note that we set a problem seed to synchronize the experiments in the sense that the same resampled training and test sets are used for the algorithm comparison in each distinct replication.</p>
-<p>The algorithms for the jobs are added to the registry in a similar manner. When using <a href="https://mllg.github.io/batchtools/reference/ProblemAlgorithm"><code><a href="../reference/ProblemAlgorithm.html">addAlgorithm()</a></code></a>, an identifier as well as the algorithm to apply to are required arguments. The algorithm must be given as a function with arguments <code>job</code>, <code>data</code> and <code>instance</code>. Further arbitrary arguments (e.g., hyperparameters or strategy parameters) may be defined analogously as for the function in <code>addProblem</code>. The objects passed to the function via <code>job</code> and <code>data</code> are here the same as above, while via <code>instance</code> the return value of the evaluated problem function is passed. The algorithm can return any R object which will automatically be stored on the file system for later retrieval. Firstly, we create an algorithm which applies a support vector machine:</p>
+<p>The algorithms for the jobs are added to the registry in a similar manner. When using <a href="https://mllg.github.io/batchtools/reference/addAlgorithm"><code><a href="../reference/addAlgorithm.html">addAlgorithm()</a></code></a>, an identifier as well as the algorithm to apply to are required arguments. The algorithm must be given as a function with arguments <code>job</code>, <code>data</code> and <code>instance</code>. Further arbitrary arguments (e.g., hyperparameters or strategy parameters) may be defined analogously as for the function in <code>addProblem</code>. The objects passed to the function via <code>job</code> and <code>data</code> are here the same as above, while via <code>instance</code> the return value of the evaluated problem function is passed. The algorithm can return any R object which will automatically be stored on the file system for later retrieval. Firstly, we create an algorithm which applies a support vector machine:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">svm.wrapper =<span class="st"> </span>function(data, job, instance, ...) {
   <span class="kw">library</span>(<span class="st">"e1071"</span>)
   mod =<span class="st"> </span><span class="kw">svm</span>(Species ~<span class="st"> </span>., <span class="dt">data =</span> data[instance$train, ], ...)
   pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> data[instance$test, ], <span class="dt">type =</span> <span class="st">"class"</span>)
   <span class="kw">table</span>(data$Species[instance$test], pred)
 }
-<span class="kw"><a href="../reference/ProblemAlgorithm.html">addAlgorithm</a></span>(<span class="dt">name =</span> <span class="st">"svm"</span>, <span class="dt">fun =</span> svm.wrapper)</code></pre></div>
+<span class="kw"><a href="../reference/addAlgorithm.html">addAlgorithm</a></span>(<span class="dt">name =</span> <span class="st">"svm"</span>, <span class="dt">fun =</span> svm.wrapper)</code></pre></div>
 <p>Secondly, a random forest of classification trees:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">forest.wrapper =<span class="st"> </span>function(data, job, instance, ...) {
   <span class="kw">library</span>(<span class="st">"ranger"</span>)
@@ -81,13 +81,13 @@ reg =<span class="st"> </span><span class="kw"><a href="../reference/ExperimentR
   pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">data =</span> data[instance$test, ])
   <span class="kw">table</span>(data$Species[instance$test], pred$predictions)
 }
-<span class="kw"><a href="../reference/ProblemAlgorithm.html">addAlgorithm</a></span>(<span class="dt">name =</span> <span class="st">"forest"</span>, <span class="dt">fun =</span> forest.wrapper)</code></pre></div>
+<span class="kw"><a href="../reference/addAlgorithm.html">addAlgorithm</a></span>(<span class="dt">name =</span> <span class="st">"forest"</span>, <span class="dt">fun =</span> forest.wrapper)</code></pre></div>
 <p>Both algorithms return a confusion matrix for the predictions on the test set, which will later be used to calculate the misclassification rate.</p>
 <p>Note that using the <code>...</code> argument in the wrapper definitions allows us to circumvent naming specific design parameters for now. This is an advantage if we later want to extend the set of algorithm parameters in the experiment. The algorithms get recorded in the registry and the corresponding functions are stored on the file system.</p>
 <p>Defined problems and algorithms can be queried:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/ProblemAlgorithm.html">getProblemIds</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/addProblem.html">getProblemIds</a></span>()</code></pre></div>
 <pre><code>## [1] "iris"</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/ProblemAlgorithm.html">getAlgorithmIds</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/addAlgorithm.html">getAlgorithmIds</a></span>()</code></pre></div>
 <pre><code>## [1] "svm"    "forest"</code></pre>
 </div>
 <div id="creating-jobs" class="section level1">
@@ -144,7 +144,7 @@ ades =<span class="st"> </span><span class="kw">list</span>(
 <pre><code>##             
 ##              setosa versicolor virginica
 ##   setosa         17          0         0
-##   versicolor      0         16         2
+##   versicolor      0         15         3
 ##   virginica       0          0        15</code></pre>
 <p>If something goes wrong, <code>batchtools</code> comes with a bunch of useful debugging utilities (see separate vignette on error handling). If everything turns out fine, we can proceed with the calculation.</p>
 </div>
@@ -186,7 +186,7 @@ ades =<span class="st"> </span><span class="kw">list</span>(
 ## 5:       svm polynomial    0.10    NA 0.088
 ## 6:       svm     radial    0.10    NA 0.048
 ## 7:    forest         NA      NA   100 0.048
-## 8:    forest         NA      NA   500 0.048
+## 8:    forest         NA      NA   500 0.044
 ## 9:    forest         NA      NA  1000 0.048</code></pre>
 </div>
 </div>

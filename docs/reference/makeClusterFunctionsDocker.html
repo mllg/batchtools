@@ -93,8 +93,8 @@ To reliably identify jobs in the swarm, jobs are labeled with &#8220;batchtools=
 
     <p><code>killJobs</code> uses <code>docker [docker.args] kill [batch.id]</code> to filter for running jobs.</p>
 
-    <p>These cluster functions use a <a href='runHook.html'>Hook</a> to remove finished jobs before a new submit and every time the <a href='Registry.html'>Registry</a>
-is synchronized (using <code><a href='Registry.html'>syncRegistry</a></code>).
+    <p>These cluster functions use a <a href='runHook.html'>Hook</a> to remove finished jobs before a new submit and every time the <a href='makeRegistry.html'>Registry</a>
+is synchronized (using <code><a href='syncRegistry.html'>syncRegistry</a></code>).
 This is currently required because docker does not remove exited containers automatically.
 Use <code>docker ps -a --filter &#39;label=batchtools&#39; --filter &#39;status=exited&#39;</code> to identify and remove terminated containers manually (or via a cron job).</p>
     

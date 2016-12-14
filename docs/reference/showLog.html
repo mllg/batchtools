@@ -85,9 +85,9 @@
 <code>getLog</code> returns the log as character vector.</p>
     
 
-    <pre><span class='fu'>showLog</span>(<span class='no'>id</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())
+    <pre><span class='fu'>showLog</span>(<span class='no'>id</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>getLog</span>(<span class='no'>id</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
+<span class='fu'>getLog</span>(<span class='no'>id</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -96,8 +96,8 @@
 Single integer to specify the job or a <code>data.table</code> with column <code>job.id</code>
 and exactly one row.</dd>
       <dt>reg</dt>
-      <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
+      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -113,7 +113,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'>
 <span class='co'># Create some dummy jobs</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
   <span class='kw'>if</span> (<span class='no'>i</span> <span class='kw'>==</span> <span class='fl'>3</span>) <span class='fu'>stop</span>(<span class='no'>i</span>)
@@ -127,13 +127,13 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt;   Done      : 4 ( 80.0%)
 #&gt;   Error     : 1 ( 20.0%)
 #&gt;   Expired   : 0 (  0.0%)</div><div class='input'>
-<span class='fu'>writeLines</span>(<span class='fu'>getLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; ### [bt 2016-12-08 14:50:27]: Starting calculation of 1 jobs
-#&gt; ### [bt 2016-12-08 14:50:27]: Setting working directory to &#39;/home/lang/Projekte/batchtools/docs/reference&#39;
-#&gt; ### [bt 2016-12-08 14:50:27]: Memory measurement disabled
-#&gt; ### [bt 2016-12-08 14:50:27]: Starting job [batchtools job.id=1]
+<span class='fu'>writeLines</span>(<span class='fu'>getLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; ### [bt 2016-12-13 21:41:02]: Starting calculation of 1 jobs
+#&gt; ### [bt 2016-12-13 21:41:02]: Setting working directory to &#39;/Users/michel/Projekte/batchtools/docs/reference&#39;
+#&gt; ### [bt 2016-12-13 21:41:02]: Memory measurement disabled
+#&gt; ### [bt 2016-12-13 21:41:02]: Starting job [batchtools job.id=1]
 #&gt; 
-#&gt; ### [bt 2016-12-08 14:50:27]: Job terminated successfully [batchtools job.id=1]
-#&gt; ### [bt 2016-12-08 14:50:27]: Calculation finished!</div><div class='input'><span class='co'>## Not run: ------------------------------------</span>
+#&gt; ### [bt 2016-12-13 21:41:02]: Job terminated successfully [batchtools job.id=1]
+#&gt; ### [bt 2016-12-13 21:41:02]: Calculation finished!</div><div class='input'><span class='co'>## Not run: ------------------------------------</span>
 <span class='co'># showLog(ids[1], reg = tmp)</span>
 <span class='co'>## ---------------------------------------------</span>
 

@@ -98,7 +98,7 @@ test_that("sweepRegistry", {
   if (reg$cluster.functions$store.job)
     expect_character(list.files(file.path(reg$file.dir, "jobs")), len = 1L)
 
-  expect_true(sweepRegistry(reg), "Registry")
+  expect_true(sweepRegistry(reg))
 
   expect_data_table(reg$resources, nrow = 1)
   expect_character(list.files(file.path(reg$file.dir, "logs")), len = 1L)

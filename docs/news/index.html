@@ -91,6 +91,8 @@
 <li>Fixed listing of jobs for <code>ClusterFunctionsLSF</code> and <code>ClusterFunctionsOpenLava</code> (thanks to @phaverty).</li>
 <li>Fixed broken key lookup in some join functions.</li>
 <li>Fixed a bug where <code><a href="../reference/getJobTable.html">getJobTable()</a></code> returned <code>difftimes</code> with the wrong unit (e.g., in minutes instead of seconds).</li>
+<li>Timestamps are now stored with sub-second accuracy.</li>
+<li>Job hashes are now prefixed with literal string ‘job’ to ensure they start with a letter as required by some SGE systems.</li>
 </ul></div>
     <div id="batchtools-0-9-0" class="section level1">
 <h1 class="hasAnchor">

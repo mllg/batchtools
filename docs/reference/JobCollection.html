@@ -85,14 +85,14 @@
 necessary information for the calculation with <code><a href='doJobCollection.html'>doJobCollection</a></code>. It is implemented as an environment
 with the following variables:
 <dl class='dl-horizontal'>
- <dt>file.dir</dt><dd><code>file.dir</code> of the <a href='Registry.html'>Registry</a>.</dd>
- <dt>work.dir:</dt><dd><code>work.dir</code> of the <a href='Registry.html'>Registry</a>.</dd>
+ <dt>file.dir</dt><dd><code>file.dir</code> of the <a href='makeRegistry.html'>Registry</a>.</dd>
+ <dt>work.dir:</dt><dd><code>work.dir</code> of the <a href='makeRegistry.html'>Registry</a>.</dd>
  <dt>job.hash</dt><dd>Unique identifier of the job. Used to create names on the file system.</dd>
  <dt>jobs</dt><dd><code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> holding individual job information. See examples.</dd>
  <dt>log.file</dt><dd>Location of the designated log file for this job.</dd>
  <dt>resources:</dt><dd>Named list of of specified computational resources.</dd>
  <dt>uri</dt><dd>Location of the job description file (saved with <code>link[base]{saveRDS}</code> on the file system.</dd>
- <dt>seed</dt><dd><code>integer(1)</code> Seed of the <a href='Registry.html'>Registry</a>.</dd>
+ <dt>seed</dt><dd><code>integer(1)</code> Seed of the <a href='makeRegistry.html'>Registry</a>.</dd>
  <dt>packages</dt><dd><code>character</code> with required packages to load via <code><a href='http://www.rdocumentation.org/packages/base/topics/library'>require</a></code>.</dd>
  <dt>namespaces</dt><dd>codecharacter with required packages to load via <code><a href='http://www.rdocumentation.org/packages/base/topics/ns-load'>requireNamespace</a></code>.</dd>
  <dt>source</dt><dd><code>character</code> with list of files to source before execution.</dd>
@@ -106,7 +106,7 @@ a collection. Thus all variables available inside the job can be used in the tem
     
 
     <pre><span class='fu'>makeJobCollection</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(),
-  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
+  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -120,8 +120,8 @@ If not set, defaults to all jobs.</dd>
       <dd>[<code>list</code>]
 Named list of resources. Default is <code>list()</code>.</dd>
       <dt>reg</dt>
-      <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
+      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -134,25 +134,25 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'><span class='co'># resources are usually forwared from submitJobs()</span>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'><span class='co'># resources are usually forwared from submitJobs()</span>
 <span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'>makeJobCollection</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>foo</span> <span class='kw'>=</span> <span class='st'>"bar"</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='fu'>ls.str</span>(<span class='no'>jc</span>))</div><div class='output co'>#&gt; array.var :  chr NA
-#&gt; file.dir :  chr &quot;/scratch/registry577050f646ea&quot;
-#&gt; job.hash :  chr &quot;b877c5be6afc6a18a407561ea623f101&quot;
+#&gt; file.dir :  chr &quot;/private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpTva1M2/registry1684e6ed090cf&quot;
+#&gt; job.hash :  chr &quot;jobf58856a915f7becaca6c80248758327b&quot;
 #&gt; jobs : Classes ‘data.table’ and &#39;data.frame&#39;:	3 obs. of  2 variables:
 #&gt;  $ job.id: int  1 2 3
 #&gt;  $ pars  :List of 3
 #&gt; load :  chr(0) 
-#&gt; log.file :  chr &quot;/scratch/registry577050f646ea/logs/b877c5be6afc6a18a407561ea623f101.log&quot;
-#&gt; namespaces :  chr(0) 
+#&gt; log.file :  chr &quot;/private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpTva1M2/registry1684e6ed090cf/logs/jobf58856a915f7becaca6c802487583&quot;| __truncated__
 #&gt; n.array.jobs :  int 1
+#&gt; namespaces :  chr(0) 
 #&gt; packages :  chr &quot;methods&quot;
 #&gt; resources : List of 1
 #&gt;  $ foo: chr &quot;bar&quot;
-#&gt; seed :  int 242782402
+#&gt; seed :  int 751436050
 #&gt; source :  chr(0) 
-#&gt; uri :  chr &quot;/scratch/registry577050f646ea/jobs/b877c5be6afc6a18a407561ea623f101.rds&quot;
-#&gt; work.dir :  chr &quot;/home/lang/Projekte/batchtools/docs/reference&quot;</div></pre>
+#&gt; uri :  chr &quot;/private/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/RtmpTva1M2/registry1684e6ed090cf/jobs/jobf58856a915f7becaca6c802487583&quot;| __truncated__
+#&gt; work.dir :  chr &quot;/Users/michel/Projekte/batchtools/docs/reference&quot;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

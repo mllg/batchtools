@@ -34,7 +34,7 @@ if (dir.exists("/tmp"))
 By adding a problem to the registry, we can define the data on which certain computational jobs shall work.
 This can be a matrix, data frame or array that always stays the same for all subsequent experiments.
 But it can also be of a more dynamic nature, e.g., subsamples of a dataset or random numbers drawn from a probability distribution .
-Therefore the function [`addProblem()`](https://mllg.github.io/batchtools/reference/ProblemAlgorithm) accepts static parts in its `data` argument, which is passed to the argument `fun` which generates a (possibly stochastic) problem instance.
+Therefore the function [`addProblem()`](https://mllg.github.io/batchtools/reference/addProblem) accepts static parts in its `data` argument, which is passed to the argument `fun` which generates a (possibly stochastic) problem instance.
 For `data`, any R object can be used.
 If only `data` is given, the generated instance is `data`.
 The argument `fun` has to be a function with the arguments `data` and `job` (and optionally other arbitrary parameters).
@@ -51,7 +51,7 @@ subsample = function(data, job, ratio, ...) {
   list(test = test, train = train)
 }
 ```
-[`addProblem()`](https://mllg.github.io/batchtools/reference/ProblemAlgorithm) files the problem to the file system and the problem gets recorded in the registry.
+[`addProblem()`](https://mllg.github.io/batchtools/reference/addProblem) files the problem to the file system and the problem gets recorded in the registry.
 ```{r}
 data("iris", package = "datasets")
 addProblem(name = "iris", data = iris, fun = subsample, seed = 42)
@@ -61,7 +61,7 @@ In this process, the `data` part will be loaded and passed to the function.
 Note that we set a problem seed to synchronize the experiments in the sense that the same resampled training and test sets are used for the algorithm comparison in each distinct replication.
 
 The algorithms for the jobs are added to the registry in a similar manner.
-When using [`addAlgorithm()`](https://mllg.github.io/batchtools/reference/ProblemAlgorithm), an identifier as well as the algorithm to apply to are required arguments.
+When using [`addAlgorithm()`](https://mllg.github.io/batchtools/reference/addAlgorithm), an identifier as well as the algorithm to apply to are required arguments.
 The algorithm must be given as a function with arguments `job`, `data` and `instance`.
 Further arbitrary arguments (e.g., hyperparameters or strategy parameters) may be defined analogously as for the function in `addProblem`.
 The objects passed to the function via `job` and `data` are here the same as above, while via `instance` the return value of the evaluated problem function is passed.
