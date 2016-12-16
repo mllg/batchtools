@@ -55,7 +55,8 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
 
   # setup output connection
   if (!is.null(output)) {
-    assertPathForOutput(output)
+    if (!testPathForOutput(output, overwrite = TRUE))
+      error("Cannot create output file for logging")
     fp = file(output, open = "wt")
     sink(file = fp)
     sink(file = fp, type = "message")
