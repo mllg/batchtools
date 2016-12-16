@@ -76,6 +76,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   # say hi
   n.jobs = nrow(jc$jobs)
   s = now()
+  catf("### [bt %s]: This is batchtools v%s", s, packageVersion("batchtools"))
   catf("### [bt %s]: Starting calculation of %i jobs", s, n.jobs)
   catf("### [bt %s]: Setting working directory to '%s'", s, jc$work.dir)
 
