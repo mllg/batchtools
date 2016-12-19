@@ -32,7 +32,7 @@ makeClusterFunctionsLSF = function(template = findTemplateFile("lsf")) { # nocov
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("bsub", c("-i", outfile))
+    res = runOSCommand("bsub", stdin = outfile)
 
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)
