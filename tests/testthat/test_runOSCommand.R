@@ -14,3 +14,14 @@ test_that("command not found", {
   expect_identical(res$exit.code, 127L)
   expect_identical(res$output, "command not found")
 })
+
+test_that("stdin", {
+  skip_on_os("windows")
+
+  tf = tempfile()
+  lines = letters
+  writeLines(letters, con = tf)
+  res = runOSCommand("cat", stdin = tf)
+  expect_identical(res$exit.code, 0L)
+  expect_identical(res$output, letters)
+})
