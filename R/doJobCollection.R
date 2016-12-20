@@ -56,7 +56,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   # setup output connection
   if (!is.null(output)) {
     if (!testPathForOutput(output, overwrite = TRUE))
-      error("Cannot create output file for logging")
+      return(error("Cannot create output file for logging"))
     fp = file(output, open = "wt")
     sink(file = fp)
     sink(file = fp, type = "message")
@@ -64,14 +64,16 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   }
 
   # subset array jobs
-  if (isTRUE(jc$resources$chunks.as.arrayjobs) && !is.na(jc$array.var)) {
-    i = Sys.getenv(jc$array.var)
-    if (nzchar(i)) {
-      i = as.integer(i)
-      if (!testInteger(i, any.missing = FALSE, lower = 1L, upper = nrow(jc$jobs)))
-        return(error("Failed to subset JobCollection using array environment variable '%s' [='%s']", jc$array.var, i))
-      jc$jobs = jc$jobs[i]
+  if (jc$n.array.jobs > 1L) {
+    i = as.integer(Sys.getenv(jc$array.var))
+    if (!testInteger(i, any.missing = FALSE, lower = 1L, upper = nrow(jc$jobs)))
+      return(error("Failed to subset JobCollection using array environment variable '%s' [='%s']", jc$array.var, i))
+
+    if (jc$n.array.jobs == nrow(jc$jobs)) {
+        jc.file = file.path(jc$file.dir, "jobs", sprintf("%s.rds", jc$hash))
+        on.exit(file.remove(jc.file), add = TRUE)
     }
+    jc$jobs = jc$jobs[i]
   }
 
   # say hi
