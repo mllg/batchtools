@@ -154,7 +154,6 @@ UpdateBuffer = R6Class("UpdateBuffer",
   public = list(
     updates = NULL,
     next.update = NA_real_,
-    count = 0L,
     initialize = function(ids) {
       self$updates = data.table(job.id = ids, started = NA_real_, done = NA_real_, error = NA_character_, memory = NA_real_, written = FALSE, key = "job.id")
       self$next.update = Sys.time() + runif(1L, 300, 1800)
@@ -165,10 +164,10 @@ UpdateBuffer = R6Class("UpdateBuffer",
     },
 
     save = function(jc) {
-      i = self$updates[!is.na(started) & !written, which = TRUE]
+      i = self$updates[!is.na(started) & (!written), which = TRUE]
       if (length(i) > 0L) {
-        self$count = self$count + 1L
-        writeRDS(self$updates[i, !"written"], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, self$count)), wait = TRUE)
+        first.id = self$updates$job.id[i[1L]]
+        writeRDS(self$updates[i], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, first.id)), wait = TRUE)
         set(self$updates, i, "written", TRUE)
       }
     },
