@@ -37,7 +37,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     ids = ids[.findSubmitted(ids = ids, reg = reg), nomatch = 0L]
   }
 
-  n.jobs.total = n.jobs = nrow(ids)
+  n.jobs = nrow(ids)
   if (n.jobs == 0L)
     return(TRUE)
 
@@ -48,26 +48,26 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
   timeout = Sys.time() + timeout
   ids.disappeared = noIds()
 
-  pb = makeProgressBar(total = n.jobs.total, format = "Waiting (S::system R::running D::done E::error) [:bar] :percent eta: :eta",
+  pb = makeProgressBar(total = n.jobs, format = "Waiting (S::system R::running D::done E::error) [:bar] :percent eta: :eta",
     tokens = as.list(getStatusTable(ids, batch.ids, reg = reg)))
 
   repeat {
     # case 1: all jobs terminated -> nothing on system
     ids.nt = .findNotTerminated(reg, ids)
     if (nrow(ids.nt) == 0L) {
-      pb$tick(n.jobs.total)
+      pb$update(1)
       return(nrow(.findErrors(reg, ids)) == 0L)
     }
 
     # case 2: there are errors and stop.on.error is TRUE
     if (stop.on.error && nrow(.findErrors(reg, ids)) > 0L) {
-      pb$tick(n.jobs.total)
+      pb$update(1)
       return(FALSE)
     }
 
     # case 3: we have reached a timeout
     if (Sys.time() > timeout) {
-      pb$tick(n.jobs.total)
+      pb$update(1)
       warning("Timeout reached")
       return(FALSE)
     }
@@ -80,15 +80,14 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     if (nrow(ids.disappeared) > 0L) {
       if (nrow(ids.nt[!ids.on.sys, on = "job.id"][ids.disappeared, on = "job.id", nomatch = 0L]) > 0L) {
         warning("Some jobs disappeared from the system")
-        pb$tick(n.jobs.total)
+        pb$update(1)
         return(FALSE)
       }
     }
     ids.disappeared = ids[!ids.on.sys, on = "job.id"]
 
     stats = getStatusTable(ids = ids, batch.ids = batch.ids, reg = reg)
-    pb$tick(n.jobs - nrow(ids.nt), tokens = as.list(stats))
-    n.jobs = nrow(ids.nt) # FIXME: remove after progress is updated
+    pb$tick(nrow(ids.nt) / n.jobs, tokens = as.list(stats))
 
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg = reg))
