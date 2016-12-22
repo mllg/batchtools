@@ -207,7 +207,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
         break
       } else if (submit$status > 0L && submit$status < 100L) {
         # temp error
-        pb$tick(0L, tokens = list(status = submit$msg))
+        pb$tick(0, tokens = list(status = submit$msg))
         Sys.sleep(wait)
         wait = wait * 1.025
       } else if (submit$status > 100L && submit$status <= 200L) {
@@ -215,7 +215,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
         stopf("Fatal error occurred: %i. %s", submit$status, submit$msg)
       }
     }
-    pb$tick(tokens = list(status = "Submitting"))
+    pb$tick(len = 1, tokens = list(status = "Submitting"))
   }
 
   # return ids, registry is saved via on.exit()

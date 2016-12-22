@@ -33,7 +33,7 @@ Imports:
     checkmate (>= 1.8.2),
     digest (>= 0.6.9),
     parallel,
-    progress,
+    progress (>= 1.1.1),
     R6,
     rappdirs,
     stats,

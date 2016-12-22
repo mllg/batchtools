@@ -42,4 +42,4 @@ export DEBUGME=<%= Sys.getenv("DEBUGME") %>
 
 ## Run R:
 ## we merge R output with stdout from SLURM, which gets then logged via --output option
-R CMD BATCH --no-save --no-restore "<%= rscript %>" /dev/stdout
+Rscript -e 'batchtools::doJobCollection("<%= uri %>")'

@@ -11,6 +11,7 @@
 #' @param output [\code{character(1)}]\cr
 #'   Path to a file to write the output to. Defaults to \code{NULL} which means
 #'   that output is written to the active \code{\link[base]{sink}}.
+#'   Do not set this if your scheduler redirects output to a log file.
 #' @return [\code{character(1)}]: Hash of the \code{\link{JobCollection}} executed.
 #' @family JobCollection
 #' @export
@@ -27,7 +28,7 @@ doJobCollection = function(jc, output = NULL) {
 #' @export
 doJobCollection.character = function(jc, output = NULL) {
   obj = readRDS(jc)
-  if (!batchtools$debug)
+  if (!batchtools$debug && obj$n.array.jobs > 1L)
     file.remove(jc)
   doJobCollection.JobCollection(obj, output = output)
 }
@@ -55,7 +56,8 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
 
   # setup output connection
   if (!is.null(output)) {
-    assertPathForOutput(output)
+    if (!testPathForOutput(output, overwrite = TRUE))
+      return(error("Cannot create output file for logging"))
     fp = file(output, open = "wt")
     sink(file = fp)
     sink(file = fp, type = "message")
@@ -63,19 +65,22 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   }
 
   # subset array jobs
-  if (isTRUE(jc$resources$chunks.as.arrayjobs) && !is.na(jc$array.var)) {
-    i = Sys.getenv(jc$array.var)
-    if (nzchar(i)) {
-      i = as.integer(i)
-      if (!testInteger(i, any.missing = FALSE, lower = 1L, upper = nrow(jc$jobs)))
-        return(error("Failed to subset JobCollection using array environment variable '%s' [='%s']", jc$array.var, i))
-      jc$jobs = jc$jobs[i]
+  if (jc$n.array.jobs > 1L) {
+    i = as.integer(Sys.getenv(jc$array.var))
+    if (!testInteger(i, any.missing = FALSE, lower = 1L, upper = nrow(jc$jobs)))
+      return(error("Failed to subset JobCollection using array environment variable '%s' [='%s']", jc$array.var, i))
+
+    if (jc$n.array.jobs == nrow(jc$jobs)) {
+        jc.file = file.path(jc$file.dir, "jobs", sprintf("%s.rds", jc$hash))
+        on.exit(file.remove(jc.file), add = TRUE)
     }
+    jc$jobs = jc$jobs[i]
   }
 
   # say hi
   n.jobs = nrow(jc$jobs)
   s = now()
+  catf("### [bt %s]: This is batchtools v%s", s, packageVersion("batchtools"))
   catf("### [bt %s]: Starting calculation of %i jobs", s, n.jobs)
   catf("### [bt %s]: Setting working directory to '%s'", s, jc$work.dir)
 
@@ -152,7 +157,6 @@ UpdateBuffer = R6Class("UpdateBuffer",
   public = list(
     updates = NULL,
     next.update = NA_real_,
-    count = 0L,
     initialize = function(ids) {
       self$updates = data.table(job.id = ids, started = NA_real_, done = NA_real_, error = NA_character_, memory = NA_real_, written = FALSE, key = "job.id")
       self$next.update = Sys.time() + runif(1L, 300, 1800)
@@ -163,10 +167,10 @@ UpdateBuffer = R6Class("UpdateBuffer",
     },
 
     save = function(jc) {
-      i = self$updates[!is.na(started) & !written, which = TRUE]
+      i = self$updates[!is.na(started) & (!written), which = TRUE]
       if (length(i) > 0L) {
-        self$count = self$count + 1L
-        writeRDS(self$updates[i, !"written"], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, self$count)), wait = TRUE)
+        first.id = self$updates$job.id[i[1L]]
+        writeRDS(self$updates[i], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, first.id)), wait = TRUE)
         set(self$updates, i, "written", TRUE)
       }
     },
