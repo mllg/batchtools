@@ -22,7 +22,7 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
   is not found.
 }
 \description{
-A function to simply load the result of a single job.
+Loads the result of a single job.
 }
 \seealso{
 Other Results: \code{\link{batchMapResults}},

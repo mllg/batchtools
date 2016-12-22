@@ -1,7 +1,7 @@
 #' @title Load the Result of a Single Job
 #'
 #' @description
-#' A function to simply load the result of a single job.
+#' Loads the result of a single job.
 #'
 #' @template id
 #' @template missing.val
@@ -13,6 +13,8 @@
 loadResult = function(id, missing.val, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   id = convertId(reg, id)
+  if (missing(missing.val) && nrow(.findDone(reg, id)) == 0L)
+    stop("Job with not terminated")
   .loadResult(reg$file.dir, id$job.id, missing.val)
 }
 

@@ -13,8 +13,10 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   store = FALSE
   "!DEBUG Running sweepRegistry"
 
+  # TODO: use data table keys here
   result.files = list.files(file.path(reg$file.dir, "results"), pattern = "\\.rds$")
-  i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% .findSubmitted(reg = reg)$job.id)
+  has.result = funion(.findDone(reg = reg), .findOnSystem(reg = reg))
+  i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% has.result$job.id)
   if (length(i) > 0L) {
     info("Removing %i obsolete result files ...", length(i))
     file.remove(file.path(reg$file.dir, "results", result.files[i]))

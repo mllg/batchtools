@@ -42,6 +42,8 @@ Applies a function on the results of your finished jobs and thereby collects
 them in a \code{\link[base]{list}} or \code{\link[data.table]{data.table}}.
 The later requires the provided function to return a list (or \code{data.frame}) of scalar values.
 See \code{\link[data.table]{rbindlist}} for features and limitations of the aggregation.
+
+If not all jobs are terminated, the respective result will be \code{NULL}.
 }
 \note{
 If you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})

@@ -27,6 +27,7 @@ test_that("pm/socket", {
 })
 
 test_that("pm/mpi", {
+  skip_on_os("mac")
   skip_on_cran()
   skip_on_travis()
   skip_if_not_installed("Rmpi")

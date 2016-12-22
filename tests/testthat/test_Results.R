@@ -7,6 +7,13 @@ suppressMessages({
   submitAndWait(reg, 1:3)
 })
 
+test_that("loadResult", {
+  expect_equal(loadResult(reg = reg, 1), list(a = 1, b = 4))
+  expect_equal(loadResult(reg = reg, 2), list(a = 2, b = 3))
+  expect_error(loadResult(reg = reg, 4), "not terminated")
+  expect_identical(loadResult(reg = reg, 4, missing.val = NA_real_), NA_real_)
+})
+
 test_that("reduceResults", {
   silent({
     expect_equal(reduceResults(fun = function(aggr, res, ...) c(aggr, res$a), init = integer(0), reg = reg), 1:3)
@@ -20,6 +27,8 @@ test_that("reduceResults", {
       reduceResults(fun = function(aggr, res, ...) c(aggr, res$a), ids = 3:1, init = integer(0), reg = reg),
       rev(reduceResults(fun = function(aggr, res, ...) c(aggr, res$a), ids = 1:3, init = integer(0), reg = reg))
     )
+    expect_error(reduceResults(fun = function(aggr, res, ...) c(aggr, res$a), ids = 1:4, init = integer(0), reg = reg),
+      "successfully computed")
   })
 })
 
@@ -86,13 +95,6 @@ test_that("batchMapResults", {
   })
   res = reduceResultsDataTable(reg = target)
   expect_equal(res[[2L]], 11:13 + rep(5, 3) + 2)
-})
-
-test_that("loadResult", {
-  expect_equal(loadResult(reg = reg, 1), list(a = 1, b = 4))
-  expect_equal(loadResult(reg = reg, 2), list(a = 2, b = 3))
-  expect_error(loadResult(reg = reg, 4), "not found")
-  expect_identical(loadResult(reg = reg, 4, missing.val = NA_real_), NA_real_)
 })
 
 test_that("multiRowResults", {

@@ -3,6 +3,7 @@
 #' @description
 #' A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects
 #' which iterates over finished jobs and aggregates them.
+#' All jobs must have terminated, an error is raised otherwise.
 #'
 #' @note
 #' If you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
@@ -39,6 +40,8 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
   assertRegistry(reg, sync = TRUE)
   ids = convertIds(reg, ids, default = .findDone(reg = reg), keep.order = TRUE)
   fun = match.fun(fun)
+  if (nrow(.findNotDone(reg, ids)))
+      stop("All jobs must be have been successfully computed")
 
   fns = sprintf("%i.rds", ids$job.id)
   if (length(fns) == 0L)
@@ -75,6 +78,8 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' them in a \code{\link[base]{list}} or \code{\link[data.table]{data.table}}.
 #' The later requires the provided function to return a list (or \code{data.frame}) of scalar values.
 #' See \code{\link[data.table]{rbindlist}} for features and limitations of the aggregation.
+#'
+#' If not all jobs are terminated, the respective result will be \code{NULL}.
 #'
 #' @note
 #' If you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
