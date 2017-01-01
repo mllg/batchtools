@@ -70,5 +70,5 @@ if (FALSE) {
   repls = 2
   profvis(addExperiments(prob.designs, algo.designs = algo.designs, repls = repls, reg = reg))
   ids = findExperiments(reg = reg)
-  profvis(submitJobs(ids = chunkIds(ids, n.chunks = 1, reg = reg), reg = reg))
+  profvis(submitJobs(ids = s.chunk(ids), reg = reg))
 }

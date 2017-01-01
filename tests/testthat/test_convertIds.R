@@ -47,7 +47,7 @@ test_that("convertIds", {
   expect_error(convertIds(reg, as.character(1:3)), "not recognized")
 
   # issue #40
-  ids = chunkIds(5:10, chunk.size = 3, reg = reg)
+  ids = ids[list(5:10), on = "job.id"][, "chunk" := chunk(job.id, chunk.size = 3)]
   ids = convertIds(reg, ids,  keep.extra = c("job.id", "chunk"))
   expect_data_table(ids, any.missing = FALSE)
 })
