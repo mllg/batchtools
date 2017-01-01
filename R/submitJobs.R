@@ -5,7 +5,8 @@
 #'
 #' If an additional column \dQuote{chunk} is found in the table \code{ids},
 #' jobs will be grouped accordingly to be executed sequentially on the same slave.
-#' The utility function \code{\link{chunkIds}} can assist in grouping jobs.
+#' The utility functions \code{\link{chunk}}, \code{\link{binpack}} and \code{\link{lpt}}
+#' can assist in grouping jobs.
 #' Jobs are submitted in the order of chunks, i.e. jobs which have chunk number
 #' \code{unique(ids$chunk)[1]} first, then jobs with chunk number \code{unique(ids$chunk)[2]}
 #' and so on. If no chunks are provided, jobs are submitted in the order of \code{ids$job.id}.
@@ -126,7 +127,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   if (hasName(resources, "chunks.as.arrayjobs"))
     assertFlag(resources$chunks.as.arrayjobs)
 
-  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk", keep.order = TRUE)
+  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk")
   if (nrow(ids) == 0L)
     return(noIds())
 

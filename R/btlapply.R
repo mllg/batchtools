@@ -22,7 +22,10 @@
 #' @param ... [\code{ANY}]\cr
 #'   Additional arguments passed to \code{fun} (\code{btlapply}) or vectors to map over (\code{btmapply}).
 #' @inheritParams submitJobs
-#' @inheritParams chunkIds
+#' @param n.chunks [\code{integer(1)}]\cr
+#'   Passed to \code{\link{chunk}} before \code{\link{submitJobs}}.
+#' @param chunk.size [\code{integer(1)}]\cr
+#'   Passed to \code{\link{chunk}} before \code{\link{submitJobs}}.
 #' @template reg
 #' @return [\code{list}] List with the results of the function call.
 #' @export
@@ -35,7 +38,8 @@ btlapply = function(X, fun, ..., resources = list(), n.chunks = NULL, chunk.size
   assertRegistry(reg, writeable = TRUE, strict = TRUE)
 
   ids = batchMap(fun, X, more.args = list(...), reg = reg)
-  ids = chunkIds(ids, n.chunks = n.chunks, chunk.size = chunk.size, reg = reg)
+  if (!is.null(n.chunks) || !is.null(chunk.size))
+    ids$chunk = chunk(ids$job.id, n.chunks = n.chunks, chunk.size = chunk.size)
   submitJobs(ids = ids, resources = resources, reg = reg)
   waitForJobs(ids = ids, reg = reg)
   reduceResultsList(ids = ids, reg = reg)
@@ -54,7 +58,8 @@ btmapply = function(fun, ..., more.args = list(), simplify = FALSE, use.names = 
   assertRegistry(reg, writeable = TRUE, strict = TRUE)
 
   ids = batchMap(fun, ..., more.args = more.args, reg = reg)
-  ids = chunkIds(ids, n.chunks = n.chunks, chunk.size = chunk.size, reg = reg)
+  if (!is.null(n.chunks) || !is.null(chunk.size))
+    ids$chunk = chunk(ids$job.id, n.chunks = n.chunks, chunk.size = chunk.size)
   submitJobs(ids = ids, resources = resources, reg = reg)
   waitForJobs(ids = ids, reg = reg)
   res = reduceResultsList(ids = ids, reg = reg)
