@@ -21,18 +21,21 @@
 #' @template reg
 #' @return [\code{\link{data.table}}] with ids of added jobs stored in column \dQuote{job.id}.
 #' @export
+#' @seealso \code{\link{batchMap}}
 #' @examples
 #' # define function to reduce on slave, we want to sum a vector
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#' xs = 1:100
 #' f = function(aggr, x) aggr + x
 #'
 #' # sum 20 numbers on each slave process, i.e. 5 jobs
-#' batchReduce(reg, fun = f, 1:100, init = 0, block.size = 5)
-#' submitJobs(reg)
-#' waitForJobs(reg)
+#' blocks = chunk(xs, chunk.size = 5)
+#' batchReduce(fun = f, 1:100, init = 0, blocks = blocks, reg = tmp)
+#' submitJobs(reg = tmp)
+#' waitForJobs(reg = tmp)
 #'
 #' # now reduce one final time on master
-#' reduceResults(reg, fun = function(aggr,job,res) f(aggr, res))
+#' reduceResults(fun = function(aggr, job, res) f(aggr, res), reg = tmp)
 batchReduce = function(fun, xs, init = NULL, blocks = seq_along(xs), more.args = list(), reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, strict = TRUE)
   if (nrow(reg$defs) > 0L)

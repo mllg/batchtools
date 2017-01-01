@@ -40,14 +40,19 @@ Results and partial results can be collected with \code{\link{reduceResultsList}
 \examples{
 # define function to reduce on slave, we want to sum a vector
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+xs = 1:100
 f = function(aggr, x) aggr + x
 
 # sum 20 numbers on each slave process, i.e. 5 jobs
-batchReduce(reg, fun = f, 1:100, init = 0, block.size = 5)
-submitJobs(reg)
-waitForJobs(reg)
+blocks = chunk(xs, chunk.size = 5)
+batchReduce(fun = f, 1:100, init = 0, blocks = blocks, reg = tmp)
+submitJobs(reg = tmp)
+waitForJobs(reg = tmp)
 
 # now reduce one final time on master
-reduceResults(reg, fun = function(aggr,job,res) f(aggr, res))
+reduceResults(fun = function(aggr, job, res) f(aggr, res), reg = tmp)
+}
+\seealso{
+\code{\link{batchMap}}
 }
 
