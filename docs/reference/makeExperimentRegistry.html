@@ -228,24 +228,25 @@ Default is <code>TRUE</code>.</dd>
 <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 80 jobs in 80 chunks using cluster functions &#39;Interactive&#39; ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 80 files ...</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># Reduce the results of algorithm a1</span>
 <span class='no'>ids.mean</span> <span class='kw'>=</span> <span class='fu'><a href='findJobs.html'>findExperiments</a></span>(<span class='kw'>algo.name</span> <span class='kw'>=</span> <span class='st'>"a1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'><a href='reduceResults.html'>reduceResults</a></span>(<span class='no'>ids.mean</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>aggr</span>, <span class='no'>res</span>, <span class='no'>...</span>) <span class='fu'>c</span>(<span class='no'>aggr</span>, <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;  [1] -1.83849470 -1.72994576 -2.02327970 -2.45246215 -1.05786475 -1.40274135
-#&gt;  [7] -0.34356045 -0.25050476  0.33919410 -0.06032533 -0.23893593  0.16595217
-#&gt; [13]  1.08151342  0.64193645  1.22866965  1.08121359  1.93678441  1.68806528
-#&gt; [19]  2.07224381  1.48469918 -2.01000035 -1.83313490 -1.58372217 -2.16582150
-#&gt; [25] -1.17443269 -0.88344587 -0.44945949 -1.42203669  0.05925380 -0.10945894
-#&gt; [31] -0.35818857  0.43462421  0.99560697  1.25387868  0.98623969  1.03193202
-#&gt; [37]  2.03557252  1.96361438  2.52490602  2.11516152</div><div class='input'>
+<span class='fu'><a href='reduceResults.html'>reduceResults</a></span>(<span class='no'>ids.mean</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>aggr</span>, <span class='no'>res</span>, <span class='no'>...</span>) <span class='fu'>c</span>(<span class='no'>aggr</span>, <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;  [1] -2.039499527 -1.856792547 -1.746638364 -2.489866496 -1.123938608
+#&gt;  [6] -0.600679522 -1.180274834 -1.879961731  0.118195223 -0.407482124
+#&gt; [11]  0.273948395  0.337556509  1.048378186  0.355671440  1.513626307
+#&gt; [16]  0.052444292  2.231719815  2.195750863  1.913149967  2.868333776
+#&gt; [21] -2.170322144 -2.172833518 -2.049205259 -2.105353492 -1.086714422
+#&gt; [26] -0.602678115 -0.559693979 -0.758708395 -0.003604666  0.216947925
+#&gt; [31]  0.223146935  0.006460301  0.915070959  0.952257332  1.311758334
+#&gt; [36]  1.174737127  2.009190963  1.939532427  1.914310422  2.424706872</div><div class='input'>
 <span class='co'># Join info table with all results and calculate mean of results</span>
 <span class='co'># grouped by n and algorithm</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='findJobs.html'>findDone</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='no'>pars</span> <span class='kw'>=</span> <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='no'>results</span> <span class='kw'>=</span> <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='no'>ids</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='no'>tab</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ljoin</a></span>(<span class='no'>pars</span>, <span class='no'>results</span>)
-<span class='no'>tab</span>[, <span class='fu'>list</span>(<span class='kw'>mres</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"n"</span>, <span class='st'>"algorithm"</span>)]</div><div class='output co'>#&gt;      n algorithm         mres
-#&gt; 1:  50        a1  0.016107859
-#&gt; 2: 100        a1  0.070554432
-#&gt; 3:  50        a2 -0.060461356
-#&gt; 4: 100        a2  0.007813407</div></pre>
+<span class='no'>tab</span>[, <span class='fu'>list</span>(<span class='kw'>mres</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"n"</span>, <span class='st'>"algorithm"</span>)]</div><div class='output co'>#&gt;      n algorithm        mres
+#&gt; 1:  50        a1 -0.02081795
+#&gt; 2: 100        a1  0.07895028
+#&gt; 3:  50        a2  0.17162881
+#&gt; 4: 100        a2 -0.03108940</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

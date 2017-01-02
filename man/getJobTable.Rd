@@ -76,13 +76,16 @@ f = function(x) if (x < 0) stop("x must be > 0") else sqrt(x)
 batchMap(f, x = c(-1, 0, 1), reg = tmp)
 submitJobs(reg = tmp)
 waitForJobs(reg = tmp)
+addJobTags(1:2, "tag1", reg = tmp)
+addJobTags(2, "tag2", reg = tmp)
 
 # Complete table:
 getJobTable(reg = tmp, flatten = FALSE)
 
-# Table with tags:
-addJobTags(1:2, "tag1", reg = tmp)
-addJobTags(2, "tag2", reg = tmp)
+# Job parameters:
+getJobPars(reg = tmp, flatten = FALSE)
+
+# Set and retrieve tags:
 getJobTags(reg = tmp)
 
 # Job parameters with tags right-joined:

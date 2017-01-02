@@ -1,10 +1,10 @@
 ---
-title: "Error handling"
+title: "Error Handling"
 output:
   html_document:
     toc: false
 vignette: >
-  %\VignetteIndexEntry{Example/ErrorHandling}
+  %\VignetteIndexEntry{Error Handling}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

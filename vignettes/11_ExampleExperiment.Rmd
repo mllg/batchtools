@@ -1,5 +1,5 @@
 ---
-title: "Example for the usage of different algorithms on different problems"
+title: "Example 2: Problems and Algorithms"
 output:
   html_document:
     toc: true
@@ -7,7 +7,7 @@ output:
       collapsed: false
       smooth_scroll: false
 vignette: >
-  %\VignetteIndexEntry{Example 2}
+  %\VignetteIndexEntry{Example 2: Problems and Algorithms}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

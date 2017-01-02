@@ -134,25 +134,14 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'><span class='co'># resources are usually forwared from submitJobs()</span>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'>
+<span class='co'># resources are usually set in submitJobs()</span>
 <span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'>makeJobCollection</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>foo</span> <span class='kw'>=</span> <span class='st'>"bar"</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>print</span>(<span class='fu'>ls.str</span>(<span class='no'>jc</span>))</div><div class='output co'>#&gt; array.var :  chr NA
-#&gt; file.dir :  chr &quot;/scratch/registry70cf62b37f3a&quot;
-#&gt; job.hash :  chr &quot;job23d595f7f7e0ff6308fcc37faf468094&quot;
-#&gt; jobs : Classes ‘data.table’ and &#39;data.frame&#39;:	3 obs. of  2 variables:
-#&gt;  $ job.id: int  1 2 3
-#&gt;  $ pars  :List of 3
-#&gt; load :  chr(0) 
-#&gt; log.file :  chr &quot;/scratch/registry70cf62b37f3a/logs/job23d595f7f7e0ff6308fcc37faf468094.log&quot;
-#&gt; namespaces :  chr(0) 
-#&gt; n.array.jobs :  int 1
-#&gt; packages :  chr &quot;methods&quot;
-#&gt; resources : List of 1
-#&gt;  $ foo: chr &quot;bar&quot;
-#&gt; seed :  int 409864812
-#&gt; source :  chr(0) 
-#&gt; uri :  chr &quot;/scratch/registry70cf62b37f3a/jobs/job23d595f7f7e0ff6308fcc37faf468094.rds&quot;
-#&gt; work.dir :  chr &quot;/home/lang/Projekte/batchtools/docs/reference&quot;</div></pre>
+<span class='fu'>ls</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt;  [1] &quot;array.var&quot;    &quot;file.dir&quot;     &quot;job.hash&quot;     &quot;jobs&quot;         &quot;load&quot;        
+#&gt;  [6] &quot;log.file&quot;     &quot;namespaces&quot;   &quot;n.array.jobs&quot; &quot;packages&quot;     &quot;resources&quot;   
+#&gt; [11] &quot;seed&quot;         &quot;source&quot;       &quot;uri&quot;          &quot;work.dir&quot;    </div><div class='input'><span class='no'>jc</span>$<span class='no'>resources</span></div><div class='output co'>#&gt; $foo
+#&gt; [1] &quot;bar&quot;
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

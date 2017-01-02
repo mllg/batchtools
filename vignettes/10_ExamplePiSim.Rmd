@@ -1,10 +1,10 @@
 ---
-title: "A short example for the usage of batchtools: Approximation of Pi"
+title: "Example 1: Approximation of Pi"
 output:
   html_document:
     toc: false
 vignette: >
-  %\VignetteIndexEntry{Example 1}
+  %\VignetteIndexEntry{Example 1: Approximation of Pi}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
