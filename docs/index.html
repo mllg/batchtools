@@ -40,8 +40,13 @@
     <div id="batchtools" class="section level1">
 <div class="page-header"><h1 class="hasAnchor"><a href="#batchtools" class="anchor"> </a>batchtools</h1></div>
 
-<p>As a successor of the packages <a href="https://github.com/tudo-r/BatchJobs">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a>, batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Torque, or SGE. For a complete list, see the <a href="https://mllg.github.io/batchtools/articles/Setup">Setup vignette</a>. Moreover, the package provides an abstraction mechanism to define large-scale computer experiments in a well-organized and reproducible way.</p>
-<div id="installation" class="section level2">
+<p>As a successor of the packages <a href="https://github.com/tudo-r/BatchJobs">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a>, batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, Torque/OpenPBS, Load Sharing Facility (LSF) or DockerSwarm (see the <a href="https://mllg.github.io/batchtools/articles/Setup">Setup vignette</a>).</p>
+<p>The main features conclude:</p>
+<ul><li>Convenience: All relevant batch system operations (submitting, listing, killing) are either handled internally or abstracted via simple R functions</li>
+<li>Portability: A well-defined interface makes the package applicable in most high-performance computing environments</li>
+<li>Reproducibility: Every computational part has an associated seed stored in a data base which ensures reproducibility even when the underlying batch system changes</li>
+<li>Abstraction: The code layers for algorithms, experiment definitions and execution are cleanly separated and allow to write readable and maintainable code to manage even large scale computer experiments</li>
+</ul><div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"> </a>Installation</h2>
 <p>Install the stable version from CRAN:</p>
@@ -49,12 +54,18 @@
 <p>For the development version, use <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
 <pre class="{r}"><code>devtools::install_github("mllg/batchtools")</code></pre>
 </div>
+<div id="why-batchtools" class="section level2">
+<h2 class="hasAnchor">
+<a href="#why-batchtools" class="anchor"> </a>Why batchtools?</h2>
+<p>The development of <a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> is discontinued because of the following reasons:</p>
+<ul><li>Maintainability: The packages <a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> are tightly connected which makes maintaining difficult. Changes have to be synchronized and tested against the current CRAN versions for compatibility. Furthermore, BatchExperiments violates CRAN policies by calling internal functions of BatchJobs.</li>
+<li>Data base issues: Although we invested weeks to mitigate issues with locks of the SQLite data base or file system (staged queries, file system timeouts, &hellip;), <code>BatchJobs</code> kept working unreliable on some systems with high latency or specific file systems. This made <code>BatchJobs</code> unusable for many users.</li>
+</ul><p><a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> will remain on CRAN, but new features are unlikely to be ported back. Changes are covered in the <a href="https://github.com/mllg/batchtools/blob/master/NEWS.md">NEWS</a>.</p>
+</div>
 <div id="resources" class="section level2">
 <h2 class="hasAnchor">
 <a href="#resources" class="anchor"> </a>Resources</h2>
-<ul><li>
-<a href="https://github.com/mllg/batchtools/blob/master/NEWS.md">NEWS</a> including a comparison with <a href="https://github.com/tudo-r/BatchJobs">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a>
-</li>
+<ul><li><a href="https://github.com/mllg/batchtools/blob/master/NEWS.md">NEWS</a></li>
 <li><a href="https://mllg.github.io/batchtools/articles/Setup">Setup</a></li>
 <li><a href="https://mllg.github.io/batchtools/">Documentation and Vignettes</a></li>
 <li><a href="http://www.jstatsoft.org/v64/i11">Paper on BatchJobs/BatchExperiments</a></li>

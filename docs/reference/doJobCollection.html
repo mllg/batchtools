@@ -97,7 +97,8 @@ containing a &#8220;JobCollection&#8221; as RDS file (as stored by <code><a href
       <dt>output</dt>
       <dd>[<code>character(1)</code>]
 Path to a file to write the output to. Defaults to <code>NULL</code> which means
-that output is written to the active <code><a href='http://www.rdocumentation.org/packages/base/topics/sink'>sink</a></code>.</dd>
+that output is written to the active <code><a href='http://www.rdocumentation.org/packages/base/topics/sink'>sink</a></code>.
+Do not set this if your scheduler redirects output to a log file.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -110,17 +111,18 @@ that output is written to the active <code><a href='http://www.rdocumentation.or
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 jobs ...</span></div><div class='input'><span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'><a href='makeJobCollection.html'>makeJobCollection</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>doJobCollection</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt; ### [bt 2016-12-13 21:40:54]: Starting calculation of 2 jobs
-#&gt; ### [bt 2016-12-13 21:40:54]: Setting working directory to &#39;/Users/michel/Projekte/batchtools/docs/reference&#39;
-#&gt; ### [bt 2016-12-13 21:40:54]: Memory measurement disabled
-#&gt; ### [bt 2016-12-13 21:40:54]: Starting job [batchtools job.id=1]
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 jobs ...</span></div><div class='input'><span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'><a href='makeJobCollection.html'>makeJobCollection</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'>doJobCollection</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt; ### [bt 2017-01-02 13:47:16]: This is batchtools v0.9.1
+#&gt; ### [bt 2017-01-02 13:47:16]: Starting calculation of 2 jobs
+#&gt; ### [bt 2017-01-02 13:47:16]: Setting working directory to &#39;/home/lang/Projekte/batchtools/docs/reference&#39;
+#&gt; ### [bt 2017-01-02 13:47:16]: Memory measurement disabled
+#&gt; ### [bt 2017-01-02 13:47:16]: Starting job [batchtools job.id=1]
 #&gt; 
-#&gt; ### [bt 2016-12-13 21:40:54]: Job terminated successfully [batchtools job.id=1]
-#&gt; ### [bt 2016-12-13 21:40:54]: Starting job [batchtools job.id=2]
+#&gt; ### [bt 2017-01-02 13:47:16]: Job terminated successfully [batchtools job.id=1]
+#&gt; ### [bt 2017-01-02 13:47:16]: Starting job [batchtools job.id=2]
 #&gt; 
-#&gt; ### [bt 2016-12-13 21:40:54]: Job terminated successfully [batchtools job.id=2]
-#&gt; ### [bt 2016-12-13 21:40:54]: Calculation finished!</div></pre>
+#&gt; ### [bt 2017-01-02 13:47:16]: Job terminated successfully [batchtools job.id=2]
+#&gt; ### [bt 2017-01-02 13:47:16]: Calculation finished!</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
