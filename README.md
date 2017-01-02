@@ -9,9 +9,9 @@ As a successor of the packages [BatchJobs](https://github.com/tudo-r/BatchJobs) 
 
 The main features conclude:
 * Convenience: All relevant batch system operations (submitting, listing, killing) are either handled internally or abstracted via simple R functions
-* Portability: A well-defined interface makes the package applicable in most high-performance computing environments
+* Portability: With a well-defined interface, the source is independent from the underlying batch system - prototype locally, deploy on any high performance cluster
 * Reproducibility: Every computational part has an associated seed stored in a data base which ensures reproducibility even when the underlying batch system changes
-* Abstraction: The code layers for algorithms, experiment definitions and execution are cleanly separated and allow to write readable and maintainable code to manage even large scale computer experiments
+* Abstraction: The code layers for algorithms, experiment definitions and execution are cleanly separated and allow to write readable and maintainable code to manage large scale computer experiments
 
 
 ## Installation
@@ -25,18 +25,19 @@ devtools::install_github("mllg/batchtools")
 ```
 
 ## Why batchtools?
-The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) is discontinued because of the following reasons:
+The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) is discontinued for the following reasons:
 
 * Maintainability: The packages [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) are tightly connected which makes maintaining difficult. Changes have to be synchronized and tested against the current CRAN versions for compatibility. Furthermore, BatchExperiments violates CRAN policies by calling internal functions of BatchJobs.
 * Data base issues: Although we invested weeks to mitigate issues with locks of the SQLite data base or file system (staged queries, file system timeouts, ...), `BatchJobs` kept working unreliable on some systems with high latency or specific file systems. This made `BatchJobs` unusable for many users.
 
 [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) will remain on CRAN, but new features are unlikely to be ported back.
-Changes are covered in the [NEWS](https://github.com/mllg/batchtools/blob/master/NEWS.md).
+See this [vignette](https://mllg.github.io/batchtools/articles/02_Migration.html) for a comparison of the packages.
+
 
 ## Resources
-* [NEWS](https://github.com/mllg/batchtools/blob/master/NEWS.md)
-* [Setup](https://mllg.github.io/batchtools/articles/Setup)
-* [Documentation and Vignettes](https://mllg.github.io/batchtools/)
+* [NEWS](https://mllg.github.io/batchtools/news/)
+* [Function reference](https://mllg.github.io/batchtools/reference)
+* [Vignettes](https://mllg.github.io/batchtools/articles)
 * [Paper on BatchJobs/BatchExperiments](http://www.jstatsoft.org/v64/i11)
 
 
