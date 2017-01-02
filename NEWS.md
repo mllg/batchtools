@@ -14,4 +14,4 @@
 # batchtools 0.9.0
 
 Initial CRAN release.
-See this [vignette](https://mllg.github.io/batchtools/articles/02_Migration.html) for a brief comparison with [BatchJobs](https://cran.r-project.org/package=BatchJobs)/[BatchExperiments](https://cran.r-project.org/package=BatchExperiments).
+See this [vignette](https://mllg.github.io/batchtools/articles/v01_Migration) for a brief comparison with [BatchJobs](https://cran.r-project.org/package=BatchJobs)/[BatchExperiments](https://cran.r-project.org/package=BatchExperiments).

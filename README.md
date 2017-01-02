@@ -31,14 +31,14 @@ The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchE
 * Data base issues: Although we invested weeks to mitigate issues with locks of the SQLite data base or file system (staged queries, file system timeouts, ...), `BatchJobs` kept working unreliable on some systems with high latency or specific file systems. This made `BatchJobs` unusable for many users.
 
 [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) will remain on CRAN, but new features are unlikely to be ported back.
-See this [vignette](https://mllg.github.io/batchtools/articles/02_Migration.html) for a comparison of the packages.
+See this [vignette](https://mllg.github.io/batchtools/articles/v01_Migration) for a comparison of the packages.
 
 
 ## Resources
 * [NEWS](https://mllg.github.io/batchtools/news/)
 * [Function reference](https://mllg.github.io/batchtools/reference)
 * [Vignettes](https://mllg.github.io/batchtools/articles)
-* [Paper on BatchJobs/BatchExperiments](http://www.jstatsoft.org/v64/i11)
+* [Paper on BatchJobs/BatchExperiments](http://www.jstatsoft.org/v64/i11): The described concept still holds for batchtools and most examples work analogously (see this [vignette](https://mllg.github.io/batchtools/articles/v01_Migration) for differences between the packages).
 
 
 ## Related Software
