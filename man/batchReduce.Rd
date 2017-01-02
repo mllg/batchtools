@@ -4,7 +4,7 @@
 \alias{batchReduce}
 \title{Reduce Operation for Batch Systems}
 \usage{
-batchReduce(fun, xs, init = NULL, blocks = seq_along(xs),
+batchReduce(fun, xs, init = NULL, chunks = seq_along(xs),
   more.args = list(), reg = getDefaultRegistry())
 }
 \arguments{
@@ -17,7 +17,7 @@ Vector to reduce.}
 \item{init}{[any]\cr
 Initial object for reducing. See \code{\link[base]{Reduce}}.}
 
-\item{blocks}{[\code{integer(length(xs))}]\cr
+\item{chunks}{[\code{integer(length(xs))}]\cr
 Group for each element of \code{xs}. Can be generated with \code{\link{chunk}}.}
 
 \item{more.args}{[\code{list}]\cr
@@ -44,8 +44,8 @@ xs = 1:100
 f = function(aggr, x) aggr + x
 
 # sum 20 numbers on each slave process, i.e. 5 jobs
-blocks = chunk(xs, chunk.size = 5)
-batchReduce(fun = f, 1:100, init = 0, blocks = blocks, reg = tmp)
+chunks = chunk(xs, chunk.size = 5)
+batchReduce(fun = f, 1:100, init = 0, chunks = chunks, reg = tmp)
 submitJobs(reg = tmp)
 waitForJobs(reg = tmp)
 
