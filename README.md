@@ -5,9 +5,14 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/1gdgk7twxrghi943/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/batchtools-jgbhb/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/mllg/batchtools.svg)](https://coveralls.io/r/mllg/batchtools?branch=master)
 
-As a successor of the packages [BatchJobs](https://github.com/tudo-r/BatchJobs) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments), batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Torque, or SGE.
-For a complete list, see the [Setup vignette](https://mllg.github.io/batchtools/articles/Setup).
-Moreover, the package provides an abstraction mechanism to define large-scale computer experiments in a well-organized and reproducible way.
+As a successor of the packages [BatchJobs](https://github.com/tudo-r/BatchJobs) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments), batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, Torque/OpenPBS, Load Sharing Facility (LSF) or DockerSwarm (see the [Setup vignette](https://mllg.github.io/batchtools/articles/Setup)).
+
+The main features conclude:
+* Convenience: All relevant batch system operations (submitting, listing, killing) are either handled internally or abstracted via simple R functions
+* Portability: A well-defined interface makes the package applicable in most high-performance computing environments
+* Reproducibility: Every computational part has an associated seed stored in a data base which ensures reproducibility even when the underlying batch system changes
+* Abstraction: The code layers for algorithms, experiment definitions and execution are cleanly separated and allow to write readable and maintainable code to manage even large scale computer experiments
+
 
 ## Installation
 Install the stable version from CRAN:
