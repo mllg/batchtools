@@ -14,7 +14,7 @@
 #'   Vector to reduce.
 #' @param init [any]\cr
 #'   Initial object for reducing. See \code{\link[base]{Reduce}}.
-#' @param blocks [\code{integer(length(xs))}]\cr
+#' @param chunks [\code{integer(length(xs))}]\cr
 #'   Group for each element of \code{xs}. Can be generated with \code{\link{chunk}}.
 #' @param more.args [\code{list}]\cr
 #'   A list of additional arguments passed to \code{fun}.
@@ -29,24 +29,24 @@
 #' f = function(aggr, x) aggr + x
 #'
 #' # sum 20 numbers on each slave process, i.e. 5 jobs
-#' blocks = chunk(xs, chunk.size = 5)
-#' batchReduce(fun = f, 1:100, init = 0, blocks = blocks, reg = tmp)
+#' chunks = chunk(xs, chunk.size = 5)
+#' batchReduce(fun = f, 1:100, init = 0, chunks = chunks, reg = tmp)
 #' submitJobs(reg = tmp)
 #' waitForJobs(reg = tmp)
 #'
 #' # now reduce one final time on master
 #' reduceResults(fun = function(aggr, job, res) f(aggr, res), reg = tmp)
-batchReduce = function(fun, xs, init = NULL, blocks = seq_along(xs), more.args = list(), reg = getDefaultRegistry()) {
+batchReduce = function(fun, xs, init = NULL, chunks = seq_along(xs), more.args = list(), reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, strict = TRUE)
   if (nrow(reg$defs) > 0L)
     stop("Registry must be empty")
   assertFunction(fun, c("aggr", "x"))
   assertAtomicVector(xs)
-  assertIntegerish(blocks, len = length(xs), any.missing = FALSE, lower = 0L)
+  assertIntegerish(chunks, len = length(xs), any.missing = FALSE, lower = 0L)
   assertList(more.args, names = "strict")
 
   more.args = c(more.args, list(..fun = fun, ..init = init))
-  batchMap(batchReduceWrapper, unname(split(xs, blocks)), more.args = more.args, reg = reg)
+  batchMap(batchReduceWrapper, unname(split(xs, chunks)), more.args = more.args, reg = reg)
 }
 
 batchReduceWrapper = function(xs.block, ..fun, ..init, ...) {
