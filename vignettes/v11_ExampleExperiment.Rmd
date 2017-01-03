@@ -99,7 +99,7 @@ getProblemIds()
 getAlgorithmIds()
 ```
 The flow to define experiments is summarized in the following figure:
-![flowchart](https://github.com/mllg/batchtools/blob/master/inst/images/tikz_prob_algo_simple.svg)
+![flowchart](tikz_prob_algo_simple.svg)
 
 
 # Creating jobs
