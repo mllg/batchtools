@@ -98,6 +98,9 @@ Defined problems and algorithms can be queried:
 getProblemIds()
 getAlgorithmIds()
 ```
+The flow to define experiments is summarized in the following figure:
+![flowchart](tikz_prob_algo_simple.svg)
+
 
 # Creating jobs
 
