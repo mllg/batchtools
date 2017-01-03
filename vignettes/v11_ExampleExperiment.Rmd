@@ -99,7 +99,9 @@ getProblemIds()
 getAlgorithmIds()
 ```
 The flow to define experiments is summarized in the following figure:
-![flowchart](tikz_prob_algo_simple.svg)
+```{r, echo=FALSE}
+knitr::include_graphics("tikz_prob_algo_simple.png")
+```
 
 
 # Creating jobs
