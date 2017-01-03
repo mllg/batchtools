@@ -45,3 +45,9 @@ See this [vignette](https://mllg.github.io/batchtools/articles/v01_Migration) fo
 * The [High Performance Computing Task View](https://cran.r-project.org/web/views/HighPerformanceComputing.html) lists the most relevant packages for scientific computing with R
 * [batch](https://cran.r-project.org/package=batch) assists in splitting and submitting jobs to LSF and MOSIX clusters
 * [flowr](https://cran.r-project.org/package=flowr) supports LSF, Slurm, Torque and Moab and provides a scatter-gather approach to define computational jobs
+
+## Contributing to batchtools
+This R package is licensed under the [LGPL-3](https://www.gnu.org/licenses/lgpl-3.0.en.html).
+If you encounter problems using this software (lack of documentation, misleading or wrong documentation, unexpected behaviour, bugs, ...) or just want to suggest features, please open an issue in the [issue tracker](https://github.com/mllg/batchtools/issues).
+Pull requests are welcome and will be included at the discretion of the author.
+If you have customized a template file for your (larger) computing site, please share it: fork the repository, place your template in `inst/templates` and send a pull request.
