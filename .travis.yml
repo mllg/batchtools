@@ -18,22 +18,22 @@ addons:
       - libssh2-1-dev
 
 r_binary_packages:
-  - covr
-  - data.table
   - backports
   - brew
   - checkmate
+  - covr
+  - data.table
   - digest
+  - e1071
+  - knitr
+  - parallelmap
   - progress
   - r6
-  - stringi
-  - e1071
-  - parallelmap
-  - knitr
   - ranger
   - rappdirs
   - rmarkdown
   - snow
+  - stringi
   - testthat
 
 after_success:
