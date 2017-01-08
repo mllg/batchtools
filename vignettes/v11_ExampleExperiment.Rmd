@@ -17,7 +17,7 @@ vignette: >
 We stick to a rather simple, but not unrealistic example to explain some further functionalities: Applying two classification learners to the famous iris data set (Anderson 1935), vary a few hyperparameters and evaluate the effect on the classification performance.
 
 First, we create a registry, the central meta-data object which records technical details and the setup of the experiments.
-We use an [`ExperimentRegistry`](https://mllg.github.io/batchtools/reference/ExperimentRegistry) where the job definition is split into creating problems and algorithms.
+We use an [`ExperimentRegistry`](https://mllg.github.io/batchtools/reference/makeExperimentRegistry) where the job definition is split into creating problems and algorithms.
 See the paper on [BatchJobs and BatchExperiments](http://www.jstatsoft.org/article/view/v064i11) for a detailed explanation.
 Again, we use a temporary registry and make it the default registry.
 ```{r, message = FALSE}

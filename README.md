@@ -5,7 +5,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/1gdgk7twxrghi943/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/batchtools-jgbhb/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/mllg/batchtools.svg)](https://coveralls.io/r/mllg/batchtools?branch=master)
 
-As a successor of the packages [BatchJobs](https://github.com/tudo-r/BatchJobs) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments), batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, Torque/OpenPBS, Load Sharing Facility (LSF) or DockerSwarm (see the [Setup vignette](https://mllg.github.io/batchtools/articles/Setup)).
+As a successor of the packages [BatchJobs](https://github.com/tudo-r/BatchJobs) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments), batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, Torque/OpenPBS, Load Sharing Facility (LSF) or DockerSwarm (see the [Setup vignette](https://mllg.github.io/batchtools/articles/v00_Setup)).
 
 The main features conclude:
 * Convenience: All relevant batch system operations (submitting, listing, killing) are either handled internally or abstracted via simple R functions
