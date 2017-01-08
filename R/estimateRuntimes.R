@@ -100,7 +100,7 @@ estimateRuntimes = function(tab, ..., reg = getDefaultRegistry()) {
 
 
 #' @rdname estimateRuntimes
-#' @param x [\code{RuntimeEstimate}]\cr
+#' @param x [\code{RuntimeEstimate}]\cr
 #'   Object to print.
 #' @param n [\code{integer(1)}]\cr
 #'   Number of parallel jobs to assume for runtime estimation.
