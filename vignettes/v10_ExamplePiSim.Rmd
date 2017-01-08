@@ -13,8 +13,8 @@ To get a first insight into the usage of `batchtools`, we start with an exemplar
 For background information, see [Wikipedia](https://en.wikipedia.org/wiki/Monte_Carlo_method).
 
 First, a so-called registry object has to be created, which defines a directory where all relevant information, files and results of the computational jobs will be stored.
-There are two different types of registry objects: First, a regular [`Registry`](https://mllg.github.io/batchtools/reference/Registry) which we will use in this example.
-Second, an [`ExperimentRegistry`](https://mllg.github.io/batchtools/reference/ExperimentRegistry) which provides an alternative way to define computational jobs and thereby is tailored for a broad range of large scale computer experiments (see, for example, [this vignette](ExampleExperiment.html)).
+There are two different types of registry objects: First, a regular [`Registry`](https://mllg.github.io/batchtools/reference/makeRegistry) which we will use in this example.
+Second, an [`ExperimentRegistry`](https://mllg.github.io/batchtools/reference/makeExperimentRegistry) which provides an alternative way to define computational jobs and thereby is tailored for a broad range of large scale computer experiments (see, for example, [this vignette](ExampleExperiment.html)).
 Here, we use a temporary registry which is stored in the temp directory of the system and gets automatically deleted if you close the R session.
 
 ```{r, message = FALSE}
@@ -31,8 +31,8 @@ It can then be reused later, e.g., when you login to the system again, by callin
 
 When a registry object is created or loaded, it is stored for the active R session as the default.
 Therefore the argument `reg` will be ignored in functions calls of this example, assuming the correct registry is set as default.
-To get the current default registry, [`getDefaultRegistry`](https://mllg.github.io/batchtools/reference/Registry) can be used.
-To switch to another registry, use [`setDefaultRegistry()`](https://mllg.github.io/batchtools/reference/Registry).
+To get the current default registry, [`getDefaultRegistry`](https://mllg.github.io/batchtools/reference/makeRegistry) can be used.
+To switch to another registry, use [`setDefaultRegistry()`](https://mllg.github.io/batchtools/reference/makeRegistry).
 
 First, we create a function which samples $n$ points $(x_i, y_i)$ whereas $x_i$ and $y_i$ are distributed uniformly, i.e. $x_i, y_i \sim \mathcal{U}(0,1)$.
 Next, the distance to the origin $(0, 0)$ is calculated and the fraction of points in the unit circle ($d \leq 1$) is returned.

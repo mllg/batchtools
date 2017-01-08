@@ -93,9 +93,9 @@
 </ul>
 <p>To use the package with the socket cluster functions, you would call the respective constructor <a href="https://mllg.github.io/batchtools/reference/makeClusterFunctionsSocket">makeClusterFunctionsSocket()</a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistry.html">makeRegistry</a></span>(<span class="ot">NA</span>)</code></pre></div>
-<pre><code>## Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</code></pre>
+<pre><code>## Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reg$cluster.functions =<span class="st"> </span><span class="kw"><a href="../reference/makeClusterFunctionsSocket.html">makeClusterFunctionsSocket</a></span>(<span class="dv">2</span>)</code></pre></div>
-<p>To make this selection permanent for this registry, save the Registry with <a href="https://mllg.github.io/batchtools/reference/Registry">saveRegistry</a>. To make your cluster function selection permanent for a specific system across R sessions for all new Registries, you can set up a configuration file (see below).</p>
+<p>To make this selection permanent for this registry, save the Registry with <a href="https://mllg.github.io/batchtools/reference/makeRegistry">saveRegistry</a>. To make your cluster function selection permanent for a specific system across R sessions for all new Registries, you can set up a configuration file (see below).</p>
 <p>If you have trouble debugging your cluster functions, you can enable the debug mode for extra output. To do so, install the <a href="https://cran.r-project.org/package=debugme">debugme package</a> and set the environment variable <code>DEBUGME</code> to <code>batchtools</code> before you load the <code>batchtools</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Sys.setenv</span>(<span class="dt">DEBUGME =</span> <span class="st">"batchtools"</span>)
 <span class="kw">library</span>(batchtools)</code></pre></div>
@@ -110,12 +110,12 @@
 <div id="configuration-file" class="section level1">
 <h1 class="hasAnchor">
 <html><body><a href="#configuration-file" class="anchor"> </a></body></html>Configuration file</h1>
-<p>The configuration file can be used to set system specific options. Its default location depends on the operating system (see <a href="https://mllg.github.io/batchtools/reference/Registry">Registry</a>), but for the first time setup you can put one in the current working directory (as reported by <code>getwd()</code>). In order to set the cluster function implementation, you would generate a file with the following content:</p>
+<p>The configuration file can be used to set system specific options. Its default location depends on the operating system (see <a href="https://mllg.github.io/batchtools/reference/makeRegistry">Registry</a>), but for the first time setup you can put one in the current working directory (as reported by <code>getwd()</code>). In order to set the cluster function implementation, you would generate a file with the following content:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cluster.functions =<span class="st"> </span><span class="kw"><a href="../reference/makeClusterFunctionsInteractive.html">makeClusterFunctionsInteractive</a></span>()</code></pre></div>
-<p>The configuration file is parsed whenever you create or load a <a href="https://mllg.github.io/batchtools/reference/Registry">Registry</a>. It is sourced inside of your registry which has the advantage that you can (a) access all of the parameters which are passed to <a href="https://mllg.github.io/batchtools/reference/Registry">makeRegistry</a> and (b) you can also directly change them. Lets say you always want your working directory in your home directory and you always want to load the <code>checkmate</code> package on the nodes, you can just append these lines:</p>
+<p>The configuration file is parsed whenever you create or load a <a href="https://mllg.github.io/batchtools/reference/makeRegistry">Registry</a>. It is sourced inside of your registry which has the advantage that you can (a) access all of the parameters which are passed to <a href="https://mllg.github.io/batchtools/reference/makeRegistry">makeRegistry</a> and (b) you can also directly change them. Lets say you always want your working directory in your home directory and you always want to load the <code>checkmate</code> package on the nodes, you can just append these lines:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">work.dir =<span class="st"> "~"</span>
 packages =<span class="st"> </span><span class="kw">union</span>(packages, <span class="st">"checkmate"</span>)</code></pre></div>
-<p>See the documentation on <a href="https://mllg.github.io/batchtools/reference/Registry">Registry</a> for a more complete list of supported configuration options.</p>
+<p>See the documentation on <a href="https://mllg.github.io/batchtools/reference/makeRegistry">Registry</a> for a more complete list of supported configuration options.</p>
 </div>
 </div>
   </div>
