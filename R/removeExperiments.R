@@ -18,12 +18,13 @@ removeExperiments = function(ids = NULL, reg = getDefaultRegistry()) {
 
   info("Removing %i Experiments ...", nrow(ids))
   reg$status = reg$status[!ids]
-
   i = reg$defs[!reg$status, on = "def.id", which = TRUE]
   if (length(i) > 0L) {
     info("Cleaning up %i job definitions ...", length(i))
     reg$defs = reg$defs[-i]
   }
+  fns = getResultFiles(reg$file.dir, ids$job.id)
+  file.remove(fns[file.exists(fns)])
 
   sweepRegistry(reg)
   return(ids)
