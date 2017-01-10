@@ -46,7 +46,8 @@ in a simple Longest Processing Time (LPT) algorithm to give an estimate for the 
 }
 \examples{
 # Create a simple toy registry
-tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+set.seed(1)
+tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE, seed = 1)
 addProblem(name = "iris", data = iris, fun = function(data, ...) nrow(data), reg = tmp)
 addAlgorithm(name = "nrow", function(instance, ...) nrow(instance), reg = tmp)
 addAlgorithm(name = "ncol", function(instance, ...) ncol(instance), reg = tmp)

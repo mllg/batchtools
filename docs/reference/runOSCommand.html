@@ -86,7 +86,8 @@ The interface is similar to <code><a href='http://www.rdocumentation.org/package
 <em>and</em> the output.</p>
     
 
-    <pre><span class='fu'>runOSCommand</span>(<span class='no'>sys.cmd</span>, <span class='kw'>sys.args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>nodename</span> <span class='kw'>=</span> <span class='st'>"localhost"</span>)</pre>
+    <pre><span class='fu'>runOSCommand</span>(<span class='no'>sys.cmd</span>, <span class='kw'>sys.args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>stdin</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>nodename</span> <span class='kw'>=</span> <span class='st'>"localhost"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -96,6 +97,9 @@ Command to run.</dd>
       <dt>sys.args</dt>
       <dd>[<code>character</code>]
 Arguments for <code>sys.cmd</code>.</dd>
+      <dt>stdin</dt>
+      <dd>[<code>character(1)</code>]
+Argument passed to <code><a href='http://www.rdocumentation.org/packages/base/topics/system2'>system2</a></code>.</dd>
       <dt>nodename</dt>
       <dd>[<code>character(1)</code>]
 Name of the SSH node to run the command on. If set to &#8220;localhost&#8221; (default), the command

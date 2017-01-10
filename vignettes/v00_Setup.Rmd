@@ -39,7 +39,7 @@ To use the package with the socket cluster functions, you would call the respect
 reg = makeRegistry(NA)
 reg$cluster.functions = makeClusterFunctionsSocket(2)
 ```
-To make this selection permanent for this registry, save the Registry with [saveRegistry](https://mllg.github.io/batchtools/reference/Registry).
+To make this selection permanent for this registry, save the Registry with [saveRegistry](https://mllg.github.io/batchtools/reference/makeRegistry).
 To make your cluster function selection permanent for a specific system across R sessions for all new Registries, you can set up a configuration file (see below).
 
 If you have trouble debugging your cluster functions, you can enable the debug mode for extra output.
@@ -67,16 +67,16 @@ If the flexibility which comes with templating is not sufficient, you can still 
 # Configuration file
 
 The configuration file can be used to set system specific options.
-Its default location depends on the operating system (see [Registry](https://mllg.github.io/batchtools/reference/Registry)), but for the first time setup you can put one in the current working directory (as reported by `getwd()`).
+Its default location depends on the operating system (see [Registry](https://mllg.github.io/batchtools/reference/makeRegistry)), but for the first time setup you can put one in the current working directory (as reported by `getwd()`).
 In order to set the cluster function implementation, you would generate a file with the following content:
 ```{r,eval = FALSE}
 cluster.functions = makeClusterFunctionsInteractive()
 ```
-The configuration file is parsed whenever you create or load a [Registry](https://mllg.github.io/batchtools/reference/Registry).
-It is sourced inside of your registry which has the advantage that you can (a) access all of the parameters which are passed to [makeRegistry](https://mllg.github.io/batchtools/reference/Registry) and (b) you can also directly change them.
+The configuration file is parsed whenever you create or load a [Registry](https://mllg.github.io/batchtools/reference/makeRegistry).
+It is sourced inside of your registry which has the advantage that you can (a) access all of the parameters which are passed to [makeRegistry](https://mllg.github.io/batchtools/reference/makeRegistry) and (b) you can also directly change them.
 Lets say you always want your working directory in your home directory and you always want to load the `checkmate` package on the nodes, you can just append these lines:
 ```{r, eval = FALSE}
 work.dir = "~"
 packages = union(packages, "checkmate")
 ```
-See the documentation on [Registry](https://mllg.github.io/batchtools/reference/Registry) for a more complete list of supported configuration options.
+See the documentation on [Registry](https://mllg.github.io/batchtools/reference/makeRegistry) for a more complete list of supported configuration options.

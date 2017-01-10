@@ -26,7 +26,8 @@
 #' @seealso lpt binpack
 #' @examples
 #' # Create a simple toy registry
-#' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+#' set.seed(1)
+#' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE, seed = 1)
 #' addProblem(name = "iris", data = iris, fun = function(data, ...) nrow(data), reg = tmp)
 #' addAlgorithm(name = "nrow", function(instance, ...) nrow(instance), reg = tmp)
 #' addAlgorithm(name = "ncol", function(instance, ...) ncol(instance), reg = tmp)
@@ -99,7 +100,7 @@ estimateRuntimes = function(tab, ..., reg = getDefaultRegistry()) {
 
 
 #' @rdname estimateRuntimes
-#' @param x [\code{RuntimeEstimate}]\cr
+#' @param x [\code{RuntimeEstimate}]\cr
 #'   Object to print.
 #' @param n [\code{integer(1)}]\cr
 #'   Number of parallel jobs to assume for runtime estimation.
