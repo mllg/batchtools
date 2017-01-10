@@ -94,14 +94,14 @@ test_that("sweepRegistry", {
   writeRDS(makeJobCollection(1, reg = reg), file.path(reg$file.dir, "jobs", "test.rds"))
 
   expect_data_table(reg$resources, nrow = 2)
-  expect_character(list.files(file.path(reg$file.dir, "logs")), len = 2L)
+  expect_character(list.files(getLogPath(reg)), len = 2L)
   if (reg$cluster.functions$store.job)
     expect_character(list.files(file.path(reg$file.dir, "jobs")), len = 1L)
 
   expect_true(sweepRegistry(reg))
 
   expect_data_table(reg$resources, nrow = 1)
-  expect_character(list.files(file.path(reg$file.dir, "logs")), len = 1L)
+  expect_character(list.files(getLogPath(reg)), len = 1L)
   if (reg$cluster.functions$store.job)
     expect_character(list.files(file.path(reg$file.dir, "jobs")), len = 0L)
   checkTables(reg)
@@ -128,10 +128,10 @@ test_that("clearRegistry", {
   clearRegistry(reg)
   checkTables(reg, nrow = 0L)
 
-  expect_identical(list.files(file.path(reg$file.dir, "jobs")), character(0))
-  expect_identical(list.files(file.path(reg$file.dir, "logs")), character(0))
-  expect_identical(list.files(file.path(reg$file.dir, "results")), character(0))
-  expect_identical(list.files(file.path(reg$file.dir, "updates")), character(0))
+  expect_identical(list.files(getJobPath(reg)), character(0))
+  expect_identical(list.files(getLogPath(reg)), character(0))
+  expect_identical(list.files(getResultPath(reg)), character(0))
+  expect_identical(list.files(getUpdatePath(reg)), character(0))
   expect_false(file.exists(file.path(reg$file.dir, "user.function.rds")))
 
   expect_identical(batchMap(identity, 1:4, reg = reg), data.table(job.id = 1:4, key = "job.id"))

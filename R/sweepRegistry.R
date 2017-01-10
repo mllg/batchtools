@@ -14,39 +14,44 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   "!DEBUG Running sweepRegistry"
 
   # TODO: use data table keys here
-  result.files = list.files(file.path(reg$file.dir, "results"), pattern = "\\.rds$")
+  path = getResultPath(reg)
+  result.files = list.files(path, pattern = "\\.rds$")
   has.result = funion(.findDone(reg = reg), .findOnSystem(reg = reg))
   i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% has.result$job.id)
   if (length(i) > 0L) {
     info("Removing %i obsolete result files ...", length(i))
-    file.remove(file.path(reg$file.dir, "results", result.files[i]))
+    file.remove(file.path(path, result.files[i]))
   }
 
-  log.files = list.files(file.path(reg$file.dir, "logs"), pattern = "\\.log$")
+  path = getLogPath(reg)
+  log.files = list.files(path, pattern = "\\.log$")
   i = which(stri_replace_last_fixed(log.files, ".log", "") %nin% reg$status$job.hash)
   if (length(i) > 0L) {
     info("Removing %i obsolete log files ...", length(i))
-    file.remove(file.path(reg$file.dir, "logs", log.files[i]))
+    file.remove(file.path(path, log.files[i]))
   }
 
-  job.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.rds$")
+  path = getJobPath(reg)
+  job.files = list.files(path, pattern = "\\.rds$")
   i = which(stri_replace_last_fixed(job.files, ".rds", "") %nin% reg$status$job.hash)
   if (length(i) > 0L) {
     info("Removing %i obsolete job files ...", length(i))
     file.remove(file.path(reg$file.dir, "jobs", job.files[i]))
   }
 
-  job.desc.files = list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.job$")
+  path = getJobPath(reg)
+  job.desc.files = list.files(path, pattern = "\\.job$")
   if (length(job.desc.files) > 0L) {
     info("Removing %i job description files ...", length(i))
     file.remove(file.path(reg$file.dir, "jobs", job.desc.files))
   }
 
-  external.dirs = list.files(file.path(reg$file.dir, "external"), pattern = "^[0-9]+$")
+  path = getExternalPath(reg)
+  external.dirs = list.files(path, pattern = "^[0-9]+$")
   i = which(as.integer(external.dirs) %nin% .findSubmitted(reg = reg)$job.id)
   if (length(i) > 0L) {
     info("Removing %i external directories of unsubmitted jobs ...", length(i))
-    unlink(file.path(reg$file.dir, "external", external.dirs[i]), recursive = TRUE)
+    unlink(getExternalDirs(reg$file.dir, external.dirs[i]), recursive = TRUE)
   }
 
   i = reg$resources[!reg$status, on = "resource.id", which = TRUE]

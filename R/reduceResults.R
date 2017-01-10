@@ -41,13 +41,12 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
   ids = convertIds(reg, ids, default = .findDone(reg = reg), keep.order = TRUE)
   fun = match.fun(fun)
   if (nrow(.findNotDone(reg, ids)))
-      stop("All jobs must be have been successfully computed")
+    stop("All jobs must be have been successfully computed")
 
-  fns = sprintf("%i.rds", ids$job.id)
-  if (length(fns) == 0L)
+  if (nrow(ids) == 0L)
     return(if (missing(init)) NULL else init)
 
-  fns = file.path(reg$file.dir, "results", fns)
+  fns = getResultFiles(reg$file.dir, ids$job.id)
   if (missing(init)) {
     init = readRDS(fns[1L])
     fns = fns[-1L]
@@ -136,7 +135,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
   setkeyv(results, "job.id")[]
 }
 
-.reduceResultsList = function(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry()) {
+.reduceResultsList = function(ids, fun = NULL, ..., reg = getDefaultRegistry()) {
   if (is.null(fun)) {
     worker = function(..res, ..job, ...) ..res
   } else {
@@ -147,7 +146,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
       worker = function(..res, ..job, ...) fun(..res, ...)
   }
 
-  fns = file.path(reg$file.dir, "results", sprintf("%i.rds", ids$job.id))
+  fns = getResultFiles(reg$file.dir, ids$job.id)
   n = length(fns)
   if (n == 0L)
     return(list())
@@ -155,6 +154,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
   results = vector("list", n)
   pb = makeProgressBar(total = n, format = "Reducing [:bar] :percent eta: :eta")
   cache = Cache$new(reg$file.dir)
+
   for (i in which(file.exists(fns))) {
     results[[i]] = worker(readRDS(fns[i]), makeJob(ids$job.id[i], cache = cache, reg = reg), ...)
     pb$tick()

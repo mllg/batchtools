@@ -10,7 +10,7 @@
 #' @export
 syncRegistry = function(reg = getDefaultRegistry()) {
   "!DEBUG Triggered syncRegistry"
-  fns = list.files(file.path(reg$file.dir, "updates"), full.names = TRUE)
+  fns = list.files(getUpdatePath(reg), full.names = TRUE)
   if (length(fns) == 0L)
     return(invisible(TRUE))
 

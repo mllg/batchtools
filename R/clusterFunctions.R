@@ -184,7 +184,7 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 cfBrewTemplate = function(reg, text, jc) {
   assertString(text)
 
-  outfile = if (batchtools$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
+  outfile = if (batchtools$debug) getJobFiles(reg$file.dir, jc$job.hash) else tempfile("job")
   parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
   "!DEBUG Brewing template to file '`outfile`'"

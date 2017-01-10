@@ -43,7 +43,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     updates = data.table(job.id = jc$jobs$job.id, started = now, done = now,
       error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),
       memory = NA_real_, key = "job.id")
-    writeRDS(updates, file = file.path(jc$file.dir, "updates", sprintf("%s-0.rds", jc$job.hash)), wait = TRUE)
+    writeRDS(updates, file = getUpdateFiles(jc$file.dir, jc$job.hash, 0L), wait = TRUE)
     invisible(NULL)
   }
 
@@ -71,7 +71,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
       return(error("Failed to subset JobCollection using array environment variable '%s' [='%s']", jc$array.var, i))
 
     if (jc$n.array.jobs == nrow(jc$jobs)) {
-        jc.file = file.path(jc$file.dir, "jobs", sprintf("%s.rds", jc$hash))
+        jc.file = getJobFiles(jc$file.dir, jc$hash)
         on.exit(file.remove(jc.file), add = TRUE)
     }
     jc$jobs = jc$jobs[i]
@@ -138,7 +138,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
       update$error = stri_trunc(stri_trim_both(as.character(result)), 500L, " [truncated]")
     } else {
       catf("\n### [bt %s]: Job terminated successfully [batchtools job.id=%i]", now(), id)
-      writeRDS(result, file = file.path(jc$file.dir, "results", sprintf("%i.rds", id)))
+      writeRDS(result, file = getResultFiles(jc$file.dir, id))
     }
     buf$add(i, update)
     buf$flush(jc)
@@ -170,7 +170,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
       i = self$updates[!is.na(started) & (!written), which = TRUE]
       if (length(i) > 0L) {
         first.id = self$updates$job.id[i[1L]]
-        writeRDS(self$updates[i], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, first.id)), wait = TRUE)
+        writeRDS(self$updates[i], file = getUpdateFiles(jc$file.dir, jc$job.hash, first.id), wait = TRUE)
         set(self$updates, i, "written", TRUE)
       }
     },

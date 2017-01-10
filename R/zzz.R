@@ -55,8 +55,8 @@ batchtools$hooks = data.table(
   if (batchtools$debug) {
     packageStartupMessage("Debug mode of batchtools enabled")
   }
-}
+} # nocov end
 
-.onUnload = function (libpath) {
-  library.dynam.unload("batchtools", libpath) # nocov
-}
+.onUnload = function (libpath) { # nocov start
+  library.dynam.unload("batchtools", libpath)
+} # nocov end

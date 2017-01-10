@@ -14,12 +14,12 @@ loadResult = function(id, missing.val, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   id = convertId(reg, id)
   if (missing(missing.val) && nrow(.findDone(reg, id)) == 0L)
-    stop("Job with not terminated")
+    stopf("Job with id %i not terminated", id$job.id)
   .loadResult(reg$file.dir, id$job.id, missing.val)
 }
 
 .loadResult = function(file.dir, id, missing.val) {
-  fn = file.path(file.dir, "results", sprintf("%i.rds", id))
+  fn = getResultFiles(file.dir, id)
   if (!file.exists(fn)) {
     if (missing(missing.val))
       stopf("Result for job with id=%i not found in %s", id, fn)

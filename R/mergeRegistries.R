@@ -55,24 +55,24 @@ mergeRegistries = function(source, target = getDefaultRegistry()) {
 
   info("Copying results ...")
   file.copy(
-    from = file.path(source$file.dir, "results", sprintf("%i.rds", status$job.id)),
-    to = file.path(target$file.dir, "results", sprintf("%i.rds", status$job.id))
+    from = getResultFiles(source$file.dir, status$job.id),
+    to = getResultFiles(target$file.dir, status$job.id)
   )
 
   info("Copying logs ...")
   file.copy(
-    from = file.path(source$file.dir, "logs", sprintf("%s.log", status$job.hash)),
-    to = file.path(target$file.dir, "results", sprintf("%s.log", status$job.hash))
+    from = getLogFiles(source$file.dir, status$job.hash),
+    to = getLogFiles(target$file.dir, status$job.hash)
   )
 
-  ext.dirs = intersect(list.files(file.path(source$file.dir, "external")), as.character(status$job.id))
+  ext.dirs = intersect(list.files(getExternalPath(source)), as.character(status$job.id))
   if (length(ext.dirs) > 0L) {
     info("Copying external directories ...")
-    target.dirs = file.path(target$file.dir, "external", ext.dirs)
+    target.dirs = getExternalDirs(target$file.dir, ext.dirs)
     lapply(target.dirs[!dir.exists(target.dirs)], dir.create)
     file.copy(
-      from = file.path(source$file.dir, "external", ext.dirs),
-      to = dirname(target.dirs),
+      from = getExternalDirs(source$file.dir, ext.dirs),
+      to = rep.int(getExternalPath(target), length(ext.dirs)),
       recursive = TRUE
     )
   }
