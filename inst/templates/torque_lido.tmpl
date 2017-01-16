@@ -69,6 +69,9 @@ export TMPDIR=/scratch/${USER}-${PBS_JOBID}
 ## export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>
 
+echo "Job ID is ${PBS_JOBID}"
+echo "Job Array ID is ${PBS_ARRAYID}"
+
 ## run R
 <%= if (use.mpi) "mpirun -np 1 " else "" %>Rscript -e 'batchtools::doJobCollection("<%= uri %>")'
 rm -rf /scratch/${USER}-${PBS_JOBID}
