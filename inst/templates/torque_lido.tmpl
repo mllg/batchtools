@@ -46,9 +46,6 @@ if (length(grep("^/data/", log.file)) > 0L) {
     log.file = sprintf("/home/%s/nobackup%s", user, substr(log.file, i, nchar(log.file)))
   }
 }
-
-if (array.jobs)
-  log.file = paste0(log.file, ".${PBS_ARRAYID}")
 -%>
 
 #PBS -N <%= job.hash %>
@@ -68,9 +65,6 @@ export TMPDIR=/scratch/${USER}-${PBS_JOBID}
 
 ## export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>
-
-echo "Job ID is ${PBS_JOBID}"
-echo "Job Array ID is ${PBS_ARRAYID}"
 
 ## run R
 <%= if (use.mpi) "mpirun -np 1 " else "" %>Rscript -e 'batchtools::doJobCollection("<%= uri %>")'

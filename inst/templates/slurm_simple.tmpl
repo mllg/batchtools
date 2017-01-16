@@ -21,7 +21,7 @@
 # relative paths are not handled well by Slurm
 log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
 if (array.jobs)
-  log.file = paste0(log.file, ".%a")
+  log.file = paste0(log.file, "-%a")
 -%>
 
 
