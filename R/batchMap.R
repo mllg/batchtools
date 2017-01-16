@@ -28,6 +28,7 @@
 #' @template reg
 #' @return [\code{\link{data.table}}] with ids of added jobs stored in column \dQuote{job.id}.
 #' @export
+#' @seealso \code{\link{batchReduce}}
 #' @examples
 #' # example using "..." and more.args
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)

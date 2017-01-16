@@ -65,4 +65,7 @@ ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), reg = tmp)
 getJobPars(reg = tmp)
 testJob(6, reg = tmp)
 }
+\seealso{
+\code{\link{batchReduce}}
+}
 
