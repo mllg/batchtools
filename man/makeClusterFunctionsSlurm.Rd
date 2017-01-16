@@ -5,7 +5,7 @@
 \title{ClusterFunctions for Slurm Systems}
 \usage{
 makeClusterFunctionsSlurm(template = findTemplateFile("slurm"),
-  clusters = NULL)
+  clusters = NULL, array.jobs = TRUE)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -24,6 +24,9 @@ the first one found:
 If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.
 If only one cluster is present, this argument may be omitted.
 Note that you should not select the cluster in your template file via \code{#SBATCH --clusters}.}
+
+\item{array.jobs}{[\code{logical(1)}]\cr
+If array jobs are disabled on the computing site, set to \code{FALSE}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

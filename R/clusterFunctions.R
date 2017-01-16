@@ -93,6 +93,9 @@ print.ClusterFunctions = function(x, ...) {
 #'   Unique id of this job on batch system, as given by the batch system.
 #'   Must be globally unique so that the job can be terminated using just this information.
 #'   For array jobs, this may be a vector of length equal to the number of jobs in the array.
+#' @param array.id [\code{integer()}]\cr
+#'   Array id, as given by the batch system.
+#'   \code{NA} if now array jobs are used, otherwise typically a sequence along \code{batch.ids}.
 #' @param msg [\code{character(1)}]\cr
 #'   Optional error message in case \code{status} is not equal to 0. Default is \dQuote{OK},
 #'   \dQuote{TEMPERROR}, \dQuote{ERROR}, depending on \code{status}.
