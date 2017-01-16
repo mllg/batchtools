@@ -132,7 +132,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   # handle chunks
   if (hasName(ids, "chunk")) {
-    assertInteger(ids$chunk, any.missing = FALSE)
+    ids$chunk = asInteger(ids$chunk, any.missing = FALSE)
     chunks = unique(ids$chunk)
   } else {
     chunks = ids$chunk = seq_row(ids)
