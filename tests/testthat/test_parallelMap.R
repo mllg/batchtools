@@ -15,27 +15,29 @@ test_that("pm/multicore", {
   expect_equal(nrow(findDone(reg = reg)), 4L)
 })
 
-test_that("pm/socket", {
-  skip_if_not_installed("snow")
-  skip_if_not_installed("parallelMap")
-  skip_on_travis()
-  if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
-    skip("Nested Parallelization not supported")
+if (!interactive()) {
+  test_that("pm/socket", {
+    skip_if_not_installed("snow")
+    skip_if_not_installed("parallelMap")
+    skip_on_travis()
+    if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
+      skip("Nested Parallelization not supported")
 
-  submitAndWait(reg, ids = ids, resources = list(pm.backend = "socket", ncpus = 2))
-  expect_equal(nrow(findDone(reg = reg)), 4L)
-})
+    submitAndWait(reg, ids = ids, resources = list(pm.backend = "socket", ncpus = 2))
+    expect_equal(nrow(findDone(reg = reg)), 4L)
+  })
 
-test_that("pm/mpi", {
-  skip_on_os("mac")
-  skip_on_cran()
-  skip_on_travis()
-  skip_if_not_installed("Rmpi")
-  skip_if_not_installed("snow")
-  skip_if_not_installed("parallelMap")
-  if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
-    skip("Nested Parallelization not supported")
+  test_that("pm/mpi", {
+    skip_on_os("mac")
+    skip_on_cran()
+    skip_on_travis()
+    skip_if_not_installed("Rmpi")
+    skip_if_not_installed("snow")
+    skip_if_not_installed("parallelMap")
+    if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
+      skip("Nested Parallelization not supported")
 
-  submitAndWait(reg, ids = ids, resources = list(pm.backend = "mpi", ncpus = 2))
-  expect_equal(nrow(findDone(reg = reg)), 4)
-})
+    submitAndWait(reg, ids = ids, resources = list(pm.backend = "mpi", ncpus = 2))
+    expect_equal(nrow(findDone(reg = reg)), 4)
+  })
+}

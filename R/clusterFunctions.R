@@ -89,10 +89,10 @@ print.ClusterFunctions = function(x, ...) {
 #' @param status [\code{integer(1)}]\cr
 #'   Launch status of job. 0 means success, codes between 1 and 100 are temporary errors and any
 #'   error greater than 100 is a permanent failure.
-#' @param batch.id [\code{character(1)}]\cr
-#'   Unique id of this job on batch system. Note that this is not the usual job id.
-#'   Must be globally unique so that the job can be terminated using just this
-#'   information.
+#' @param batch.id [\code{character()}]\cr
+#'   Unique id of this job on batch system, as given by the batch system.
+#'   Must be globally unique so that the job can be terminated using just this information.
+#'   For array jobs, this may be a vector of length equal to the number of jobs in the array.
 #' @param msg [\code{character(1)}]\cr
 #'   Optional error message in case \code{status} is not equal to 0. Default is \dQuote{OK},
 #'   \dQuote{TEMPERROR}, \dQuote{ERROR}, depending on \code{status}.
@@ -111,7 +111,7 @@ makeSubmitJobResult = function(status, batch.id, msg = NA_character_) {
     else
       "ERROR"
   }
-  "!DEBUG SubmitJobResult for batch.id '`batch.id`': `status` (`msg`)"
+  "!DEBUG SubmitJobResult for batch.id '`paste0(batch.id, sep = ',')`': `status` (`msg`)"
   setClasses(list(status = status, batch.id = batch.id, msg = msg), "SubmitJobResult")
 }
 

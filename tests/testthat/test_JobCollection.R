@@ -18,7 +18,7 @@ test_that("makeJobCollection", {
   expect_directory(jc$work.dir)
   expect_list(jc$jobs$pars)
   expect_string(jc$array.var, na.ok = TRUE)
-  expect_count(jc$n.array.jobs)
+  expect_flag(jc$array.jobs)
 
   expect_output(print(jc), "Collection")
 })
@@ -43,7 +43,7 @@ test_that("makeJobCollection.ExperimentCollection", {
   expect_factor(jc$jobs$problem)
   expect_factor(jc$jobs$algorithm)
   expect_string(jc$array.var, na.ok = TRUE)
-  expect_count(jc$n.array.jobs)
+  expect_flag(jc$array.jobs)
 
   expect_is(jc, "ExperimentCollection")
 })

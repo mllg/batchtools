@@ -10,6 +10,8 @@
 * Deactivated swap allocation for clusterFunctionsDocker.
 * Timestamps are now stored with sub-second accuracy.
 * Job hashes are now prefixed with literal string 'job' to ensure they start with a letter as required by some SGE systems.
+* Better support for array jobs.
+  Note that `n.array.jobs` has been removed from `JobCollection` in favor of the logical `array.jobs`.
 
 # batchtools 0.9.0
 

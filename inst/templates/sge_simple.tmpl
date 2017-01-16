@@ -20,7 +20,7 @@
 #$ -q <%= resources$queue %>
 
 ## Use job arrays
-#$ -t 1-<%= n.array.jobs %>
+#$ -t 1-<%= nrow(jobs) %>
 
 ## Export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>

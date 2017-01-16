@@ -18,7 +18,7 @@
 #'  \item{source}{\code{character} with list of files to source before execution.}
 #'  \item{load}{\code{character} with list of files to load before execution.}
 #'  \item{array.var}{\code{character(1)} of the array environment variable specified by the cluster functions.}
-#'  \item{n.array.jobs}{\code{integer(1)} of the number of array jobs (i.e., the number of jobs in chunk if \code{chunks.as.arrayjobs} is \code{TRUE} and 1 otherwise.}
+#'  \item{array.jobs}{\code{logical(1)} signaling if jobs were submitted using \code{chunks.as.arrayjobs}.}
 #' }
 #' If your \link{ClusterFunctions} uses a template, \code{\link[brew]{brew}} will be executed in the environment of such
 #' a collection. Thus all variables available inside the job can be used in the template.
@@ -60,7 +60,7 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$load         = reg$load
   jc$resources    = resources
   jc$array.var    = reg$cluster.functions$array.var
-  jc$n.array.jobs = if (isTRUE(resources$chunks.as.arrayjobs)) nrow(jobs) else 1L
+  jc$array.jobs   = isTRUE(resources$chunks.as.arrayjobs)
 
   hooks = reg$cluster.functions$hooks
   if (length(hooks) > 0L) {

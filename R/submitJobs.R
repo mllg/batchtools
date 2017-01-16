@@ -23,8 +23,7 @@
 #' neither work reliably for external code like C/C++ nor in combination with threading.
 #'
 #' If your cluster supports array jobs, you can set the resource \code{chunks.as.arrayjobs} to \code{TRUE} in order
-#' to execute chunks as job arrays. To do so, the job must be repeated \code{n.array.jobs} times via the cluster functions template
-#' (\code{n.array.jobs} is automatically available while brewing the template).
+#' to execute chunks as job arrays. To do so, the job must be repeated \code{nrow(jobs)} times via the cluster functions template.
 #' The function \code{\link{doJobCollection}} (which is called on the slave) now retrieves the repetition number from the environment
 #' and restricts the computation to the respective job in the \code{\link{JobCollection}}.
 #'
