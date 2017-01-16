@@ -112,13 +112,14 @@ makeSubmitJobResult = function(status, batch.id, msg = NA_character_) {
       "ERROR"
   }
   "!DEBUG SubmitJobResult for batch.id '`paste0(batch.id, sep = ',')`': `status` (`msg`)"
+
   setClasses(list(status = status, batch.id = batch.id, msg = msg), "SubmitJobResult")
 }
 
 #' @export
 print.SubmitJobResult = function(x, ...) {
   cat("Job submission result\n")
-  catf("  ID    : %s", x$batch.id)
+  catf("  ID    : %s", stri_flatten(x$batch.id, ","))
   catf("  Status: %i", x$status)
   catf("  Msg   : %s", x$msg)
 }

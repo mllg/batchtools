@@ -52,31 +52,44 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
     } else if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("sbatch", res$exit.code, res$output)
     } else {
-      makeSubmitJobResult(status = 0L, batch.id = stri_trim_both(stri_split_fixed(output[1L], " ")[[1L]][4L]))
+      id = stri_trim_both(stri_split_fixed(output[1L], " ")[[1L]][4L])
+      if (jc$array.jobs) {
+        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)))
+      } else {
+        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_1", id))
+      }
     }
   }
 
-  listJobs = function(reg, cmd) {
-    cmd = c(cmd, sprintf("--clusters=%s", clusters))
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
-
-    # if cluster name is specified, the first line will be the cluster name
-    if (!is.null(clusters))
-      batch.ids = tail(batch.ids, -1L)
-
-    stri_extract_first_regex(batch.ids, "[0-9]+")
+  expandIds = function(batch.ids) {
+    i = stri_detect_regex(batch.ids, "^[0-9]+_\\[[0-9]+-[0-9]+\\]$")
+    if (any(i)) {
+      m = stri_extract_all_regex(batch.ids[i], "[0-9]+")
+      expanded.ids = lapply(m, function(x) {
+        x = as.integer(x)
+        sprintf("%i_%i", x[1L], seq(from = x[2L], to = x[3L]))
+      })
+      batch.ids = c(unlist(expanded.ids, use.names = FALSE), batch.ids[!i])
+    }
+    batch.ids
   }
 
   listJobsQueued = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t PD")
-    listJobs(reg, cmd)
+    cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t PD", sprintf("--clusters=%s", clusters))
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
+    if (!is.null(clusters))
+      batch.ids = tail(batch.ids, -1L)
+    expandIds(batch.ids)
   }
 
   listJobsRunning = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t R,S,CG")
-    listJobs(reg, cmd)
+    cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t R,S,CG", sprintf("--clusters=%s", clusters))
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
+    if (!is.null(clusters))
+      batch.ids = tail(batch.ids, -1L)
+    batch.ids
   }
 
   killJob = function(reg, batch.id) {
