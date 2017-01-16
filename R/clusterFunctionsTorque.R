@@ -65,5 +65,5 @@ makeClusterFunctionsTorque = function(template = findTemplateFile("torque")) { #
   }
 
   makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, store.job = TRUE, array.var = "PBS_ARRAYID")
+    listJobsRunning = listJobsRunning, store.job = TRUE, array.var = "PBS_ARRAY_INDEX")
 } # nocov end
