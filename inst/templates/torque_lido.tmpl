@@ -48,7 +48,7 @@ if (length(grep("^/data/", log.file)) > 0L) {
 }
 
 if (array.jobs)
-  log.file = paste0(log.file, ".${PBS_ARRAY_INDEX}")
+  log.file = paste0(log.file, ".${PBS_ARRAYID}")
 -%>
 
 #PBS -N <%= job.hash %>
