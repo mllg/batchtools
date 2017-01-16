@@ -54,9 +54,14 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
     } else {
       id = stri_trim_both(stri_split_fixed(output[1L], " ")[[1L]][4L])
       if (jc$array.jobs) {
+        # job collection sent as array job
         makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), array.id = seq_row(jc$jobs))
-      } else {
+      } else if (nzchar(jc$array.envir.var)) {
+        # array jobs supported, but not used here
         makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_1", id))
+      } else {
+        # no support for array jobs
+        makeSubmitJobResult(status = 0L, batch.id = id)
       }
     }
   }
