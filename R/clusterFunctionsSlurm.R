@@ -57,43 +57,32 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
     } else {
       id = stri_split_fixed(output[1L], " ")[[1L]][4L]
       if (jc$array.jobs) {
+        if (!array.jobs)
+          stop("Array jobs not supported by cluster function")
         # job collection sent as array job
         makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), array.id = seq_row(jc$jobs))
-      } else if (array.jobs) {
-        # array jobs supported, but not used here
-        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_1", id))
       } else {
-        # no support for array jobs at all
         makeSubmitJobResult(status = 0L, batch.id = id)
       }
     }
   }
 
-  expandIds = function(batch.ids) {
-    i = stri_detect_regex(batch.ids, "^[0-9]+_\\[[0-9]+-[0-9]+\\]$")
-    if (any(i)) {
-      m = stri_extract_all_regex(batch.ids[i], "[0-9]+")
-      expanded.ids = lapply(m, function(x) {
-        x = as.integer(x)
-        sprintf("%i_%i", x[1L], seq(from = x[2L], to = x[3L]))
-      })
-      batch.ids = c(unlist(expanded.ids, use.names = FALSE), batch.ids[!i])
-    }
-    batch.ids
-  }
-
   listJobsQueued = function(reg) {
     assertRegistry(reg, writeable = FALSE)
     cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t PD", sprintf("--clusters=%s", clusters))
+    if (array.jobs)
+      cmd = c(cmd, "-r")
     batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
     if (!is.null(clusters))
       batch.ids = tail(batch.ids, -1L)
-    expandIds(batch.ids)
+    batch.ids
   }
 
   listJobsRunning = function(reg) {
     assertRegistry(reg, writeable = FALSE)
     cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t R,S,CG", sprintf("--clusters=%s", clusters))
+    if (array.jobs)
+      cmd = c(cmd, "-r")
     batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
     if (!is.null(clusters))
       batch.ids = tail(batch.ids, -1L)

@@ -20,9 +20,8 @@
 <%
 # relative paths are not handled well by Slurm
 log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
-
 if (array.jobs)
-  log.file = paste(log.file, "%a", sep = ".")
+  log.file = paste0(log.file, ".%a")
 -%>
 
 
@@ -33,7 +32,7 @@ if (array.jobs)
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=<%= resources$ncpus %>
 #SBATCH --mem-per-cpu=<%= resources$memory %>
-#SBATCH --array=1-<%= nrow(jobs) %>
+<%= if (array.jobs) sprintf("#SBATCH --array=1-%i", nrow(jobs)) else "" %>
 
 ## Initialize work environment like
 ## source /etc/profile
