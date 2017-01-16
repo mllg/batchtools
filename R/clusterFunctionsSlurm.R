@@ -24,12 +24,15 @@
 #'  If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.
 #'  If only one cluster is present, this argument may be omitted.
 #'  Note that you should not select the cluster in your template file via \code{#SBATCH --clusters}.
+#' @param array.jobs [\code{logical(1)}]\cr
+#'  If array jobs are disabled on the computing site, set to \code{FALSE}.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clusters = NULL) { # nocov start
+makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clusters = NULL, array.jobs = TRUE) { # nocov start
   if (!is.null(clusters))
     assertString(clusters, min.chars = 1L)
+  assertFlag(array.jobs)
   template = cfReadBrewTemplate(template, "##")
 
   submitJob = function(reg, jc) {
@@ -56,11 +59,11 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
       if (jc$array.jobs) {
         # job collection sent as array job
         makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), array.id = seq_row(jc$jobs))
-      } else if (nzchar(jc$array.envir.var)) {
+      } else if (array.jobs) {
         # array jobs supported, but not used here
         makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_1", id))
       } else {
-        # no support for array jobs
+        # no support for array jobs at all
         makeSubmitJobResult(status = 0L, batch.id = id)
       }
     }
