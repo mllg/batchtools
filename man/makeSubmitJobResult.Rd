@@ -5,7 +5,8 @@
 \alias{makeSubmitJobResult}
 \title{Create a SubmitJobResult}
 \usage{
-makeSubmitJobResult(status, batch.id, msg = NA_character_)
+makeSubmitJobResult(status, batch.id, array.id = NA_integer_,
+  msg = NA_character_)
 }
 \arguments{
 \item{status}{[\code{integer(1)}]\cr

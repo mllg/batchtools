@@ -21,8 +21,8 @@ getResultFiles = function(fd, ids) {
   file.path(fd, "results", sprintf("%i.rds", ids))
 }
 
-getLogFiles = function(fd, hash) {
-  file.path(fd, "logs", sprintf("%s.log", hash))
+getLogFiles = function(fd, hash, array.id) {
+  file.path(fd, "logs", sprintf("%s.log%s", hash, ifelse(is.na(array.id), "", sprintf(".%i", array.id))))
 }
 
 getJobFiles = function(fd, hash) {

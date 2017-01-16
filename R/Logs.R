@@ -1,7 +1,7 @@
 #' @useDynLib batchtools fill_gaps
 readLog = function(id, missing.as.empty = FALSE, reg = getDefaultRegistry()) {
-  tab = reg$status[id, c("job.id", "job.hash"), nomatch = NA]
-  log.file = getLogFiles(reg$file.dir, tab$job.hash)
+  tab = reg$status[id, c("job.id", "job.hash", "array.id"), nomatch = NA]
+  log.file = getLogFiles(reg$file.dir, tab$job.hash, tab$array.id)
 
   if (is.na(tab$job.hash) || !file.exists(log.file)) {
     if (missing.as.empty)
