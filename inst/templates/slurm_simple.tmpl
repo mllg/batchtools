@@ -20,6 +20,9 @@
 <%
 # relative paths are not handled well by Slurm
 log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
+
+if (array.jobs)
+  log.file = paste(log.file, "%a", sep = ".")
 -%>
 
 
@@ -30,7 +33,6 @@ log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=<%= resources$ncpus %>
 #SBATCH --mem-per-cpu=<%= resources$memory %>
-## remove this line if your cluster does not support arrayjobs
 #SBATCH --array=1-<%= nrow(jobs) %>
 
 ## Initialize work environment like
