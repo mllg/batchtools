@@ -28,7 +28,7 @@ doJobCollection = function(jc, output = NULL) {
 #' @export
 doJobCollection.character = function(jc, output = NULL) {
   obj = readRDS(jc)
-  if (!batchtools$debug && obj$n.array.jobs > 1L)
+  if (!batchtools$debug && obj$n.array.jobs == 1L)
     file.remove(jc)
   doJobCollection.JobCollection(obj, output = output)
 }
@@ -69,11 +69,6 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     i = as.integer(Sys.getenv(jc$array.var))
     if (!testInteger(i, any.missing = FALSE, lower = 1L, upper = nrow(jc$jobs)))
       return(error("Failed to subset JobCollection using array environment variable '%s' [='%s']", jc$array.var, i))
-
-    if (jc$n.array.jobs == nrow(jc$jobs)) {
-        jc.file = getJobFiles(jc$file.dir, jc$hash)
-        on.exit(file.remove(jc.file), add = TRUE)
-    }
     jc$jobs = jc$jobs[i]
   }
 

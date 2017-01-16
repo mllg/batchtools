@@ -46,8 +46,8 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
     exit.code = 127L
   }
 
-  "!DEBUG OS result (stdin `stdin`, exit code `exit.code`):"
-  "!DEBUG `cat(output, sep = \"\n\")`"
+  "!DEBUG OS result (stdin '`stdin`', exit code `exit.code`):"
+  "!DEBUG `paste0(output, sep = '\n')`"
 
   return(list(exit.code = exit.code, output = output))
 }
