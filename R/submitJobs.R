@@ -203,8 +203,8 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
       if (submit$status == 0L) {
         reg$status[ids.chunk,
-          c("submitted", "started", "done",   "error",       "memory", "resource.id", "batch.id",      "job.hash") :=
-          list(now,      NA_real_,  NA_real_, NA_character_, NA_real_, res.id,        submit$batch.id, jc$job.hash)]
+          c("submitted", "started", "done",   "error",       "memory", "resource.id", "batch.id",      "array.id",      "job.hash") :=
+          list(now,      NA_real_,  NA_real_, NA_character_, NA_real_, res.id,        submit$batch.id, submit$array.id, jc$job.hash)]
         runHook(reg, "post.submit")
         break
       } else if (submit$status > 0L && submit$status < 100L) {

@@ -146,6 +146,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
     memory      = double(0L),
     resource.id = integer(0L),
     batch.id    = character(0L),
+    array.id    = integer(0L),
     job.hash    = character(0L),
     key         = "job.id")
 

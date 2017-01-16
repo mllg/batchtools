@@ -101,7 +101,7 @@ print.ClusterFunctions = function(x, ...) {
 #' @family ClusterFunctionsHelper
 #' @aliases SubmitJobResult
 #' @export
-makeSubmitJobResult = function(status, batch.id, msg = NA_character_) {
+makeSubmitJobResult = function(status, batch.id, array.id = NA_integer_, msg = NA_character_) {
   status = asInt(status)
   if (is.na(msg)) {
     msg = if (status == 0L)
@@ -113,7 +113,7 @@ makeSubmitJobResult = function(status, batch.id, msg = NA_character_) {
   }
   "!DEBUG SubmitJobResult for batch.id '`paste0(batch.id, sep = ',')`': `status` (`msg`)"
 
-  setClasses(list(status = status, batch.id = batch.id, msg = msg), "SubmitJobResult")
+  setClasses(list(status = status, batch.id = batch.id, array.id = array.id, msg = msg), "SubmitJobResult")
 }
 
 #' @export
