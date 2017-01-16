@@ -45,7 +45,7 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
     temp.error = "Socket timed out on send/recv operation"
-    output = stri_flatten(res$output, "\n")
+    output = stri_flatten(stri_trim_both(res$output), "\n")
 
     if (stri_detect_fixed(max.jobs.msg, output)) {
       makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = max.jobs.msg)
@@ -55,7 +55,7 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
     } else if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("sbatch", res$exit.code, res$output)
     } else {
-      id = stri_trim_both(stri_split_fixed(output[1L], " ")[[1L]][4L])
+      id = stri_split_fixed(output[1L], " ")[[1L]][4L]
       if (jc$array.jobs) {
         # job collection sent as array job
         makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), array.id = seq_row(jc$jobs))

@@ -46,6 +46,9 @@ if (length(grep("^/data/", log.file)) > 0L) {
     log.file = sprintf("/home/%s/nobackup%s", user, substr(log.file, i, nchar(log.file)))
   }
 }
+
+if (array.jobs)
+  log.file = paste(log.file, "$PBS_ARRAY_INDEX", sep = ".")
 -%>
 
 #PBS -N <%= job.hash %>
