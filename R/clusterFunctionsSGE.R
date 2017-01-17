@@ -16,6 +16,9 @@
 #' It is the template file's job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
+#' @note
+#' Array jobs are currently not supported.
+#'
 #' @templateVar cf.name sge
 #' @template template
 #' @return [\code{\link{ClusterFunctions}}].
@@ -61,5 +64,5 @@ makeClusterFunctionsSGE = function(template = findTemplateFile("sge")) { # nocov
   }
 
   makeClusterFunctions(name = "SGE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, store.job = TRUE, array.var = "SGE_TASK_ID")
+    listJobsRunning = listJobsRunning, store.job = TRUE)
 } # nocov end
