@@ -59,7 +59,6 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
       if (jc$array.jobs) {
         if (!array.jobs)
           stop("Array jobs not supported by cluster function")
-        # job collection sent as array job
         makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), array.id = seq_row(jc$jobs))
       } else {
         makeSubmitJobResult(status = 0L, batch.id = id)
