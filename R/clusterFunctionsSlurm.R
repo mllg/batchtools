@@ -40,6 +40,10 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
     assertClass(jc, "JobCollection")
 
     jc$clusters = clusters
+    if (jc$array.jobs) {
+      logs = sprintf("%s_%i", basename(jc$log.file), seq_row(jc$jobs))
+      jc$log.file = stri_join(jc$log.file, "_%a")
+    }
     outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("sbatch", outfile)
 
@@ -59,7 +63,7 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
       if (jc$array.jobs) {
         if (!array.jobs)
           stop("Array jobs not supported by cluster function")
-        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), array.id = seq_row(jc$jobs))
+        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), log.file = logs)
       } else {
         makeSubmitJobResult(status = 0L, batch.id = id)
       }

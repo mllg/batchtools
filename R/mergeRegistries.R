@@ -61,8 +61,8 @@ mergeRegistries = function(source, target = getDefaultRegistry()) {
 
   info("Copying logs ...")
   file.copy(
-    from = getLogFiles(source$file.dir, status$job.hash, status$array.id),
-    to = getLogFiles(target$file.dir, status$job.hash, status$array.id)
+    from = getLogFiles(source$file.dir, status$job.hash, status$log.file),
+    to = getLogFiles(target$file.dir, status$job.hash, status$log.file)
   )
 
   ext.dirs = intersect(list.files(getExternalPath(source)), as.character(status$job.id))
