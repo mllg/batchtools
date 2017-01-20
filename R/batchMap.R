@@ -98,7 +98,7 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
     memory      = NA_real_,
     resource.id = NA_integer_,
     batch.id    = NA_character_,
-    array.id    = NA_integer_,
+    log.file    = NA_character_,
     job.hash    = NA_character_,
     key         = "job.id")
 

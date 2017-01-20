@@ -93,9 +93,9 @@ print.ClusterFunctions = function(x, ...) {
 #'   Unique id of this job on batch system, as given by the batch system.
 #'   Must be globally unique so that the job can be terminated using just this information.
 #'   For array jobs, this may be a vector of length equal to the number of jobs in the array.
-#' @param array.id [\code{integer()}]\cr
-#'   Array id, as given by the batch system.
-#'   \code{NA} if now array jobs are used, otherwise typically a sequence along \code{batch.ids}.
+#' @param log.file [\code{character()}]\cr
+#'   Log file. If \code{NA}, defaults to \code{[job.hash].log}.
+#'   Some cluster functions set this for array jobs.
 #' @param msg [\code{character(1)}]\cr
 #'   Optional error message in case \code{status} is not equal to 0. Default is \dQuote{OK},
 #'   \dQuote{TEMPERROR}, \dQuote{ERROR}, depending on \code{status}.
@@ -104,7 +104,7 @@ print.ClusterFunctions = function(x, ...) {
 #' @family ClusterFunctionsHelper
 #' @aliases SubmitJobResult
 #' @export
-makeSubmitJobResult = function(status, batch.id, array.id = NA_integer_, msg = NA_character_) {
+makeSubmitJobResult = function(status, batch.id, log.file = NA_character_, msg = NA_character_) {
   status = asInt(status)
   if (is.na(msg)) {
     msg = if (status == 0L)
@@ -116,7 +116,7 @@ makeSubmitJobResult = function(status, batch.id, array.id = NA_integer_, msg = N
   }
   "!DEBUG SubmitJobResult for batch.id '`paste0(batch.id, sep = ',')`': `status` (`msg`)"
 
-  setClasses(list(status = status, batch.id = batch.id, array.id = array.id, msg = msg), "SubmitJobResult")
+  setClasses(list(status = status, batch.id = batch.id, log.file = log.file, msg = msg), "SubmitJobResult")
 }
 
 #' @export

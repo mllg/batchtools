@@ -38,10 +38,10 @@ makeClusterFunctionsTorque = function(template = findTemplateFile("torque")) { #
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
     } else {
       if (jc$array.jobs) {
-        array.ids = seq_row(jc$jobs)
-        makeSubmitJobResult(status = 0L, batch.id = stri_replace_first_fixed(output, "[]", stri_paste("[", array.ids, "]")), array.id = array.ids)
+        logs = sprintf("%s-%i", jc$log.file, seq_row(jc$jobs))
+        makeSubmitJobResult(status = 0L, batch.id = stri_replace_first_fixed(output, "[]", stri_paste("[", seq_row(jc$jobs), "]")), log.file = logs)
       } else {
-        makeSubmitJobResult(status = 0L, batch.id = output, array.id = NA_integer_)
+        makeSubmitJobResult(status = 0L, batch.id = output)
       }
     }
   }
