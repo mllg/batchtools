@@ -1,5 +1,6 @@
 # batchtools 0.9.1
 
+* New function `batchReduce()`.
 * `chunkIds()` has been deprecated. Use `chunk()`, `lpt()` or `binpack()` instead.
 * `findExperiments()` now has two additional arguments to match for regular expressions.
   The possibility to prefix a string with "~" to enable regular expression matching has been removed.
@@ -7,7 +8,7 @@
 * Fixed listing of jobs for `ClusterFunctionsLSF` and `ClusterFunctionsOpenLava` (thanks to @phaverty).
 * Fixed broken key lookup in some join functions.
 * Fixed a bug where `getJobTable()` returned `difftimes` with the wrong unit (e.g., in minutes instead of seconds).
-* Deactivated swap allocation for clusterFunctionsDocker.
+* Deactivated swap allocation for `clusterFunctionsDocker`.
 * Timestamps are now stored with sub-second accuracy.
 * Job hashes are now prefixed with literal string 'job' to ensure they start with a letter as required by some SGE systems.
 * Better support for array jobs.
