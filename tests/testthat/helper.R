@@ -24,7 +24,7 @@ submitAndWait = function(reg, ids = NULL, ...) {
     ids = s.chunk(ids)
   silent({
     ids = submitJobs(ids = ids, ..., reg = reg)
-    waitForJobs(ids, reg = reg)
+    waitForJobs(ids, reg = reg, sleep = 1)
   })
 }
 
