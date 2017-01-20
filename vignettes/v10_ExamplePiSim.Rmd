@@ -71,6 +71,7 @@ The resulting output includes the number of jobs in the registry, how many have 
 After jobs have successfully terminated, we can load their results on the master.
 This can be done in a simple fashion by using either [`loadResult()`](https://mllg.github.io/batchtools/reference/loadResult), which returns a single result exactly in the form it was calculated during mapping, or by using [`reduceResults()`](https://mllg.github.io/batchtools/reference/reduceResults), which is a version of `Reduce()` from the base package for registry objects.
 ```{r}
+waitForJobs()
 mean(sapply(1:10, loadResult))
 reduceResults(function(x, y) x + y) / 10
 ```

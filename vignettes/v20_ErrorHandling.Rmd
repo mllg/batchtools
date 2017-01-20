@@ -47,6 +47,7 @@ as.character(try(testJob(id = 2)))
 When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run [`getStatus()`](https://mllg.github.io/batchtools/reference/getStatus) to display a summary of the current state of the system.
 ```{r}
 submitJobs()
+waitForJobs()
 getStatus()
 ```
 The status message shows that two of the jobs could not be executed successfully.
