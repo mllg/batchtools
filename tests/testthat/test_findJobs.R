@@ -85,7 +85,7 @@ test_that("findOnSystem", {
     submitJobs(reg = reg, ids = s.chunk(ids))
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
     expect_equal(findExpired(reg = reg), none)
-    waitForJobs(reg = reg)
+    waitForJobs(reg = reg, sleep = 1)
   })
 })
 

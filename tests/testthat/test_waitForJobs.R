@@ -6,8 +6,8 @@ test_that("waitForJobs", {
   ids = batchMap(reg = reg, fun, 1:2)
   silent({
     submitJobs(ids, reg = reg)
-    expect_true(waitForJobs(ids = ids[1], reg = reg))
-    expect_false(waitForJobs(ids = ids, stop.on.error = TRUE, reg = reg))
+    expect_true(waitForJobs(ids = ids[1], reg = reg, sleep = 1))
+    expect_false(waitForJobs(ids = ids, stop.on.error = TRUE, sleep = 1, reg = reg))
   })
 })
 
@@ -30,7 +30,7 @@ test_that("waitForJobs: filter out unsubmitted jobs", {
   ids = batchMap(identity, 1:2, reg = reg)
   silent({
     submitJobs(ids = 1, reg = reg)
-    expect_warning(res <- waitForJobs(ids = ids, reg = reg), "unsubmitted")
+    expect_warning(res <- waitForJobs(ids = ids, reg = reg, sleep = 1), "unsubmitted")
     expect_true(res)
   })
 })
