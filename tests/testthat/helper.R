@@ -18,13 +18,13 @@ s.chunk = function(ids) {
   ids
 }
 
-submitAndWait = function(reg, ids = NULL, ...) {
+submitAndWait = function(reg, ids = NULL, ..., sleep = 1) {
   ids = if (is.null(ids)) findNotSubmitted(reg = reg) else convertIds(reg, ids, keep.extra = names(ids))
   if ("chunk" %nin% names(ids))
     ids = s.chunk(ids)
   silent({
     ids = submitJobs(ids = ids, ..., reg = reg)
-    waitForJobs(ids, reg = reg)
+    waitForJobs(ids, reg = reg, sleep = sleep)
   })
 }
 

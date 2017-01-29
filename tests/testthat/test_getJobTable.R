@@ -34,10 +34,7 @@ test_that("getJobTable.Registry", {
   # be sure that the original tables are untouched
   checkTables(reg)
 
-  silent({
-    submitJobs(reg = reg, ids = s.chunk(ids), resources = list(my.walltime = 42L))
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(reg = reg, ids = s.chunk(ids), resources = list(my.walltime = 42L))
   addJobTags(2:3, "my_tag", reg = reg)
 
   tab = getJobTable(reg = reg, flatten = TRUE)
@@ -109,12 +106,9 @@ test_that("getJobPars with repls", {
   prob.designs = list(prob = data.table())
   algo.designs = list(algo = data.table(i = 1:2))
   ids = addExperiments(prob.designs, algo.designs, repls = 3, reg = reg)
-  waitForJobs(reg = reg)
+  waitForJobs(reg = reg, sleep = 1)
   ids[, chunk := chunk(job.id, chunk.size = 2)]
-  silent({
-    submitJobs(ids, reg = reg)
-    waitForJobs(reg = reg)
-  })
+  submitAndWait(ids = ids, reg = reg)
   expect_equal(nrow(getJobPars(reg = reg)), nrow(ids))
 })
 

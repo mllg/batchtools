@@ -93,7 +93,7 @@
 </ul>
 <p>To use the package with the socket cluster functions, you would call the respective constructor <a href="https://mllg.github.io/batchtools/reference/makeClusterFunctionsSocket">makeClusterFunctionsSocket()</a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistry.html">makeRegistry</a></span>(<span class="ot">NA</span>)</code></pre></div>
-<pre><code>## Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</code></pre>
+<pre><code>## Sourcing configuration file '~/.batchtools.conf.R' ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reg$cluster.functions =<span class="st"> </span><span class="kw"><a href="../reference/makeClusterFunctionsSocket.html">makeClusterFunctionsSocket</a></span>(<span class="dv">2</span>)</code></pre></div>
 <p>To make this selection permanent for this registry, save the Registry with <a href="https://mllg.github.io/batchtools/reference/makeRegistry">saveRegistry</a>. To make your cluster function selection permanent for a specific system across R sessions for all new Registries, you can set up a configuration file (see below).</p>
 <p>If you have trouble debugging your cluster functions, you can enable the debug mode for extra output. To do so, install the <a href="https://cran.r-project.org/package=debugme">debugme package</a> and set the environment variable <code>DEBUGME</code> to <code>batchtools</code> before you load the <code>batchtools</code> package:</p>

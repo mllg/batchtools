@@ -85,8 +85,10 @@ reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistr
 <p>When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run <a href="https://mllg.github.io/batchtools/reference/getStatus"><code><a href="../reference/getStatus.html">getStatus()</a></code></a> to display a summary of the current state of the system.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/submitJobs.html">submitJobs</a></span>()</code></pre></div>
 <pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/getStatus.html">getStatus</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/waitForJobs.html">waitForJobs</a></span>()</code></pre></div>
 <pre><code>## Syncing 10 files ...</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/getStatus.html">getStatus</a></span>()</code></pre></div>
 <pre><code>## Status for 10 jobs:
 ##   Submitted : 10 (100.0%)
 ##   Queued    :  0 (  0.0%)
@@ -106,15 +108,15 @@ reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistr
 ## 2:      9       TRUE  TRUE Error in (function (value)  : Ooops.</code></pre>
 <p>If we want to peek into the R log file of a job to see more context for the error we can use <a href="https://mllg.github.io/batchtools/reference/showLog"><code><a href="../reference/showLog.html">showLog()</a></code></a> which opens a pager or use <a href="https://mllg.github.io/batchtools/reference/showLog"><code><a href="../reference/showLog.html">getLog()</a></code></a> to get the log as character vector:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">writeLines</span>(<span class="kw"><a href="../reference/showLog.html">getLog</a></span>(<span class="dt">id =</span> <span class="dv">9</span>))</code></pre></div>
-<pre><code>## ### [bt 2017-01-09 00:35:58]: This is batchtools v0.9.1
-## ### [bt 2017-01-09 00:35:58]: Starting calculation of 1 jobs
-## ### [bt 2017-01-09 00:35:58]: Setting working directory to '/tmp'
-## ### [bt 2017-01-09 00:35:58]: Memory measurement disabled
-## ### [bt 2017-01-09 00:35:58]: Starting job [batchtools job.id=9]
+<pre><code>## ### [bt 2017-01-29 21:25:10]: This is batchtools v0.9.1
+## ### [bt 2017-01-29 21:25:10]: Starting calculation of 1 jobs
+## ### [bt 2017-01-29 21:25:10]: Setting working directory to '/tmp'
+## ### [bt 2017-01-29 21:25:10]: Memory measurement disabled
+## ### [bt 2017-01-29 21:25:10]: Starting job [batchtools job.id=9]
 ## Error in (function (value)  : Ooops.
 ## 
-## ### [bt 2017-01-09 00:35:58]: Job terminated with an exception [batchtools job.id=9]
-## ### [bt 2017-01-09 00:35:58]: Calculation finished!</code></pre>
+## ### [bt 2017-01-29 21:25:10]: Job terminated with an exception [batchtools job.id=9]
+## ### [bt 2017-01-29 21:25:10]: Calculation finished!</code></pre>
 <p>You can also grep for error or warning messages:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids =<span class="st"> </span><span class="kw"><a href="../reference/grepLogs.html">grepLogs</a></span>(<span class="dt">pattern =</span> <span class="st">"ooops"</span>, <span class="dt">ignore.case =</span> <span class="ot">TRUE</span>)
 <span class="kw">print</span>(ids)</code></pre></div>
