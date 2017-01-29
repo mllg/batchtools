@@ -41,12 +41,18 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
     update = TRUE
   }
 
-  ### hotfix for timestamps
-  if (reg$version <= "0.9.1") {
+  if (reg$version <= "0.9.2") {
+    ### hotfix for timestamps
     if (is.integer(reg$status$submitted)) {
       info("Converting timestamps to numeric")
       for (x in c("submitted", "started", "done"))
         reg$status[[x]] = as.numeric(reg$status[[x]])
+      update = TRUE
+    }
+
+    ### hotfix for log.file column
+    if ("log.file" %nin% names(reg$status)) {
+      reg$status$log.file = NA_character_
       update = TRUE
     }
   }
