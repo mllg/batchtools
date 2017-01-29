@@ -98,7 +98,7 @@ with the following variables:
  <dt>source</dt><dd><code>character</code> with list of files to source before execution.</dd>
  <dt>load</dt><dd><code>character</code> with list of files to load before execution.</dd>
  <dt>array.var</dt><dd><code>character(1)</code> of the array environment variable specified by the cluster functions.</dd>
- <dt>n.array.jobs</dt><dd><code>integer(1)</code> of the number of array jobs (i.e., the number of jobs in chunk if <code>chunks.as.arrayjobs</code> is <code>TRUE</code> and 1 otherwise.</dd>
+ <dt>array.jobs</dt><dd><code>logical(1)</code> signaling if jobs were submitted using <code>chunks.as.arrayjobs</code>.</dd>
 </dl></p>
 
     <p>If your <a href='makeClusterFunctions.html'>ClusterFunctions</a> uses a template, <code><a href='http://www.rdocumentation.org/packages/brew/topics/brew'>brew</a></code> will be executed in the environment of such
@@ -134,12 +134,12 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'>
 <span class='co'># resources are usually set in submitJobs()</span>
 <span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'>makeJobCollection</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>foo</span> <span class='kw'>=</span> <span class='st'>"bar"</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>ls</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt;  [1] &quot;array.var&quot;    &quot;file.dir&quot;     &quot;job.hash&quot;     &quot;jobs&quot;         &quot;load&quot;        
-#&gt;  [6] &quot;log.file&quot;     &quot;namespaces&quot;   &quot;n.array.jobs&quot; &quot;packages&quot;     &quot;resources&quot;   
-#&gt; [11] &quot;seed&quot;         &quot;source&quot;       &quot;uri&quot;          &quot;work.dir&quot;    </div><div class='input'><span class='no'>jc</span>$<span class='no'>resources</span></div><div class='output co'>#&gt; $foo
+<span class='fu'>ls</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt;  [1] &quot;array.jobs&quot; &quot;array.var&quot;  &quot;file.dir&quot;   &quot;job.hash&quot;   &quot;jobs&quot;      
+#&gt;  [6] &quot;load&quot;       &quot;log.file&quot;   &quot;namespaces&quot; &quot;packages&quot;   &quot;resources&quot; 
+#&gt; [11] &quot;seed&quot;       &quot;source&quot;     &quot;uri&quot;        &quot;work.dir&quot;  </div><div class='input'><span class='no'>jc</span>$<span class='no'>resources</span></div><div class='output co'>#&gt; $foo
 #&gt; [1] &quot;bar&quot;
 #&gt; </div></pre>
   </div>

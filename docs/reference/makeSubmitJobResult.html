@@ -96,10 +96,10 @@ value for the <code>submitJob</code> function.</p>
 Launch status of job. 0 means success, codes between 1 and 100 are temporary errors and any
 error greater than 100 is a permanent failure.</dd>
       <dt>batch.id</dt>
-      <dd>[<code>character(1)</code>]
-Unique id of this job on batch system. Note that this is not the usual job id.
-Must be globally unique so that the job can be terminated using just this
-information.</dd>
+      <dd>[<code>character()</code>]
+Unique id of this job on batch system, as given by the batch system.
+Must be globally unique so that the job can be terminated using just this information.
+For array jobs, this may be a vector of length equal to the number of jobs in the array.</dd>
       <dt>msg</dt>
       <dd>[<code>character(1)</code>]
 Optional error message in case <code>status</code> is not equal to 0. Default is &#8220;OK&#8221;,
