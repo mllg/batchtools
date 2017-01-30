@@ -1,3 +1,4 @@
+library("testthat")
 library("data.table")
 library("checkmate")
 library("stringi")

@@ -9,64 +9,52 @@
 #' @family Registry
 #' @export
 sweepRegistry = function(reg = getDefaultRegistry()) {
-  assertRegistry(reg, sync = TRUE, writeable = TRUE)
-  store = FALSE
+  assertRegistry(reg, sync = TRUE, writeable = TRUE, running.ok = FALSE)
   "!DEBUG sweepRegistry: Running sweepRegistry"
 
-  # TODO: use data table keys here
   path = getResultPath(reg)
-  result.files = list.files(path, pattern = "\\.rds$")
-  has.result = funion(.findDone(reg = reg), .findOnSystem(reg = reg))
-  i = which(as.integer(stri_replace_last_fixed(result.files, ".rds", "")) %nin% has.result$job.id)
-  if (length(i) > 0L) {
-    info("Removing %i obsolete result files ...", length(i))
-    file.remove(file.path(path, result.files[i]))
-  }
+  obsolete = setdiff(
+    list.files(path, full.names = TRUE),
+    getResultFiles(reg$file.dir, reg$status$job.id)
+  )
+  info("Removing %i obsolete result files ...", length(obsolete))
+  file.remove(obsolete)
 
   path = getLogPath(reg)
-  log.files = list.files(path, pattern = "\\.log$")
-  i = which(stri_replace_last_fixed(log.files, ".log", "") %nin% reg$status$job.hash)
-  if (length(i) > 0L) {
-    info("Removing %i obsolete log files ...", length(i))
-    file.remove(file.path(path, log.files[i]))
-  }
+  obsolete = setdiff(
+    list.files(path, full.names = TRUE),
+    getLogFiles(reg$file.dir, reg$status$job.hash, reg$status$log.file)
+  )
+  info("Removing %i obsolete log files ...", length(obsolete))
+  file.remove(obsolete)
 
   path = getJobPath(reg)
-  job.files = list.files(path, pattern = "\\.rds$")
-  i = which(stri_replace_last_fixed(job.files, ".rds", "") %nin% reg$status$job.hash)
-  if (length(i) > 0L) {
-    info("Removing %i obsolete job files ...", length(i))
-    file.remove(file.path(reg$file.dir, "jobs", job.files[i]))
-  }
+  obsolete = list.files(path, pattern = "\\.rds", full.names = TRUE)
+  info("Removing %i obsolete job collection files ...", length(obsolete))
+  file.remove(obsolete)
 
   path = getJobPath(reg)
-  job.desc.files = list.files(path, pattern = "\\.job$")
-  if (length(job.desc.files) > 0L) {
-    info("Removing %i job description files ...", length(i))
-    file.remove(file.path(reg$file.dir, "jobs", job.desc.files))
-  }
+  obsolete = list.files(path, pattern = "\\.job$", full.names = TRUE)
+  info("Removing %i job description files ...", length(obsolete))
+  file.remove(obsolete)
 
   path = getExternalPath(reg)
-  external.dirs = list.files(path, pattern = "^[0-9]+$")
-  i = which(as.integer(external.dirs) %nin% .findSubmitted(reg = reg)$job.id)
-  if (length(i) > 0L) {
-    info("Removing %i external directories of unsubmitted jobs ...", length(i))
-    unlink(getExternalDirs(reg$file.dir, external.dirs[i]), recursive = TRUE)
-  }
+  obsolete = setdiff(
+    list.files(path, pattern = "^[0-9]+$", full.names = TRUE),
+    getExternalDirs(reg$file.dir, .findSubmitted(reg)$job.id)
+  )
+  info("Removing %i external directories of unsubmitted jobs ...", length(obsolete))
+  unlink(obsolete, recursive = TRUE)
 
-  i = reg$resources[!reg$status, on = "resource.id", which = TRUE]
-  if (length(i) > 0L) {
-    info("Removing %i resource specifications ...", length(i))
-    reg$resources = reg$resources[-i]
-    store = TRUE
-  }
+  obsolete = reg$resources[!reg$status, on = "resource.id", which = TRUE]
+  info("Removing %i resource specifications ...", length(obsolete))
+  if (length(obsolete) > 0L)
+    reg$resources = reg$resources[-obsolete]
 
-  i = reg$tags[!reg$status, on = "job.id", which = TRUE]
-  if (length(i) > 0L) {
-    info("Removing %i tags ...", length(i))
-    reg$tags = reg$tags[-i]
-    store = TRUE
-  }
+  obsolete = reg$tags[!reg$status, on = "job.id", which = TRUE]
+  info("Removing %i tags ...", length(obsolete))
+  if (length(obsolete) > 0L)
+    reg$tags = reg$tags[-obsolete]
 
-  if (store) saveRegistry(reg) else FALSE
+  saveRegistry(reg)
 }

@@ -42,7 +42,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     return(TRUE)
 
   batch.ids = getBatchIds(reg)
-  "!DEBUG waitForJobs: `match.call()[1]`: Using `nrow(ids)` ids and `nrow(batch.ids)` batch ids"
+  "!DEBUG waitForJobs: Using `nrow(ids)` ids and `nrow(batch.ids)` batch ids"
   if (nrow(batch.ids) == 0L)
     return(nrow(.findErrors(reg, ids)) == 0L)
 
