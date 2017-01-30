@@ -165,7 +165,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   if (is.na(file.dir))
     reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
-  "!DEBUG Creating directories in '`reg$file.dir`'"
+  "!DEBUG makeRegistry: Creating directories in '`reg$file.dir`'"
   for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
     dir.create(d, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)
@@ -212,7 +212,7 @@ assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, 
 }
 
 loadRegistryDependencies = function(x, switch.wd = TRUE) {
-  "!DEBUG Loading Registry dependencies"
+  "!DEBUG loadRegistryDependencies: Starting ..."
   pkgs = union(x$packages, "methods")
   ok = vlapply(pkgs, require, character.only = TRUE)
   if (!all(ok))

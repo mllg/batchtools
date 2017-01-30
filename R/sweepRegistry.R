@@ -11,7 +11,7 @@
 sweepRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE, writeable = TRUE)
   store = FALSE
-  "!DEBUG Running sweepRegistry"
+  "!DEBUG sweepRegistry: Running sweepRegistry"
 
   # TODO: use data table keys here
   path = getResultPath(reg)

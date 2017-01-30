@@ -114,7 +114,7 @@ makeSubmitJobResult = function(status, batch.id, log.file = NA_character_, msg =
     else
       "ERROR"
   }
-  "!DEBUG SubmitJobResult for batch.id '`paste0(batch.id, sep = ',')`': `status` (`msg`)"
+  "!DEBUG makeSubmitJobResult: Result for batch.id '`paste0(batch.id, sep = ',')`': `status` (`msg`)"
 
   setClasses(list(status = status, batch.id = batch.id, log.file = log.file, msg = msg), "SubmitJobResult")
 }
@@ -149,10 +149,10 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
     stop("No template found")
 
   if (stri_detect_regex(template, "\n")) {
-    "!DEBUG Parsing template from string"
+    "!DEBUG cfReadBrewTemplate: Parsing template from string"
     lines = stri_trim_both(stri_split_lines(template)[[1L]])
   } else if (testFileExists(template, "r")) {
-    "!DEBUG Parsing template form file '`template`'"
+    "!DEBUG cfReadBrewTemplate: Parsing template form file '`template`'"
     lines = stri_trim_both(readLines(template))
   } else {
     stop("Argument 'template' must non point to a template file or provide the template as string (containing at least one newline)")
@@ -191,7 +191,7 @@ cfBrewTemplate = function(reg, text, jc) {
   outfile = if (batchtools$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
   parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
-  "!DEBUG Brewing template to file '`outfile`'"
+  "!DEBUG cfBrewTemplate: Brewing template to file '`outfile`'"
 
   z = try(brew(text = text, output = outfile, envir = jc), silent = TRUE)
   if (is.error(z))
@@ -267,14 +267,14 @@ getBatchIds = function(reg, status = "all") {
   batch.id = NULL
 
   if (status %in% c("all", "running") && !is.null(cf$listJobsRunning)) {
-    "!DEBUG Getting running Jobs"
+    "!DEBUG getBatchIds: Getting running Jobs"
     x = unique(cf$listJobsRunning(reg))
     if (length(x) > 0L)
       tab = rbind(tab, data.table(batch.id = x, status = "running"))
   }
 
   if (status %in% c("all", "queued") && !is.null(cf$listJobsQueued)) {
-    "!DEBUG Getting queued Jobs"
+    "!DEBUG getBatchIds: Getting queued Jobs"
     x = unique(setdiff(cf$listJobsQueued(reg), tab$batch.id))
     if (length(x) > 0L)
       tab = rbind(tab, data.table(batch.id = x, status = "queued"))

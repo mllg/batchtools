@@ -35,7 +35,7 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
       sys.args = ""
   }
 
-  "!DEBUG OS cmd: `sys.cmd` `stri_flatten(sys.args, ' ')`"
+  "!DEBUG runOSCommand: cmd: `sys.cmd` `stri_flatten(sys.args, ' ')`"
 
   if (nzchar(Sys.which(sys.cmd))) {
     res = suppressWarnings(system2(command = sys.cmd, args = sys.args, stdin = stdin, stdout = TRUE, stderr = TRUE, wait = TRUE))
@@ -46,8 +46,8 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
     exit.code = 127L
   }
 
-  "!DEBUG OS result (stdin '`stdin`', exit code `exit.code`):"
-  "!DEBUG `paste0(output, sep = '\n')`"
+  "!DEBUG runOSCommand: OS result (stdin '`stdin`', exit code `exit.code`):"
+  "!DEBUG runOSCommand: `paste0(output, sep = '\n')`"
 
   return(list(exit.code = exit.code, output = output))
 }
