@@ -48,9 +48,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
 
   timeout = Sys.time() + timeout
   ids.disappeared = noIds()
-
-  pb = makeProgressBar(total = n.jobs, format = "Waiting (S::system R::running D::done E::error) [:bar] :percent eta: :eta",
-    tokens = as.list(getStatusTable(ids, batch.ids, reg = reg)))
+  pb = makeProgressBar(total = n.jobs, format = "Waiting (S::system R::running D::done E::error) [:bar] :percent eta: :eta")
 
   repeat {
     # case 1: all jobs terminated -> nothing on system
@@ -60,6 +58,9 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
       pb$update(1)
       return(nrow(.findErrors(reg, ids)) == 0L)
     }
+
+    stats = getStatusTable(ids = ids, batch.ids = batch.ids, reg = reg)
+    pb$update((n.jobs - nrow(ids.nt)) / n.jobs, tokens = as.list(stats))
 
     # case 2: there are errors and stop.on.error is TRUE
     if (stop.on.error && nrow(.findErrors(reg, ids)) > 0L) {
@@ -87,11 +88,9 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
         return(FALSE)
       }
     }
+
     ids.disappeared = ids[!ids.on.sys, on = "job.id"]
     "!DEBUG waitForJobs: `nrow(ids.disappeared)` jobs disappeared"
-
-    stats = getStatusTable(ids = ids, batch.ids = batch.ids, reg = reg)
-    pb$tick(nrow(ids.nt) / n.jobs, tokens = as.list(stats))
 
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg = reg))

@@ -49,7 +49,7 @@ writeRDS = function(object, file, wait = FALSE) {
   invisible(TRUE)
 }
 
-makeProgressBar = function(..., tokens = list()) {
+makeProgressBar = function(...) {
   if (!batchtools$debug && getOption("batchtools.verbose", TRUE) && getOption("batchtools.progress", TRUE) && getOption("width") >= 20L) {
     progress_bar$new(...)
   } else {

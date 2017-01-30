@@ -174,7 +174,8 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   default.wait = 5
   chunk = NULL
-  pb = makeProgressBar(total = length(chunks), format = ":status [:bar] :percent eta: :eta", tokens = list(status = "Submitting"))
+  pb = makeProgressBar(total = length(chunks), format = ":status [:bar] :percent eta: :eta")
+  pb$tick(0, tokens = list(status = "Submitting"))
 
   for (ch in chunks) {
     wait = default.wait
