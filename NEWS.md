@@ -11,6 +11,7 @@
 * Timestamps are now stored with sub-second accuracy.
 * Fixed listing of jobs for `ClusterFunctionsLSF` and `ClusterFunctionsOpenLava` (thanks to @phaverty).
 * Job hashes are now prefixed with the literal string 'job' to ensure they start with a letter as required by some SGE systems.
+* Fixed handling of results being `NULL` in `reduceResultsList()`
 * Fixed broken key lookup heuristic join functions.
 * Fixed a bug where `getJobTable()` returned `difftimes` with the wrong unit (e.g., in minutes instead of seconds).
 * Deactivated swap allocation for `clusterFunctionsDocker`.

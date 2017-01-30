@@ -156,7 +156,9 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
   cache = Cache$new(reg$file.dir)
 
   for (i in which(file.exists(fns))) {
-    results[[i]] = worker(readRDS(fns[i]), makeJob(ids$job.id[i], cache = cache, reg = reg), ...)
+    res = worker(readRDS(fns[i]), makeJob(ids$job.id[i], cache = cache, reg = reg), ...)
+    if (!is.null(res))
+      results[[i]] = res
     pb$tick()
   }
   return(results)

@@ -86,6 +86,15 @@ test_that("reduceResults with no results reg", {
   })
 })
 
+test_that("reduceResultsList/NULL", {
+  reg = makeRegistry(NA, make.default = FALSE)
+  f = function(...) NULL
+  ids = batchMap(f, 1:3, reg = reg)
+  submitAndWait(ids, reg = reg)
+  res = reduceResultsList(ids = ids, reg = reg)
+  expect_equal(res, replicate(3, NULL, simplify = FALSE))
+})
+
 test_that("batchMapResults", {
   target = makeRegistry(NA, make.default = FALSE)
   x = batchMapResults(target = target, function(x, c, d) x$a+x$b + c + d, c = 11:13, source = reg, more.args = list(d = 2))
@@ -130,3 +139,4 @@ test_that("reduceResultsList/BatchExperiments", {
     expect_equal(reduceResultsList(fun = function(job, ...) job$instance, reg = reg), as.list(rep(2, 3)))
   })
 })
+
