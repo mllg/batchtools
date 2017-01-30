@@ -17,10 +17,11 @@
 #'
 #' @templateVar cf.name openlava
 #' @template template
+#' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava")) { # nocov start
+makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"), scheduler.delay = 1) { # nocov start
   template = cfReadBrewTemplate(template)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
@@ -70,5 +71,5 @@ makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"))
   }
 
   makeClusterFunctions(name = "OpenLava", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, store.job = TRUE, array.var = "LSB_JOBINDEX")
+    listJobsRunning = listJobsRunning, array.var = "LSB_JOBINDEX", store.job = TRUE, scheduler.delay = scheduler.delay)
 } # nocov end

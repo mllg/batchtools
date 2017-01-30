@@ -5,7 +5,7 @@
 \title{ClusterFunctions for Docker}
 \usage{
 makeClusterFunctionsDocker(image, docker.args = character(0L),
-  image.args = character(0L))
+  image.args = character(0L), scheduler.delay = 1)
 }
 \arguments{
 \item{image}{[\code{character(1)}]\cr
@@ -16,6 +16,10 @@ Additional arguments passed to \dQuote{docker} *before* the command (\dQuote{run
 
 \item{image.args}{[\code{character}]\cr
 Additional arguments passed to \dQuote{docker run} (e.g., to define mounts or environment variables).}
+
+\item{scheduler.delay}{[\code{numeric(1)}]\cr
+Time to sleep after important interactions with the scheduler to ensure a sane state.
+Currently only user after \code{\link{submitJobs}}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

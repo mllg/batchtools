@@ -26,10 +26,11 @@
 #'  Note that you should not select the cluster in your template file via \code{#SBATCH --clusters}.
 #' @param array.jobs [\code{logical(1)}]\cr
 #'  If array jobs are disabled on the computing site, set to \code{FALSE}.
+#' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clusters = NULL, array.jobs = TRUE) { # nocov start
+makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clusters = NULL, array.jobs = TRUE, scheduler.delay = 1) { # nocov start
   if (!is.null(clusters))
     assertString(clusters, min.chars = 1L)
   assertFlag(array.jobs)
@@ -99,5 +100,5 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
   }
 
   makeClusterFunctions(name = "Slurm", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    listJobsQueued = listJobsQueued, store.job = TRUE, array.var = "SLURM_ARRAY_TASK_ID")
+    listJobsQueued = listJobsQueued, array.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE, scheduler.delay = scheduler.delay)
 } # nocov end

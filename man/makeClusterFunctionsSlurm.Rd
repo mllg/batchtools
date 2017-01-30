@@ -5,7 +5,7 @@
 \title{ClusterFunctions for Slurm Systems}
 \usage{
 makeClusterFunctionsSlurm(template = findTemplateFile("slurm"),
-  clusters = NULL, array.jobs = TRUE)
+  clusters = NULL, array.jobs = TRUE, scheduler.delay = 1)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -27,6 +27,10 @@ Note that you should not select the cluster in your template file via \code{#SBA
 
 \item{array.jobs}{[\code{logical(1)}]\cr
 If array jobs are disabled on the computing site, set to \code{FALSE}.}
+
+\item{scheduler.delay}{[\code{numeric(1)}]\cr
+Time to sleep after important interactions with the scheduler to ensure a sane state.
+Currently only user after \code{\link{submitJobs}}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

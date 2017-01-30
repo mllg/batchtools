@@ -16,10 +16,11 @@
 #'
 #' @templateVar cf.name torque
 #' @template template
+#' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsTorque = function(template = findTemplateFile("torque")) { # nocov start
+makeClusterFunctionsTorque = function(template = findTemplateFile("torque"), scheduler.delay = 1) { # nocov start
   template = cfReadBrewTemplate(template, "##")
 
   submitJob = function(reg, jc) {
@@ -65,5 +66,5 @@ makeClusterFunctionsTorque = function(template = findTemplateFile("torque")) { #
   }
 
   makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, store.job = TRUE, array.var = "PBS_ARRAYID")
+    listJobsRunning = listJobsRunning, array.var = "PBS_ARRAYID", store.job = TRUE, scheduler.delay = scheduler.delay)
 } # nocov end

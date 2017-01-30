@@ -228,6 +228,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     pb$tick(len = 1, tokens = list(status = "Submitting"))
   }
 
+  Sys.sleep(reg$cluster.functions$scheduler.delay)
   runHook(reg, "post.submit")
 
   # return ids, registry is saved via on.exit()

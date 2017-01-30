@@ -7,7 +7,7 @@
 \usage{
 makeClusterFunctions(name, submitJob, killJob = NULL, listJobsQueued = NULL,
   listJobsRunning = NULL, array.var = NA_character_, store.job = FALSE,
-  hooks = list())
+  scheduler.delay = 0, hooks = list())
 }
 \arguments{
 \item{name}{[\code{character(1)}]\cr
@@ -45,6 +45,10 @@ Default is \code{NA} for no array support.}
 \item{store.job}{[\code{logical(1)}]\cr
 Flag to indicate that the cluster function implementation of \code{submitJob} can not directly handle \code{\link{JobCollection}} objects.
 If set to \code{FALSE}, the \code{\link{JobCollection}} is serialized to the file system before submitting the job.}
+
+\item{scheduler.delay}{[\code{numeric(1)}]\cr
+Time to sleep after important interactions with the scheduler to ensure a sane state.
+Currently only user after \code{\link{submitJobs}}.}
 
 \item{hooks}{[\code{list}]\cr
 Named list of functions which will we called on certain events like \dQuote{pre.submit} or \dQuote{post.sync}.

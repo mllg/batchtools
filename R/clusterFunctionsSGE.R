@@ -21,10 +21,11 @@
 #'
 #' @templateVar cf.name sge
 #' @template template
+#' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSGE = function(template = findTemplateFile("sge")) { # nocov start
+makeClusterFunctionsSGE = function(template = findTemplateFile("sge"), scheduler.delay = 1) { # nocov start
   template = cfReadBrewTemplate(template)
 
   submitJob = function(reg, jc) {
@@ -64,5 +65,5 @@ makeClusterFunctionsSGE = function(template = findTemplateFile("sge")) { # nocov
   }
 
   makeClusterFunctions(name = "SGE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, store.job = TRUE)
+    listJobsRunning = listJobsRunning, store.job = TRUE, scheduler.delay = scheduler.delay)
 } # nocov end

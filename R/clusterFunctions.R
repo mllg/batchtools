@@ -31,6 +31,9 @@
 #' @param array.var [\code{character(1)}]\cr
 #'   Name of the environment variable set by the scheduler to identify IDs of job arrays.
 #'   Default is \code{NA} for no array support.
+#' @param scheduler.delay [\code{numeric(1)}]\cr
+#'   Time to sleep after important interactions with the scheduler to ensure a sane state.
+#'   Currently only user after \code{\link{submitJobs}}.
 #' @param store.job [\code{logical(1)}]\cr
 #'   Flag to indicate that the cluster function implementation of \code{submitJob} can not directly handle \code{\link{JobCollection}} objects.
 #'   If set to \code{FALSE}, the \code{\link{JobCollection}} is serialized to the file system before submitting the job.
@@ -42,29 +45,19 @@
 #' @family ClusterFunctions
 #' @family ClusterFunctionsHelper
 makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL,
-  array.var = NA_character_, store.job = FALSE, hooks = list()) {
-  assertString(name, min.chars = 1L)
-  if (!is.null(submitJob))
-    assertFunction(submitJob, c("reg", "jc"))
-  if (!is.null(killJob))
-    assertFunction(killJob, c("reg", "batch.id"))
-  if (!is.null(listJobsQueued))
-    assertFunction(listJobsQueued, "reg")
-  if (!is.null(listJobsRunning))
-    assertFunction(listJobsRunning, "reg")
-  assertString(array.var, na.ok = TRUE)
-  assertFlag(store.job)
+  array.var = NA_character_, store.job = FALSE, scheduler.delay = 0, hooks = list()) {
   assertList(hooks, types = "function", names = "unique")
   assertSubset(names(hooks), batchtools$hooks$name)
 
   setClasses(list(
-      name = name,
-      submitJob = submitJob,
-      killJob = killJob,
-      listJobsQueued = listJobsQueued,
-      listJobsRunning = listJobsRunning,
-      array.var = array.var,
-      store.job = store.job,
+      name = assertString(name, min.chars = 1L),
+      submitJob = assertFunction(submitJob, c("reg", "jc"), null.ok = TRUE),
+      killJob = assertFunction(killJob, c("reg", "batch.id"), null.ok = TRUE),
+      listJobsQueued = assertFunction(listJobsQueued, "reg", null.ok = TRUE),
+      listJobsRunning = assertFunction(listJobsRunning, "reg", null.ok = TRUE),
+      array.var = assertString(array.var, na.ok = TRUE),
+      store.job = assertFlag(store.job),
+      scheduler.delay = assertNumber(scheduler.delay, lower = 0),
       hooks = hooks),
     "ClusterFunctions")
 }

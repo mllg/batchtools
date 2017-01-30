@@ -24,10 +24,11 @@
 #'   Additional arguments passed to \dQuote{docker} *before* the command (\dQuote{run}, \dQuote{ps} or \dQuote{kill}) to execute (e.g., the docker host).
 #' @param image.args [\code{character}]\cr
 #'   Additional arguments passed to \dQuote{docker run} (e.g., to define mounts or environment variables).
+#' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.args = character(0L)) { # nocov start
+makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.args = character(0L), scheduler.delay = 1) { # nocov start
   assertString(image)
   assertCharacter(docker.args, any.missing = FALSE)
   assertCharacter(image.args, any.missing = FALSE)
@@ -91,5 +92,5 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
   }
 
   makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    store.job = TRUE, hooks = list(pre.submit.job = housekeeping, post.sync = housekeeping))
+    store.job = TRUE, scheduler.delay = scheduler.delay, hooks = list(pre.submit.job = housekeeping, post.sync = housekeeping))
 } # nocov end

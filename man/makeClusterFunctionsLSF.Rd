@@ -4,7 +4,8 @@
 \alias{makeClusterFunctionsLSF}
 \title{ClusterFunctions for LSF Systems}
 \usage{
-makeClusterFunctionsLSF(template = findTemplateFile("lsf"))
+makeClusterFunctionsLSF(template = findTemplateFile("lsf"),
+  scheduler.delay = 1)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -18,6 +19,10 @@ the first one found:
   \item \dQuote{.batchtools.lsf.tmpl} in the home directory.
   \item \dQuote{lsf.default.tmpl} in the package installation directory in the subfolder \dQuote{templates} (this probably does not exist for your cluster system or needs adaptation).
 }}
+
+\item{scheduler.delay}{[\code{numeric(1)}]\cr
+Time to sleep after important interactions with the scheduler to ensure a sane state.
+Currently only user after \code{\link{submitJobs}}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
