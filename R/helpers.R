@@ -50,7 +50,7 @@ writeRDS = function(object, file, wait = FALSE) {
 }
 
 makeProgressBar = function(..., tokens = list()) {
-  if (getOption("batchtools.verbose", TRUE) && getOption("batchtools.progress", TRUE) && getOption("width") >= 20L) {
+  if (!batchtools$debug && getOption("batchtools.verbose", TRUE) && getOption("batchtools.progress", TRUE) && getOption("width") >= 20L) {
     progress_bar$new(...)
   } else {
     list(tick = function(len = 1, tokens = list()) NULL, update = function(ratio, tokens) NULL)
