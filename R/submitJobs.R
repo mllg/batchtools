@@ -123,8 +123,13 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     assertCount(resources$ncpus, positive = TRUE)
   if (hasName(resources, "measure.memory"))
     assertFlag(resources$measure.memory)
-  if (hasName(resources, "chunks.as.arrayjobs"))
+  if (hasName(resources, "chunks.as.arrayjobs")) {
     assertFlag(resources$chunks.as.arrayjobs)
+    if (resources$chunks.as.arrayjobs && is.na(reg$cluster.functions$array.var)) {
+      info("Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions '%s'", reg$cluster.functions$name)
+      resources$chunks.as.arrayjobs = NULL
+    }
+  }
 
   ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk")
   if (nrow(ids) == 0L)
