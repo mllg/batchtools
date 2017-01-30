@@ -21,6 +21,7 @@
 #'   one job terminated with an exception.
 #' @export
 waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
+  "!DEBUG Starting waitForJobs"
   assertRegistry(reg, writeable = FALSE, sync = TRUE)
   assertNumeric(sleep, len = 1L, lower = 0, finite = TRUE)
   assertNumeric(timeout, len = 1L, lower = sleep)
