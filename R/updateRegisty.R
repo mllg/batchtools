@@ -1,5 +1,5 @@
 updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
-  "!DEBUG updateRegistry: Running updateRegistry"
+  "!DEBUG [updateRegistry]: Running updateRegistry"
   pv = packageVersion("batchtools")
   update = FALSE
 

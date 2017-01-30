@@ -11,7 +11,7 @@
 #' @export
 saveRegistry = function(reg = getDefaultRegistry()) {
   if (reg$writeable) {
-    "!DEBUG saveRegistry: Saving Registry"
+    "!DEBUG [saveRegistry]: Saving Registry"
 
     fn = file.path(reg$file.dir, c("registry.new.rds", "registry.rds"))
     ee = new.env(parent = asNamespace("batchtools"))
@@ -20,7 +20,7 @@ saveRegistry = function(reg = getDefaultRegistry()) {
     writeRDS(ee, file = fn[1L], wait = TRUE)
     file.rename(fn[1L], fn[2L])
   } else {
-    "!DEBUG saveRegistry: Skipping saveRegistry (read-only)"
+    "!DEBUG [saveRegistry]: Skipping saveRegistry (read-only)"
   }
   invisible(reg$writeable)
 }

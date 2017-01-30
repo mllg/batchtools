@@ -154,7 +154,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   if (hasName(reg, "max.concurrent.jobs")) {
     assertInt(reg$max.concurrent.jobs, lower = 0L)
     if (uniqueN(on.sys, by = "batch.id") + length(chunks) > reg$max.concurrent.jobs) {
-      "!DEBUG submitJobs: Limiting the number of concurrent jobs to `reg$max.concurrent.jobs`"
+      "!DEBUG [submitJobs]: Limiting the number of concurrent jobs to `reg$max.concurrent.jobs`"
       max.concurrent.jobs = reg$max.concurrent.jobs
     }
   }
@@ -188,7 +188,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
       # count chunks or job.id
       repeat {
         n.on.sys = uniqueN(getBatchIds(reg), by = "batch.id")
-        "!DEBUG submitJobs: Detected `n.on.sys` batch jobs on system (`max.concurrent.jobs` allowed concurrently)"
+        "!DEBUG [submitJobs]: Detected `n.on.sys` batch jobs on system (`max.concurrent.jobs` allowed concurrently)"
 
         if (n.on.sys < max.concurrent.jobs)
           break

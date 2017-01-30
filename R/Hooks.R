@@ -37,7 +37,7 @@ runHook.Registry = function(obj, hook, ...) {
   f = obj$cluster.functions$hooks[[hook]]
   if (is.null(f))
     return(NULL)
-  "!DEBUG runHook: Running hook '`hook`'"
+  "!DEBUG [runHook]: Running hook '`hook`'"
   f(obj, ...)
 }
 
@@ -46,6 +46,6 @@ runHook.JobCollection = function(obj, hook, ...) {
   f = obj$hooks[[hook]]
   if (is.null(f))
     return(NULL)
-  "!DEBUG runHook: Running hook '`hook`'"
+  "!DEBUG [runHook]: Running hook '`hook`'"
   f(obj, ...)
 }

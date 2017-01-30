@@ -10,7 +10,7 @@ test_that("resetJobs", {
   )
   submitAndWait(reg, 1:3)
 
-  expect_true(file.exists(getLogFiles(reg$file.dir, reg$status[.(3), job.hash], NA_character_)))
+  expect_true(file.exists(getLogFiles(reg$file.dir, reg$status[.(3), job.hash], reg$status[.(3), log.file])))
   expect_false(identical(reg$status$submitted, before$status$submitted))
   expect_true(file.exists(getResultFiles(reg$file.dir, 1)))
   expect_equal(dir.exists(file.path(reg$file.dir, "external", 1:3)), c(TRUE, FALSE, TRUE))
@@ -19,7 +19,7 @@ test_that("resetJobs", {
   expect_true(all.equal(before$status[1], reg$status[1]))
   expect_false(file.exists(getResultFiles(reg$file.dir, 1)))
   expect_true(file.exists(getResultFiles(reg$file.dir, 3)))
-  expect_true(file.exists(getLogFiles(reg$file.dir, reg$status[.(3L), job.hash], NA_character_)))
+  expect_true(file.exists(getLogFiles(reg$file.dir, reg$status[.(3L), job.hash], reg$status[.(3L), log.file])))
   expect_equal(dir.exists(file.path(reg$file.dir, "external", 1:3)), c(FALSE, FALSE, TRUE))
   expect_false(file.exists(getResultFiles(reg$file.dir, 1)))
   expect_true(file.exists(getResultFiles(reg$file.dir, 3)))

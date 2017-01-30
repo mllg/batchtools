@@ -72,7 +72,7 @@ Worker = R6Class("Worker",
     },
 
     update = function(reg) {
-      "!DEBUG Worker/update: Updating Worker '`self$nodename`'"
+      "!DEBUG [Worker]: Updating Worker '`self$nodename`'"
       res = self$run(c("status", reg$file.dir))
       res = as.numeric(stri_split_regex(res$output, "\\s+")[[1L]])
       names(res) = c("load", "n.rprocs", "n.rprocs.50", "n.jobs")

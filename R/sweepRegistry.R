@@ -10,7 +10,7 @@
 #' @export
 sweepRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE, writeable = TRUE, running.ok = FALSE)
-  "!DEBUG sweepRegistry: Running sweepRegistry"
+  "!DEBUG [sweepRegistry]: Running sweepRegistry"
 
   path = getResultPath(reg)
   obsolete = setdiff(
