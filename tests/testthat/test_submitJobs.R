@@ -14,6 +14,8 @@ test_that("submitJobs", {
   expect_true(is.na(reg$status[3, submitted]))
   x = reg$resources[1, resources][[1L]]
   y = insert(reg$default.resources, list(foo = "bar"))
+  if (isTRUE(y$chunks.as.arrayjobs) && is.na(reg$cluster.functions$array.var))
+    y$chunks.as.arrayjobs = NULL
   expect_equal(x[order(names2(x))], y[order(names2(y))])
 
   submitAndWait(reg, 3, resources = list(walltime = 100, memory = 500))
