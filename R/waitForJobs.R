@@ -42,6 +42,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     return(TRUE)
 
   batch.ids = getBatchIds(reg)
+  "!DEBUG Using `nrow(ids)` ids and `nrow(batch.ids)` batch ids"
   if (nrow(batch.ids) == 0L)
     return(nrow(.findErrors(reg, ids)) == 0L)
 
@@ -55,12 +56,14 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     # case 1: all jobs terminated -> nothing on system
     ids.nt = .findNotTerminated(reg, ids)
     if (nrow(ids.nt) == 0L) {
+      "!DEBUG All jobs terminated"
       pb$update(1)
       return(nrow(.findErrors(reg, ids)) == 0L)
     }
 
     # case 2: there are errors and stop.on.error is TRUE
     if (stop.on.error && nrow(.findErrors(reg, ids)) > 0L) {
+      "!DEBUG Errors found and stop.on.error is TRUE"
       pb$update(1)
       return(FALSE)
     }
@@ -85,6 +88,7 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
       }
     }
     ids.disappeared = ids[!ids.on.sys, on = "job.id"]
+    "!DEBUG `nrow(ids.disappeared)` jobs disappeared"
 
     stats = getStatusTable(ids = ids, batch.ids = batch.ids, reg = reg)
     pb$tick(nrow(ids.nt) / n.jobs, tokens = as.list(stats))
@@ -92,5 +96,6 @@ waitForJobs = function(ids = NULL, sleep = 10, timeout = 604800, stop.on.error =
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg = reg))
     batch.ids = getBatchIds(reg)
+    "!DEBUG New batch.ids: `stri_flatten(batch.ids$batch.id, ',')`"
   }
 }
