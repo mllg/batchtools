@@ -174,6 +174,8 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   default.wait = 5
   chunk = NULL
+  runHook(reg, "pre.submit")
+
   pb = makeProgressBar(total = length(chunks), format = ":status [:bar] :percent eta: :eta")
   pb$tick(0, tokens = list(status = "Submitting"))
 
@@ -203,7 +205,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     file.remove(fns[file.exists(fns)])
 
     repeat {
-      runHook(reg, "pre.submit")
+      runHook(reg, "pre.submit.job")
       now = ustamp()
       submit = reg$cluster.functions$submitJob(reg = reg, jc = jc)
 
@@ -211,7 +213,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
         reg$status[ids.chunk,
           c("submitted", "started", "done",   "error",       "memory", "resource.id", "batch.id",      "log.file",      "job.hash") :=
           list(now,      NA_real_,  NA_real_, NA_character_, NA_real_, res.id,        submit$batch.id, submit$log.file, jc$job.hash)]
-        runHook(reg, "post.submit")
+        runHook(reg, "post.submit.job")
         break
       } else if (submit$status > 0L && submit$status < 100L) {
         # temp error
@@ -225,6 +227,8 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     }
     pb$tick(len = 1, tokens = list(status = "Submitting"))
   }
+
+  runHook(reg, "post.submit")
 
   # return ids, registry is saved via on.exit()
   return(invisible(ids))
