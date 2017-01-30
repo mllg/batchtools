@@ -33,7 +33,7 @@ test_that("empty log files", {
   submitAndWait(reg)
 
   # overwrite log file
-  log.file = getLogFiles(reg$file.dir, reg$status[1, job.hash])
+  log.file = getLogFiles(reg$file.dir, reg$status[1, job.hash], NA_character_)
   file.remove(log.file)
   file.create(log.file)
 

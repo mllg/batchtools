@@ -132,7 +132,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   # handle chunks
   if (hasName(ids, "chunk")) {
-    assertInteger(ids$chunk, any.missing = FALSE)
+    ids$chunk = asInteger(ids$chunk, any.missing = FALSE)
     chunks = unique(ids$chunk)
   } else {
     chunks = ids$chunk = seq_row(ids)
@@ -166,8 +166,6 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   on.exit(saveRegistry(reg))
 
   info("Submitting %i jobs in %i chunks using cluster functions '%s' ...", nrow(ids), length(chunks), reg$cluster.functions$name)
-  update = data.table(submitted = NA_real_, started = NA_real_, done = NA_real_, error = NA_character_,
-    memory = NA_real_, resource.id = res.id, batch.id = NA_character_, job.hash = NA_character_)
 
   default.wait = 5
   chunk = NULL
@@ -204,8 +202,9 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
       submit = reg$cluster.functions$submitJob(reg = reg, jc = jc)
 
       if (submit$status == 0L) {
-        update[,  c("submitted", "batch.id", "job.hash") := list(now, submit$batch.id, jc$job.hash)]
-        reg$status[ids.chunk, names(update) := update]
+        reg$status[ids.chunk,
+          c("submitted", "started", "done",   "error",       "memory", "resource.id", "batch.id",      "log.file",      "job.hash") :=
+          list(now,      NA_real_,  NA_real_, NA_character_, NA_real_, res.id,        submit$batch.id, submit$log.file, jc$job.hash)]
         runHook(reg, "post.submit")
         break
       } else if (submit$status > 0L && submit$status < 100L) {

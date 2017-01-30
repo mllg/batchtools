@@ -15,6 +15,9 @@
 #' It is the template file's job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
+#' @note
+#' Array jobs are currently not supported.
+#'
 #' @templateVar cf.name lsf
 #' @template template
 #' @return [\code{\link{ClusterFunctions}}].
@@ -69,5 +72,5 @@ makeClusterFunctionsLSF = function(template = findTemplateFile("lsf")) { # nocov
   }
 
   makeClusterFunctions(name = "LSF", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, store.job = TRUE, array.var = "LSB_JOBINDEX")
+    listJobsRunning = listJobsRunning, store.job = TRUE)
 } # nocov end

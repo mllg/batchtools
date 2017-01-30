@@ -5,7 +5,8 @@
 \alias{makeSubmitJobResult}
 \title{Create a SubmitJobResult}
 \usage{
-makeSubmitJobResult(status, batch.id, msg = NA_character_)
+makeSubmitJobResult(status, batch.id, log.file = NA_character_,
+  msg = NA_character_)
 }
 \arguments{
 \item{status}{[\code{integer(1)}]\cr
@@ -16,6 +17,10 @@ error greater than 100 is a permanent failure.}
 Unique id of this job on batch system, as given by the batch system.
 Must be globally unique so that the job can be terminated using just this information.
 For array jobs, this may be a vector of length equal to the number of jobs in the array.}
+
+\item{log.file}{[\code{character()}]\cr
+Log file. If \code{NA}, defaults to \code{[job.hash].log}.
+Some cluster functions set this for array jobs.}
 
 \item{msg}{[\code{character(1)}]\cr
 Optional error message in case \code{status} is not equal to 0. Default is \dQuote{OK},

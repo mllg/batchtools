@@ -53,6 +53,7 @@ if (length(grep("^/data/", log.file)) > 0L) {
 #PBS -l walltime=<%= resources$walltime %>,nodes=<%= if (use.mpi) resources$ncpus else 1 %>:ppn=<%= if (use.mpi) 1 else resources$ncpus %><%= if (!is.null(resources$type)) paste0(":", resources$type) %>,vmem=<%= resources$memory %>M
 #PBS -q <%= queue %>
 #PBS -j oe
+<%= if (array.jobs) sprintf("#PBS -t 1-%i", nrow(jobs)) else "" %>
 
 ## setup modules
 source /sysdata/shared/sfw/Modules/default/init/bash

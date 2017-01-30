@@ -30,14 +30,19 @@ makeClusterFunctionsTorque = function(template = findTemplateFile("torque")) { #
     res = runOSCommand("qsub", outfile)
 
     max.jobs.msg = "Maximum number of jobs already in queue"
-    output = stri_flatten(res$output, "\n")
+    output = stri_flatten(stri_trim_both(res$output), "\n")
 
     if (stri_detect_fixed(max.jobs.msg, output)) {
       makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = max.jobs.msg)
     } else if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
     } else {
-      makeSubmitJobResult(status = 0L, batch.id = stri_trim_both(output))
+      if (jc$array.jobs) {
+        logs = sprintf("%s-%i", basename(jc$log.file), seq_row(jc$jobs))
+        makeSubmitJobResult(status = 0L, batch.id = stri_replace_first_fixed(output, "[]", stri_paste("[", seq_row(jc$jobs), "]")), log.file = logs)
+      } else {
+        makeSubmitJobResult(status = 0L, batch.id = output)
+      }
     }
   }
 
@@ -47,19 +52,16 @@ makeClusterFunctionsTorque = function(template = findTemplateFile("torque")) { #
     cfKillJob(reg, "qdel", batch.id)
   }
 
-  listJobs = function(reg, cmd) {
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
-    unique(stri_replace_all_regex(batch.ids, "\\[[0-9]+\\]", "[]"))
-  }
-
   listJobsQueued = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    listJobs(reg, c("qselect", "-u $USER", "-s QW"))
+    cmd = c("qselect", "-u $USER", "-s QW")
+    runOSCommand(cmd[1L], cmd[-1L])$output
   }
 
   listJobsRunning = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    listJobs(reg, c("qselect", "-u $USER", "-s EHRT"))
+    cmd = c("qselect", "-u $USER", "-s EHRT")
+    runOSCommand(cmd[1L], cmd[-1L])$output
   }
 
   makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,

@@ -30,8 +30,7 @@ log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=<%= resources$ncpus %>
 #SBATCH --mem-per-cpu=<%= resources$memory %>
-## remove this line if your cluster does not support arrayjobs
-#SBATCH --array=1-<%= nrow(jobs) %>
+<%= if (array.jobs) sprintf("#SBATCH --array=1-%i", nrow(jobs)) else "" %>
 
 ## Initialize work environment like
 ## source /etc/profile
