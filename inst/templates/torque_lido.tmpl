@@ -1,26 +1,19 @@
 #!/bin/bash
 <%
-## Set sane defaults
-if (is.null(resources$modules))
-  resources$modules = character(0L)
-if (is.null(resources$ncpus))
-    resources$ncpus = 1L
-use.mpi = (resources$pm.backend %??% "default") == "mpi"
-
-## Check variables
+## Check some resources and set sane defaults
 resources$walltime = asInt(resources$walltime, lower = 60L, upper = 3600L * 672L)
 resources$memory = asInt(resources$memory, lower = 100L, upper = 64L * 1024L)
-resources$ncpus = asInt(resources$ncpus, lower = 1L)
-assertCharacter(resources$modules, any.missing = FALSE)
-if (is.null(resources$R)) {
-  resources$R = "R/3.3.1-gcc48-base"
-} else {
-  assertString(resources$R)
-}
-if (!is.null(resources$type))
-  assertString(resources$type)
+resources$ncpus = if (is.null(resources$ncpus)) 1L else asInt(resources$ncpus, lower = 1L)
+resources$modules = if (is.null(resources$modules)) character(0L) else assertCharacter(resources$modules, any.missing = FALSE)
+resources$R = if (is.null(resources$R)) "R/3.3.1-gcc48-base" else assertString(resources$R)
+resources$omp.threads = if (is.null(resources$omp.threads)) 1L else asInt(resources$omp.threads, lower = 1L)
+resources$blas.threads = if (is.null(resources$blas.threads)) 1L else asInt(resources$blas.threads, lower = 1L)
+
+if (!is.null(resources$type)) assertString(resources$type)
 if (resources$memory > 15000)
-  resources$type = "quad"
+    resources$type = "quad"
+
+use.mpi = (resources$pm.backend %??% "default") == "mpi"
 
 ## first string of queue, selected by walltime
 walltimes = 3600L * c(1L, 8L, 48L, 672L)
@@ -62,6 +55,11 @@ module add <%= modules %>
 ## create our own temp dir and clean it up later, lido does not do this automatically
 mkdir /scratch/${USER}-${PBS_JOBID}
 export TMPDIR=/scratch/${USER}-${PBS_JOBID}
+
+## Set thread number of OMP and OpenBlas
+export OMP_NUM_THREADS=<%= resources$omp.threads %>
+export NUMEXPR_NUM_THREADS=<%= resources$blas.threads %>
+export OPENBLAS_NUM_THREADS=<%= resources$tblas.hreads %>
 
 ## export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>
