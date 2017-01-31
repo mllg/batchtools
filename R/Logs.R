@@ -48,22 +48,22 @@ grepLogs = function(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE, reg
   assertString(pattern, min.chars = 1L)
   assertFlag(ignore.case)
   assertFlag(fixed)
-  job.hash = matches = NULL
+  job.id = job.hash = log.file = matches = NULL
 
   ids = convertIds(reg, ids)
-  tab = filter(reg$status[!is.na(job.hash)], ids, c("job.id", "job.hash"))
+  tab = filter(reg$status[!is.na(job.hash)], ids)[, list(job.id = job.id, hash = sprintf("%s-%s", job.hash, log.file))]
   if (nrow(tab) == 0L)
     return(data.table(job.id = integer(0L), matches = character(0L)))
 
-  setorderv(tab, "job.hash")
+  setorderv(tab, "hash")
   res = data.table(job.id = tab$job.id, matches = NA_character_)
   hash.before = ""
   matcher = if (fixed) stri_detect_fixed else stri_detect_regex
 
   for (i in seq_row(tab)) {
-    if (hash.before != tab$job.hash[i]) {
+    if (hash.before != tab$hash[i]) {
       log = readLog(tab[i], missing.as.empty = TRUE, reg = reg)
-      hash.before = tab$job.hash[i]
+      hash.before = tab$hash[i]
     }
 
     if (nrow(log) > 0L) {
