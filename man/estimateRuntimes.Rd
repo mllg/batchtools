@@ -102,6 +102,5 @@ ids[, chunk := lpt(runtime, 10)]
 print(ids[, list(runtime = sum(runtime)), by = chunk])
 }
 \seealso{
-lpt binpack
+\code{\link{binpack}} and \code{\link{lpt}} to chunk jobs according to their estimated runtimes.
 }
-

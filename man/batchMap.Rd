@@ -68,4 +68,3 @@ testJob(6, reg = tmp)
 \seealso{
 \code{\link{batchReduce}}
 }
-

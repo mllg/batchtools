@@ -13,7 +13,7 @@
 #' @inheritParams chunk
 #' @template reg
 #' @return [\code{\link[data.table]{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
-#' @seealso chunk lpt binpack
+#' @seealso \code{\link{chunk}} \code{\link{binpack}} \code{\link{lpt}}
 #' @export
 chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = character(0L), reg = getDefaultRegistry()) {
   .Deprecated("chunk", package = "batchtools")
@@ -71,7 +71,7 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
 #'   If more chunks than necessary are requested, empty chunks are ignored.
 #'   Mutually exclusive with \code{chunks.size}.
 #' @return [\code{integer}] giving the chunk number for each element of \code{x}.
-#' @seealso estimateRuntimes
+#' @seealso \code{\link{estimateRuntimes}}
 #' @export
 #' @examples
 #' ch = chunk(1:10, n.chunks = 2)

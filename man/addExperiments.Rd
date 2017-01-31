@@ -78,4 +78,3 @@ getJobPars(reg = tmp)
 Other Experiment: \code{\link{removeExperiments}},
   \code{\link{summarizeExperiments}}
 }
-

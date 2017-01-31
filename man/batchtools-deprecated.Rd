@@ -9,4 +9,3 @@ The following functions have been deprecated:
   \code{chunkIds} \tab deprecated in favor of \code{\link{chunk}}, \code{\link{lpt}} and \code{\link{binpack}}\cr
 }
 }
-

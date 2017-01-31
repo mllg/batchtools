@@ -39,4 +39,3 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 \description{
 This function simply waits until all jobs are terminated.
 }
-

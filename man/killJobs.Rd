@@ -33,4 +33,3 @@ Other debug: \code{\link{getErrorMessages}},
   \code{\link{resetJobs}}, \code{\link{showLog}},
   \code{\link{testJob}}
 }
-

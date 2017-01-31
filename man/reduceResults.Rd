@@ -57,4 +57,3 @@ reduceResults(function(x, y) c(x, sqrt(y)), init = numeric(0), reg = tmp)
 Other Results: \code{\link{batchMapResults}},
   \code{\link{loadResult}}, \code{\link{reduceResultsList}}
 }
-

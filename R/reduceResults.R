@@ -95,7 +95,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @return \code{reduceResultsList} returns a list of the results in the same order as the provided ids.
 #'   \code{reduceResultsDataTable} returns a \code{\link[data.table]{data.table}} with columns \dQuote{job.id} and additional result columns
 #'   created via \code{\link[data.table]{rbindlist}}, sorted by \dQuote{job.id}.
-#' @seealso \code{\link{reduceResults}}.
+#' @seealso \code{\link{reduceResults}}
 #' @family Results
 #' @export
 #' @examples

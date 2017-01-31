@@ -21,4 +21,3 @@ Other Registry: \code{\link{clearRegistry}},
   \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
   \code{\link{saveRegistry}}, \code{\link{syncRegistry}}
 }
-

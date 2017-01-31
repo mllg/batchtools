@@ -55,4 +55,3 @@ reduceResults(fun = function(aggr, job, res) f(aggr, res), reg = tmp)
 \seealso{
 \code{\link{batchMap}}
 }
-

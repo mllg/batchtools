@@ -3,8 +3,8 @@
 \name{Tags}
 \alias{Tags}
 \alias{addJobTags}
-\alias{getUsedJobTags}
 \alias{removeJobTags}
+\alias{getUsedJobTags}
 \title{Add or Remove Job Tags}
 \usage{
 addJobTags(ids = NULL, tags, reg = getDefaultRegistry())
@@ -59,4 +59,3 @@ getJobTags(reg = tmp)
 ids = findTagged("x.neg", reg = tmp)
 getUsedJobTags(ids, reg = tmp)
 }
-

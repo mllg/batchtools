@@ -23,7 +23,7 @@
 #'  \dQuote{observed} if runtime was observed).
 #'  The other element of the list named \dQuote{model}] contains the fitted random forest object.
 #' @export
-#' @seealso lpt binpack
+#' @seealso \code{\link{binpack}} and \code{\link{lpt}} to chunk jobs according to their estimated runtimes.
 #' @examples
 #' # Create a simple toy registry
 #' set.seed(1)

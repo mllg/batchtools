@@ -53,4 +53,3 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsSocket}},
   \code{\link{makeClusterFunctions}}
 }
-

@@ -67,4 +67,3 @@ registry directory yourself.
 btlapply(1:3, function(x) x^2)
 btmapply(function(x, y, z) x + y + z, x = 1:3, y = 1:3, more.args = list(z = 1), simplify = TRUE)
 }
-

@@ -2,12 +2,12 @@
 % Please edit documentation in R/Joins.R
 \name{JoinTables}
 \alias{JoinTables}
-\alias{ajoin}
 \alias{ijoin}
 \alias{ljoin}
-\alias{ojoin}
 \alias{rjoin}
+\alias{ojoin}
 \alias{sjoin}
+\alias{ajoin}
 \alias{ujoin}
 \title{Inner, Left, Right, Outer, Semi and Anti Join for Data Tables}
 \usage{
@@ -85,4 +85,3 @@ ajoin(x, y)
 # Updating join: Replace values in x with values in y
 ujoin(x, y)
 }
-

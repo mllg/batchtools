@@ -67,4 +67,3 @@ Other Registry: \code{\link{clearRegistry}},
   \code{\link{makeRegistry}}, \code{\link{saveRegistry}},
   \code{\link{sweepRegistry}}, \code{\link{syncRegistry}}
 }
-

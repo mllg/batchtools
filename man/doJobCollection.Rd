@@ -33,4 +33,3 @@ doJobCollection(jc)
 \seealso{
 Other JobCollection: \code{\link{makeJobCollection}}
 }
-

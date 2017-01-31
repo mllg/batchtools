@@ -43,6 +43,5 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 This function is deprecated in favor of the more flexible \code{chunk}, \code{lpt} and \code{binpack}.
 }
 \seealso{
-chunk lpt binpack
+\code{\link{chunk}} \code{\link{binpack}} \code{\link{lpt}}
 }
-

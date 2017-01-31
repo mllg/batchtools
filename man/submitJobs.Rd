@@ -132,4 +132,3 @@ getJobTable(reg = tmp)[, .(job.id, time.running)]
 grepLogs(pattern = "parallelMap", reg = tmp)
 }
 }
-
