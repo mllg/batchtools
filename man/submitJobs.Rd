@@ -4,7 +4,8 @@
 \alias{submitJobs}
 \title{Submit Jobs to the Batch Systems}
 \usage{
-submitJobs(ids = NULL, resources = list(), reg = getDefaultRegistry())
+submitJobs(ids = NULL, resources = list(), sleep = default.sleep,
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -19,6 +20,10 @@ Computational  resources for the batch jobs. The elements of this list
 See notes for reserved special resource names.
 Defaults can be stored in the configuration file by providing the named list \code{default.resources}.
 Settings in \code{resources} overwrite those in \code{default.resources}.}
+
+\item{sleep}{[\code{function(i)} | \code{numeric(1)}]\cr
+Function which returns the duration to sleep in the \code{i}-th iteration between temporary errors.
+Alternatively, you can pass a single positive numeric value.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}

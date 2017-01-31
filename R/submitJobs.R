@@ -53,6 +53,9 @@
 #'   See notes for reserved special resource names.
 #'   Defaults can be stored in the configuration file by providing the named list \code{default.resources}.
 #'   Settings in \code{resources} overwrite those in \code{default.resources}.
+#' @param sleep [\code{function(i)} | \code{numeric(1)}]\cr
+#'   Function which returns the duration to sleep in the \code{i}-th iteration between temporary errors.
+#'   Alternatively, you can pass a single positive numeric value.
 #' @template reg
 #' @return [\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 #' @export
@@ -111,7 +114,7 @@
 #' # There should also be a note in the log:
 #' grepLogs(pattern = "parallelMap", reg = tmp)
 #' }
-submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
+submitJobs = function(ids = NULL, resources = list(), sleep = default.sleep, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, sync = TRUE)
   assertList(resources, names = "strict")
   resources = insert(reg$default.resources, resources)
@@ -130,6 +133,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
       resources$chunks.as.arrayjobs = NULL
     }
   }
+  sleep = getSleepFunction(sleep)
 
   ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk")
   if (nrow(ids) == 0L)
@@ -172,7 +176,6 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
   info("Submitting %i jobs in %i chunks using cluster functions '%s' ...", nrow(ids), length(chunks), reg$cluster.functions$name)
 
-  default.wait = 5
   chunk = NULL
   runHook(reg, "pre.submit")
 
@@ -180,7 +183,6 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   pb$tick(0, tokens = list(status = "Submitting"))
 
   for (ch in chunks) {
-    wait = default.wait
     ids.chunk = ids[chunk == ch, "job.id"]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
@@ -188,6 +190,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
 
     if (!is.na(max.concurrent.jobs)) {
       # count chunks or job.id
+      i = 1L
       repeat {
         n.on.sys = uniqueN(getBatchIds(reg), by = "batch.id")
         "!DEBUG [submitJobs]: Detected `n.on.sys` batch jobs on system (`max.concurrent.jobs` allowed concurrently)"
@@ -195,8 +198,8 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
         if (n.on.sys < max.concurrent.jobs)
           break
         pb$tick(0, tokens = list(status = "Waiting   "))
-        Sys.sleep(wait)
-        wait = wait * 1.025
+        sleep(i)
+        i = i + 1L
       }
     }
 
@@ -204,6 +207,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     fns = getResultFiles(reg$file.dir, ids.chunk$job.id)
     file.remove(fns[file.exists(fns)])
 
+    i = 1L
     repeat {
       runHook(reg, "pre.submit.job")
       now = ustamp()
@@ -218,8 +222,8 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
       } else if (submit$status > 0L && submit$status < 100L) {
         # temp error
         pb$tick(0, tokens = list(status = submit$msg))
-        Sys.sleep(wait)
-        wait = wait * 1.025
+        sleep(i)
+        i = i + 1L
       } else if (submit$status > 100L && submit$status <= 200L) {
         # fatal error
         stopf("Fatal error occurred: %i. %s", submit$status, submit$msg)
