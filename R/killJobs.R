@@ -27,6 +27,7 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   if (nrow(tab) == 0L)
     return(data.table(job.id = integer(0L), batch.id = character(0L), killed = logical(0L)))
 
+  runHook(reg, "pre.kill", tab)
   info("Trying to kill %i jobs ...", nrow(tab))
 
   # kill queued jobs first, otherwise they might get started while killing running jobs
@@ -51,6 +52,9 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   cols = c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "log.file", "job.hash")
   reg$status[tab[tab$killed], (cols) := list(NA_real_, NA_real_, NA_real_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_, NA_character_)]
   saveRegistry(reg)
+
+  tab = setkeyv(tab[, c("job.id", "batch.id", "killed")], "job.id")
   Sys.sleep(reg$cluster.functions$scheduler.delay)
-  tab[, c("job.id", "batch.id", "killed")]
+  runHook(reg, "post.kill", tab)
+  return(tab)
 }
