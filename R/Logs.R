@@ -50,7 +50,7 @@ grepLogs = function(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE, reg
   assertFlag(fixed)
   job.id = job.hash = log.file = matches = NULL
 
-  ids = convertIds(reg, ids)
+  ids = convertIds(reg, ids, default = .findStarted(reg = reg))
   tab = filter(reg$status[!is.na(job.hash)], ids)[, list(job.id = job.id, hash = sprintf("%s-%s", job.hash, log.file))]
   if (nrow(tab) == 0L)
     return(data.table(job.id = integer(0L), matches = character(0L)))
