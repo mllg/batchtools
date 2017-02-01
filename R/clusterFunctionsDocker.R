@@ -46,7 +46,7 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     timeout = if (is.null(jc$resources$walltime)) character(0L) else sprintf("timeout %i", asInt(jc$resources$walltime, lower = 0L))
 
     cmd = c("docker", docker.args, "run", "--detach=true", image.args,
-      sprintf("-e DEBUGME=%s", Sys.getenv("DEBUGME")),
+      sprintf("-e DEBUGME='%s'", Sys.getenv("DEBUGME")),
       sprintf("-e OMP_NUM_THREADS=%i", jc$resources$threads %??% 1L),
       sprintf("-e OPENBLAS_NUM_THREADS=%i", jc$resources$threads %??% 1L),
       sprintf("-c %i", jc$resources$ncpus),
