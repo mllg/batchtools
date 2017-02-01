@@ -44,7 +44,8 @@ using the current login name (label \dQuote{user}) and the job hash (label \dQuo
 These cluster functions use a \link{Hook} to remove finished jobs before a new submit and every time the \link{Registry}
 is synchronized (using \code{\link{syncRegistry}}).
 This is currently required because docker does not remove terminated containers automatically.
-Use \code{docker ps -a --filter 'label=batchtools' --filter 'status=exited'} to identify and remove terminated containers manually (or via a cron job).
+Use \code{docker ps -a --filter 'label=batchtools' --filter 'status=exited'} to identify and remove terminated
+containers manually (or usa a cron job).
 }
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
