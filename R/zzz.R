@@ -24,7 +24,7 @@
 #' @importFrom brew brew
 #' @importFrom progress progress_bar
 #' @importFrom rappdirs user_config_dir
-#' @importFrom stats runif predict
+#' @importFrom stats runif predict pexp
 "_PACKAGE"
 
 #' @title Deprecated function in the batchtools package
