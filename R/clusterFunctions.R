@@ -47,7 +47,7 @@
 makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL,
   array.var = NA_character_, store.job = FALSE, scheduler.delay = 0, hooks = list()) {
   assertList(hooks, types = "function", names = "unique")
-  assertSubset(names(hooks), batchtools$hooks$name)
+  assertSubset(names(hooks), unlist(batchtools$hooks, use.names = FALSE))
 
   setClasses(list(
       name = assertString(name, min.chars = 1L),

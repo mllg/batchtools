@@ -39,9 +39,9 @@ NULL
 
 batchtools = new.env(parent = emptyenv())
 batchtools$debug = FALSE
-batchtools$hooks = data.table(
-  name =   c("pre.sync", "post.sync", "pre.do.collection", "post.do.collection", "pre.submit.job", "post.submit.job", "pre.submit", "post.submit", "pre.kill", "post.kill"),
-  remote = c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)
+batchtools$hooks = list(
+  remote = c("pre.do.collection", "post.do.collection"),
+  local  = c("pre.sync", "post.sync", "pre.submit.job", "post.submit.job", "pre.submit", "post.submit", "pre.kill", "post.kill")
 )
 
 .onLoad = function(libname, pkgname) { # nocov start
