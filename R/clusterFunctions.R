@@ -259,14 +259,14 @@ getBatchIds = function(reg, status = "all") {
   tab = data.table(batch.id = character(0L), status = character(0L))
   batch.id = NULL
 
-  if (status %in% c("all", "running") && !is.null(cf$listJobsRunning)) {
+  if (status %chin% c("all", "running") && !is.null(cf$listJobsRunning)) {
     "!DEBUG [getBatchIds]: Getting running Jobs"
     x = unique(cf$listJobsRunning(reg))
     if (length(x) > 0L)
       tab = rbind(tab, data.table(batch.id = x, status = "running"))
   }
 
-  if (status %in% c("all", "queued") && !is.null(cf$listJobsQueued)) {
+  if (status %chin% c("all", "queued") && !is.null(cf$listJobsQueued)) {
     "!DEBUG [getBatchIds]: Getting queued Jobs"
     x = unique(setdiff(cf$listJobsQueued(reg), tab$batch.id))
     if (length(x) > 0L)

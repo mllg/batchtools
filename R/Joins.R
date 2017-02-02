@@ -142,7 +142,7 @@ guessBy = function(x, y, by = NULL) {
 
   if (is.null(by)) {
     res = key(x)
-    if (!is.null(res) && all(res %in% names(y)))
+    if (!is.null(res) && all(res %chin% names(y)))
       return(res)
 
     res = intersect(names(x), names(y))

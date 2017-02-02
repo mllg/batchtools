@@ -71,7 +71,7 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
     ddd = list2dt(list(...))
   }
 
-  if (".job" %in% names(ddd))
+  if (".job" %chin% names(ddd))
     stop("Name '.job' not allowed as parameter name (reserved keyword)")
 
   if (any(dim(ddd) == 0L))

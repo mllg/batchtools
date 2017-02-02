@@ -5,7 +5,7 @@ test_that("runOSCommand", {
   x = runOSCommand("ls", find.package("batchtools"))
   expect_list(x, names = "named", len = 2)
   expect_identical(x$exit.code, 0L)
-  expect_true(all(c("DESCRIPTION", "NAMESPACE", "NEWS.md") %in% x$output))
+  expect_true(all(c("DESCRIPTION", "NAMESPACE", "NEWS.md") %chin% x$output))
 })
 
 test_that("command not found", {

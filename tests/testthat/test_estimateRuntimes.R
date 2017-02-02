@@ -31,5 +31,4 @@ test_that("estimateRuntimes", {
   res = ijoin(res$runtimes, tab)
   res = res[, list(t = mean(runtime)), by = y]
   expect_true(all(res[y == "a", t] > res[y %in% c("c", "d", "e"), t]))
-
 })

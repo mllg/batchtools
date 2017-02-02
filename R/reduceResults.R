@@ -55,7 +55,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
   }
 
   pb = makeProgressBar(total = length(fns), format = "Reduce [:bar] :percent eta: :eta")
-  if ("job" %in% names(formals(fun))) {
+  if ("job" %chin% names(formals(fun))) {
     for (i in seq_along(fns)) {
       init = fun(init, readRDS(fns[i]), job = makeJob(ids[i], reg = reg), ...)
       pb$tick()
@@ -140,7 +140,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, reg
     worker = function(..res, ..job, ...) ..res
   } else {
     fun = match.fun(fun)
-    if ("job" %in% names(formals(fun)))
+    if ("job" %chin% names(formals(fun)))
       worker = function(..res, ..job, ...) fun(..res, job = ..job, ...)
     else
       worker = function(..res, ..job, ...) fun(..res, ...)
