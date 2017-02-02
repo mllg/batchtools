@@ -54,7 +54,7 @@ makeClusterFunctionsLSF = function(template = findTemplateFile("lsf"), scheduler
 
   listJobs = function(reg, cmd) {
     res = runOSCommand(cmd[1L], cmd[-1L])
-    if (res$exit.code == 255L && stri_detect_regex(res$output, "No (unfinished|pending) job found"))
+    if (stri_detect_regex(res$output, "No (unfinished|pending|running) job found"))
       return(character(0L))
     if (res$exit.code > 0L)
       stopf("Command '%s' produced exit code: %i; output: %s", stri_flatten(cmd, " "), res$exit.code, res$output)
