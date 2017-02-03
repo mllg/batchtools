@@ -18,7 +18,6 @@ addons:
       - libssh2-1-dev
 
 r_binary_packages:
-  - backports
   - brew
   - checkmate
   - covr
