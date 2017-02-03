@@ -14,7 +14,7 @@
 #'   Parameters given via \code{args} or \code{...} are passed as-is, in the respective order and possibly named.
 #'   If the function has the named formal argument \dQuote{.job}, the \code{\link{Job}} is passed to the function
 #'   on the slave.
-#' @param ... [any]\cr
+#' @param ... [ANY]\cr
 #'   Arguments to vectorize over (list or vector).
 #'   Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the longest length).
 #'   Mutually exclusive with \code{args}.

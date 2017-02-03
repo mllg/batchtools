@@ -17,7 +17,7 @@ with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of \code{\link{findDone}}.}
 
-\item{...}{[any]\cr
+\item{...}{[ANY]\cr
 Arguments to vectorize over (list or vector). Passed to \code{\link{batchMap}}.}
 
 \item{missing.val}{[\code{ANY}]\cr

@@ -14,7 +14,7 @@
 #'   Observed runtimes will be looked up in the registry and serve as dependent variable.
 #'   All columns in \code{tab} except \dQuote{job.id} will be passed to \code{\link[ranger]{ranger}} as
 #'   independent variables to fit the model.
-#' @param ... [any]\cr
+#' @param ... [ANY]\cr
 #'   Additional parameters passed to \code{\link[ranger]{ranger}}. Ignored for the \code{print} method.
 #' @template reg
 #' @return [\code{RuntimeEstimate}] which is a \code{list} with two named elements:

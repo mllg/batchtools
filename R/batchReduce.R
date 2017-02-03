@@ -12,7 +12,7 @@
 #'   Function to reduce \code{xs} with.
 #' @param xs [\code{vector}]\cr
 #'   Vector to reduce.
-#' @param init [any]\cr
+#' @param init [ANY]\cr
 #'   Initial object for reducing. See \code{\link[base]{Reduce}}.
 #' @param chunks [\code{integer(length(xs))}]\cr
 #'   Group for each element of \code{xs}. Can be generated with \code{\link{chunk}}.

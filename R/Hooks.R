@@ -25,7 +25,7 @@
 #'  remotely.
 #' @param hook [\code{character(1)}]\cr
 #'  ID of the hook as string.
-#' @param ... [any]\cr
+#' @param ... [ANY]\cr
 #'  Additional arguments passed to the function referenced by \code{hook}.
 #'  See description.
 #' @return Return value of the called function, or \code{NULL} if there is no hook

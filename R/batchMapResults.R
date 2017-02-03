@@ -8,7 +8,7 @@
 #' @param fun [\code{function}]\cr
 #'   Function which takes the result as first (unnamed) argument.
 #' @template ids
-#' @param ... [any]\cr
+#' @param ... [ANY]\cr
 #'   Arguments to vectorize over (list or vector). Passed to \code{\link{batchMap}}.
 #' @template missing.val
 #' @template more.args
