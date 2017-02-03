@@ -54,7 +54,7 @@ The `batchtools` package also comes with an abstraction mechanism to assist in c
 The mechanism is similar to [`BatchExperiments`](https://github.com/tudo-r/BatchExperiments) [@batchjobs_2015] which `batchtools` now also supersedes:
 After defining the building blocks of most computer experiments, problems and algorithms, both can be parametrized to define jobs which are then in a second step submitted to one of the parallel backends.
 
-Important changes to its predecessors are summarized in the NEWS file to help users of [`BatchJobs`](https://github.com/tudo-r/BatchJobs)/[`BatchExperiments`](https://github.com/tudo-r/BatchExperiments) migrating their cluster configuration and aid the transition to `batchtools`.
+Important changes to its predecessors are summarized in a vignette to help users of [`BatchJobs`](https://github.com/tudo-r/BatchJobs)/[`BatchExperiments`](https://github.com/tudo-r/BatchExperiments) migrating their cluster configuration and aid the transition to `batchtools`.
 
 
 # References
