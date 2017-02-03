@@ -18,7 +18,6 @@ addons:
       - libssh2-1-dev
 
 r_binary_packages:
-  - backports
   - brew
   - checkmate
   - covr
@@ -35,6 +34,10 @@ r_binary_packages:
   - snow
   - stringi
   - testthat
+
+before_install:
+  # Ensure that backports is build with the current R version
+  Rscript -e 'install.packages("backports")'
 
 after_success:
   - Rscript -e 'covr::coveralls()'
