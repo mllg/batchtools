@@ -37,7 +37,7 @@ It provides an implementation of a Map-like operation to define and asynchronous
 * [OpenLava](http://www.openlava.org/)
 * [Univa Grid Engine](http://www.univa.com/) (formerly Oracle Grind Engine and Sun Grid Engine)
 * [Slurm Workload Manager](http://slurm.schedmd.com/)
-* [Torque/PBS Resource Manager](http://www.adaptivecomputing.com/products/open-source/torque/)
+* [TORQUE/PBS Resource Manager](http://www.adaptivecomputing.com/products/open-source/torque/)
 
 Extensibility and user customization are important features as configuration on high-performance computing clusters is often heavily tailored towards very specific requirements or special hardware.
 Hence, the interaction with the schedulers uses a template engine for improved flexibility.

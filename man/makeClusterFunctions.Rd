@@ -56,7 +56,7 @@ See \link{Hooks}.}
 }
 \description{
 This is the constructor used to create \emph{custom} cluster functions.
-Note that some standard implementations for Torque, Slurm, LSF, SGE, etc. ship
+Note that some standard implementations for TORQUE, Slurm, LSF, SGE, etc. ship
 with the package.
 }
 \seealso{
@@ -69,7 +69,7 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsSocket}},
-  \code{\link{makeClusterFunctionsTorque}}
+  \code{\link{makeClusterFunctionsTORQUE}}
 
 Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
   \code{\link{cfHandleUnknownSubmitError}},

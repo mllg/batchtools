@@ -2,7 +2,7 @@
 #'
 #' @description
 #' This is the constructor used to create \emph{custom} cluster functions.
-#' Note that some standard implementations for Torque, Slurm, LSF, SGE, etc. ship
+#' Note that some standard implementations for TORQUE, Slurm, LSF, SGE, etc. ship
 #' with the package.
 #'
 #' @param name [\code{character(1)}]\cr

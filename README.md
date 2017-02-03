@@ -5,7 +5,7 @@
 [![Build Status](https://ci.appveyor.com/api/projects/status/ypp14tiiqfhnv92k/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/batchtools/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/mllg/batchtools.svg)](https://coveralls.io/r/mllg/batchtools?branch=master)
 
-As a successor of the packages [BatchJobs](https://github.com/tudo-r/BatchJobs) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments), batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, Torque/OpenPBS, Load Sharing Facility (LSF) or DockerSwarm (see the [Setup vignette](https://mllg.github.io/batchtools/articles/v00_Setup)).
+As a successor of the packages [BatchJobs](https://github.com/tudo-r/BatchJobs) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments), batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, TORQUE/OpenPBS, Load Sharing Facility (LSF) or DockerSwarm (see the [Setup vignette](https://mllg.github.io/batchtools/articles/v00_Setup)).
 
 The main features conclude:
 * Convenience: All relevant batch system operations (submitting, listing, killing) are either handled internally or abstracted via simple R functions
@@ -44,7 +44,7 @@ See this [vignette](https://mllg.github.io/batchtools/articles/v01_Migration) fo
 ## Related Software
 * The [High Performance Computing Task View](https://cran.r-project.org/web/views/HighPerformanceComputing.html) lists the most relevant packages for scientific computing with R
 * [batch](https://cran.r-project.org/package=batch) assists in splitting and submitting jobs to LSF and MOSIX clusters
-* [flowr](https://cran.r-project.org/package=flowr) supports LSF, Slurm, Torque and Moab and provides a scatter-gather approach to define computational jobs
+* [flowr](https://cran.r-project.org/package=flowr) supports LSF, Slurm, TORQUE and Moab and provides a scatter-gather approach to define computational jobs
 
 ## Contributing to batchtools
 This R package is licensed under the [LGPL-3](https://www.gnu.org/licenses/lgpl-3.0.en.html).

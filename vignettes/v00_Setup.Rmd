@@ -32,7 +32,7 @@ Usually you do not have to start from scratch but can just use one of the cluste
 * OpenLava: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsOpenLava), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsOpenLava.R)
 * Univia Grid Engine / Oracle Grid Engine (OGE) / Sun Grid Engine (SGE): [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSGE), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSGE.R)
 * Slurm: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSlurm), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSlurm.R)
-* Torque/OpenPBS: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsTorque), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsTorque.R)
+* TORQUE/OpenPBS: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsTORQUE), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsTORQUE.R)
 
 To use the package with the socket cluster functions, you would call the respective constructor [makeClusterFunctionsSocket()](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSocket):
 ```{r}
