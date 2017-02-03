@@ -82,23 +82,27 @@
     </div>
 
     <div class="contents">
-    <div id="batchtools-0-9-1" class="section level1">
+    <div id="batchtools-0-9-2" class="section level1">
 <h1 class="hasAnchor">
-<a href="#batchtools-0-9-1" class="anchor"> </a>batchtools 0.9.1</h1>
+<a href="#batchtools-0-9-2" class="anchor"> </a>batchtools 0.9.2</h1>
 <ul>
-<li>New function <code><a href="../reference/batchReduce.html">batchReduce()</a></code>.</li>
-<li>
-<code><a href="../reference/chunkIds.html">chunkIds()</a></code> has been deprecated. Use <code><a href="../reference/chunk.html">chunk()</a></code>, <code><a href="../reference/chunk.html">lpt()</a></code> or <code><a href="../reference/chunk.html">binpack()</a></code> instead.</li>
+<li>Full support for array jobs on Slurm and TORQUE. Array jobs have been disabled for SGE and LSF (due to missing information about the output format) but will be re-enable in a future release. Note that the variable <code>n.array.jobs</code> has been removed from <code>JobCollection</code> in favor of the new logical variable <code>array.jobs</code>.</li>
 <li>
 <code><a href="../reference/findJobs.html">findExperiments()</a></code> now has two additional arguments to match for regular expressions. The possibility to prefix a string with “~” to enable regular expression matching has been removed.</li>
-<li>New function <code><a href="../reference/estimateRuntimes.html">estimateRuntimes()</a></code> which uses a random forest to predict runtimes of unfinished jobs.</li>
+<li>New function <code><a href="../reference/batchReduce.html">batchReduce()</a></code>.</li>
+<li>New function <code><a href="../reference/estimateRuntimes.html">estimateRuntimes()</a></code>.</li>
+<li>Timestamps are now stored with sub-second accuracy.</li>
+<li>Renamed Torque to TORQUE. This especially affects the function <code>makeClusterFunctionsTorque</code> which must now be called via <code><a href="../reference/makeClusterFunctionsTORQUE.html">makeClusterFunctionsTORQUE()</a></code>
+</li>
+<li>
+<code><a href="../reference/chunkIds.html">chunkIds()</a></code> has been deprecated. Use <code><a href="../reference/chunk.html">chunk()</a></code>, <code><a href="../reference/chunk.html">lpt()</a></code> or <code><a href="../reference/chunk.html">binpack()</a></code> instead.</li>
 <li>Fixed listing of jobs for <code>ClusterFunctionsLSF</code> and <code>ClusterFunctionsOpenLava</code> (thanks to @phaverty).</li>
-<li>Fixed broken key lookup in some join functions.</li>
+<li>Job hashes are now prefixed with the literal string ‘job’ to ensure they start with a letter as required by some SGE systems.</li>
+<li>Fixed handling of results being <code>NULL</code> in <code><a href="../reference/reduceResultsList.html">reduceResultsList()</a></code>
+</li>
+<li>Fixed broken key lookup heuristic join functions.</li>
 <li>Fixed a bug where <code><a href="../reference/getJobTable.html">getJobTable()</a></code> returned <code>difftimes</code> with the wrong unit (e.g., in minutes instead of seconds).</li>
 <li>Deactivated swap allocation for <code>clusterFunctionsDocker</code>.</li>
-<li>Timestamps are now stored with sub-second accuracy.</li>
-<li>Job hashes are now prefixed with literal string ‘job’ to ensure they start with a letter as required by some SGE systems.</li>
-<li>Better support for array jobs. Note that <code>n.array.jobs</code> has been removed from <code>JobCollection</code> in favor of the logical <code>array.jobs</code>.</li>
 </ul>
 </div>
     <div id="batchtools-0-9-0" class="section level1">
@@ -113,7 +117,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#batchtools-0-9-1">0.9.1</a></li>
+        <li><a href="#batchtools-0-9-2">0.9.2</a></li>
         <li><a href="#batchtools-0-9-0">0.9.0</a></li>
       </ul>
     </div>

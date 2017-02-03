@@ -137,6 +137,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     <dt>error</dt><dd>Either <code>NA</code> if the job terminated successfully or the error message.</dd>
     <dt>memory</dt><dd>Estimate of the memory usage.</dd>
     <dt>batch.id</dt><dd>Batch ID as reported by the scheduler.</dd>
+    <dt>log.file</dt><dd>Log file. If missing, defaults to <code>[job.hash].log</code>.</dd>
     <dt>job.hash</dt><dd>Unique string identifying the job or chunk.</dd>
     <dt>time.queued</dt><dd>Time in seconds (as <code><a href='http://www.rdocumentation.org/packages/base/topics/difftime'>difftime</a></code>) the job was queued.</dd>
     <dt>time.running</dt><dd>Time in seconds (as <code><a href='http://www.rdocumentation.org/packages/base/topics/difftime'>difftime</a></code>) the job was running.</dd>
@@ -149,23 +150,23 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'><span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>) <span class='fu'>stop</span>(<span class='st'>"x must be &gt; 0"</span>) <span class='kw'>else</span> <span class='fu'>sqrt</span>(<span class='no'>x</span>)
-<span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>f</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Interactive&#39; ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 3 files ...</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='st'>"tag1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>) <span class='fu'>stop</span>(<span class='st'>"x must be &gt; 0"</span>) <span class='kw'>else</span> <span class='fu'>sqrt</span>(<span class='no'>x</span>)
+<span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>f</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Ignoring resource &#39;chunks.as.arrayjobs&#39;, not supported by cluster functions &#39;Multicore&#39;</span></div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Multicore&#39; ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 2 files ...</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='st'>"tag1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>2</span>, <span class='st'>"tag2"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
 <span class='co'># Complete table:</span>
 <span class='fu'>getJobTable</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;    job.id           submitted             started                done
-#&gt; 1:      1 2017-01-29 21:24:53 2017-01-29 21:24:53 2017-01-29 21:24:53
-#&gt; 2:      2 2017-01-29 21:24:53 2017-01-29 21:24:53 2017-01-29 21:24:53
-#&gt; 3:      3 2017-01-29 21:24:53 2017-01-29 21:24:53 2017-01-29 21:24:53
-#&gt;                                      error memory      batch.id
-#&gt; 1: Error in (function (x)  : x must be &gt; 0     NA cfInteractive
-#&gt; 2:                                      NA     NA cfInteractive
-#&gt; 3:                                      NA     NA cfInteractive
+#&gt; 1:      1 2017-02-03 15:55:14 2017-02-03 15:55:14 2017-02-03 15:55:14
+#&gt; 2:      2 2017-02-03 15:55:14 2017-02-03 15:55:14 2017-02-03 15:55:14
+#&gt; 3:      3 2017-02-03 15:55:14 2017-02-03 15:55:14 2017-02-03 15:55:14
+#&gt;                                      error memory batch.id log.file
+#&gt; 1: Error in (function (x)  : x must be &gt; 0     NA    15614       NA
+#&gt; 2:                                      NA     NA    15615       NA
+#&gt; 3:                                      NA     NA    15617       NA
 #&gt;                               job.hash time.queued time.running   pars
-#&gt; 1: job0338227ba81f2f003adc1a5b001a34e7      0 secs       0 secs &lt;list&gt;
-#&gt; 2: job48392c54bf3864c9a1c794d2f0c543a5      0 secs       0 secs &lt;list&gt;
-#&gt; 3: jobdd35f6558bda4c8c71437cd626335809      0 secs       0 secs &lt;list&gt;
+#&gt; 1: jobff481acf9a105f2ca0de15993c8768cd      0 secs       0 secs &lt;list&gt;
+#&gt; 2: job774fb6e8f2fa57934cfb32f75c6e643a      0 secs       0 secs &lt;list&gt;
+#&gt; 3: jobd2d2226a7af2a625525954f9f533665e      0 secs       0 secs &lt;list&gt;
 #&gt;    resources      tags
 #&gt; 1:    &lt;list&gt;      tag1
 #&gt; 2:    &lt;list&gt; tag1,tag2
