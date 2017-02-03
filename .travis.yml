@@ -35,5 +35,9 @@ r_binary_packages:
   - stringi
   - testthat
 
+before_install:
+  # Ensure that backports is build with the current R version
+  Rscript -e 'install.packages("backports")'
+
 after_success:
   - Rscript -e 'covr::coveralls()'
