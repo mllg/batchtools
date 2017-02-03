@@ -1,7 +1,7 @@
-#' @title ClusterFunctions for OpenPBS/Torque Systems
+#' @title ClusterFunctions for OpenPBS/TORQUE Systems
 #'
 #' @description
-#' Cluster functions for Torque/PBS (\url{http://www.adaptivecomputing.com/products/open-source/torque/}).
+#' Cluster functions for TORQUE/PBS (\url{http://www.adaptivecomputing.com/products/open-source/torque/}).
 #'
 #' Job files are created based on the brew template \code{template.file}. This file is processed
 #' with brew and then submitted to the queue using the \code{qsub} command. Jobs are killed using
@@ -20,7 +20,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsTorque = function(template = findTemplateFile("torque"), scheduler.delay = 1) { # nocov start
+makeClusterFunctionsTORQUE = function(template = findTemplateFile("torque"), scheduler.delay = 1) { # nocov start
   template = cfReadBrewTemplate(template, "##")
 
   submitJob = function(reg, jc) {
@@ -65,6 +65,6 @@ makeClusterFunctionsTorque = function(template = findTemplateFile("torque"), sch
     runOSCommand(cmd[1L], cmd[-1L])$output
   }
 
-  makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
+  makeClusterFunctions(name = "TORQUE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
     listJobsRunning = listJobsRunning, array.var = "PBS_ARRAYID", store.job = TRUE, scheduler.delay = scheduler.delay)
 } # nocov end
