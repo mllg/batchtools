@@ -48,7 +48,7 @@ The communication between the master `R` session and the computational nodes is 
 The [`data.table`](https://github.com/Rdatatable/data.table) package [@data_table] acts as an in-memory database to keep track of the computational status of all jobs.
 Unique job seeds ensure reproducibility across systems, log files can conveniently be searched using regular expressions and jobs can be annotated with arbitrary tags.
 Jobs can be chunked (i.e., merged into one technical cluster job) to be executed as one virtual job on a node (executed sequentially or using multiple local CPUs) in order to reduce the overhead induced by job management and starting/stopping `R`.
-All in all, the provided tools allow to work with many thousands or even millions of jobs in an organized and efficient manner.
+All in all, the provided tools allow users to work with many thousands or even millions of jobs in an organized and efficient manner.
 
 The `batchtools` package also comes with an abstraction mechanism to assist in conducting large-scale computer experiments, especially suited for (but not restricted to) benchmarking and exploration of algorithm performance.
 The mechanism is similar to [`BatchExperiments`](https://github.com/tudo-r/BatchExperiments) [@batchjobs_2015] which `batchtools` now also supersedes:

@@ -42,7 +42,7 @@ The argument `job` is an object of type [`Job`](https://mllg.github.io/batchtool
 
 We want to split the iris data set into a training set and test set.
 In this example we use use subsampling which just randomly takes a fraction of the observations as training set.
-We define a problem function which returns the indices of the respective training and test set for a split with `ratio`% of the observations being in the test set:
+We define a problem function which returns the indices of the respective training and test set for a split with `100 * ratio`% of the observations being in the test set:
 ```{r}
 subsample = function(data, job, ratio, ...) {
   n = nrow(data)

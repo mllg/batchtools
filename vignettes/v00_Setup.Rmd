@@ -27,10 +27,10 @@ Usually you do not have to start from scratch but can just use one of the cluste
 * Multicore Cluster Functions: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsMulticore), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsMulticore.R)
 * Socket Cluster Functions: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSocket), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSocket.R)
 * Makeshift SSH cluster: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSSH), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSSH.R)
-* DockerSwarm: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsDocker), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsDocker.R)
+* Docker Swarm: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsDocker), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsDocker.R)
 * IBM Spectrum Load Sharing Facility (LSF): [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsLSF), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsLSF.R)
 * OpenLava: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsOpenLava), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsOpenLava.R)
-* Univia Grid Engine / Oracle Grid Engine (OGE) / Sun Grid Engine (SGE): [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSGE), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSGE.R)
+* Univa Grid Engine / Oracle Grid Engine (OGE) / Sun Grid Engine (SGE): [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSGE), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSGE.R)
 * Slurm: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSlurm), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSlurm.R)
 * TORQUE/OpenPBS: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsTORQUE), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsTORQUE.R)
 

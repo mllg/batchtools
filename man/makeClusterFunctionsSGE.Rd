@@ -28,7 +28,7 @@ Currently only user after \code{\link{submitJobs}}.}
 [\code{\link{ClusterFunctions}}].
 }
 \description{
-Cluster functions for Univia Grid Engine / Oracle Grid Engine /
+Cluster functions for Univa Grid Engine / Oracle Grid Engine /
 Sun Grid Engine (\url{http://www.univa.com/}).
 
 Job files are created based on the brew template \code{template}. This
