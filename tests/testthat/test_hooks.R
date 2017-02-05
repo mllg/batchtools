@@ -22,5 +22,5 @@ test_that("hooks", {
   expect_true(file.exists(fn.ps))
 
   lines = getLog(1, reg = reg)
-  expect_true(reg$status[1]$job.hash %in% lines)
+  expect_true(reg$status[1]$job.hash %chin% lines)
 })

@@ -1,8 +1,10 @@
 #' @title Store the Registy to the File System
 #'
 #' @description
-#' Stores the registry on the file system. Usually called internally by functions
-#' whenever they touch the registry.
+#' Stores the registry on the file system in its \dQuote{file.dir} (specified
+#' for construction in \code{\link{makeRegistry}}, can be accessed via
+#' \code{reg$file.dir}).
+#' This function is usually called internally whenever needed.
 #'
 #' @template reg
 #' @return [\code{logical(1)}]: \code{TRUE} if the registry was saved,
@@ -17,7 +19,7 @@ saveRegistry = function(reg = getDefaultRegistry()) {
     ee = new.env(parent = asNamespace("batchtools"))
     list2env(mget(setdiff(ls(reg), c("cluster.functions", "default.resources", "temp.dir")), reg), ee)
     class(ee) = class(reg)
-    writeRDS(ee, file = fn[1L], wait = TRUE)
+    writeRDS(ee, file = fn[1L])
     file.rename(fn[1L], fn[2L])
   } else {
     "!DEBUG [saveRegistry]: Skipping saveRegistry (read-only)"

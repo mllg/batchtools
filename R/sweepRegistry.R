@@ -9,11 +9,12 @@
 #' @family Registry
 #' @export
 sweepRegistry = function(reg = getDefaultRegistry()) {
-  assertRegistry(reg, sync = TRUE, writeable = TRUE, running.ok = FALSE)
+  assertRegistry(reg, writeable = TRUE, running.ok = FALSE)
   "!DEBUG [sweepRegistry]: Running sweepRegistry"
+  chsetdiff = function(x, y) x[chmatch(x, y, 0L) == 0L] # assume x to have no duplicates
 
   path = getResultPath(reg)
-  obsolete = setdiff(
+  obsolete = chsetdiff(
     list.files(path, full.names = TRUE),
     getResultFiles(reg$file.dir, reg$status$job.id)
   )
@@ -21,7 +22,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   file.remove(obsolete)
 
   path = getLogPath(reg)
-  obsolete = setdiff(
+  obsolete = chsetdiff(
     list.files(path, full.names = TRUE),
     getLogFiles(reg$file.dir, reg$status$job.hash, reg$status$log.file)
   )
@@ -39,7 +40,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   file.remove(obsolete)
 
   path = getExternalPath(reg)
-  obsolete = setdiff(
+  obsolete = chsetdiff(
     list.files(path, pattern = "^[0-9]+$", full.names = TRUE),
     getExternalDirs(reg$file.dir, .findSubmitted(reg)$job.id)
   )

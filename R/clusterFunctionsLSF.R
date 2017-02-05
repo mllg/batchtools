@@ -46,19 +46,13 @@ makeClusterFunctionsLSF = function(template = findTemplateFile("lsf"), scheduler
     }
   }
 
-  killJob = function(reg, batch.id) {
-    assertRegistry(reg, writeable = TRUE)
-    assertString(batch.id)
-    cfKillJob(reg, "bkill", batch.id)
-  }
-
   listJobs = function(reg, cmd) {
     res = runOSCommand(cmd[1L], cmd[-1L])
-    if (res$exit.code == 255L && stri_detect_regex(res$output, "No (unfinished|pending) job found"))
-      return(character(0L))
-    if (res$exit.code > 0L)
+    if (res$exit.code > 0L) {
+      if (res$exit.code == 255L || any(stri_detect_regex(res$output, "No (unfinished|pending|running) job found")))
+        return(character(0L))
       stopf("Command '%s' produced exit code: %i; output: %s", stri_flatten(cmd, " "), res$exit.code, res$output)
-
+    }
     stri_extract_first_regex(tail(res$output, -1L), "\\d+")
   }
 
@@ -70,6 +64,12 @@ makeClusterFunctionsLSF = function(template = findTemplateFile("lsf"), scheduler
   listJobsRunning = function(reg) {
     assertRegistry(reg, writeable = FALSE)
     listJobs(reg, c("bjobs", "-u $USER", "-w", "-r"))
+  }
+
+  killJob = function(reg, batch.id) {
+    assertRegistry(reg, writeable = TRUE)
+    assertString(batch.id)
+    cfKillJob(reg, "bkill", batch.id)
   }
 
   makeClusterFunctions(name = "LSF", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,

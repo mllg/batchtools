@@ -14,7 +14,7 @@ Function to reduce \code{xs} with.}
 \item{xs}{[\code{vector}]\cr
 Vector to reduce.}
 
-\item{init}{[any]\cr
+\item{init}{[ANY]\cr
 Initial object for reducing. See \code{\link[base]{Reduce}}.}
 
 \item{chunks}{[\code{integer(length(xs))}]\cr

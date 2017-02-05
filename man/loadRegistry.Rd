@@ -64,6 +64,7 @@ Loads a registry from its \code{file.dir}.
 \seealso{
 Other Registry: \code{\link{clearRegistry}},
   \code{\link{getDefaultRegistry}},
-  \code{\link{makeRegistry}}, \code{\link{saveRegistry}},
-  \code{\link{sweepRegistry}}, \code{\link{syncRegistry}}
+  \code{\link{makeRegistry}}, \code{\link{removeRegistry}},
+  \code{\link{saveRegistry}}, \code{\link{sweepRegistry}},
+  \code{\link{syncRegistry}}
 }

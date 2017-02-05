@@ -16,7 +16,7 @@ Observed runtimes will be looked up in the registry and serve as dependent varia
 All columns in \code{tab} except \dQuote{job.id} will be passed to \code{\link[ranger]{ranger}} as
 independent variables to fit the model.}
 
-\item{...}{[any]\cr
+\item{...}{[ANY]\cr
 Additional parameters passed to \code{\link[ranger]{ranger}}. Ignored for the \code{print} method.}
 
 \item{reg}{[\code{\link{Registry}}]\cr

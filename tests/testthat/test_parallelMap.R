@@ -8,7 +8,7 @@ test_that("pm/multicore", {
   skip_on_os("windows")
   skip_if_not_installed("parallelMap")
   skip_on_travis()
-  if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
+  if (reg$cluster.functions$name %chin% c("Parallel", "Socket"))
     skip("Nested Parallelization not supported")
 
   submitAndWait(reg, ids = ids, resources = list(pm.backend = "multicore", ncpus = 2))
@@ -19,7 +19,7 @@ test_that("pm/socket", {
   skip_if_not_installed("snow")
   skip_if_not_installed("parallelMap")
   skip_on_travis()
-  if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
+  if (reg$cluster.functions$name %chin% c("Parallel", "Socket"))
     skip("Nested Parallelization not supported")
 
   submitAndWait(reg, ids = ids, resources = list(pm.backend = "socket", ncpus = 2))

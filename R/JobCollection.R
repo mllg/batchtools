@@ -62,14 +62,9 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$array.var    = reg$cluster.functions$array.var
   jc$array.jobs   = isTRUE(resources$chunks.as.arrayjobs)
 
-  cf.hooks = reg$cluster.functions$hooks
-  if (length(cf.hooks) > 0L) {
-    name = remote = NULL
-    hooks = batchtools$hooks[remote & name %in% names(cf.hooks), name]
-    if (length(hooks) > 0L)
-      jc$hooks = cf.hooks[hooks]
-  }
-
+  hooks = intersect(names(reg$cluster.functions$hooks), batchtools$hooks$remote)
+  if (length(hooks) > 0L)
+    jc$hooks = reg$cluster.functions$hooks[hooks]
   return(jc)
 }
 

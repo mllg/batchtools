@@ -100,7 +100,7 @@ Use <code>docker ps -a --filter &#39;label=batchtools&#39; --filter &#39;status=
     
 
     <pre><span class='fu'>makeClusterFunctionsDocker</span>(<span class='no'>image</span>, <span class='kw'>docker.args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>),
-  <span class='kw'>image.args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>))</pre>
+  <span class='kw'>image.args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>scheduler.delay</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -113,6 +113,10 @@ Additional arguments passed to &#8220;docker&#8221; *before* the command (&#8220
       <dt>image.args</dt>
       <dd>[<code>character</code>]
 Additional arguments passed to &#8220;docker run&#8221; (e.g., to define mounts or environment variables).</dd>
+      <dt>scheduler.delay</dt>
+      <dd>[<code>numeric(1)</code>]
+Time to sleep after important interactions with the scheduler to ensure a sane state.
+Currently only user after <code><a href='submitJobs.html'>submitJobs</a></code>.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -129,7 +133,7 @@ Additional arguments passed to &#8220;docker run&#8221; (e.g., to define mounts 
   <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>,
   <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
   <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
-  <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code>,
+  <code><a href='makeClusterFunctionsTORQUE.html'>makeClusterFunctionsTORQUE</a></code>,
   <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p>
     
 

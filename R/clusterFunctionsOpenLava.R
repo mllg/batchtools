@@ -15,6 +15,9 @@
 #' It is the template file's job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
+#' @note
+#' Array jobs are currently not supported.
+#'
 #' @templateVar cf.name openlava
 #' @template template
 #' @inheritParams makeClusterFunctions
@@ -32,9 +35,8 @@ makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"),
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
-
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("bsub", outfile)
+    res = runOSCommand("bsub", stdin = outfile)
 
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)
@@ -46,11 +48,11 @@ makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"),
 
   listJobs = function(reg, cmd) {
     res = runOSCommand(cmd[1L], cmd[-1L])
-    if (res$exit.code == 255L && stri_detect_regex(res$output, "No (unfinished|pending) job found"))
-      return(character(0L))
-    if (res$exit.code > 0L)
+    if (res$exit.code > 0L) {
+      if (res$exit.code == 255L || any(stri_detect_regex(res$output, "No (unfinished|pending|running) job found")))
+        return(character(0L))
       stopf("Command '%s' produced exit code: %i; output: %s", stri_flatten(cmd, " "), res$exit.code, res$output)
-
+    }
     stri_extract_first_regex(tail(res$output, -1L), "\\d+")
   }
 
@@ -71,5 +73,5 @@ makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"),
   }
 
   makeClusterFunctions(name = "OpenLava", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, array.var = "LSB_JOBINDEX", store.job = TRUE, scheduler.delay = scheduler.delay)
+    listJobsRunning = listJobsRunning, store.job = TRUE, scheduler.delay = scheduler.delay)
 } # nocov end

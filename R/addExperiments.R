@@ -63,7 +63,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
   convertDesigns = function(type, designs, keywords) {
     Map(function(id, design) {
       design = as.data.table(design)
-      i = wf(keywords %in% names(design))
+      i = wf(keywords %chin% names(design))
       if (length(i) > 0L)
         stopf("%s design %s contains reserved keyword '%s'", type, id, keywords[i])
       design

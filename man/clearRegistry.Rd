@@ -16,6 +16,6 @@ Removes all jobs from a registry and calls \code{\link{sweepRegistry}}<`3`>.
 \seealso{
 Other Registry: \code{\link{getDefaultRegistry}},
   \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
-  \code{\link{saveRegistry}}, \code{\link{sweepRegistry}},
-  \code{\link{syncRegistry}}
+  \code{\link{removeRegistry}}, \code{\link{saveRegistry}},
+  \code{\link{sweepRegistry}}, \code{\link{syncRegistry}}
 }

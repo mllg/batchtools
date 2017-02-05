@@ -76,7 +76,7 @@ reg =<span class="st"> </span><span class="kw"><a href="../reference/makeExperim
 <h1 class="hasAnchor">
 <html><body><a href="#problems-and-algorithms" class="anchor"> </a></body></html>Problems and algorithms</h1>
 <p>By adding a problem to the registry, we can define the data on which certain computational jobs shall work. This can be a matrix, data frame or array that always stays the same for all subsequent experiments. But it can also be of a more dynamic nature, e.g., subsamples of a dataset or random numbers drawn from a probability distribution . Therefore the function <a href="https://mllg.github.io/batchtools/reference/addProblem"><code><a href="../reference/addProblem.html">addProblem()</a></code></a> accepts static parts in its <code>data</code> argument, which is passed to the argument <code>fun</code> which generates a (possibly stochastic) problem instance. For <code>data</code>, any R object can be used. If only <code>data</code> is given, the generated instance is <code>data</code>. The argument <code>fun</code> has to be a function with the arguments <code>data</code> and <code>job</code> (and optionally other arbitrary parameters). The argument <code>job</code> is an object of type <a href="https://mllg.github.io/batchtools/reference/JobExperiment"><code>Job</code></a> which holds additional information about the job.</p>
-<p>We want to split the iris data set into a training set and test set. In this example we use use subsampling which just randomly takes a fraction of the observations as training set. We define a problem function which returns the indices of the respective training and test set for a split with <code>ratio</code>% of the observations being in the test set:</p>
+<p>We want to split the iris data set into a training set and test set. In this example we use use subsampling which just randomly takes a fraction of the observations as training set. We define a problem function which returns the indices of the respective training and test set for a split with <code>100 * ratio</code>% of the observations being in the test set:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subsample =<span class="st"> </span>function(data, job, ratio, ...) {
   n =<span class="st"> </span><span class="kw">nrow</span>(data)
   train =<span class="st"> </span><span class="kw">sample</span>(n, <span class="kw">floor</span>(n *<span class="st"> </span>ratio))
@@ -168,7 +168,7 @@ ades =<span class="st"> </span><span class="kw">list</span>(
 <pre><code>##             
 ##              setosa versicolor virginica
 ##   setosa         17          0         0
-##   versicolor      0         15         3
+##   versicolor      0         16         2
 ##   virginica       0          0        15</code></pre>
 <p>If something goes wrong, <code>batchtools</code> comes with a bunch of useful debugging utilities (see separate vignette on error handling). If everything turns out fine, we can proceed with the calculation.</p>
 </div>
@@ -177,9 +177,10 @@ ades =<span class="st"> </span><span class="kw">list</span>(
 <html><body><a href="#submitting-and-collecting-results" class="anchor"> </a></body></html>Submitting and collecting results</h1>
 <p>To submit the jobs, we call <a href="https://mllg.github.io/batchtools/reference/submitJobs"><code><a href="../reference/submitJobs.html">submitJobs()</a></code></a> and wait for all jobs to terminate using <a href="https://mllg.github.io/batchtools/reference/waitForJobs"><code><a href="../reference/waitForJobs.html">waitForJobs()</a></code></a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/submitJobs.html">submitJobs</a></span>()</code></pre></div>
-<pre><code>## Submitting 90 jobs in 90 chunks using cluster functions 'Interactive' ...</code></pre>
+<pre><code>## Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions 'Multicore'</code></pre>
+<pre><code>## Submitting 90 jobs in 90 chunks using cluster functions 'Multicore' ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/waitForJobs.html">waitForJobs</a></span>()</code></pre></div>
-<pre><code>## Syncing 90 files ...</code></pre>
+<pre><code>## Syncing 88 files ...</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p>After jobs are finished, the results can be collected with <a href="https://mllg.github.io/batchtools/reference/reduceResultsList"><code><a href="../reference/reduceResultsList.html">reduceResultsDataTable()</a></code></a> where we directly extract the mean misclassification error:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results =<span class="st"> </span><span class="kw"><a href="../reference/reduceResultsList.html">reduceResultsDataTable</a></span>(<span class="dt">fun =</span> function(res) (<span class="kw">list</span>(<span class="dt">mce =</span> (<span class="kw">sum</span>(res) -<span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(res))) /<span class="st"> </span><span class="kw">sum</span>(res))))
@@ -211,7 +212,7 @@ ades =<span class="st"> </span><span class="kw">list</span>(
 ## 5:       svm polynomial    0.10    NA 0.088
 ## 6:       svm     radial    0.10    NA 0.048
 ## 7:    forest         NA      NA   100 0.048
-## 8:    forest         NA      NA   500 0.044
+## 8:    forest         NA      NA   500 0.048
 ## 9:    forest         NA      NA  1000 0.048</code></pre>
 </div>
 </div>

@@ -42,6 +42,9 @@ as well as all variables stored in the \code{\link{JobCollection}}.
 It is the template file's job to choose a queue for the job and handle the desired resource
 allocations.
 }
+\note{
+Array jobs are currently not supported.
+}
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsInteractive}},
@@ -51,6 +54,6 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsSocket}},
-  \code{\link{makeClusterFunctionsTorque}},
+  \code{\link{makeClusterFunctionsTORQUE}},
   \code{\link{makeClusterFunctions}}
 }

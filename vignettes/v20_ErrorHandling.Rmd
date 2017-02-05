@@ -10,7 +10,7 @@ vignette: >
 ---
 
 In any large scale experiment many things can and will go wrong.
-The cluster might have an outage, jobs may run into resource limits or crash, subtile bugs in your code could be triggered or any other error condition might arise.
+The cluster might have an outage, jobs may run into resource limits or crash, subtle bugs in your code could be triggered or any other error condition might arise.
 In these situations it is important to quickly determine what went wrong and to recompute only the minimal number of required jobs.
 
 Therefore, before you submit anything you should use [`testJob()`](https://mllg.github.io/batchtools/reference/testJob) to catch errors that are easy to spot because they are raised in many or all jobs.

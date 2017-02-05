@@ -2,7 +2,7 @@
 #'
 #' @description
 #' This is a set of functions acting as counterparts to the sequential popular apply functions in base R:
-#' \code{btlapply} for \code{\link[base]{lapply}} and \code{btmapply} for \code{link[base]{mapply}}.
+#' \code{btlapply} for \code{\link[base]{lapply}} and \code{btmapply} for \code{\link[base]{mapply}}.
 #'
 #' Internally, jobs are created using \code{\link{batchMap}} on the provided registry.
 #' If no registry is provided, a temporary registry (see argument \code{file.dir} of \code{\link{makeRegistry}}) and \code{\link{batchMap}}

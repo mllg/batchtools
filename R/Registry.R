@@ -200,7 +200,7 @@ assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, 
       stop("Key of reg$resources lost")
   }
   if (reg$writeable) {
-    if (sync)
+    if (sync || !running.ok)
       syncRegistry(reg)
   } else {
     if (writeable)

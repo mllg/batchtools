@@ -37,7 +37,7 @@ It provides an implementation of a Map-like operation to define and asynchronous
 * [OpenLava](http://www.openlava.org/)
 * [Univa Grid Engine](http://www.univa.com/) (formerly Oracle Grind Engine and Sun Grid Engine)
 * [Slurm Workload Manager](http://slurm.schedmd.com/)
-* [Torque/PBS Resource Manager](http://www.adaptivecomputing.com/products/open-source/torque/)
+* [TORQUE/PBS Resource Manager](http://www.adaptivecomputing.com/products/open-source/torque/)
 
 Extensibility and user customization are important features as configuration on high-performance computing clusters is often heavily tailored towards very specific requirements or special hardware.
 Hence, the interaction with the schedulers uses a template engine for improved flexibility.
@@ -48,13 +48,13 @@ The communication between the master `R` session and the computational nodes is 
 The [`data.table`](https://github.com/Rdatatable/data.table) package [@data_table] acts as an in-memory database to keep track of the computational status of all jobs.
 Unique job seeds ensure reproducibility across systems, log files can conveniently be searched using regular expressions and jobs can be annotated with arbitrary tags.
 Jobs can be chunked (i.e., merged into one technical cluster job) to be executed as one virtual job on a node (executed sequentially or using multiple local CPUs) in order to reduce the overhead induced by job management and starting/stopping `R`.
-All in all, the provided tools allow to work with many thousands or even millions of jobs in an organized and efficient manner.
+All in all, the provided tools allow users to work with many thousands or even millions of jobs in an organized and efficient manner.
 
 The `batchtools` package also comes with an abstraction mechanism to assist in conducting large-scale computer experiments, especially suited for (but not restricted to) benchmarking and exploration of algorithm performance.
 The mechanism is similar to [`BatchExperiments`](https://github.com/tudo-r/BatchExperiments) [@batchjobs_2015] which `batchtools` now also supersedes:
 After defining the building blocks of most computer experiments, problems and algorithms, both can be parametrized to define jobs which are then in a second step submitted to one of the parallel backends.
 
-Important changes to its predecessors are summarized in the NEWS file to help users of [`BatchJobs`](https://github.com/tudo-r/BatchJobs)/[`BatchExperiments`](https://github.com/tudo-r/BatchExperiments) migrating their cluster configuration and aid the transition to `batchtools`.
+Important changes to its predecessors are summarized in a vignette to help users of [`BatchJobs`](https://github.com/tudo-r/BatchJobs)/[`BatchExperiments`](https://github.com/tudo-r/BatchExperiments) migrating their cluster configuration and aid the transition to `batchtools`.
 
 
 # References

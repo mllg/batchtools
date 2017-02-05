@@ -17,7 +17,7 @@ remotely.}
 \item{hook}{[\code{character(1)}]\cr
 ID of the hook as string.}
 
-\item{...}{[any]\cr
+\item{...}{[ANY]\cr
 Additional arguments passed to the function referenced by \code{hook}.
 See description.}
 }

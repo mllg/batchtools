@@ -21,6 +21,6 @@ a registry as default.
 \seealso{
 Other Registry: \code{\link{clearRegistry}},
   \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
-  \code{\link{saveRegistry}}, \code{\link{sweepRegistry}},
-  \code{\link{syncRegistry}}
+  \code{\link{removeRegistry}}, \code{\link{saveRegistry}},
+  \code{\link{sweepRegistry}}, \code{\link{syncRegistry}}
 }

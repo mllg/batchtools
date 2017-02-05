@@ -14,7 +14,7 @@
 #' @family debug
 #' @export
 resetJobs = function(ids = NULL, reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE, sync = TRUE, running.ok = FALSE)
+  assertRegistry(reg, writeable = TRUE, running.ok = FALSE)
   ids = convertIds(reg, ids, default = noIds())
 
   info("Resetting %i jobs in DB ...", nrow(ids))
