@@ -43,7 +43,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     updates = data.table(job.id = jc$jobs$job.id, started = now, done = now,
       error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),
       memory = NA_real_, key = "job.id")
-    writeRDS(updates, file = getUpdateFiles(jc$file.dir, jc$job.hash, 0L), wait = TRUE)
+    writeRDS(updates, file = getUpdateFiles(jc$file.dir, jc$job.hash, 0L))
     invisible(NULL)
   }
 
@@ -165,7 +165,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
       i = self$updates[!is.na(started) & (!written), which = TRUE]
       if (length(i) > 0L) {
         first.id = self$updates$job.id[i[1L]]
-        writeRDS(self$updates[i], file = getUpdateFiles(jc$file.dir, jc$job.hash, first.id), wait = TRUE)
+        writeRDS(self$updates[i], file = getUpdateFiles(jc$file.dir, jc$job.hash, first.id))
         set(self$updates, i, "written", TRUE)
       }
     },

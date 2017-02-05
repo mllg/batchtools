@@ -19,7 +19,7 @@ saveRegistry = function(reg = getDefaultRegistry()) {
     ee = new.env(parent = asNamespace("batchtools"))
     list2env(mget(setdiff(ls(reg), c("cluster.functions", "default.resources", "temp.dir")), reg), ee)
     class(ee) = class(reg)
-    writeRDS(ee, file = fn[1L], wait = TRUE)
+    writeRDS(ee, file = fn[1L])
     file.rename(fn[1L], fn[2L])
   } else {
     "!DEBUG [saveRegistry]: Skipping saveRegistry (read-only)"

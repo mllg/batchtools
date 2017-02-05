@@ -37,15 +37,11 @@ insert = function(x, y) {
   x[order(names2(x))]
 }
 
-writeRDS = function(object, file, wait = FALSE) {
-  if (wait && file.exists(file))
+writeRDS = function(object, file) {
+  if (file.exists(file))
     file.remove(file)
-
   saveRDS(object, file = file)
-
-  if (wait)
-    while(!file.exists(file)) Sys.sleep(0.5)
-
+  while(!file.exists(file)) Sys.sleep(0.5)
   invisible(TRUE)
 }
 
