@@ -9,7 +9,7 @@ r:
   - devel
 
 r_packages:
-  - jimhester/covr
+  - covr
 
 after_success:
-  - Rscript -e 'covr::coveralls()'
+  - if [[ "${TRAVIS_R_VERSION}" == "stable" ]]; then Rscript -e 'covr::coveralls()'; fi
