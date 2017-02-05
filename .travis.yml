@@ -1,3 +1,15 @@
 dist: trusty
 sudo: false
 language: r
+cache: packages
+
+r:
+  - oldrel
+  - release
+  - devel
+
+r_packages:
+  - jimhester/covr
+
+after_success:
+  - Rscript -e 'covr::coveralls()'
