@@ -15,8 +15,10 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
   \code{FALSE} otherwise (if the registry is read-only).
 }
 \description{
-Stores the registry on the file system. Usually called internally by functions
-whenever they touch the registry.
+Stores the registry on the file system in its \dQuote{file.dir} (specified
+for construction in \code{\link{makeRegistry}}, can be accessed via
+\code{reg$file.dir}).
+This function is usually called internally whenever needed.
 }
 \seealso{
 Other Registry: \code{\link{clearRegistry}},
