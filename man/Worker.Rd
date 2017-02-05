@@ -19,7 +19,7 @@ Worker
 \describe{
 \item{\code{nodename}}{Host name. Set via constructor.}
 
-\item{\code{ncpus}}{Number of VPUs of worker. Set via constructor and defaults to the number of CPUs of the machine.}
+\item{\code{ncpus}}{Number of CPUs. Set via constructor and defaults to a heuristic which tries to detect the number of CPUs of the machine.}
 
 \item{\code{max.load}}{Maximum load average (of the last 5 min). Set via constructor and defaults to the number of CPUs of the machine.}
 
