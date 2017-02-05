@@ -21,5 +21,6 @@ internal data base.
 Other Registry: \code{\link{clearRegistry}},
   \code{\link{getDefaultRegistry}},
   \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
-  \code{\link{saveRegistry}}, \code{\link{sweepRegistry}}
+  \code{\link{removeRegistry}}, \code{\link{saveRegistry}},
+  \code{\link{sweepRegistry}}
 }

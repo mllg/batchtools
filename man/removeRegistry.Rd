@@ -20,8 +20,16 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 }
 \description{
 All files will be erased from the file system, including all results.
+If you wish to remove only intermediate files, use \code{\link{sweepRegistry}}.<`3`>
 }
 \examples{
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 removeRegistry(0, tmp)
+}
+\seealso{
+Other Registry: \code{\link{clearRegistry}},
+  \code{\link{getDefaultRegistry}},
+  \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
+  \code{\link{saveRegistry}}, \code{\link{sweepRegistry}},
+  \code{\link{syncRegistry}}
 }

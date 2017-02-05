@@ -2,6 +2,7 @@
 #'
 #' @description
 #' All files will be erased from the file system, including all results.
+#' If you wish to remove only intermediate files, use \code{\link{sweepRegistry}}.<`3`>
 #'
 #' @param wait [\code{numeric(1)}]\cr
 #'   Seconds to wait before proceeding. This is a safety measure to not
@@ -11,6 +12,7 @@
 #'
 #' @return [\code{logical(1)}]: Success of \code{\link[base]{unlink}}.
 #' @export
+#' @family Registry
 #' @examples
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' removeRegistry(0, tmp)

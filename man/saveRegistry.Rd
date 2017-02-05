@@ -22,5 +22,6 @@ whenever they touch the registry.
 Other Registry: \code{\link{clearRegistry}},
   \code{\link{getDefaultRegistry}},
   \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
+  \code{\link{removeRegistry}},
   \code{\link{sweepRegistry}}, \code{\link{syncRegistry}}
 }
