@@ -7,6 +7,7 @@
   The possibility to prefix a string with "~" to enable regular expression matching has been removed.
 * New function `batchReduce()`.
 * New function `estimateRuntimes()`.
+* New function `removeRegistry()`.
 * Timestamps are now stored with sub-second accuracy.
 * Renamed Torque to TORQUE. This especially affects the function `makeClusterFunctionsTorque` which must now be called via `makeClusterFunctionsTORQUE()`
 * `chunkIds()` has been deprecated. Use `chunk()`, `lpt()` or `binpack()` instead.

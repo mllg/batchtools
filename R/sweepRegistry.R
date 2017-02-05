@@ -9,7 +9,7 @@
 #' @family Registry
 #' @export
 sweepRegistry = function(reg = getDefaultRegistry()) {
-  assertRegistry(reg, sync = TRUE, writeable = TRUE, running.ok = FALSE)
+  assertRegistry(reg, writeable = TRUE, running.ok = FALSE)
   "!DEBUG [sweepRegistry]: Running sweepRegistry"
   chsetdiff = function(x, y) x[chmatch(x, y, 0L) == 0L] # assume x to have no duplicates
 
