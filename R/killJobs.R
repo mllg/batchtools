@@ -54,7 +54,7 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   saveRegistry(reg)
 
   tab = setkeyv(tab[, c("job.id", "batch.id", "killed")], "job.id")
-  Sys.sleep(reg$cluster.functions$scheduler.delay)
+  Sys.sleep(reg$cluster.functions$scheduler.latency)
   runHook(reg, "post.kill", tab)
   return(tab)
 }

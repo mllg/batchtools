@@ -5,7 +5,8 @@
 \title{ClusterFunctions for Slurm Systems}
 \usage{
 makeClusterFunctionsSlurm(template = findTemplateFile("slurm"),
-  clusters = NULL, array.jobs = TRUE, scheduler.delay = 1)
+  clusters = NULL, array.jobs = TRUE, scheduler.latency = 1,
+  fs.latency = 0)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -28,9 +29,14 @@ Note that you should not select the cluster in your template file via \code{#SBA
 \item{array.jobs}{[\code{logical(1)}]\cr
 If array jobs are disabled on the computing site, set to \code{FALSE}.}
 
-\item{scheduler.delay}{[\code{numeric(1)}]\cr
+\item{scheduler.latency}{[\code{numeric(1)}]\cr
 Time to sleep after important interactions with the scheduler to ensure a sane state.
-Currently only user after \code{\link{submitJobs}}.}
+Currently only triggered after calling \code{\link{submitJobs}}.}
+
+\item{fs.latency}{[\code{numeric(1)}]\cr
+Expected maximum latency of the file system, in seconds. Usually safe to set to 0 if you are working on a regular, local file system.
+Set to a positive number for network file systems which enables more robust (but also more expensive) mechanisms to
+access files and directories.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

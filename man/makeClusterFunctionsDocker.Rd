@@ -5,7 +5,7 @@
 \title{ClusterFunctions for Docker}
 \usage{
 makeClusterFunctionsDocker(image, docker.args = character(0L),
-  image.args = character(0L), scheduler.delay = 1)
+  image.args = character(0L), scheduler.latency = 1, fs.latency = 0)
 }
 \arguments{
 \item{image}{[\code{character(1)}]\cr
@@ -17,9 +17,14 @@ Additional arguments passed to \dQuote{docker} *before* the command (\dQuote{run
 \item{image.args}{[\code{character}]\cr
 Additional arguments passed to \dQuote{docker run} (e.g., to define mounts or environment variables).}
 
-\item{scheduler.delay}{[\code{numeric(1)}]\cr
+\item{scheduler.latency}{[\code{numeric(1)}]\cr
 Time to sleep after important interactions with the scheduler to ensure a sane state.
-Currently only user after \code{\link{submitJobs}}.}
+Currently only triggered after calling \code{\link{submitJobs}}.}
+
+\item{fs.latency}{[\code{numeric(1)}]\cr
+Expected maximum latency of the file system, in seconds. Usually safe to set to 0 if you are working on a regular, local file system.
+Set to a positive number for network file systems which enables more robust (but also more expensive) mechanisms to
+access files and directories.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

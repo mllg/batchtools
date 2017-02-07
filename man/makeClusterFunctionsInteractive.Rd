@@ -4,7 +4,8 @@
 \alias{makeClusterFunctionsInteractive}
 \title{ClusterFunctions for Sequential Execution in the Running R Session}
 \usage{
-makeClusterFunctionsInteractive(external = FALSE, write.logs = TRUE)
+makeClusterFunctionsInteractive(external = FALSE, write.logs = TRUE,
+  fs.latency = 0)
 }
 \arguments{
 \item{external}{[\code{logical(1)}]\cr
@@ -16,6 +17,11 @@ Default is \code{FALSE}.}
 Sink the output to log files. Turning logging off can increase the speed of
 calculations but makes it very difficult to debug.
 Default is \code{TRUE}.}
+
+\item{fs.latency}{[\code{numeric(1)}]\cr
+Expected maximum latency of the file system, in seconds. Usually safe to set to 0 if you are working on a regular, local file system.
+Set to a positive number for network file systems which enables more robust (but also more expensive) mechanisms to
+access files and directories.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
