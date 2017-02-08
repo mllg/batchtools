@@ -11,7 +11,6 @@ test_that("loadResult", {
   expect_equal(loadResult(reg = reg, 1), list(a = 1, b = 4))
   expect_equal(loadResult(reg = reg, 2), list(a = 2, b = 3))
   expect_error(loadResult(reg = reg, 4), "not terminated")
-  expect_identical(loadResult(reg = reg, 4, missing.val = NA_real_), NA_real_)
 })
 
 test_that("reduceResults", {
