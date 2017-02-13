@@ -5,7 +5,7 @@
 \title{ClusterFunctions for Docker}
 \usage{
 makeClusterFunctionsDocker(image, docker.args = character(0L),
-  image.args = character(0L), scheduler.latency = 1, fs.latency = 0)
+  image.args = character(0L), scheduler.latency = 1, fs.latency = 65)
 }
 \arguments{
 \item{image}{[\code{character(1)}]\cr
@@ -22,9 +22,10 @@ Time to sleep after important interactions with the scheduler to ensure a sane s
 Currently only triggered after calling \code{\link{submitJobs}}.}
 
 \item{fs.latency}{[\code{numeric(1)}]\cr
-Expected maximum latency of the file system, in seconds. Usually safe to set to 0 if you are working on a regular, local file system.
-Set to a positive number for network file systems which enables more robust (but also more expensive) mechanisms to
-access files and directories.}
+Expected maximum latency of the file system, in seconds.
+Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
+access files and directories.
+Usually safe to set to \code{NA} which disables the expensive heuristic if you are working on a local file system.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

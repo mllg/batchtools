@@ -7,7 +7,7 @@
 \usage{
 makeClusterFunctions(name, submitJob, killJob = NULL, listJobsQueued = NULL,
   listJobsRunning = NULL, array.var = NA_character_, store.job = FALSE,
-  scheduler.latency = 0, fs.latency = 0, hooks = list())
+  scheduler.latency = 0, fs.latency = NA_real_, hooks = list())
 }
 \arguments{
 \item{name}{[\code{character(1)}]\cr
@@ -51,9 +51,10 @@ Time to sleep after important interactions with the scheduler to ensure a sane s
 Currently only triggered after calling \code{\link{submitJobs}}.}
 
 \item{fs.latency}{[\code{numeric(1)}]\cr
-Expected maximum latency of the file system, in seconds. Usually safe to set to 0 if you are working on a regular, local file system.
-Set to a positive number for network file systems which enables more robust (but also more expensive) mechanisms to
-access files and directories.}
+Expected maximum latency of the file system, in seconds.
+Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
+access files and directories.
+Usually safe to set to \code{NA} which disables the expensive heuristic if you are working on a local file system.}
 
 \item{hooks}{[\code{list}]\cr
 Named list of functions which will we called on certain events like \dQuote{pre.submit} or \dQuote{post.sync}.

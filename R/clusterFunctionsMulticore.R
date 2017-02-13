@@ -77,7 +77,7 @@ Multicore = R6Class("Multicore",
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsMulticore = function(ncpus = NA_integer_, fs.latency = 0) {
+makeClusterFunctionsMulticore = function(ncpus = NA_integer_, fs.latency = NA_real_) {
   if (testOS("windows"))
     stop("ClusterFunctionsMulticore do not support Windows. Use makeClusterFunctionsSocket instead.")
   ncpus = asCount(ncpus, na.ok = TRUE, positive = TRUE)

@@ -49,7 +49,7 @@ Socket = R6Class("Socket",
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSocket = function(ncpus = NA_integer_, fs.latency = 0) {
+makeClusterFunctionsSocket = function(ncpus = NA_integer_, fs.latency = 65) {
   assertCount(ncpus, positive = TRUE, na.ok = TRUE)
   if (is.na(ncpus)) {
     ncpus = max(getOption("mc.cores", parallel::detectCores()), 1L, na.rm = TRUE)

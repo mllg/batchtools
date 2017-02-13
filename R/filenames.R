@@ -1,19 +1,19 @@
-getResultPath = function(reg = getDefaultRegistry()) {
+getResultPath = function(reg) {
   file.path(reg$file.dir, "results")
 }
-getLogPath = function(reg = getDefaultRegistry()) {
+getLogPath = function(reg) {
   file.path(reg$file.dir, "logs")
 }
 
-getJobPath = function(reg = getDefaultRegistry()) {
+getJobPath = function(reg) {
   file.path(reg$file.dir, "jobs")
 }
 
-getUpdatePath = function(reg = getDefaultRegistry()) {
+getUpdatePath = function(reg) {
   file.path(reg$file.dir, "updates")
 }
 
-getExternalPath = function(reg = getDefaultRegistry()) {
+getExternalPath = function(reg) {
   file.path(reg$file.dir, "external")
 }
 

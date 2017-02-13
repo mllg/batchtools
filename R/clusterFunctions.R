@@ -38,9 +38,10 @@
 #'   Time to sleep after important interactions with the scheduler to ensure a sane state.
 #'   Currently only triggered after calling \code{\link{submitJobs}}.
 #' @param fs.latency [\code{numeric(1)}]\cr
-#'   Expected maximum latency of the file system, in seconds. Usually safe to set to 0 if you are working on a regular, local file system.
-#'   Set to a positive number for network file systems which enables more robust (but also more expensive) mechanisms to
+#'   Expected maximum latency of the file system, in seconds.
+#'   Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 #'   access files and directories.
+#'   Usually safe to set to \code{NA} which disables the expensive heuristic if you are working on a local file system.
 #' @param hooks [\code{list}]\cr
 #'   Named list of functions which will we called on certain events like \dQuote{pre.submit} or \dQuote{post.sync}.
 #'   See \link{Hooks}.
@@ -49,7 +50,7 @@
 #' @family ClusterFunctions
 #' @family ClusterFunctionsHelper
 makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL,
-  array.var = NA_character_, store.job = FALSE, scheduler.latency = 0, fs.latency = 0, hooks = list()) {
+  array.var = NA_character_, store.job = FALSE, scheduler.latency = 0, fs.latency = NA_real_, hooks = list()) {
   assertList(hooks, types = "function", names = "unique")
   assertSubset(names(hooks), unlist(batchtools$hooks, use.names = FALSE))
 
@@ -62,7 +63,7 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
       array.var = assertString(array.var, na.ok = TRUE),
       store.job = assertFlag(store.job),
       scheduler.latency = assertNumber(scheduler.latency, lower = 0),
-      fs.latency = assertNumber(fs.latency, lower = 0),
+      fs.latency = assertNumber(fs.latency, lower = 0, na.ok = TRUE),
       hooks = hooks),
     "ClusterFunctions")
 }

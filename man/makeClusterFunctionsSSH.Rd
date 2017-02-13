@@ -4,16 +4,17 @@
 \alias{makeClusterFunctionsSSH}
 \title{ClusterFunctions for Remote SSH Execution}
 \usage{
-makeClusterFunctionsSSH(workers, fs.latency = 0)
+makeClusterFunctionsSSH(workers, fs.latency = 65)
 }
 \arguments{
 \item{workers}{[\code{list} of \code{\link{Worker}}]\cr
 List of Workers as constructed with \code{\link{Worker}}.}
 
 \item{fs.latency}{[\code{numeric(1)}]\cr
-Expected maximum latency of the file system, in seconds. Usually safe to set to 0 if you are working on a regular, local file system.
-Set to a positive number for network file systems which enables more robust (but also more expensive) mechanisms to
-access files and directories.}
+Expected maximum latency of the file system, in seconds.
+Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
+access files and directories.
+Usually safe to set to \code{NA} which disables the expensive heuristic if you are working on a local file system.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

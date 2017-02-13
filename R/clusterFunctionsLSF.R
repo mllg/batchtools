@@ -24,7 +24,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsLSF = function(template = findTemplateFile("lsf"), scheduler.latency = 1, fs.latency = 0) { # nocov start
+makeClusterFunctionsLSF = function(template = findTemplateFile("lsf"), scheduler.latency = 1, fs.latency = 65) { # nocov start
   template = cfReadBrewTemplate(template)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only

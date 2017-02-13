@@ -56,7 +56,7 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
     if (nrow(ids.nt) == 0L) {
       "!DEBUG [waitForJobs]: All jobs terminated"
       pb$update(1)
-      waitForFiles(reg, ids)
+      waitForResults(reg, ids)
       return(nrow(.findErrors(reg, ids)) == 0L)
     }
 
@@ -86,7 +86,7 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
       if (nrow(ids.nt[!ids.on.sys, on = "job.id"][ids.disappeared, on = "job.id", nomatch = 0L]) > 0L) {
         warning("Some jobs disappeared from the system")
         pb$update(1)
-        waitForFiles(reg, ids)
+        waitForResults(reg, ids)
         return(FALSE)
       }
     }
@@ -99,24 +99,5 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
     suppressMessages(syncRegistry(reg = reg))
     batch.ids = getBatchIds(reg)
     "!DEBUG [waitForJobs]: New batch.ids: `stri_flatten(batch.ids$batch.id, ',')`"
-  }
-}
-
-waitForFiles = function(reg, ids) {
-  # use list.files() here as this seems to trick the nfs cache
-  # see https://github.com/mllg/batchtools/issues/85
-  if (reg$cluster.functions$fs.latency == 0)
-    return(TRUE)
-
-  fns = sprintf("%i.rds", .findDone(reg, ids)$job.id)
-  path = getResultPath(reg)
-  timeout = Sys.time() + reg$cluster.functions$fs.latency
-  repeat {
-    fns = setdiff(fns, list.files(path))
-    if (length(fns) == 0L)
-      return(TRUE)
-    if (Sys.time() > timeout)
-      stopf("Timeout while waiting for %i files, e.g. '%s'", length(fns), fns[1L])
-    Sys.sleep(0.5)
   }
 }

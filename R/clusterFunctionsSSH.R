@@ -23,7 +23,7 @@
 #' # cluster functions for multicore execution on the local machine
 #' makeClusterFunctionsSSH(list(Worker$new("localhost", ncpus = 2)))
 #' }
-makeClusterFunctionsSSH = function(workers, fs.latency = 0) { # nocov start
+makeClusterFunctionsSSH = function(workers, fs.latency = 65) { # nocov start
   assertList(workers, types = "Worker")
   nodenames = vcapply(workers, "[[", "nodename")
   if (anyDuplicated(nodenames))
