@@ -159,3 +159,8 @@ with_seed = function(seed, expr) {
   }
   eval.parent(expr)
 }
+
+chsetdiff = function(x, y) {
+  # Note: assumes that x has no duplicates
+  x[chmatch(x, y, 0L) == 0L]
+}

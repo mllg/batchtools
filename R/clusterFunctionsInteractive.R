@@ -16,10 +16,11 @@
 #'   Sink the output to log files. Turning logging off can increase the speed of
 #'   calculations but makes it very difficult to debug.
 #'   Default is \code{TRUE}.
+#' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsInteractive = function(external = FALSE, write.logs = TRUE) {
+makeClusterFunctionsInteractive = function(external = FALSE, write.logs = TRUE, fs.latency = NA_real_) {
   assertFlag(external)
   assertFlag(write.logs)
 
@@ -35,5 +36,5 @@ makeClusterFunctionsInteractive = function(external = FALSE, write.logs = TRUE) 
     }
   }
 
-  makeClusterFunctions(name = "Interactive", submitJob = submitJob, store.job = external)
+  makeClusterFunctions(name = "Interactive", submitJob = submitJob, store.job = external, fs.latency = fs.latency)
 }
