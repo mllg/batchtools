@@ -5,10 +5,11 @@
 \alias{reduceResultsDataTable}
 \title{Apply Functions on Results}
 \usage{
-reduceResultsList(ids = NULL, fun = NULL, ..., reg = getDefaultRegistry())
+reduceResultsList(ids = NULL, fun = NULL, ..., missing.val,
+  reg = getDefaultRegistry())
 
 reduceResultsDataTable(ids = NULL, fun = NULL, ..., fill = FALSE,
-  reg = getDefaultRegistry())
+  missing.val, reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -23,6 +24,10 @@ If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\cod
 
 \item{...}{[\code{ANY}]\cr
 Additional arguments passed to to function \code{fun}.}
+
+\item{missing.val}{[\code{ANY}]\cr
+Value to impute as result for a job which is not finished.
+If not provided and a result is missing, an exception is raised.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
