@@ -29,6 +29,7 @@ Depends:
     data.table (>= 1.9.8)
 Imports:
     backports (>= 1.0.4),
+    base64url (>= 1.1),
     brew,
     checkmate (>= 1.8.2),
     digest (>= 0.6.9),
