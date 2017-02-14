@@ -8,6 +8,8 @@
 * New function `batchReduce()`.
 * New function `estimateRuntimes()`.
 * New function `removeRegistry()`.
+* Missing result files are now handled more consistently, raising an exception in its defaults if the result is not available.
+  The argument `missing.val` has been added to `reduceResultsList()` and `reduceResultsDataTable()` and removed from `loadResult()` and `batchMapResults()`.
 * Timestamps are now stored with sub-second accuracy.
 * Renamed Torque to TORQUE. This especially affects the function `makeClusterFunctionsTorque` which must now be called via `makeClusterFunctionsTORQUE()`
 * `chunkIds()` has been deprecated. Use `chunk()`, `lpt()` or `binpack()` instead.

@@ -25,7 +25,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSGE = function(template = findTemplateFile("sge"), scheduler.delay = 1) { # nocov start
+makeClusterFunctionsSGE = function(template = findTemplateFile("sge"), scheduler.latency = 1, fs.latency = 65) { # nocov start
   template = cfReadBrewTemplate(template)
 
   submitJob = function(reg, jc) {
@@ -65,5 +65,5 @@ makeClusterFunctionsSGE = function(template = findTemplateFile("sge"), scheduler
   }
 
   makeClusterFunctions(name = "SGE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, store.job = TRUE, scheduler.delay = scheduler.delay)
+    listJobsRunning = listJobsRunning, store.job = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end

@@ -56,6 +56,7 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
     if (nrow(ids.nt) == 0L) {
       "!DEBUG [waitForJobs]: All jobs terminated"
       pb$update(1)
+      waitForResults(reg, ids)
       return(nrow(.findErrors(reg, ids)) == 0L)
     }
 
@@ -85,6 +86,7 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
       if (nrow(ids.nt[!ids.on.sys, on = "job.id"][ids.disappeared, on = "job.id", nomatch = 0L]) > 0L) {
         warning("Some jobs disappeared from the system")
         pb$update(1)
+        waitForResults(reg, ids)
         return(FALSE)
       }
     }

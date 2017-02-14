@@ -11,7 +11,6 @@
 sweepRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, running.ok = FALSE)
   "!DEBUG [sweepRegistry]: Running sweepRegistry"
-  chsetdiff = function(x, y) x[chmatch(x, y, 0L) == 0L] # assume x to have no duplicates
 
   path = getResultPath(reg)
   obsolete = chsetdiff(

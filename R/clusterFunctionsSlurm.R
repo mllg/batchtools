@@ -30,7 +30,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clusters = NULL, array.jobs = TRUE, scheduler.delay = 1) { # nocov start
+makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clusters = NULL, array.jobs = TRUE, scheduler.latency = 1, fs.latency = 65) { # nocov start
   if (!is.null(clusters))
     assertString(clusters, min.chars = 1L)
   assertFlag(array.jobs)
@@ -100,5 +100,6 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
   }
 
   makeClusterFunctions(name = "Slurm", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    listJobsQueued = listJobsQueued, array.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE, scheduler.delay = scheduler.delay)
+    listJobsQueued = listJobsQueued, array.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE,
+    scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end

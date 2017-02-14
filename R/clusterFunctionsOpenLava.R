@@ -24,7 +24,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"), scheduler.delay = 1) { # nocov start
+makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"), scheduler.latency = 1, fs.latency = 65) { # nocov start
   template = cfReadBrewTemplate(template)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
@@ -73,5 +73,5 @@ makeClusterFunctionsOpenLava = function(template = findTemplateFile("openlava"),
   }
 
   makeClusterFunctions(name = "OpenLava", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, store.job = TRUE, scheduler.delay = scheduler.delay)
+    listJobsRunning = listJobsRunning, store.job = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end

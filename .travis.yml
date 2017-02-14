@@ -1,7 +1,15 @@
-language: r
 dist: trusty
 sudo: false
+language: r
 cache: packages
 
+r:
+  - oldrel
+  - release
+  - devel
+
+r_packages:
+  - covr
+
 after_success:
-  - Rscript -e 'covr::coveralls()'
+  - if [[ "${TRAVIS_R_VERSION_STRING}" == "release" ]]; then Rscript -e 'covr::coveralls()'; fi

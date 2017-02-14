@@ -7,6 +7,7 @@
 #'
 #' @param workers [\code{list} of \code{\link{Worker}}]\cr
 #'   List of Workers as constructed with \code{\link{Worker}}.
+#' @inheritParams makeClusterFunctions
 #'
 #' @note
 #' If you use a custom \dQuote{.ssh/config} file, make sure your
@@ -22,7 +23,7 @@
 #' # cluster functions for multicore execution on the local machine
 #' makeClusterFunctionsSSH(list(Worker$new("localhost", ncpus = 2)))
 #' }
-makeClusterFunctionsSSH = function(workers) { # nocov start
+makeClusterFunctionsSSH = function(workers, fs.latency = 65) { # nocov start
   assertList(workers, types = "Worker")
   nodenames = vcapply(workers, "[[", "nodename")
   if (anyDuplicated(nodenames))
@@ -62,5 +63,6 @@ makeClusterFunctionsSSH = function(workers) { # nocov start
     unlist(lapply(workers, function(w) w$list(reg)), use.names = FALSE)
   }
 
-  makeClusterFunctions(name = "SSH", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning, store.job = TRUE)
+  makeClusterFunctions(name = "SSH", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
+    store.job = TRUE, fs.latency = fs.latency)
 } # nocov end

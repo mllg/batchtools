@@ -73,10 +73,11 @@ Multicore = R6Class("Multicore",
 #' Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
 #'
 #' @template ncpus
+#' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsMulticore = function(ncpus = NA_integer_) {
+makeClusterFunctionsMulticore = function(ncpus = NA_integer_, fs.latency = NA_real_) {
   if (testOS("windows"))
     stop("ClusterFunctionsMulticore do not support Windows. Use makeClusterFunctionsSocket instead.")
   ncpus = asCount(ncpus, na.ok = TRUE, positive = TRUE)
@@ -98,5 +99,5 @@ makeClusterFunctionsMulticore = function(ncpus = NA_integer_) {
   }
 
   makeClusterFunctions(name = "Multicore", submitJob = submitJob, listJobsRunning = listJobsRunning,
-    store.job = FALSE, hooks = list(pre.sync = function(reg, fns) p$collect(1)))
+    store.job = FALSE, fs.latency = fs.latency, hooks = list(pre.sync = function(reg, fns) p$collect(1)))
 }
