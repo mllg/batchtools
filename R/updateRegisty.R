@@ -1,7 +1,8 @@
 updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
   "!DEBUG [updateRegistry]: Running updateRegistry"
   pv = packageVersion("batchtools")
-  update = FALSE
+  if (identical(pv, reg$version))
+    return(TRUE)
 
   ### hotfix for versions before first cran release.
   ### this will be removed in the future
@@ -38,27 +39,34 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
         }
       }
     }
-    update = TRUE
   }
 
-  if (reg$version <= "0.9.2") {
+  if (reg$version < "0.9.1-9000") {
     ### hotfix for timestamps
     if (is.integer(reg$status$submitted)) {
       info("Converting timestamps to numeric")
       for (x in c("submitted", "started", "done"))
         reg$status[[x]] = as.numeric(reg$status[[x]])
-      update = TRUE
     }
 
     ### hotfix for log.file column
     if ("log.file" %nin% names(reg$status)) {
       reg$status$log.file = NA_character_
-      update = TRUE
     }
   }
 
-  if (update) {
-    reg$version = pv
-    saveRegistry(reg)
+  if (reg$version < "0.9.1-9001") {
+    ### hotfix for base32 encoding of exports
+    fns = list.files(file.path(reg$file.dir, "exports"), pattern = "\\.rds$", all.files = TRUE, no.. = TRUE)
+    if (length(fns)) {
+      info("Renaming export files")
+      file.rename(
+        file.path(reg$file.dir, fns),
+        file.path(reg$file.dir, mangle(stri_sub(fn, to = -5L)))
+      )
+    }
   }
+
+  reg$version = pv
+  saveRegistry(reg)
 } # nocov end

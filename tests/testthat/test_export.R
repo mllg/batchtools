@@ -6,7 +6,7 @@ test_that("export works", {
   expect_data_table(x, nrow = 1, ncol = 2)
   expect_set_equal(names(x), c("name", "uri"))
   expect_equal(x$name, "exported_obj")
-  expect_file_exists(file.path(reg$file.dir, "exports", "exported_obj.rds"))
+  expect_file_exists(file.path(reg$file.dir, "exports", mangle("exported_obj")))
   loadRegistryDependencies(reg)
   expect_equal(get("exported_obj", envir = .GlobalEnv), 42L)
 
@@ -18,11 +18,31 @@ test_that("export works", {
   x = batchExport(unexport = "exported_obj", reg = reg)
   expect_data_table(x, nrow = 0, ncol = 2)
   expect_set_equal(names(x), c("name", "uri"))
-  expect_false(file.exists(file.path(reg$file.dir, "exports", "exported_obj.rds")))
+  expect_false(file.exists(file.path(reg$file.dir, "exports", mangle("exported_obj"))))
 
   x = batchExport(list(exported_obj = 43L), reg = reg)
   batchMap(function(x) exported_obj + x, 1L, reg = reg)
   submitAndWait(reg)
   expect_equal(loadResult(1, reg = reg), 44L)
   rm("exported_obj", envir = .GlobalEnv)
+})
+
+
+test_that("export works with funny variable names", {
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  x = batchExport(list(`%bla%` = function(x, y, ...) 42), reg = reg)
+  expect_data_table(x, nrow = 1, ncol = 2)
+  expect_set_equal(names(x), c("name", "uri"))
+  expect_equal(x$name, "%bla%")
+  expect_file_exists(file.path(reg$file.dir, "exports", mangle("%bla%")))
+  loadRegistryDependencies(reg)
+  expect_function(get("%bla%", envir = .GlobalEnv))
+  expect_equal(1 %bla% 2, 42)
+
+  x = batchExport(unexport = "%bla%", reg = reg)
+  expect_data_table(x, nrow = 0, ncol = 2)
+  expect_set_equal(names(x), c("name", "uri"))
+  expect_false(file.exists(file.path(reg$file.dir, "exports", mangle("%bla%"))))
+
+  rm("%bla%", envir = .GlobalEnv)
 })

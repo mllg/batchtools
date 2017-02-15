@@ -1,6 +1,6 @@
 Package: batchtools
 Title: Tools for Computation on Batch Systems
-Version: 0.9.1-9000
+Version: 0.9.1-9001
 Authors@R: c(
     person("Michel", "Lang", NULL, "michellang@gmail.com", role = c("cre", "aut")),
     person("Bernd", "Bischl", NULL, "bernd_bischl@gmx.de", role = "aut"),
@@ -29,6 +29,7 @@ Depends:
     data.table (>= 1.9.8)
 Imports:
     backports (>= 1.0.4),
+    base64url (>= 1.1),
     brew,
     checkmate (>= 1.8.2),
     digest (>= 0.6.9),
