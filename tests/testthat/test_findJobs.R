@@ -20,7 +20,7 @@ test_that("find[Status]", {
 
   fun = function(i) if (i == 3) stop(i) else i
   ids = batchMap(fun, i = 1:5, reg = reg)
-  all = reg$status[, "job.id", with = FALSE]
+  all = reg$status[, "job.id"]
 
   expect_equal(findJobs(reg = reg), all)
   expect_equal(findSubmitted(reg = reg), none)
@@ -55,7 +55,7 @@ test_that("Subsetting", {
   fun = function(i) if (i == 3) stop(i) else i
   ids = batchMap(fun, i = 1:5, reg = reg)
   submitAndWait(reg, ids)
-  all = reg$status[, "job.id", with = FALSE]
+  all = reg$status[, "job.id"]
 
   expect_equal(findJobs(ids = 1:3, reg = reg), all[1:3])
   expect_equal(findDone(ids = 3, reg = reg), none)
@@ -68,7 +68,7 @@ test_that("findJobs", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(i, j) i + j
   ids = batchMap(fun, i = 1:5, j = c(2, 2, 3, 4, 4), reg = reg)
-  all = reg$status[, "job.id", with = FALSE]
+  all = reg$status[, "job.id"]
   expect_equal(findJobs(i == 1, reg = reg), all[1])
   expect_equal(findJobs(i >= 3, reg = reg), all[3:5])
   expect_equal(findJobs(i >= 3 & j > 3, reg = reg), all[4:5])
@@ -82,10 +82,10 @@ test_that("findOnSystem", {
     skip("Test requires listJobsRunning")
   silent({
     ids = batchMap(reg = reg, Sys.sleep, c(10, 10))
-    submitJobs(reg = reg, ids = chunkIds(ids, n.chunks = 1, reg = reg))
+    submitJobs(reg = reg, ids = s.chunk(ids))
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
     expect_equal(findExpired(reg = reg), none)
-    waitForJobs(reg = reg)
+    waitForJobs(reg = reg, sleep = 1)
   })
 })
 
@@ -105,16 +105,15 @@ test_that("findExperiments", {
   tab = findExperiments(reg = reg, prob.name = "p1")
   expect_data_table(tab, nrow = 60, ncol = 1, key = "job.id")
 
-  tab = findExperiments(reg = reg, prob.name = c("p1", "p2"))
+  expect_error(findExperiments(reg = reg, prob.name = c("p1", "p2")), "length 1")
+
+  tab = findExperiments(reg = reg, prob.pattern = "p.")
   expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
 
-  tab = findExperiments(reg = reg, prob.name = "~p.")
-  expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
-
-  tab = findExperiments(reg = reg, prob.name = "~2$")
+  tab = findExperiments(reg = reg, prob.pattern = "2$")
   expect_data_table(tab, nrow = 30, ncol = 1, key = "job.id")
 
-  tab = findExperiments(reg = reg, prob.name = c("~^p"))
+  tab = findExperiments(reg = reg, prob.pattern = c("^p"))
   expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
 
   tab = findExperiments(reg = reg, prob.name = "p2")
@@ -135,7 +134,7 @@ test_that("findExperiments", {
   tab = findExperiments(reg = reg, algo.name = "a1")
   expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
 
-  tab = findExperiments(reg = reg, algo.name = "~a.")
+  tab = findExperiments(reg = reg, algo.pattern = "a.")
   expect_data_table(tab, nrow = 90, ncol = 1, key = "job.id")
 
   tab = findExperiments(reg = reg, algo.name = "a.")

@@ -4,29 +4,24 @@
 \alias{loadResult}
 \title{Load the Result of a Single Job}
 \usage{
-loadResult(id, missing.val, reg = getDefaultRegistry())
+loadResult(id, reg = getDefaultRegistry())
 }
 \arguments{
 \item{id}{[\code{integer(1)} or \code{data.table}]\cr
 Single integer to specify the job or a \code{data.table} with column \code{job.id}
 and exactly one row.}
 
-\item{missing.val}{[\code{ANY}]\cr
-Value to impute if the result file is missing (if not provided and a result file is not found, an exception is raised).}
-
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
-[\code{ANY}]. The saved result or \code{missing.val} if result file
-  is not found.
+[\code{ANY}]. The stored result.
 }
 \description{
-A function to simply load the result of a single job.
+Loads the result of a single job.
 }
 \seealso{
 Other Results: \code{\link{batchMapResults}},
   \code{\link{reduceResultsList}},
   \code{\link{reduceResults}}
 }
-

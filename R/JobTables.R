@@ -29,6 +29,7 @@
 #'     \item{error}{Either \code{NA} if the job terminated successfully or the error message.}
 #'     \item{memory}{Estimate of the memory usage.}
 #'     \item{batch.id}{Batch ID as reported by the scheduler.}
+#'     \item{log.file}{Log file. If missing, defaults to \code{[job.hash].log}.}
 #'     \item{job.hash}{Unique string identifying the job or chunk.}
 #'     \item{time.queued}{Time in seconds (as \code{\link[base]{difftime}}) the job was queued.}
 #'     \item{time.running}{Time in seconds (as \code{\link[base]{difftime}}) the job was running.}
@@ -45,13 +46,16 @@
 #' batchMap(f, x = c(-1, 0, 1), reg = tmp)
 #' submitJobs(reg = tmp)
 #' waitForJobs(reg = tmp)
+#' addJobTags(1:2, "tag1", reg = tmp)
+#' addJobTags(2, "tag2", reg = tmp)
 #'
 #' # Complete table:
 #' getJobTable(reg = tmp, flatten = FALSE)
 #'
-#' # Table with tags:
-#' addJobTags(1:2, "tag1", reg = tmp)
-#' addJobTags(2, "tag2", reg = tmp)
+#' # Job parameters:
+#' getJobPars(reg = tmp, flatten = FALSE)
+#'
+#' # Set and retrieve tags:
 #' getJobTags(reg = tmp)
 #'
 #' # Job parameters with tags right-joined:
@@ -73,8 +77,8 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   tab[, "submitted" := as.POSIXct(submitted, origin = "1970-01-01")]
   tab[, "started" := as.POSIXct(started, origin = "1970-01-01")]
   tab[, "done" := as.POSIXct(done, origin = "1970-01-01")]
-  tab[, "time.queued" := as.difftime(started - submitted, units = "secs")]
-  tab[, "time.running" := as.difftime(done - started, units = "secs")]
+  tab[, "time.queued" := difftime(started, submitted, units = "secs")]
+  tab[, "time.running" := difftime(done, started, units = "secs")]
   tab[]
 }
 
@@ -87,7 +91,7 @@ getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = get
   assertFlag(prefix)
 
   ids = convertIds(reg, ids)
-  tab = merge(filter(reg$status, ids, c("job.id", "resource.id")), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", "resources"), with = FALSE]
+  tab = merge(filter(reg$status, ids, c("job.id", "resource.id")), reg$resources, all.x = TRUE, by = "resource.id")[, c("job.id", "resources")]
   if (flatten %??% qtestr(tab$resources, c("v1", "L", "0"), depth = 2L)) {
     tab = rbindlist(.mapply(function(job.id, resources) c(list(job.id = job.id), resources), tab, list()), fill = TRUE)
     if (prefix && ncol(tab) >= 2L) {
@@ -133,8 +137,8 @@ getJobPars.ExperimentRegistry = function(ids = NULL, flatten = NULL, prefix = FA
   tab = mergedJobs(reg, ids, c("job.id", "pars", "problem", "algorithm"))
 
   if (flatten %??% qtestr(tab$pars, c("v1", "L"), depth = 2L)) {
-    new.cols = rbindlist(lapply(tab$pars, unlist, recursive = FALSE), fill = TRUE)
-    if (ncol(new.cols) > 0L) {
+    new.cols = rbindlist(.mapply(function(job.id, pars, ...) c(list(job.id = job.id), unlist(pars, recursive = FALSE)), tab, list()), fill = TRUE)
+    if (ncol(new.cols) >= 2L) {
       pattern = "^(prob|algo)\\.pars\\."
       replacement = if (prefix) "$1.par." else ""
       setnames(new.cols, names(new.cols), stri_replace_all_regex(names(new.cols), pattern, replacement))

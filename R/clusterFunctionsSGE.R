@@ -1,7 +1,7 @@
 #' @title ClusterFunctions for SGE Systems
 #'
 #' @description
-#' Cluster functions for Univia Grid Engine / Oracle Grid Engine /
+#' Cluster functions for Univa Grid Engine / Oracle Grid Engine /
 #' Sun Grid Engine (\url{http://www.univa.com/}).
 #'
 #' Job files are created based on the brew template \code{template}. This
@@ -16,12 +16,16 @@
 #' It is the template file's job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
+#' @note
+#' Array jobs are currently not supported.
+#'
 #' @templateVar cf.name sge
 #' @template template
+#' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSGE = function(template = findTemplateFile("sge")) { # nocov start
+makeClusterFunctionsSGE = function(template = findTemplateFile("sge"), scheduler.latency = 1, fs.latency = 65) { # nocov start
   template = cfReadBrewTemplate(template)
 
   submitJob = function(reg, jc) {
@@ -61,5 +65,5 @@ makeClusterFunctionsSGE = function(template = findTemplateFile("sge")) { # nocov
   }
 
   makeClusterFunctions(name = "SGE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, store.job = TRUE, array.var = "SGE_TASK_ID")
+    listJobsRunning = listJobsRunning, store.job = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end

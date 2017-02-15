@@ -14,10 +14,31 @@ test_that("cf ssh", {
       submitJobs(1:2, reg = reg)
       expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
       expect_true(killJobs(2, reg = reg)$killed)
-      expect_true(waitForJobs(1, sleep = 0.5, reg = reg))
+      expect_true(
+        waitForJobs(1, sleep = 0.5, reg = reg)
+      )
     })
     expect_equal(findDone(reg = reg), findJobs(ids = 1, reg = reg))
     expect_equal(findNotDone(reg = reg), findJobs(ids = 2, reg = reg))
     expect_true(loadResult(1, reg = reg))
   }
+
+
 })
+
+if (FALSE) {
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  workers = list(Worker$new("129.217.207.53"), Worker$new("localhost", ncpus = 1))
+  reg$cluster.functions = makeClusterFunctionsSSH(workers)
+  expect_equal(workers[[1L]]$ncpus, 4L)
+  expect_equal(workers[[2L]]$ncpus, 1L)
+  fun = function(x) { Sys.sleep(x); is(x, "numeric") }
+  ids = batchMap(fun, x = c(5, 5), reg = reg)
+  submitJobs(1:2, reg = reg)
+  expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
+  expect_true(killJobs(2, reg = reg)$killed)
+  expect_true(waitForJobs(1, reg = reg, sleep = 1))
+  expect_equal(findDone(reg = reg), findJobs(ids = 1, reg = reg))
+  expect_equal(findNotDone(reg = reg), findJobs(ids = 2, reg = reg))
+  expect_true(loadResult(1, reg = reg))
+}

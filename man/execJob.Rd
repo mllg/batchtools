@@ -23,4 +23,3 @@ batchMap(identity, 1:2, reg = tmp)
 job = makeJob(1, reg = tmp)
 execJob(job)
 }
-

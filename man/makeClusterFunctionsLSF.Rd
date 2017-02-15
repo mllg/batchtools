@@ -4,7 +4,8 @@
 \alias{makeClusterFunctionsLSF}
 \title{ClusterFunctions for LSF Systems}
 \usage{
-makeClusterFunctionsLSF(template = findTemplateFile("lsf"))
+makeClusterFunctionsLSF(template = findTemplateFile("lsf"),
+  scheduler.latency = 1, fs.latency = 65)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -18,6 +19,16 @@ the first one found:
   \item \dQuote{.batchtools.lsf.tmpl} in the home directory.
   \item \dQuote{lsf.default.tmpl} in the package installation directory in the subfolder \dQuote{templates} (this probably does not exist for your cluster system or needs adaptation).
 }}
+
+\item{scheduler.latency}{[\code{numeric(1)}]\cr
+Time to sleep after important interactions with the scheduler to ensure a sane state.
+Currently only triggered after calling \code{\link{submitJobs}}.}
+
+\item{fs.latency}{[\code{numeric(1)}]\cr
+Expected maximum latency of the file system, in seconds.
+Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
+access files and directories.
+Usually safe to set to \code{NA} which disables the expensive heuristic if you are working on a local file system.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
@@ -37,6 +48,9 @@ as well as all variables stored in the \code{\link{JobCollection}}.
 It is the template file's job to choose a queue for the job and handle the desired resource
 allocations.
 }
+\note{
+Array jobs are currently not supported.
+}
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsInteractive}},
@@ -46,7 +60,6 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsSocket}},
-  \code{\link{makeClusterFunctionsTorque}},
+  \code{\link{makeClusterFunctionsTORQUE}},
   \code{\link{makeClusterFunctions}}
 }
-

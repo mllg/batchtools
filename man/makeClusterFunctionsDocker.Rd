@@ -5,7 +5,7 @@
 \title{ClusterFunctions for Docker}
 \usage{
 makeClusterFunctionsDocker(image, docker.args = character(0L),
-  image.args = character(0L))
+  image.args = character(0L), scheduler.latency = 1, fs.latency = 65)
 }
 \arguments{
 \item{image}{[\code{character(1)}]\cr
@@ -16,6 +16,16 @@ Additional arguments passed to \dQuote{docker} *before* the command (\dQuote{run
 
 \item{image.args}{[\code{character}]\cr
 Additional arguments passed to \dQuote{docker run} (e.g., to define mounts or environment variables).}
+
+\item{scheduler.latency}{[\code{numeric(1)}]\cr
+Time to sleep after important interactions with the scheduler to ensure a sane state.
+Currently only triggered after calling \code{\link{submitJobs}}.}
+
+\item{fs.latency}{[\code{numeric(1)}]\cr
+Expected maximum latency of the file system, in seconds.
+Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
+access files and directories.
+Usually safe to set to \code{NA} which disables the expensive heuristic if you are working on a local file system.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
@@ -47,7 +57,6 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsSocket}},
-  \code{\link{makeClusterFunctionsTorque}},
+  \code{\link{makeClusterFunctionsTORQUE}},
   \code{\link{makeClusterFunctions}}
 }
-

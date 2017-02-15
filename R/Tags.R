@@ -50,7 +50,7 @@ addJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
   reg$tags = setkeyv(unique(reg$tags, by = NULL), "job.id")
 
   saveRegistry(reg)
-  invisible(ids[, "job.id", with = FALSE])
+  invisible(ids[, "job.id"])
 }
 
 #' @export
@@ -67,7 +67,7 @@ removeJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
     i = reg$tags[job.id %in% ids$job.id & tag %in% tags, which = TRUE]
   }
   if (length(i) > 0L) {
-    ids = unique(reg$tags[i, "job.id", with = FALSE], by = "job.id")
+    ids = unique(reg$tags[i, "job.id"], by = "job.id")
     reg$tags = reg$tags[-i]
     saveRegistry(reg)
   } else {

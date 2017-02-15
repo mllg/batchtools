@@ -14,7 +14,8 @@ containing a \dQuote{JobCollection} as RDS file (as stored by \code{\link{submit
 
 \item{output}{[\code{character(1)}]\cr
 Path to a file to write the output to. Defaults to \code{NULL} which means
-that output is written to the active \code{\link[base]{sink}}.}
+that output is written to the active \code{\link[base]{sink}}.
+Do not set this if your scheduler redirects output to a log file.}
 }
 \value{
 [\code{character(1)}]: Hash of the \code{\link{JobCollection}} executed.
@@ -32,4 +33,3 @@ doJobCollection(jc)
 \seealso{
 Other JobCollection: \code{\link{makeJobCollection}}
 }
-

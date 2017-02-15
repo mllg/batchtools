@@ -8,13 +8,11 @@
 #' These can be parametrized with \code{\link{addExperiments}} to actually define computational
 #' jobs.
 #'
-#' @inheritParams Registry
+#' @inheritParams makeRegistry
 #' @aliases ExperimentRegistry
 #' @return [\code{ExperimentRegistry}].
-#' @name ExperimentRegistry
-#' @rdname ExperimentRegistry
 #' @export
-#' @family Experiment
+#' @family Registry Experiment
 #' @examples
 #' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #'
@@ -33,9 +31,8 @@
 #' ids = findExperiments(prob.pars = (n == 50), reg = tmp)
 #' getJobPars(ids, reg = tmp)
 #'
-#' # Chunk jobs per algorithm and submit them:
-#' ids = chunkIds(getJobPars(reg = tmp), group.by = "algorithm", reg = tmp)
-#' submitJobs(ids, reg = tmp)
+#' # Submit jobs
+#' submitJobs(reg = tmp)
 #' waitForJobs(reg = tmp)
 #'
 #' # Reduce the results of algorithm a1

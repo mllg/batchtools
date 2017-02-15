@@ -86,7 +86,7 @@ See <code><a href='showLog.html'>showLog</a></code> for an example.</p>
     
 
     <pre><span class='fu'>grepLogs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>pattern</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
+  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -106,8 +106,8 @@ If <code>TRUE</code> the match will be performed case insensitively.</dd>
       <dd>[<code>logical(1L)</code>]
 If <code>FALSE</code> (default), <code>pattern</code> is a regular expression and a fixed string otherwise.</dd>
       <dt>reg</dt>
-      <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
+      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>

@@ -36,4 +36,3 @@ Other ClusterFunctionsHelper: \code{\link{cfHandleUnknownSubmitError}},
   \code{\link{makeSubmitJobResult}},
   \code{\link{runOSCommand}}
 }
-

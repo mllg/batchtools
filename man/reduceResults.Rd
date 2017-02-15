@@ -39,6 +39,7 @@ Aggregated results in the same order as provided ids.
 \description{
 A version of \code{\link[base]{Reduce}} for \code{\link{Registry}} objects
 which iterates over finished jobs and aggregates them.
+All jobs must have terminated, an error is raised otherwise.
 }
 \note{
 If you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
@@ -56,4 +57,3 @@ reduceResults(function(x, y) c(x, sqrt(y)), init = numeric(0), reg = tmp)
 Other Results: \code{\link{batchMapResults}},
   \code{\link{loadResult}}, \code{\link{reduceResultsList}}
 }
-

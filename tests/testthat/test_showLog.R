@@ -33,9 +33,9 @@ test_that("empty log files", {
   submitAndWait(reg)
 
   # overwrite log file
-  log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", reg$status[1, job.hash]))
-  file.remove(log.file)
-  file.create(log.file)
+  log.file = getLogFiles(reg$file.dir, reg$status[1, job.hash], reg$status[1, log.file])
+  expect_true(file.remove(log.file))
+  expect_true(file.create(log.file))
 
   x = readLog(list(1), reg = reg)
   expect_data_table(x, ncol = 2, nrow = 0, index = "job.id")

@@ -72,14 +72,12 @@ Multicore = R6Class("Multicore",
 #' Jobs are spawned asynchronously using the functions \code{mcparallel} and \code{mccollect} (both in \pkg{parallel}).
 #' Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
 #'
-#' @note
-#' Sets the number of threads internally used by \pkg{data.table} to 1 during initialization (via \code{data.table::setthreads}).
-#'
 #' @template ncpus
+#' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsMulticore = function(ncpus = NA_integer_) {
+makeClusterFunctionsMulticore = function(ncpus = NA_integer_, fs.latency = NA_real_) {
   if (testOS("windows"))
     stop("ClusterFunctionsMulticore do not support Windows. Use makeClusterFunctionsSocket instead.")
   ncpus = asCount(ncpus, na.ok = TRUE, positive = TRUE)
@@ -101,5 +99,5 @@ makeClusterFunctionsMulticore = function(ncpus = NA_integer_) {
   }
 
   makeClusterFunctions(name = "Multicore", submitJob = submitJob, listJobsRunning = listJobsRunning,
-    store.job = FALSE, hooks = list(pre.sync = function(reg, fns) p$collect(1)))
+    store.job = FALSE, fs.latency = fs.latency, hooks = list(pre.sync = function(reg, fns) p$collect(1)))
 }

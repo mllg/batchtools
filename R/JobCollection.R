@@ -18,7 +18,7 @@
 #'  \item{source}{\code{character} with list of files to source before execution.}
 #'  \item{load}{\code{character} with list of files to load before execution.}
 #'  \item{array.var}{\code{character(1)} of the array environment variable specified by the cluster functions.}
-#'  \item{n.array.jobs}{\code{integer(1)} of the number of array jobs (i.e., the number of jobs in chunk if \code{chunks.as.arrayjobs} is \code{TRUE} and 1 otherwise.}
+#'  \item{array.jobs}{\code{logical(1)} signaling if jobs were submitted using \code{chunks.as.arrayjobs}.}
 #' }
 #' If your \link{ClusterFunctions} uses a template, \code{\link[brew]{brew}} will be executed in the environment of such
 #' a collection. Thus all variables available inside the job can be used in the template.
@@ -36,9 +36,11 @@
 #' @examples
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE, packages = "methods")
 #' batchMap(identity, 1:5, reg = tmp)
-#' # resources are usually forwared from submitJobs()
+#'
+#' # resources are usually set in submitJobs()
 #' jc = makeJobCollection(1:3, resources = list(foo = "bar"), reg = tmp)
-#' print(ls.str(jc))
+#' ls(jc)
+#' jc$resources
 makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
   UseMethod("makeJobCollection", reg)
 }
@@ -49,24 +51,20 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$file.dir     = reg$file.dir
   jc$work.dir     = reg$work.dir
   jc$seed         = reg$seed
-  jc$job.hash     = digest(list(runif(1L), format(Sys.time(), "%H:%M%OS6")))
-  jc$uri          = file.path(reg$file.dir, "jobs", sprintf("%s.rds", jc$job.hash))
-  jc$log.file     = file.path(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
+  jc$job.hash     = stri_join("job", digest(list(runif(1L), as.numeric(Sys.time()))))
+  jc$uri          = getJobFiles(reg$file.dir, jc$job.hash)
+  jc$log.file     = getLogFiles(reg$file.dir, jc$job.hash, log.file = NA_character_)
   jc$packages     = reg$packages
   jc$namespaces   = reg$namespaces
   jc$source       = reg$source
   jc$load         = reg$load
   jc$resources    = resources
   jc$array.var    = reg$cluster.functions$array.var
-  jc$n.array.jobs = if (isTRUE(resources$chunks.as.arrayjobs)) nrow(jobs) else 1L
+  jc$array.jobs   = isTRUE(resources$chunks.as.arrayjobs)
 
-  hooks = reg$cluster.functions$hooks
-  if (length(hooks) > 0L) {
-    hooks = hooks[intersect(names(hooks), batchtools$hooks[batchtools$hooks$remote]$name)]
-    if (length(hooks) > 0L)
-      jc$hooks = hooks
-  }
-
+  hooks = intersect(names(reg$cluster.functions$hooks), batchtools$hooks$remote)
+  if (length(hooks) > 0L)
+    jc$hooks = reg$cluster.functions$hooks[hooks]
   return(jc)
 }
 

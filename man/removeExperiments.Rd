@@ -26,8 +26,6 @@ However, if the implemented heuristic fails, this can lead to inconsistencies in
 Use with care while jobs are running.
 }
 \seealso{
-Other Experiment: \code{\link{ExperimentRegistry}},
-  \code{\link{addExperiments}},
+Other Experiment: \code{\link{addExperiments}},
   \code{\link{summarizeExperiments}}
 }
-

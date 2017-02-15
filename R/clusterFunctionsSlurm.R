@@ -24,12 +24,16 @@
 #'  If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.
 #'  If only one cluster is present, this argument may be omitted.
 #'  Note that you should not select the cluster in your template file via \code{#SBATCH --clusters}.
+#' @param array.jobs [\code{logical(1)}]\cr
+#'  If array jobs are disabled on the computing site, set to \code{FALSE}.
+#' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clusters = NULL) { # nocov start
+makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clusters = NULL, array.jobs = TRUE, scheduler.latency = 1, fs.latency = 65) { # nocov start
   if (!is.null(clusters))
     assertString(clusters, min.chars = 1L)
+  assertFlag(array.jobs)
   template = cfReadBrewTemplate(template, "##")
 
   submitJob = function(reg, jc) {
@@ -37,12 +41,16 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
     assertClass(jc, "JobCollection")
 
     jc$clusters = clusters
+    if (jc$array.jobs) {
+      logs = sprintf("%s_%i", basename(jc$log.file), seq_row(jc$jobs))
+      jc$log.file = stri_join(jc$log.file, "_%a")
+    }
     outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("sbatch", outfile)
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
     temp.error = "Socket timed out on send/recv operation"
-    output = stri_flatten(res$output, "\n")
+    output = stri_flatten(stri_trim_both(res$output), "\n")
 
     if (stri_detect_fixed(max.jobs.msg, output)) {
       makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = max.jobs.msg)
@@ -52,31 +60,37 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
     } else if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("sbatch", res$exit.code, res$output)
     } else {
-      makeSubmitJobResult(status = 0L, batch.id = stri_trim_both(stri_split_fixed(output[1L], " ")[[1L]][4L]))
+      id = stri_split_fixed(output[1L], " ")[[1L]][4L]
+      if (jc$array.jobs) {
+        if (!array.jobs)
+          stop("Array jobs not supported by cluster function")
+        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), log.file = logs)
+      } else {
+        makeSubmitJobResult(status = 0L, batch.id = id)
+      }
     }
-  }
-
-  listJobs = function(reg, cmd) {
-    cmd = c(cmd, sprintf("--clusters=%s", clusters))
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
-
-    # if cluster name is specified, the first line will be the cluster name
-    if (!is.null(clusters))
-      batch.ids = tail(batch.ids, -1L)
-
-    stri_extract_first_regex(batch.ids, "[0-9]+")
   }
 
   listJobsQueued = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t PD")
-    listJobs(reg, cmd)
+    cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t PD", sprintf("--clusters=%s", clusters))
+    if (array.jobs)
+      cmd = c(cmd, "-r")
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
+    if (!is.null(clusters))
+      batch.ids = tail(batch.ids, -1L)
+    batch.ids
   }
 
   listJobsRunning = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t R,S,CG")
-    listJobs(reg, cmd)
+    cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t R,S,CG", sprintf("--clusters=%s", clusters))
+    if (array.jobs)
+      cmd = c(cmd, "-r")
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
+    if (!is.null(clusters))
+      batch.ids = tail(batch.ids, -1L)
+    batch.ids
   }
 
   killJob = function(reg, batch.id) {
@@ -86,5 +100,6 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
   }
 
   makeClusterFunctions(name = "Slurm", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    listJobsQueued = listJobsQueued, store.job = TRUE, array.var = "SLURM_ARRAY_TASK_ID")
+    listJobsQueued = listJobsQueued, array.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE,
+    scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end

@@ -1,6 +1,6 @@
 Package: batchtools
 Title: Tools for Computation on Batch Systems
-Version: 0.9.1
+Version: 0.9.1-9000
 Authors@R: c(
     person("Michel", "Lang", NULL, "michellang@gmail.com", role = c("cre", "aut")),
     person("Bernd", "Bischl", NULL, "bernd_bischl@gmx.de", role = "aut"),
@@ -10,9 +10,9 @@ Description: As a successor of the packages 'BatchJobs' and 'BatchExperiments',
     this package provides a parallel implementation of the Map function for high
     performance computing systems managed by schedulers 'IBM Spectrum LSF'
     (<http://www-03.ibm.com/systems/spectrum-computing/products/lsf/>),
-    'OpenLava' (<http://www.openlava.org/>), 'Univia Grid Engine'/'Oracle Grid
+    'OpenLava' (<http://www.openlava.org/>), 'Univa Grid Engine'/'Oracle Grid
     Engine' (<http://www.univa.com/>), 'Slurm' (<http://slurm.schedmd.com/>),
-    'Torque/PBS'
+    'TORQUE/PBS'
     (<http://www.adaptivecomputing.com/products/open-source/torque/>), or
     'Docker Swarm' (<https://docs.docker.com/swarm/>).
     A multicore and socket mode allow the parallelization on a local machines,
@@ -26,14 +26,14 @@ NeedsCompilation: yes
 ByteCompile: yes
 Depends:
     R (>= 3.0.0),
-    data.table (>= 1.9.6)
+    data.table (>= 1.9.8)
 Imports:
     backports (>= 1.0.4),
     brew,
     checkmate (>= 1.8.2),
     digest (>= 0.6.9),
     parallel,
-    progress,
+    progress (>= 1.1.1),
     R6,
     rappdirs,
     stats,
@@ -50,4 +50,4 @@ Suggests:
     snow,
     testthat
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

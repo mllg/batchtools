@@ -14,7 +14,7 @@
 #'   Parameters given via \code{args} or \code{...} are passed as-is, in the respective order and possibly named.
 #'   If the function has the named formal argument \dQuote{.job}, the \code{\link{Job}} is passed to the function
 #'   on the slave.
-#' @param ... [any]\cr
+#' @param ... [ANY]\cr
 #'   Arguments to vectorize over (list or vector).
 #'   Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the longest length).
 #'   Mutually exclusive with \code{args}.
@@ -28,6 +28,7 @@
 #' @template reg
 #' @return [\code{\link{data.table}}] with ids of added jobs stored in column \dQuote{job.id}.
 #' @export
+#' @seealso \code{\link{batchReduce}}
 #' @examples
 #' # example using "..." and more.args
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
@@ -44,13 +45,7 @@
 #'
 #' # example for an expand.grid()-like operation on parameters
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
-#' ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), more.args = list(sep = ""), reg = tmp)
-#' getJobPars(reg = tmp)
-#' testJob(6, reg = tmp)
-#'
-#' # example on how to deal with bulky objects
-#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
-#' ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), more.args = list(sep = ""), reg = tmp)
+#' ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), reg = tmp)
 #' getJobPars(reg = tmp)
 #' testJob(6, reg = tmp)
 batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaultRegistry()) {
@@ -76,7 +71,7 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
     ddd = list2dt(list(...))
   }
 
-  if (".job" %in% names(ddd))
+  if (".job" %chin% names(ddd))
     stop("Name '.job' not allowed as parameter name (reserved keyword)")
 
   if (any(dim(ddd) == 0L))
@@ -96,13 +91,14 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
   reg$status = data.table(
     job.id      = ids,
     def.id      = ids,
-    submitted   = NA_integer_,
-    started     = NA_integer_,
-    done        = NA_integer_,
+    submitted   = NA_real_,
+    started     = NA_real_,
+    done        = NA_real_,
     error       = NA_character_,
     memory      = NA_real_,
     resource.id = NA_integer_,
     batch.id    = NA_character_,
+    log.file    = NA_character_,
     job.hash    = NA_character_,
     key         = "job.id")
 

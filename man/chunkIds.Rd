@@ -16,13 +16,16 @@ If not set, defaults to all jobs.}
 
 \item{n.chunks}{[\code{integer(1)}]\cr
 Requested number of chunks.
-If more chunks than elements in \code{ids} are requested, empty chunks are ignored.
+The function \code{chunk} distributes the number of elements in \code{x} evenly while
+\code{lpt} tries to even out the sum of elements in each chunk.
+If more chunks than necessary are requested, empty chunks are ignored.
 Mutually exclusive with \code{chunks.size}.}
 
 \item{chunk.size}{[\code{integer(1)}]\cr
-Requested number of elements in each chunk.
-If \code{ids} cannot be chunked evenly, some chunks will have less elements than others.
-Mutually exclusive with with \code{n.chunks}.}
+Requested chunk size for each single chunk.
+For \code{chunk} this is the number of elements in \code{x}, for \code{binpack} the size
+is determined by the sum of values in \code{x}.
+Mutually exclusive with \code{n.chunks}.}
 
 \item{group.by}{[\code{character(0)}]\cr
 If \code{ids} is a \code{\link{data.frame}} with additional columns
@@ -37,38 +40,8 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 [\code{\link[data.table]{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 }
 \description{
-Partition jobs into \dQuote{chunks} which will be executed together on the nodes.
-
-Chunks are submitted via \code{\link{submitJobs}} by simply providing
-a data frame with columns \dQuote{job.id} and corresponding \dQuote{chunk} (both integer).
-All jobs with the same chunk number will be grouped together on one node as a single
-computational job.
-
-If neither \code{n.chunks} nor \code{chunk.size} are provided, each job will be assigned
-to its own chunk.
+This function is deprecated in favor of the more flexible \code{chunk}, \code{lpt} and \code{binpack}.
 }
-\examples{
-# chunking for Registry
-tmp = makeRegistry(file.dir = NA, make.default = FALSE)
-batchMap(identity, 1:25, reg = tmp)
-ids = chunkIds(chunk.size = 10, reg = tmp)
-print(ids)
-print(table(ids$chunk))
-
-# Creating chunks for an ExperimentRegistry
-tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
-prob = addProblem(reg = tmp, "prob1", data = iris, fun = function(job, data) nrow(data))
-prob = addProblem(reg = tmp, "prob2", data = Titanic, fun = function(job, data) nrow(data))
-algo = addAlgorithm(reg = tmp, "algo", fun = function(job, data, instance, i, ...) problem)
-prob.designs = list(prob1 = data.table(), prob2 = data.table(x = 1:2))
-algo.designs = list(algo = data.table(i = 1:3))
-addExperiments(prob.designs, algo.designs, repls = 3, reg = tmp)
-
-# group into chunks of 5 jobs, but do not put multiple problems into a single chunk
-# -> only one problem has to be loaded per chunk, and only once because it is then cached.
-ids = getJobTable(reg = tmp)[, .(job.id, problem, algorithm)]
-chunked = chunkIds(ids, chunk.size = 5, group.by = "problem", reg = tmp)
-print(chunked)
-dcast(ijoin(ids, chunked), chunk ~ problem)
+\seealso{
+\code{\link{chunk}} \code{\link{binpack}} \code{\link{lpt}}
 }
-

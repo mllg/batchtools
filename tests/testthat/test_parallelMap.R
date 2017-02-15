@@ -8,35 +8,33 @@ test_that("pm/multicore", {
   skip_on_os("windows")
   skip_if_not_installed("parallelMap")
   skip_on_travis()
-  if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
+  if (reg$cluster.functions$name %chin% c("Parallel", "Socket"))
     skip("Nested Parallelization not supported")
 
-  submitAndWait(reg, resources = list(pm.backend = "multicore", ncpus = 2))
-  expect_true(nrow(findDone(reg = reg)) == 4)
+  submitAndWait(reg, ids = ids, resources = list(pm.backend = "multicore", ncpus = 2))
+  expect_equal(nrow(findDone(reg = reg)), 4L)
 })
 
 test_that("pm/socket", {
-    skip_if_not_installed("snow")
-    skip_if_not_installed("parallelMap")
-    skip_on_travis()
-    if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
-      skip("Nested Parallelization not supported")
+  skip_if_not_installed("snow")
+  skip_if_not_installed("parallelMap")
+  skip_on_travis()
+  if (!identical(reg$cluster.functions$name, "interactive"))
+    skip("Nested Parallelization not supported")
 
-    submitAndWait(reg, resources = list(pm.backend = "socket", ncpus = 2))
-    expect_true(nrow(findDone(reg = reg)) == 4)
+  submitAndWait(reg, ids = ids, resources = list(pm.backend = "socket", ncpus = 2))
+  expect_equal(nrow(findDone(reg = reg)), 4L)
 })
 
-if (FALSE) {
-  test_that("pm/mpi", {
-    skip_if_not_installed("Rmpi")
-    skip_if_not_installed("snow")
-    skip_if_not_installed("parallelMap")
-    skip_on_cran()
-    skip_on_travis()
-    if (reg$cluster.functions$name %in% c("Parallel", "Socket"))
-      skip("Nested Parallelization not supported")
+test_that("pm/mpi", {
+  skip_on_os("mac")
+  skip_on_cran()
+  skip_if_not_installed("Rmpi")
+  skip_if_not_installed("snow")
+  skip_if_not_installed("parallelMap")
+  if (!identical(reg$cluster.functions$name, "interactive"))
+    skip("Nested Parallelization not supported")
 
-    submitAndWait(reg, resources = list(pm.backend = "mpi", ncpus = 2))
-    expect_true(nrow(findDone(reg = reg)) == 4)
+  submitAndWait(reg, ids = ids, resources = list(pm.backend = "mpi", ncpus = 2))
+  expect_equal(nrow(findDone(reg = reg)), 4)
 })
-}

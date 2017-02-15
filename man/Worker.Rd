@@ -19,12 +19,13 @@ Worker
 \describe{
 \item{\code{nodename}}{Host name. Set via constructor.}
 
-\item{\code{ncpus}}{Number of VPUs of worker. Set via constructor and defaults to the number of CPUs of the machine.}
+\item{\code{ncpus}}{Number of CPUs. Set via constructor and defaults to a heuristic which tries to detect the number of CPUs of the machine.}
 
 \item{\code{max.load}}{Maximum load average (of the last 5 min). Set via constructor and defaults to the number of CPUs of the machine.}
 
 \item{\code{status}}{Status of the worker; one of \dQuote{unknown}, \dQuote{available}, \dQuote{max.cpus} and \dQuote{max.load}.}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -35,6 +36,7 @@ Worker
  \item{\code{kill(reg, batch.id)}}{Kill job matching the \dQuote{batch.id}.}
 }
 }
+
 \examples{
 \dontrun{
 # create a worker for the local machine and use 4 CPUs.
@@ -42,4 +44,3 @@ Worker$new("localhost", ncpus = 4)
 }
 }
 \keyword{datasets}
-

@@ -2,7 +2,7 @@
 #'
 #' @description
 #' This is the constructor used to create \emph{custom} cluster functions.
-#' Note that some standard implementations for Torque, Slurm, LSF, SGE, etc. ship
+#' Note that some standard implementations for TORQUE, Slurm, LSF, SGE, etc. ship
 #' with the package.
 #'
 #' @param name [\code{character(1)}]\cr
@@ -34,6 +34,14 @@
 #' @param store.job [\code{logical(1)}]\cr
 #'   Flag to indicate that the cluster function implementation of \code{submitJob} can not directly handle \code{\link{JobCollection}} objects.
 #'   If set to \code{FALSE}, the \code{\link{JobCollection}} is serialized to the file system before submitting the job.
+#' @param scheduler.latency [\code{numeric(1)}]\cr
+#'   Time to sleep after important interactions with the scheduler to ensure a sane state.
+#'   Currently only triggered after calling \code{\link{submitJobs}}.
+#' @param fs.latency [\code{numeric(1)}]\cr
+#'   Expected maximum latency of the file system, in seconds.
+#'   Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
+#'   access files and directories.
+#'   Usually safe to set to \code{NA} which disables the expensive heuristic if you are working on a local file system.
 #' @param hooks [\code{list}]\cr
 #'   Named list of functions which will we called on certain events like \dQuote{pre.submit} or \dQuote{post.sync}.
 #'   See \link{Hooks}.
@@ -42,29 +50,20 @@
 #' @family ClusterFunctions
 #' @family ClusterFunctionsHelper
 makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL,
-  array.var = NA_character_, store.job = FALSE, hooks = list()) {
-  assertString(name, min.chars = 1L)
-  if (!is.null(submitJob))
-    assertFunction(submitJob, c("reg", "jc"))
-  if (!is.null(killJob))
-    assertFunction(killJob, c("reg", "batch.id"))
-  if (!is.null(listJobsQueued))
-    assertFunction(listJobsQueued, "reg")
-  if (!is.null(listJobsRunning))
-    assertFunction(listJobsRunning, "reg")
-  assertString(array.var, na.ok = TRUE)
-  assertFlag(store.job)
+  array.var = NA_character_, store.job = FALSE, scheduler.latency = 0, fs.latency = NA_real_, hooks = list()) {
   assertList(hooks, types = "function", names = "unique")
-  assertSubset(names(hooks), batchtools$hooks$name)
+  assertSubset(names(hooks), unlist(batchtools$hooks, use.names = FALSE))
 
   setClasses(list(
-      name = name,
-      submitJob = submitJob,
-      killJob = killJob,
-      listJobsQueued = listJobsQueued,
-      listJobsRunning = listJobsRunning,
-      array.var = array.var,
-      store.job = store.job,
+      name = assertString(name, min.chars = 1L),
+      submitJob = assertFunction(submitJob, c("reg", "jc"), null.ok = TRUE),
+      killJob = assertFunction(killJob, c("reg", "batch.id"), null.ok = TRUE),
+      listJobsQueued = assertFunction(listJobsQueued, "reg", null.ok = TRUE),
+      listJobsRunning = assertFunction(listJobsRunning, "reg", null.ok = TRUE),
+      array.var = assertString(array.var, na.ok = TRUE),
+      store.job = assertFlag(store.job),
+      scheduler.latency = assertNumber(scheduler.latency, lower = 0),
+      fs.latency = assertNumber(fs.latency, lower = 0, na.ok = TRUE),
       hooks = hooks),
     "ClusterFunctions")
 }
@@ -89,10 +88,13 @@ print.ClusterFunctions = function(x, ...) {
 #' @param status [\code{integer(1)}]\cr
 #'   Launch status of job. 0 means success, codes between 1 and 100 are temporary errors and any
 #'   error greater than 100 is a permanent failure.
-#' @param batch.id [\code{character(1)}]\cr
-#'   Unique id of this job on batch system. Note that this is not the usual job id.
-#'   Must be globally unique so that the job can be terminated using just this
-#'   information.
+#' @param batch.id [\code{character()}]\cr
+#'   Unique id of this job on batch system, as given by the batch system.
+#'   Must be globally unique so that the job can be terminated using just this information.
+#'   For array jobs, this may be a vector of length equal to the number of jobs in the array.
+#' @param log.file [\code{character()}]\cr
+#'   Log file. If \code{NA}, defaults to \code{[job.hash].log}.
+#'   Some cluster functions set this for array jobs.
 #' @param msg [\code{character(1)}]\cr
 #'   Optional error message in case \code{status} is not equal to 0. Default is \dQuote{OK},
 #'   \dQuote{TEMPERROR}, \dQuote{ERROR}, depending on \code{status}.
@@ -101,7 +103,7 @@ print.ClusterFunctions = function(x, ...) {
 #' @family ClusterFunctionsHelper
 #' @aliases SubmitJobResult
 #' @export
-makeSubmitJobResult = function(status, batch.id, msg = NA_character_) {
+makeSubmitJobResult = function(status, batch.id, log.file = NA_character_, msg = NA_character_) {
   status = asInt(status)
   if (is.na(msg)) {
     msg = if (status == 0L)
@@ -111,14 +113,15 @@ makeSubmitJobResult = function(status, batch.id, msg = NA_character_) {
     else
       "ERROR"
   }
-  "!DEBUG SubmitJobResult for batch.id '`batch.id`': `status` (`msg`)"
-  setClasses(list(status = status, batch.id = batch.id, msg = msg), "SubmitJobResult")
+  "!DEBUG [makeSubmitJobResult]: Result for batch.id '`paste0(batch.id, sep = ',')`': `status` (`msg`)"
+
+  setClasses(list(status = status, batch.id = batch.id, log.file = log.file, msg = msg), "SubmitJobResult")
 }
 
 #' @export
 print.SubmitJobResult = function(x, ...) {
   cat("Job submission result\n")
-  catf("  ID    : %s", x$batch.id)
+  catf("  ID    : %s", stri_flatten(x$batch.id, ","))
   catf("  Status: %i", x$status)
   catf("  Msg   : %s", x$msg)
 }
@@ -145,10 +148,10 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
     stop("No template found")
 
   if (stri_detect_regex(template, "\n")) {
-    "!DEBUG Parsing template from string"
+    "!DEBUG [cfReadBrewTemplate]: Parsing template from string"
     lines = stri_trim_both(stri_split_lines(template)[[1L]])
   } else if (testFileExists(template, "r")) {
-    "!DEBUG Parsing template form file '`template`'"
+    "!DEBUG [cfReadBrewTemplate]: Parsing template form file '`template`'"
     lines = stri_trim_both(readLines(template))
   } else {
     stop("Argument 'template' must non point to a template file or provide the template as string (containing at least one newline)")
@@ -187,7 +190,7 @@ cfBrewTemplate = function(reg, text, jc) {
   outfile = if (batchtools$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
   parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
-  "!DEBUG Brewing template to file '`outfile`'"
+  "!DEBUG [cfBrewTemplate]: Brewing template to file '`outfile`'"
 
   z = try(brew(text = text, output = outfile, envir = jc), silent = TRUE)
   if (is.error(z))
@@ -262,15 +265,15 @@ getBatchIds = function(reg, status = "all") {
   tab = data.table(batch.id = character(0L), status = character(0L))
   batch.id = NULL
 
-  if (status %in% c("all", "running") && !is.null(cf$listJobsRunning)) {
-    "!DEBUG Getting running Jobs"
+  if (status %chin% c("all", "running") && !is.null(cf$listJobsRunning)) {
+    "!DEBUG [getBatchIds]: Getting running Jobs"
     x = unique(cf$listJobsRunning(reg))
     if (length(x) > 0L)
       tab = rbind(tab, data.table(batch.id = x, status = "running"))
   }
 
-  if (status %in% c("all", "queued") && !is.null(cf$listJobsQueued)) {
-    "!DEBUG Getting queued Jobs"
+  if (status %chin% c("all", "queued") && !is.null(cf$listJobsQueued)) {
+    "!DEBUG [getBatchIds]: Getting queued Jobs"
     x = unique(setdiff(cf$listJobsQueued(reg), tab$batch.id))
     if (length(x) > 0L)
       tab = rbind(tab, data.table(batch.id = x, status = "queued"))
@@ -278,59 +281,6 @@ getBatchIds = function(reg, status = "all") {
 
   tab[batch.id %in% reg$status$batch.id]
 }
-
-#' @title Run OS Commands on Local or Remote Machines
-#'
-#' @description
-#' This is a helper function to run arbitrary OS commands on local or remote machines.
-#' The interface is similar to \code{\link[base]{system2}}, but it always returns the exit status
-#' \emph{and} the output.
-#'
-#' @param sys.cmd [\code{character(1)}]\cr
-#'   Command to run.
-#' @param sys.args [\code{character}]\cr
-#'   Arguments for \code{sys.cmd}.
-#' @param nodename [\code{character(1)}]\cr
-#'   Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
-#'   is not piped through SSH.
-#' @return [\code{named list}] with \dQuote{exit.code} (integer) and \dQuote{output} (character).
-#' @export
-#' @family ClusterFunctionsHelper
-#' @examples
-#' \dontrun{
-#' runOSCommand("ls")
-#' runOSCommand("ls", "-al")
-#' runOSCommand("notfound")
-#' }
-runOSCommand = function(sys.cmd, sys.args = character(0L), nodename = "localhost") {
-  assertCharacter(sys.cmd, any.missing = FALSE, len = 1L)
-  assertCharacter(sys.args, any.missing = FALSE)
-  assertString(nodename, min.chars = 1L)
-
-  if (nodename != "localhost") {
-    sys.args = c(nodename, shQuote(stri_flatten(c(sys.cmd, sys.args), " ")))
-    sys.cmd = "ssh"
-  } else if (length(sys.args) == 0L) {
-      sys.args = ""
-  }
-
-  "!DEBUG OS cmd: `sys.cmd` `stri_flatten(sys.args, ' ')`"
-
-  if (nzchar(Sys.which(sys.cmd))) {
-    res = suppressWarnings(system2(command = sys.cmd, args = sys.args, stdout = TRUE, stderr = TRUE, wait = TRUE))
-    output = as.character(res)
-    exit.code = attr(res, "status") %??% 0L
-  } else {
-    output = "command not found"
-    exit.code = 127L
-  }
-
-  "!DEBUG OS result (exit code `exit.code`):"
-  "!DEBUG `cat(output, sep = \"\n\")`"
-
-  return(list(exit.code = exit.code, output = output))
-}
-
 
 findTemplateFile = function(name) {
   x = sprintf("batchtools.%s.tmpl", name)

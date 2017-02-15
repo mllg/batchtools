@@ -4,13 +4,19 @@
 \alias{makeClusterFunctionsMulticore}
 \title{ClusterFunctions for Parallel Multicore Execution}
 \usage{
-makeClusterFunctionsMulticore(ncpus = NA_integer_)
+makeClusterFunctionsMulticore(ncpus = NA_integer_, fs.latency = NA_real_)
 }
 \arguments{
 \item{ncpus}{[\code{integer(1)}]\cr
-Number of VPUs of worker.
-Default is to use all cores. The total number of cores "available" can be set via the option \code{mc.cores}
+Number of CPUs.
+Default is to use all logical cores. The total number of cores "available" can be set via the option \code{mc.cores}
 and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}.}
+
+\item{fs.latency}{[\code{numeric(1)}]\cr
+Expected maximum latency of the file system, in seconds.
+Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
+access files and directories.
+Usually safe to set to \code{NA} which disables the expensive heuristic if you are working on a local file system.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
@@ -18,9 +24,6 @@ and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}
 \description{
 Jobs are spawned asynchronously using the functions \code{mcparallel} and \code{mccollect} (both in \pkg{parallel}).
 Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
-}
-\note{
-Sets the number of threads internally used by \pkg{data.table} to 1 during initialization (via \code{data.table::setthreads}).
 }
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
@@ -31,7 +34,6 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsSlurm}},
   \code{\link{makeClusterFunctionsSocket}},
-  \code{\link{makeClusterFunctionsTorque}},
+  \code{\link{makeClusterFunctionsTORQUE}},
   \code{\link{makeClusterFunctions}}
 }
-

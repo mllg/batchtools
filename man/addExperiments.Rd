@@ -75,8 +75,6 @@ summarizeExperiments(reg = tmp)
 getJobPars(reg = tmp)
 }
 \seealso{
-Other Experiment: \code{\link{ExperimentRegistry}},
-  \code{\link{removeExperiments}},
+Other Experiment: \code{\link{removeExperiments}},
   \code{\link{summarizeExperiments}}
 }
-

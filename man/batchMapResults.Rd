@@ -4,8 +4,8 @@
 \alias{batchMapResults}
 \title{Map Over Results to Create New Jobs}
 \usage{
-batchMapResults(fun, ids = NULL, ..., missing.val, more.args = list(),
-  target, source = getDefaultRegistry())
+batchMapResults(fun, ids = NULL, ..., more.args = list(), target,
+  source = getDefaultRegistry())
 }
 \arguments{
 \item{fun}{[\code{function}]\cr
@@ -17,11 +17,8 @@ with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of \code{\link{findDone}}.}
 
-\item{...}{[any]\cr
+\item{...}{[ANY]\cr
 Arguments to vectorize over (list or vector). Passed to \code{\link{batchMap}}.}
-
-\item{missing.val}{[\code{ANY}]\cr
-Value to impute if the result file is missing (if not provided and a result file is not found, an exception is raised).}
 
 \item{more.args}{[\code{list}]\cr
 A list of further arguments passed to \code{fun}.
@@ -57,7 +54,7 @@ waitForJobs(reg = target)
 # Map old to new ids. First, get a table with results and parameters
 results = rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target))
 
-# Parameter '..id' points to job.id in 'source'. Use an inner join to combine:
+# Parameter '..id' points to job.id in 'source'. Use a inner join to combine:
 ijoin(results, reduceResultsDataTable(reg = tmp), by = c("..id" = "job.id"))
 }
 \seealso{
@@ -65,4 +62,3 @@ Other Results: \code{\link{loadResult}},
   \code{\link{reduceResultsList}},
   \code{\link{reduceResults}}
 }
-

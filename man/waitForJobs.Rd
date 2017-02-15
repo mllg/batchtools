@@ -4,7 +4,7 @@
 \alias{waitForJobs}
 \title{Wait for Termination of Jobs}
 \usage{
-waitForJobs(ids = NULL, sleep = 10, timeout = 604800,
+waitForJobs(ids = NULL, sleep = default.sleep, timeout = 604800,
   stop.on.error = FALSE, reg = getDefaultRegistry())
 }
 \arguments{
@@ -14,8 +14,9 @@ with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of \code{\link{findSubmitted}}.}
 
-\item{sleep}{[\code{numeric(1)}]\cr
-Seconds to sleep between status updates. Default is \code{10}.}
+\item{sleep}{[\code{function(i)} | \code{numeric(1)}]\cr
+Function which returns the duration to sleep in the \code{i}-th iteration.
+Alternatively, you can pass a single positive numeric value.}
 
 \item{timeout}{[\code{numeric(1)}]\cr
 After waiting \code{timeout} seconds, show a message and return
@@ -38,4 +39,3 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 \description{
 This function simply waits until all jobs are terminated.
 }
-

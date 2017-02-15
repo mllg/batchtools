@@ -9,7 +9,7 @@ test_that("makeJobCollection", {
   expect_environment(jc, c("file.dir", "job.hash", "jobs", "log.file", "packages", "resources", "uri", "work.dir"))
 
   expect_directory(jc$file.dir)
-  expect_string(jc$job.hash)
+  expect_string(jc$job.hash, pattern = "^job[[:alnum:]]{32}$")
   expect_data_table(jc$jobs, key = "job.id")
   expect_string(jc$log.file)
   expect_character(jc$packages, any.missing = FALSE)
@@ -18,7 +18,7 @@ test_that("makeJobCollection", {
   expect_directory(jc$work.dir)
   expect_list(jc$jobs$pars)
   expect_string(jc$array.var, na.ok = TRUE)
-  expect_count(jc$n.array.jobs)
+  expect_flag(jc$array.jobs)
 
   expect_output(print(jc), "Collection")
 })
@@ -32,7 +32,7 @@ test_that("makeJobCollection.ExperimentCollection", {
   jc = makeJobCollection(ids, resources = list(foo = 42), reg = reg)
 
   expect_directory(jc$file.dir)
-  expect_string(jc$job.hash)
+  expect_string(jc$job.hash, pattern = "^job[[:alnum:]]{32}$")
   expect_data_table(jc$jobs, key = "job.id")
   expect_string(jc$log.file)
   expect_character(jc$packages, any.missing = FALSE)
@@ -43,7 +43,7 @@ test_that("makeJobCollection.ExperimentCollection", {
   expect_factor(jc$jobs$problem)
   expect_factor(jc$jobs$algorithm)
   expect_string(jc$array.var, na.ok = TRUE)
-  expect_count(jc$n.array.jobs)
+  expect_flag(jc$array.jobs)
 
   expect_is(jc, "ExperimentCollection")
 })

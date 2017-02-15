@@ -28,8 +28,6 @@ Returns a frequency table of defined experiments.
 See \code{\link{ExperimentRegistry}} for an example.
 }
 \seealso{
-Other Experiment: \code{\link{ExperimentRegistry}},
-  \code{\link{addExperiments}},
+Other Experiment: \code{\link{addExperiments}},
   \code{\link{removeExperiments}}
 }
-

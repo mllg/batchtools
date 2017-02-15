@@ -82,13 +82,13 @@
 
     
     <p>This is the constructor used to create <em>custom</em> cluster functions.
-Note that some standard implementations for Torque, Slurm, LSF, SGE, etc. ship
+Note that some standard implementations for TORQUE, Slurm, LSF, SGE, etc. ship
 with the package.</p>
     
 
     <pre><span class='fu'>makeClusterFunctions</span>(<span class='no'>name</span>, <span class='no'>submitJob</span>, <span class='kw'>killJob</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>listJobsQueued</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>listJobsRunning</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>array.var</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>store.job</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>hooks</span> <span class='kw'>=</span> <span class='fu'>list</span>())</pre>
+  <span class='kw'>scheduler.delay</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>hooks</span> <span class='kw'>=</span> <span class='fu'>list</span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -98,11 +98,11 @@ Name of cluster functions.</dd>
       <dt>submitJob</dt>
       <dd>[<code>function(reg, jc, ...)</code>]
 Function to submit new jobs. Must return a <code><a href='makeSubmitJobResult.html'>SubmitJobResult</a></code> object.
-The arguments are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and <code>jobs</code> (<code><a href='makeJobCollection.html'>JobCollection</a></code>).</dd>
+The arguments are <code>reg</code> (<code><a href='makeRegistry.html'>Registry</a></code>) and <code>jobs</code> (<code><a href='makeJobCollection.html'>JobCollection</a></code>).</dd>
       <dt>killJob</dt>
       <dd>[<code>function(reg, batch.id)</code>]
 Function to kill a job on the batch system. Make sure that you definitely kill the job! Return
-value is currently ignored. Must have the arguments <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>) and
+value is currently ignored. Must have the arguments <code>reg</code> (<code><a href='makeRegistry.html'>Registry</a></code>) and
 <code>batch.id</code> (<code>character(1)</code> as returned by <code>submitJob</code>).
 Note that there is a helper function <code><a href='cfKillJob.html'>cfKillJob</a></code> to repeatedly try to kill jobs.
 Set <code>killJob</code> to <code>NULL</code> if killing jobs cannot be supported.</dd>
@@ -118,7 +118,7 @@ List all running jobs on the batch system for the current user.
 Must return an character vector of batch ids, same format as they
 are returned by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.
 all for the current user instead of all for the current registry), but you have to include all
-relevant ones. Must have the argument are <code>reg</code> (<code><a href='Registry.html'>Registry</a></code>).
+relevant ones. Must have the argument are <code>reg</code> (<code><a href='makeRegistry.html'>Registry</a></code>).
 Set <code>listJobsRunning</code> to <code>NULL</code> if listing of running jobs is not supported.</dd>
       <dt>array.var</dt>
       <dd>[<code>character(1)</code>]
@@ -128,6 +128,10 @@ Default is <code>NA</code> for no array support.</dd>
       <dd>[<code>logical(1)</code>]
 Flag to indicate that the cluster function implementation of <code>submitJob</code> can not directly handle <code><a href='makeJobCollection.html'>JobCollection</a></code> objects.
 If set to <code>FALSE</code>, the <code><a href='makeJobCollection.html'>JobCollection</a></code> is serialized to the file system before submitting the job.</dd>
+      <dt>scheduler.delay</dt>
+      <dd>[<code>numeric(1)</code>]
+Time to sleep after important interactions with the scheduler to ensure a sane state.
+Currently only user after <code><a href='submitJobs.html'>submitJobs</a></code>.</dd>
       <dt>hooks</dt>
       <dd>[<code>list</code>]
 Named list of functions which will we called on certain events like &#8220;pre.submit&#8221; or &#8220;post.sync&#8221;.
@@ -145,7 +149,7 @@ See <a href='runHook.html'>Hooks</a>.</dd>
   <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>,
   <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
   <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
-  <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code></p>
+  <code><a href='makeClusterFunctionsTORQUE.html'>makeClusterFunctionsTORQUE</a></code></p>
     <p>Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
   <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
   <code><a href='cfKillJob.html'>cfKillJob</a></code>,

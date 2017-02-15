@@ -82,11 +82,11 @@
 
     
     <p>Returns a frequency table of defined experiments.
-See <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code> for an example.</p>
+See <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code> for an example.</p>
     
 
     <pre><span class='fu'>summarizeExperiments</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"problem"</span>, <span class='st'>"algorithm"</span>),
-  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
+  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -100,7 +100,7 @@ If not set, defaults to all jobs.</dd>
       <dd>[<code>character</code>]
 Split the resulting table by columns of <code><a href='getJobTable.html'>getJobPars</a></code>.</dd>
       <dt>reg</dt>
-      <dd>[<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>]
+      <dd>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
     </dl>
     
@@ -110,8 +110,7 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other Experiment: <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>,
-  <code><a href='addExperiments.html'>addExperiments</a></code>,
+    <p>Other Experiment: <code><a href='addExperiments.html'>addExperiments</a></code>,
   <code><a href='removeExperiments.html'>removeExperiments</a></code></p>
     
 

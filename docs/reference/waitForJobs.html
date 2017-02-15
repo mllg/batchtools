@@ -84,8 +84,8 @@
     <p>This function simply waits until all jobs are terminated.</p>
     
 
-    <pre><span class='fu'>waitForJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sleep</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fl'>604800</span>,
-  <span class='kw'>stop.on.error</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
+    <pre><span class='fu'>waitForJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sleep</span> <span class='kw'>=</span> <span class='no'>default.sleep</span>, <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fl'>604800</span>,
+  <span class='kw'>stop.on.error</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -96,8 +96,9 @@ with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to the return value of <code><a href='findJobs.html'>findSubmitted</a></code>.</dd>
       <dt>sleep</dt>
-      <dd>[<code>numeric(1)</code>]
-Seconds to sleep between status updates. Default is <code>10</code>.</dd>
+      <dd>[<code>function(i)</code> | <code>numeric(1)</code>]
+Function which returns the duration to sleep in the <code>i</code>-th iteration.
+Alternatively, you can pass a single positive numeric value.</dd>
       <dt>timeout</dt>
       <dd>[<code>numeric(1)</code>]
 After waiting <code>timeout</code> seconds, show a message and return
@@ -109,8 +110,8 @@ a timeout, set this to <code>Inf</code>. Default is <code>604800</code> (one wee
 Immediately cancel if a job terminates with an error? Default is
 <code>FALSE</code>.</dd>
       <dt>reg</dt>
-      <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
+      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>

@@ -19,9 +19,6 @@
 ## Use correct queue
 #$ -q <%= resources$queue %>
 
-## Use job arrays
-#$ -t 1-<%= n.array.jobs %>
-
 ## Export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>
 

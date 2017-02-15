@@ -31,4 +31,3 @@ Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
   \code{\link{makeSubmitJobResult}},
   \code{\link{runOSCommand}}
 }
-

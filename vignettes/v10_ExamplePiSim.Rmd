@@ -1,0 +1,85 @@
+---
+title: "Example 1: Approximation of Pi"
+output:
+  html_document:
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{Example 1: Approximation of Pi}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+To get a first insight into the usage of `batchtools`, we start with an exemplary Monte Carlo simulation to approximate $\pi$.
+For background information, see [Wikipedia](https://en.wikipedia.org/wiki/Monte_Carlo_method).
+
+First, a so-called registry object has to be created, which defines a directory where all relevant information, files and results of the computational jobs will be stored.
+There are two different types of registry objects: First, a regular [`Registry`](https://mllg.github.io/batchtools/reference/makeRegistry) which we will use in this example.
+Second, an [`ExperimentRegistry`](https://mllg.github.io/batchtools/reference/makeExperimentRegistry) which provides an alternative way to define computational jobs and thereby is tailored for a broad range of large scale computer experiments (see, for example, [this vignette](ExampleExperiment.html)).
+Here, we use a temporary registry which is stored in the temp directory of the system and gets automatically deleted if you close the R session.
+
+```{r, message = FALSE}
+library(batchtools)
+reg = makeRegistry(file.dir = NA, seed = 1)
+```
+```{r,include=FALSE}
+if (dir.exists("/tmp"))
+  reg$work.dir = "/tmp"
+```
+
+For a permanent registry, set the `file.dir` to a valid path.
+It can then be reused later, e.g., when you login to the system again, by calling the function `loadRegistry(file.dir)`.
+
+When a registry object is created or loaded, it is stored for the active R session as the default.
+Therefore the argument `reg` will be ignored in functions calls of this example, assuming the correct registry is set as default.
+To get the current default registry, [`getDefaultRegistry`](https://mllg.github.io/batchtools/reference/makeRegistry) can be used.
+To switch to another registry, use [`setDefaultRegistry()`](https://mllg.github.io/batchtools/reference/makeRegistry).
+
+First, we create a function which samples $n$ points $(x_i, y_i)$ whereas $x_i$ and $y_i$ are distributed uniformly, i.e. $x_i, y_i \sim \mathcal{U}(0,1)$.
+Next, the distance to the origin $(0, 0)$ is calculated and the fraction of points in the unit circle ($d \leq 1$) is returned.
+```{r}
+piApprox = function(n) {
+  nums = matrix(runif(2 * n), ncol = 2)
+  d = sqrt(nums[, 1]^2 + nums[, 2]^2)
+  4 * mean(d <= 1)
+}
+piApprox(1000)
+```
+We now parallelize `piApprox()` with `batchtools`: We create 10 jobs, each doing a MC simulation with $10^5$ jobs.
+We use [`batchMap()`](https://mllg.github.io/batchtools/reference/batchMap) to define the jobs (note that this does not yet start the calculation):
+```{r}
+batchMap(fun = piApprox, n = rep(1e5, 10))
+```
+The length of the vector or list defines how many different jobs are created, while the elements itself are used as arguments for the function.
+The function `batchMap(fun, ...)` works analogously to `Map(f, ...)` of the base package.
+An overview over the jobs and their IDs can be retrieved with [`getJobTable()`](https://mllg.github.io/batchtools/reference/getJobTable) which returns a data frame with all relevant information:
+```{r}
+names(getJobTable())
+```
+Note that a unique job ID is assigned to each job.
+These IDs can be used to restrict operations to subsets of jobs.
+To actually start the calculation, call [`submitJobs()`](https://mllg.github.io/batchtools/reference/submitJobs).
+The registry and the selected job IDs can be taken as arguments as well as an arbitrary list of resource requirements, which are to be handled by the cluster back end.
+```{r}
+submitJobs(resources = list(walltime = 3600, memory = 1024))
+```
+In this example, a cap for the execution time (so-called walltime) and for the maximum memory requirements are set.
+The progress of the submitted jobs can be checked with [`getStatus()`](https://mllg.github.io/batchtools/reference/getStatus).
+```{r}
+getStatus()
+```
+The resulting output includes the number of jobs in the registry, how many have been submitted, have started to execute on the batch system, are currently running, have successfully completed, and have terminated due to an R exception.
+After jobs have successfully terminated, we can load their results on the master.
+This can be done in a simple fashion by using either [`loadResult()`](https://mllg.github.io/batchtools/reference/loadResult), which returns a single result exactly in the form it was calculated during mapping, or by using [`reduceResults()`](https://mllg.github.io/batchtools/reference/reduceResults), which is a version of `Reduce()` from the base package for registry objects.
+```{r}
+waitForJobs()
+mean(sapply(1:10, loadResult))
+reduceResults(function(x, y) x + y) / 10
+```
+
+If you are absolutely sure that your function works, you can take a shortcut and use *batchtools* in an `lapply` fashion using [`btlapply()`](https://mllg.github.io/batchtools/reference/btlapply).
+This function creates a temporary registry (but you may also pass one yourself), calls [`batchMap()`](https://mllg.github.io/batchtools/reference/reduceResultsList), wait for the jobs to terminate with [`waitForJobs()`](https://mllg.github.io/batchtools/reference/waitForJobs) and then uses [`reduceResultsList()`](https://mllg.github.io/batchtools/reference/reduceResultsList) to return the results.
+
+```{r}
+res = btlapply(rep(1e5, 10), piApprox)
+mean(unlist(res))
+```

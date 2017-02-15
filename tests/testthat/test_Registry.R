@@ -85,52 +85,21 @@ test_that("loadRegistry", {
   expect_null(x$cluster.functions)
 })
 
-test_that("sweepRegistry", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
-  batchMap(identity, 1, reg = reg)
-
-  submitAndWait(reg, 1, resources = list(foo = 1))
-  submitAndWait(reg, 1, resources = list(foo = 2))
-  writeRDS(makeJobCollection(1, reg = reg), file.path(reg$file.dir, "jobs", "test.rds"))
-
-  expect_data_table(reg$resources, nrow = 2)
-  expect_character(list.files(file.path(reg$file.dir, "logs")), len = 2L)
-  if (reg$cluster.functions$store.job)
-    expect_character(list.files(file.path(reg$file.dir, "jobs")), len = 1L)
-
-  expect_true(sweepRegistry(reg), "Registry")
-
-  expect_data_table(reg$resources, nrow = 1)
-  expect_character(list.files(file.path(reg$file.dir, "logs")), len = 1L)
-  if (reg$cluster.functions$store.job)
-    expect_character(list.files(file.path(reg$file.dir, "jobs")), len = 0L)
-  checkTables(reg)
-
-
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
-  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
-  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
-  addExperiments(prob.designs = list(p1 = data.table(i = 1:10)), reg = reg)
-  addJobTags(6:10, "foo", reg = reg)
-  expect_data_table(reg$tags, nrow = 5, any.missing = FALSE)
-  removeExperiments(ids = 6:10, reg = reg)
-  expect_data_table(reg$tags, nrow = 0)
-})
-
 test_that("clearRegistry", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   reg$foo = TRUE
-  batchMap(identity, 1:3, reg = reg)
+  ids = batchMap(identity, 1:3, reg = reg)
   addJobTags(1:2, "bar", reg = reg)
-  submitAndWait(reg, chunkIds(reg = reg, n.chunks = 2))
+  ids[, chunk := chunk(job.id, n.chunks = 2)]
+  submitAndWait(reg, ids)
 
   clearRegistry(reg)
   checkTables(reg, nrow = 0L)
 
-  expect_identical(list.files(file.path(reg$file.dir, "jobs")), character(0))
-  expect_identical(list.files(file.path(reg$file.dir, "logs")), character(0))
-  expect_identical(list.files(file.path(reg$file.dir, "results")), character(0))
-  expect_identical(list.files(file.path(reg$file.dir, "updates")), character(0))
+  expect_identical(list.files(getJobPath(reg)), character(0))
+  expect_identical(list.files(getLogPath(reg)), character(0))
+  expect_identical(list.files(getResultPath(reg)), character(0))
+  expect_identical(list.files(getUpdatePath(reg)), character(0))
   expect_false(file.exists(file.path(reg$file.dir, "user.function.rds")))
 
   expect_identical(batchMap(identity, 1:4, reg = reg), data.table(job.id = 1:4, key = "job.id"))

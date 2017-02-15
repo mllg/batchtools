@@ -1,0 +1,186 @@
+---
+title: "Example 2: Problems and Algorithms"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+vignette: >
+  %\VignetteIndexEntry{Example 2: Problems and Algorithms}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Intro
+
+We stick to a rather simple, but not unrealistic example to explain some further functionalities: Applying two classification learners to the famous iris data set (Anderson 1935), vary a few hyperparameters and evaluate the effect on the classification performance.
+
+First, we create a registry, the central meta-data object which records technical details and the setup of the experiments.
+We use an [`ExperimentRegistry`](https://mllg.github.io/batchtools/reference/makeExperimentRegistry) where the job definition is split into creating problems and algorithms.
+See the paper on [BatchJobs and BatchExperiments](http://www.jstatsoft.org/article/view/v064i11) for a detailed explanation.
+Again, we use a temporary registry and make it the default registry.
+```{r, message = FALSE}
+library(batchtools)
+reg = makeExperimentRegistry(file.dir = NA, seed = 1)
+```
+```{r,include=FALSE}
+if (dir.exists("/tmp"))
+  reg$work.dir = "/tmp"
+```
+
+# Problems and algorithms
+
+By adding a problem to the registry, we can define the data on which certain computational jobs shall work.
+This can be a matrix, data frame or array that always stays the same for all subsequent experiments.
+But it can also be of a more dynamic nature, e.g., subsamples of a dataset or random numbers drawn from a probability distribution .
+Therefore the function [`addProblem()`](https://mllg.github.io/batchtools/reference/addProblem) accepts static parts in its `data` argument, which is passed to the argument `fun` which generates a (possibly stochastic) problem instance.
+For `data`, any R object can be used.
+If only `data` is given, the generated instance is `data`.
+The argument `fun` has to be a function with the arguments `data` and `job` (and optionally other arbitrary parameters).
+The argument `job` is an object of type [`Job`](https://mllg.github.io/batchtools/reference/JobExperiment) which holds additional information about the job.
+
+We want to split the iris data set into a training set and test set.
+In this example we use use subsampling which just randomly takes a fraction of the observations as training set.
+We define a problem function which returns the indices of the respective training and test set for a split with `100 * ratio`% of the observations being in the test set:
+```{r}
+subsample = function(data, job, ratio, ...) {
+  n = nrow(data)
+  train = sample(n, floor(n * ratio))
+  test = setdiff(seq_len(n), train)
+  list(test = test, train = train)
+}
+```
+[`addProblem()`](https://mllg.github.io/batchtools/reference/addProblem) files the problem to the file system and the problem gets recorded in the registry.
+```{r}
+data("iris", package = "datasets")
+addProblem(name = "iris", data = iris, fun = subsample, seed = 42)
+```
+The function call will be evaluated at a later stage on the workers.
+In this process, the `data` part will be loaded and passed to the function.
+Note that we set a problem seed to synchronize the experiments in the sense that the same resampled training and test sets are used for the algorithm comparison in each distinct replication.
+
+The algorithms for the jobs are added to the registry in a similar manner.
+When using [`addAlgorithm()`](https://mllg.github.io/batchtools/reference/addAlgorithm), an identifier as well as the algorithm to apply to are required arguments.
+The algorithm must be given as a function with arguments `job`, `data` and `instance`.
+Further arbitrary arguments (e.g., hyperparameters or strategy parameters) may be defined analogously as for the function in `addProblem`.
+The objects passed to the function via `job` and `data` are here the same as above, while via `instance` the return value of the evaluated problem function is passed.
+The algorithm can return any R object which will automatically be stored on the file system for later retrieval.
+Firstly, we create an algorithm which applies a support vector machine:
+```{r}
+svm.wrapper = function(data, job, instance, ...) {
+  library("e1071")
+  mod = svm(Species ~ ., data = data[instance$train, ], ...)
+  pred = predict(mod, newdata = data[instance$test, ], type = "class")
+  table(data$Species[instance$test], pred)
+}
+addAlgorithm(name = "svm", fun = svm.wrapper)
+```
+
+Secondly, a random forest of classification trees:
+```{r}
+forest.wrapper = function(data, job, instance, ...) {
+  library("ranger")
+  mod = ranger(Species ~ ., data = data[instance$train, ], write.forest = TRUE)
+  pred = predict(mod, data = data[instance$test, ])
+  table(data$Species[instance$test], pred$predictions)
+}
+addAlgorithm(name = "forest", fun = forest.wrapper)
+```
+Both algorithms return a confusion matrix for the predictions on the test set, which will later be used to calculate the misclassification rate.
+
+Note that using the `...` argument in the wrapper definitions allows us to circumvent naming specific design parameters for now.
+This is an advantage if we later want to extend the set of algorithm parameters in the experiment.
+The algorithms get recorded in the registry and the corresponding functions are stored on the file system.
+
+Defined problems and algorithms can be queried:
+```{r}
+getProblemIds()
+getAlgorithmIds()
+```
+The flow to define experiments is summarized in the following figure:
+```{r, echo=FALSE}
+knitr::include_graphics("tikz_prob_algo_simple.png")
+```
+
+
+# Creating jobs
+
+[`addExperiments()`](https://mllg.github.io/batchtools/reference/addExperiments) is used to parametrize the jobs and thereby define computational jobs.
+To do so, you have to pass named lists of parameters to [`addExperiments()`](https://mllg.github.io/batchtools/reference/addExperiments).
+The elements of the respective list (one for problems and one for algorithms) must be named after the problem or algorithm they refer to.
+The data frames contain parameter constellations for the problem or algorithm function where columns must have the same names as the target arguments.
+When the problem design and the algorithm design are combined in [`addExperiments()`](https://mllg.github.io/batchtools/reference/addExperiments), each combination of the parameter sets of the two designs defines a distinct job.
+How often each of these jobs should be computed can be determined with the argument `repls`.
+
+```{r}
+# problem design: try two values for the ratio parameter
+pdes = list(iris = data.frame(ratio = c(0.67, 0.9)))
+
+# algorithm design: try combinations of kernel and epsilon exhaustively,
+# try different number of trees for the forest
+ades = list(
+  svm = expand.grid(kernel = c("linear", "polynomial", "radial"), epsilon = c(0.01, 0.1)),
+  forest = data.frame(ntree = c(100, 500, 1000))
+)
+
+addExperiments(pdes, ades, repls = 5)
+```
+The jobs are now available in the registry with an individual job ID for each.
+The function [`summarizeExperiments()`](https://mllg.github.io/batchtools/reference/summarizeExperiments) returns a table which gives a quick overview over all defined experiments.
+
+```{r}
+summarizeExperiments()
+summarizeExperiments(by = c("problem", "algorithm", "ratio"))
+```
+
+# Before you submit
+Before submitting all jobs to the batch system, we encourage you to test each algorithm individually.
+Or sometimes you want to submit only a subset of experiments because the jobs vastly differ in runtime.
+Another reoccurring task is the collection of results for only a subset of experiments.
+For all these use cases, [`findExperiments()`](https://mllg.github.io/batchtools/reference/findJobs) can be employed to conveniently select a particular subset of jobs.
+It returns the IDs of all experiments that match the given criteria.
+Your selection can depend on substring matches of problem or algorithm IDs using `prob.name` or `algo.name`, respectively.
+You can also pass R expressions, which will be evaluated in your problem parameter setting (`prob.pars`) or algorithm parameter setting (`algo.pars`).
+The expression is then expected to evaluate to a Boolean value.
+Furthermore, you can restrict the experiments to specific replication numbers.
+
+To illustrate [`findExperiments()`](https://mllg.github.io/batchtools/reference/findJobs), we will select two experiments, one with a support vector machine and the other with a random forest and the parameter `ntree = 1000`.
+The selected experiment IDs are then passed to testJob.
+```{r}
+id1 = head(findExperiments(algo.name = "svm"), 1)
+print(id1)
+id2 = head(findExperiments(algo.name = "forest", algo.pars = (ntree == 1000)), 1)
+print(id2)
+testJob(id = id1)
+testJob(id = id2)
+```
+
+If something goes wrong, `batchtools` comes with a bunch of useful debugging utilities (see separate vignette on error handling).
+If everything turns out fine, we can proceed with the calculation.
+
+# Submitting and collecting results
+
+To submit the jobs, we call [`submitJobs()`](https://mllg.github.io/batchtools/reference/submitJobs) and wait for all jobs to terminate using [`waitForJobs()`](https://mllg.github.io/batchtools/reference/waitForJobs).
+```{r}
+submitJobs()
+waitForJobs()
+```
+After jobs are finished, the results can be collected with [`reduceResultsDataTable()`](https://mllg.github.io/batchtools/reference/reduceResultsList) where we directly extract the mean misclassification error:
+```{r}
+results = reduceResultsDataTable(fun = function(res) (list(mce = (sum(res) - sum(diag(res))) / sum(res))))
+head(results)
+```
+
+Next, we merge the results table with the table of job parameters using one of the [join helpers](https://mllg.github.io/batchtools/reference/JoinTables) provided by `batchtools` (here, we use an inner join):
+```{r}
+tab = ijoin(getJobPars(), results)
+head(tab)
+```
+
+We now aggregate the results group-wise.
+You can use [`data.table`](https://cran.r-project.org/package=data.table), `base::aggregate()`, or the [`dplyr`](https://cran.r-project.org/package=dplyr) package for this purpose.
+Here, we use [`data.table`](https://cran.r-project.org/package=data.table) to subset the table to jobs where the ratio is `0.67` and group by algorithm the algorithm hyperparameters:
+```{r}
+tab[ratio == 0.67, list(mmce = mean(mce)), by = c("algorithm", "kernel", "epsilon", "ntree")]
+```

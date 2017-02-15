@@ -4,7 +4,7 @@
 \name{batchtools-package}
 \alias{batchtools}
 \alias{batchtools-package}
-\title{Tools for Computation on Batch Systems}
+\title{batchtools: Tools for Computation on Batch Systems}
 \description{
 For bug reports and feature requests please use the tracker:
 \url{https://github.com/mllg/batchtools}.
@@ -24,3 +24,25 @@ setting the environment variable \dQuote{DEBUGME} to \dQuote{batchtools} before
 loading \pkg{batchtools}.
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/mllg/batchtools}
+  \item Report bugs at \url{https://github.com/mllg/batchtools/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Michel Lang \email{michellang@gmail.com}
+
+Authors:
+\itemize{
+  \item Bernd Bischl \email{bernd_bischl@gmx.de}
+}
+
+Other contributors:
+\itemize{
+  \item Dirk Surmann \email{surmann@statistik.tu-dortmund.de} [contributor]
+}
+
+}

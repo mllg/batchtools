@@ -46,4 +46,3 @@ stopifnot(loadResult(1, reg = tmp) == 101)
 exports = batchExport(unexport = "z", reg = tmp)
 print(exports)
 }
-

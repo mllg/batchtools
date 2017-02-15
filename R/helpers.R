@@ -10,7 +10,7 @@ auto_increment = function(ids, n = 1L) {
 }
 
 ustamp = function() {
-  as.integer(Sys.time())
+  round(as.numeric(Sys.time(), 4L))
 }
 
 npath = function(path, must.work = TRUE) {
@@ -37,25 +37,20 @@ insert = function(x, y) {
   x[order(names2(x))]
 }
 
-writeRDS = function(object, file, wait = FALSE) {
-  if (wait && file.exists(file))
+writeRDS = function(object, file) {
+  if (file.exists(file))
     file.remove(file)
-
   saveRDS(object, file = file)
-
-  if (wait)
-    while(!file.exists(file)) Sys.sleep(0.5)
-
+  while(!file.exists(file)) Sys.sleep(0.5)
   invisible(TRUE)
 }
 
-makeProgressBar = function(..., tokens = list()) {
-  if (getOption("batchtools.verbose", TRUE) && getOption("batchtools.progress", TRUE) && getOption("width") >= 20L) {
-    pb = progress_bar$new(..., show_after = 1, width = getOption("width") - 5L)
-    pb$tick(0L, tokens = tokens)
-    return(pb)
+makeProgressBar = function(...) {
+  if (!batchtools$debug && getOption("batchtools.verbose", TRUE) && getOption("batchtools.progress", TRUE) && getOption("width") >= 20L) {
+    progress_bar$new(...)
+  } else {
+    list(tick = function(len = 1, tokens = list()) NULL, update = function(ratio, tokens) NULL)
   }
-  list(tick = function(len = 1, tokens = list()) NULL, update = function(ratio, tokens) NULL)
 }
 
 seq_row = function(x) {
@@ -64,6 +59,10 @@ seq_row = function(x) {
 
 vlapply = function (x, fun, ..., use.names = TRUE) {
   vapply(X = x, FUN = fun, ..., FUN.VALUE = NA, USE.NAMES = use.names)
+}
+
+viapply = function (x, fun, ..., use.names = TRUE) {
+  vapply(X = x, FUN = fun, ..., FUN.VALUE = NA_integer_, USE.NAMES = use.names)
 }
 
 vnapply = function (x, fun, ..., use.names = TRUE) {
@@ -159,4 +158,9 @@ with_seed = function(seed, expr) {
     on.exit(assign(".Random.seed", state, envir = .GlobalEnv))
   }
   eval.parent(expr)
+}
+
+chsetdiff = function(x, y) {
+  # Note: assumes that x has no duplicates
+  x[chmatch(x, y, 0L) == 0L]
 }

@@ -6,7 +6,7 @@
 #' \code{\link[R6]{R6Class}} to create local and remote linux workers.
 #'
 #' @field nodename Host name. Set via constructor.
-#' @field ncpus Number of VPUs of worker. Set via constructor and defaults to the number of CPUs of the machine.
+#' @field ncpus Number of CPUs. Set via constructor and defaults to a heuristic which tries to detect the number of CPUs of the machine.
 #' @field max.load Maximum load average (of the last 5 min). Set via constructor and defaults to the number of CPUs of the machine.
 #' @field status Status of the worker; one of \dQuote{unknown}, \dQuote{available}, \dQuote{max.cpus} and \dQuote{max.load}.
 #' @section Methods:
@@ -50,20 +50,20 @@ Worker = R6Class("Worker",
         self$script = tail(runOSCommand(Rscript(), args, nodename = nodename)$output, 1L)
       }
 
-      if (is.null(ncpus) || is.null(max.load)) {
-        detected.cpus = as.integer(runOSCommand(self$script, "number-of-cpus")$output)
-        "!DEBUG Detected `detected.cpus` number of CPUs"
-      }
-      self$ncpus = ncpus %??% detected.cpus
-      self$max.load = max.load %??% detected.cpus
+      self$ncpus = ncpus %??% as.integer(self$run("number-of-cpus")$output)
+      self$max.load = max.load %??% self$ncpus
+    },
+
+    run = function(args) {
+      runOSCommand(self$script, args, nodename = self$nodename)
     },
 
     list = function(reg) {
-      stri_join(self$nodename, "#", stri_trim_both(runOSCommand(self$script, c("list-jobs", reg$file.dir))$output))
+      stri_join(self$nodename, "#", stri_trim_both(self$run(c("list-jobs", reg$file.dir))$output))
     },
 
     start = function(reg, fn, outfile) {
-      runOSCommand(self$script, c("start-job", fn, outfile))$output
+      self$run(c("start-job", fn, outfile))$output
     },
 
     kill = function(reg, batch.id) {
@@ -72,8 +72,8 @@ Worker = R6Class("Worker",
     },
 
     update = function(reg) {
-      "!DEBUG Updating Worker '`self$nodename`'"
-      res = runOSCommand(self$script, c("status", reg$file.dir), nodename = self$nodename)
+      "!DEBUG [Worker]: Updating Worker '`self$nodename`'"
+      res = self$run(c("status", reg$file.dir))
       res = as.numeric(stri_split_regex(res$output, "\\s+")[[1L]])
       names(res) = c("load", "n.rprocs", "n.rprocs.50", "n.jobs")
       self$status = if (res["load"] > self$max.load) {

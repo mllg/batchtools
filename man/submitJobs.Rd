@@ -4,7 +4,8 @@
 \alias{submitJobs}
 \title{Submit Jobs to the Batch Systems}
 \usage{
-submitJobs(ids = NULL, resources = list(), reg = getDefaultRegistry())
+submitJobs(ids = NULL, resources = list(), sleep = default.sleep,
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -20,6 +21,10 @@ See notes for reserved special resource names.
 Defaults can be stored in the configuration file by providing the named list \code{default.resources}.
 Settings in \code{resources} overwrite those in \code{default.resources}.}
 
+\item{sleep}{[\code{function(i)} | \code{numeric(1)}]\cr
+Function which returns the duration to sleep in the \code{i}-th iteration between temporary errors.
+Alternatively, you can pass a single positive numeric value.}
+
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
@@ -31,7 +36,8 @@ Submits defined jobs to the batch system.
 
 If an additional column \dQuote{chunk} is found in the table \code{ids},
 jobs will be grouped accordingly to be executed sequentially on the same slave.
-The utility function \code{\link{chunkIds}} can assist in grouping jobs.
+The utility functions \code{\link{chunk}}, \code{\link{binpack}} and \code{\link{lpt}}
+can assist in grouping jobs.
 Jobs are submitted in the order of chunks, i.e. jobs which have chunk number
 \code{unique(ids$chunk)[1]} first, then jobs with chunk number \code{unique(ids$chunk)[2]}
 and so on. If no chunks are provided, jobs are submitted in the order of \code{ids$job.id}.
@@ -48,8 +54,7 @@ and after the job and the difference is stored in the internal database. Note th
 neither work reliably for external code like C/C++ nor in combination with threading.
 
 If your cluster supports array jobs, you can set the resource \code{chunks.as.arrayjobs} to \code{TRUE} in order
-to execute chunks as job arrays. To do so, the job must be repeated \code{n.array.jobs} times via the cluster functions template
-(\code{n.array.jobs} is automatically available while brewing the template).
+to execute chunks as job arrays. To do so, the job must be repeated \code{nrow(jobs)} times via the cluster functions template.
 The function \code{\link{doJobCollection}} (which is called on the slave) now retrieves the repetition number from the environment
 and restricts the computation to the respective job in the \code{\link{JobCollection}}.
 
@@ -127,4 +132,3 @@ getJobTable(reg = tmp)[, .(job.id, time.running)]
 grepLogs(pattern = "parallelMap", reg = tmp)
 }
 }
-

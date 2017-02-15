@@ -14,12 +14,14 @@
 #' @family debug
 #' @export
 resetJobs = function(ids = NULL, reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE, sync = TRUE, running.ok = FALSE)
+  assertRegistry(reg, writeable = TRUE, running.ok = FALSE)
   ids = convertIds(reg, ids, default = noIds())
 
-  info("Resetting %i jobs in DB.", nrow(ids))
-  cols = c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash")
-  reg$status[ids, (cols) := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_), on = "job.id"]
+  info("Resetting %i jobs in DB ...", nrow(ids))
+  cols = c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "log.file", "job.hash")
+  reg$status[ids, (cols) := list(NA_real_, NA_real_, NA_real_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_, NA_character_), on = "job.id"]
+  fns = getResultFiles(reg$file.dir, ids$job.id)
+  file.remove(fns[file.exists(fns)])
 
   sweepRegistry(reg)
   invisible(ids)

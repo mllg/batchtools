@@ -2,7 +2,7 @@
 ## 'default.resources' as a named list.
 
 ## Remove [*] if arrayjobs are not supported
-#BSUB-J <%= job.hash %>[1-<%= n.array.jobs %>]      # name of the job / number of jobs in chunk
+#BSUB-J <%= job.hash %>[1-<%= nrow(jobs) %>]        # name of the job / number of jobs in chunk
 #BSUB-o <%= log.file %>                             # output is sent to logfile, stdout + stderr by default
 #BSUB-q <%= resources$queue %>                      # Job queue
 #BSUB-W <%= resources$walltime %>                   # Walltime in minutes

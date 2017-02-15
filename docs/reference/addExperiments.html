@@ -90,7 +90,7 @@ E.g., if you have two problems <code>p1</code> and <code>p2</code> and three alg
     
 
     <pre><span class='fu'>addExperiments</span>(<span class='kw'>prob.designs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>algo.designs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>repls</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>combine</span> <span class='kw'>=</span> <span class='st'>"crossprod"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
+  <span class='kw'>combine</span> <span class='kw'>=</span> <span class='st'>"crossprod"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -114,7 +114,7 @@ Default is &#8220;crossprod&#8221; which combines each row of the problem design
 in a cross-product fashion. Set to &#8220;bind&#8221; to just <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code> the tables of
 problem and algorithm designs where the shorter table is repeated if necessary.</dd>
       <dt>reg</dt>
-      <dd>[<code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>]
+      <dd>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]
 Registry. If not explicitly passed, uses the last created registry.</dd>
     </dl>
     
@@ -124,28 +124,27 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other Experiment: <code><a href='ExperimentRegistry.html'>ExperimentRegistry</a></code>,
-  <code><a href='removeExperiments.html'>removeExperiments</a></code>,
+    <p>Other Experiment: <code><a href='removeExperiments.html'>removeExperiments</a></code>,
   <code><a href='summarizeExperiments.html'>summarizeExperiments</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='ExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;~/.batchtools.conf.R&#39; ...</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</span></div><div class='input'>
 <span class='co'># add first problem</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>...</span>) <span class='fu'>rnorm</span>(<span class='no'>n</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>sd</span>)
-<span class='fu'><a href='ProblemAlgorithm.html'>addProblem</a></span>(<span class='st'>"p1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"p1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
 <span class='co'># add second problem</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>lamba</span>, <span class='no'>...</span>) <span class='fu'>rexp</span>(<span class='no'>n</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='no'>lambda</span>)
-<span class='fu'><a href='ProblemAlgorithm.html'>addProblem</a></span>(<span class='st'>"p2"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"p2"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
 <span class='co'># add first algorithm</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>instance</span>, <span class='no'>method</span>, <span class='no'>...</span>) <span class='kw'>if</span> (<span class='no'>method</span> <span class='kw'>==</span> <span class='st'>"mean"</span>) <span class='fu'>mean</span>(<span class='no'>instance</span>) <span class='kw'>else</span> <span class='fu'>median</span>(<span class='no'>instance</span>)
-<span class='fu'><a href='ProblemAlgorithm.html'>addAlgorithm</a></span>(<span class='st'>"a1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='st'>"a1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
 <span class='co'># add second algorithm</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>se</span>(<span class='no'>instance</span>)
-<span class='fu'><a href='ProblemAlgorithm.html'>addAlgorithm</a></span>(<span class='st'>"a2"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='st'>"a2"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
 <span class='co'># define problem and algorithm designs</span>
 <span class='no'>prob.designs</span> <span class='kw'>=</span> <span class='no'>algo.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>()

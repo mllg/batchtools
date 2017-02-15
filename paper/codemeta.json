@@ -3,20 +3,34 @@
   "@type": "Code",
   "author": [
     {
-      "@id": "http://orcid.org/0000-0001-9754-0393",
+      "@id": "https://orcid.org/0000-0001-9754-0393",
       "@type": "Person",
       "email": "lang@statistik.tu-dortmund.de",
       "name": "Michel Lang",
       "affiliation": "TU Dortmund University"
+    },
+    {
+      "@id": "https://orcid.org/0000-0001-6002-6980",
+      "@type": "Person",
+      "email": "bernd.bischl@stat.uni-muenchen.de",
+      "name": "Bernd Bischl",
+      "affiliation": "LMU Munich"
+    },
+    {
+      "@id": "https://orcid.org/0000-0003-0873-137X",
+      "@type": "Person",
+      "email": "surmann@statistik.tu-dortmund.de",
+      "name": "Dirk Surmann",
+      "affiliation": "TU Dortmund University"
     }
   ],
-  "identifier": "",
+  "identifier": "https://doi.org/10.5281/zenodo.165184",
   "codeRepository": "https://github.com/mllg/batchtools",
-  "datePublished": "2016-11-07",
-  "dateModified": "2016-11-07",
-  "dateCreated": "2016-11-07",
-  "description": "Tools to work on managed batch systems",
-  "keywords": "r,high-performance computing,batch systems",
+  "datePublished": "2016-11-10",
+  "dateModified": "2016-11-10",
+  "dateCreated": "2016-11-10",
+  "description": "Tools for computation on batch systems",
+  "keywords": "r, parallelization, high-performance computing, batch systems",
   "license": "GPL v3.0",
   "title": "batchtools",
   "version": "v0.9.0"

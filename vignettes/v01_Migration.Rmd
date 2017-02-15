@@ -1,0 +1,92 @@
+---
+title: "Migrating from BatchJobs/BatchExperiments"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+vignette: >
+  %\VignetteIndexEntry{Migration from BatchJobs/BatchExperiments}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r,include = FALSE}
+library(batchtools)
+```
+
+The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) is discontinued because of the following reasons:
+
+* Maintainability: The packages [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) are tightly connected which makes maintaining difficult. Changes have to be synchronized and tested against the current CRAN versions for compatibility. Furthermore, BatchExperiments violates CRAN policies by calling internal functions of BatchJobs.
+* Data base issues: Although we invested weeks to mitigate issues with locks of the SQLite data base or file system (staged queries, file system timeouts, ...), BatchJobs kept working unreliable on some systems with high latency or specific file systems. This made BatchJobs unusable for many users.
+
+[BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) will remain on CRAN, but new features are unlikely to be ported back.
+
+
+# Comparison with BatchJobs/BatchExperiments
+
+## Internal changes
+* batchtools does not use SQLite anymore.
+  Instead, all the information is stored directly in the registry using [data.tables](https://cran.r-project.org/package=data.table) acting as an in-memory database. As a side effect, many operations are much faster.
+* Nodes do not have to access the registry.
+  [submitJobs()](https://mllg.github.io/batchtools/reference/submitJobs) stores a temporary object of type [JobCollection](https://mllg.github.io/batchtools/reference/JobCollection) on the file system which holds all the information necessary to execute a chunk of jobs via [doJobCollection()](https://mllg.github.io/batchtools/reference/doJobCollection) on the node.
+  This avoids file system locks because each job accesses only one file exclusively.
+* `ClusterFunctionsMulticore` now uses the parallel package for multicore execution.
+  `ClusterFunctionsSSH` can still be used to emulate a scheduler-like system which respects the work load on the local machine.
+
+## Interface changes
+* batchtools remembers the last created or loaded Registry and sets it as default registry.
+  This way, you do not need to pass the registry around anymore.
+  If you need to work with multiple registries simultaneously on the other hand, you can still do so by explicitly passing registries to the functions.
+* The template file format has changed:
+    - The scheduler should directly execute the command `Rscript -e 'batchtools::doJobCollection(<filename>)'`.
+      There is no intermediate R source file like in BatchJobs.
+    - All information stored in the object `JobCollection` can be accessed while brewing the template.
+      Some variable names have changed and need to be adapted though.
+      See the vignette on cluster functions for more information.
+* Most functions now return a [data.table](https://cran.r-project.org/package=data.table) which is keyed with the `job.id`.
+  This way, return values can be joined together easily and efficient (see this [help page](https://mllg.github.io/batchtools/reference/JoinTables) for some examples).
+* The building blocks of a problem has been renamed from `static` and `dynamic` to the more intuitive `data` and `fun`.
+  Thus, algorithm function should have the formal arguments `job`, `data` and `instance`.
+* The function `makeDesign` has been removed.
+  Parameters can be defined by just passing a `data.frame` or `data.table` to [addExperiments](https://mllg.github.io/batchtools/reference/addExperiments).
+  For exhaustive designs, use `expand.grid()` or `data.table::CJ()`.
+
+## New features
+* Support for Docker Swarm via `ClusterFunctionsDocker`.
+* Jobs can now be tagged and untagged to provide an easy way to group them.
+* Some resources like the number of CPUs are now optionally passed to [parallelMap](https://cran.r-project.org/package=parallelMap).
+  This eases nested parallelization, e.g. to use multicore parallelization on the slave by just setting a resource on the master.
+  See [submitJobs()](https://mllg.github.io/batchtools/reference/submitJobs) for an example.
+* `ClusterFunctions` are now more flexible in general as they can define hook functions which will be called at certain events.
+  [ClusterFunctionsDocker](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsDocker.R) is an example use case which implements a housekeeping routine.
+  This routine is called every time before a job is about to get submitted to the scheduler (in the case: the Docker Swarm) via the hook `pre.submit` and every time directly after the registry synchronized jobs stored on the file system via the hook `post.sync`.
+* More new features are covered in the [NEWS](https://mllg.github.io/batchtools/news/index.html).
+
+# Porting to batchtools
+
+The following table assists in porting to batchtools by mapping BatchJobs/BatchExperiments functions to their counterparts in batchtools.
+The table does not cover functions which are (a) used only internally in BatchJobs and (b) functions which have not been renamed.
+
+| BatchJobs                | batchtools                                        |
+| -------------            | :-------------:                                   |
+| `addRegistryPackages`    | Set `reg$packages` or `reg$namespaces`, call [saveRegistry](https://mllg.github.io/batchtools/reference/saveRegistry) |
+| `addRegistrySourceDirs`  | -                                                                                                                     |
+| `addRegistrySourceFiles` | Set `reg$source`, call [saveRegistry](https://mllg.github.io/batchtools/reference/saveRegistry)                       |
+| `batchExpandGrid`        | [batchMap](https://mllg.github.io/batchtools/reference/batchMap): `batchMap(..., args = CJ(x = 1:3, y = 1:10))`       |
+| `batchMapQuick`          | [btmapply](https://mllg.github.io/batchtools/reference/btlapply)                                                      |
+| `batchReduceResults`     | -                                                                                                                     |
+| `batchUnexport`          | [batchExport](https://mllg.github.io/batchtools/reference/batchExport)                                                |
+| `filterResults`          | -                                                                                                                     |
+| `getJobIds`              | [findJobs](https://mllg.github.io/batchtools/reference/findJobs)                                                      |
+| `getJobInfo`             | [getJobStatus](https://mllg.github.io/batchtools/reference/getJobTable)                                               |
+| `getJob`                 | [makeJob](https://mllg.github.io/batchtools/reference/JobExperiment)                                                  |
+| `getJobParamDf`          | [getJobPars](https://mllg.github.io/batchtools/reference/getJobTable)                                                 |
+| `loadResults`            | [reduceResultsList](https://mllg.github.io/batchtools/reference/reduceResultsList)                                    |
+| `reduceResultsDataFrame` | [reduceResultsDataTable](https://mllg.github.io/batchtools/reference/reduceResultsList)                               |
+| `reduceResultsMatrix`    | [reduceResultsList](https://mllg.github.io/batchtools/reference/reduceResultsList) + `do.call(rbind, res)`            |
+| `reduceResultsVector`    | [reduceResultsDataTable](https://mllg.github.io/batchtools/reference/reduceResultsList)                               |
+| `setJobFunction`         | -                                                                                                                     |
+| `setJobNames`            | -                                                                                                                     |
+| `showStatus`             | [getStatus](https://mllg.github.io/batchtools/reference/getStatus)                                                    |
+

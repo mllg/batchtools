@@ -22,11 +22,12 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
     stop("ClusterFunctions implementation does not support the killing of jobs")
 
   ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
-  tab = reg$status[.findOnSystem(ids = ids, reg = reg), c("job.id", "started", "batch.id"), with = FALSE]
+  tab = reg$status[.findOnSystem(ids = ids, reg = reg), c("job.id", "started", "batch.id")]
 
   if (nrow(tab) == 0L)
     return(data.table(job.id = integer(0L), batch.id = character(0L), killed = logical(0L)))
 
+  runHook(reg, "pre.kill", tab)
   info("Trying to kill %i jobs ...", nrow(tab))
 
   # kill queued jobs first, otherwise they might get started while killing running jobs
@@ -48,9 +49,12 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
 
   # reset killed jobs
   syncRegistry(reg = reg)
-  cols = c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "job.hash")
-  reg$status[tab[tab$killed], (cols) := list(NA_integer_, NA_integer_, NA_integer_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_)]
-
+  cols = c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "log.file", "job.hash")
+  reg$status[tab[tab$killed], (cols) := list(NA_real_, NA_real_, NA_real_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_, NA_character_)]
   saveRegistry(reg)
-  tab[, c("job.id", "batch.id", "killed"), with = FALSE]
+
+  tab = setkeyv(tab[, c("job.id", "batch.id", "killed")], "job.id")
+  Sys.sleep(reg$cluster.functions$scheduler.latency)
+  runHook(reg, "post.kill", tab)
+  return(tab)
 }

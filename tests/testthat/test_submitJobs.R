@@ -10,10 +10,12 @@ test_that("submitJobs", {
 
   expect_integer(reg$status[1:2, resource.id], any.missing = FALSE)
   expect_character(reg$status[1:2, batch.id], any.missing = FALSE)
-  expect_integer(reg$status[1:2, submitted], any.missing = FALSE)
+  expect_numeric(reg$status[1:2, submitted], any.missing = FALSE)
   expect_true(is.na(reg$status[3, submitted]))
   x = reg$resources[1, resources][[1L]]
   y = insert(reg$default.resources, list(foo = "bar"))
+  if (isTRUE(y$chunks.as.arrayjobs) && is.na(reg$cluster.functions$array.var))
+    y$chunks.as.arrayjobs = NULL
   expect_equal(x[order(names2(x))], y[order(names2(y))])
 
   submitAndWait(reg, 3, resources = list(walltime = 100, memory = 500))

@@ -24,14 +24,24 @@
 #' @importFrom brew brew
 #' @importFrom progress progress_bar
 #' @importFrom rappdirs user_config_dir
-#' @importFrom stats runif
+#' @importFrom stats runif predict pexp
 "_PACKAGE"
+
+#' @title Deprecated function in the batchtools package
+#' @rdname batchtools-deprecated
+#' @name batchtools-deprecated
+#' @description
+#' The following functions have been deprecated:
+#' \tabular{rl}{
+#'   \code{chunkIds} \tab deprecated in favor of \code{\link{chunk}}, \code{\link{lpt}} and \code{\link{binpack}}\cr
+#' }
+NULL
 
 batchtools = new.env(parent = emptyenv())
 batchtools$debug = FALSE
-batchtools$hooks = data.table(
-  name =   c("pre.sync", "post.sync", "pre.do.collection", "post.do.collection", "pre.submit", "post.submit"),
-  remote = c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE)
+batchtools$hooks = list(
+  remote = c("pre.do.collection", "post.do.collection"),
+  local  = c("pre.sync", "post.sync", "pre.submit.job", "post.submit.job", "pre.submit", "post.submit", "pre.kill", "post.kill")
 )
 
 .onLoad = function(libname, pkgname) { # nocov start
@@ -41,6 +51,6 @@ batchtools$hooks = data.table(
   }
 } # nocov end
 
-.onUnload = function (libpath) {
-  library.dynam.unload("batchtools", libpath) # nocov
-}
+.onUnload = function (libpath) { # nocov start
+  library.dynam.unload("batchtools", libpath)
+} # nocov end

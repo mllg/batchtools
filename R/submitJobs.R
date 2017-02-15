@@ -5,7 +5,8 @@
 #'
 #' If an additional column \dQuote{chunk} is found in the table \code{ids},
 #' jobs will be grouped accordingly to be executed sequentially on the same slave.
-#' The utility function \code{\link{chunkIds}} can assist in grouping jobs.
+#' The utility functions \code{\link{chunk}}, \code{\link{binpack}} and \code{\link{lpt}}
+#' can assist in grouping jobs.
 #' Jobs are submitted in the order of chunks, i.e. jobs which have chunk number
 #' \code{unique(ids$chunk)[1]} first, then jobs with chunk number \code{unique(ids$chunk)[2]}
 #' and so on. If no chunks are provided, jobs are submitted in the order of \code{ids$job.id}.
@@ -22,8 +23,7 @@
 #' neither work reliably for external code like C/C++ nor in combination with threading.
 #'
 #' If your cluster supports array jobs, you can set the resource \code{chunks.as.arrayjobs} to \code{TRUE} in order
-#' to execute chunks as job arrays. To do so, the job must be repeated \code{n.array.jobs} times via the cluster functions template
-#' (\code{n.array.jobs} is automatically available while brewing the template).
+#' to execute chunks as job arrays. To do so, the job must be repeated \code{nrow(jobs)} times via the cluster functions template.
 #' The function \code{\link{doJobCollection}} (which is called on the slave) now retrieves the repetition number from the environment
 #' and restricts the computation to the respective job in the \code{\link{JobCollection}}.
 #'
@@ -53,6 +53,9 @@
 #'   See notes for reserved special resource names.
 #'   Defaults can be stored in the configuration file by providing the named list \code{default.resources}.
 #'   Settings in \code{resources} overwrite those in \code{default.resources}.
+#' @param sleep [\code{function(i)} | \code{numeric(1)}]\cr
+#'   Function which returns the duration to sleep in the \code{i}-th iteration between temporary errors.
+#'   Alternatively, you can pass a single positive numeric value.
 #' @template reg
 #' @return [\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 #' @export
@@ -111,7 +114,7 @@
 #' # There should also be a note in the log:
 #' grepLogs(pattern = "parallelMap", reg = tmp)
 #' }
-submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
+submitJobs = function(ids = NULL, resources = list(), sleep = default.sleep, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, sync = TRUE)
   assertList(resources, names = "strict")
   resources = insert(reg$default.resources, resources)
@@ -123,21 +126,26 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
     assertCount(resources$ncpus, positive = TRUE)
   if (hasName(resources, "measure.memory"))
     assertFlag(resources$measure.memory)
-  if (hasName(resources, "chunks.as.arrayjobs"))
+  if (hasName(resources, "chunks.as.arrayjobs")) {
     assertFlag(resources$chunks.as.arrayjobs)
+    if (resources$chunks.as.arrayjobs && is.na(reg$cluster.functions$array.var)) {
+      info("Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions '%s'", reg$cluster.functions$name)
+      resources$chunks.as.arrayjobs = NULL
+    }
+  }
+  sleep = getSleepFunction(sleep)
 
-  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk", keep.order = TRUE)
+  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk")
   if (nrow(ids) == 0L)
     return(noIds())
 
   # handle chunks
   if (hasName(ids, "chunk")) {
-    assertInteger(ids$chunk, any.missing = FALSE)
+    ids$chunk = asInteger(ids$chunk, any.missing = FALSE)
     chunks = unique(ids$chunk)
   } else {
     chunks = ids$chunk = seq_row(ids)
   }
-  setkeyv(ids, "job.id")
 
   # check for jobs already on system
   on.sys = .findOnSystem(reg = reg, cols = c("job.id", "batch.id"))
@@ -150,7 +158,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   if (hasName(reg, "max.concurrent.jobs")) {
     assertInt(reg$max.concurrent.jobs, lower = 0L)
     if (uniqueN(on.sys, by = "batch.id") + length(chunks) > reg$max.concurrent.jobs) {
-      "!DEBUG Limiting the number of concurrent jobs to `reg$max.concurrent.jobs`"
+      "!DEBUG [submitJobs]: Limiting the number of concurrent jobs to `reg$max.concurrent.jobs`"
       max.concurrent.jobs = reg$max.concurrent.jobs
     }
   }
@@ -158,7 +166,7 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   # handle resources
   res.hash = digest(resources)
   resource.hash = NULL
-  res.id = reg$resources[resource.hash == res.hash, "resource.id", with = FALSE]$resource.id
+  res.id = reg$resources[resource.hash == res.hash, "resource.id"]$resource.id
   if (length(res.id) == 0L) {
     res.id = auto_increment(reg$resources$resource.id)
     reg$resources = rbind(reg$resources, data.table(resource.id = res.id, resource.hash = res.hash, resources = list(resources)))
@@ -167,56 +175,65 @@ submitJobs = function(ids = NULL, resources = list(), reg = getDefaultRegistry()
   on.exit(saveRegistry(reg))
 
   info("Submitting %i jobs in %i chunks using cluster functions '%s' ...", nrow(ids), length(chunks), reg$cluster.functions$name)
-  update = data.table(submitted = NA_integer_, started = NA_integer_, done = NA_integer_, error = NA_character_,
-    memory = NA_real_, resource.id = res.id, batch.id = NA_character_, job.hash = NA_character_)
 
-  default.wait = 5
   chunk = NULL
-  pb = makeProgressBar(total = length(chunks), format = ":status [:bar] :percent eta: :eta", tokens = list(status = "Submitting"))
+  runHook(reg, "pre.submit")
+
+  pb = makeProgressBar(total = length(chunks), format = ":status [:bar] :percent eta: :eta")
+  pb$tick(0, tokens = list(status = "Submitting"))
 
   for (ch in chunks) {
-    wait = default.wait
-    ids.chunk = ids[chunk == ch, "job.id", with = FALSE]
+    ids.chunk = ids[chunk == ch, "job.id"]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
-      writeRDS(jc, file = jc$uri, wait = TRUE)
+      writeRDS(jc, file = jc$uri)
 
     if (!is.na(max.concurrent.jobs)) {
       # count chunks or job.id
+      i = 1L
       repeat {
         n.on.sys = uniqueN(getBatchIds(reg), by = "batch.id")
-        "!DEBUG Detected `n.on.sys` batch jobs on system (`max.concurrent.jobs` allowed concurrently)"
+        "!DEBUG [submitJobs]: Detected `n.on.sys` batch jobs on system (`max.concurrent.jobs` allowed concurrently)"
 
         if (n.on.sys < max.concurrent.jobs)
           break
         pb$tick(0, tokens = list(status = "Waiting   "))
-        Sys.sleep(wait)
-        wait = wait * 1.025
+        sleep(i)
+        i = i + 1L
       }
     }
 
+    # remove old result files
+    fns = getResultFiles(reg$file.dir, ids.chunk$job.id)
+    file.remove(fns[file.exists(fns)])
+
+    i = 1L
     repeat {
-      runHook(reg, "pre.submit")
+      runHook(reg, "pre.submit.job")
       now = ustamp()
       submit = reg$cluster.functions$submitJob(reg = reg, jc = jc)
 
       if (submit$status == 0L) {
-        update[,  c("submitted", "batch.id", "job.hash") := list(now, submit$batch.id, jc$job.hash)]
-        reg$status[ids.chunk, names(update) := update]
-        runHook(reg, "post.submit")
+        reg$status[ids.chunk,
+          c("submitted", "started", "done",   "error",       "memory", "resource.id", "batch.id",      "log.file",      "job.hash") :=
+          list(now,      NA_real_,  NA_real_, NA_character_, NA_real_, res.id,        submit$batch.id, submit$log.file, jc$job.hash)]
+        runHook(reg, "post.submit.job")
         break
       } else if (submit$status > 0L && submit$status < 100L) {
         # temp error
-        pb$tick(0L, tokens = list(status = submit$msg))
-        Sys.sleep(wait)
-        wait = wait * 1.025
+        pb$tick(0, tokens = list(status = submit$msg))
+        sleep(i)
+        i = i + 1L
       } else if (submit$status > 100L && submit$status <= 200L) {
         # fatal error
         stopf("Fatal error occurred: %i. %s", submit$status, submit$msg)
       }
     }
-    pb$tick(tokens = list(status = "Submitting"))
+    pb$tick(len = 1, tokens = list(status = "Submitting"))
   }
+
+  Sys.sleep(reg$cluster.functions$scheduler.latency)
+  runHook(reg, "post.submit")
 
   # return ids, registry is saved via on.exit()
   return(invisible(ids))

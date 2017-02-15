@@ -30,8 +30,7 @@ log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=<%= resources$ncpus %>
 #SBATCH --mem-per-cpu=<%= resources$memory %>
-## remove this line if your cluster does not support arrayjobs
-#SBATCH --array=1-<%= n.array.jobs %>
+<%= if (array.jobs) sprintf("#SBATCH --array=1-%i", nrow(jobs)) else "" %>
 
 ## Initialize work environment like
 ## source /etc/profile
@@ -42,4 +41,4 @@ export DEBUGME=<%= Sys.getenv("DEBUGME") %>
 
 ## Run R:
 ## we merge R output with stdout from SLURM, which gets then logged via --output option
-R CMD BATCH --no-save --no-restore "<%= rscript %>" /dev/stdout
+Rscript -e 'batchtools::doJobCollection("<%= uri %>")'

@@ -1,7 +1,7 @@
 #' @useDynLib batchtools fill_gaps
 readLog = function(id, missing.as.empty = FALSE, reg = getDefaultRegistry()) {
-  tab = reg$status[id, c("job.id", "done", "job.hash"), with = FALSE, nomatch = NA]
-  log.file = file.path(reg$file.dir, "logs", sprintf("%s.log", tab$job.hash))
+  tab = reg$status[id, c("job.id", "job.hash", "log.file"), nomatch = NA]
+  log.file = getLogFiles(reg$file.dir, tab$job.hash, tab$log.file)
 
   if (is.na(tab$job.hash) || !file.exists(log.file)) {
     if (missing.as.empty)
@@ -48,22 +48,22 @@ grepLogs = function(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE, reg
   assertString(pattern, min.chars = 1L)
   assertFlag(ignore.case)
   assertFlag(fixed)
-  job.hash = matches = NULL
+  job.id = job.hash = log.file = matches = NULL
 
-  ids = convertIds(reg, ids)
-  tab = filter(reg$status[!is.na(job.hash)], ids, c("job.id", "job.hash"))
+  ids = convertIds(reg, ids, default = .findStarted(reg = reg))
+  tab = filter(reg$status[!is.na(job.hash)], ids)[, list(job.id = job.id, hash = sprintf("%s-%s", job.hash, log.file))]
   if (nrow(tab) == 0L)
     return(data.table(job.id = integer(0L), matches = character(0L)))
 
-  setorderv(tab, "job.hash")
+  setorderv(tab, "hash")
   res = data.table(job.id = tab$job.id, matches = NA_character_)
   hash.before = ""
   matcher = if (fixed) stri_detect_fixed else stri_detect_regex
 
   for (i in seq_row(tab)) {
-    if (hash.before != tab$job.hash[i]) {
+    if (hash.before != tab$hash[i]) {
       log = readLog(tab[i], missing.as.empty = TRUE, reg = reg)
-      hash.before = tab$job.hash[i]
+      hash.before = tab$hash[i]
     }
 
     if (nrow(log) > 0L) {

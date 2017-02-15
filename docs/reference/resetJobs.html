@@ -81,13 +81,13 @@
     </div>
 
     
-    <p>Resets the computational state of jobs in the <code><a href='Registry.html'>Registry</a></code>.
+    <p>Resets the computational state of jobs in the <code><a href='makeRegistry.html'>Registry</a></code>.
 This function automatically checks if any of the jobs to reset is either pending or running.
 However, if the implemented heuristic fails, this can lead to inconsistencies in the data base.
 Use with care while jobs are running.</p>
     
 
-    <pre><span class='fu'>resetJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='Registry.html'>getDefaultRegistry</a></span>())</pre>
+    <pre><span class='fu'>resetJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -98,8 +98,8 @@ with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
 If not set, defaults to no job.</dd>
       <dt>reg</dt>
-      <dd>[<code><a href='Registry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='Registry.html'>setDefaultRegistry</a></code>).</dd>
+      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>

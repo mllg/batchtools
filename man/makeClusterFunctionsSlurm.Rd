@@ -5,7 +5,8 @@
 \title{ClusterFunctions for Slurm Systems}
 \usage{
 makeClusterFunctionsSlurm(template = findTemplateFile("slurm"),
-  clusters = NULL)
+  clusters = NULL, array.jobs = TRUE, scheduler.latency = 1,
+  fs.latency = 65)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -24,6 +25,19 @@ the first one found:
 If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.
 If only one cluster is present, this argument may be omitted.
 Note that you should not select the cluster in your template file via \code{#SBATCH --clusters}.}
+
+\item{array.jobs}{[\code{logical(1)}]\cr
+If array jobs are disabled on the computing site, set to \code{FALSE}.}
+
+\item{scheduler.latency}{[\code{numeric(1)}]\cr
+Time to sleep after important interactions with the scheduler to ensure a sane state.
+Currently only triggered after calling \code{\link{submitJobs}}.}
+
+\item{fs.latency}{[\code{numeric(1)}]\cr
+Expected maximum latency of the file system, in seconds.
+Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
+access files and directories.
+Usually safe to set to \code{NA} which disables the expensive heuristic if you are working on a local file system.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
@@ -55,7 +69,6 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsSGE}},
   \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsSocket}},
-  \code{\link{makeClusterFunctionsTorque}},
+  \code{\link{makeClusterFunctionsTORQUE}},
   \code{\link{makeClusterFunctions}}
 }
-

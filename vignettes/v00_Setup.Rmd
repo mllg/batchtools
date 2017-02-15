@@ -1,0 +1,82 @@
+---
+title: "Setup for batchtools"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+vignette: >
+  %\VignetteIndexEntry{Setup}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r,include = FALSE}
+library(batchtools)
+```
+
+# Cluster Functions
+
+The communication with the batch system is managed via so-called cluster functions.
+They are created with the constructor [makeClusterFunctions](https://mllg.github.io/batchtools/reference/makeClusterFunctions) which defines how jobs are submitted on your system.
+Furthermore, you may provide functions to list queued/running jobs and to kill jobs.
+
+Usually you do not have to start from scratch but can just use one of the cluster functions which ship with the package:
+
+* Interactive Cluster Functions (default): [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsInteractive), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsInteractive.R)
+* Multicore Cluster Functions: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsMulticore), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsMulticore.R)
+* Socket Cluster Functions: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSocket), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSocket.R)
+* Makeshift SSH cluster: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSSH), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSSH.R)
+* Docker Swarm: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsDocker), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsDocker.R)
+* IBM Spectrum Load Sharing Facility (LSF): [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsLSF), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsLSF.R)
+* OpenLava: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsOpenLava), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsOpenLava.R)
+* Univa Grid Engine / Oracle Grid Engine (OGE) / Sun Grid Engine (SGE): [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSGE), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSGE.R)
+* Slurm: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSlurm), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSlurm.R)
+* TORQUE/OpenPBS: [docs](https://mllg.github.io/batchtools/reference/makeClusterFunctionsTORQUE), [implementation](https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsTORQUE.R)
+
+To use the package with the socket cluster functions, you would call the respective constructor [makeClusterFunctionsSocket()](https://mllg.github.io/batchtools/reference/makeClusterFunctionsSocket):
+```{r}
+reg = makeRegistry(NA)
+reg$cluster.functions = makeClusterFunctionsSocket(2)
+```
+To make this selection permanent for this registry, save the Registry with [saveRegistry](https://mllg.github.io/batchtools/reference/makeRegistry).
+To make your cluster function selection permanent for a specific system across R sessions for all new Registries, you can set up a configuration file (see below).
+
+If you have trouble debugging your cluster functions, you can enable the debug mode for extra output.
+To do so, install the [debugme package](https://cran.r-project.org/package=debugme) and set the environment variable `DEBUGME` to `batchtools` before you load the `batchtools` package:
+```{r,eval=FALSE}
+Sys.setenv(DEBUGME = "batchtools")
+library(batchtools)
+```
+
+# Template files
+
+Many cluster functions require a template file as argument.
+These templates are used to communicate with the scheduler and contain placeholders to evaluate arbitrary R expressions.
+Internally, the [brew package](https://cran.r-project.org/package=brew) is used for this purpose.
+Some exemplary template files can be found [here](https://github.com/mllg/batchtools/tree/master/inst/templates).
+It would be great if you would help expand this collection to cover more exotic configurations.
+To do so, please send your template via [mail](mailto:michellang@gmail.com) or open a new pull request.
+
+Note that all variables defined in a [JobCollection](https://mllg.github.io/batchtools/reference/JobCollection) can be used inside the template.
+If you need to pass extra variables, you can set them via the argument `resources` of [submitJobs](https://mllg.github.io/batchtools/reference/submitJobs).
+
+If the flexibility which comes with templating is not sufficient, you can still construct a custom cluster function implementation yourself using the provided [constructor](https://mllg.github.io/batchtools/reference/makeClusterFunctions).
+
+
+# Configuration file
+
+The configuration file can be used to set system specific options.
+Its default location depends on the operating system (see [Registry](https://mllg.github.io/batchtools/reference/makeRegistry)), but for the first time setup you can put one in the current working directory (as reported by `getwd()`).
+In order to set the cluster function implementation, you would generate a file with the following content:
+```{r,eval = FALSE}
+cluster.functions = makeClusterFunctionsInteractive()
+```
+The configuration file is parsed whenever you create or load a [Registry](https://mllg.github.io/batchtools/reference/makeRegistry).
+It is sourced inside of your registry which has the advantage that you can (a) access all of the parameters which are passed to [makeRegistry](https://mllg.github.io/batchtools/reference/makeRegistry) and (b) you can also directly change them.
+Lets say you always want your working directory in your home directory and you always want to load the `checkmate` package on the nodes, you can just append these lines:
+```{r, eval = FALSE}
+work.dir = "~"
+packages = union(packages, "checkmate")
+```
+See the documentation on [Registry](https://mllg.github.io/batchtools/reference/makeRegistry) for a more complete list of supported configuration options.

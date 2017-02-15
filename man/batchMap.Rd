@@ -14,7 +14,7 @@ Parameters given via \code{args} or \code{...} are passed as-is, in the respecti
 If the function has the named formal argument \dQuote{.job}, the \code{\link{Job}} is passed to the function
 on the slave.}
 
-\item{...}{[any]\cr
+\item{...}{[ANY]\cr
 Arguments to vectorize over (list or vector).
 Shorter vectors will be recycled (possibly with a warning any length is not a multiple of the longest length).
 Mutually exclusive with \code{args}.
@@ -61,14 +61,10 @@ getJobPars(reg = tmp)
 
 # example for an expand.grid()-like operation on parameters
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
-ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), more.args = list(sep = ""), reg = tmp)
-getJobPars(reg = tmp)
-testJob(6, reg = tmp)
-
-# example on how to deal with bulky objects
-tmp = makeRegistry(file.dir = NA, make.default = FALSE)
-ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), more.args = list(sep = ""), reg = tmp)
+ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), reg = tmp)
 getJobPars(reg = tmp)
 testJob(6, reg = tmp)
 }
-
+\seealso{
+\code{\link{batchReduce}}
+}

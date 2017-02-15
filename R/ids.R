@@ -1,5 +1,5 @@
 allIds = function(reg) {
-  reg$status[, "job.id", with = FALSE]
+  reg$status[, "job.id"]
 }
 
 noIds = function() {
@@ -11,13 +11,13 @@ castIds = function(ids, setkey = TRUE) {
     qassert(ids$job.id, "X", .var.name = "column 'job.id'")
 
     if (!is.integer(ids$job.id)) {
-      "!DEBUG Casting ids in data.table to integer"
+      "!DEBUG [castIds]: Casting ids in data.table to integer"
       ids = copy(ids)
       ids$job.id = as.integer(ids$job.id)
     }
 
     if (setkey && !identical(key(ids), "job.id")) {
-      "!DEBUG Setting missing key for ids table"
+      "!DEBUG [castIds]: Setting missing key for ids table"
       ids = copy(ids)
       setkeyv(ids, "job.id")
     }
@@ -26,13 +26,13 @@ castIds = function(ids, setkey = TRUE) {
   }
 
   if (is.data.frame(ids)) {
-    "!DEBUG Casting ids from data.frame to data.table"
+    "!DEBUG [castIds]: Casting ids from data.frame to data.table"
     ids$job.id = asInteger(ids$job.id, .var.name = "column 'job.id'")
     return(as.data.table(ids, key = if (setkey) "job.id" else NULL))
   }
 
   if (qtest(ids, "X")) {
-    "!DEBUG Casting ids from vector to data.table"
+    "!DEBUG [castIds]: Casting ids from vector to data.table"
     return(data.table(job.id = as.integer(ids), key = if (setkey) "job.id" else NULL))
   }
 
@@ -52,7 +52,7 @@ convertIds = function(reg, ids, default = NULL, keep.extra = character(0L), keep
     keep.extra = intersect(keep.extra, names(ids))
     return(merge(ids, reg$status, all = FALSE, sort = sort, by = "job.id")[, union("job.id", keep.extra), with = FALSE])
   }
-  return(reg$status[ids, "job.id", on = "job.id", nomatch = 0L, with = FALSE])
+  return(reg$status[ids, "job.id", on = "job.id", nomatch = 0L])
 }
 
 convertId = function(reg, id) {

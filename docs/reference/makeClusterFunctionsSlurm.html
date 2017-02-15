@@ -100,7 +100,7 @@ otherwise the commands for listing and killing jobs will not work.</p>
     
 
     <pre><span class='fu'>makeClusterFunctionsSlurm</span>(<span class='kw'>template</span> <span class='kw'>=</span> <span class='fu'>findTemplateFile</span>(<span class='st'>"slurm"</span>),
-  <span class='kw'>clusters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>clusters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>array.jobs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>scheduler.delay</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -126,6 +126,13 @@ the first one found:
 If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.
 If only one cluster is present, this argument may be omitted.
 Note that you should not select the cluster in your template file via <code>#SBATCH --clusters</code>.</dd>
+      <dt>array.jobs</dt>
+      <dd>[<code>logical(1)</code>]
+If array jobs are disabled on the computing site, set to <code>FALSE</code>.</dd>
+      <dt>scheduler.delay</dt>
+      <dd>[<code>numeric(1)</code>]
+Time to sleep after important interactions with the scheduler to ensure a sane state.
+Currently only user after <code><a href='submitJobs.html'>submitJobs</a></code>.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -142,7 +149,7 @@ Note that you should not select the cluster in your template file via <code>#SBA
   <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
   <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>,
   <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
-  <code><a href='makeClusterFunctionsTorque.html'>makeClusterFunctionsTorque</a></code>,
+  <code><a href='makeClusterFunctionsTORQUE.html'>makeClusterFunctionsTORQUE</a></code>,
   <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p>
     
 

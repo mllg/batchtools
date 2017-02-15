@@ -8,9 +8,8 @@
 #' @param fun [\code{function}]\cr
 #'   Function which takes the result as first (unnamed) argument.
 #' @template ids
-#' @param ... [any]\cr
+#' @param ... [ANY]\cr
 #'   Arguments to vectorize over (list or vector). Passed to \code{\link{batchMap}}.
-#' @template missing.val
 #' @template more.args
 #' @param target [\code{\link{Registry}}]\cr
 #'   Empty Registry where new jobs are created for.
@@ -36,9 +35,9 @@
 #' # Map old to new ids. First, get a table with results and parameters
 #' results = rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target))
 #'
-#' # Parameter '..id' points to job.id in 'source'. Use an inner join to combine:
+#' # Parameter '..id' points to job.id in 'source'. Use a inner join to combine:
 #' ijoin(results, reduceResultsDataTable(reg = tmp), by = c("..id" = "job.id"))
-batchMapResults = function(fun, ids = NULL, ..., missing.val, more.args = list(), target, source = getDefaultRegistry()) {
+batchMapResults = function(fun, ids = NULL, ..., more.args = list(), target, source = getDefaultRegistry()) {
   assertRegistry(source, sync = TRUE)
   assertRegistry(target, sync = TRUE)
   assertFunction(fun)
@@ -49,13 +48,11 @@ batchMapResults = function(fun, ids = NULL, ..., missing.val, more.args = list()
     stop("Target registry 'target' must be empty")
 
   more.args = c(list(..file.dir = source$file.dir, ..fun = fun), more.args)
-  if (!missing(missing.val))
-    more.args["..missing.val"] = list(missing.val)
   args = c(list(..id = ids$job.id), list(...))
 
   batchMap(batchMapResultsWrapper, args = args, more.args = more.args, reg = target)
 }
 
-batchMapResultsWrapper = function(..fun, ..file.dir, ..id, ..missing.val, ...) {
-  ..fun(.loadResult(..file.dir, ..id, ..missing.val), ...)
+batchMapResultsWrapper = function(..fun, ..file.dir, ..id, ...) {
+  ..fun(readRDS(getResultFiles(..file.dir, ..id)), ...)
 }

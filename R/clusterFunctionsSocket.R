@@ -45,10 +45,11 @@ Socket = R6Class("Socket",
 #' Jobs are spawned asynchronously using the package \pkg{snow}.
 #'
 #' @template ncpus
+#' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSocket = function(ncpus = NA_integer_) {
+makeClusterFunctionsSocket = function(ncpus = NA_integer_, fs.latency = 65) {
   assertCount(ncpus, positive = TRUE, na.ok = TRUE)
   if (is.na(ncpus)) {
     ncpus = max(getOption("mc.cores", parallel::detectCores()), 1L, na.rm = TRUE)
@@ -70,5 +71,5 @@ makeClusterFunctionsSocket = function(ncpus = NA_integer_) {
   }
 
   makeClusterFunctions(name = "Socket", submitJob = submitJob, listJobsRunning = listJobsRunning,
-    store.job = FALSE, hooks = list(pre.sync = function(reg, fns) p$list()))
+    store.job = FALSE, fs.latency = fs.latency, hooks = list(pre.sync = function(reg, fns) p$list()))
 }

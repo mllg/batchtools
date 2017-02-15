@@ -33,8 +33,8 @@ getStatusTable = function(ids = NULL, batch.ids = getBatchIds(reg = reg), reg = 
     started   = count(started),
     done      = count(done),
     error     = count(error),
-    queued    = sum(batch.id %in% batch.ids[status == "queued"]$batch.id),
-    running   = sum(batch.id %in% batch.ids[status == "running"]$batch.id),
+    queued    = sum(batch.id %chin% batch.ids[status == "queued"]$batch.id),
+    running   = sum(batch.id %chin% batch.ids[status == "running"]$batch.id),
     expired   = sum(!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids$batch.id)
   )]
   stats$done = stats$done - stats$error
