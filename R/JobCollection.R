@@ -52,8 +52,8 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$work.dir     = reg$work.dir
   jc$seed         = reg$seed
   jc$job.hash     = stri_join("job", digest(list(runif(1L), as.numeric(Sys.time()))))
-  jc$uri          = getJobFiles(reg$file.dir, jc$job.hash)
-  jc$log.file     = getLogFiles(reg$file.dir, jc$job.hash, log.file = NA_character_)
+  jc$uri          = reg$path$jobs(hash = jc$job.hash)
+  jc$log.file     = reg$path$logs(hash = jc$job.hash, log.file = NA_character_)
   jc$packages     = reg$packages
   jc$namespaces   = reg$namespaces
   jc$source       = reg$source
@@ -62,7 +62,7 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$array.var    = reg$cluster.functions$array.var
   jc$array.jobs   = isTRUE(resources$chunks.as.arrayjobs)
 
-  hooks = intersect(names(reg$cluster.functions$hooks), batchtools$hooks$remote)
+  hooks = chintersect(names(reg$cluster.functions$hooks), batchtools$hooks$remote)
   if (length(hooks) > 0L)
     jc$hooks = reg$cluster.functions$hooks[hooks]
   return(jc)

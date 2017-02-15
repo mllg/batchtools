@@ -25,11 +25,9 @@
 #' }
 makeClusterFunctionsSSH = function(workers, fs.latency = 65) { # nocov start
   assertList(workers, types = "Worker")
-  nodenames = vcapply(workers, "[[", "nodename")
-  if (anyDuplicated(nodenames))
+  names(workers) = vcapply(workers, "[[", "nodename")
+  if (anyDuplicated(names(workers)))
     stop("Duplicated hostnames found in list of workers")
-  names(workers) = nodenames
-  rm(nodenames)
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)

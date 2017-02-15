@@ -17,7 +17,7 @@ saveRegistry = function(reg = getDefaultRegistry()) {
 
     fn = file.path(reg$file.dir, c("registry.new.rds", "registry.rds"))
     ee = new.env(parent = asNamespace("batchtools"))
-    list2env(mget(setdiff(ls(reg), c("cluster.functions", "default.resources", "temp.dir")), reg), ee)
+    list2env(mget(chsetdiff(ls(reg), c("cluster.functions", "default.resources", "temp.dir", "path")), reg), ee)
     class(ee) = class(reg)
     writeRDS(ee, file = fn[1L])
     file.rename(fn[1L], fn[2L])

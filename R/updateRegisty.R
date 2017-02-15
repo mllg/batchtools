@@ -62,7 +62,7 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
       info("Renaming export files")
       file.rename(
         file.path(reg$file.dir, fns),
-        file.path(reg$file.dir, mangle(stri_sub(fn, to = -5L)))
+        file.path(reg$file.dir, mangle(stri_sub(fns, to = -5L)))
       )
     }
   }

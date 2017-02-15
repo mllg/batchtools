@@ -204,7 +204,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = default.sleep, reg
     }
 
     # remove old result files
-    fns = getResultFiles(reg$file.dir, ids.chunk$job.id)
+    fns = reg$path$results(ids.chunk)
     file.remove(fns[file.exists(fns)])
 
     i = 1L
