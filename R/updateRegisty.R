@@ -26,7 +26,7 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
         if (!stri_detect_regex("^[[:alnum:]_.-]+_[a-z0-9]{32}\\.rds", p)) {
           name = stri_replace_last_fixed(p, ".rds", "")
           info("Renaming file for problem '%s'", name)
-          file.rename(file.path(reg$file.dir, "problems", p), getProblemURI(reg, name))
+          file.rename(file.path(reg$file.dir, "problems", p), reg$path$problems(name))
         }
       }
 
@@ -35,7 +35,7 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
         if (!stri_detect_regex("^[[:alnum:]_.-]+_[a-z0-9]{32}\\.rds", a)) {
           name = stri_replace_last_fixed(a, ".rds", "")
           info("Renaming file for algorithm '%s'", name)
-          file.rename(file.path(reg$file.dir, "algorithms", a), getAlgorithmURI(reg, name))
+          file.rename(file.path(reg$file.dir, "algorithms", a), reg$path$algorithms(name))
         }
       }
     }
@@ -64,6 +64,14 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
         file.path(reg$file.dir, fns),
         file.path(reg$file.dir, mangle(stri_sub(fns, to = -5L)))
       )
+    }
+
+    if (reg$version < "0.9.1-9002" && inherits(reg, "ExperimentRegistry")) {
+      info("Renaming problems and algorithm files")
+      for (prob in getProblemIds(reg))
+        file.rename(file.path(reg$file.dir, "problems", sprintf("%s.rds", digest(prob))), reg$path$problems(prob))
+      for (algo in getAlgorithmIds(reg))
+        file.rename(file.path(reg$file.dir, "algorithms", sprintf("%s.rds", digest(algo))), reg$path$algorithms(algo))
     }
   }
 
