@@ -41,7 +41,7 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
     }
   }
 
-  if (reg$version < "0.9.2") {
+  if (reg$version < "0.9.1-9000") {
     ### hotfix for timestamps
     if (is.integer(reg$status$submitted)) {
       info("Converting timestamps to numeric")
@@ -53,13 +53,18 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
     if ("log.file" %nin% names(reg$status)) {
       reg$status$log.file = NA_character_
     }
+  }
 
+  if (reg$version < "0.9.1-9001") {
     ### hotfix for base32 encoding of exports
     fns = list.files(file.path(reg$file.dir, "exports"), pattern = "\\.rds$", all.files = TRUE, no.. = TRUE)
-    file.rename(
-      file.path(reg$file.dir, fns),
-      file.path(reg$file.dir, mangle(stri_sub(fn, to = -5L)))
-    )
+    if (length(fns)) {
+      info("Renaming export files")
+      file.rename(
+        file.path(reg$file.dir, fns),
+        file.path(reg$file.dir, mangle(stri_sub(fn, to = -5L)))
+      )
+    }
   }
 
   reg$version = pv
