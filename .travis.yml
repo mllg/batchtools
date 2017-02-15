@@ -11,8 +11,5 @@ r:
 r_packages:
   - covr
 
-r_github_packages:
-  - mllg/base64url
-
 after_success:
   - if [[ "${TRAVIS_R_VERSION_STRING}" == "release" ]]; then Rscript -e 'covr::coveralls()'; fi
