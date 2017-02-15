@@ -1,40 +1,16 @@
-getResultPath = function(reg) {
-  file.path(reg$file.dir, "results")
-}
-getLogPath = function(reg) {
-  file.path(reg$file.dir, "logs")
-}
-
-getJobPath = function(reg) {
-  file.path(reg$file.dir, "jobs")
-}
-
-getUpdatePath = function(reg) {
-  file.path(reg$file.dir, "updates")
-}
-
-getExternalPath = function(reg) {
-  file.path(reg$file.dir, "external")
-}
-
-getResultFiles = function(fd, ids) {
-  file.path(fd, "results", sprintf("%i.rds", ids))
-}
-
-getLogFiles = function(fd, hash, log.file) {
-  file.path(fd, "logs", ifelse(is.na(log.file), sprintf("%s.log", hash), log.file))
-}
-
-getJobFiles = function(fd, hash) {
-  file.path(fd, "jobs", sprintf("%s.rds", hash))
-}
-
-getUpdateFiles = function(fd, hash, num = 0L) {
-  file.path(fd, "updates", sprintf("%s-%i.rds", hash, num))
-}
-
-getExternalDirs = function(fd, dirs) {
-  file.path(fd, "external", as.character(dirs))
+FileHandler = function(file.dir) {
+  force(file.dir)
+  list(
+    result.dir = file.path(file.dir, "results"),
+    log.dir = file.path(file.dir, "logs"),
+    job.dir = file.path(file.dir, "jobs"),
+    update.dir = file.path(file.dir, "updates"),
+    external.dir = file.path(file.dir, "external"),
+    results = function(ids) file.path(file.dir, "results", sprintf("%s.rds", if (is.atomic(ids)) ids else ids$job.id)),
+    logs = function(ids = NULL, hash = ids$job.hash, log.file = ids$log.file) file.path(file.dir, "logs", ifelse(is.na(log.file), sprintf("%s.log", hash), log.file)),
+    jobs = function(ids = NULL, hash = ids$job.hash) file.path(file.dir, "jobs", sprintf("%s.rds", hash)),
+    external = function(ids = NULL) file.path(file.dir, "external", if (is.atomic(ids)) ids else ids$job.id)
+  )
 }
 
 mangle = function(x) {

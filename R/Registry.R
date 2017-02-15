@@ -169,6 +169,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
     dir.create(d, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)
+  reg$path = FileHandler(reg$file.dir)
 
   loadRegistryDependencies(list(file.dir = file.dir, work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
 

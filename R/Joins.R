@@ -126,9 +126,9 @@ ujoin = function(x, y, all.y = FALSE, by = NULL) {
   y = as.data.table(y)
   by = guessBy(x, y, by)
 
-  cn = setdiff(names(y), by)
+  cn = chsetdiff(names(y), by)
   if (!all.y)
-    cn = intersect(names(x), cn)
+    cn = chintersect(names(x), cn)
   if (length(cn) == 0L)
     return(x)
 
@@ -145,7 +145,7 @@ guessBy = function(x, y, by = NULL) {
     if (!is.null(res) && all(res %chin% names(y)))
       return(res)
 
-    res = intersect(names(x), names(y))
+    res = chintersect(names(x), names(y))
     if (length(res) > 0L)
       return(res)
     stop("Unable to guess columns to match on. Please specify them explicitly or set keys beforehand.")

@@ -63,7 +63,7 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
     seed = asCount(seed, positive = TRUE)
 
   prob = setClasses(list(name = name, seed = seed, data = data, fun = fun), "Problem")
-  writeRDS(prob, file = getProblemURI(reg, name))
+  writeRDS(prob, file = reg$path$problems(name))
   reg$defs$problem = addlevel(reg$defs$problem, name)
   saveRegistry(reg)
   invisible(prob)
@@ -82,7 +82,7 @@ removeProblems = function(name, reg = getDefaultRegistry()) {
     job.ids = filter(def.ids, reg$status, "job.id")
 
     info("Removing Problem '%s' and %i corresponding jobs ...", nn, nrow(job.ids))
-    file.remove(getProblemURI(reg, nn))
+    file.remove(reg$path$problems(name))
     reg$defs = reg$defs[!def.ids]
     reg$status = reg$status[!job.ids]
     reg$defs$problem = rmlevel(reg$defs$problem, nn)
@@ -97,8 +97,4 @@ removeProblems = function(name, reg = getDefaultRegistry()) {
 getProblemIds = function(reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg)
   levels(reg$defs$problem)
-}
-
-getProblemURI = function(reg, name) {
-  file.path(reg$file.dir, "problems", sprintf("%s.rds", digest(name)))
 }

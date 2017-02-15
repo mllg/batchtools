@@ -51,18 +51,28 @@ makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), con
 
   reg = makeRegistry(file.dir = file.dir, work.dir = work.dir, conf.file = conf.file,
     packages = packages, namespaces = namespaces, source = source, load = load, seed = seed, make.default = make.default)
+  class(reg) = c("ExperimentRegistry", "Registry")
+  specializeRegistry(reg)
 
+  saveRegistry(reg)
+  return(reg)
+}
+
+specializeRegistry.ExperimentRegistry = function(reg) {
   dir.create(file.path(reg$file.dir, "problems"))
   dir.create(file.path(reg$file.dir, "algorithms"))
-
   reg$status$repl = integer(0L)
   reg$defs$problem = factor(character(0L))
   reg$defs$algorithm = factor(character(0L))
   reg$defs$pars.hash = character(0L)
-  class(reg) = c("ExperimentRegistry", "Registry")
 
-  saveRegistry(reg)
-  return(reg)
+  reg$path = c(reg$path, list(
+    problem.dir = file.path(reg$file.dir, "problems"),
+    algorithm.dir = file.path(reg$file.dir, "algorithms"),
+    problems = function(ids) file.path(file.path(file.dir, "problems", mangle(ids))),
+    algorithms = function(ids) file.path(file.path(file.dir, "algorithms", mangle(ids)))
+  ))
+  environment(reg$path$problems) = environment(reg$path$algorithms) = environment(reg$path$results)
 }
 
 #' @export
