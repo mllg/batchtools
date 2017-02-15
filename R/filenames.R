@@ -36,3 +36,11 @@ getUpdateFiles = function(fd, hash, num = 0L) {
 getExternalDirs = function(fd, dirs) {
   file.path(fd, "external", as.character(dirs))
 }
+
+mangle = function(x) {
+  sprintf("%s.rds", base32_encode(x, use.padding = FALSE))
+}
+
+unmangle = function(x) {
+  base32_decode(stri_sub(x, to = -5L), use.padding = FALSE)
+}

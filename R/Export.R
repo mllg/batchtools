@@ -61,12 +61,3 @@ batchExport = function(export = list(), unexport = character(0L), reg = getDefau
   fns = list.files(path, pattern = "\\.rds")
   invisible(data.table(name = unmangle(fns), uri = file.path(path, fns)))
 }
-
-
-mangle = function(x) {
-  sprintf("%s.rds", base32_encode(x, use.padding = FALSE))
-}
-
-unmangle = function(x) {
-  base32_decode(stri_sub(x, to = -5L), use.padding = FALSE)
-}
