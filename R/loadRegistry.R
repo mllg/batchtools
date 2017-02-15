@@ -56,7 +56,7 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
     }
   }
   reg$file.dir = file.dir
-  reg$path = FileHandler$new(file.dir)
+  reg$path = FileHandler(file.dir)
   if (reg$writeable)
     updateRegistry(reg)
 
