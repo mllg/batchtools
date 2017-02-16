@@ -53,6 +53,7 @@ waitForJobs(reg = target)
 
 # Map old to new ids. First, get a table with results and parameters
 results = rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target))
+print(results)
 
 # Parameter '..id' points to job.id in 'source'. Use a inner join to combine:
 ijoin(results, reduceResultsDataTable(reg = tmp), by = c("..id" = "job.id"))

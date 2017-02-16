@@ -34,6 +34,7 @@
 #'
 #' # Map old to new ids. First, get a table with results and parameters
 #' results = rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target))
+#' print(results)
 #'
 #' # Parameter '..id' points to job.id in 'source'. Use a inner join to combine:
 #' ijoin(results, reduceResultsDataTable(reg = tmp), by = c("..id" = "job.id"))
@@ -47,12 +48,14 @@ batchMapResults = function(fun, ids = NULL, ..., more.args = list(), target, sou
   if (nrow(target$status) > 0L)
     stop("Target registry 'target' must be empty")
 
-  more.args = c(list(..file.dir = source$file.dir, ..fun = fun), more.args)
+  fns = getResultFiles(source, ids)
+  names(fns) = ids$job.id
+  more.args = c(list(..fn = fns, ..fun = fun), more.args)
   args = c(list(..id = ids$job.id), list(...))
 
   batchMap(batchMapResultsWrapper, args = args, more.args = more.args, reg = target)
 }
 
-batchMapResultsWrapper = function(..fun, ..file.dir, ..id, ...) {
-  ..fun(readRDS(getResultFiles(..file.dir, ..id)), ...)
+batchMapResultsWrapper = function(..fun, ..fn, ..id, ...) {
+  ..fun(readRDS(..fn[[as.character(..id)]]), ...)
 }

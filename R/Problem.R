@@ -100,5 +100,5 @@ getProblemIds = function(reg = getDefaultRegistry()) {
 }
 
 getProblemURI = function(reg, name) {
-  file.path(reg$file.dir, "problems", sprintf("%s.rds", digest(name)))
+  file.path(reg$file.dir, "problems", mangle(name))
 }

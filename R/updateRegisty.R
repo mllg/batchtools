@@ -62,9 +62,17 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
       info("Renaming export files")
       file.rename(
         file.path(reg$file.dir, fns),
-        file.path(reg$file.dir, mangle(stri_sub(fn, to = -5L)))
+        file.path(reg$file.dir, mangle(stri_sub(fns, to = -5L)))
       )
     }
+  }
+
+  if (reg$version < "0.9.1-9002" && inherits(reg, "ExperimentRegistry")) {
+    info("Renaming problems and algorithm files")
+    for (prob in getProblemIds(reg))
+      file.rename(file.path(reg$file.dir, "problems", sprintf("%s.rds", digest(prob))), reg$path$problems(prob))
+    for (algo in getAlgorithmIds(reg))
+      file.rename(file.path(reg$file.dir, "algorithms", sprintf("%s.rds", digest(algo))), reg$path$algorithms(algo))
   }
 
   reg$version = pv

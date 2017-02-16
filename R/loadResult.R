@@ -13,6 +13,6 @@ loadResult = function(id, reg = getDefaultRegistry()) {
   id = convertId(reg, id)
   if (nrow(.findDone(reg, id)) == 0L)
     stopf("Job with id %i not terminated", id$job.id)
-  fn = getResultFiles(reg$file.dir, id$job.id)
+  fn = getResultFiles(reg, id)
   return(readRDS(fn))
 }
