@@ -81,8 +81,10 @@
     </div>
 
     
-    <p>Stores the registry on the file system. Usually called internally by functions
-whenever they touch the registry.</p>
+    <p>Stores the registry on the file system in its &#8220;file.dir&#8221; (specified
+for construction in <code><a href='makeRegistry.html'>makeRegistry</a></code>, can be accessed via
+<code>reg$file.dir</code>).
+This function is usually called internally whenever needed.</p>
     
 
     <pre><span class='fu'>saveRegistry</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
@@ -104,6 +106,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     <p>Other Registry: <code><a href='clearRegistry.html'>clearRegistry</a></code>,
   <code><a href='getDefaultRegistry.html'>getDefaultRegistry</a></code>,
   <code><a href='loadRegistry.html'>loadRegistry</a></code>, <code><a href='makeRegistry.html'>makeRegistry</a></code>,
+  <code><a href='removeRegistry.html'>removeRegistry</a></code>,
   <code><a href='sweepRegistry.html'>sweepRegistry</a></code>, <code><a href='syncRegistry.html'>syncRegistry</a></code></p>
     
 

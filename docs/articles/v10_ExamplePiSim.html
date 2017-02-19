@@ -71,13 +71,13 @@ reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistr
 <p>For a permanent registry, set the <code>file.dir</code> to a valid path. It can then be reused later, e.g., when you login to the system again, by calling the function <code><a href="../reference/loadRegistry.html">loadRegistry(file.dir)</a></code>.</p>
 <p>When a registry object is created or loaded, it is stored for the active R session as the default. Therefore the argument <code>reg</code> will be ignored in functions calls of this example, assuming the correct registry is set as default. To get the current default registry, <a href="https://mllg.github.io/batchtools/reference/makeRegistry"><code>getDefaultRegistry</code></a> can be used. To switch to another registry, use <a href="https://mllg.github.io/batchtools/reference/makeRegistry"><code><a href="../reference/getDefaultRegistry.html">setDefaultRegistry()</a></code></a>.</p>
 <p>First, we create a function which samples <span class="math inline">\(n\)</span> points <span class="math inline">\((x_i, y_i)\)</span> whereas <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> are distributed uniformly, i.e. <span class="math inline">\(x_i, y_i \sim \mathcal{U}(0,1)\)</span>. Next, the distance to the origin <span class="math inline">\((0, 0)\)</span> is calculated and the fraction of points in the unit circle (<span class="math inline">\(d \leq 1\)</span>) is returned.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">piApprox =<span class="st"> </span>function(n) {
-  nums =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(<span class="dv">2</span> *<span class="st"> </span>n), <span class="dt">ncol =</span> <span class="dv">2</span>)
-  d =<span class="st"> </span><span class="kw">sqrt</span>(nums[, <span class="dv">1</span>]^<span class="dv">2</span> +<span class="st"> </span>nums[, <span class="dv">2</span>]^<span class="dv">2</span>)
-  <span class="dv">4</span> *<span class="st"> </span><span class="kw">mean</span>(d &lt;=<span class="st"> </span><span class="dv">1</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">piApprox =<span class="st"> </span><span class="cf">function</span>(n) {
+  nums =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>n), <span class="dt">ncol =</span> <span class="dv">2</span>)
+  d =<span class="st"> </span><span class="kw">sqrt</span>(nums[, <span class="dv">1</span>]<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>nums[, <span class="dv">2</span>]<span class="op">^</span><span class="dv">2</span>)
+  <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">mean</span>(d <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1</span>)
 }
 <span class="kw">piApprox</span>(<span class="dv">1000</span>)</code></pre></div>
-<pre><code>## [1] 3.16</code></pre>
+<pre><code>## [1] 3.184</code></pre>
 <p>We now parallelize <code>piApprox()</code> with <code>batchtools</code>: We create 10 jobs, each doing a MC simulation with <span class="math inline">\(10^5\)</span> jobs. We use <a href="https://mllg.github.io/batchtools/reference/batchMap"><code><a href="../reference/batchMap.html">batchMap()</a></code></a> to define the jobs (note that this does not yet start the calculation):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/batchMap.html">batchMap</a></span>(<span class="dt">fun =</span> piApprox, <span class="dt">n =</span> <span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>))</code></pre></div>
 <pre><code>## Adding 10 jobs ...</code></pre>
@@ -89,36 +89,33 @@ reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistr
 ## [13] "tags"</code></pre>
 <p>Note that a unique job ID is assigned to each job. These IDs can be used to restrict operations to subsets of jobs. To actually start the calculation, call <a href="https://mllg.github.io/batchtools/reference/submitJobs"><code><a href="../reference/submitJobs.html">submitJobs()</a></code></a>. The registry and the selected job IDs can be taken as arguments as well as an arbitrary list of resource requirements, which are to be handled by the cluster back end.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/submitJobs.html">submitJobs</a></span>(<span class="dt">resources =</span> <span class="kw">list</span>(<span class="dt">walltime =</span> <span class="dv">3600</span>, <span class="dt">memory =</span> <span class="dv">1024</span>))</code></pre></div>
-<pre><code>## Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions 'Multicore'</code></pre>
-<pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Multicore' ...</code></pre>
+<pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
 <p>In this example, a cap for the execution time (so-called walltime) and for the maximum memory requirements are set. The progress of the submitted jobs can be checked with <a href="https://mllg.github.io/batchtools/reference/getStatus"><code><a href="../reference/getStatus.html">getStatus()</a></code></a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/getStatus.html">getStatus</a></span>()</code></pre></div>
-<pre><code>## Syncing 9 files ...</code></pre>
+<pre><code>## Syncing 10 files ...</code></pre>
 <pre><code>## Status for 10 jobs:
 ##   Submitted : 10 (100.0%)
 ##   Queued    :  0 (  0.0%)
-##   Started   :  9 ( 90.0%)
-##   Running   :  1 ( 10.0%)
-##   Done      :  9 ( 90.0%)
+##   Started   : 10 (100.0%)
+##   Running   :  0 (  0.0%)
+##   Done      : 10 (100.0%)
 ##   Error     :  0 (  0.0%)
 ##   Expired   :  0 (  0.0%)</code></pre>
 <p>The resulting output includes the number of jobs in the registry, how many have been submitted, have started to execute on the batch system, are currently running, have successfully completed, and have terminated due to an R exception. After jobs have successfully terminated, we can load their results on the master. This can be done in a simple fashion by using either <a href="https://mllg.github.io/batchtools/reference/loadResult"><code><a href="../reference/loadResult.html">loadResult()</a></code></a>, which returns a single result exactly in the form it was calculated during mapping, or by using <a href="https://mllg.github.io/batchtools/reference/reduceResults"><code><a href="../reference/reduceResults.html">reduceResults()</a></code></a>, which is a version of <code>Reduce()</code> from the base package for registry objects.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/waitForJobs.html">waitForJobs</a></span>()</code></pre></div>
-<pre><code>## Syncing 1 files ...</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(<span class="kw">sapply</span>(<span class="dv">1</span>:<span class="dv">10</span>, loadResult))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(<span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, loadResult))</code></pre></div>
 <pre><code>## [1] 3.140652</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/reduceResults.html">reduceResults</a></span>(function(x, y) x +<span class="st"> </span>y) /<span class="st"> </span><span class="dv">10</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/reduceResults.html">reduceResults</a></span>(<span class="cf">function</span>(x, y) x <span class="op">+</span><span class="st"> </span>y) <span class="op">/</span><span class="st"> </span><span class="dv">10</span></code></pre></div>
 <pre><code>## [1] 3.140652</code></pre>
 <p>If you are absolutely sure that your function works, you can take a shortcut and use <em>batchtools</em> in an <code>lapply</code> fashion using <a href="https://mllg.github.io/batchtools/reference/btlapply"><code><a href="../reference/btlapply.html">btlapply()</a></code></a>. This function creates a temporary registry (but you may also pass one yourself), calls <a href="https://mllg.github.io/batchtools/reference/reduceResultsList"><code><a href="../reference/batchMap.html">batchMap()</a></code></a>, wait for the jobs to terminate with <a href="https://mllg.github.io/batchtools/reference/waitForJobs"><code><a href="../reference/waitForJobs.html">waitForJobs()</a></code></a> and then uses <a href="https://mllg.github.io/batchtools/reference/reduceResultsList"><code><a href="../reference/reduceResultsList.html">reduceResultsList()</a></code></a> to return the results.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res =<span class="st"> </span><span class="kw"><a href="../reference/btlapply.html">btlapply</a></span>(<span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>), piApprox)</code></pre></div>
-<pre><code>## Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</code></pre>
+<pre><code>## Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</code></pre>
 <pre><code>## Adding 10 jobs ...</code></pre>
-<pre><code>## Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions 'Multicore'</code></pre>
-<pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Multicore' ...</code></pre>
-<pre><code>## Syncing 7 files ...</code></pre>
+<pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
+<pre><code>## Syncing 10 files ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(<span class="kw">unlist</span>(res))</code></pre></div>
-<pre><code>## [1] 3.141884</code></pre>
+<pre><code>## [1] 3.142772</code></pre>
 </div>
   </div>
 

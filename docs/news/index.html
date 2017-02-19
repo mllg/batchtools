@@ -91,6 +91,8 @@
 <code><a href="../reference/findJobs.html">findExperiments()</a></code> now has two additional arguments to match for regular expressions. The possibility to prefix a string with “~” to enable regular expression matching has been removed.</li>
 <li>New function <code><a href="../reference/batchReduce.html">batchReduce()</a></code>.</li>
 <li>New function <code><a href="../reference/estimateRuntimes.html">estimateRuntimes()</a></code>.</li>
+<li>New function <code><a href="../reference/removeRegistry.html">removeRegistry()</a></code>.</li>
+<li>Missing result files are now handled more consistently, raising an exception in its defaults if the result is not available. The argument <code>missing.val</code> has been added to <code><a href="../reference/reduceResultsList.html">reduceResultsList()</a></code> and <code><a href="../reference/reduceResultsList.html">reduceResultsDataTable()</a></code> and removed from <code><a href="../reference/loadResult.html">loadResult()</a></code> and <code><a href="../reference/batchMapResults.html">batchMapResults()</a></code>.</li>
 <li>Timestamps are now stored with sub-second accuracy.</li>
 <li>Renamed Torque to TORQUE. This especially affects the function <code>makeClusterFunctionsTorque</code> which must now be called via <code><a href="../reference/makeClusterFunctionsTORQUE.html">makeClusterFunctionsTORQUE()</a></code>
 </li>

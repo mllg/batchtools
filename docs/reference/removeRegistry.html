@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ClusterFunctions for Remote SSH Execution — makeClusterFunctionsSSH • batchtools</title>
+<title>Remove a Registry from the File System — removeRegistry • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,60 +77,43 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>ClusterFunctions for Remote SSH Execution</h1>
+    <h1>Remove a Registry from the File System</h1>
     </div>
 
     
-    <p>Jobs are spawned by starting multiple R sessions via <code>Rscript</code> over SSH.
-If the hostname of the <code><a href='Worker.html'>Worker</a></code> equals &#8220;localhost&#8221;,
-<code>Rscript</code> is called directly so that you do not need to have an SSH client installed.</p>
+    <p>All files will be erased from the file system, including all results.
+If you wish to remove only intermediate files, use <code><a href='sweepRegistry.html'>sweepRegistry</a></code>.</p>
     
 
-    <pre><span class='fu'>makeClusterFunctionsSSH</span>(<span class='no'>workers</span>, <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
+    <pre><span class='fu'>removeRegistry</span>(<span class='kw'>wait</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
-      <dt>workers</dt>
-      <dd>[<code>list</code> of <code><a href='Worker.html'>Worker</a></code>]
-List of Workers as constructed with <code><a href='Worker.html'>Worker</a></code>.</dd>
-      <dt>fs.latency</dt>
+      <dt>wait</dt>
       <dd>[<code>numeric(1)</code>]
-Expected maximum latency of the file system, in seconds.
-Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
-access files and directories.
-Usually safe to set to <code>NA</code> which disables the expensive heuristic if you are working on a local file system.</dd>
+Seconds to wait before proceeding. This is a safety measure to not
+accidentally remove your precious files. Set to 0 in
+non-interactive scripts to disable this precaution.</dd>
+      <dt>reg</dt>
+      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>[<code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>].</p>
-    
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>If you use a custom &#8220;.ssh/config&#8221; file, make sure your
-ProxyCommand passes &#8216;-q&#8217; to ssh, otherwise each output will
-end with the message &#8220;Killed by signal 1&#8221; and this will break
-the communication with the nodes.</p>
+    <p>[<code>logical(1)</code>]: Success of <code><a href='http://www.rdocumentation.org/packages/base/topics/unlink'>unlink</a></code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
-  <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
-  <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
-  <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
-  <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
-  <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
-  <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
-  <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
-  <code><a href='makeClusterFunctionsTORQUE.html'>makeClusterFunctionsTORQUE</a></code>,
-  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p>
+    <p>Other Registry: <code><a href='clearRegistry.html'>clearRegistry</a></code>,
+  <code><a href='getDefaultRegistry.html'>getDefaultRegistry</a></code>,
+  <code><a href='loadRegistry.html'>loadRegistry</a></code>, <code><a href='makeRegistry.html'>makeRegistry</a></code>,
+  <code><a href='saveRegistry.html'>saveRegistry</a></code>, <code><a href='sweepRegistry.html'>sweepRegistry</a></code>,
+  <code><a href='syncRegistry.html'>syncRegistry</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
-<span class='co'># # cluster functions for multicore execution on the local machine</span>
-<span class='co'># makeClusterFunctionsSSH(list(Worker$new("localhost", ncpus = 2)))</span>
-<span class='co'>## ---------------------------------------------</span></div></pre>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'>removeRegistry</span>(<span class='fl'>0</span>, <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Recursively removing files in &#39;/tmp/Rtmp04BE7o/registry2e051906ed71&#39; ...</span></div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -138,8 +121,6 @@ the communication with the nodes.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#note">Note</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

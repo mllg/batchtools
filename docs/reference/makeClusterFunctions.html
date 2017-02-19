@@ -88,7 +88,7 @@ with the package.</p>
 
     <pre><span class='fu'>makeClusterFunctions</span>(<span class='no'>name</span>, <span class='no'>submitJob</span>, <span class='kw'>killJob</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>listJobsQueued</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>listJobsRunning</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>array.var</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>store.job</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>scheduler.delay</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>hooks</span> <span class='kw'>=</span> <span class='fu'>list</span>())</pre>
+  <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>NA_real_</span>, <span class='kw'>hooks</span> <span class='kw'>=</span> <span class='fu'>list</span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -128,10 +128,16 @@ Default is <code>NA</code> for no array support.</dd>
       <dd>[<code>logical(1)</code>]
 Flag to indicate that the cluster function implementation of <code>submitJob</code> can not directly handle <code><a href='makeJobCollection.html'>JobCollection</a></code> objects.
 If set to <code>FALSE</code>, the <code><a href='makeJobCollection.html'>JobCollection</a></code> is serialized to the file system before submitting the job.</dd>
-      <dt>scheduler.delay</dt>
+      <dt>scheduler.latency</dt>
       <dd>[<code>numeric(1)</code>]
 Time to sleep after important interactions with the scheduler to ensure a sane state.
-Currently only user after <code><a href='submitJobs.html'>submitJobs</a></code>.</dd>
+Currently only triggered after calling <code><a href='submitJobs.html'>submitJobs</a></code>.</dd>
+      <dt>fs.latency</dt>
+      <dd>[<code>numeric(1)</code>]
+Expected maximum latency of the file system, in seconds.
+Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
+access files and directories.
+Usually safe to set to <code>NA</code> which disables the expensive heuristic if you are working on a local file system.</dd>
       <dt>hooks</dt>
       <dd>[<code>list</code>]
 Named list of functions which will we called on certain events like &#8220;pre.submit&#8221; or &#8220;post.sync&#8221;.

@@ -89,7 +89,8 @@ The main use of this <code>ClusterFunctions</code> implementation is to test and
 and <code>killJob</code> is not implemented for the same reasons.</p>
     
 
-    <pre><span class='fu'>makeClusterFunctionsInteractive</span>(<span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>write.logs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre><span class='fu'>makeClusterFunctionsInteractive</span>(<span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>write.logs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>NA_real_</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -103,6 +104,12 @@ Default is <code>FALSE</code>.</dd>
 Sink the output to log files. Turning logging off can increase the speed of
 calculations but makes it very difficult to debug.
 Default is <code>TRUE</code>.</dd>
+      <dt>fs.latency</dt>
+      <dd>[<code>numeric(1)</code>]
+Expected maximum latency of the file system, in seconds.
+Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
+access files and directories.
+Usually safe to set to <code>NA</code> which disables the expensive heuristic if you are working on a local file system.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>

@@ -198,17 +198,18 @@ Default is <code>TRUE</code>.</dd>
 
     <p>Other Registry: <code><a href='clearRegistry.html'>clearRegistry</a></code>,
   <code><a href='getDefaultRegistry.html'>getDefaultRegistry</a></code>,
-  <code><a href='loadRegistry.html'>loadRegistry</a></code>, <code><a href='saveRegistry.html'>saveRegistry</a></code>,
-  <code><a href='sweepRegistry.html'>sweepRegistry</a></code>, <code><a href='syncRegistry.html'>syncRegistry</a></code></p>
+  <code><a href='loadRegistry.html'>loadRegistry</a></code>, <code><a href='removeRegistry.html'>removeRegistry</a></code>,
+  <code><a href='saveRegistry.html'>saveRegistry</a></code>, <code><a href='sweepRegistry.html'>sweepRegistry</a></code>,
+  <code><a href='syncRegistry.html'>syncRegistry</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/lang/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
-#&gt;   Name    : Multicore
-#&gt;   File dir: /scratch/registry3b3d13bb82bd
-#&gt;   Work dir: /home/lang/Projekte/batchtools/docs/reference
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
+#&gt;   Name    : Interactive
+#&gt;   File dir: /tmp/Rtmp04BE7o/registry2e053b377b4a
+#&gt;   Work dir: /home/michel/Projekte/batchtools/docs/reference
 #&gt;   Jobs    : 0
-#&gt;   Seed    : 556816887</div><div class='input'>
+#&gt;   Seed    : 396414167</div><div class='input'>
 <span class='co'># Set cluster functions to interactive mode and start jobs in external R sessions</span>
 <span class='no'>tmp</span>$<span class='no'>cluster.functions</span> <span class='kw'>=</span> <span class='fu'><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></span>(<span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
