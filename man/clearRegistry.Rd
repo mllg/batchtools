@@ -11,7 +11,7 @@ clearRegistry(reg = getDefaultRegistry())
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \description{
-Removes all jobs from a registry and calls \code{\link{sweepRegistry}}<`3`>.
+Removes all jobs from a registry and calls \code{\link{sweepRegistry}}.
 }
 \seealso{
 Other Registry: \code{\link{getDefaultRegistry}},
