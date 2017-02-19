@@ -12,10 +12,12 @@ reference:
       - saveRegistry
       - syncRegistry
       - sweepRegistry
+      - removeRegistry
       - getDefaultRegistry
   - title: Define Jobs
     contents:
       - batchMap
+      - batchReduce
       - batchMapResults
       - Problem
       - Algorithm
@@ -73,3 +75,4 @@ reference:
       - runOSCommand
       - execJob
       - doJobCollection
+      - estimateRuntimes
