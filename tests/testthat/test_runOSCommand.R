@@ -1,7 +1,7 @@
 context("runOSCommand")
 
 test_that("runOSCommand", {
-  skip_on_os("windows")
+  skip_on_os(c("windows", "solaris")) # system2 is broken on solaris
   x = runOSCommand("ls", find.package("batchtools"))
   expect_list(x, names = "named", len = 2)
   expect_identical(x$exit.code, 0L)
@@ -9,6 +9,7 @@ test_that("runOSCommand", {
 })
 
 test_that("command not found", {
+  skip_on_os("solaris") # system2 is broken on solaris
   res = runOSCommand("notfoundcommand")
   expect_list(res, len = 2)
   expect_identical(res$exit.code, 127L)
@@ -16,7 +17,7 @@ test_that("command not found", {
 })
 
 test_that("stdin", {
-  skip_on_os("windows")
+  skip_on_os(c("windows", "solaris")) # system2 is broken on solaris
 
   tf = tempfile()
   lines = letters

@@ -10,8 +10,6 @@ test_that("clusterFunctions constructor", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   check(reg$cluster.functions)
   check(makeClusterFunctionsInteractive())
-  if (!testOS("windows"))
-    check(makeClusterFunctionsSSH(workers = list(Worker$new(nodename = "localhost", ncpus = 1L))))
   check(makeClusterFunctionsSGE(template = "foo\n"))
   check(makeClusterFunctionsTORQUE(template = "foo\n"))
   check(makeClusterFunctionsSlurm(template = "foo\n"))
@@ -20,8 +18,10 @@ test_that("clusterFunctions constructor", {
   check(makeClusterFunctionsTORQUE(system.file(file.path("templates", "torque_lido.tmpl"), package = "batchtools")))
   check(makeClusterFunctionsSlurm(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools")))
   check(makeClusterFunctionsDocker("image"))
-
   expect_error(makeClusterFunctionsLSF(), "No template")
+
+  skip_on_os(c("windows", "solaris")) # system2 is broken on solaris
+    check(makeClusterFunctionsSSH(workers = list(Worker$new(nodename = "localhost", ncpus = 1L))))
 })
 
 
