@@ -81,5 +81,5 @@ getAlgorithmIds = function(reg = getDefaultRegistry()) {
 }
 
 getAlgorithmURI = function(reg, name) {
-  file.path(reg$file.dir, "algorithms", sprintf("%s.rds", digest(name)))
+  file.path(reg$file.dir, "algorithms", mangle(name))
 }

@@ -49,7 +49,7 @@ convertIds = function(reg, ids, default = NULL, keep.extra = character(0L), keep
 
   if (length(keep.extra) > 0L && ncol(ids) > 1L) {
     sort = !keep.order || identical(key(ids), "job.id")
-    keep.extra = intersect(keep.extra, names(ids))
+    keep.extra = chintersect(keep.extra, names(ids))
     return(merge(ids, reg$status, all = FALSE, sort = sort, by = "job.id")[, union("job.id", keep.extra), with = FALSE])
   }
   return(reg$status[ids, "job.id", on = "job.id", nomatch = 0L])

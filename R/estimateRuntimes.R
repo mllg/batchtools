@@ -93,7 +93,7 @@ estimateRuntimes = function(tab, ..., reg = getDefaultRegistry()) {
     stop("No training data available. Some jobs must be finished before estimating runtimes.")
 
   rf = ranger::ranger(runtime ~ ., data = data[!i, !"job.id"], ...)
-  data[i, "runtime" := predict(rf, .SD)$predictions, .SDcols = setdiff(names(data), c("job.id", "runtime"))]
+  data[i, "runtime" := predict(rf, .SD)$predictions, .SDcols = chsetdiff(names(data), c("job.id", "runtime"))]
   data$type = factor(ifelse(i, "estimated", "observed"), levels = c("observed", "estimated"))
   setClasses(list(runtimes = data[, c("job.id", "type", "runtime")], model = rf), c("RuntimeEstimate", class(data)))
 }

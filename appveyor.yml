@@ -20,7 +20,6 @@ environment:
 
 build_script:
   - travis-tool.sh install_deps
-  - travis-tool.sh install_github mllg/checkmate
 
 test_script:
   - travis-tool.sh run_tests

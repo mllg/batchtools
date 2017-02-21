@@ -1,6 +1,6 @@
 #' @title Remove All Jobs
 #' @description
-#' Removes all jobs from a registry and calls \code{\link{sweepRegistry}}<`3`>.
+#' Removes all jobs from a registry and calls \code{\link{sweepRegistry}}.
 #'
 #' @template reg
 #' @family Registry

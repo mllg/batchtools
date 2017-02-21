@@ -84,15 +84,21 @@
     <p>Jobs are spawned asynchronously using the package <span class="pkg">snow</span>.</p>
     
 
-    <pre><span class='fu'>makeClusterFunctionsSocket</span>(<span class='kw'>ncpus</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>)</pre>
+    <pre><span class='fu'>makeClusterFunctionsSocket</span>(<span class='kw'>ncpus</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>, <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>ncpus</dt>
       <dd>[<code>integer(1)</code>]
-Number of VPUs of worker.
-Default is to use all cores. The total number of cores &quot;available&quot; can be set via the option <code>mc.cores</code>
+Number of CPUs.
+Default is to use all logical cores. The total number of cores &quot;available&quot; can be set via the option <code>mc.cores</code>
 and defaults to the heuristic implemented in <code><a href='http://www.rdocumentation.org/packages/parallel/topics/detectCores'>detectCores</a></code>.</dd>
+      <dt>fs.latency</dt>
+      <dd>[<code>numeric(1)</code>]
+Expected maximum latency of the file system, in seconds.
+Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
+access files and directories.
+Usually safe to set to <code>NA</code> which disables the expensive heuristic if you are working on a local file system.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>

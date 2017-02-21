@@ -12,10 +12,11 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, running.ok = FALSE)
   "!DEBUG [sweepRegistry]: Running sweepRegistry"
 
+  submitted = reg$status[.findSubmitted(reg = reg), c("job.id", "job.hash", "log.file")]
   path = getResultPath(reg)
   obsolete = chsetdiff(
     list.files(path, full.names = TRUE),
-    getResultFiles(reg$file.dir, reg$status$job.id)
+    getResultFiles(reg, submitted)
   )
   info("Removing %i obsolete result files ...", length(obsolete))
   file.remove(obsolete)
@@ -23,7 +24,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   path = getLogPath(reg)
   obsolete = chsetdiff(
     list.files(path, full.names = TRUE),
-    getLogFiles(reg$file.dir, reg$status$job.hash, reg$status$log.file)
+    getLogFiles(reg, submitted)
   )
   info("Removing %i obsolete log files ...", length(obsolete))
   file.remove(obsolete)
@@ -41,7 +42,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   path = getExternalPath(reg)
   obsolete = chsetdiff(
     list.files(path, pattern = "^[0-9]+$", full.names = TRUE),
-    getExternalDirs(reg$file.dir, .findSubmitted(reg)$job.id)
+    getExternalDirs(reg, submitted)
   )
   info("Removing %i external directories of unsubmitted jobs ...", length(obsolete))
   unlink(obsolete, recursive = TRUE)

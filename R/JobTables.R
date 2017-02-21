@@ -72,7 +72,7 @@ getJobStatus = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   submitted = started = done = NULL
 
-  cols = setdiff(names(reg$status), c("def.id", "resource.id"))
+  cols = chsetdiff(names(reg$status), c("def.id", "resource.id"))
   tab = filter(reg$status, convertIds(reg, ids), cols)
   tab[, "submitted" := as.POSIXct(submitted, origin = "1970-01-01")]
   tab[, "started" := as.POSIXct(started, origin = "1970-01-01")]
@@ -95,7 +95,7 @@ getJobResources = function(ids = NULL, flatten = NULL, prefix = FALSE, reg = get
   if (flatten %??% qtestr(tab$resources, c("v1", "L", "0"), depth = 2L)) {
     tab = rbindlist(.mapply(function(job.id, resources) c(list(job.id = job.id), resources), tab, list()), fill = TRUE)
     if (prefix && ncol(tab) >= 2L) {
-      nn = setdiff(names(tab), "job.id")
+      nn = chsetdiff(names(tab), "job.id")
       setnames(tab, nn, stri_join("res.", nn))
     }
   }

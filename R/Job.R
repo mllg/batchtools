@@ -9,7 +9,7 @@ Cache = R6Class("Cache",
 
     get = function(id, slot = id, subdir = "", mangle = FALSE) {
       if (is.null(self$cache[[slot]]) || self$cache[[slot]]$id != id) {
-        path = file.path(self$file.dir, subdir, sprintf("%s.rds", if (mangle) digest(id) else id))
+        path = file.path(self$file.dir, subdir, if (mangle) mangle(id) else sprintf("%s.rds", id))
         self$cache[[slot]] = list(id = id, obj = if (file.exists(path)) readRDS(path) else NULL)
       }
       return(self$cache[[slot]]$obj)

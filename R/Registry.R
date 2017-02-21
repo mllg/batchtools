@@ -250,7 +250,7 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
     ee = .GlobalEnv
     Map(function(name, fn) {
       assign(x = name, value = readRDS(fn), envir = ee)
-    }, name = basename(stri_sub(fns, to = -5L)), fn = file.path(path, fns))
+    }, name = unmangle(fns), fn = file.path(path, fns))
   }
 
   invisible(TRUE)

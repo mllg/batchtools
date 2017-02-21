@@ -70,11 +70,11 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(batchtools)
 reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistry.html">makeRegistry</a></span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</code></pre></div>
 <p>Ten jobs are created, two of them will throw an exception.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">flakeyFunction &lt;-<span class="st"> </span>function(value) {
-  if (value %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">9</span>)) <span class="kw">stop</span>(<span class="st">"Ooops."</span>)
-  value^<span class="dv">2</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">flakeyFunction &lt;-<span class="st"> </span><span class="cf">function</span>(value) {
+  <span class="cf">if</span> (value <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">9</span>)) <span class="kw">stop</span>(<span class="st">"Ooops."</span>)
+  value<span class="op">^</span><span class="dv">2</span>
 }
-<span class="kw"><a href="../reference/batchMap.html">batchMap</a></span>(flakeyFunction, <span class="dv">1</span>:<span class="dv">10</span>)</code></pre></div>
+<span class="kw"><a href="../reference/batchMap.html">batchMap</a></span>(flakeyFunction, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)</code></pre></div>
 <pre><code>## Adding 10 jobs ...</code></pre>
 <p>Now that the jobs are defined, we can test jobs independently:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/testJob.html">testJob</a></span>(<span class="dt">id =</span> <span class="dv">1</span>)</code></pre></div>
@@ -84,10 +84,9 @@ reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistr
 <pre><code>## [1] "Error in (function (value)  : Ooops.\n"</code></pre>
 <p>When you have already submitted the jobs and suspect that something is going wrong, the first thing to do is to run <a href="https://mllg.github.io/batchtools/reference/getStatus"><code><a href="../reference/getStatus.html">getStatus()</a></code></a> to display a summary of the current state of the system.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/submitJobs.html">submitJobs</a></span>()</code></pre></div>
-<pre><code>## Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions 'Multicore'</code></pre>
-<pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Multicore' ...</code></pre>
+<pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/waitForJobs.html">waitForJobs</a></span>()</code></pre></div>
-<pre><code>## Syncing 9 files ...</code></pre>
+<pre><code>## Syncing 10 files ...</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/getStatus.html">getStatus</a></span>()</code></pre></div>
 <pre><code>## Status for 10 jobs:
@@ -109,15 +108,15 @@ reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistr
 ## 2:      9       TRUE  TRUE Error in (function (value)  : Ooops.</code></pre>
 <p>If we want to peek into the R log file of a job to see more context for the error we can use <a href="https://mllg.github.io/batchtools/reference/showLog"><code><a href="../reference/showLog.html">showLog()</a></code></a> which opens a pager or use <a href="https://mllg.github.io/batchtools/reference/showLog"><code><a href="../reference/showLog.html">getLog()</a></code></a> to get the log as character vector:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">writeLines</span>(<span class="kw"><a href="../reference/showLog.html">getLog</a></span>(<span class="dt">id =</span> <span class="dv">9</span>))</code></pre></div>
-<pre><code>## ### [bt 2017-02-03 15:56:12]: This is batchtools v0.9.1.9000
-## ### [bt 2017-02-03 15:56:12]: Starting calculation of 1 jobs
-## ### [bt 2017-02-03 15:56:12]: Setting working directory to '/tmp'
-## ### [bt 2017-02-03 15:56:12]: Memory measurement disabled
-## ### [bt 2017-02-03 15:56:12]: Starting job [batchtools job.id=9]
+<pre><code>## ### [bt 2017-02-19 22:49:09]: This is batchtools v0.9.1.9002
+## ### [bt 2017-02-19 22:49:09]: Starting calculation of 1 jobs
+## ### [bt 2017-02-19 22:49:09]: Setting working directory to '/tmp'
+## ### [bt 2017-02-19 22:49:09]: Memory measurement disabled
+## ### [bt 2017-02-19 22:49:09]: Starting job [batchtools job.id=9]
 ## Error in (function (value)  : Ooops.
 ## 
-## ### [bt 2017-02-03 15:56:12]: Job terminated with an exception [batchtools job.id=9]
-## ### [bt 2017-02-03 15:56:12]: Calculation finished!</code></pre>
+## ### [bt 2017-02-19 22:49:09]: Job terminated with an exception [batchtools job.id=9]
+## ### [bt 2017-02-19 22:49:09]: Calculation finished!</code></pre>
 <p>You can also grep for error or warning messages:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids =<span class="st"> </span><span class="kw"><a href="../reference/grepLogs.html">grepLogs</a></span>(<span class="dt">pattern =</span> <span class="st">"ooops"</span>, <span class="dt">ignore.case =</span> <span class="ot">TRUE</span>)
 <span class="kw">print</span>(ids)</code></pre></div>

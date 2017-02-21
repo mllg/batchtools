@@ -84,7 +84,7 @@
     <p>Loads the result of a single job.</p>
     
 
-    <pre><span class='fu'>loadResult</span>(<span class='no'>id</span>, <span class='no'>missing.val</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
+    <pre><span class='fu'>loadResult</span>(<span class='no'>id</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -92,9 +92,6 @@
       <dd>[<code>integer(1)</code> or <code>data.table</code>]
 Single integer to specify the job or a <code>data.table</code> with column <code>job.id</code>
 and exactly one row.</dd>
-      <dt>missing.val</dt>
-      <dd>[<code>ANY</code>]
-Value to impute if the result file is missing (if not provided and a result file is not found, an exception is raised).</dd>
       <dt>reg</dt>
       <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
@@ -102,8 +99,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>[<code>ANY</code>]. The saved result or <code>missing.val</code> if result file
-  is not found.</p>
+    <p>[<code>ANY</code>]. The stored result.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

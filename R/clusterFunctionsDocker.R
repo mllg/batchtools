@@ -3,11 +3,15 @@
 #' @description
 #' Cluster functions for Docker/Docker Swarm (\url{https://docs.docker.com/swarm/}).
 #'
-#' The \code{submitJob} function executes \code{docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]}.
+#' The \code{submitJob} function executes
+#' \code{docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]}.
 #' Arguments \code{docker.args}, \code{image.args} and \code{image} can be set on construction.
-#' The \code{resources} part takes the named resources \code{ncpus} and \code{memory} from \code{\link{submitJobs}} and maps them to
-#' the arguments \code{--cpu-shares} and \code{--memory} (in Megabytes).
-#' To reliably identify jobs in the swarm, jobs are labeled with \dQuote{batchtools=[job.hash]} and named using the current login name and the job hash.
+#' The \code{resources} part takes the named resources \code{ncpus} and \code{memory}
+#' from \code{\link{submitJobs}} and maps them to the arguments \code{--cpu-shares} and \code{--memory}
+#' (in Megabytes). The resource \code{threads} is mapped to the environment variables \dQuote{OMP_NUM_THREADS}
+#' and \dQuote{OPENBLAS_NUM_THREADS}.
+#' To reliably identify jobs in the swarm, jobs are labeled with \dQuote{batchtools=[job.hash]} and named
+#' using the current login name (label \dQuote{user}) and the job hash (label \dQuote{batchtools}).
 #'
 #' \code{listJobsRunning} uses \code{docker [docker.args] ps --format=\{\{.ID\}\}} to filter for running jobs.
 #'
@@ -15,8 +19,9 @@
 #'
 #' These cluster functions use a \link{Hook} to remove finished jobs before a new submit and every time the \link{Registry}
 #' is synchronized (using \code{\link{syncRegistry}}).
-#' This is currently required because docker does not remove exited containers automatically.
-#' Use \code{docker ps -a --filter 'label=batchtools' --filter 'status=exited'} to identify and remove terminated containers manually (or via a cron job).
+#' This is currently required because docker does not remove terminated containers automatically.
+#' Use \code{docker ps -a --filter 'label=batchtools' --filter 'status=exited'} to identify and remove terminated
+#' containers manually (or usa a cron job).
 #'
 #' @param image [\code{character(1)}]\cr
 #'   Name of the docker image to run.
@@ -42,7 +47,9 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     timeout = if (is.null(jc$resources$walltime)) character(0L) else sprintf("timeout %i", asInt(jc$resources$walltime, lower = 0L))
 
     cmd = c("docker", docker.args, "run", "--detach=true", image.args,
-      sprintf("-e DEBUGME=%s", Sys.getenv("DEBUGME")),
+      sprintf("-e DEBUGME='%s'", Sys.getenv("DEBUGME")),
+      sprintf("-e OMP_NUM_THREADS=%i", jc$resources$threads %??% 1L),
+      sprintf("-e OPENBLAS_NUM_THREADS=%i", jc$resources$threads %??% 1L),
       sprintf("-c %i", jc$resources$ncpus),
       sprintf("-m %im", jc$resources$memory),
       sprintf("--memory-swap %im", jc$resources$memory),
@@ -68,9 +75,23 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     }
   }
 
+  listJobs = function(reg, filter = character(0L)) {
+    # use a workaround for DockerSwarm: docker ps does not list all jobs correctly, only
+    # docker inspect reports the status correctly
+    args = c(docker.args, "ps", "--format={{.ID}}", "--filter 'label=batchtools'", filter)
+    ids = runOSCommand("docker", args)
+    if (ids$exit.code != 0L)
+      stop("docker returned non-zero exit code")
+    if (length(ids$output) == 0L)
+      return(character(0L))
+
+    args = c(docker.args, "inspect", "--format '{{json .State.Status}}'", ids$output)
+    status = runOSCommand("docker", args)
+    ids$output[status$output == "\"running\""]
+  }
+
   housekeeping = function(reg, ...) {
-    args = c(docker.args, "ps", "-a", "--format={{.ID}}", "--filter 'label=batchtools'", "--filter 'status=exited'")
-    batch.ids = intersect(runOSCommand("docker", args)$output, reg$status$batch.id)
+    batch.ids = chintersect(listJobs(reg, "--filter 'status=exited'"), reg$status$batch.id)
     if (length(batch.ids) > 0L)
       runOSCommand("docker", c(docker.args, "rm", batch.ids))
     invisible(TRUE)
@@ -84,11 +105,7 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
 
   listJobsRunning = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    args = c(docker.args, "ps", "--format={{.ID}}", "--filter 'label=batchtools'", sprintf("--filter 'user=%s'", user))
-    res = runOSCommand("docker", args)
-    if (res$exit.code == 0L)
-      return(res$output)
-    stop("docker returned non-zero exit code")
+    listJobs(reg, sprintf("--filter 'user=%s'", user))
   }
 
   makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
