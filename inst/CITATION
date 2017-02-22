@@ -3,6 +3,25 @@
 citHeader("To cite BatchJobs, BatchExperiments or batchtools in publications use:")
 
 citEntry(entry = "Article",
+  title        = "batchtools: Tools for R to work on batch systems",
+  author       = personList(as.person("Michel Lang"),
+                   as.person("Bernd Bischl"),
+                   as.person("Dirk Surmann")),
+  journal      = "The Journal of Open Source Software",
+  year         = "2017",
+  month        = "feb",
+  volume       = "2",
+  number       = "10",
+  doi          = "10.21105/joss.00135",
+  url          = "https://doi.org/10.21105/joss.00135",
+  textVersion  =
+  paste("Michel Lang, Bernd Bischl, Dirk Surmann (2017).",
+        "batchtools: Tools for R to work on batch systems.",
+        "The Journal of Open Source Software, 2(10).",
+        "URL https://doi.org/10.21105/joss.00135.")
+)
+
+citEntry(entry = "Article",
   title        = "{BatchJobs} and {BatchExperiments}: Abstraction Mechanisms for Using {R} in Batch Environments",
   author       = personList(as.person("Bernd Bischl"),
                    as.person("Michel Lang"),
@@ -15,7 +34,6 @@ citEntry(entry = "Article",
   number       = "11",
   pages        = "1--25",
   url          = "http://www.jstatsoft.org/v64/i11/",
-
   textVersion  =
   paste("Bernd Bischl, Michel Lang, Olaf Mersmann, Joerg Rahnenfuehrer, Claus Weihs (2015).",
         "BatchJobs and BatchExperiments: Abstraction Mechanisms for Using R in Batch Environments.",
