@@ -1,5 +1,6 @@
 # batchtools
 
+[![JOSS Publicatoin](http://joss.theoj.org/papers/10.21105/joss.00135/status.svg)](http://dx.doi.org/10.21105/joss.00135)
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/batchtools)](https://cran.r-project.org/package=batchtools)
 [![Build Status](https://travis-ci.org/mllg/batchtools.svg?branch=master)](https://travis-ci.org/mllg/batchtools)
 [![Build Status](https://ci.appveyor.com/api/projects/status/ypp14tiiqfhnv92k/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/batchtools/branch/master)
