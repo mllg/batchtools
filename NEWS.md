@@ -1,3 +1,5 @@
+# batchtools 0.9.3
+
 # batchtools 0.9.2
 
 * Full support for array jobs on Slurm and TORQUE.
