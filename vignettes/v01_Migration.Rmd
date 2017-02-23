@@ -38,12 +38,6 @@ The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchE
 * batchtools remembers the last created or loaded Registry and sets it as default registry.
   This way, you do not need to pass the registry around anymore.
   If you need to work with multiple registries simultaneously on the other hand, you can still do so by explicitly passing registries to the functions.
-* The template file format has changed:
-    - The scheduler should directly execute the command `Rscript -e 'batchtools::doJobCollection(<filename>)'`.
-      There is no intermediate R source file like in BatchJobs.
-    - All information stored in the object `JobCollection` can be accessed while brewing the template.
-      Some variable names have changed and need to be adapted though.
-      See the vignette on cluster functions for more information.
 * Most functions now return a [data.table](https://cran.r-project.org/package=data.table) which is keyed with the `job.id`.
   This way, return values can be joined together easily and efficient (see this [help page](https://mllg.github.io/batchtools/reference/JoinTables) for some examples).
 * The building blocks of a problem has been renamed from `static` and `dynamic` to the more intuitive `data` and `fun`.
@@ -51,6 +45,13 @@ The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchE
 * The function `makeDesign` has been removed.
   Parameters can be defined by just passing a `data.frame` or `data.table` to [addExperiments](https://mllg.github.io/batchtools/reference/addExperiments).
   For exhaustive designs, use `expand.grid()` or `data.table::CJ()`.
+
+## Template changes
+* The scheduler should directly execute the command `Rscript -e 'batchtools::doJobCollection(<filename>)'`.
+  There is no intermediate R source file like in BatchJobs.
+* All information stored in the object [`JobCollection`](https://mllg.github.io/batchtools/reference/JobCollection) can be accessed while brewing the template.
+* Some variable names have changed and need to be adapted, e.g. `job.name` is now `job.hash`.
+* Extra variables may be passed via the argument `resoures` of [submitJobs](https://mllg.github.io/batchtools/reference/submitJobs).
 
 ## New features
 * Support for Docker Swarm via `ClusterFunctionsDocker`.

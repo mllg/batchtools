@@ -88,15 +88,19 @@
 <html><body><a href="#interface-changes" class="anchor"> </a></body></html>Interface changes</h2>
 <ul>
 <li>batchtools remembers the last created or loaded Registry and sets it as default registry. This way, you do not need to pass the registry around anymore. If you need to work with multiple registries simultaneously on the other hand, you can still do so by explicitly passing registries to the functions.</li>
-<li>The template file format has changed:
-<ul>
-<li>The scheduler should directly execute the command <code>Rscript -e 'batchtools::doJobCollection(&lt;filename&gt;)'</code>. There is no intermediate R source file like in BatchJobs.</li>
-<li>All information stored in the object <code>JobCollection</code> can be accessed while brewing the template. Some variable names have changed and need to be adapted though. See the vignette on cluster functions for more information.</li>
-</ul>
-</li>
 <li>Most functions now return a <a href="https://cran.r-project.org/package=data.table">data.table</a> which is keyed with the <code>job.id</code>. This way, return values can be joined together easily and efficient (see this <a href="https://mllg.github.io/batchtools/reference/JoinTables">help page</a> for some examples).</li>
 <li>The building blocks of a problem has been renamed from <code>static</code> and <code>dynamic</code> to the more intuitive <code>data</code> and <code>fun</code>. Thus, algorithm function should have the formal arguments <code>job</code>, <code>data</code> and <code>instance</code>.</li>
 <li>The function <code>makeDesign</code> has been removed. Parameters can be defined by just passing a <code>data.frame</code> or <code>data.table</code> to <a href="https://mllg.github.io/batchtools/reference/addExperiments">addExperiments</a>. For exhaustive designs, use <code>expand.grid()</code> or <code>data.table::CJ()</code>.</li>
+</ul>
+</div>
+<div id="template-changes" class="section level2">
+<h2 class="hasAnchor">
+<html><body><a href="#template-changes" class="anchor"> </a></body></html>Template changes</h2>
+<ul>
+<li>The scheduler should directly execute the command <code>Rscript -e 'batchtools::doJobCollection(&lt;filename&gt;)'</code>. There is no intermediate R source file like in BatchJobs.</li>
+<li>All information stored in the object <a href="https://mllg.github.io/batchtools/reference/JobCollection"><code>JobCollection</code></a> can be accessed while brewing the template.</li>
+<li>Some variable names have changed and need to be adapted, e.g. <code>job.name</code> is now <code>job.hash</code>.</li>
+<li>Extra variables may be passed via the argument <code>resoures</code> of <a href="https://mllg.github.io/batchtools/reference/submitJobs">submitJobs</a>.</li>
 </ul>
 </div>
 <div id="new-features" class="section level2">
@@ -218,6 +222,7 @@
 <a href="#comparison-with-batchjobsbatchexperiments">Comparison with BatchJobs/BatchExperiments</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#internal-changes">Internal changes</a></li>
       <li><a href="#interface-changes">Interface changes</a></li>
+      <li><a href="#template-changes">Template changes</a></li>
       <li><a href="#new-features">New features</a></li>
       </ul>
 </li>
