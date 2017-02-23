@@ -10,6 +10,13 @@ with_options = function(opts, expr) {
   force(expr)
 }
 
+with_rng = function(kind, expr) {
+  prev = RNGkind()[1L]
+  on.exit(RNGkind(prev))
+  RNGkind(kind)
+  force(expr)
+}
+
 silent = function(expr) {
   with_options(list(batchtools.progress = FALSE, batchtools.verbose = FALSE), expr)
 }
