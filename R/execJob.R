@@ -23,13 +23,6 @@ execJob.character = function(job) {
 }
 
 #' @export
-execJob.JobCollection = function(job) {
-  if (nrow(job$jobs) != 1L)
-    stop("You must provide a JobCollection with exactly one job")
-  execJob(getJob(job, i = 1L))
-}
-
-#' @export
 execJob.Job = function(job) {
   if (".job" %chin% names(formals(job$fun))) {
     with_seed(job$seed, do.call(job$fun, c(job$pars, list(.job = job)), envir = .GlobalEnv))

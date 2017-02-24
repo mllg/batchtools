@@ -1,27 +1,51 @@
-#' @useDynLib batchtools next_streams
-RNGStream = R6Class("RNGStream",
-  public = list(
-    start.seed = NA_integer_,
-    initialize = function(seed) {
-      prev.state = get0(".Random.seed", .GlobalEnv)
-      prev.rng = RNGkind()[1L]
-      on.exit({ RNGkind(prev.rng); assign(".Random.seed", prev.state, envir = .GlobalEnv) })
+convertSeed = function(seed, method = "default") {
+  if (identical(method, "lecuyer") && length(seed) == 1L) {
+    # convert integer seed to state
+    kind = RNGkind()
+    if (!identical(kind[1L], "L'Ecuyer-CMRG")) {
       RNGkind("L'Ecuyer-CMRG")
-      set.seed(seed)
-      self$start.seed = get0(".Random.seed", .GlobalEnv)
-
-      assertInteger(self$start.seed, len = 7L, any.missing = FALSE)
-      if (self$start.seed[1L] %% 100L != 7L)
-        stop("Invalid value of 'seed'")
-    },
-
-    get = function(i) {
-      i = asInteger(i, lower = 1, any.missing = FALSE)
-      x = .Call(next_streams, self$start.seed, as.integer(max(i)))
-      x[, i, drop = FALSE]
+      on.exit(RNGkind(kind = kind[1L], normal.kind = kind[2L]))
     }
-  )
-)
+    set.seed(seed)
+    seed = get0(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+  }
+  seed
+}
+
+#' @useDynLib batchtools next_streams
+incrementSeed = function(seed, i) {
+  if (length(seed) == 1L) {
+    ifelse(i > .Machine$integer.max - seed, seed - .Machine$integer.max + i, seed + i)
+  } else {
+    assertInteger(seed, len = 7L, any.missing = FALSE)
+    stopifnot(!is.unsorted(i))
+    .Call(next_streams, seed, as.integer(i))
+  }
+}
+
+with_temp_rng = function(type, expr) {
+  saved.kind = RNGkind()
+  saved.state = get0(".Random.seed", envir = .GlobalEnv, inherits = FALSE, ifnotfound = NULL)
+  on.exit({
+    RNGkind(saved.kind[1L], saved.kind[2L])
+    if (is.null(saved.state))
+      rm(".Random.seed", envir = .GlobalEnv)
+    else
+      assign(".Random.seed", saved.state, envir = .GlobalEnv)
+  })
+  RNGkind(type)
+  force(expr)
+}
+
+with_seed = function(seed, expr) {
+  if (length(seed) == 1L) { # Mersenne
+    set.seed(seed, kind = "Mersenne-Twister")
+  } else { # L'Ecuyer
+    assign(".Random.seed", seed, envir = .GlobalEnv)
+  }
+  eval.parent(expr)
+}
+
 
 getSeed = function(start.seed, id) {
   if (id > .Machine$integer.max - start.seed)
@@ -40,12 +64,3 @@ with_seed = function(seed, expr) {
   }
   eval.parent(expr)
 }
-
-if (FALSE) {
-  rng = RNGStream$new(123L)
-  i = 1:5e6
-  d = data.table(i = i, state = unname(as.list(as.data.frame(rng$get(i)))))
-  print(object.size(d), unit = "Mb")
-  system.time(rng$get(10000000))
-}
-

@@ -14,14 +14,15 @@ static const Uint64 A2p127[3][3] = {
     {      32183930, 1464411153, 1022607788 },
     {    2824425944,   32183930, 2093834863 }};
 
-SEXP next_streams(SEXP x_, SEXP n_) {
+SEXP next_streams(SEXP x_, SEXP i_) {
     Uint64 seed[6], nseed[6];
     for (int i = 0; i < 6; i++)
         seed[i] = (unsigned int)INTEGER(x_)[i+1];
-    const int n = INTEGER(n_)[0];
+
+    const int n = length(i_);
     SEXP ans = PROTECT(allocMatrix(INTSXP, 7, n));
 
-    for (int k = 0; k < n; k++) {
+    for (int nstate = 1, k = 0;; nstate++) {
         Uint64 tmp;
         for (int i = 0; i < 3; i++) {
             tmp = 0;
@@ -41,10 +42,17 @@ SEXP next_streams(SEXP x_, SEXP n_) {
             nseed[i+3] = tmp;
         }
 
-        INTEGER(ans)[k * 7] = INTEGER(x_)[0];
-        for (int i = 0;  i < 6; i++) {
-            INTEGER(ans)[k * 7 + i + 1] = (int) nseed[i];
+        if (nstate == INTEGER(i_)[k]) {
+            INTEGER(ans)[k * 7] = INTEGER(x_)[0];
+            for (int i = 0;  i < 6; i++) {
+                INTEGER(ans)[k * 7 + i + 1] = (int) nseed[i];
+            }
+            if (++k == n)
+                break;
         }
+
+        for (int i = 0; i < 6; i++)
+            seed[i] = nseed[i];
     }
 
     UNPROTECT(1);
