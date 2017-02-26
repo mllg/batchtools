@@ -13,13 +13,13 @@ convertSeed = function(seed, method = "default") {
 }
 
 #' @useDynLib batchtools next_streams
-incrementSeed = function(seed, i) {
-  if (length(seed) == 1L) {
-    ifelse(i > .Machine$integer.max - seed, seed - .Machine$integer.max + i, seed + i)
+nextState = function(state, i) {
+  i = asInteger(i, any.missing = FALSE, min.len = 1L, lower = 1L)
+  if (length(state) == 1L) {
+    ifelse(i > .Machine$integer.max - state, state - .Machine$integer.max + i, state + i)
   } else {
-    assertInteger(seed, len = 7L, any.missing = FALSE)
-    stopifnot(!is.unsorted(i))
-    .Call(next_streams, seed, as.integer(i))
+    assertInteger(state, len = 7L, any.missing = FALSE)
+    .Call(next_streams, state, i, order(i))
   }
 }
 
