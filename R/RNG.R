@@ -1,51 +1,108 @@
-convertSeed = function(seed, method = "default") {
-  if (identical(method, "lecuyer") && length(seed) == 1L) {
-    # convert integer seed to state
-    kind = RNGkind()
-    if (!identical(kind[1L], "L'Ecuyer-CMRG")) {
-      RNGkind("L'Ecuyer-CMRG")
-      on.exit(RNGkind(kind = kind[1L], normal.kind = kind[2L]))
+RNG = R6Class("RNG",
+  cloneable = FALSE,
+  public = list(
+    states = NULL,
+
+    initialize = function(start, i) {
+      self$setRNG()
+      private$compute(start, i)
+      self$nextStream()
+    },
+
+    setRNG = function() {
+      current = RNGkind()
+      if (!exists(".Random.seed", .GlobalEnv))
+        set.seed(NULL)
+      private$prev$state = get0(".Random.seed", envir = .GlobalEnv)
+
+      if (current[1L] != self$kind) {
+        "!DEBUG [RNG] Setting RNG to `self$kind`"
+        private$prev$kind = current[1L]
+        private$prev$normal.kind = current[2L]
+        RNGkind(self$kind)
+      }
+    },
+
+    restore = function() {
+      if (!is.null(private$prev$kind)) {
+        "!DEBUG [RNG] Resetting RNG to `private$prev$kind`"
+        RNGkind(private$prev$kind, private$prev$normal.kind)
+      }
+
+      if (!is.null(private$prev$state)) {
+        "!DEBUG [RNG] Restored previous state"
+        assign(".Random.seed", private$prev$state, envir = .GlobalEnv)
+      }
     }
-    set.seed(seed)
-    seed = get0(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
-  }
-  seed
-}
+  ),
+
+  private = list(
+    prev = list(),
+    i = 0L
+  )
+)
 
 #' @useDynLib batchtools next_streams
-nextState = function(state, i) {
-  i = asInteger(i, any.missing = FALSE, min.len = 1L, lower = 1L)
-  if (length(state) == 1L) {
-    ifelse(i > .Machine$integer.max - state, state - .Machine$integer.max + i, state + i)
-  } else {
-    assertInteger(state, len = 7L, any.missing = FALSE)
-    .Call(next_streams, state, i, order(i))
-  }
+RNGLecuyer = R6Class("RNG",
+  cloneable = FALSE,
+  inherit = RNG,
+  public = list(
+    kind = "L'Ecuyer-CMRG",
+    nextStream = function() {
+      private$i = private$i + 1L
+      if (private$i > ncol(self$states))
+        stop("No more RNG Streams remaining")
+      assign(".Random.seed", self$states[, private$i], envir = .GlobalEnv)
+    }
+  ),
+
+  private = list(
+    compute = function(start, i) {
+      set.seed(start, kind = self$kind)
+      start = get0(".Random.seed", envir = .GlobalEnv)
+      self$states = .Call(next_streams, start, i)
+    }
+  )
+)
+
+
+RNGMersenne = R6Class("RNGMersenne",
+  cloneable = FALSE,
+  inherit = RNG,
+  public = list(
+    kind = "Mersenne-Twister",
+    nextStream = function() {
+      private$i = private$i + 1L
+      if (private$i > length(self$states))
+        stop("No more RNG Streams remaining")
+      set.seed(self$states[private$i])
+    }
+  ),
+
+  private = list(
+    compute = function(start, i) {
+      self$states = ifelse(i > .Machine$integer.max - start, start - .Machine$integer.max + i, start + i)
+    }
+  )
+)
+
+getRNG = function(kind, seed, i) {
+  seed = asCount(seed)
+  i = asInteger(i, any.missing = FALSE, lower = 1L)
+  switch(kind,
+    "mersenne" = RNGMersenne$new(seed, i),
+    "lecuyer" = RNGLecuyer$new(seed, i),
+    stop("Invalid value for RNG kind")
+  )
 }
 
-with_temp_rng = function(type, expr) {
-  saved.kind = RNGkind()
-  saved.state = get0(".Random.seed", envir = .GlobalEnv, inherits = FALSE, ifnotfound = NULL)
-  on.exit({
-    RNGkind(saved.kind[1L], saved.kind[2L])
-    if (is.null(saved.state))
-      rm(".Random.seed", envir = .GlobalEnv)
-    else
-      assign(".Random.seed", saved.state, envir = .GlobalEnv)
-  })
-  RNGkind(type)
-  force(expr)
+if (FALSE) {
+  getRNG("mersenne", 123, 2)
+  rng = RNGLecuyer$new(1L, 1:3)
+  .Random.seed
+  rng$nextStream()
+  .Random.seed
 }
-
-with_seed = function(seed, expr) {
-  if (length(seed) == 1L) { # Mersenne
-    set.seed(seed, kind = "Mersenne-Twister")
-  } else { # L'Ecuyer
-    assign(".Random.seed", seed, envir = .GlobalEnv)
-  }
-  eval.parent(expr)
-}
-
 
 getSeed = function(start.seed, id) {
   if (id > .Machine$integer.max - start.seed)

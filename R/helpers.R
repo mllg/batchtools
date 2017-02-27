@@ -57,6 +57,10 @@ seq_row = function(x) {
   seq_len(nrow(x))
 }
 
+seq_col = function(x) {
+  seq_len(ncol(x))
+}
+
 vlapply = function (x, fun, ..., use.names = TRUE) {
   vapply(X = x, FUN = fun, ..., FUN.VALUE = NA, USE.NAMES = use.names)
 }

@@ -177,6 +177,5 @@ UpdateBuffer = R6Class("UpdateBuffer",
         self$next.update = now + runif(1L, 300, 1800)
       }
     }
-
   )
 )

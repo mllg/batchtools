@@ -8,14 +8,14 @@ extern SEXP c_binpack(SEXP, SEXP, SEXP);
 extern SEXP c_lpt(SEXP, SEXP, SEXP);
 extern SEXP count_not_missing(SEXP);
 extern SEXP fill_gaps(SEXP);
-extern SEXP next_streams(SEXP, SEXP, SEXP);
+extern SEXP next_streams(SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"c_binpack",         (DL_FUNC) &c_binpack,         3},
     {"c_lpt",             (DL_FUNC) &c_lpt,             3},
     {"count_not_missing", (DL_FUNC) &count_not_missing, 1},
     {"fill_gaps",         (DL_FUNC) &fill_gaps,         1},
-    {"next_streams",      (DL_FUNC) &next_streams,      3},
+    {"next_streams",      (DL_FUNC) &next_streams,      2},
     {NULL, NULL, 0}
 };
 

@@ -14,16 +14,25 @@ static const Uint64 A2p127[3][3] = {
     {      32183930, 1464411153, 1022607788 },
     {    2824425944,   32183930, 2093834863 }};
 
-SEXP next_streams(SEXP x_, SEXP i_, SEXP ord_) {
+
+SEXP next_streams(SEXP x_, SEXP i_) {
+    const int n = length(i_);
     Uint64 seed[6], nseed[6], tmp;
+
+    /* copy over contents of x_ */
     for (int i = 0; i < 6; i++)
         seed[i] = (unsigned int)INTEGER(x_)[i+1];
 
-    const int n = length(i_);
-    SEXP ans = PROTECT(allocMatrix(INTSXP, 7, n));
-    int ii = INTEGER(i_)[INTEGER(ord_)[0] - 1];
+    /* determine order of i_ */
+    int * ord = malloc(n * sizeof(int));
+    R_orderVector1(ord, n, i_, FALSE, FALSE);
 
-    for (int nstate = 1, k = 0;; nstate++) {
+    /* allocate output matrix */
+    SEXP ans = PROTECT(allocMatrix(INTSXP, 7, n));
+
+    R_len_t needle = INTEGER(i_)[ord[0]];
+    R_len_t count = 0;
+    for (int nstate = 1;; nstate++) {
         for (int i = 0; i < 3; i++) {
             tmp = 0;
             for(int j = 0; j < 3; j++) {
@@ -42,19 +51,25 @@ SEXP next_streams(SEXP x_, SEXP i_, SEXP ord_) {
             nseed[i+3] = tmp;
         }
 
-        if (nstate == ii) {
-            INTEGER(ans)[k * 7] = INTEGER(x_)[0];
-            for (int i = 0;  i < 6; i++)
-                INTEGER(ans)[k * 7 + i + 1] = (int) nseed[i];
-            if (++k == n)
+        if (nstate == needle) {
+            /* store state in ans */
+            int col = ord[count] * 7;
+            INTEGER(ans)[col] = INTEGER(x_)[0];
+            for (int i = 0; i < 6; i++)
+                INTEGER(ans)[col + i + 1] = (int) nseed[i];
+
+            /* advance to next i */
+            if (++count == n)
                 break;
-            ii = INTEGER(i_)[INTEGER(ord_)[k] - 1];
+            needle = INTEGER(i_)[ord[count]];
         }
 
+        /* copy nseed -> seed */
         for (int i = 0; i < 6; i++)
             seed[i] = nseed[i];
     }
 
+    free(ord);
     UNPROTECT(1);
     return ans;
 }
