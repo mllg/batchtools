@@ -123,3 +123,35 @@ test_that("L'Ecuyer", {
 
   rng$restore()
 })
+
+test_that("Problem and Algorithm seed", {
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE, seed = 42)
+  addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) runif(1), seed = 1L)
+  addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) list(instance = instance, res = runif(1)))
+  addAlgorithm(reg = reg, "a2", fun = function(job, data, instance, ...) list(instance = instance, res = runif(1)))
+  prob.designs = list(p1 = data.table())
+  algo.designs = list(a1 = data.table(), a2 = data.table())
+  repls = 3
+  ids = addExperiments(prob.designs, algo.designs, repls = repls, reg = reg)
+
+  submitAndWait(reg, ids)
+
+  set.seed(2); p1 = runif(1)
+  set.seed(3); p2 = runif(1)
+  set.seed(4); p3 = runif(1)
+  set.seed(43); a1 = runif(1)
+  set.seed(44); a2 = runif(1)
+  set.seed(45); a3 = runif(1)
+  silent({
+    ids = findExperiments(algo.name = "a1", reg = reg)
+    results = rbindlist(reduceResultsList(ids, reg = reg))
+  })
+  expect_true(all(results$instance == c(p1, p2, p3)))
+  expect_true(all(results$res == c(a1, a2, a3)))
+
+  silent({
+    ids = findExperiments(repl = 2, reg = reg)
+    results = rbindlist(reduceResultsList(ids, reg = reg))
+  })
+  expect_true(all(results$instance == p2))
+})
