@@ -23,11 +23,22 @@ execJob.character = function(job) {
 }
 
 #' @export
+execJob.JobCollection = function(job) {
+  # this is used in the testJob template
+  if (nrow(job$jobs) != 1L)
+    stop("You must provide a JobCollection with exactly one job")
+  execJob(getJob(job, i = 1L))
+}
+
+#' @export
 execJob.Job = function(job) {
+  rng = getRNG("mersenne", job$seed[1L], job$seed[2L])
+  on.exit(rng$restore())
+
   if (".job" %chin% names(formals(job$fun))) {
-    with_seed(job$seed, do.call(job$fun, c(job$pars, list(.job = job)), envir = .GlobalEnv))
+    do.call(job$fun, c(job$pars, list(.job = job)), envir = .GlobalEnv)
   } else {
-    with_seed(job$seed, do.call(job$fun, job$pars, envir = .GlobalEnv))
+    do.call(job$fun, job$pars, envir = .GlobalEnv)
   }
 }
 
@@ -39,6 +50,8 @@ execJob.Experiment = function(job) {
   job$allow.access.to.instance = FALSE
 
   catf("Applying algorithm '%s' on problem '%s' ...", job$algo.name, job$prob.name)
+  rng = getRNG("mersenne", job$seed[1L], job$seed[2L])
+  on.exit(rng$restore())
   wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, instance = instance, ...)
-  with_seed(job$seed, do.call(wrapper, job$pars$algo.pars, envir = .GlobalEnv))
+  do.call(wrapper, job$pars$algo.pars, envir = .GlobalEnv)
 }

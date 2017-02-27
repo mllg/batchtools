@@ -28,12 +28,12 @@
 #'   problem across algorithms, so that different algorithms are evaluated on the same stochastic instance.
 #'   If the problem seed is defined, the seeding mechanism works as follows:
 #'   (1) Before the dynamic part of a problem is instantiated,
-#'   the seed of the problem + [replication number] - 1 is set, i.e. the first
-#'   replication uses the problem seed. (2) The stochastic part of the problem is
-#'   instantiated. (3) From now on the usual experiment seed of the registry is used,
-#'   see \code{\link{ExperimentRegistry}}.
-#'   If \code{seed} is set to \code{NULL} (default), the job seed is used to instantiate the problem and
-#'   different algorithms see different stochastic instances of the same problem.
+#'   the seed of the problem + [replication number] is set.
+#'   (2) The stochastic part of the problem is instantiated.
+#'   (3) Before the algorithm is called, the same seed which is used for regular jobs is set: [registry seed] + [job id].
+#'
+#'   If \code{seed} is set to \code{NULL} (default), the job seed is also used to instantiate the problem which leads to
+#'   different stochastic instances of the same problem for each experiment.
 #' @template expreg
 #' @return [\code{Problem}]. Object of class \dQuote{Problem} (invisibly).
 #' @aliases Problem

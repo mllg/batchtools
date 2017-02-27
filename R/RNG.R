@@ -95,29 +95,3 @@ getRNG = function(kind, seed, i) {
     stop("Invalid value for RNG kind")
   )
 }
-
-if (FALSE) {
-  getRNG("mersenne", 123, 2)
-  rng = RNGLecuyer$new(1L, 1:3)
-  .Random.seed
-  rng$nextStream()
-  .Random.seed
-}
-
-getSeed = function(start.seed, id) {
-  if (id > .Machine$integer.max - start.seed)
-    start.seed - .Machine$integer.max + id
-  else
-    start.seed + id
-}
-
-with_seed = function(seed, expr) {
-  if (!is.null(seed)) {
-    if (!exists(".Random.seed", .GlobalEnv))
-      set.seed(NULL)
-    state = get(".Random.seed", .GlobalEnv)
-    set.seed(seed)
-    on.exit(assign(".Random.seed", state, envir = .GlobalEnv))
-  }
-  eval.parent(expr)
-}

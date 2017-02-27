@@ -1,22 +1,33 @@
 context("Seeds")
 
-test_that("with_seed", {
-  set.seed(1)
-  x.1 = runif(5)
-  set.seed(42)
-  x.42 = runif(5)
-  x.next = runif(5)
+# with_seed = function(seed, expr) {
+#   if (!is.null(seed)) {
+#     if (!exists(".Random.seed", .GlobalEnv))
+#       set.seed(NULL)
+#     state = get(".Random.seed", .GlobalEnv)
+#     set.seed(seed)
+#     on.exit(assign(".Random.seed", state, envir = .GlobalEnv))
+#   }
+#   eval.parent(expr)
+# }
 
-  set.seed(42)
-  y.1 = with_seed(1, runif(5))
-  y.42 = runif(5)
-  y.next = runif(5)
+# test_that("with_seed", {
+#   set.seed(1)
+#   x.1 = runif(5)
+#   set.seed(42)
+#   x.42 = runif(5)
+#   x.next = runif(5)
 
-  expect_identical(x.1, y.1)
-  expect_identical(x.42, y.42)
-  expect_identical(x.next, y.next)
-  expect_error(with_seed(1, print(state)))
-})
+#   set.seed(42)
+#   y.1 = with_seed(1, runif(5))
+#   y.42 = runif(5)
+#   y.next = runif(5)
+
+#   expect_identical(x.1, y.1)
+#   expect_identical(x.42, y.42)
+#   expect_identical(x.next, y.next)
+#   expect_error(with_seed(1, print(state)))
+# })
 
 test_that("Problem and Algorithm seed", {
   reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE, seed = 42)
@@ -30,9 +41,9 @@ test_that("Problem and Algorithm seed", {
 
   submitAndWait(reg, ids)
 
-  set.seed(1); p1 = runif(1)
-  set.seed(2); p2 = runif(1)
-  set.seed(3); p3 = runif(1)
+  set.seed(2); p1 = runif(1)
+  set.seed(3); p2 = runif(1)
+  set.seed(4); p3 = runif(1)
   set.seed(43); a1 = runif(1)
   set.seed(44); a2 = runif(1)
   set.seed(45); a3 = runif(1)

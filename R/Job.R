@@ -74,9 +74,12 @@ Experiment = R6Class("Experiment",
       if (!self$allow.access.to.instance)
         stop("You cannot access 'job$instance' in the problem generation or algorithm function")
       p = self$problem
-      seed = if (is.null(p$seed)) self$seed else p$seed + self$repl - 1L
+      seed = if (is.null(p$seed)) self$seed else c(p$seed, self$repl)
+      rng = getRNG("mersenne", seed[1L], seed[2L])
+      catf("Setting prob seed: %i/%i", seed[1], seed[2])
+      on.exit(rng$restore())
       wrapper = function(...) p$fun(job = self, data = p$data, ...)
-      with_seed(seed, do.call(wrapper, self$pars$prob.pars, envir = .GlobalEnv))
+      do.call(wrapper, self$pars$prob.pars, envir = .GlobalEnv)
     },
     external.dir = function() {
       path = file.path(self$cache$file.dir, "external", self$id)
@@ -155,7 +158,7 @@ makeJob = function(id, cache = NULL, reg = getDefaultRegistry()) {
 makeJob.Registry = function(id, cache = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Job$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Job$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = c(reg$seed, row$job.id),
     resources = resources)
 }
 
@@ -163,7 +166,7 @@ makeJob.Registry = function(id, cache = NULL, reg = getDefaultRegistry()) {
 makeJob.ExperimentRegistry = function(id, cache = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "problem", "algorithm", "repl", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Experiment$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Experiment$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = c(reg$seed, row$job.id),
     repl = row$repl, resources = resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
@@ -173,12 +176,12 @@ getJob = function(jc, i, cache = NULL) {
 
 getJob.JobCollection = function(jc, i, cache = NULL) {
   row = jc$jobs[i]
-  Job$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
+  Job$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = c(jc$seed, row$job.id),
     resources = jc$resources)
 }
 
 getJob.ExperimentCollection = function(jc, i, cache = NULL) {
   row = jc$jobs[i]
-  Experiment$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
+  Experiment$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = c(jc$seed, row$job.id),
     repl = row$repl, resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm)
 }

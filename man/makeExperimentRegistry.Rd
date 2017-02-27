@@ -84,6 +84,10 @@ is suitable for the definition of large scale computer experiments.
 Each experiments consists of a \code{\link{Problem}} and an \code{\link{Algorithm}}.
 These can be parametrized with \code{\link{addExperiments}} to actually define computational
 jobs.
+
+The seeding mechanism is identical to the seeding for a regular \code{\link{Registry}} whereas
+the seed is set twice: first before instantiating the \code{\link{Problem}} and second time before running the \code{\link{Algorithm}}.
+To synchronize the problem instance generation, you may set a special problem seed (see \code{\link{Problem}}).
 }
 \examples{
 tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
