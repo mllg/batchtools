@@ -42,6 +42,26 @@ RNG = R6Class("RNG",
   )
 )
 
+RNGMersenne = R6Class("RNGMersenne",
+  cloneable = FALSE,
+  inherit = RNG,
+  public = list(
+    kind = "Mersenne-Twister",
+    nextStream = function() {
+      private$i = private$i + 1L
+      if (private$i > length(self$states))
+        stop("No more RNG Streams remaining")
+      set.seed(self$states[private$i])
+    }
+  ),
+
+  private = list(
+    compute = function(start, i) {
+      self$states = ifelse(i > .Machine$integer.max - start, start - .Machine$integer.max + i, start + i)
+    }
+  )
+)
+
 #' @useDynLib batchtools next_streams
 RNGLecuyer = R6Class("RNG",
   cloneable = FALSE,
@@ -65,30 +85,9 @@ RNGLecuyer = R6Class("RNG",
   )
 )
 
-
-RNGMersenne = R6Class("RNGMersenne",
-  cloneable = FALSE,
-  inherit = RNG,
-  public = list(
-    kind = "Mersenne-Twister",
-    nextStream = function() {
-      private$i = private$i + 1L
-      if (private$i > length(self$states))
-        stop("No more RNG Streams remaining")
-      set.seed(self$states[private$i])
-    }
-  ),
-
-  private = list(
-    compute = function(start, i) {
-      self$states = ifelse(i > .Machine$integer.max - start, start - .Machine$integer.max + i, start + i)
-    }
-  )
-)
-
 getRNG = function(kind, seed, i) {
   seed = asCount(seed)
-  i = asInteger(i, any.missing = FALSE, lower = 1L)
+  i = asInteger(i, any.missing = FALSE, lower = 0L)
   switch(kind,
     "mersenne" = RNGMersenne$new(seed, i),
     "lecuyer" = RNGLecuyer$new(seed, i),

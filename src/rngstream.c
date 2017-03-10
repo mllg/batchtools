@@ -15,13 +15,38 @@ static const Uint64 A2p127[3][3] = {
     {    2824425944,   32183930, 2093834863 }};
 
 
+static void avance(Uint64 * seed, Uint64 * nseed) {
+    Uint64 tmp;
+    for (int i = 0; i < 3; i++) {
+        tmp = 0;
+        for(int j = 0; j < 3; j++) {
+            tmp += A1p127[i][j] * seed[j];
+            tmp %= 4294967087;
+        }
+        nseed[i] = tmp;
+    }
+
+    for (int i = 0; i < 3; i++) {
+        tmp = 0;
+        for(int j = 0; j < 3; j++) {
+            tmp += A2p127[i][j] * seed[j+3];
+            tmp %= 4294944443;
+        }
+        nseed[i+3] = tmp;
+    }
+
+    for (int i = 0; i < 6; i++)
+        seed[i] = nseed[i];
+}
+
+
 SEXP next_streams(SEXP x_, SEXP i_) {
     const int n = length(i_);
     Uint64 seed[6], nseed[6], tmp;
 
     /* copy over contents of x_ */
     for (int i = 0; i < 6; i++)
-        seed[i] = (unsigned int)INTEGER(x_)[i+1];
+        seed[i] = nseed[i] = (unsigned int)INTEGER(x_)[i+1];
 
     /* determine order of i_ */
     int * ord = malloc(n * sizeof(int));
@@ -30,27 +55,10 @@ SEXP next_streams(SEXP x_, SEXP i_) {
     /* allocate output matrix */
     SEXP ans = PROTECT(allocMatrix(INTSXP, 7, n));
 
-    R_len_t needle = INTEGER(i_)[ord[0]];
+    R_len_t needle = INTEGER(i_)[ord[0]] - 1;
     R_len_t count = 0;
-    for (int nstate = 1;; nstate++) {
-        for (int i = 0; i < 3; i++) {
-            tmp = 0;
-            for(int j = 0; j < 3; j++) {
-                tmp += A1p127[i][j] * seed[j];
-                tmp %= 4294967087;
-            }
-            nseed[i] = tmp;
-        }
 
-        for (int i = 0; i < 3; i++) {
-            tmp = 0;
-            for(int j = 0; j < 3; j++) {
-                tmp += A2p127[i][j] * seed[j+3];
-                tmp %= 4294944443;
-            }
-            nseed[i+3] = tmp;
-        }
-
+    for (R_len_t nstate = 0;; nstate++) {
         if (nstate == needle) {
             /* store state in ans */
             int col = ord[count] * 7;
@@ -58,15 +66,11 @@ SEXP next_streams(SEXP x_, SEXP i_) {
             for (int i = 0; i < 6; i++)
                 INTEGER(ans)[col + i + 1] = (int) nseed[i];
 
-            /* advance to next i */
             if (++count == n)
                 break;
-            needle = INTEGER(i_)[ord[count]];
+            needle = INTEGER(i_)[ord[count]] - 1;
         }
-
-        /* copy nseed -> seed */
-        for (int i = 0; i < 6; i++)
-            seed[i] = nseed[i];
+        avance(seed, nseed);
     }
 
     free(ord);

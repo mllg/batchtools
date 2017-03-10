@@ -74,7 +74,7 @@ Experiment = R6Class("Experiment",
       if (!self$allow.access.to.instance)
         stop("You cannot access 'job$instance' in the problem generation or algorithm function")
       p = self$problem
-      seed = if (is.null(p$seed)) self$seed else c(p$seed, self$repl)
+      seed = if (is.null(p$seed)) self$seed else c(p$seed, self$repl - 1L)
       rng = getRNG("mersenne", seed[1L], seed[2L])
       catf("Setting prob seed: %i/%i", seed[1], seed[2])
       on.exit(rng$restore())

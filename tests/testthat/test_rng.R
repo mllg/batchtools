@@ -21,8 +21,8 @@ getStream = function(start, i) {
     state = getState()
     expected = matrix(NA, nrow = 7, ncol = length(i))
     for (ii in order(i)) {
-      state = parallel::nextRNGStream(state)
       expected[, ii] = state
+      state = parallel::nextRNGStream(state)
     }
     expected
   })
@@ -106,7 +106,7 @@ test_that("L'Ecuyer", {
 
   set.seed(start, kind = rng$kind)
   state = getState()
-  for (j in seq_len(i[1])) state = parallel::nextRNGStream(state)
+  for (j in seq_len(i[1] - 1)) state = parallel::nextRNGStream(state)
 
   expect_equal(state, rng$states[, 1])
   expect_equal(state, state1)
@@ -115,13 +115,17 @@ test_that("L'Ecuyer", {
 
   set.seed(start, kind = rng$kind)
   state = getState()
-  for (j in seq_len(i[2])) state = parallel::nextRNGStream(state)
+  for (j in seq_len(i[2] - 1)) state = parallel::nextRNGStream(state)
   expect_equal(state, rng$states[, 2])
   expect_equal(state, state2)
   setState(state2)
   expect_equal(x2, runif(1))
 
   rng$restore()
+})
+
+test_that("start + 0", {
+  rng = getRNG("mersenne", 123, 1)
 })
 
 test_that("Problem and Algorithm seed", {
@@ -136,9 +140,9 @@ test_that("Problem and Algorithm seed", {
 
   submitAndWait(reg, ids)
 
-  set.seed(2); p1 = runif(1)
-  set.seed(3); p2 = runif(1)
-  set.seed(4); p3 = runif(1)
+  set.seed(1); p1 = runif(1)
+  set.seed(2); p2 = runif(1)
+  set.seed(3); p3 = runif(1)
   set.seed(43); a1 = runif(1)
   set.seed(44); a2 = runif(1)
   set.seed(45); a3 = runif(1)
