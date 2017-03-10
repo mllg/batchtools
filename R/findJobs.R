@@ -54,13 +54,13 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
 #' @export
 #' @rdname findJobs
 #' @param prob.name [\code{character}]\cr
-#'   Fixed string to match problem names.
+#'   Exact name of the problem (no substring matching).
 #'   If not provided, all problems are matched.
 #' @param prob.pattern [\code{character}]\cr
 #'   Regular expression pattern to match problem names.
 #'   If not provided, all problems are matched.
 #' @param algo.name [\code{character}]\cr
-#'   Fixed string to match algorithm names.
+#'   Exact name of the problem (no substring matching).
 #'   If not provided, all algorithms are matched.
 #' @param algo.pattern [\code{character}]\cr
 #'   Regular expression pattern to match algorithm names.
@@ -82,7 +82,7 @@ findExperiments = function(prob.name = NA_character_, prob.pattern = NA_characte
 
   if (!is.na(prob.name)) {
     problem = NULL
-    tab = tab[stri_detect_fixed(problem, prob.name)]
+    tab = tab[problem == prob.name]
   }
 
   if (!is.na(prob.pattern)) {
@@ -92,7 +92,7 @@ findExperiments = function(prob.name = NA_character_, prob.pattern = NA_characte
 
   if (!is.na(algo.name)) {
     algorithm = NULL
-    tab = tab[stri_detect_fixed(algorithm, algo.name)]
+    tab = tab[algorithm == algo.name]
   }
 
   if (!is.na(algo.pattern)) {

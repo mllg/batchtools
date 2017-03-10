@@ -1,4 +1,6 @@
 # batchtools 0.9.3
+* `findExperiments()` now matches exact string (instead of substrings) for matches using `prob.name` and `algo.name`.
+  For substring search, use `prob.pattern` or `algo.pattern`, respectively.
 
 # batchtools 0.9.2
 
