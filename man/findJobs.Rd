@@ -56,7 +56,8 @@ Jobs for which \code{expr} evaluates to \code{TRUE} are returned.}
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})
 with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to all jobs.}
+If not set, defaults to all jobs.
+Invalid ids are ignored.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}

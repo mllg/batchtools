@@ -12,7 +12,8 @@ grepLogs(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE,
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})
 with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to the return value of \code{\link{findStarted}}.}
+If not set, defaults to the return value of \code{\link{findStarted}}.
+Invalid ids are ignored.}
 
 \item{pattern}{[\code{character(1L)}]\cr
 Regular expression or string (see \code{fixed}).}
