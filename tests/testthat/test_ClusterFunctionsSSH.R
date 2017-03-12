@@ -22,8 +22,6 @@ test_that("cf ssh", {
     expect_equal(findNotDone(reg = reg), findJobs(ids = 2, reg = reg))
     expect_true(loadResult(1, reg = reg))
   }
-
-
 })
 
 if (FALSE) {
