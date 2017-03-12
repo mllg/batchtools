@@ -19,7 +19,7 @@ test_that("convertIds", {
   tab = convertIds(reg, data.table(job.id = 3:4, key = "job.id"))
   expect_data_table(tab, ncol = 1, nrow = 1, key = "job.id")
 
-  tab = convertIds(reg, as.data.frame(findJobs(reg = reg)))
+  tab = convertIds(reg, ids = as.data.frame(findJobs(reg = reg)))
   expect_data_table(tab, ncol = 1, key = "job.id")
   expect_copied(tab, reg$status)
 
