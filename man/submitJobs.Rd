@@ -12,7 +12,8 @@ submitJobs(ids = NULL, resources = list(), sleep = default.sleep,
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})
 with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to the return value of \code{\link{findNotSubmitted}}.}
+If not set, defaults to the return value of \code{\link{findNotSubmitted}}.
+Invalid ids are ignored.}
 
 \item{resources}{[\code{named list}]\cr
 Computational  resources for the batch jobs. The elements of this list
