@@ -137,8 +137,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' addExperiments(prob.designs, algo.designs, reg = tmp)
 #' submitJobs(reg = tmp)
 #'
-#' # collect results and join them
-#' # with problem and algorithm paramters
+#' # collect results and join them # with problem and algorithm paramters
 #' ijoin(
 #'   getJobPars(reg = tmp),
 #'   reduceResultsDataTable(reg = tmp, fun = function(x) list(res = x))
@@ -150,28 +149,33 @@ reduceResultsList = function(ids = NULL, fun = NULL, ..., missing.val, reg = get
   .reduceResultsList(ids, fun, ..., missing.val = missing.val, reg = reg)
 }
 
-#' @param fill [\code{logical(1)}]\cr
-#'   In \code{reduceResultsDataTable}: This flag is passed down to
-#'   \code{\link[data.table]{rbindlist}} which is used to convert the results
-#'   to a \code{\link[data.table]{data.table}}.
+#' @param flatten [\code{logical(1)}]\cr
+#'   Transform results into separate \code{\link[data.table]{data.table}} columns.
+#'   Defaults to \code{TRUE} if all results are (a list of) scalar atomics,
+#'   Otherwise each row of the column will hold a named list.
 #' @export
 #' @rdname reduceResultsList
-reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, missing.val, reg = getDefaultRegistry()) {
+reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., flatten = NULL, missing.val, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   ids = convertIds(reg, ids, default = .findDone(reg = reg))
   assertFunction(fun, null.ok = TRUE)
-  assertFlag(fill)
+  assertFlag(flatten, null.ok = TRUE)
 
   results = .reduceResultsList(ids = ids, fun = fun, ..., missing.val = missing.val, reg = reg)
   if (length(results) == 0L)
     return(noIds())
-  if (!qtestr(results, "d"))
-    results = lapply(results, as.data.table)
-  results = rbindlist(results, fill = fill, idcol = "job.id")
-  if (!identical(results$job.id, seq_row(ids)))
-    stop("The function must return an object for each job which is convertible to a data.frame with one row")
-  results[, "job.id" := ids$job.id]
-  setkeyv(results, "job.id")[]
+
+  if (flatten %??% qtestr(results, c("v1", "L"), depth = 2L)) {
+    if (!qtestr(results, "d"))
+      results = lapply(results, as.data.table)
+    results = rbindlist(results, fill = TRUE, idcol = "job.id")
+    if (!identical(results$job.id, seq_row(ids)))
+      stop("The function must return an object for each job which is convertible to a data.frame with one row")
+    results[, "job.id" := ids$job.id]
+    setkeyv(results, "job.id")[]
+  } else {
+    ids[, result := results][]
+  }
 }
 
 .reduceResultsList = function(ids, fun = NULL, ..., missing.val, reg = getDefaultRegistry()) {

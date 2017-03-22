@@ -1,6 +1,10 @@
 # batchtools 0.9.3
 * `findExperiments()` now matches exact string (instead of substrings) for matches using `prob.name` and `algo.name`.
   For substring search, use `prob.pattern` or `algo.pattern`, respectively.
+* Changed arguments for `reduceResultsDataTable()`
+    * Removed `fill`, now is always `TRUE`
+    * Introduced `flatten` to control if the result should be represented as a column of lists or flattened as separate columns.
+      Defaults to a backward-compatible heuristic, similar to `getJobPars`.
 
 # batchtools 0.9.2
 
