@@ -26,15 +26,16 @@ test_that("addAlgorithm", {
 
 test_that("addAlgorithm overwrites old algo", {
   reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
-  addProblem(reg = reg, "p1", data = iris, fun = function(job, data) 2)
-  addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) instance * 2)
-  addExperiments(list(p1 = data.table()), list(a1 = data.table()), reg = reg)
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) 2)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) instance * 2)
+  ids = addExperiments(list(p1 = data.table()), list(a1 = data.table()), reg = reg)
+  run = function(id) suppressAll(execJob(makeJob(id, reg = reg)))
 
-  expect_equal(execJob(makeJob(1, reg = reg)), 4)
+  expect_equal(run(1), 4)
 
-  addProblem(reg = reg, "p1", data = iris, fun = function(job, data) 4)
-  expect_equal(execJob(makeJob(1, reg = reg)), 8)
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) 4)
+  expect_equal(run(1), 8)
 
-  addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) instance * 8)
-  expect_equal(execJob(makeJob(1, reg = reg)), 32)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) instance * 8)
+  expect_equal(run(1), 32)
 })

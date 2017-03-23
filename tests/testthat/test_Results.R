@@ -110,7 +110,7 @@ test_that("multiRowResults", {
     fun = function(a) data.table(y1 = rep(a, 3), y2 = rep(a/2, 3))
     ids = batchMap(fun, a = c(10, 100), reg = reg)
     submitAndWait(reg, ids)
-    expect_error(reduceResultsDataTable(reg = reg), "one row")
+    expect_error(reduceResultsDataTable(reg = reg, flatten = TRUE), "one row")
   })
 })
 
@@ -139,3 +139,24 @@ test_that("reduceResultsList/BatchExperiments", {
   })
 })
 
+test_that("reduceResultsDataTable/flatten simple", {
+  silent({
+    tab = reduceResultsDataTable(reg = reg, flatten = FALSE)
+    expect_data_table(tab, nrow = 3, ncol = 2, key = "job.id")
+    expect_set_equal(names(tab), c("job.id", "result"))
+    expect_list(tab$result, types = "numeric", names = "unnamed")
+  })
+})
+
+test_that("reduceResultsDataTable/flatten objects", {
+  silent({
+    reg = makeRegistry(file.dir = NA, make.default = FALSE)
+    fun = function(...) iris
+    ids = batchMap(fun, i = 1:2, reg = reg)
+    submitAndWait(reg, 1:2)
+    tab = reduceResultsDataTable(reg = reg)
+    expect_data_table(tab, nrow = 2, ncol = 2, key = "job.id")
+    expect_set_equal(names(tab), c("job.id", "result"))
+    expect_list(tab$result, types = "data.frame", names = "unnamed")
+  })
+})

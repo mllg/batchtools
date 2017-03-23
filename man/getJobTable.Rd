@@ -31,8 +31,8 @@ Invalid ids are ignored.}
 
 \item{flatten}{[\code{logical(1)}]\cr
 Transform the job parameters and/or resource specifications to data frame columns?
-Defaults to \code{TRUE} if all parameters or resources are atomics,
-\code{FALSE} otherwise where each row of the column will hold a named list.
+Defaults to \code{TRUE} if all parameters (or resources) are scalar atomics.
+Otherwise each row of the column will hold a named list.
 New columns will be named using \code{prefix}.}
 
 \item{prefix}{[\code{logical(1)}]\cr
