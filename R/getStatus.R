@@ -30,7 +30,7 @@ getStatusTable = function(ids = NULL, batch.ids = getBatchIds(reg = reg), reg = 
   stats = filter(reg$status, ids)[, list(
     defined   = .N,
     submitted = count(submitted),
-    started   = count(started),
+    started   = sum(!is.na(started) | batch.id %chin% batch.ids[status == "running"]$batch.id),
     done      = count(done),
     error     = count(error),
     queued    = sum(batch.id %chin% batch.ids[status == "queued"]$batch.id),
