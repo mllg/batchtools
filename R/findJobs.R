@@ -159,7 +159,8 @@ findStarted = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findStarted = function(reg, ids = NULL, batch.ids = getBatchIds(reg, status = "running")) {
   started = batch.id = NULL
-  filter(reg$status, ids, c("job.id", "started", "batch.id"))[!is.na(started) | batch.id %in% batch.ids[status == "running"], "job.id"]
+  bids = batch.ids[status == "running"]$batch.id
+  filter(reg$status, ids, c("job.id", "started", "batch.id"))[!is.na(started) | batch.id %in% bids, "job.id"]
 }
 
 
@@ -172,7 +173,8 @@ findNotStarted = function(ids = NULL, reg = getDefaultRegistry()) {
 
 .findNotStarted = function(reg, ids = NULL, batch.ids = getBatchIds(reg, status = "running")) {
   started = batch.id = NULL
-  filter(reg$status, ids, c("job.id", "started", "batch.id"))[is.na(started) & batch.id %nin% batch.ids[status == "running"], "job.id"]
+  bids = batch.ids[status == "running"]$batch.id
+  filter(reg$status, ids, c("job.id", "started", "batch.id"))[is.na(started) & ! batch.id %chin% bids, "job.id"]
 }
 
 
