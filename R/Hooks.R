@@ -2,7 +2,7 @@
 #'
 #' @description
 #' Hooks allow to trigger functions calls on specific events.
-#' They can be specified via the \code{\link{ClusterFunctions}} and are trigged on the following events:
+#' They can be specified via the \code{\link{ClusterFunctions}} and are triggered on the following events:
 #' \describe{
 #'   \item{\code{pre.sync}}{\code{function(reg, fns, ...)}: Run before synchronizing the registry on the master. \code{fn} is the character vector of paths to the update files.}
 #'   \item{\code{post.sync}}{\code{function(reg, updates, ...)}: Run after synchronizing the registry on the master. \code{updates} is the data.table of processed updates.}

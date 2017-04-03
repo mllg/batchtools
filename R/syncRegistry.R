@@ -1,4 +1,4 @@
-#' @title Syncronize the Registry
+#' @title Synchronize the Registry
 #'
 #' @description
 #' Parses update files written by the slaves to the file system and updates the

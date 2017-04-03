@@ -3,7 +3,7 @@
 #' @description
 #' Canceled jobs and jobs submitted multiple times may leave stray files behind.
 #' This function checks the registry for consistency and removes obsolete files
-#' and data base informations.
+#' and redundant data base entries.
 #'
 #' @template reg
 #' @family Registry

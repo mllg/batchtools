@@ -9,7 +9,7 @@
 #' @param export [\code{list}]\cr
 #'  Named list of objects to export.
 #' @param unexport [\code{character}]\cr
-#'  Vector of object names to un-export.
+#'  Vector of object names to unexport.
 #' @template reg
 #' @return [\code{data.table}] with name and uri to the exported objects.
 #' @export
