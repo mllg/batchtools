@@ -8,6 +8,7 @@
       Defaults to a backward-compatible heuristic, similar to `getJobPars`.
 * Improved heuristic to lookup template files.
   Templates shipped with the package can now be used by providing just the file name (w/o extension).
+* Updated CITATION
 
 # batchtools 0.9.2
 
