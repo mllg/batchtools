@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -82,23 +84,27 @@
 
     
     <p>This function is only intended for use in your own cluster functions implementation.</p>
-
-    <p>This function is only intended for use in your own cluster functions implementation.
+<p>This function is only intended for use in your own cluster functions implementation.
 Simply reads your template file and returns it as a character vector.</p>
     
 
-    <pre><span class='fu'>cfReadBrewTemplate</span>(<span class='no'>template</span>, <span class='kw'>comment.string</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>)</pre>
+    <pre class="usage"><span class='fu'>cfReadBrewTemplate</span>(<span class='no'>template</span>, <span class='kw'>comment.string</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>template</dt>
-      <dd>[<code>character(1)</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>template</th>
+      <td><p>[<code>character(1)</code>]
 Path to template file or single string (containing newlines) which is then passed
-to <code><a href='http://www.rdocumentation.org/packages/brew/topics/brew'>brew</a></code>.</dd>
-      <dt>comment.string</dt>
-      <dd>[<code>character(1)</code>]
-Ignore lines starting with this string.</dd>
-    </dl>
+to <code><a href='http://www.rdocumentation.org/packages/brew/topics/brew'>brew</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>comment.string</th>
+      <td><p>[<code>character(1)</code>]
+Ignore lines starting with this string.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

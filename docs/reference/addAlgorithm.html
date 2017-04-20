@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -83,35 +85,40 @@
     
     <p>Algorithms are functions which get the codedata part as well as the problem instance (the return value of the
 function defined in <code><a href='addProblem.html'>Problem</a></code>) and return an arbitrary R object.</p>
+<p>This function serializes all components to the file system and registers the algorithm in the <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>.
 
-    <p>This function serializes all components to the file system and registers the algorithm in the <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>.</p>
-
-    <p><code>removeAlgorithm</code> removes all jobs from the registry which depend on the specific algorithm.
+    <code>removeAlgorithm</code> removes all jobs from the registry which depend on the specific algorithm.
 <code>getAlgorithmIds</code> can be used to retrieve the IDs of already algorithms.</p>
     
 
-    <pre><span class='fu'>addAlgorithm</span>(<span class='no'>name</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())
+    <pre class="usage"><span class='fu'>addAlgorithm</span>(<span class='no'>name</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())
 
 <span class='fu'>removeAlgorithms</span>(<span class='no'>name</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())
 
 <span class='fu'>getAlgorithmIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>name</dt>
-      <dd>[<code>character(1)</code>]
-Unique identifier for the algorithm.</dd>
-      <dt>fun</dt>
-      <dd>[<code>function</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>name</th>
+      <td><p>[<code>character(1)</code>]
+Unique identifier for the algorithm.</p></td>
+    </tr>
+    <tr>
+      <th>fun</th>
+      <td><p>[<code>function</code>]
   The algorithm function. The static problem part is passed as &#8220;data&#8221;, the generated
-  problem instance is passed as &#8220;instance&#8221; and the <code><a href='makeJob.html'>Job</a></code>/<code><a href='makeJob.html'>Experiment</a></code> as &#8220;job&#8221;.
-  Therefore, your function must have the formal arguments &#8220;job&#8221;, &#8220;data&#8221; and &#8220;instance&#8221; (or dots <code>...</code>).
-
-  If you do not provide a function, it defaults to a function which just returns the instance.</dd>
-      <dt>reg</dt>
-      <dd>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]
-Registry. If not explicitly passed, uses the last created registry.</dd>
-    </dl>
+  problem instance is passed as &#8220;instance&#8221; and the <code><a href='JobExperiment.html'>Job</a></code>/<code><a href='JobExperiment.html'>Experiment</a></code> as &#8220;job&#8221;.
+  Therefore, your function must have the formal arguments &#8220;job&#8221;, &#8220;data&#8221; and &#8220;instance&#8221; (or dots <code>...</code>).</p>
+<p>If you do not provide a function, it defaults to a function which just returns the instance.</p></td>
+    </tr>
+    <tr>
+      <th>reg</th>
+      <td><p>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]
+Registry. If not explicitly passed, uses the last created registry.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -119,12 +126,12 @@ Registry. If not explicitly passed, uses the last created registry.</dd>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"p1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='no'>data</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'><span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"p1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='no'>data</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"p2"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='no'>job</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'><a href='addProblem.html'>getProblemIds</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] &quot;p1&quot; &quot;p2&quot;</div><div class='input'>
+<span class='fu'><a href='addProblem.html'>getProblemIds</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] "p1" "p2"</div><div class='input'>
 <span class='fu'>addAlgorithm</span>(<span class='st'>"a1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>) <span class='no'>instance</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>getAlgorithmIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] &quot;a1&quot;</div><div class='input'>
-<span class='fu'>removeAlgorithms</span>(<span class='st'>"a1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Removing Algorithm &#39;a1&#39; and 0 corresponding jobs ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 obsolete result files ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 obsolete log files ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 obsolete job collection files ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 job description files ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 external directories of unsubmitted jobs ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 resource specifications ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 tags ...</span></div><div class='input'><span class='fu'>getAlgorithmIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; character(0)</div></pre>
+<span class='fu'>getAlgorithmIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] "a1"</div><div class='input'>
+<span class='fu'>removeAlgorithms</span>(<span class='st'>"a1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Removing Algorithm 'a1' and 0 corresponding jobs ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 obsolete result files ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 obsolete log files ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 obsolete job collection files ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 job description files ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 external directories of unsubmitted jobs ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 resource specifications ...</span></div><div class='output co'>#&gt; <span class='message'>Removing 0 tags ...</span></div><div class='input'><span class='fu'>getAlgorithmIds</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; character(0)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

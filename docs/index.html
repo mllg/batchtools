@@ -9,7 +9,7 @@
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
@@ -58,7 +58,7 @@
   <div class="contents col-md-9">
     <div id="batchtools" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#batchtools" class="anchor"> </a>batchtools</h1></div>
+<a href="#batchtools" class="anchor"></a>batchtools</h1></div>
 
 <p>As a successor of the packages <a href="https://github.com/tudo-r/BatchJobs">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a>, batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, TORQUE/OpenPBS, Load Sharing Facility (LSF) or Docker Swarm (see the <a href="https://mllg.github.io/batchtools/articles/v00_Setup">Setup vignette</a>).</p>
 <p>The main features conclude:</p>
@@ -70,7 +70,7 @@
 </ul>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"> </a>Installation</h2>
+<a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install the stable version from CRAN:</p>
 <pre class="{r}"><code>install.packages("batchtools")</code></pre>
 <p>For the development version, use <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
@@ -78,7 +78,7 @@
 </div>
 <div id="why-batchtools" class="section level2">
 <h2 class="hasAnchor">
-<a href="#why-batchtools" class="anchor"> </a>Why batchtools?</h2>
+<a href="#why-batchtools" class="anchor"></a>Why batchtools?</h2>
 <p>The development of <a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> is discontinued for the following reasons:</p>
 <ul>
 <li>Maintainability: The packages <a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> are tightly connected which makes maintenance difficult. Changes have to be synchronized and tested against the current CRAN versions for compatibility. Furthermore, BatchExperiments violates CRAN policies by calling internal functions of BatchJobs.</li>
@@ -88,18 +88,37 @@
 </div>
 <div id="resources" class="section level2">
 <h2 class="hasAnchor">
-<a href="#resources" class="anchor"> </a>Resources</h2>
+<a href="#resources" class="anchor"></a>Resources</h2>
 <ul>
 <li><a href="https://mllg.github.io/batchtools/news/">NEWS</a></li>
 <li><a href="https://mllg.github.io/batchtools/reference">Function reference</a></li>
 <li><a href="https://mllg.github.io/batchtools/articles">Vignettes</a></li>
 <li>
+<a href="http://dx.doi.org/10.21105/joss.00135">JOSS Paper</a>: Short paper on batchtools. Please cite this if you use batchtools.</li>
+<li>
 <a href="http://www.jstatsoft.org/v64/i11">Paper on BatchJobs/BatchExperiments</a>: The described concept still holds for batchtools and most examples work analogously (see this <a href="https://mllg.github.io/batchtools/articles/v01_Migration">vignette</a> for differences between the packages).</li>
 </ul>
 </div>
+<div id="citation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#citation" class="anchor"></a>Citation</h2>
+<p>Please cite the <a href="http://dx.doi.org/10.21105/joss.00135">JOSS paper</a> using the following BibTeX entry:</p>
+<pre><code>@article{,
+  doi = {10.21105/joss.00135},
+  url = {https://doi.org/10.21105/joss.00135},
+  year  = {2017},
+  month = {feb},
+  publisher = {The Open Journal},
+  volume = {2},
+  number = {10},
+  author = {Michel Lang and Bernd Bischl and Dirk Surmann},
+  title = {batchtools: Tools for R to work on batch systems},
+  journal = {The Journal of Open Source Software}
+}</code></pre>
+</div>
 <div id="related-software" class="section level2">
 <h2 class="hasAnchor">
-<a href="#related-software" class="anchor"> </a>Related Software</h2>
+<a href="#related-software" class="anchor"></a>Related Software</h2>
 <ul>
 <li>The <a href="https://cran.r-project.org/view=HighPerformanceComputing">High Performance Computing Task View</a> lists the most relevant packages for scientific computing with R</li>
 <li>
@@ -110,7 +129,7 @@
 </div>
 <div id="contributing-to-batchtools" class="section level2">
 <h2 class="hasAnchor">
-<a href="#contributing-to-batchtools" class="anchor"> </a>Contributing to batchtools</h2>
+<a href="#contributing-to-batchtools" class="anchor"></a>Contributing to batchtools</h2>
 <p>This R package is licensed under the <a href="https://www.gnu.org/licenses/lgpl-3.0.en.html">LGPL-3</a>. If you encounter problems using this software (lack of documentation, misleading or wrong documentation, unexpected behaviour, bugs, …) or just want to suggest features, please open an issue in the <a href="https://github.com/mllg/batchtools/issues">issue tracker</a>. Pull requests are welcome and will be included at the discretion of the author. If you have customized a template file for your (larger) computing site, please share it: fork the repository, place your template in <code>inst/templates</code> and send a pull request.</p>
 </div>
 </div>
@@ -134,15 +153,14 @@
 <li>Bernd Bischl <br><small class="roles"> Author </small> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
-<html><body>
 <h2>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="http://dx.doi.org/10.21105/joss.00135"><img src="http://joss.theoj.org/papers/10.21105/joss.00135/status.svg" alt="JOSS Publicatoin"></a></li>
 <li><a href="https://cran.r-project.org/package=batchtools"><img src="http://www.r-pkg.org/badges/version/batchtools" alt="CRAN Status Badge"></a></li>
 <li><a href="https://travis-ci.org/mllg/batchtools"><img src="https://travis-ci.org/mllg/batchtools.svg?branch=master" alt="Build Status"></a></li>
 <li><a href="https://ci.appveyor.com/project/mllg/batchtools/branch/master"><img src="https://ci.appveyor.com/api/projects/status/ypp14tiiqfhnv92k/branch/master?svg=true" alt="Build Status"></a></li>
 <li><a href="https://coveralls.io/r/mllg/batchtools?branch=master"><img src="https://img.shields.io/coveralls/mllg/batchtools.svg" alt="Coverage Status"></a></li>
 </ul>
-</body></html>
 </div>
 </div>
 

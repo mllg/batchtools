@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -84,30 +86,36 @@
     <p>Starts a single job on the local machine.</p>
     
 
-    <pre><span class='fu'>testJob</span>(<span class='no'>id</span>, <span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
+    <pre class="usage"><span class='fu'>testJob</span>(<span class='no'>id</span>, <span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>id</dt>
-      <dd>[<code>integer(1)</code> or <code>data.table</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>id</th>
+      <td><p>[<code>integer(1)</code> or <code>data.table</code>]
 Single integer to specify the job or a <code>data.table</code> with column <code>job.id</code>
-and exactly one row.</dd>
-      <dt>external</dt>
-      <dd>[<code>logical(1)</code>]
+and exactly one row.</p></td>
+    </tr>
+    <tr>
+      <th>external</th>
+      <td><p>[<code>logical(1)</code>]
  Run the job in an external R session? If <code>TRUE</code>, starts a fresh R
  session on the local machine to execute the with <code><a href='execJob.html'>execJob</a></code>.
  You will not be able to use debug tools like <code><a href='http://www.rdocumentation.org/packages/base/topics/traceback'>traceback</a></code>
- or <code><a href='http://www.rdocumentation.org/packages/base/topics/browser'>browser</a></code>.
-
- If <code>external</code> is set to <code>FALSE</code> (default) on the other hand,
+ or <code><a href='http://www.rdocumentation.org/packages/base/topics/browser'>browser</a></code>.</p>
+<p>If <code>external</code> is set to <code>FALSE</code> (default) on the other hand,
  <code>testJob</code> will execute the job in the current R session and the usual
  debugging tools work. However, spotting missing variable declarations (as they
  are possibly resolved in the global environment) is impossible.
- Same holds for missing package dependency declarations.</dd>
-      <dt>reg</dt>
-      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
-    </dl>
+ Same holds for missing package dependency declarations.</p></td>
+    </tr>
+    <tr>
+      <th>reg</th>
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -122,9 +130,9 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>2</span>) <span class='no'>xxx</span> <span class='kw'>else</span> <span class='no'>x</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 jobs ...</span></div><div class='input'><span class='fu'>testJob</span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='co'>## Not run: ------------------------------------</span>
-<span class='co'># testJob(2, reg = tmp)</span>
-<span class='co'>## ---------------------------------------------</span></div></pre>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>2</span>) <span class='no'>xxx</span> <span class='kw'>else</span> <span class='no'>x</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 jobs ...</span></div><div class='input'><span class='fu'>testJob</span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='fu'>not_run</span>({
+  <span class='fu'>testJob</span>(<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+})</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
