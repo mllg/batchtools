@@ -15,10 +15,10 @@ test_that("clusterFunctions constructor", {
   check(makeClusterFunctionsSlurm(template = "foo\n"))
   check(makeClusterFunctionsOpenLava(template = "foo\n"))
   check(makeClusterFunctionsLSF(template = "foo\n"))
-  check(makeClusterFunctionsTORQUE(system.file(file.path("templates", "torque_lido.tmpl"), package = "batchtools")))
-  check(makeClusterFunctionsSlurm(system.file(file.path("templates", "slurm_dortmund.tmpl"), package = "batchtools")))
+  check(makeClusterFunctionsTORQUE("torque-lido"))
+  check(makeClusterFunctionsSlurm("slurm-dortmund"))
   check(makeClusterFunctionsDocker("image"))
-  expect_error(makeClusterFunctionsLSF(), "No template")
+  expect_error(makeClusterFunctionsLSF(), "point to a template file")
 
   skip_on_os(c("windows", "solaris")) # system2 is broken on solaris
     check(makeClusterFunctionsSSH(workers = list(Worker$new(nodename = "localhost", ncpus = 1L))))

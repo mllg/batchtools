@@ -6,6 +6,8 @@
     * Removed `fill`, now is always `TRUE`
     * Introduced `flatten` to control if the result should be represented as a column of lists or flattened as separate columns.
       Defaults to a backward-compatible heuristic, similar to `getJobPars`.
+* Improved heuristic to lookup template files.
+  Templates shipped with the package can now be used by providing just the file name (w/o extension).
 
 # batchtools 0.9.2
 

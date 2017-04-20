@@ -4,21 +4,20 @@
 \alias{makeClusterFunctionsLSF}
 \title{ClusterFunctions for LSF Systems}
 \usage{
-makeClusterFunctionsLSF(template = findTemplateFile("lsf"),
-  scheduler.latency = 1, fs.latency = 65)
+makeClusterFunctionsLSF(template = "lsf", scheduler.latency = 1,
+  fs.latency = 65)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
-Path to a brew template file that can be used for the job description.
-Alternatively, the template as a single string (including at least one newline \dQuote{\\n}).
-Defaults to a heuristic which looks for a template file in the following locations and picks
-the first one found:
+Either a path to a brew template file (with extension \dQuote{tmpl}), or a short descriptive name enabling the following heuristic for the file lookup:
 \enumerate{
-  \item \dQuote{batchtools.lsf.tmpl} in the current working directory.
-  \item \dQuote{lsf.tmpl} in the user config directory (see \code{\link[rappdirs]{user_config_dir}}); on linux is is usually \dQuote{~/.config/batchtools/lsf.tmpl}.
-  \item \dQuote{.batchtools.lsf.tmpl} in the home directory.
-  \item \dQuote{lsf.default.tmpl} in the package installation directory in the subfolder \dQuote{templates} (this probably does not exist for your cluster system or needs adaptation).
-}}
+  \item \dQuote{batchtools.[template].tmpl} in the current working directory.
+  \item \dQuote{[template].tmpl} in the user config directory (see \code{\link[rappdirs]{user_config_dir}}); on linux this is usually \dQuote{~/.config/batchtools/[template].tmpl}.
+  \item \dQuote{.batchtools.[template].tmpl} in the home directory.
+  \item \dQuote{[template].tmpl} in the package installation directory in the subfolder \dQuote{templates}.
+}
+Here, the default for \code{template} is \dQuote{lsf}.
+Alternatively, the template itself can be provided as a single string (including at least one newline \dQuote{\\n}).}
 
 \item{scheduler.latency}{[\code{numeric(1)}]\cr
 Time to sleep after important interactions with the scheduler to ensure a sane state.
