@@ -26,6 +26,7 @@ setSystemConf = function(reg, conf.file) {
 
     assertClass(reg$cluster.functions, "ClusterFunctions")
     assertList(reg$default.resources, names = "unique")
-    assertDirectoryExists(reg$temp.dir, access = "w")
+    if (!dir.exists(reg$temp.dir))
+      dir.create(reg$temp.dir, recursive = TRUE)
   }
 }
