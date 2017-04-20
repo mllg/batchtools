@@ -174,7 +174,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., flatten = NULL, m
     results[, "job.id" := ids$job.id]
     setkeyv(results, "job.id")[]
   } else {
-    ids[, result := results][]
+    ids[, "result" := results][]
   }
 }
 

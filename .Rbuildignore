@@ -1,3 +1,4 @@
+^LICENSE$
 ^src/.+\.o$
 ^src/.+\.so$
 \.swp$
