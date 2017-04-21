@@ -73,6 +73,8 @@ test_that("brew", {
 
 test_that("Export of environment variable DEBUGME", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  if (reg$cluster.functions$name == "Socket")
+    skip("Environment variables not exported for CF socket")
   batchMap(function(i) Sys.getenv("DEBUGME"), i = 1, reg = reg)
 
   prev = Sys.getenv("DEBUGME")
