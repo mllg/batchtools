@@ -1,4 +1,5 @@
 # batchtools 0.9.3
+
 * Running jobs now are also included while querying for status "started". This affects `findStarted()`, `findNotStarted` and `getStatus()`.
 * `findExperiments()` now performs an exact string match (instead of matching substrings) for patterns specified via `prob.name` and `algo.name`.
   For substring matching, use `prob.pattern` or `algo.pattern`, respectively.
