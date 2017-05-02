@@ -208,6 +208,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., flatten = NULL, m
       res = worker(readRDS(fns[i]), makeJob(ids$job.id[i], cache = cache, reg = reg), ...)
       if (!is.null(res))
         results[[i]] = res
+      rm(res)
       pb$tick()
     }
   }
