@@ -182,11 +182,11 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 #' @export
 print.Registry = function(x, ...) {
   cat("Job Registry\n")
-  catf("  Name    : %s", x$cluster.functions$name)
-  catf("  File dir: %s", x$file.dir)
-  catf("  Work dir: %s", x$work.dir)
-  catf("  Jobs    : %i", nrow(x$status))
-  catf("  Seed    : %i", x$seed)
+  catf("  ClusterFunction : %s", x$cluster.functions$name)
+  catf("  File dir        : %s", x$file.dir)
+  catf("  Work dir        : %s", x$work.dir)
+  catf("  Jobs            : %i", nrow(x$status))
+  catf("  Seed            : %i", x$seed)
 }
 
 assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, running.ok = TRUE) {
