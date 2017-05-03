@@ -4,6 +4,9 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
   if (identical(pv, reg$version))
     return(TRUE)
 
+  if (is.null(reg$version))
+    reg$version = "0.1"
+
   ### hotfix for versions before first cran release.
   ### this will be removed in the future
   if (reg$version < "0.9.0") {
