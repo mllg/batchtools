@@ -71,7 +71,7 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
 #'   Predicate expression evaluated in the algorithm parameters.
 #' @param repls [\code{integer}]\cr
 #'   Whitelist of replication numbers. If not provided, all replications are matched.
-findExperiments = function(prob.name = NA_character_, prob.pattern = NA_character_, algo.name = NA_character_, algo.pattern = NA_character_, prob.pars, algo.pars, repls = NULL, ids = NULL, reg = getDefaultRegistry()) {
+findExperiments = function(ids = NULL, prob.name = NA_character_, prob.pattern = NA_character_, algo.name = NA_character_, algo.pattern = NA_character_, prob.pars, algo.pars, repls = NULL, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, sync = TRUE)
   assertString(prob.name, na.ok = TRUE, min.chars = 1L)
   assertString(prob.pattern, na.ok = TRUE, min.chars = 1L)

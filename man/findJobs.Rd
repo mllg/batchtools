@@ -19,9 +19,10 @@
 \usage{
 findJobs(expr, ids = NULL, reg = getDefaultRegistry())
 
-findExperiments(prob.name = NA_character_, prob.pattern = NA_character_,
-  algo.name = NA_character_, algo.pattern = NA_character_, prob.pars,
-  algo.pars, repls = NULL, ids = NULL, reg = getDefaultRegistry())
+findExperiments(ids = NULL, prob.name = NA_character_,
+  prob.pattern = NA_character_, algo.name = NA_character_,
+  algo.pattern = NA_character_, prob.pars, algo.pars, repls = NULL,
+  reg = getDefaultRegistry())
 
 findSubmitted(ids = NULL, reg = getDefaultRegistry())
 
