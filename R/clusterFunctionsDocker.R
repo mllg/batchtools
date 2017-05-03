@@ -60,6 +60,7 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     res = runOSCommand(cmd[1L], cmd[-1L])
 
     if (res$exit.code > 0L) {
+      housekeeping(reg)
       no.res.msg = "no resources available"
       if (res$exit.code == 1L && any(stri_detect_fixed(res$output, no.res.msg)))
         return(makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = no.res.msg))
@@ -110,5 +111,5 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
 
   makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
     store.job = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency,
-    hooks = list(pre.submit.job = housekeeping, post.sync = housekeeping))
+    hooks = list(post.submit = housekeeping, post.sync = housekeeping))
 } # nocov end
