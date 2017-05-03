@@ -85,10 +85,12 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
       stop("docker returned non-zero exit code")
     if (length(ids$output) == 0L)
       return(character(0L))
+    # TODO: is this still required? breaks housekeeping in its current state
+    # args = c(docker.args, "inspect", "--format '{{json .State.Status}}'", ids$output)
+    # status = runOSCommand("docker", args)
+    # ids$output[status$output == "\"running\""]
+    ids$output
 
-    args = c(docker.args, "inspect", "--format '{{json .State.Status}}'", ids$output)
-    status = runOSCommand("docker", args)
-    ids$output[status$output == "\"running\""]
   }
 
   housekeeping = function(reg, ...) {
