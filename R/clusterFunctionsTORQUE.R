@@ -29,7 +29,7 @@ makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1
     assertClass(jc, "JobCollection")
 
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("qsub", outfile)
+    res = runOSCommand("qsub", shQuote(outfile))
 
     max.jobs.msg = "Maximum number of jobs already in queue"
     output = stri_flatten(stri_trim_both(res$output), "\n")

@@ -1,3 +1,9 @@
+# batchtools 0.9.4
+
+* Fixed handling of `file.dir` with special chars like whitespace.
+* Fixed order of arguments in `findExperiments()` (argument `ids` is now first).
+* Removed code to upgrade registries created with versions prior to v0.9.0 (first CRAN release).
+
 # batchtools 0.9.3
 
 * Running jobs now are also included while querying for status "started". This affects `findStarted()`, `findNotStarted` and `getStatus()`.

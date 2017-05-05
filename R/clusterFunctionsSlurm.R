@@ -47,7 +47,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
       jc$log.file = stri_join(jc$log.file, "_%a")
     }
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("sbatch", outfile)
+    res = runOSCommand("sbatch", shQuote(outfile))
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
     temp.error = "Socket timed out on send/recv operation"

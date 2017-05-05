@@ -37,7 +37,7 @@ makeClusterFunctionsOpenLava = function(template = "openlava", scheduler.latency
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("bsub", stdin = outfile)
+    res = runOSCommand("bsub", stdin = shQuote(outfile))
 
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)
