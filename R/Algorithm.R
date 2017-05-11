@@ -43,6 +43,7 @@ addAlgorithm = function(name, fun = NULL, reg = getDefaultRegistry())  {
     assert(checkFunction(fun, args = c("job", "data", "instance")), checkFunction(fun, args = "..."))
   }
 
+  info("Adding algorithm '%s'", name)
   algo = setClasses(list(fun = fun, name = name), "Algorithm")
   writeRDS(algo, file = getAlgorithmURI(reg, name))
   reg$defs$algorithm = addlevel(reg$defs$algorithm, name)

@@ -59,9 +59,11 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
   } else {
     assert(checkFunction(fun, args = c("job", "data")), checkFunction(fun, args = "..."))
   }
-  if (!is.null(seed))
+  if (!is.null(seed)) {
     seed = asCount(seed, positive = TRUE)
+  }
 
+  info("Adding problem '%s'", name)
   prob = setClasses(list(name = name, seed = seed, data = data, fun = fun), "Problem")
   writeRDS(prob, file = getProblemURI(reg, name))
   reg$defs$problem = addlevel(reg$defs$problem, name)

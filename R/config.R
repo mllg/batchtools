@@ -28,5 +28,7 @@ setSystemConf = function(reg, conf.file) {
     assertList(reg$default.resources, names = "unique")
     if (!dir.exists(reg$temp.dir))
       dir.create(reg$temp.dir, recursive = TRUE)
+  } else {
+    info("No configuration file found")
   }
 }
