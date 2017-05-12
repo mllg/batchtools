@@ -64,7 +64,7 @@ removeAlgorithms = function(name, reg = getDefaultRegistry()) {
     job.ids = filter(def.ids, reg$status, "job.id")
 
     info("Removing Algorithm '%s' and %i corresponding jobs ...", nn, nrow(job.ids))
-    file.remove(getAlgorithmURI(reg, nn))
+    file.remove.safely(getAlgorithmURI(reg, nn))
     reg$defs = reg$defs[!def.ids]
     reg$status = reg$status[!job.ids]
     reg$defs$algorithm = rmlevel(reg$defs$algorithm, nn)

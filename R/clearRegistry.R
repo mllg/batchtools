@@ -14,7 +14,7 @@ clearRegistry = function(reg = getDefaultRegistry()) {
   user.fun = file.path(reg$file.dir, "user.function.rds")
   if (file.exists(user.fun)) {
     info("Removing user function ...")
-    file.remove(user.fun)
+    file.remove.safely(user.fun)
   }
   sweepRegistry(reg = reg)
 }

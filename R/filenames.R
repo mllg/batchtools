@@ -1,3 +1,15 @@
+npath = function(path, must.work = TRUE) {
+  if (stri_startswith_fixed(path, "~")) {
+    # do not call normalizePath, we do not want to expand this paths relative to home
+    if (must.work && !file.exists(path))
+      stopf("File '%s' not found", path)
+    if (testOS("windows"))
+      path = stri_replace_all_fixed(path, "\\", "/")
+    return(path)
+  }
+  normalizePath(path, winslash = "/", mustWork = must.work)
+}
+
 getResultPath = function(reg) {
   file.path(reg$file.dir, "results")
 }

@@ -154,7 +154,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
     next.update = NA_real_,
     initialize = function(ids) {
       self$updates = data.table(job.id = ids, started = NA_real_, done = NA_real_, error = NA_character_, memory = NA_real_, written = FALSE, key = "job.id")
-      self$next.update = Sys.time() + runif(1L, 300, 1800)
+      self$next.update = Sys.time() + runif(1L, 60, 300)
     },
 
     add = function(i, x) {
@@ -174,7 +174,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
       now = Sys.time()
       if (now > self$next.update) {
         self$save(jc)
-        self$next.update = now + runif(1L, 300, 1800)
+        self$next.update = now + runif(1L, 60, 300)
       }
     }
 
