@@ -25,7 +25,8 @@ Usually safe to set to \code{NA} which disables the expensive heuristic if you a
 Jobs are spawned asynchronously using the package \pkg{snow}.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDockerQueue}},
+  \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsMulticore}},

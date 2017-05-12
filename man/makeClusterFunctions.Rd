@@ -66,7 +66,8 @@ Note that some standard implementations for TORQUE, Slurm, LSF, SGE, etc. ship
 with the package.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDockerQueue}},
+  \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsMulticore}},

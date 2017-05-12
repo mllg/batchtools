@@ -36,7 +36,8 @@ Listing jobs returns an empty vector (as no jobs can be running when you call th
 and \code{killJob} is not implemented for the same reasons.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDockerQueue}},
+  \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsMulticore}},
   \code{\link{makeClusterFunctionsOpenLava}},

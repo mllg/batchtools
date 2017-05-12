@@ -51,7 +51,8 @@ allocations.
 Array jobs are currently not supported.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDockerQueue}},
+  \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsMulticore}},
   \code{\link{makeClusterFunctionsOpenLava}},

@@ -54,7 +54,8 @@ Use \code{docker ps -a --filter 'label=batchtools' --filter 'status=exited'} to 
 containers manually (or usa a cron job).
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDockerQueue}},
+  \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsMulticore}},
   \code{\link{makeClusterFunctionsOpenLava}},

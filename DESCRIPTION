@@ -43,6 +43,8 @@ Imports:
 Suggests:
     debugme,
     e1071,
+    jsonlite,
+    RCurl,
     knitr,
     parallelMap,
     ranger,

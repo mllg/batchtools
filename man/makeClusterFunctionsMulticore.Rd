@@ -26,7 +26,8 @@ Jobs are spawned asynchronously using the functions \code{mcparallel} and \code{
 Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDockerQueue}},
+  \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsOpenLava}},
