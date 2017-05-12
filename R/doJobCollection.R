@@ -108,13 +108,13 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   catf("### [bt %s]: Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"))
 
   # try to pre-fetch some objects from the file system
-  cache = Cache$new(jc$file.dir)
+  reader = RDSReader$new(use.cache = TRUE)
   buf = UpdateBuffer$new(jc$jobs$job.id)
 
-  runHook(jc, "pre.do.collection", cache = cache)
+  runHook(jc, "pre.do.collection", reader = reader)
 
   for (i in seq_len(n.jobs)) {
-    job = getJob(jc, i, cache = cache)
+    job = getJob(jc, i, reader = reader)
     id = job$id
 
     update = list(started = ustamp(), done = NA_integer_, error = NA_character_, memory = NA_real_)
@@ -139,7 +139,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     buf$flush(jc)
   }
 
-  runHook(jc, "post.do.collection", updates = buf$updates, cache = cache)
+  runHook(jc, "post.do.collection", updates = buf$updates, reader = reader)
   buf$save(jc)
   catf("### [bt %s]: Calculation finished!", now())
 

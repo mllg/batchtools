@@ -45,7 +45,7 @@ addAlgorithm = function(name, fun = NULL, reg = getDefaultRegistry())  {
 
   info("Adding algorithm '%s'", name)
   algo = setClasses(list(fun = fun, name = name), "Algorithm")
-  writeRDS(algo, file = getAlgorithmURI(reg, name))
+  writeRDS(algo, file = getAlgorithmURI(reg$file.dir, name))
   reg$defs$algorithm = addlevel(reg$defs$algorithm, name)
   saveRegistry(reg)
   invisible(algo)
@@ -64,7 +64,7 @@ removeAlgorithms = function(name, reg = getDefaultRegistry()) {
     job.ids = filter(def.ids, reg$status, "job.id")
 
     info("Removing Algorithm '%s' and %i corresponding jobs ...", nn, nrow(job.ids))
-    file.remove.safely(getAlgorithmURI(reg, nn))
+    file.remove.safely(getAlgorithmURI(reg$file.dir, nn))
     reg$defs = reg$defs[!def.ids]
     reg$status = reg$status[!job.ids]
     reg$defs$algorithm = rmlevel(reg$defs$algorithm, nn)
@@ -81,6 +81,6 @@ getAlgorithmIds = function(reg = getDefaultRegistry()) {
   levels(reg$defs$algorithm)
 }
 
-getAlgorithmURI = function(reg, name) {
-  file.path(reg$file.dir, "algorithms", mangle(name))
+getAlgorithmURI = function(file.dir, name) {
+  file.path(file.dir, "algorithms", mangle(name))
 }
