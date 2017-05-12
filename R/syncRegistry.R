@@ -35,7 +35,7 @@ syncRegistry = function(reg = getDefaultRegistry()) {
     expr = quote(`:=`(started = i.started, done = i.done, error = i.error, memory = i.memory))
     reg$status[updates, eval(expr), on = "job.id"]
     saveRegistry(reg)
-    unlink(fns[!failed])
+    file.remove.safely(fns[!failed])
   }
 
   runHook(reg, "post.sync", updates = updates)
