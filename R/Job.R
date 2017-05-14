@@ -118,7 +118,8 @@ Experiment = R6Class("Experiment",
 #'
 #' @template id
 #' @param reader [\code{RDSReader} | \code{NULL}]\cr
-#'  Reader object to retrieve files. Mainly used internally.
+#'  Reader object to retrieve files. Used internally to cache reading from the file system.
+#'  The default (\code{NULL}) does not make use of caching.
 #' @template reg
 #' @return [\code{Job} | \code{Experiment}].
 #' @aliases Job Experiment
@@ -148,7 +149,7 @@ makeJob = function(id, reader = NULL, reg = getDefaultRegistry()) {
 makeJob.Registry = function(id, reader = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Job$new(file.dir = reg$file.dir, reader %??% RDSReader$new(), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Job$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     resources = resources)
 }
 
@@ -156,7 +157,7 @@ makeJob.Registry = function(id, reader = NULL, reg = getDefaultRegistry()) {
 makeJob.ExperimentRegistry = function(id, reader = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "problem", "algorithm", "repl", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Experiment$new(file.dir = reg$file.dir, reader %??% RDSReader$new(), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Experiment$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     repl = row$repl, resources = resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
@@ -165,14 +166,14 @@ getJob = function(jc, i, reader = NULL) {
 }
 
 getJob.JobCollection = function(jc, i, reader = NULL) {
-  reader = reader %??% RDSReader$new()
+  reader = reader %??% RDSReader$new(FALSE)
   row = jc$jobs[i]
   Job$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     resources = jc$resources)
 }
 
 getJob.ExperimentCollection = function(jc, i, reader = NULL) {
-  reader = reader %??% RDSReader$new()
+  reader = reader %??% RDSReader$new(FALSE)
   row = jc$jobs[i]
   Experiment$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     repl = row$repl, resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm)

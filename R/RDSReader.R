@@ -4,7 +4,7 @@ RDSReader = R6Class("RDSReader",
     cache = list(),
     use.cache = NA,
 
-    initialize = function(use.cache = TRUE) {
+    initialize = function(use.cache = FALSE) {
       self$use.cache = use.cache
     },
 

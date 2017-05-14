@@ -202,7 +202,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., flatten = NULL, m
   if (length(done) > 0L) {
     fns = getResultFiles(reg, ids)
     pb = makeProgressBar(total = length(fns), format = "Reducing [:bar] :percent eta: :eta")
-    reader = RDSReader$new()
+    reader = RDSReader$new(TRUE)
 
     for (i in done) {
       res = worker(readRDS(fns[i]), makeJob(ids$job.id[i], reader = reader, reg = reg), ...)

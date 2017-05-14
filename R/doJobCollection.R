@@ -108,7 +108,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   catf("### [bt %s]: Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"))
 
   # try to pre-fetch some objects from the file system
-  reader = RDSReader$new(use.cache = TRUE)
+  reader = RDSReader$new(n.jobs > 1L)
   buf = UpdateBuffer$new(jc$jobs$job.id)
 
   runHook(jc, "pre.do.collection", reader = reader)

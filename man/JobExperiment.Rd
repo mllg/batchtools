@@ -6,15 +6,16 @@
 \alias{Experiment}
 \title{Jobs and Experiments}
 \usage{
-makeJob(id, cache = NULL, reg = getDefaultRegistry())
+makeJob(id, reader = NULL, reg = getDefaultRegistry())
 }
 \arguments{
 \item{id}{[\code{integer(1)} or \code{data.table}]\cr
 Single integer to specify the job or a \code{data.table} with column \code{job.id}
 and exactly one row.}
 
-\item{cache}{[\code{Cache} | \code{NULL}]\cr
-Cache to retrieve files. Used internally.}
+\item{reader}{[\code{RDSReader} | \code{NULL}]\cr
+Reader object to retrieve files. Used internally to cache reading from the file system.
+The default (\code{NULL}) does not make use of caching.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
