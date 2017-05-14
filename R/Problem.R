@@ -65,7 +65,7 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
 
   info("Adding problem '%s'", name)
   prob = setClasses(list(name = name, seed = seed, data = data, fun = fun), "Problem")
-  writeRDS(prob, file = getProblemURI(reg, name))
+  writeRDS(prob, file = getProblemURI(reg$file.dir, name))
   reg$defs$problem = addlevel(reg$defs$problem, name)
   saveRegistry(reg)
   invisible(prob)
@@ -84,7 +84,7 @@ removeProblems = function(name, reg = getDefaultRegistry()) {
     job.ids = filter(def.ids, reg$status, "job.id")
 
     info("Removing Problem '%s' and %i corresponding jobs ...", nn, nrow(job.ids))
-    file.remove.safely(getProblemURI(reg, nn))
+    file.remove.safely(getProblemURI(reg$file.dir, nn))
     reg$defs = reg$defs[!def.ids]
     reg$status = reg$status[!job.ids]
     reg$defs$problem = rmlevel(reg$defs$problem, nn)
@@ -101,6 +101,6 @@ getProblemIds = function(reg = getDefaultRegistry()) {
   levels(reg$defs$problem)
 }
 
-getProblemURI = function(reg, name) {
-  file.path(reg$file.dir, "problems", mangle(name))
+getProblemURI = function(file.dir, name) {
+  file.path(file.dir, "problems", mangle(name))
 }

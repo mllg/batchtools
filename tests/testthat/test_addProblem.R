@@ -8,7 +8,7 @@ test_that("addProblem", {
   expect_equal(prob$name, "p1")
   expect_function(prob$fun)
   expect_null(prob$seed)
-  expect_file(getProblemURI(reg, prob$name))
+  expect_file(getProblemURI(reg$file.dir, prob$name))
 
   prob = addProblem(reg = reg, "p2", fun = function(...) NULL, seed = 42)
   expect_is(prob, "Problem")
@@ -16,7 +16,7 @@ test_that("addProblem", {
   expect_equal(prob$name, "p2")
   expect_function(prob$fun)
   expect_identical(prob$seed, 42L)
-  expect_file(getProblemURI(reg, prob$name))
+  expect_file(getProblemURI(reg$file.dir, prob$name))
 
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
   prob.designs = list(p1 = data.table(), p2 = data.table())
@@ -28,8 +28,8 @@ test_that("addProblem", {
   expect_integer(reg$status$job.id, len = 2L)
   expect_set_equal(levels(reg$defs$problem), "p2")
   expect_set_equal(getProblemIds(reg), "p2")
-  expect_false(file.exists(getProblemURI(reg, "p1")))
-  expect_true(file.exists(getProblemURI(reg, "p2")))
+  expect_false(file.exists(getProblemURI(reg$file.dir, "p1")))
+  expect_true(file.exists(getProblemURI(reg$file.dir, "p2")))
   expect_set_equal(as.character(getJobPars(reg = reg)$problem), "p2")
   checkTables(reg)
 })
