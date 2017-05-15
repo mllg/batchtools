@@ -1,43 +1,30 @@
-Cache = R6Class("Cache",
-  cloneable = FALSE,
-  public = list(
-    cache = list(),
-    file.dir = NA_character_,
-    initialize = function(file.dir) {
-      self$file.dir = file.dir
-    },
-
-    get = function(id, slot = id, subdir = "", mangle = FALSE) {
-      if (is.null(self$cache[[slot]]) || self$cache[[slot]]$id != id) {
-        path = file.path(self$file.dir, subdir, if (mangle) mangle(id) else sprintf("%s.rds", id))
-        self$cache[[slot]] = list(id = id, obj = if (file.exists(path)) readRDS(path) else NULL)
-      }
-      return(self$cache[[slot]]$obj)
-    }
-  )
-)
-
 Job = R6Class("Job",
   cloneable = FALSE,
   public = list(
-    initialize = function(cache, id, pars, seed, resources) {
-      self$cache = cache
+    initialize = function(file.dir, reader, id, pars, seed, resources) {
+      self$file.dir = file.dir
+      self$reader = reader
       self$id = id
       self$job.pars = pars
       self$seed = seed
       self$resources = resources
     },
+    file.dir = NULL,
     id = NULL,
     job.pars = NULL,
     seed = NULL,
     resources = NULL,
-    cache = NULL
+    reader = NULL
   ),
   active = list(
-    pars = function() c(self$job.pars, self$cache$get("more.args")),
-    fun = function() self$cache$get("user.function"),
+    pars = function() {
+      c(self$job.pars, self$reader$get(file.path(self$file.dir, "more.args.rds")))
+    },
+    fun = function() {
+      self$reader$get(file.path(self$file.dir, "user.function.rds"))
+    },
     external.dir = function() {
-      path = file.path(self$cache$file.dir, "external", self$id)
+      path = file.path(self$file.dir, "external", self$id)
       dir.create(path, recursive = TRUE, showWarnings = FALSE)
       path
     }
@@ -47,8 +34,9 @@ Job = R6Class("Job",
 Experiment = R6Class("Experiment",
   cloneable = FALSE,
   public = list(
-    initialize = function(cache, id, pars, repl, seed, resources, prob.name, algo.name) {
-      self$cache = cache
+    initialize = function(file.dir, reader, id, pars, repl, seed, resources, prob.name, algo.name) {
+      self$file.dir = file.dir
+      self$reader = reader
       self$id = id
       self$pars = pars
       self$repl = repl
@@ -57,19 +45,24 @@ Experiment = R6Class("Experiment",
       self$prob.name = as.character(prob.name)
       self$algo.name = as.character(algo.name)
     },
+    file.dir = NULL,
     id = NULL,
     pars = NULL,
     repl = NULL,
     seed = NULL,
     resources = NULL,
-    cache = NULL,
+    reader = NULL,
     prob.name = NULL,
     algo.name = NULL,
     allow.access.to.instance = TRUE
   ),
   active = list(
-    problem = function() self$cache$get(id = self$prob.name, subdir = "problems", slot = "..problem..", mangle = TRUE),
-    algorithm = function() self$cache$get(id = self$algo.name, subdir = "algorithms", mangle = TRUE),
+    problem = function()  {
+      self$reader$get(getProblemURI(self$file.dir, self$prob.name), slot = "..problem..")
+    },
+    algorithm = function() {
+      self$reader$get(getAlgorithmURI(self$file.dir, self$algo.name))
+    },
     instance = function() {
       if (!self$allow.access.to.instance)
         stop("You cannot access 'job$instance' in the problem generation or algorithm function")
@@ -79,7 +72,7 @@ Experiment = R6Class("Experiment",
       with_seed(seed, do.call(wrapper, self$pars$prob.pars, envir = .GlobalEnv))
     },
     external.dir = function() {
-      path = file.path(self$cache$file.dir, "external", self$id)
+      path = file.path(self$file.dir, "external", self$id)
       dir.create(path, recursive = TRUE, showWarnings = FALSE)
       path
     }
@@ -124,8 +117,9 @@ Experiment = R6Class("Experiment",
 #' Jobs and Experiments can be executed manually with \code{\link{execJob}}.
 #'
 #' @template id
-#' @param cache [\code{Cache} | \code{NULL}]\cr
-#'  Cache to retrieve files. Used internally.
+#' @param reader [\code{RDSReader} | \code{NULL}]\cr
+#'  Reader object to retrieve files. Used internally to cache reading from the file system.
+#'  The default (\code{NULL}) does not make use of caching.
 #' @template reg
 #' @return [\code{Job} | \code{Experiment}].
 #' @aliases Job Experiment
@@ -146,39 +140,41 @@ Experiment = R6Class("Experiment",
 #'
 #' # Execute the job locally:
 #' execJob(job)
-makeJob = function(id, cache = NULL, reg = getDefaultRegistry()) {
+makeJob = function(id, reader = NULL, reg = getDefaultRegistry()) {
   UseMethod("makeJob", object = reg)
 }
 
 
 #' @export
-makeJob.Registry = function(id, cache = NULL, reg = getDefaultRegistry()) {
+makeJob.Registry = function(id, reader = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Job$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Job$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     resources = resources)
 }
 
 #' @export
-makeJob.ExperimentRegistry = function(id, cache = NULL, reg = getDefaultRegistry()) {
+makeJob.ExperimentRegistry = function(id, reader = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "problem", "algorithm", "repl", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Experiment$new(cache %??% Cache$new(reg$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Experiment$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     repl = row$repl, resources = resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
-getJob = function(jc, i, cache = NULL) {
+getJob = function(jc, i, reader = NULL) {
   UseMethod("getJob")
 }
 
-getJob.JobCollection = function(jc, i, cache = NULL) {
+getJob.JobCollection = function(jc, i, reader = NULL) {
+  reader = reader %??% RDSReader$new(FALSE)
   row = jc$jobs[i]
-  Job$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
+  Job$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     resources = jc$resources)
 }
 
-getJob.ExperimentCollection = function(jc, i, cache = NULL) {
+getJob.ExperimentCollection = function(jc, i, reader = NULL) {
+  reader = reader %??% RDSReader$new(FALSE)
   row = jc$jobs[i]
-  Experiment$new(cache %??% Cache$new(jc$file.dir), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
+  Experiment$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     repl = row$repl, resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm)
 }
