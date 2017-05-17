@@ -28,6 +28,7 @@ doJobCollection = function(jc, output = NULL) {
 #' @export
 doJobCollection.character = function(jc, output = NULL) {
   obj = readRDS(jc)
+  force(obj)
   if (!batchtools$debug && !obj$array.jobs)
     file.remove(jc)
   doJobCollection.JobCollection(obj, output = output)
