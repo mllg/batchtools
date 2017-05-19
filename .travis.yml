@@ -6,7 +6,8 @@ cache: packages
 addons:
   apt:
     packages:
-      - openmpi-dev
+      - libopenmpi-dev
+      - openmpi-bin
 
 r:
   - oldrel
