@@ -7,7 +7,6 @@ addons:
   apt:
     packages:
       - libopenmpi-dev
-      - openmpi-bin
 
 r:
   - oldrel
