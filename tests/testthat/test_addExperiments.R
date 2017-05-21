@@ -58,6 +58,17 @@ test_that("addExperiments / user provided designs", {
   ids = addExperiments(reg = reg, prob.designs = prob.designs, algo.designs = algo.designs, combine = "crossprod")
   expect_data_table(ids, nrow = 12, key = "job.id")
   expect_data_table(getJobPars(reg = reg), nrow = 28)
+
+  pd = list(p1 = data.frame(foo = letters[1:2]))
+  withr::with_options(list(stringsAsFactors = NULL), {
+    expect_warning(addExperiments(reg = reg, prob.designs = pd), "stringsAsFactors")
+  })
+  withr::with_options(list(stringsAsFactors = TRUE), {
+    expect_warning(addExperiments(reg = reg, prob.designs = pd), "stringsAsFactors")
+  })
+  withr::with_options(list(stringsAsFactors = FALSE), {
+    addExperiments(reg = reg, prob.designs = pd)
+  })
 })
 
 if (FALSE) {

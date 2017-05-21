@@ -8,6 +8,14 @@
 #' \code{addExperiments} creates experiments for all parameters for the combinations \code{(p1, a1)}, \code{(p1, a2)},
 #' \code{(p1, a3)}, \code{(p2, a1)}, \code{(p2, a2)} and \code{(p2, a3)}.
 #'
+#' @note
+#' R's \code{data.frame} converts character vectors to factors by default which frequently resulted in problems using \code{addExperiments}.
+#' Therefore, this function will warn about factor variables if the following conditions hold:
+#' \enumerate{
+#'   \item The design is passed as a \code{data.frame}, not a \code{\link[data.table]{data.table}} or \code{\link[tibble]{tibble}}.
+#'   \item The option \dQuote{stringsAsFactors} is not set or set to \code{TRUE}.
+#' }
+#'
 #' @param prob.designs [named list of \code{\link[base]{data.frame}}]\cr
 #'   Named list of data frames (or \code{\link[data.table]{data.table}}).
 #'   The name must match the problem name while the column names correspond to parameters of the problem.
@@ -61,7 +69,15 @@
 #' getJobPars(reg = tmp)
 addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, combine = "crossprod", reg = getDefaultRegistry()) {
   convertDesigns = function(type, designs, keywords) {
+    check.factors = getOption("stringsAsFactors", TRUE)
+
     Map(function(id, design) {
+      if (check.factors && identical(head(class(design), 1L), "data.frame")) {
+        i = which(vlapply(design, is.factor))
+        if (length(i) > 0L) {
+          warningf("%s design '%s' passed as 'data.frame' and 'stringsAsFactors' is not set. Column(s) '%s' may be encoded as factors accidentally.", type, id, stri_flatten(names(design)[i]), "','")
+        }
+      }
       design = as.data.table(design)
       i = wf(keywords %chin% names(design))
       if (length(i) > 0L)
