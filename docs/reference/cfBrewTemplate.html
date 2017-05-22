@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -82,28 +84,34 @@
 
     
     <p>This function is only intended for use in your own cluster functions implementation.</p>
-
-    <p>Calls brew silently on your template, any error will lead to an exception. If debug mode is
+<p>Calls brew silently on your template, any error will lead to an exception. If debug mode is
 enabled (via environment variable &#8220;DEBUGME&#8221; set to &#8220;batchtools&#8221;),
 the file is stored at the same place as the corresponding
 job file in the &#8220;jobs&#8221;-subdir of your files directory, otherwise as <code>tempfile</code> on the local system.</p>
     
 
-    <pre><span class='fu'>cfBrewTemplate</span>(<span class='no'>reg</span>, <span class='no'>text</span>, <span class='no'>jc</span>)</pre>
+    <pre class="usage"><span class='fu'>cfBrewTemplate</span>(<span class='no'>reg</span>, <span class='no'>text</span>, <span class='no'>jc</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>reg</dt>
-      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
-      <dt>text</dt>
-      <dd>[<code>character(1)</code>]
-String ready to be brewed. See <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code> to read a template from the file system.</dd>
-      <dt>jc</dt>
-      <dd>[<code><a href='makeJobCollection.html'>JobCollection</a>)</code>]
-Will be used as environment to brew the template file in. See <code><a href='makeJobCollection.html'>JobCollection</a></code> for a list of all
-available variables.</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>reg</th>
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>text</th>
+      <td><p>[<code>character(1)</code>]
+String ready to be brewed. See <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code> to read a template from the file system.</p></td>
+    </tr>
+    <tr>
+      <th>jc</th>
+      <td><p>[<code><a href='JobCollection.html'>JobCollection</a>)</code>]
+Will be used as environment to brew the template file in. See <code><a href='JobCollection.html'>JobCollection</a></code> for a list of all
+available variables.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

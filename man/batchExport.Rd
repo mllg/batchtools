@@ -12,7 +12,7 @@ batchExport(export = list(), unexport = character(0L),
 Named list of objects to export.}
 
 \item{unexport}{[\code{character}]\cr
-Vector of object names to un-export.}
+Vector of object names to unexport.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}

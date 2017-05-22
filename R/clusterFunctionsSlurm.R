@@ -30,10 +30,11 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clusters = NULL, array.jobs = TRUE, scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.jobs = TRUE, scheduler.latency = 1, fs.latency = 65) { # nocov start
   if (!is.null(clusters))
     assertString(clusters, min.chars = 1L)
   assertFlag(array.jobs)
+  template = findTemplateFile(template)
   template = cfReadBrewTemplate(template, "##")
 
   submitJob = function(reg, jc) {
@@ -46,7 +47,7 @@ makeClusterFunctionsSlurm = function(template = findTemplateFile("slurm"), clust
       jc$log.file = stri_join(jc$log.file, "_%a")
     }
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("sbatch", outfile)
+    res = runOSCommand("sbatch", shQuote(outfile))
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
     temp.error = "Socket timed out on send/recv operation"

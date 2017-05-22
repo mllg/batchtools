@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -82,41 +84,47 @@
 
     
     <p>Hooks allow to trigger functions calls on specific events.
-They can be specified via the <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code> and are trigged on the following events:
-<dl class='dl-horizontal'>
-  <dt><code>pre.sync</code></dt><dd><code>function(reg, fns, ...)</code>: Run before synchronizing the registry on the master. <code>fn</code> is the character vector of paths to the update files.</dd>
-  <dt><code>post.sync</code></dt><dd><code>function(reg, updates, ...)</code>: Run after synchronizing the registry on the master. <code>updates</code> is the data.table of processed updates.</dd>
-  <dt><code>pre.submit.job</code></dt><dd><code>function(reg, ...)</code>: Run before a job is successfully submitted to the scheduler on the master.</dd>
-  <dt><code>post.submit.job</code></dt><dd><code>function(reg, ...)</code>: Run after a job is successfully submitted to the scheduler on the master.</dd>
-  <dt><code>pre.submit</code></dt><dd><code>function(reg, ...)</code>: Run before any job is submitted to the scheduler.</dd>
-  <dt><code>post.submit</code></dt><dd><code>function(reg, ...)</code>: Run after a jobs are submitted to the schedule.</dd>
-  <dt><code>pre.do.collection</code></dt><dd><code>function(reg, cache, ...)</code>: Run before starting the job collection on the slave.
-    <code>cache</code> is an internal cache object.</dd>
-  <dt><code>post.do.collection</code></dt><dd><code>function(reg, updates, cache, ...)</code>: Run after all jobs in the chunk are terminated on the slave.
+They can be specified via the <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code> and are triggered on the following events:</p><dl class='dl-horizontal'>
+  <dt><code>pre.sync</code></dt><dd><p><code>function(reg, fns, ...)</code>: Run before synchronizing the registry on the master. <code>fn</code> is the character vector of paths to the update files.</p></dd>
+  <dt><code>post.sync</code></dt><dd><p><code>function(reg, updates, ...)</code>: Run after synchronizing the registry on the master. <code>updates</code> is the data.table of processed updates.</p></dd>
+  <dt><code>pre.submit.job</code></dt><dd><p><code>function(reg, ...)</code>: Run before a job is successfully submitted to the scheduler on the master.</p></dd>
+  <dt><code>post.submit.job</code></dt><dd><p><code>function(reg, ...)</code>: Run after a job is successfully submitted to the scheduler on the master.</p></dd>
+  <dt><code>pre.submit</code></dt><dd><p><code>function(reg, ...)</code>: Run before any job is submitted to the scheduler.</p></dd>
+  <dt><code>post.submit</code></dt><dd><p><code>function(reg, ...)</code>: Run after a jobs are submitted to the schedule.</p></dd>
+  <dt><code>pre.do.collection</code></dt><dd><p><code>function(reg, cache, ...)</code>: Run before starting the job collection on the slave.
+    <code>cache</code> is an internal cache object.</p></dd>
+  <dt><code>post.do.collection</code></dt><dd><p><code>function(reg, updates, cache, ...)</code>: Run after all jobs in the chunk are terminated on the slave.
     <code>updates</code> is a <code>data.table</code> of updates which will be merged with the <code><a href='makeRegistry.html'>Registry</a></code> by the master.
-    <code>cache</code> is an internal cache object.</dd>
-  <dt><code>pre.kill</code></dt><dd><code>function(reg, ids, ...)</code>: Run before any job is killed.</dd>
-  <dt><code>post.kill</code></dt><dd><code>function(reg, ids, ...)</code>: Run after jobs are killed. <code>ids</code> is the return value of <code><a href='killJobs.html'>killJobs</a></code>.</dd>
-</dl></p>
+    <code>cache</code> is an internal cache object.</p></dd>
+  <dt><code>pre.kill</code></dt><dd><p><code>function(reg, ids, ...)</code>: Run before any job is killed.</p></dd>
+  <dt><code>post.kill</code></dt><dd><p><code>function(reg, ids, ...)</code>: Run after jobs are killed. <code>ids</code> is the return value of <code><a href='killJobs.html'>killJobs</a></code>.</p></dd>
+</dl>
     
 
-    <pre><span class='fu'>runHook</span>(<span class='no'>obj</span>, <span class='no'>hook</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>runHook</span>(<span class='no'>obj</span>, <span class='no'>hook</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>obj</dt>
-      <dd>[<a href='makeRegistry.html'>Registry</a> | <a href='makeJobCollection.html'>JobCollection</a>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>obj</th>
+      <td><p>[<a href='makeRegistry.html'>Registry</a> | <a href='JobCollection.html'>JobCollection</a>]
 Registry which contains the <a href='makeClusterFunctions.html'>ClusterFunctions</a> with element &#8220;hooks&#8221;
-or a <a href='makeJobCollection.html'>JobCollection</a> which holds the subset of functions which are executed
-remotely.</dd>
-      <dt>hook</dt>
-      <dd>[<code>character(1)</code>]
-ID of the hook as string.</dd>
-      <dt>...</dt>
-      <dd>[ANY]
+or a <a href='JobCollection.html'>JobCollection</a> which holds the subset of functions which are executed
+remotely.</p></td>
+    </tr>
+    <tr>
+      <th>hook</th>
+      <td><p>[<code>character(1)</code>]
+ID of the hook as string.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>[ANY]
 Additional arguments passed to the function referenced by <code>hook</code>.
-See description.</dd>
-    </dl>
+See description.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

@@ -18,9 +18,9 @@ use.mpi = (resources$pm.backend %??% "default") == "mpi"
 ## first string of queue, selected by walltime
 walltimes = 3600L * c(1L, 8L, 48L, 672L)
 queue = c("short", "med", "long", "ultralong")[wf(resources$walltime <= walltimes)]
-modules = paste0(c("binutils/2.25", "gcc/4.8.5", "openblas/0.2.17", resources$R), collapse = " ")
+modules = paste("binutils/2.25", "gcc/4.8.5", "openblas/0.2.17", resources$R)
 if (use.mpi)
-  modules = c(modules, "openmpi/gcc4.8.x")
+  modules = paste(modules, "openmpi/gcc4.8.x")
 
 ## very ugly hack because we cannot log to data (nobackup) filesystem on lido,
 ## only home fs is available
@@ -52,7 +52,7 @@ if (length(grep("^/data/", log.file)) > 0L) {
 source /sysdata/shared/sfw/Modules/default/init/bash
 module add <%= modules %>
 
-## create our own temp dir and clean it up later, lido does not do this automatically
+## create our own temp dir (and clean it up later), lido does not do this automatically
 mkdir /scratch/${USER}-${PBS_JOBID}
 export TMPDIR=/scratch/${USER}-${PBS_JOBID}
 
@@ -66,4 +66,6 @@ export DEBUGME=<%= Sys.getenv("DEBUGME") %>
 
 ## run R
 <%= if (use.mpi) "mpirun -np 1 " else "" %>Rscript -e 'batchtools::doJobCollection("<%= uri %>")'
+
+## Cleanup
 rm -rf /scratch/${USER}-${PBS_JOBID}

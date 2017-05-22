@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -83,7 +85,7 @@
     
     <p><code>makeRegistry</code> constructs the inter-communication object for all functions in <code>batchtools</code>.
 All communication transactions are processed via the file system:
-All information required to run a job is stored as <code><a href='makeJobCollection.html'>JobCollection</a></code> in a file in the
+All information required to run a job is stored as <code><a href='JobCollection.html'>JobCollection</a></code> in a file in the
 a subdirectory of the <code>file.dir</code> directory.
 Each jobs stores its results as well as computational status information (start time, end time, error message, ...)
 also on the file system which is regular merged parsed by the master using <code><a href='syncRegistry.html'>syncRegistry</a></code>.
@@ -92,107 +94,121 @@ Both <code><a href='syncRegistry.html'>syncRegistry</a></code> and <code><a href
 Therefore it should be safe to quit the R session at any time.
 Work can later be resumed by calling <code><a href='loadRegistry.html'>loadRegistry</a></code> which de-serializes the registry from
 the file system.</p>
-
-    <p>The registry created last is saved in the package namespace (unless <code>make.default</code> is set to
+<p>The registry created last is saved in the package namespace (unless <code>make.default</code> is set to
 <code>FALSE</code>) and can be retrieved via <code><a href='getDefaultRegistry.html'>getDefaultRegistry</a></code>.</p>
-
-    <p>Canceled jobs and jobs submitted multiple times may leave stray files behind.
+<p>Canceled jobs and jobs submitted multiple times may leave stray files behind.
 These can be swept using <code><a href='sweepRegistry.html'>sweepRegistry</a></code>.
 <code><a href='clearRegistry.html'>clearRegistry</a></code> completely erases all jobs from a registry, including log files and results,
 and thus allows you to start over.</p>
     
 
-    <pre><span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='st'>"registry"</span>, <span class='kw'>work.dir</span> <span class='kw'>=</span> <span class='fu'>getwd</span>(),
+    <pre class="usage"><span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='st'>"registry"</span>, <span class='kw'>work.dir</span> <span class='kw'>=</span> <span class='fu'>getwd</span>(),
   <span class='kw'>conf.file</span> <span class='kw'>=</span> <span class='fu'>findConfFile</span>(), <span class='kw'>packages</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>),
   <span class='kw'>namespaces</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>source</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>),
   <span class='kw'>load</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>file.dir</dt>
-      <dd>[<code>character(1)</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>file.dir</th>
+      <td><p>[<code>character(1)</code>]
   Path where all files of the registry are saved.
   Default is directory &#8220;registry&#8221; in the current working directory.
   The provided path will get normalized unless it is given relative to the home directory
-  (i.e., starting with &#8220;~&#8221;). Note that some templates do not handle relative paths well.
-
-  If you pass <code>NA</code>, a temporary directory will be used.
+  (i.e., starting with &#8220;~&#8221;). Note that some templates do not handle relative paths well.</p>
+<p>If you pass <code>NA</code>, a temporary directory will be used.
   This way, you can create disposable registries for <code><a href='btlapply.html'>btlapply</a></code> or examples.
   By default, the temporary directory <code><a href='http://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a>()</code> will be used.
   If you want to use another directory, e.g. a directory which is shared between nodes,
-  you can set it in your configuration file by setting the variable <code>temp.dir</code>.</dd>
-      <dt>work.dir</dt>
-      <dd>[<code>character(1)</code>]
+  you can set it in your configuration file by setting the variable <code>temp.dir</code>.</p></td>
+    </tr>
+    <tr>
+      <th>work.dir</th>
+      <td><p>[<code>character(1)</code>]
   Working directory for R process for running jobs.
   Defaults to the working directory currently set during Registry construction (see <code><a href='http://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a></code>).
   <code>loadRegistry</code> uses the stored <code>work.dir</code>, but you may also explicitly overwrite it,
-  e.g., after switching to another system.
-
-  The provided path will get normalized unless it is given relative to the home directory
-  (i.e., starting with &#8220;~&#8221;). Note that some templates do not handle relative paths well.</dd>
-      <dt>conf.file</dt>
-      <dd>[<code>character(1)</code>]
+  e.g., after switching to another system.</p>
+<p>The provided path will get normalized unless it is given relative to the home directory
+  (i.e., starting with &#8220;~&#8221;). Note that some templates do not handle relative paths well.</p></td>
+    </tr>
+    <tr>
+      <th>conf.file</th>
+      <td><p>[<code>character(1)</code>]
   Path to a configuration file which is sourced while the registry is created.
   For example, you can set cluster functions or default resources in it.
   The script is executed inside the environment of the registry after the defaults for all variables are set,
-  thus you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.
-
-  The file lookup defaults to a heuristic which first tries to read &#8220;batchtools.conf.R&#8221; in the current working directory.
+  thus you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.</p>
+<p>The file lookup defaults to a heuristic which first tries to read &#8220;batchtools.conf.R&#8221; in the current working directory.
   If not found, it looks for a configuration file &#8220;config.R&#8221; in the OS dependent user configuration directory
-  as reported by via <code>rappdirs::user_config_dir(&quot;batchtools&quot;, expand = FALSE)</code> (e.g., on linux this
+  as reported by via <code>rappdirs::user_config_dir("batchtools", expand = FALSE)</code> (e.g., on linux this
   usually resolves to &#8220;~/.config/batchtools/config.R&#8221;).
   If this file is also not found, the heuristic finally tries to read the file &#8220;.batchtools.conf.R&#8221; in the
   home directory (&#8220;~&#8221;).
-  Set to <code>character(0)</code> if you want to disable this heuristic.</dd>
-      <dt>packages</dt>
-      <dd>[<code>character</code>]
+  Set to <code>character(0)</code> if you want to disable this heuristic.</p></td>
+    </tr>
+    <tr>
+      <th>packages</th>
+      <td><p>[<code>character</code>]
 Packages that will always be loaded on each node.
 Uses <code><a href='http://www.rdocumentation.org/packages/base/topics/library'>require</a></code> internally.
-Default is <code>character(0)</code>.</dd>
-      <dt>namespaces</dt>
-      <dd>[<code>character</code>]
+Default is <code>character(0)</code>.</p></td>
+    </tr>
+    <tr>
+      <th>namespaces</th>
+      <td><p>[<code>character</code>]
 Same as <code>packages</code>, but the packages will not be attached.
 Uses <code><a href='http://www.rdocumentation.org/packages/base/topics/ns-load'>requireNamespace</a></code> internally.
-Default is <code>character(0)</code>.</dd>
-      <dt>source</dt>
-      <dd>[<code>character</code>]
+Default is <code>character(0)</code>.</p></td>
+    </tr>
+    <tr>
+      <th>source</th>
+      <td><p>[<code>character</code>]
 Files which should be sourced on the slaves prior to executing a job.
-Calls <code><a href='http://www.rdocumentation.org/packages/base/topics/sys.source'>sys.source</a></code> using the <code><a href='http://www.rdocumentation.org/packages/base/topics/environment'>.GlobalEnv</a></code>.</dd>
-      <dt>load</dt>
-      <dd>[<code>character</code>]
+Calls <code><a href='http://www.rdocumentation.org/packages/base/topics/sys.source'>sys.source</a></code> using the <code><a href='http://www.rdocumentation.org/packages/base/topics/environment'>.GlobalEnv</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>load</th>
+      <td><p>[<code>character</code>]
 Files which should be loaded on the slaves prior to executing a job.
-Calls <code><a href='http://www.rdocumentation.org/packages/base/topics/load'>load</a></code> using the <code><a href='http://www.rdocumentation.org/packages/base/topics/environment'>.GlobalEnv</a></code>.</dd>
-      <dt>seed</dt>
-      <dd>[<code>integer(1)</code>]
+Calls <code><a href='http://www.rdocumentation.org/packages/base/topics/load'>load</a></code> using the <code><a href='http://www.rdocumentation.org/packages/base/topics/environment'>.GlobalEnv</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>seed</th>
+      <td><p>[<code>integer(1)</code>]
 Start seed for jobs. Each job uses the (<code>seed</code> + <code>job.id</code>) as seed.
-Default is a random number in the range [1, <code>.Machine$integer.max/2</code>].</dd>
-      <dt>make.default</dt>
-      <dd>[<code>logical(1)</code>]
+Default is a random number in the range [1, <code>.Machine$integer.max/2</code>].</p></td>
+    </tr>
+    <tr>
+      <th>make.default</th>
+      <td><p>[<code>logical(1)</code>]
 If set to <code>TRUE</code>, the created registry is saved inside the package
 namespace and acts as default registry. You might want to switch this
 off if you work with multiple registries simultaneously.
-Default is <code>TRUE</code>.</dd>
-    </dl>
+Default is <code>TRUE</code>.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>[<code>environment</code>] of class &#8220;Registry&#8221; with the following slots:
-  <dl class='dl-horizontal'>
-    <dt><code>file.dir</code> [path]:</dt><dd>File directory.</dd>
-    <dt><code>work.dir</code> [path]:</dt><dd>Working directory.</dd>
-    <dt><code>temp.dir</code> [path]:</dt><dd>Temporary directory. Used if <code>file.dir</code> is <code>NA</code>.</dd>
-    <dt><code>packages</code> [character()]:</dt><dd>Packages to load on the slaves.</dd>
-    <dt><code>namespaces</code> [character()]:</dt><dd>Namespaces to load on the slaves.</dd>
-    <dt><code>seed</code> [integer(1)]:</dt><dd>Registry seed. Before each job is executed, the seed <code>seed + job.id</code> is set.</dd>
-    <dt><code>cluster.functions</code> [cluster.functions]:</dt><dd>Usually set in your <code>conf.file</code>. Set via a call to <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>. See example.</dd>
-    <dt><code>default.resources</code> [named list()]:</dt><dd>Usually set in your <code>conf.file</code>. Named list of default resources.</dd>
-    <dt><code>max.concurrent.jobs</code> [integer(1)]:</dt><dd>Usually set in your <code>conf.file</code>. Maximum number of concurrent jobs for a single user and current registry on the system.
-      <code><a href='submitJobs.html'>submitJobs</a></code> will try to respect this setting.</dd>
-    <dt><code>defs</code> [data.table]:</dt><dd>Table with job definitions (i.e. parameters).</dd>
-    <dt><code>status</code> [data.table]:</dt><dd>Table holding information about the computational status. Also see <code><a href='getJobTable.html'>getJobStatus</a></code>.</dd>
-    <dt><code>resources</code> [data.table]:</dt><dd>Table holding information about the computational resources used for the job. Also see <code><a href='getJobTable.html'>getJobResources</a></code>.</dd>
-    <dt><code>tags</code> [data.table]:</dt><dd>Table holding information about tags. See <a href='Tags.html'>Tags</a>.</dd>
-  </dl></p>
+    <p>[<code>environment</code>] of class &#8220;Registry&#8221; with the following slots:</p><dl class='dl-horizontal'>
+    <dt><code>file.dir</code> [path]:</dt><dd><p>File directory.</p></dd>
+    <dt><code>work.dir</code> [path]:</dt><dd><p>Working directory.</p></dd>
+    <dt><code>temp.dir</code> [path]:</dt><dd><p>Temporary directory. Used if <code>file.dir</code> is <code>NA</code>.</p></dd>
+    <dt><code>packages</code> [character()]:</dt><dd><p>Packages to load on the slaves.</p></dd>
+    <dt><code>namespaces</code> [character()]:</dt><dd><p>Namespaces to load on the slaves.</p></dd>
+    <dt><code>seed</code> [integer(1)]:</dt><dd><p>Registry seed. Before each job is executed, the seed <code>seed + job.id</code> is set.</p></dd>
+    <dt><code>cluster.functions</code> [cluster.functions]:</dt><dd><p>Usually set in your <code>conf.file</code>. Set via a call to <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>. See example.</p></dd>
+    <dt><code>default.resources</code> [named list()]:</dt><dd><p>Usually set in your <code>conf.file</code>. Named list of default resources.</p></dd>
+    <dt><code>max.concurrent.jobs</code> [integer(1)]:</dt><dd><p>Usually set in your <code>conf.file</code>. Maximum number of concurrent jobs for a single user and current registry on the system.
+      <code><a href='submitJobs.html'>submitJobs</a></code> will try to respect this setting.</p></dd>
+    <dt><code>defs</code> [data.table]:</dt><dd><p>Table with job definitions (i.e. parameters).</p></dd>
+    <dt><code>status</code> [data.table]:</dt><dd><p>Table holding information about the computational status. Also see <code><a href='getJobTable.html'>getJobStatus</a></code>.</p></dd>
+    <dt><code>resources</code> [data.table]:</dt><dd><p>Table holding information about the computational resources used for the job. Also see <code><a href='getJobTable.html'>getJobResources</a></code>.</p></dd>
+    <dt><code>tags</code> [data.table]:</dt><dd><p>Table holding information about tags. See <a href='Tags.html'>Tags</a>.</p></dd>
+  </dl>
+
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -204,10 +220,10 @@ Default is <code>TRUE</code>.</dd>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
 #&gt;   Name    : Interactive
-#&gt;   File dir: /tmp/Rtmp04BE7o/registry2e053b377b4a
-#&gt;   Work dir: /home/michel/Projekte/batchtools/docs/reference
+#&gt;   File dir: /scratch/registry676a33542a85
+#&gt;   Work dir: /home/lang/Projekte/batchtools/docs/reference
 #&gt;   Jobs    : 0
 #&gt;   Seed    : 396414167</div><div class='input'>
 <span class='co'># Set cluster functions to interactive mode and start jobs in external R sessions</span>

@@ -3,6 +3,12 @@ sudo: false
 language: r
 cache: packages
 
+addons:
+  apt:
+    packages:
+      - libopenmpi-dev
+      - openmpi-bin
+
 r:
   - oldrel
   - release
@@ -10,6 +16,7 @@ r:
 
 r_packages:
   - covr
+  - Rmpi
 
 after_success:
   - if [[ "${TRAVIS_R_VERSION_STRING}" == "release" ]]; then Rscript -e 'covr::coveralls()'; fi

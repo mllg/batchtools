@@ -9,7 +9,7 @@
 #' @param export [\code{list}]\cr
 #'  Named list of objects to export.
 #' @param unexport [\code{character}]\cr
-#'  Vector of object names to un-export.
+#'  Vector of object names to unexport.
 #' @template reg
 #' @return [\code{data.table}] with name and uri to the exported objects.
 #' @export
@@ -55,7 +55,7 @@ batchExport = function(export = list(), unexport = character(0L), reg = getDefau
     found = file.exists(fn)
     if (any(found))
       info("Un-exporting exported objects: '%s' ...", stri_flatten(unexport[found], "','"))
-    unlink(fn[found])
+    file.remove.safely(fn[found])
   }
 
   fns = list.files(path, pattern = "\\.rds")

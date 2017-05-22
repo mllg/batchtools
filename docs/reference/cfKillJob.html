@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -82,30 +84,38 @@
 
     
     <p>This function is only intended for use in your own cluster functions implementation.</p>
-
-    <p>Calls the OS command to kill a job via <code>system</code> like this: &#8220;cmd batch.job.id&#8221;. If the
+<p>Calls the OS command to kill a job via <code>system</code> like this: &#8220;cmd batch.job.id&#8221;. If the
 command returns an exit code &gt; 0, the command is repeated after a 1 second sleep
 <code>max.tries-1</code> times. If the command failed in all tries, an exception is generated.</p>
     
 
-    <pre><span class='fu'>cfKillJob</span>(<span class='no'>reg</span>, <span class='no'>cmd</span>, <span class='kw'>args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>max.tries</span> <span class='kw'>=</span> <span class='fl'>3L</span>)</pre>
+    <pre class="usage"><span class='fu'>cfKillJob</span>(<span class='no'>reg</span>, <span class='no'>cmd</span>, <span class='kw'>args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>max.tries</span> <span class='kw'>=</span> <span class='fl'>3L</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>reg</dt>
-      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
-      <dt>cmd</dt>
-      <dd>[<code>character(1)</code>]
-OS command, e.g. &#8220;qdel&#8221;.</dd>
-      <dt>args</dt>
-      <dd>[<code>character</code>]
-Arguments to <code>cmd</code>, including the batch id.</dd>
-      <dt>max.tries</dt>
-      <dd>[<code>integer(1)</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>reg</th>
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>cmd</th>
+      <td><p>[<code>character(1)</code>]
+OS command, e.g. &#8220;qdel&#8221;.</p></td>
+    </tr>
+    <tr>
+      <th>args</th>
+      <td><p>[<code>character</code>]
+Arguments to <code>cmd</code>, including the batch id.</p></td>
+    </tr>
+    <tr>
+      <th>max.tries</th>
+      <td><p>[<code>integer(1)</code>]
 Number of total times to try execute the OS command in cases of failures.
-Default is <code>3</code>.</dd>
-    </dl>
+Default is <code>3</code>.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

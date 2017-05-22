@@ -8,7 +8,7 @@
 reduceResultsList(ids = NULL, fun = NULL, ..., missing.val,
   reg = getDefaultRegistry())
 
-reduceResultsDataTable(ids = NULL, fun = NULL, ..., fill = FALSE,
+reduceResultsDataTable(ids = NULL, fun = NULL, ..., flatten = NULL,
   missing.val, reg = getDefaultRegistry())
 }
 \arguments{
@@ -16,7 +16,8 @@ reduceResultsDataTable(ids = NULL, fun = NULL, ..., fill = FALSE,
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})
 with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to the return value of \code{\link{findDone}}.}
+If not set, defaults to the return value of \code{\link{findDone}}.
+Invalid ids are ignored.}
 
 \item{fun}{[\code{function}]\cr
 Function to apply to each result. The result is passed unnamed as first argument. If \code{NULL}, the identity is used.
@@ -32,10 +33,10 @@ If not provided and a result is missing, an exception is raised.}
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 
-\item{fill}{[\code{logical(1)}]\cr
-In \code{reduceResultsDataTable}: This flag is passed down to
-\code{\link[data.table]{rbindlist}} which is used to convert the results
-to a \code{\link[data.table]{data.table}}.}
+\item{flatten}{[\code{logical(1)}]\cr
+Transform results into separate \code{\link[data.table]{data.table}} columns.
+Defaults to \code{TRUE} if all results are (a list of) scalar atomics,
+Otherwise each row of the column will hold a named list.}
 }
 \value{
 \code{reduceResultsList} returns a list of the results in the same order as the provided ids.
@@ -55,11 +56,48 @@ If you have thousands of jobs, disabling the progress bar (\code{options(batchto
 can significantly increase the performance.
 }
 \examples{
+### Example 1 - reduceResultsList
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(function(x) x^2, x = 1:10, reg = tmp)
 submitJobs(reg = tmp)
 waitForJobs(reg = tmp)
 reduceResultsList(fun = sqrt, reg = tmp)
+
+### Example 2 - reduceResultsDataTable
+tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+
+# add first problem
+fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd)
+addProblem("rnorm", fun = fun, reg = tmp)
+
+# add second problem
+fun = function(job, data, n, lambda, ...) rexp(n, rate = lambda)
+addProblem("rexp", fun = fun, reg = tmp)
+
+# add first algorithm
+fun = function(instance, method, ...) if (method == "mean") mean(instance) else median(instance)
+addAlgorithm("average", fun = fun, reg = tmp)
+
+# add second algorithm
+fun = function(instance, ...) sd(instance)
+addAlgorithm("deviation", fun = fun, reg = tmp)
+
+# define problem and algorithm designs
+prob.designs = algo.designs = list()
+prob.designs$rnorm = expand.grid(n = 100, mean = -1:1, sd = 1:5)
+prob.designs$rexp = data.table(n = 100, lambda = 1:5)
+algo.designs$average = data.table(method = c("mean", "median"))
+algo.designs$deviation = data.table()
+
+# add experiments and submit
+addExperiments(prob.designs, algo.designs, reg = tmp)
+submitJobs(reg = tmp)
+
+# collect results and join them # with problem and algorithm paramters
+ijoin(
+  getJobPars(reg = tmp),
+  reduceResultsDataTable(reg = tmp, fun = function(x) list(res = x))
+)
 }
 \seealso{
 \code{\link{reduceResults}}

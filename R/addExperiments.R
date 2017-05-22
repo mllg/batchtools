@@ -32,28 +32,28 @@
 #'
 #' # add first problem
 #' fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd)
-#' addProblem("p1", fun = fun, reg = tmp)
+#' addProblem("rnorm", fun = fun, reg = tmp)
 #'
 #' # add second problem
-#' fun = function(job, data, n, lamba, ...) rexp(n, lambda = lambda)
-#' addProblem("p2", fun = fun, reg = tmp)
+#' fun = function(job, data, n, lambda, ...) rexp(n, rate = lambda)
+#' addProblem("rexp", fun = fun, reg = tmp)
 #'
 #' # add first algorithm
 #' fun = function(instance, method, ...) if (method == "mean") mean(instance) else median(instance)
-#' addAlgorithm("a1", fun = fun, reg = tmp)
+#' addAlgorithm("average", fun = fun, reg = tmp)
 #'
 #' # add second algorithm
-#' fun = function(instance, ...) se(instance)
-#' addAlgorithm("a2", reg = tmp)
+#' fun = function(instance, ...) sd(instance)
+#' addAlgorithm("deviation", fun = fun, reg = tmp)
 #'
 #' # define problem and algorithm designs
 #' prob.designs = algo.designs = list()
-#' prob.designs$p1 = expand.grid(n = 100, mean = -1:1, sd = 1:5)
-#' prob.designs$p2 = data.table(lambda = 1:5)
-#' algo.designs$a1 = data.table(method = c("mean", "median"))
-#' algo.designs$a2 = data.table()
+#' prob.designs$rnorm = expand.grid(n = 100, mean = -1:1, sd = 1:5)
+#' prob.designs$rexp = data.table(n = 100, lambda = 1:5)
+#' algo.designs$average = data.table(method = c("mean", "median"))
+#' algo.designs$deviation = data.table()
 #'
-#' # add experiments
+#' # add experiments and submit
 #' addExperiments(prob.designs, algo.designs, reg = tmp)
 #'
 #' # check what has been created

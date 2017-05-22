@@ -2,7 +2,7 @@
 % Please edit documentation in R/syncRegistry.R
 \name{syncRegistry}
 \alias{syncRegistry}
-\title{Syncronize the Registry}
+\title{Synchronize the Registry}
 \usage{
 syncRegistry(reg = getDefaultRegistry())
 }

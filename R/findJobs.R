@@ -54,13 +54,13 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
 #' @export
 #' @rdname findJobs
 #' @param prob.name [\code{character}]\cr
-#'   Fixed string to match problem names.
+#'   Exact name of the problem (no substring matching).
 #'   If not provided, all problems are matched.
 #' @param prob.pattern [\code{character}]\cr
 #'   Regular expression pattern to match problem names.
 #'   If not provided, all problems are matched.
 #' @param algo.name [\code{character}]\cr
-#'   Fixed string to match algorithm names.
+#'   Exact name of the problem (no substring matching).
 #'   If not provided, all algorithms are matched.
 #' @param algo.pattern [\code{character}]\cr
 #'   Regular expression pattern to match algorithm names.
@@ -71,7 +71,7 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
 #'   Predicate expression evaluated in the algorithm parameters.
 #' @param repls [\code{integer}]\cr
 #'   Whitelist of replication numbers. If not provided, all replications are matched.
-findExperiments = function(prob.name = NA_character_, prob.pattern = NA_character_, algo.name = NA_character_, algo.pattern = NA_character_, prob.pars, algo.pars, repls = NULL, ids = NULL, reg = getDefaultRegistry()) {
+findExperiments = function(ids = NULL, prob.name = NA_character_, prob.pattern = NA_character_, algo.name = NA_character_, algo.pattern = NA_character_, prob.pars, algo.pars, repls = NULL, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, sync = TRUE)
   assertString(prob.name, na.ok = TRUE, min.chars = 1L)
   assertString(prob.pattern, na.ok = TRUE, min.chars = 1L)
@@ -82,7 +82,7 @@ findExperiments = function(prob.name = NA_character_, prob.pattern = NA_characte
 
   if (!is.na(prob.name)) {
     problem = NULL
-    tab = tab[stri_detect_fixed(problem, prob.name)]
+    tab = tab[problem == prob.name]
   }
 
   if (!is.na(prob.pattern)) {
@@ -92,7 +92,7 @@ findExperiments = function(prob.name = NA_character_, prob.pattern = NA_characte
 
   if (!is.na(algo.name)) {
     algorithm = NULL
-    tab = tab[stri_detect_fixed(algorithm, algo.name)]
+    tab = tab[algorithm == algo.name]
   }
 
   if (!is.na(algo.pattern)) {
@@ -157,9 +157,10 @@ findStarted = function(ids = NULL, reg = getDefaultRegistry()) {
   .findStarted(reg, convertIds(reg, ids))
 }
 
-.findStarted = function(reg, ids = NULL) {
-  started = NULL
-  filter(reg$status, ids, c("job.id", "started"))[!is.na(started), "job.id"]
+.findStarted = function(reg, ids = NULL, batch.ids = getBatchIds(reg, status = "running")) {
+  started = batch.id = status = NULL
+  bids = batch.ids[status == "running"]$batch.id
+  filter(reg$status, ids, c("job.id", "started", "batch.id"))[!is.na(started) | batch.id %in% bids, "job.id"]
 }
 
 
@@ -170,9 +171,10 @@ findNotStarted = function(ids = NULL, reg = getDefaultRegistry()) {
   .findNotStarted(reg, convertIds(reg, ids))
 }
 
-.findNotStarted = function(reg, ids = NULL) {
-  started = NULL
-  filter(reg$status, ids, c("job.id", "started"))[is.na(started), "job.id"]
+.findNotStarted = function(reg, ids = NULL, batch.ids = getBatchIds(reg, status = "running")) {
+  started = batch.id = status = NULL
+  bids = batch.ids[status == "running"]$batch.id
+  filter(reg$status, ids, c("job.id", "started", "batch.id"))[is.na(started) & ! batch.id %chin% bids, "job.id"]
 }
 
 

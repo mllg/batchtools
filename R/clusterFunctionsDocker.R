@@ -60,6 +60,7 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
     res = runOSCommand(cmd[1L], cmd[-1L])
 
     if (res$exit.code > 0L) {
+      housekeeping(reg)
       no.res.msg = "no resources available"
       if (res$exit.code == 1L && any(stri_detect_fixed(res$output, no.res.msg)))
         return(makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = no.res.msg))
@@ -84,10 +85,12 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
       stop("docker returned non-zero exit code")
     if (length(ids$output) == 0L)
       return(character(0L))
+    # TODO: is this still required? breaks housekeeping in its current state
+    # args = c(docker.args, "inspect", "--format '{{json .State.Status}}'", ids$output)
+    # status = runOSCommand("docker", args)
+    # ids$output[status$output == "\"running\""]
+    ids$output
 
-    args = c(docker.args, "inspect", "--format '{{json .State.Status}}'", ids$output)
-    status = runOSCommand("docker", args)
-    ids$output[status$output == "\"running\""]
   }
 
   housekeeping = function(reg, ...) {
@@ -110,5 +113,5 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
 
   makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
     store.job = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency,
-    hooks = list(pre.submit.job = housekeeping, post.sync = housekeeping))
+    hooks = list(post.submit = housekeeping, post.sync = housekeeping))
 } # nocov end

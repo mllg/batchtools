@@ -15,7 +15,6 @@
 #' setting the environment variable \dQuote{DEBUGME} to \dQuote{batchtools} before
 #' loading \pkg{batchtools}.
 #' @import utils
-#' @import backports
 #' @import checkmate
 #' @import data.table
 #' @import stringi
@@ -50,6 +49,7 @@ batchtools$hooks = list(
     debugme::debugme()
     batchtools$debug = TRUE
   }
+  backports::import(pkgname, c("dir.exists", "hasName"))
 } # nocov end
 
 .onUnload = function (libpath) { # nocov start

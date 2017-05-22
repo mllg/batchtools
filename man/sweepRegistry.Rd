@@ -13,7 +13,7 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 \description{
 Canceled jobs and jobs submitted multiple times may leave stray files behind.
 This function checks the registry for consistency and removes obsolete files
-and data base informations.
+and redundant data base entries.
 }
 \seealso{
 Other Registry: \code{\link{clearRegistry}},

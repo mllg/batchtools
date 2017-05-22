@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -84,40 +86,52 @@
     <p>This function is deprecated in favor of the more flexible <code>chunk</code>, <code>lpt</code> and <code>binpack</code>.</p>
     
 
-    <pre><span class='fu'>chunkIds</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>chunkIds</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>group.by</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>ids</dt>
-      <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>ids</th>
+      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
 A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to all jobs.</dd>
-      <dt>n.chunks</dt>
-      <dd>[<code>integer(1)</code>]
+If not set, defaults to all jobs.
+Invalid ids are ignored.</p></td>
+    </tr>
+    <tr>
+      <th>n.chunks</th>
+      <td><p>[<code>integer(1)</code>]
 Requested number of chunks.
 The function <code>chunk</code> distributes the number of elements in <code>x</code> evenly while
 <code>lpt</code> tries to even out the sum of elements in each chunk.
 If more chunks than necessary are requested, empty chunks are ignored.
-Mutually exclusive with <code>chunks.size</code>.</dd>
-      <dt>chunk.size</dt>
-      <dd>[<code>integer(1)</code>]
+Mutually exclusive with <code>chunks.size</code>.</p></td>
+    </tr>
+    <tr>
+      <th>chunk.size</th>
+      <td><p>[<code>integer(1)</code>]
 Requested chunk size for each single chunk.
 For <code>chunk</code> this is the number of elements in <code>x</code>, for <code>binpack</code> the size
 is determined by the sum of values in <code>x</code>.
-Mutually exclusive with <code>n.chunks</code>.</dd>
-      <dt>group.by</dt>
-      <dd>[<code>character(0)</code>]
+Mutually exclusive with <code>n.chunks</code>.</p></td>
+    </tr>
+    <tr>
+      <th>group.by</th>
+      <td><p>[<code>character(0)</code>]
 If <code>ids</code> is a <code>data.frame</code> with additional columns
 (in addition to the required column &#8220;job.id&#8221;), then the chunking is performed using
 subgroups defined by the columns set in <code>group.by</code>.
-See example.</dd>
-      <dt>reg</dt>
-      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
-    </dl>
+See example.</p></td>
+    </tr>
+    <tr>
+      <th>reg</th>
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

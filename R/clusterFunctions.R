@@ -143,18 +143,12 @@ print.SubmitJobResult = function(x, ...) {
 #' @family ClusterFunctionsHelper
 #' @export
 cfReadBrewTemplate = function(template, comment.string = NA_character_) {
-  assertCharacter(template, any.missing = FALSE, max.len = 1L)
-  if (length(template) == 0L)
-    stop("No template found")
-
-  if (stri_detect_regex(template, "\n")) {
+  if (stri_detect_fixed(template, "\n")) {
     "!DEBUG [cfReadBrewTemplate]: Parsing template from string"
     lines = stri_trim_both(stri_split_lines(template)[[1L]])
-  } else if (testFileExists(template, "r")) {
+  } else {
     "!DEBUG [cfReadBrewTemplate]: Parsing template form file '`template`'"
     lines = stri_trim_both(readLines(template))
-  } else {
-    stop("Argument 'template' must non point to a template file or provide the template as string (containing at least one newline)")
   }
 
   lines = lines[!stri_isempty(lines)]
@@ -283,6 +277,16 @@ getBatchIds = function(reg, status = "all") {
 }
 
 findTemplateFile = function(name) {
+  assertString(name, min.chars = 1L)
+
+  if (stri_detect_fixed(name, "\n"))
+    return(name)
+
+  if (stri_endswith_fixed(name, ".tmpl")) {
+    assertFileExists(name, access = "r")
+    return(name)
+  }
+
   x = sprintf("batchtools.%s.tmpl", name)
   if (file.exists(x))
     return(npath(x))
@@ -295,9 +299,9 @@ findTemplateFile = function(name) {
   if (file.exists(x))
     return(npath(x))
 
-  x = system.file("templates", sprintf("%s.default.tmpl", name), package = "batchtools")
+  x = system.file("templates", sprintf("%s.tmpl", name), package = "batchtools")
   if (file.exists(x))
     return(x)
 
-  return(character(0L))
+  stopf("Argument 'template' (=\"%s\") must point to a template file or contain the template itself as string (containing at least one newline)", name)
 }

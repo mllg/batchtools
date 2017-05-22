@@ -26,12 +26,13 @@ getJobTags(ids = NULL, reg = getDefaultRegistry())
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})
 with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to all jobs.}
+If not set, defaults to all jobs.
+Invalid ids are ignored.}
 
 \item{flatten}{[\code{logical(1)}]\cr
 Transform the job parameters and/or resource specifications to data frame columns?
-Defaults to \code{TRUE} if all parameters or resources are atomics,
-\code{FALSE} otherwise where each row of the column will hold a named list.
+Defaults to \code{TRUE} if all parameters (or resources) are scalar atomics.
+Otherwise each row of the column will hold a named list.
 New columns will be named using \code{prefix}.}
 
 \item{prefix}{[\code{logical(1)}]\cr

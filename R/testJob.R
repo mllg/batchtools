@@ -42,7 +42,7 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
     brew(file = system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE),
       output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))
 
-    res = runOSCommand(Rscript(), fn.r)
+    res = runOSCommand(Rscript(), shQuote(fn.r))
 
     writeLines(res$output)
     if (res$exit.code == 0L)

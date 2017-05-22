@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -83,13 +85,12 @@
     
     <p>These functions are used to find and filter jobs, depending on either their parameters (<code>findJobs</code> and
 <code>findExperiments</code>), their tags (<code>findTagged</code>), or their computational status (all other functions).</p>
-
-    <p>For a summarizing overview over the status, see <code><a href='getStatus.html'>getStatus</a></code>.
+<p>For a summarizing overview over the status, see <code><a href='getStatus.html'>getStatus</a></code>.
 Note that <code>findOnSystem</code> and <code>findExpired</code> are somewhat heuristic and may report misleading results,
 depending on the state of the system and the <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code> implementation.</p>
     
 
-    <pre><span class='fu'>findJobs</span>(<span class='no'>expr</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())
+    <pre class="usage"><span class='fu'>findJobs</span>(<span class='no'>expr</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())
 
 <span class='fu'>findExperiments</span>(<span class='kw'>prob.name</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>prob.pattern</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
   <span class='kw'>algo.name</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>algo.pattern</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='no'>prob.pars</span>,
@@ -120,49 +121,73 @@ depending on the state of the system and the <code><a href='makeClusterFunctions
 <span class='fu'>findTagged</span>(<span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>expr</dt>
-      <dd>[<code>expression</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>expr</th>
+      <td><p>[<code>expression</code>]
 Predicate expression evaluated in the job parameters.
-Jobs for which <code>expr</code> evaluates to <code>TRUE</code> are returned.</dd>
-      <dt>ids</dt>
-      <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+Jobs for which <code>expr</code> evaluates to <code>TRUE</code> are returned.</p></td>
+    </tr>
+    <tr>
+      <th>ids</th>
+      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
 A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to all jobs.</dd>
-      <dt>reg</dt>
-      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
-      <dt>prob.name</dt>
-      <dd>[<code>character</code>]
-Fixed string to match problem names.
-If not provided, all problems are matched.</dd>
-      <dt>prob.pattern</dt>
-      <dd>[<code>character</code>]
+If not set, defaults to all jobs.
+Invalid ids are ignored.</p></td>
+    </tr>
+    <tr>
+      <th>reg</th>
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>prob.name</th>
+      <td><p>[<code>character</code>]
+Exact name of the problem (no substring matching).
+If not provided, all problems are matched.</p></td>
+    </tr>
+    <tr>
+      <th>prob.pattern</th>
+      <td><p>[<code>character</code>]
 Regular expression pattern to match problem names.
-If not provided, all problems are matched.</dd>
-      <dt>algo.name</dt>
-      <dd>[<code>character</code>]
-Fixed string to match algorithm names.
-If not provided, all algorithms are matched.</dd>
-      <dt>algo.pattern</dt>
-      <dd>[<code>character</code>]
+If not provided, all problems are matched.</p></td>
+    </tr>
+    <tr>
+      <th>algo.name</th>
+      <td><p>[<code>character</code>]
+Exact name of the problem (no substring matching).
+If not provided, all algorithms are matched.</p></td>
+    </tr>
+    <tr>
+      <th>algo.pattern</th>
+      <td><p>[<code>character</code>]
 Regular expression pattern to match algorithm names.
-If not provided, all algorithms are matched.</dd>
-      <dt>prob.pars</dt>
-      <dd>[<code>expression</code>]
-Predicate expression evaluated in the problem parameters.</dd>
-      <dt>algo.pars</dt>
-      <dd>[<code>expression</code>]
-Predicate expression evaluated in the algorithm parameters.</dd>
-      <dt>repls</dt>
-      <dd>[<code>integer</code>]
-Whitelist of replication numbers. If not provided, all replications are matched.</dd>
-      <dt>tags</dt>
-      <dd>[<code>character</code>]
-Return jobs which are tagged with any of the tags provided.</dd>
-    </dl>
+If not provided, all algorithms are matched.</p></td>
+    </tr>
+    <tr>
+      <th>prob.pars</th>
+      <td><p>[<code>expression</code>]
+Predicate expression evaluated in the problem parameters.</p></td>
+    </tr>
+    <tr>
+      <th>algo.pars</th>
+      <td><p>[<code>expression</code>]
+Predicate expression evaluated in the algorithm parameters.</p></td>
+    </tr>
+    <tr>
+      <th>repls</th>
+      <td><p>[<code>integer</code>]
+Whitelist of replication numbers. If not provided, all replications are matched.</p></td>
+    </tr>
+    <tr>
+      <th>tags</th>
+      <td><p>[<code>character</code>]
+Return jobs which are tagged with any of the tags provided.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -170,7 +195,7 @@ Return jobs which are tagged with any of the tags provided.</dd>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>findNotSubmitted</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>findNotSubmitted</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
 <span class='co'># get all jobs:</span>
 <span class='fu'>findJobs</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id

@@ -100,11 +100,48 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @family Results
 #' @export
 #' @examples
+#' ### Example 1 - reduceResultsList
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(function(x) x^2, x = 1:10, reg = tmp)
 #' submitJobs(reg = tmp)
 #' waitForJobs(reg = tmp)
 #' reduceResultsList(fun = sqrt, reg = tmp)
+#'
+#' ### Example 2 - reduceResultsDataTable
+#' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+#'
+#' # add first problem
+#' fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd)
+#' addProblem("rnorm", fun = fun, reg = tmp)
+#'
+#' # add second problem
+#' fun = function(job, data, n, lambda, ...) rexp(n, rate = lambda)
+#' addProblem("rexp", fun = fun, reg = tmp)
+#'
+#' # add first algorithm
+#' fun = function(instance, method, ...) if (method == "mean") mean(instance) else median(instance)
+#' addAlgorithm("average", fun = fun, reg = tmp)
+#'
+#' # add second algorithm
+#' fun = function(instance, ...) sd(instance)
+#' addAlgorithm("deviation", fun = fun, reg = tmp)
+#'
+#' # define problem and algorithm designs
+#' prob.designs = algo.designs = list()
+#' prob.designs$rnorm = expand.grid(n = 100, mean = -1:1, sd = 1:5)
+#' prob.designs$rexp = data.table(n = 100, lambda = 1:5)
+#' algo.designs$average = data.table(method = c("mean", "median"))
+#' algo.designs$deviation = data.table()
+#'
+#' # add experiments and submit
+#' addExperiments(prob.designs, algo.designs, reg = tmp)
+#' submitJobs(reg = tmp)
+#'
+#' # collect results and join them # with problem and algorithm paramters
+#' ijoin(
+#'   getJobPars(reg = tmp),
+#'   reduceResultsDataTable(reg = tmp, fun = function(x) list(res = x))
+#' )
 reduceResultsList = function(ids = NULL, fun = NULL, ..., missing.val, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   assertFunction(fun, null.ok = TRUE)
@@ -112,28 +149,33 @@ reduceResultsList = function(ids = NULL, fun = NULL, ..., missing.val, reg = get
   .reduceResultsList(ids, fun, ..., missing.val = missing.val, reg = reg)
 }
 
-#' @param fill [\code{logical(1)}]\cr
-#'   In \code{reduceResultsDataTable}: This flag is passed down to
-#'   \code{\link[data.table]{rbindlist}} which is used to convert the results
-#'   to a \code{\link[data.table]{data.table}}.
+#' @param flatten [\code{logical(1)}]\cr
+#'   Transform results into separate \code{\link[data.table]{data.table}} columns.
+#'   Defaults to \code{TRUE} if all results are (a list of) scalar atomics,
+#'   Otherwise each row of the column will hold a named list.
 #' @export
 #' @rdname reduceResultsList
-reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, missing.val, reg = getDefaultRegistry()) {
+reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., flatten = NULL, missing.val, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   ids = convertIds(reg, ids, default = .findDone(reg = reg))
   assertFunction(fun, null.ok = TRUE)
-  assertFlag(fill)
+  assertFlag(flatten, null.ok = TRUE)
 
   results = .reduceResultsList(ids = ids, fun = fun, ..., missing.val = missing.val, reg = reg)
   if (length(results) == 0L)
     return(noIds())
-  if (!qtestr(results, "d"))
-    results = lapply(results, as.data.table)
-  results = rbindlist(results, fill = fill, idcol = "job.id")
-  if (!identical(results$job.id, seq_row(ids)))
-    stop("The function must return an object for each job which is convertible to a data.frame with one row")
-  results[, "job.id" := ids$job.id]
-  setkeyv(results, "job.id")[]
+
+  if (flatten %??% qtestr(results, c("v1", "L"), depth = 2L)) {
+    if (!qtestr(results, "d"))
+      results = lapply(results, as.data.table)
+    results = rbindlist(results, fill = TRUE, idcol = "job.id")
+    if (!identical(results$job.id, seq_row(ids)))
+      stop("The function must return an object for each job which is convertible to a data.frame with one row")
+    results[, "job.id" := ids$job.id]
+    setkeyv(results, "job.id")[]
+  } else {
+    ids[, "result" := results][]
+  }
 }
 
 .reduceResultsList = function(ids, fun = NULL, ..., missing.val, reg = getDefaultRegistry()) {
@@ -160,12 +202,13 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., fill = FALSE, mis
   if (length(done) > 0L) {
     fns = getResultFiles(reg, ids)
     pb = makeProgressBar(total = length(fns), format = "Reducing [:bar] :percent eta: :eta")
-    cache = Cache$new(reg$file.dir)
+    reader = RDSReader$new(TRUE)
 
     for (i in done) {
-      res = worker(readRDS(fns[i]), makeJob(ids$job.id[i], cache = cache, reg = reg), ...)
+      res = worker(readRDS(fns[i]), makeJob(ids$job.id[i], reader = reader, reg = reg), ...)
       if (!is.null(res))
         results[[i]] = res
+      rm(res)
       pb$tick()
     }
   }
