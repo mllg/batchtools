@@ -115,13 +115,13 @@ How often each of these jobs should be computed can be determined with the argum
 
 ```{r}
 # problem design: try two values for the ratio parameter
-pdes = list(iris = data.frame(ratio = c(0.67, 0.9)))
+pdes = list(iris = data.table(ratio = c(0.67, 0.9)))
 
 # algorithm design: try combinations of kernel and epsilon exhaustively,
 # try different number of trees for the forest
 ades = list(
-  svm = expand.grid(kernel = c("linear", "polynomial", "radial"), epsilon = c(0.01, 0.1)),
-  forest = data.frame(ntree = c(100, 500, 1000))
+  svm = CJ(kernel = c("linear", "polynomial", "radial"), epsilon = c(0.01, 0.1)),
+  forest = data.table(ntree = c(100, 500, 1000))
 )
 
 addExperiments(pdes, ades, repls = 5)
