@@ -53,4 +53,3 @@ Suggests:
     withr
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
-Remotes: mllg/backports
