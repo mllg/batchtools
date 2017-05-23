@@ -2,16 +2,10 @@ library("testthat")
 library("data.table")
 library("checkmate")
 library("stringi")
-
-with_options = function(opts, expr) {
-  prev = options(names(opts))
-  on.exit(do.call(options, prev))
-  do.call(options, opts)
-  force(expr)
-}
+requireNamespace("withr")
 
 silent = function(expr) {
-  with_options(list(batchtools.progress = FALSE, batchtools.verbose = FALSE), expr)
+  withr::with_options(list(batchtools.progress = FALSE, batchtools.verbose = FALSE), expr)
 }
 
 s.chunk = function(ids) {

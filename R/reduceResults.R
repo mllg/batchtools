@@ -128,7 +128,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #'
 #' # define problem and algorithm designs
 #' prob.designs = algo.designs = list()
-#' prob.designs$rnorm = expand.grid(n = 100, mean = -1:1, sd = 1:5)
+#' prob.designs$rnorm = CJ(n = 100, mean = -1:1, sd = 1:5)
 #' prob.designs$rexp = data.table(n = 100, lambda = 1:5)
 #' algo.designs$average = data.table(method = c("mean", "median"))
 #' algo.designs$deviation = data.table()

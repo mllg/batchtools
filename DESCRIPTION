@@ -49,6 +49,7 @@ Suggests:
     rmarkdown,
     rpart,
     snow,
-    testthat
+    testthat,
+    withr
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
