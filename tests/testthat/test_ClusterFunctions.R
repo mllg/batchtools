@@ -98,5 +98,3 @@ test_that("Export of environment variable DEBUGME", {
   res = loadResult(1, reg = reg)
   expect_string(res, min.chars = 1, fixed = "grepme")
 })
-
-
