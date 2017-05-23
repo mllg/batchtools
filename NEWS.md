@@ -3,6 +3,7 @@
 * Fixed handling of `file.dir` with special chars like whitespace.
 * Fixed order of arguments in `findExperiments()` (argument `ids` is now first).
 * Removed code to upgrade registries created with versions prior to v0.9.0 (first CRAN release).
+* `addExperiments()` now warns if a design is passed as `data.frame` with factor columns and `stringsAsFactors` is `TRUE`.
 
 # batchtools 0.9.3
 

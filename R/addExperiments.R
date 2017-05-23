@@ -56,7 +56,7 @@
 #'
 #' # define problem and algorithm designs
 #' prob.designs = algo.designs = list()
-#' prob.designs$rnorm = expand.grid(n = 100, mean = -1:1, sd = 1:5)
+#' prob.designs$rnorm = CJ(n = 100, mean = -1:1, sd = 1:5)
 #' prob.designs$rexp = data.table(n = 100, lambda = 1:5)
 #' algo.designs$average = data.table(method = c("mean", "median"))
 #' algo.designs$deviation = data.table()
@@ -69,16 +69,17 @@
 #' getJobPars(reg = tmp)
 addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, combine = "crossprod", reg = getDefaultRegistry()) {
   convertDesigns = function(type, designs, keywords) {
-    check.factors = getOption("stringsAsFactors", TRUE)
+    check.factors = default.stringsAsFactors()
 
     Map(function(id, design) {
-      if (check.factors && identical(head(class(design), 1L), "data.frame")) {
+      if (check.factors && identical(class(design)[1L], "data.frame")) {
         i = which(vlapply(design, is.factor))
         if (length(i) > 0L) {
-          warningf("%s design '%s' passed as 'data.frame' and 'stringsAsFactors' is not set. Column(s) '%s' may be encoded as factors accidentally.", type, id, stri_flatten(names(design)[i]), "','")
+          warningf("%s design '%s' passed as 'data.frame' and 'stringsAsFactors' is TRUE. Column(s) '%s' may be encoded as factors accidentally.", type, id, stri_flatten(names(design)[i]), "','")
         }
       }
-      design = as.data.table(design)
+      if (!is.data.table(design))
+        design = as.data.table(design)
       i = wf(keywords %chin% names(design))
       if (length(i) > 0L)
         stopf("%s design %s contains reserved keyword '%s'", type, id, keywords[i])
