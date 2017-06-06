@@ -100,7 +100,3 @@ getProblemIds = function(reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg)
   levels(reg$defs$problem)
 }
-
-getProblemURI = function(file.dir, name) {
-  file.path(file.dir, "problems", mangle(name))
-}

@@ -9,7 +9,7 @@ findConfFile = function() {
 
   x = npath(file.path("~", ".batchtools.conf.R"), must.work = FALSE)
   if (file.exists(x))
-    return(npath(x))
+    return(x)
 
   return(character(0L))
 }

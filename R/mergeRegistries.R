@@ -34,7 +34,7 @@
 mergeRegistries = function(source, target = getDefaultRegistry()) {
   assertRegistry(source, writeable = TRUE, running.ok = FALSE)
   assertRegistry(target, writeable = TRUE, running.ok = FALSE)
-  if (source$file.dir == target$file.dir)
+  if (npath(source$file.dir, norm.home = FALSE) == npath(target$file.dir, norm.home = FALSE))
     stop("You must provide two different registries (using different file directories")
   hash = function(x) unlist(.mapply(function(...) digest(list(...)), x[, !"def.id"], list()))
 

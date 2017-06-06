@@ -122,7 +122,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   reg = new.env(parent = asNamespace("batchtools"))
   reg$file.dir = file.dir
-  reg$work.dir = npath(work.dir)
+  reg$work.dir = npath(work.dir, norm.home = FALSE)
   reg$packages = packages
   reg$namespaces = namespaces
   reg$source = source
@@ -168,7 +168,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   "!DEBUG [makeRegistry]: Creating directories in '`reg$file.dir`'"
   for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
     dir.create(d, recursive = TRUE)
-  reg$file.dir = npath(reg$file.dir)
+  reg$file.dir = npath(reg$file.dir, norm.home = FALSE)
 
   loadRegistryDependencies(list(file.dir = file.dir, work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
 

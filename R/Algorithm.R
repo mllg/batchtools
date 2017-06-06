@@ -80,7 +80,3 @@ getAlgorithmIds = function(reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg)
   levels(reg$defs$algorithm)
 }
-
-getAlgorithmURI = function(file.dir, name) {
-  file.path(file.dir, "algorithms", mangle(name))
-}
