@@ -1,9 +1,8 @@
 Job = R6Class("Job", cloneable = FALSE,
   public = list(
-    initialize = function(file.dir, reader, path, id, pars, seed, resources) {
+    initialize = function(file.dir, reader, id, pars, seed, resources) {
       self$file.dir = file.dir
       self$reader = reader
-      self$path = path
       self$id = id
       self$job.pars = pars
       self$seed = seed
@@ -14,8 +13,7 @@ Job = R6Class("Job", cloneable = FALSE,
     job.pars = NULL,
     seed = NULL,
     resources = NULL,
-    reader = NULL,
-    path = NULL
+    reader = NULL
   ),
   active = list(
     pars = function() {
@@ -34,10 +32,9 @@ Job = R6Class("Job", cloneable = FALSE,
 
 Experiment = R6Class("Experiment", cloneable = FALSE,
   public = list(
-    initialize = function(file.dir, reader, path, id, pars, repl, seed, resources, prob.name, algo.name) {
+    initialize = function(file.dir, reader, id, pars, repl, seed, resources, prob.name, algo.name) {
       self$file.dir = file.dir
       self$reader = reader
-      self$path = path
       self$id = id
       self$pars = pars
       self$repl = repl
@@ -53,7 +50,6 @@ Experiment = R6Class("Experiment", cloneable = FALSE,
     seed = NULL,
     resources = NULL,
     reader = NULL,
-    path = NULL,
     prob.name = NULL,
     algo.name = NULL,
     allow.access.to.instance = TRUE
@@ -151,7 +147,7 @@ makeJob = function(id, reader = NULL, reg = getDefaultRegistry()) {
 makeJob.Registry = function(id, reader = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Job$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), path = reg$path, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Job$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     resources = resources)
 }
 
@@ -159,7 +155,7 @@ makeJob.Registry = function(id, reader = NULL, reg = getDefaultRegistry()) {
 makeJob.ExperimentRegistry = function(id, reader = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "problem", "algorithm", "repl", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Experiment$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), path = reg$path, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Experiment$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     repl = row$repl, resources = resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
@@ -170,13 +166,13 @@ getJob = function(jc, i, reader = NULL) {
 getJob.JobCollection = function(jc, i, reader = NULL) {
   reader = reader %??% RDSReader$new(FALSE)
   row = jc$jobs[i]
-  Job$new(file.dir = jc$file.dir, reader = reader, path = NULL, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
+  Job$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     resources = jc$resources)
 }
 
 getJob.ExperimentCollection = function(jc, i, reader = NULL) {
   reader = reader %??% RDSReader$new(FALSE)
   row = jc$jobs[i]
-  Experiment$new(file.dir = jc$file.dir, reader = reader, path = NULL, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
+  Experiment$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     repl = row$repl, resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm)
 }

@@ -47,7 +47,6 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
 
 createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()) {
   jc              = new.env(parent = emptyenv())
-  jc$paths        = NULL
   jc$jobs         = setkeyv(jobs, "job.id")
   jc$file.dir     = reg$file.dir
   jc$work.dir     = reg$work.dir

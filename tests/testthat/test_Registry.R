@@ -103,7 +103,6 @@ test_that("clearRegistry", {
   expect_identical(list.files(reg$path$dir["logs"]), character(0))
   expect_identical(list.files(reg$path$dir["results"]), character(0))
   expect_identical(list.files(reg$path$dir["updates"]), character(0))
-  expect_false(file.exists(file.path(reg$file.dir, "user.function.rds")))
 
   expect_identical(batchMap(identity, 1:4, reg = reg), data.table(job.id = 1:4, key = "job.id"))
   expect_true(reg$foo)

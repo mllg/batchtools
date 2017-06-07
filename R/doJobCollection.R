@@ -38,7 +38,6 @@ doJobCollection.character = function(jc, output = NULL) {
 #' @export
 doJobCollection.JobCollection = function(jc, output = NULL) {
   now = function() strftime(Sys.time())
-  setPaths(jc)
 
   error = function(msg, ...) {
     now = ustamp()
