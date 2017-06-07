@@ -20,8 +20,7 @@ resetJobs = function(ids = NULL, reg = getDefaultRegistry()) {
   info("Resetting %i jobs in DB ...", nrow(ids))
   cols = c("submitted", "started", "done", "error", "memory", "resource.id", "batch.id", "log.file", "job.hash")
   reg$status[ids, (cols) := list(NA_real_, NA_real_, NA_real_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_, NA_character_), on = "job.id"]
-  fns = getResultFiles(reg, ids)
-  file.remove.safely(fns)
+  file.remove.safely(reg$path$results(ids))
 
   sweepRegistry(reg)
   invisible(ids)

@@ -1,4 +1,5 @@
 #' @title Remove All Jobs
+#'
 #' @description
 #' Removes all jobs from a registry and calls \code{\link{sweepRegistry}}.
 #'
@@ -11,10 +12,5 @@ clearRegistry = function(reg = getDefaultRegistry()) {
   reg$status = reg$status[FALSE]
   reg$defs = reg$defs[FALSE]
   reg$resources = reg$resources[FALSE]
-  user.fun = file.path(reg$file.dir, "user.function.rds")
-  if (file.exists(user.fun)) {
-    info("Removing user function ...")
-    file.remove.safely(user.fun)
-  }
   sweepRegistry(reg = reg)
 }

@@ -49,17 +49,13 @@
 makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = findConfFile(), packages = character(0L), namespaces = character(0L),
   source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
 
-  reg = makeRegistry(file.dir = file.dir, work.dir = work.dir, conf.file = conf.file,
-    packages = packages, namespaces = namespaces, source = source, load = load, seed = seed, make.default = make.default)
-
-  dir.create(file.path(reg$file.dir, "problems"))
-  dir.create(file.path(reg$file.dir, "algorithms"))
+  reg = createRegistry("ExperimentRegistry", file.dir, work.dir, conf.file, packages, namespaces, source, load, seed, make.default)
+  info("Created Experiment Registry in '%s' using cluster functions '%s'", reg$file.dir, reg$cluster.functions$name)
 
   reg$status$repl = integer(0L)
   reg$defs$problem = factor(character(0L))
   reg$defs$algorithm = factor(character(0L))
   reg$defs$pars.hash = character(0L)
-  class(reg) = c("ExperimentRegistry", "Registry")
 
   saveRegistry(reg)
   return(reg)

@@ -107,6 +107,14 @@
 #' saveRegistry(reg = tmp)
 makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = findConfFile(), packages = character(0L), namespaces = character(0L),
   source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
+
+  reg = createRegistry("Registry", file.dir, work.dir, conf.file, packages, namespaces, source, load, seed, make.default)
+  info("Created Registry in '%s' using cluster functions '%s'", reg$file.dir, reg$cluster.functions$name)
+  saveRegistry(reg)
+  return(reg)
+}
+
+createRegistry = function(cl, file.dir, work.dir, conf.file, packages, namespaces, source, load, seed, make.default) {
   assertString(file.dir, na.ok = TRUE)
   if (!is.na(file.dir))
     assertPathForOutput(file.dir, overwrite = FALSE)
@@ -121,6 +129,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   seed = if (is.null(seed)) as.integer(runif(1L, 1, .Machine$integer.max / 2L)) else asCount(seed, positive = TRUE)
 
   reg = new.env(parent = asNamespace("batchtools"))
+  class(reg) = unique(c(cl, "Registry"))
   reg$file.dir = file.dir
   reg$work.dir = npath(work.dir)
   reg$packages = packages
@@ -166,16 +175,13 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   if (is.na(file.dir))
     reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
   "!DEBUG [makeRegistry]: Creating directories in '`reg$file.dir`'"
-  for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
-    dir.create(d, recursive = TRUE)
+  dir.create(reg$file.dir, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)
-  reg$dir = normalizePath(reg$file.dir)
+  setPaths(reg)
+  for (d in reg$path$dir) dir.create(d)
 
   loadRegistryDependencies(list(file.dir = file.dir, work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
 
-  class(reg) = "Registry"
-  saveRegistry(reg)
-  info("Created registry in '%s' using cluster functions '%s'", reg$file.dir, reg$cluster.functions$name)
   if (make.default)
     batchtools$default.registry = reg
   return(reg)

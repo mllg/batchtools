@@ -63,6 +63,7 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
     assertString(work.dir)
     reg$work.dir = npath(work.dir)
   }
+  setPaths(reg)
 
   wd.exists = dir.exists(reg$work.dir)
   if (!wd.exists)
@@ -76,4 +77,3 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
   syncRegistry(reg = reg)
   return(reg)
 }
-

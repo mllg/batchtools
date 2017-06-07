@@ -23,8 +23,7 @@ removeExperiments = function(ids = NULL, reg = getDefaultRegistry()) {
     info("Cleaning up %i job definitions ...", length(i))
     reg$defs = reg$defs[-i]
   }
-  fns = getResultFiles(reg, ids)
-  file.remove.safely(fns)
+  file.remove.safely(reg$path$results(ids))
 
   sweepRegistry(reg)
   return(ids)

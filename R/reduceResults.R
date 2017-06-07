@@ -46,7 +46,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
   if (nrow(ids) == 0L)
     return(if (missing(init)) NULL else init)
 
-  fns = getResultFiles(reg, ids)
+  fns = reg$path$results(ids)
   if (missing(init)) {
     init = readRDS(fns[1L])
     fns = fns[-1L]
@@ -200,7 +200,7 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., flatten = NULL, m
   }
 
   if (length(done) > 0L) {
-    fns = getResultFiles(reg, ids)
+    fns = reg$path$results(ids)
     pb = makeProgressBar(total = length(fns), format = "Reducing [:bar] :percent eta: :eta")
     reader = RDSReader$new(TRUE)
 

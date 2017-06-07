@@ -55,24 +55,24 @@ mergeRegistries = function(source, target = getDefaultRegistry()) {
 
   info("Copying results ...")
   file.copy(
-    from = getResultFiles(source, status),
-    to = getResultFiles(target, status)
+    from = source$path$results(status),
+    to = target$path$results(status)
   )
 
   info("Copying logs ...")
   file.copy(
-    from = getLogFiles(source, status),
-    to = getLogFiles(target, status)
+    from = source$path$logs(status),
+    to = target$path$logs(status)
   )
 
-  ext.dirs = chintersect(list.files(getExternalPath(source)), as.character(status$job.id))
+  ext.dirs = chintersect(list.files(source$path$dir["external"]), as.character(status$job.id))
   if (length(ext.dirs) > 0L) {
     info("Copying external directories ...")
-    target.dirs = getExternalDirs(target, ext.dirs)
+    target.dirs = target$path$external(ext.dirs)
     lapply(target.dirs[!dir.exists(target.dirs)], dir.create)
     file.copy(
-      from = getExternalDirs(source, ext.dirs),
-      to = rep.int(getExternalPath(target), length(ext.dirs)),
+      from = source$path$external(ext.dirs),
+      to = rep.int(target$path$dir["external"], length(ext.dirs)),
       recursive = TRUE
     )
   }

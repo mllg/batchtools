@@ -23,7 +23,7 @@
 #' @importFrom brew brew
 #' @importFrom progress progress_bar
 #' @importFrom rappdirs user_config_dir
-#' @importFrom stats runif predict pexp
+#' @importFrom stats runif predict pexp setNames
 #' @importFrom base64url base32_encode base32_decode
 "_PACKAGE"
 

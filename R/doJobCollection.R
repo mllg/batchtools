@@ -38,6 +38,7 @@ doJobCollection.character = function(jc, output = NULL) {
 #' @export
 doJobCollection.JobCollection = function(jc, output = NULL) {
   now = function() strftime(Sys.time())
+  setPaths(jc)
 
   error = function(msg, ...) {
     now = ustamp()
@@ -134,7 +135,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
       update$error = stri_trunc(stri_trim_both(as.character(result)), 500L, " [truncated]")
     } else {
       catf("\n### [bt %s]: Job terminated successfully [batchtools job.id=%i]", now(), id)
-      writeRDS(result, file = getResultFiles(jc, id))
+      writeRDS(result, file = file.path(jc$file.dir, "results", sprintf("%i.rds", id)))
     }
     buf$add(i, update)
     buf$flush(jc)

@@ -6,7 +6,7 @@ test_that("makeRegistry", {
   expect_true(is.environment(reg))
   expect_directory_exists(reg$file.dir, access = "rw")
   expect_directory_exists(reg$work.dir, access = "r")
-  expect_directory_exists(reg$path)
+  expect_is(reg$path, "Paths")
   expect_directory_exists(file.path(reg$file.dir, c("jobs", "results", "updates", "logs")))
   expect_file_exists(file.path(reg$file.dir, "registry.rds"))
   expect_character(reg$packages, any.missing = FALSE)
@@ -76,11 +76,11 @@ test_that("extra files are loaded", {
 
 test_that("loadRegistry", {
   reg1 = makeRegistry(file.dir = NA, make.default = FALSE)
-  expect_directory_exists(reg1$path)
-  expect_true(!stri_startswith_fixed(reg1$path, "~"))
   fd = reg1$file.dir
   setDefaultRegistry(NULL)
   reg2 = loadRegistry(fd, make.default = FALSE)
+  expect_is(reg2$path, "Paths")
+  expect_identical(reg1$path$base, reg2$path$base)
   checkTables(reg2)
   expect_equal(reg1, reg2)
 
@@ -99,10 +99,10 @@ test_that("clearRegistry", {
   clearRegistry(reg)
   checkTables(reg, nrow = 0L)
 
-  expect_identical(list.files(getJobPath(reg)), character(0))
-  expect_identical(list.files(getLogPath(reg)), character(0))
-  expect_identical(list.files(getResultPath(reg)), character(0))
-  expect_identical(list.files(getUpdatePath(reg)), character(0))
+  expect_identical(list.files(reg$path$dir["jobs"]), character(0))
+  expect_identical(list.files(reg$path$dir["logs"]), character(0))
+  expect_identical(list.files(reg$path$dir["results"]), character(0))
+  expect_identical(list.files(reg$path$dir["updates"]), character(0))
   expect_false(file.exists(file.path(reg$file.dir, "user.function.rds")))
 
   expect_identical(batchMap(identity, 1:4, reg = reg), data.table(job.id = 1:4, key = "job.id"))

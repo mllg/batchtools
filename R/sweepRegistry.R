@@ -13,36 +13,36 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   "!DEBUG [sweepRegistry]: Running sweepRegistry"
 
   submitted = reg$status[.findSubmitted(reg = reg), c("job.id", "job.hash", "log.file")]
-  path = getResultPath(reg)
+  path = reg$path$dir["results"]
   obsolete = chsetdiff(
     list.files(path, full.names = TRUE),
-    getResultFiles(reg, submitted)
+    reg$path$results(submitted)
   )
   info("Removing %i obsolete result files ...", length(obsolete))
   file.remove(obsolete)
 
-  path = getLogPath(reg)
+  path = reg$path$dir["logs"]
   obsolete = chsetdiff(
     list.files(path, full.names = TRUE),
-    getLogFiles(reg, submitted)
+    reg$path$logs(submitted)
   )
   info("Removing %i obsolete log files ...", length(obsolete))
   file.remove(obsolete)
 
-  path = getJobPath(reg)
+  path = reg$path$dir["jobs"]
   obsolete = list.files(path, pattern = "\\.rds", full.names = TRUE)
   info("Removing %i obsolete job collection files ...", length(obsolete))
   file.remove(obsolete)
 
-  path = getJobPath(reg)
+  path = reg$path$dir["jobs"]
   obsolete = list.files(path, pattern = "\\.job$", full.names = TRUE)
   info("Removing %i job description files ...", length(obsolete))
   file.remove(obsolete)
 
-  path = getExternalPath(reg)
+  path = reg$path$dir["external"]
   obsolete = chsetdiff(
     list.files(path, pattern = "^[0-9]+$", full.names = TRUE),
-    getExternalDirs(reg, submitted)
+    reg$path$external(submitted)
   )
   info("Removing %i external directories of unsubmitted jobs ...", length(obsolete))
   unlink(obsolete, recursive = TRUE)
