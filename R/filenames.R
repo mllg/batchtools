@@ -1,8 +1,8 @@
-npath = function(path, norm.home = TRUE, must.work = TRUE) {
-  if (!norm.home && stri_startswith_fixed(path, "~")) {
+npath = function(path, must.work = TRUE) {
+  if (stri_startswith_fixed(path, "~")) {
     # do not call normalizePath, we do not want to expand this paths relative to home
     if (must.work && !file.exists(path))
-      stopf("File '%s' not found", path)
+      stopf("Path '%s' not found", path)
     if (testOS("windows"))
       path = stri_replace_all_fixed(path, "\\", "/")
     return(path)

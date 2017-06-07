@@ -289,7 +289,7 @@ findTemplateFile = function(name) {
 
   x = sprintf("batchtools.%s.tmpl", name)
   if (file.exists(x))
-    return(npath(x))
+    return(normalizePath(x))
 
   x = file.path(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", name))
   if (file.exists(x))
@@ -297,7 +297,7 @@ findTemplateFile = function(name) {
 
   x = file.path("~", sprintf(".batchtools.%s.tmpl", name))
   if (file.exists(x))
-    return(npath(x))
+    return(normalizePath(x))
 
   x = system.file("templates", sprintf("%s.tmpl", name), package = "batchtools")
   if (file.exists(x))

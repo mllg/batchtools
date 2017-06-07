@@ -47,9 +47,9 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
   alloc.col(reg$resources, ncol(reg$resources))
   alloc.col(reg$tags, ncol(reg$tags))
 
-  file.dir = npath(file.dir, norm.home = FALSE)
+  file.dir = npath(file.dir)
   if (!update.paths) {
-    before = npath(reg$file.dir, norm.home = FALSE, must.work = FALSE)
+    before = npath(reg$file.dir, must.work = FALSE)
     if (before != file.dir) {
       warningf("The absolute path of the file.dir has changed (before '%s', now '%s'). Enabling read-only mode for the registry.", before, file.dir)
       reg$writeable = FALSE
@@ -61,7 +61,7 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
 
   if (!is.null(work.dir)) {
     assertString(work.dir)
-    reg$work.dir = npath(work.dir, norm.home = FALSE)
+    reg$work.dir = npath(work.dir)
   }
 
   wd.exists = dir.exists(reg$work.dir)
