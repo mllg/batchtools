@@ -48,7 +48,7 @@ batchMapResults = function(fun, ids = NULL, ..., more.args = list(), target, sou
   if (nrow(target$status) > 0L)
     stop("Target registry 'target' must be empty")
 
-  fns = source$path$results(ids)
+  fns = source$paths$results(ids)
   names(fns) = ids$job.id
   more.args = c(list(..fn = fns, ..fun = fun), more.args)
   args = c(list(..id = ids$job.id), list(...))

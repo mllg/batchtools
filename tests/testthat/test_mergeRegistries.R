@@ -22,7 +22,7 @@ test_that("mergeRegistries", {
 
   checkTables(target)
 
-  expect_set_equal(list.files(target$path$dir["external"]), as.character(c(2, 7)))
+  expect_set_equal(list.files(target$paths$dir[["external"]]), as.character(c(2, 7)))
   expect_equal(reduceResultsDataTable(reg = target)$V1, c(1,2,3,4,6,7,8,9)^2)
   expect_file_exists(file.path(target$file.dir, "external", c("2", "7"), "foo"))
 })

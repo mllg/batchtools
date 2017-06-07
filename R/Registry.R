@@ -178,7 +178,7 @@ createRegistry = function(cl, file.dir, work.dir, conf.file, packages, namespace
   dir.create(reg$file.dir, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)
   setPaths(reg)
-  for (d in reg$path$dir) dir.create(d)
+  for (d in reg$paths$dir) dir.create(d)
 
   loadRegistryDependencies(list(file.dir = file.dir, work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
 

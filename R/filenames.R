@@ -8,11 +8,11 @@ Paths = R6Class("Paths", cloneable = FALSE,
       dirs = c("results", "logs", "jobs", "updates", "external", "exports")
       self$dir = setNames(file.path(self$base, dirs), dirs)
     },
-    results = function(ids) file.path(self$dir["results"], sprintf("%i.rds", if (is.atomic(ids)) ids else ids$job.id)),
-    external = function(ids) file.path(self$dir["external"], if (is.atomic(ids)) ids else ids$job.id),
-    jobs = function(hash) file.path(self$dir["jobs"], sprintf("%s.rds", hash)),
-    logs = function(ids, hash = ids$job.hash, log.file = ids$log.file) file.path(self$dir["logs"], ifelse(is.na(log.file), sprintf("%s.log", hash), log.file)),
-    exports = function(name) file.path(self$dir["exports"], mangle(name))
+    results = function(ids) file.path(self$dir[["results"]], sprintf("%i.rds", if (is.atomic(ids)) ids else ids$job.id)),
+    external = function(ids) file.path(self$dir[["external"]], if (is.atomic(ids)) ids else ids$job.id),
+    jobs = function(hash) file.path(self$dir[["jobs"]], sprintf("%s.rds", hash)),
+    logs = function(ids, hash = ids$job.hash, log.file = ids$log.file) file.path(self$dir[["logs"]], ifelse(is.na(log.file), sprintf("%s.log", hash), log.file)),
+    exports = function(name) file.path(self$dir[["exports"]], mangle(name))
   )
 )
 
@@ -30,11 +30,11 @@ ExperimentRegistryPaths = R6Class("ExperimentRegistryPaths", cloneable = FALSE, 
   public = list(
     initialize = function(file.dir) {
       super$initialize(file.dir)
-      self$dir["problems"] = file.path(self$base, "problems")
-      self$dir["algorithms"] = file.path(self$base, "algorithms")
+      self$dir[["problems"]] = file.path(self$base, "problems")
+      self$dir[["algorithms"]] = file.path(self$base, "algorithms")
     },
-    problem = function(name) file.path(self$dir["problems"], mangle(name)),
-    algorithm = function(name) file.path(self$dir["algorithms"], mangle(name))
+    problem = function(name) file.path(self$dir[["problems"]], mangle(name)),
+    algorithm = function(name) file.path(self$dir[["algorithms"]], mangle(name))
   )
 )
 
@@ -43,19 +43,19 @@ setPaths = function(x) {
 }
 
 setPaths.Registry = function(x) {
-  x$path = RegistryPaths$new(x$file.dir)
+  x$paths = RegistryPaths$new(x$file.dir)
 }
 
 setPaths.ExperimentRegistry = function(x) {
-  x$path = ExperimentRegistryPaths$new(x$file.dir)
+  x$paths = ExperimentRegistryPaths$new(x$file.dir)
 }
 
 setPaths.JobCollection = function(x) {
-  x$path = RegistryPaths$new(x$file.dir)
+  x$paths = RegistryPaths$new(x$file.dir)
 }
 
 setPaths.ExperimentCollection = function(x) {
-  x$path = ExperimentRegistryPaths$new(x$file.dir)
+  x$paths = ExperimentRegistryPaths$new(x$file.dir)
 }
 
 npath = function(path, must.work = TRUE) {
@@ -68,14 +68,6 @@ npath = function(path, must.work = TRUE) {
     return(path)
   }
   normalizePath(path, winslash = "/", mustWork = must.work)
-}
-
-getProblemURI = function(file.dir, name) {
-  file.path(path.expand(file.dir), "problems", mangle(name))
-}
-
-getAlgorithmURI = function(file.dir, name) {
-  file.path(path.expand(file.dir), "algorithms", mangle(name))
 }
 
 mangle = function(x) {

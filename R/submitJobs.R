@@ -204,7 +204,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = default.sleep, reg
     }
 
     # remove old result files
-    file.remove.safely(reg$path$results(ids.chunk))
+    file.remove.safely(reg$paths$results(ids.chunk))
 
     i = 1L
     repeat {
