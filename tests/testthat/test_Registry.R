@@ -4,10 +4,11 @@ test_that("makeRegistry", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   expect_is(reg, "Registry")
   expect_true(is.environment(reg))
-  expect_directory(reg$file.dir, access = "rw")
-  expect_directory(reg$work.dir, access = "r")
-  expect_directory(file.path(reg$file.dir, c("jobs", "results", "updates", "logs")))
-  expect_file(file.path(reg$file.dir, "registry.rds"))
+  expect_directory_exists(reg$file.dir, access = "rw")
+  expect_directory_exists(reg$work.dir, access = "r")
+  expect_directory_exists(reg$path)
+  expect_directory_exists(file.path(reg$file.dir, c("jobs", "results", "updates", "logs")))
+  expect_file_exists(file.path(reg$file.dir, "registry.rds"))
   expect_character(reg$packages, any.missing = FALSE)
   expect_character(reg$namespaces, any.missing = FALSE)
   expect_int(reg$seed, na.ok = FALSE)
@@ -75,6 +76,8 @@ test_that("extra files are loaded", {
 
 test_that("loadRegistry", {
   reg1 = makeRegistry(file.dir = NA, make.default = FALSE)
+  expect_directory_exists(reg1$path)
+  expect_true(!stri_startswith_fixed(reg1$path, "~"))
   fd = reg1$file.dir
   setDefaultRegistry(NULL)
   reg2 = loadRegistry(fd, make.default = FALSE)
