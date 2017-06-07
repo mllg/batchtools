@@ -1,4 +1,4 @@
-Job = R6Class("Job", cloneable = FALSE,
+BaseJob = R6Class("Job", cloneable = FALSE,
   public = list(
     initialize = function(file.dir, reader, id, pars, seed, resources) {
       self$file.dir = file.dir
@@ -19,9 +19,6 @@ Job = R6Class("Job", cloneable = FALSE,
     pars = function() {
       c(self$job.pars, self$reader$get(file.path(self$file.dir, "more.args.rds")))
     },
-    fun = function() {
-      self$reader$get(file.path(self$file.dir, "user.function.rds"))
-    },
     external.dir = function() {
       path = file.path(self$file.dir, "external", self$id)
       dir.create(path, recursive = TRUE, showWarnings = FALSE)
@@ -30,28 +27,30 @@ Job = R6Class("Job", cloneable = FALSE,
   )
 )
 
-Experiment = R6Class("Experiment", cloneable = FALSE,
+Job = R6Class("Job", cloneable = FALSE, inherit = BaseJob,
+  public = list(
+    initialize = function(file.dir, reader, id, pars, seed, resources) {
+      super$initialize(file.dir, reader, id, pars, seed, resources)
+    }
+  ),
+  active = list(
+    fun = function() {
+      self$reader$get(file.path(self$file.dir, "user.function.rds"))
+    }
+  )
+)
+
+Experiment = R6Class("Experiment", cloneable = FALSE, inherit = BaseJob,
   public = list(
     initialize = function(file.dir, reader, id, pars, repl, seed, resources, prob.name, algo.name) {
-      self$file.dir = file.dir
-      self$reader = reader
-      self$id = id
-      self$pars = pars
+      super$initialize(file.dir, reader, id, pars, seed, resources)
       self$repl = repl
-      self$seed = seed
-      self$resources = resources
       self$prob.name = as.character(prob.name)
       self$algo.name = as.character(algo.name)
     },
-    file.dir = NULL,
-    id = NULL,
-    pars = NULL,
-    repl = NULL,
-    seed = NULL,
-    resources = NULL,
-    reader = NULL,
-    prob.name = NULL,
-    algo.name = NULL,
+    repl = NA_integer_,
+    prob.name = NA_character_,
+    algo.name = NA_character_,
     allow.access.to.instance = TRUE
   ),
   active = list(
@@ -68,11 +67,6 @@ Experiment = R6Class("Experiment", cloneable = FALSE,
       seed = if (is.null(p$seed)) self$seed else p$seed + self$repl - 1L
       wrapper = function(...) p$fun(job = self, data = p$data, ...)
       with_seed(seed, do.call(wrapper, self$pars$prob.pars, envir = .GlobalEnv))
-    },
-    external.dir = function() {
-      path = file.path(self$file.dir, "external", self$id)
-      dir.create(path, recursive = TRUE, showWarnings = FALSE)
-      path
     }
   )
 )
