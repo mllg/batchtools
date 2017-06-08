@@ -36,8 +36,8 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
   if (reg$version < "0.9.1-9002" && inherits(reg, "ExperimentRegistry")) {
     info("Renaming problems and algorithm files")
 
-    getProblemURI = function(file.dir, name) file.path(path.expand(file.dir), "problems", mangle(name))
-    getAlgorithmURI = function(file.dir, name) file.path(path.expand(file.dir), "algorithms", mangle(name))
+    getProblemURI = function(file.dir, name) file.path(normalizePath(file.dir), "problems", mangle(name))
+    getAlgorithmURI = function(file.dir, name) file.path(normalizePath(file.dir), "algorithms", mangle(name))
     for (prob in getProblemIds(reg))
       file.rename(file.path(reg$file.dir, "problems", sprintf("%s.rds", digest(prob))), getProblemURI(reg$file.dir, prob))
     for (algo in getAlgorithmIds(reg))
