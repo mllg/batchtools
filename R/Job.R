@@ -1,30 +1,26 @@
 BaseJob = R6Class("Job", cloneable = FALSE,
   public = list(
-    initialize = function(file.dir, reader, paths, id, pars, seed, resources) {
-      self$file.dir = file.dir
-      self$reader = reader
-      self$paths = paths
-      self$id = id
-      self$job.pars = pars
-      self$seed = seed
-      self$resources = resources
-    },
     file.dir = NULL,
     id = NULL,
     job.pars = NULL,
     seed = NULL,
     resources = NULL,
     reader = NULL,
-    paths = NULL
+    uri = NULL,
+    initialize = function(file.dir, reader, uri, id, pars, seed, resources) {
+      self$file.dir = file.dir
+      self$reader = reader
+      self$uri = uri
+      self$id = id
+      self$job.pars = pars
+      self$seed = seed
+      self$resources = resources
+    }
   ),
 
   active = list(
-    pars = function() {
-      c(self$job.pars, self$reader$get(self$paths$file["more.args"]))
-    },
-
     external.dir = function() {
-      path = self$paths$external(self$id)
+      path = self$uri$external(self$id)
       dir.create(path, recursive = TRUE, showWarnings = FALSE)
       path
     }
@@ -33,21 +29,24 @@ BaseJob = R6Class("Job", cloneable = FALSE,
 
 Job = R6Class("Job", cloneable = FALSE, inherit = BaseJob,
   public = list(
-    initialize = function(file.dir, reader, paths, id, pars, seed, resources) {
-      super$initialize(file.dir, reader, paths, id, pars, seed, resources)
+    initialize = function(file.dir, reader, uri, id, pars, seed, resources) {
+      super$initialize(file.dir, reader, uri, id, pars, seed, resources)
     }
   ),
   active = list(
     fun = function() {
-      self$reader$get(self$paths$file["user.function"])
+      self$reader$get(self$uri$files[["user.function"]])
+    },
+    pars = function() {
+      c(self$job.pars, self$reader$get(self$uri$files[["more.args"]]))
     }
   )
 )
 
 Experiment = R6Class("Experiment", cloneable = FALSE, inherit = BaseJob,
   public = list(
-    initialize = function(file.dir, reader, paths, id, pars, repl, seed, resources, prob.name, algo.name) {
-      super$initialize(file.dir, reader, paths, id, pars, seed, resources)
+    initialize = function(file.dir, reader, uri, id, pars, repl, seed, resources, prob.name, algo.name) {
+      super$initialize(file.dir, reader, uri, id, pars, seed, resources)
       self$repl = repl
       self$prob.name = as.character(prob.name)
       self$algo.name = as.character(algo.name)
@@ -59,11 +58,16 @@ Experiment = R6Class("Experiment", cloneable = FALSE, inherit = BaseJob,
   ),
   active = list(
     problem = function()  {
-      self$reader$get(self$paths$problem(self$prob.name), slot = "..problem..")
+      self$reader$get(self$uri$problem(self$prob.name), slot = "..problem..")
     },
     algorithm = function() {
-      self$reader$get(self$paths$algorithm(self$algo.name))
+      self$reader$get(self$uri$algorithm(self$algo.name))
     },
+
+    pars = function() {
+      self$job.pars
+    },
+
     instance = function() {
       if (!self$allow.access.to.instance)
         stop("You cannot access 'job$instance' in the problem generation or algorithm function")
@@ -145,7 +149,7 @@ makeJob = function(id, reader = NULL, reg = getDefaultRegistry()) {
 makeJob.Registry = function(id, reader = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Job$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), paths = reg$paths, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Job$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), uri = reg$uri, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     resources = resources)
 }
 
@@ -153,7 +157,7 @@ makeJob.Registry = function(id, reader = NULL, reg = getDefaultRegistry()) {
 makeJob.ExperimentRegistry = function(id, reader = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "problem", "algorithm", "repl", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Experiment$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), paths = reg$paths, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Experiment$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), uri = reg$uri, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
     repl = row$repl, resources = resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
@@ -162,17 +166,17 @@ getJob = function(jc, i, reader = NULL) {
 }
 
 getJob.JobCollection = function(jc, i, reader = RDSReader$new(FALSE)) {
-  if (is.null(jc$paths))
-    setPaths(jc)
+  if (is.null(jc$uri))
+    setURI(jc)
   row = jc$jobs[i]
-  Job$new(file.dir = jc$file.dir, reader = reader, paths = jc$paths, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
+  Job$new(file.dir = jc$file.dir, reader = reader, uri = jc$uri, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     resources = jc$resources)
 }
 
 getJob.ExperimentCollection = function(jc, i, reader = RDSReader$new(FALSE)) {
-  if (is.null(jc$paths))
-    setPaths(jc)
+  if (is.null(jc$uri))
+    setURI(jc)
   row = jc$jobs[i]
-  Experiment$new(file.dir = jc$file.dir, reader = reader, paths = jc$paths, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
+  Experiment$new(file.dir = jc$file.dir, reader = reader, uri = jc$uri, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
     repl = row$repl, resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm)
 }

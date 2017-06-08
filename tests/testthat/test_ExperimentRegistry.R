@@ -7,7 +7,7 @@ test_that("makeExperimentRegistry", {
   expect_true(is.environment(reg))
   expect_directory_exists(reg$file.dir, access = "rw")
   expect_directory_exists(reg$work.dir, access = "r")
-  expect_is(reg$paths, "Paths")
+  expect_is(reg$uri, "URI")
   expect_directory_exists(file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "external")))
   expect_file_exists(file.path(reg$file.dir, "registry.rds"))
   expect_character(reg$packages, any.missing = FALSE)

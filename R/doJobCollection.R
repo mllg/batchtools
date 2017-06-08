@@ -38,14 +38,14 @@ doJobCollection.character = function(jc, output = NULL) {
 #' @export
 doJobCollection.JobCollection = function(jc, output = NULL) {
   now = function() strftime(Sys.time())
-  setPaths(jc)
+  setURI(jc)
 
   error = function(msg, ...) {
     now = ustamp()
     updates = data.table(job.id = jc$jobs$job.id, started = now, done = now,
       error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),
       memory = NA_real_, key = "job.id")
-    writeRDS(updates, file = file.path(jc$paths$dir[["updates"]], sprintf("%s.rds", jc$job.hash)))
+    writeRDS(updates, file = file.path(jc$uri$path[["updates"]], sprintf("%s.rds", jc$job.hash)))
     invisible(NULL)
   }
 
@@ -135,7 +135,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
       update$error = stri_trunc(stri_trim_both(as.character(result)), 500L, " [truncated]")
     } else {
       catf("\n### [bt %s]: Job terminated successfully [batchtools job.id=%i]", now(), id)
-      writeRDS(result, file = jc$paths$results(id))
+      writeRDS(result, file = jc$uri$results(id))
     }
     buf$add(i, update)
     buf$flush(jc)
@@ -167,7 +167,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
       i = self$updates[!is.na(started) & (!written), which = TRUE]
       if (length(i) > 0L) {
         first.id = self$updates$job.id[i[1L]]
-        writeRDS(self$updates[i], file = file.path(jc$paths$dir[["updates"]], sprintf("%s-%i.rds", jc$job.hash, first.id)))
+        writeRDS(self$updates[i], file = file.path(jc$uri$path[["updates"]], sprintf("%s-%i.rds", jc$job.hash, first.id)))
         set(self$updates, i, "written", TRUE)
       }
     },

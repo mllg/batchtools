@@ -56,7 +56,7 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
       sprintf("--label batchtools=%s", jc$job.hash),
       sprintf("--label user=%s", user),
       sprintf("--name=%s_bt_%s", user, jc$job.hash),
-      image, timeout, "Rscript", stri_join("-e", shQuote(sprintf("batchtools::doJobCollection('%s', '%s')", jc$uri, jc$log.file)), sep = " "))
+      image, timeout, "Rscript", stri_join("-e", shQuote(sprintf("batchtools::doJobCollection('%s', '%s')", reg$uri$job(jc$job.hash), jc$log.file)), sep = " "))
     res = runOSCommand(cmd[1L], cmd[-1L])
 
     if (res$exit.code > 0L) {

@@ -186,7 +186,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = default.sleep, reg
     ids.chunk = ids[chunk == ch, "job.id"]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
     if (reg$cluster.functions$store.job)
-      writeRDS(jc, file = jc$uri)
+      writeRDS(jc, file = reg$uri$jobs(jc$job.hash))
 
     if (!is.na(max.concurrent.jobs)) {
       # count chunks or job.id
@@ -204,7 +204,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = default.sleep, reg
     }
 
     # remove old result files
-    file.remove.safely(reg$paths$results(ids.chunk))
+    file.remove.safely(reg$uri$results(ids.chunk))
 
     i = 1L
     repeat {

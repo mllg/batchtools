@@ -26,7 +26,7 @@ waitForFiles = function(path, fns, timeout = NA_real_) {
 
 waitForResults = function(reg, ids) {
   waitForFiles(
-    reg$paths$dir[["results"]],
+    reg$uri$path[["results"]],
     sprintf("%i.rds", .findDone(reg, ids)$job.id),
     reg$cluster.functions$fs.latency
   )

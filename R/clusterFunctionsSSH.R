@@ -38,7 +38,7 @@ makeClusterFunctionsSSH = function(workers, fs.latency = 65) { # nocov start
     worker = Find(function(w) w$status == "available", sample(workers, prob = 1 / (rload + 0.1)), nomatch = NULL)
 
     if (!is.null(worker) && worker$status == "available") {
-      pid = try(worker$start(reg, jc$uri, jc$log.file))
+      pid = try(worker$start(reg, reg$uri$jobs(jc$job.hash), jc$log.file))
       if (is.error(pid)) {
         makeSubmitJobResult(status = 101L, batch.id = NA_character_, msg = "Submit failed.")
       } else {

@@ -48,13 +48,13 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
 createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()) {
   jc              = new.env(parent = emptyenv())
   jc$jobs         = setkeyv(jobs, "job.id")
-  jc$paths        = NULL # this is usually set on the slave
+  jc$uri          = NULL # set on the slave
   jc$file.dir     = reg$file.dir
   jc$work.dir     = reg$work.dir
   jc$seed         = reg$seed
   jc$job.hash     = stri_join("job", digest(list(runif(1L), as.numeric(Sys.time()))))
-  jc$uri          = reg$paths$jobs(jc$job.hash)
-  jc$log.file     = reg$paths$logs(hash = jc$job.hash, log.file = NA_character_)
+  # jc$uri          = reg$uri$jobs(jc$job.hash)
+  jc$log.file     = reg$uri$logs(hash = jc$job.hash, log.file = NA_character_)
   jc$packages     = reg$packages
   jc$namespaces   = reg$namespaces
   jc$source       = reg$source

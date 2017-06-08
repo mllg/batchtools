@@ -37,11 +37,11 @@ batchExport = function(export = list(), unexport = character(0L), reg = getDefau
   assertList(export, names = "named")
   assertCharacter(unexport, any.missing = FALSE, min.chars = 1L)
 
-  path = reg$paths$dir[["exports"]]
+  path = reg$uri$path[["exports"]]
 
   if (length(export) > 0L) {
     nn = names(export)
-    fn = reg$paths$exports(nn)
+    fn = reg$uri$exports(nn)
     found = file.exists(fn)
     if (any(!found))
       info("Exporting new objects: '%s' ...", stri_flatten(nn[!found], "','"))
@@ -51,7 +51,7 @@ batchExport = function(export = list(), unexport = character(0L), reg = getDefau
   }
 
   if (length(unexport) > 0L) {
-    fn = reg$paths$exports(unexport)
+    fn = reg$uri$exports(unexport)
     found = file.exists(fn)
     if (any(found))
       info("Un-exporting exported objects: '%s' ...", stri_flatten(unexport[found], "','"))
