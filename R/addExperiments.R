@@ -90,8 +90,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
   assertExperimentRegistry(reg, writeable = TRUE)
   if (is.null(prob.designs)) {
     probs = levels(reg$defs$problem)
-    prob.designs = replicate(length(probs), data.table(), simplify = FALSE)
-    names(prob.designs) = probs
+    prob.designs = setNames(replicate(length(probs), data.table(), simplify = FALSE), probs)
   } else {
     assertList(prob.designs, types = "data.frame", names = "named")
     assertSubset(names(prob.designs), levels(reg$defs$problem))
@@ -99,8 +98,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
   }
   if (is.null(algo.designs)) {
     algos = levels(reg$defs$algorithm)
-    algo.designs = replicate(length(algos), data.table(), simplify = FALSE)
-    names(algo.designs) = algos
+    algo.designs = setNames(replicate(length(algos), data.table(), simplify = FALSE), algos)
   } else {
     assertList(algo.designs, types = "data.frame", names = "named")
     assertSubset(names(algo.designs), levels(reg$defs$algorithm))

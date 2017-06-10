@@ -42,7 +42,7 @@ test_that("relative paths work (#113)", {
   pdes = lapply(problems, function(p) {
     addProblem(name = p, data = p, fun = function(...) list(...), reg = reg)
     res = data.frame(fold = 1:3)
-})
+  })
   names(pdes) = problems
 
   algo.rep1 = function(job, data, instance, x) { rep(paste(data, x), instance$fold) }

@@ -14,8 +14,7 @@ if (getRversion() < "3.3.2" && .Platform$OS.type != "windows") {
       r = readChild(x)
       if (is.raw(r)) unserialize(r) else NULL
     })
-    names(res) = as.character(pids)[match(s, pids)]
-    res
+    setNames(res, as.character(pids)[match(s, pids)])
   }
 } else {
   mccollect = function(jobs, timeout = 0) {
