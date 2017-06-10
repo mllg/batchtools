@@ -17,12 +17,13 @@
 #'   i-th iteration as second. See \code{\link[base]{Reduce}} for some
 #'   examples.
 #'   If the function has the formal argument \dQuote{job}, the \code{\link{Job}}/\code{\link{Experiment}}
-#'   is also passed to the function.
+#'   is also passed to the function (named).
 #' @param init [\code{ANY}]\cr
 #'   Initial element, as used in \code{\link[base]{Reduce}}.
-#'   Default is the first result.
+#'   If missing, the reduction uses the result of the first job as \code{init} and the reduction starts
+#'   with the second job.
 #' @param ... [\code{ANY}]\cr
-#'   Additional arguments passed to to function \code{fun}.
+#'   Additional arguments passed to function \code{fun}.
 #' @return Aggregated results in the same order as provided ids.
 #'   Return type depends on the user function. If \code{ids}
 #'   is empty, \code{reduceResults} returns \code{init} (if available) or \code{NULL} otherwise.
@@ -31,11 +32,26 @@
 #' @export
 #' @examples
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
-#' batchMap(function(x) x^2, x = 1:10, reg = tmp)
+#' batchMap(function(a, b) list(sum = a+b, prod = a*b), a = 1:3, b = 1:3, reg = tmp)
 #' submitJobs(reg = tmp)
 #' waitForJobs(reg = tmp)
-#' reduceResults(function(x, y) c(x, y), reg = tmp)
-#' reduceResults(function(x, y) c(x, sqrt(y)), init = numeric(0), reg = tmp)
+#'
+#' # Extract element sum
+#' reduceResults(function(aggr, res) c(aggr, res$sum), init = list(), reg = tmp)
+#'
+#' # Aggregate element sum via '+'
+#' reduceResults(function(aggr, res) aggr + res$sum, init = 0, reg = tmp)
+#'
+#' # Aggregate element prod via '*' where parameter b < 3
+#' reduce = function(aggr, res, job) {
+#'   if (job$pars$b >= 3)
+#'     return(aggr)
+#'   aggr * res$prod
+#' }
+#' reduceResults(reduce, init = 1, reg = tmp)
+#'
+#' # Reduce to data.frame() (inefficient)
+#' reduceResults(rbind, init = data.frame(), reg = tmp)
 reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   ids = convertIds(reg, ids, default = .findDone(reg = reg), keep.order = TRUE)
