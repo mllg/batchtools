@@ -1,5 +1,5 @@
-npath = function(path, norm.home = TRUE, must.work = TRUE) {
-  if (!norm.home && stri_startswith_fixed(path, "~")) {
+npath = function(path, must.work = TRUE) {
+  if (stri_startswith_fixed(path, "~")) {
     # do not call normalizePath, we do not want to expand this paths relative to home
     if (must.work && !file.exists(path))
       stopf("File '%s' not found", path)
@@ -45,7 +45,6 @@ getJobFiles = function(reg, ids, hash = ids$job.hash) {
 getExternalDirs = function(reg, ids, dirs = ids$job.id) {
   file.path(path.expand(reg$file.dir), "external", if (is.atomic(ids)) ids else ids$job.id)
 }
-
 
 getProblemURI = function(file.dir, name) {
   file.path(path.expand(file.dir), "problems", mangle(name))

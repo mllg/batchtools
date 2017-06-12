@@ -33,7 +33,7 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   id = convertId(reg, id)
 
   if (external) {
-    td      = npath(tempdir())
+    td      = normalizePath(tempdir())
     fn.r    = file.path(td, "batchtools-testJob.R")
     fn.jc   = file.path(td, "batchtools-testJob.jc")
     fn.res  = file.path(td, "batchtools-testJob.rds")

@@ -79,7 +79,7 @@
 #'   \describe{
 #'     \item{\code{file.dir} [path]:}{File directory.}
 #'     \item{\code{work.dir} [path]:}{Working directory.}
-#'     \item{\code{temp.dir} [path]:}{Temporary directory. Used if \code{file.dir} is \code{NA}.}
+#'     \item{\code{temp.dir} [path]:}{Temporary directory. Used if \code{file.dir} is \code{NA} to create temporary registries.}
 #'     \item{\code{packages} [character()]:}{Packages to load on the slaves.}
 #'     \item{\code{namespaces} [character()]:}{Namespaces to load on the slaves.}
 #'     \item{\code{seed} [integer(1)]:}{Registry seed. Before each job is executed, the seed \code{seed + job.id} is set.}
@@ -122,7 +122,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   reg = new.env(parent = asNamespace("batchtools"))
   reg$file.dir = file.dir
-  reg$work.dir = npath(work.dir, norm.home = FALSE)
+  reg$work.dir = npath(work.dir)
   reg$packages = packages
   reg$namespaces = namespaces
   reg$source = source
@@ -168,7 +168,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   "!DEBUG [makeRegistry]: Creating directories in '`reg$file.dir`'"
   for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
     dir.create(d, recursive = TRUE)
-  reg$file.dir = npath(reg$file.dir, norm.home = FALSE)
+  reg$file.dir = npath(reg$file.dir)
 
   loadRegistryDependencies(list(file.dir = file.dir, work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
 

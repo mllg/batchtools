@@ -1,13 +1,13 @@
 findConfFile = function() {
   x = "batchtools.conf.R"
   if (file.exists(x))
-    return(npath(x))
+    return(normalizePath(x))
 
   x = file.path(user_config_dir("batchtools", expand = FALSE), "config.R")
   if (file.exists(x))
     return(x)
 
-  x = npath(file.path("~", ".batchtools.conf.R"), must.work = FALSE)
+  x = normalizePath(file.path("~", ".batchtools.conf.R"), mustWork = FALSE)
   if (file.exists(x))
     return(x)
 
