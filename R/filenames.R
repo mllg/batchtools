@@ -34,8 +34,10 @@ getResultFiles = function(reg, ids) {
   file.path(path.expand(reg$file.dir), "results", sprintf("%i.rds", if (is.atomic(ids)) ids else ids$job.id))
 }
 
-getLogFiles = function(reg, ids, hash = ids$job.hash, log.file = ids$log.file) {
-  file.path(path.expand(reg$file.dir), "logs", ifelse(is.na(log.file), sprintf("%s.log", hash), log.file))
+getLogFiles = function(reg, ids) {
+  tab = reg$status[.(ids), c("job.id", "job.hash", "log.file")]
+  tab[is.na(log.file) & !is.na(job.hash), log.file := sprintf("%s.rds", job.hash)]
+  tab[!is.na(log.file), log.file := file.path(path.expand(reg$file.dir), "logs", log.file)]$log.file
 }
 
 getJobFiles = function(reg, ids, hash = ids$job.hash) {

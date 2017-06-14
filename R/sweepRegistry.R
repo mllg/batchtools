@@ -12,7 +12,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, running.ok = FALSE)
   "!DEBUG [sweepRegistry]: Running sweepRegistry"
 
-  submitted = reg$status[.findSubmitted(reg = reg), c("job.id", "job.hash", "log.file")]
+  submitted = reg$status[.findSubmitted(reg = reg), c("job.id", "job.hash")]
   path = getResultPath(reg)
   obsolete = chsetdiff(
     list.files(path, full.names = TRUE),

@@ -33,7 +33,7 @@ test_that("empty log files", {
   submitAndWait(reg)
 
   # overwrite log file
-  log.file = getLogFiles(reg, reg$status[1])
+  log.file = getLogFiles(reg, 1)
   expect_true(file.remove(log.file))
   expect_true(file.create(log.file))
 
