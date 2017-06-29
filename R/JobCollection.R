@@ -53,7 +53,7 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$seed         = reg$seed
   jc$job.hash     = stri_join("job", digest(list(runif(1L), as.numeric(Sys.time()))))
   jc$uri          = getJobFiles(reg, hash = jc$job.hash)
-  jc$log.file     = file.path(reg$file.dir, "logs", sprintf("%s.rds", jc$job.hash))
+  jc$log.file     = file.path(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
   jc$packages     = reg$packages
   jc$namespaces   = reg$namespaces
   jc$source       = reg$source

@@ -1,11 +1,10 @@
 #' @useDynLib batchtools fill_gaps
 readLog = function(id, missing.as.empty = FALSE, reg = getDefaultRegistry()) {
-
   log.file = getLogFiles(reg, id)
   if (is.na(log.file) || !file.exists(log.file)) {
     if (missing.as.empty)
       return(data.table(job.id = integer(0L), lines = character(0L)))
-    stopf("Log file for job with id %i not available", tab$job.id)
+    stopf("Log file for job with id %i not available", id$job.id)
   }
 
   lines = readLines(log.file)
