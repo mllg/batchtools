@@ -1,8 +1,9 @@
 #include <R.h>
 #include <Rinternals.h>
+#include <R_ext/Visibility.h>
 #include <stdbool.h>
 
-SEXP c_binpack(SEXP x_, SEXP order_, SEXP capacity_) {
+SEXP attribute_hidden c_binpack(SEXP x_, SEXP order_, SEXP capacity_) {
     const double * x = REAL(x_);
     const R_len_t n = length(x_);
     const int * order = INTEGER(order_);
