@@ -96,10 +96,10 @@ test_that("clearRegistry", {
   clearRegistry(reg)
   checkTables(reg, nrow = 0L)
 
-  expect_identical(list.files(getJobPath(reg)), character(0))
-  expect_identical(list.files(getLogPath(reg)), character(0))
-  expect_identical(list.files(getResultPath(reg)), character(0))
-  expect_identical(list.files(getUpdatePath(reg)), character(0))
+  expect_identical(list.files(dir(reg, "jobs")), character(0))
+  expect_identical(list.files(dir(reg, "logs")), character(0))
+  expect_identical(list.files(dir(reg, "results")), character(0))
+  expect_identical(list.files(dir(reg, "updates")), character(0))
   expect_false(file.exists(file.path(reg$file.dir, "user.function.rds")))
 
   expect_identical(batchMap(identity, 1:4, reg = reg), data.table(job.id = 1:4, key = "job.id"))

@@ -10,14 +10,14 @@ test_that("sweepRegistry", {
   writeRDS(makeJobCollection(1, reg = reg), file.path(reg$file.dir, "jobs", "test.rds"))
 
   expect_data_table(reg$resources, nrow = 2)
-  expect_character(list.files(getLogPath(reg)), len = 2L)
+  expect_character(list.files(dir(reg, "logs")), len = 2L)
   expect_character(list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.rds$"), len = 1L + (array.jobs && reg$cluster.functions$store.job) * 2L)
   expect_character(list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.job$"), len = (batchtools$debug && array.jobs) * 2L)
 
   expect_true(sweepRegistry(reg))
 
   expect_data_table(reg$resources, nrow = 1)
-  expect_character(list.files(getLogPath(reg)), len = 1L)
+  expect_character(list.files(dir(reg, "logs")), len = 1L)
   if (reg$cluster.functions$store.job)
     expect_character(list.files(file.path(reg$file.dir, "jobs")), len = 0L)
   checkTables(reg)
@@ -34,7 +34,7 @@ test_that("sweepRegistry", {
 })
 
 test_that("relative paths work (#113)", {
-  skip_if_not(identical(Sys.info()[["nodename"]], "lang"))
+  skip_if_not(identical(Sys.getenv("R_EXPENSIVE_EXAMPLE_OK"), "1"))
   fd = sprintf("~/batchtools-test-%s", basename(tempfile("")))
   reg = makeExperimentRegistry(file.dir = fd, make.default = FALSE)
 

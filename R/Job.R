@@ -57,10 +57,10 @@ Experiment = R6Class("Experiment", cloneable = FALSE, inherit = BaseJob,
   ),
   active = list(
     problem = function()  {
-      self$reader$get(getProblemURI(self$file.dir, self$prob.name), slot = "..problem..")
+      self$reader$get(getProblemURI(self, self$prob.name), slot = "..problem..")
     },
     algorithm = function() {
-      self$reader$get(getAlgorithmURI(self$file.dir, self$algo.name))
+      self$reader$get(getAlgorithmURI(self, self$algo.name))
     },
     pars = function() {
       self$job.pars

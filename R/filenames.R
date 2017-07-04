@@ -1,5 +1,5 @@
 npath = function(path, must.work = TRUE) {
-  if (stri_startswith_fixed(path, "~")) {
+  if (any(stri_startswith_fixed(path, c("~", "$")))) {
     # do not call normalizePath, we do not want to expand this paths relative to home
     if (must.work && !file.exists(path))
       stopf("File '%s' not found", path)
@@ -10,51 +10,39 @@ npath = function(path, must.work = TRUE) {
   normalizePath(path, winslash = "/", mustWork = must.work)
 }
 
-getResultPath = function(reg) {
-  file.path(path.expand(reg$file.dir), "results")
+fp = function(...) {
+  file.path(..., fsep = "/")
 }
 
-getLogPath = function(reg) {
-  file.path(path.expand(reg$file.dir), "logs")
-}
-
-getJobPath = function(reg) {
-  file.path(path.expand(reg$file.dir), "jobs")
-}
-
-getUpdatePath = function(reg) {
-  file.path(path.expand(reg$file.dir), "updates")
-}
-
-getExternalPath = function(reg) {
-  file.path(path.expand(reg$file.dir), "external")
+dir = function(reg, what) {
+  fp(normalizePath(reg$file.dir, winslash = "/"), what)
 }
 
 getResultFiles = function(reg, ids) {
-  file.path(path.expand(reg$file.dir), "results", sprintf("%i.rds", if (is.atomic(ids)) ids else ids$job.id))
+  fp(dir(reg, "results"), sprintf("%i.rds", if (is.atomic(ids)) ids else ids$job.id))
 }
 
 getLogFiles = function(reg, ids) {
   job.hash = NULL
   tab = reg$status[list(ids), c("job.id", "job.hash", "log.file")]
   tab[is.na(log.file) & !is.na(job.hash), log.file := sprintf("%s.log", job.hash)]
-  tab[!is.na(log.file), log.file := file.path(path.expand(reg$file.dir), "logs", log.file)]$log.file
+  tab[!is.na(log.file), log.file := fp(dir(reg, "logs"), log.file)]$log.file
 }
 
-getJobFiles = function(reg, ids, hash = ids$job.hash) {
-  file.path(path.expand(reg$file.dir), "jobs", sprintf("%s.rds", hash))
+getJobFiles = function(reg, hash) {
+  fp(dir(reg, "jobs"), sprintf("%s.rds", hash))
 }
 
-getExternalDirs = function(reg, ids, dirs = ids$job.id) {
-  file.path(path.expand(reg$file.dir), "external", if (is.atomic(ids)) ids else ids$job.id)
+getExternalDirs = function(reg, ids) {
+  fp(dir(reg, "external"), if (is.atomic(ids)) ids else ids$job.id)
 }
 
-getProblemURI = function(file.dir, name) {
-  file.path(path.expand(file.dir), "problems", mangle(name))
+getProblemURI = function(reg, name) {
+  fp(dir(reg, "problems"), mangle(name))
 }
 
-getAlgorithmURI = function(file.dir, name) {
-  file.path(path.expand(file.dir), "algorithms", mangle(name))
+getAlgorithmURI = function(reg, name) {
+  fp(dir(reg, "algorithms"), mangle(name))
 }
 
 mangle = function(x) {
