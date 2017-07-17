@@ -79,7 +79,7 @@ if (FALSE) {
   prob.designs = list(p1 = data.table(x = 1:500))
   algo.designs = list(a1 = data.table(y = 1:20), a2 = data.table(y = 1:20))
   repls = 2
-  profvis(addExperiments(prob.designs, algo.designs = algo.designs, repls = repls, reg = reg))
+  profvis::profvis(addExperiments(prob.designs, algo.designs = algo.designs, repls = repls, reg = reg))
   ids = findExperiments(reg = reg)
-  profvis(submitJobs(ids = s.chunk(ids), reg = reg))
+  profvis::profvis(submitJobs(ids = s.chunk(ids), reg = reg))
 }
