@@ -56,6 +56,7 @@ checkTables = function(reg, ...) {
   expect_equal(as.character(reg$status[, lapply(.SD, class), .SDcols = cols]), types)
   expect_equal(key(reg$status), "job.id")
   expect_equal(anyDuplicated(reg$status, by = "job.id"), 0L)
+  checkStatusIntegrity(reg)
 
   cols = c("resource.id", "resource.hash", "resources")
   types = c("integer", "character", "list")
@@ -82,6 +83,22 @@ checkTables = function(reg, ...) {
     expect_subset(reg$tags$job.id, reg$status$job.id)
   else
     expect_equal(nrow(reg$tags), 0)
+}
+
+checkStatusIntegrity = function(reg) {
+  tab = reg$status[, list(job.id, code = (!is.na(submitted)) + 2L * (!is.na(started)) + 4L * (!is.na(done)) + 8L * (!is.na(error)))]
+
+  # submitted   started   done   error
+  #       2^0       2^1    2^2     2^3
+  #         1         2      4       8
+  # ------------------------------------------------------
+  #         0         0      0       0 -> 0  (unsubmitted)
+  #         1         0      0       0 -> 1  (submitted)
+  #         1         1      0       0 -> 3  (started)
+  #         1         1      1       0 -> 7  (done)
+  #         1         1      1       1 -> 15 (error)
+
+  expect_subset(tab$code, c(0L, 1L, 3L, 7L, 15L), info = "Status Integrity")
 }
 
 expect_copied = function(x, y) {

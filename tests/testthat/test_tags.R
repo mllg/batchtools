@@ -8,6 +8,8 @@ test_that("tags work", {
   expect_set_equal(getUsedJobTags(reg = reg), c("walltime", "broken"))
   expect_set_equal(getUsedJobTags(1:2, reg = reg), c("walltime"))
 
+  submitJobs(ids = "broken", reg = reg)
+
   addJobTags(tags = c("foo", "bar"), reg = reg)
   x = getJobTags(reg = reg)
   expect_true(all(stri_detect_fixed(x$tags, "foo")))

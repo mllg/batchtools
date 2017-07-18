@@ -31,6 +31,8 @@ test_that("sweepRegistry", {
   expect_data_table(reg$tags, nrow = 5, any.missing = FALSE)
   removeExperiments(ids = 6:10, reg = reg)
   expect_data_table(reg$tags, nrow = 0)
+
+  checkTables(reg)
 })
 
 test_that("relative paths work (#113)", {
@@ -66,4 +68,6 @@ test_that("relative paths work (#113)", {
   expect_list(reduceResultsList(ids = ids.rep1, reg = reg), len = 18)
 
   unlink(fd, recursive = TRUE)
+
+  checkTables(reg)
 })
