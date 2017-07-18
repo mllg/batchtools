@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -82,8 +84,7 @@
 
     
     <p>Cluster functions for Docker/Docker Swarm (<a href = 'https://docs.docker.com/swarm/'>https://docs.docker.com/swarm/</a>).</p>
-
-    <p>The <code>submitJob</code> function executes
+<p>The <code>submitJob</code> function executes
 <code>docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]</code>.
 Arguments <code>docker.args</code>, <code>image.args</code> and <code>image</code> can be set on construction.
 The <code>resources</code> part takes the named resources <code>ncpus</code> and <code>memory</code>
@@ -91,44 +92,54 @@ from <code><a href='submitJobs.html'>submitJobs</a></code> and maps them to the 
 (in Megabytes). The resource <code>threads</code> is mapped to the environment variables &#8220;OMP_NUM_THREADS&#8221;
 and &#8220;OPENBLAS_NUM_THREADS&#8221;.
 To reliably identify jobs in the swarm, jobs are labeled with &#8220;batchtools=[job.hash]&#8221; and named
-using the current login name (label &#8220;user&#8221;) and the job hash (label &#8220;batchtools&#8221;).</p>
+using the current login name (label &#8220;user&#8221;) and the job hash (label &#8220;batchtools&#8221;).
 
-    <p><code>listJobsRunning</code> uses <code>docker [docker.args] ps --format={{.ID}}</code> to filter for running jobs.</p>
+    <code>listJobsRunning</code> uses <code>docker [docker.args] ps --format={{.ID}}</code> to filter for running jobs.
 
-    <p><code>killJobs</code> uses <code>docker [docker.args] kill [batch.id]</code> to filter for running jobs.</p>
-
-    <p>These cluster functions use a <a href='runHook.html'>Hook</a> to remove finished jobs before a new submit and every time the <a href='makeRegistry.html'>Registry</a>
+    <code>killJobs</code> uses <code>docker [docker.args] kill [batch.id]</code> to filter for running jobs.</p>
+<p>These cluster functions use a <a href='runHook.html'>Hook</a> to remove finished jobs before a new submit and every time the <a href='makeRegistry.html'>Registry</a>
 is synchronized (using <code><a href='syncRegistry.html'>syncRegistry</a></code>).
 This is currently required because docker does not remove terminated containers automatically.
-Use <code>docker ps -a --filter &#39;label=batchtools&#39; --filter &#39;status=exited&#39;</code> to identify and remove terminated
+Use <code>docker ps -a --filter 'label=batchtools' --filter 'status=exited'</code> to identify and remove terminated
 containers manually (or usa a cron job).</p>
     
 
-    <pre><span class='fu'>makeClusterFunctionsDocker</span>(<span class='no'>image</span>, <span class='kw'>docker.args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>),
+    <pre class="usage"><span class='fu'>makeClusterFunctionsDocker</span>(<span class='no'>image</span>, <span class='kw'>docker.args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>),
   <span class='kw'>image.args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>image</dt>
-      <dd>[<code>character(1)</code>]
-Name of the docker image to run.</dd>
-      <dt>docker.args</dt>
-      <dd>[<code>character</code>]
-Additional arguments passed to &#8220;docker&#8221; *before* the command (&#8220;run&#8221;, &#8220;ps&#8221; or &#8220;kill&#8221;) to execute (e.g., the docker host).</dd>
-      <dt>image.args</dt>
-      <dd>[<code>character</code>]
-Additional arguments passed to &#8220;docker run&#8221; (e.g., to define mounts or environment variables).</dd>
-      <dt>scheduler.latency</dt>
-      <dd>[<code>numeric(1)</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>image</th>
+      <td><p>[<code>character(1)</code>]
+Name of the docker image to run.</p></td>
+    </tr>
+    <tr>
+      <th>docker.args</th>
+      <td><p>[<code>character</code>]
+Additional arguments passed to &#8220;docker&#8221; *before* the command (&#8220;run&#8221;, &#8220;ps&#8221; or &#8220;kill&#8221;) to execute (e.g., the docker host).</p></td>
+    </tr>
+    <tr>
+      <th>image.args</th>
+      <td><p>[<code>character</code>]
+Additional arguments passed to &#8220;docker run&#8221; (e.g., to define mounts or environment variables).</p></td>
+    </tr>
+    <tr>
+      <th>scheduler.latency</th>
+      <td><p>[<code>numeric(1)</code>]
 Time to sleep after important interactions with the scheduler to ensure a sane state.
-Currently only triggered after calling <code><a href='submitJobs.html'>submitJobs</a></code>.</dd>
-      <dt>fs.latency</dt>
-      <dd>[<code>numeric(1)</code>]
+Currently only triggered after calling <code><a href='submitJobs.html'>submitJobs</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>fs.latency</th>
+      <td><p>[<code>numeric(1)</code>]
 Expected maximum latency of the file system, in seconds.
 Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 access files and directories.
-Usually safe to set to <code>NA</code> which disables the expensive heuristic if you are working on a local file system.</dd>
-    </dl>
+Usually safe to set to <code>NA</code> which disables the expensive heuristic if you are working on a local file system.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

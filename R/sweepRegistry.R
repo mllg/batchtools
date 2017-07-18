@@ -3,7 +3,7 @@
 #' @description
 #' Canceled jobs and jobs submitted multiple times may leave stray files behind.
 #' This function checks the registry for consistency and removes obsolete files
-#' and data base informations.
+#' and redundant data base entries.
 #'
 #' @template reg
 #' @family Registry
@@ -12,8 +12,8 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, running.ok = FALSE)
   "!DEBUG [sweepRegistry]: Running sweepRegistry"
 
-  submitted = reg$status[.findSubmitted(reg = reg), c("job.id", "job.hash", "log.file")]
-  path = getResultPath(reg)
+  submitted = reg$status[.findSubmitted(reg = reg), c("job.id", "job.hash")]
+  path = dir(reg, "results")
   obsolete = chsetdiff(
     list.files(path, full.names = TRUE),
     getResultFiles(reg, submitted)
@@ -21,7 +21,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   info("Removing %i obsolete result files ...", length(obsolete))
   file.remove(obsolete)
 
-  path = getLogPath(reg)
+  path = dir(reg, "logs")
   obsolete = chsetdiff(
     list.files(path, full.names = TRUE),
     getLogFiles(reg, submitted)
@@ -29,17 +29,17 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   info("Removing %i obsolete log files ...", length(obsolete))
   file.remove(obsolete)
 
-  path = getJobPath(reg)
+  path = dir(reg, "jobs")
   obsolete = list.files(path, pattern = "\\.rds", full.names = TRUE)
   info("Removing %i obsolete job collection files ...", length(obsolete))
   file.remove(obsolete)
 
-  path = getJobPath(reg)
+  path = dir(reg, "jobs")
   obsolete = list.files(path, pattern = "\\.job$", full.names = TRUE)
   info("Removing %i job description files ...", length(obsolete))
   file.remove(obsolete)
 
-  path = getExternalPath(reg)
+  path = dir(reg, "external")
   obsolete = chsetdiff(
     list.files(path, pattern = "^[0-9]+$", full.names = TRUE),
     getExternalDirs(reg, submitted)

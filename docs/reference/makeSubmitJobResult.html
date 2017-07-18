@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -82,34 +84,42 @@
 
     
     <p>This function is only intended for use in your own cluster functions implementation.</p>
-
-    <p>Use this function in your implementation of <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code> to create a return
+<p>Use this function in your implementation of <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code> to create a return
 value for the <code>submitJob</code> function.</p>
     
 
-    <pre><span class='fu'>makeSubmitJobResult</span>(<span class='no'>status</span>, <span class='no'>batch.id</span>, <span class='kw'>log.file</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
+    <pre class="usage"><span class='fu'>makeSubmitJobResult</span>(<span class='no'>status</span>, <span class='no'>batch.id</span>, <span class='kw'>log.file</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
   <span class='kw'>msg</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>status</dt>
-      <dd>[<code>integer(1)</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>status</th>
+      <td><p>[<code>integer(1)</code>]
 Launch status of job. 0 means success, codes between 1 and 100 are temporary errors and any
-error greater than 100 is a permanent failure.</dd>
-      <dt>batch.id</dt>
-      <dd>[<code>character()</code>]
+error greater than 100 is a permanent failure.</p></td>
+    </tr>
+    <tr>
+      <th>batch.id</th>
+      <td><p>[<code>character()</code>]
 Unique id of this job on batch system, as given by the batch system.
 Must be globally unique so that the job can be terminated using just this information.
-For array jobs, this may be a vector of length equal to the number of jobs in the array.</dd>
-      <dt>log.file</dt>
-      <dd>[<code>character()</code>]
+For array jobs, this may be a vector of length equal to the number of jobs in the array.</p></td>
+    </tr>
+    <tr>
+      <th>log.file</th>
+      <td><p>[<code>character()</code>]
 Log file. If <code>NA</code>, defaults to <code>[job.hash].log</code>.
-Some cluster functions set this for array jobs.</dd>
-      <dt>msg</dt>
-      <dd>[<code>character(1)</code>]
+Some cluster functions set this for array jobs.</p></td>
+    </tr>
+    <tr>
+      <th>msg</th>
+      <td><p>[<code>character(1)</code>]
 Optional error message in case <code>status</code> is not equal to 0. Default is &#8220;OK&#8221;,
-&#8220;TEMPERROR&#8221;, &#8220;ERROR&#8221;, depending on <code>status</code>.</dd>
-    </dl>
+&#8220;TEMPERROR&#8221;, &#8220;ERROR&#8221;, depending on <code>status</code>.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

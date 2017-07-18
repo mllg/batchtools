@@ -1,4 +1,22 @@
+# batchtools 0.9.4
+
+* Fixed handling of `file.dir` with special chars like whitespace.
+* Fixed order of arguments in `findExperiments()` (argument `ids` is now first).
+* Removed code to upgrade registries created with versions prior to v0.9.0 (first CRAN release).
+* `addExperiments()` now warns if a design is passed as `data.frame` with factor columns and `stringsAsFactors` is `TRUE`.
+
 # batchtools 0.9.3
+
+* Running jobs now are also included while querying for status "started". This affects `findStarted()`, `findNotStarted` and `getStatus()`.
+* `findExperiments()` now performs an exact string match (instead of matching substrings) for patterns specified via `prob.name` and `algo.name`.
+  For substring matching, use `prob.pattern` or `algo.pattern`, respectively.
+* Changed arguments for `reduceResultsDataTable()`
+    * Removed `fill`, now is always `TRUE`
+    * Introduced `flatten` to control if the result should be represented as a column of lists or flattened as separate columns.
+      Defaults to a backward-compatible heuristic, similar to `getJobPars`.
+* Improved heuristic to lookup template files.
+  Templates shipped with the package can now be used by providing just the file name (w/o extension).
+* Updated CITATION
 
 # batchtools 0.9.2
 

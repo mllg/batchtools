@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -84,59 +86,67 @@
     <p>Loads a registry from its <code>file.dir</code>.</p>
     
 
-    <pre><span class='fu'>loadRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fu'>getwd</span>(), <span class='kw'>work.dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>loadRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fu'>getwd</span>(), <span class='kw'>work.dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>conf.file</span> <span class='kw'>=</span> <span class='fu'>findConfFile</span>(), <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>update.paths</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>file.dir</dt>
-      <dd>[<code>character(1)</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>file.dir</th>
+      <td><p>[<code>character(1)</code>]
   Path where all files of the registry are saved.
   Default is directory &#8220;registry&#8221; in the current working directory.
   The provided path will get normalized unless it is given relative to the home directory
-  (i.e., starting with &#8220;~&#8221;). Note that some templates do not handle relative paths well.
-
-  If you pass <code>NA</code>, a temporary directory will be used.
+  (i.e., starting with &#8220;~&#8221;). Note that some templates do not handle relative paths well.</p>
+<p>If you pass <code>NA</code>, a temporary directory will be used.
   This way, you can create disposable registries for <code><a href='btlapply.html'>btlapply</a></code> or examples.
   By default, the temporary directory <code><a href='http://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a>()</code> will be used.
   If you want to use another directory, e.g. a directory which is shared between nodes,
-  you can set it in your configuration file by setting the variable <code>temp.dir</code>.</dd>
-      <dt>work.dir</dt>
-      <dd>[<code>character(1)</code>]
+  you can set it in your configuration file by setting the variable <code>temp.dir</code>.</p></td>
+    </tr>
+    <tr>
+      <th>work.dir</th>
+      <td><p>[<code>character(1)</code>]
   Working directory for R process for running jobs.
   Defaults to the working directory currently set during Registry construction (see <code><a href='http://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a></code>).
   <code>loadRegistry</code> uses the stored <code>work.dir</code>, but you may also explicitly overwrite it,
-  e.g., after switching to another system.
-
-  The provided path will get normalized unless it is given relative to the home directory
-  (i.e., starting with &#8220;~&#8221;). Note that some templates do not handle relative paths well.</dd>
-      <dt>conf.file</dt>
-      <dd>[<code>character(1)</code>]
+  e.g., after switching to another system.</p>
+<p>The provided path will get normalized unless it is given relative to the home directory
+  (i.e., starting with &#8220;~&#8221;). Note that some templates do not handle relative paths well.</p></td>
+    </tr>
+    <tr>
+      <th>conf.file</th>
+      <td><p>[<code>character(1)</code>]
   Path to a configuration file which is sourced while the registry is created.
   For example, you can set cluster functions or default resources in it.
   The script is executed inside the environment of the registry after the defaults for all variables are set,
-  thus you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.
-
-  The file lookup defaults to a heuristic which first tries to read &#8220;batchtools.conf.R&#8221; in the current working directory.
+  thus you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.</p>
+<p>The file lookup defaults to a heuristic which first tries to read &#8220;batchtools.conf.R&#8221; in the current working directory.
   If not found, it looks for a configuration file &#8220;config.R&#8221; in the OS dependent user configuration directory
-  as reported by via <code>rappdirs::user_config_dir(&quot;batchtools&quot;, expand = FALSE)</code> (e.g., on linux this
+  as reported by via <code>rappdirs::user_config_dir("batchtools", expand = FALSE)</code> (e.g., on linux this
   usually resolves to &#8220;~/.config/batchtools/config.R&#8221;).
   If this file is also not found, the heuristic finally tries to read the file &#8220;.batchtools.conf.R&#8221; in the
   home directory (&#8220;~&#8221;).
-  Set to <code>character(0)</code> if you want to disable this heuristic.</dd>
-      <dt>make.default</dt>
-      <dd>[<code>logical(1)</code>]
+  Set to <code>character(0)</code> if you want to disable this heuristic.</p></td>
+    </tr>
+    <tr>
+      <th>make.default</th>
+      <td><p>[<code>logical(1)</code>]
 If set to <code>TRUE</code>, the created registry is saved inside the package
 namespace and acts as default registry. You might want to switch this
 off if you work with multiple registries simultaneously.
-Default is <code>TRUE</code>.</dd>
-      <dt>update.paths</dt>
-      <dd>[<code>logical(1)</code>]
+Default is <code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>update.paths</th>
+      <td><p>[<code>logical(1)</code>]
 If set to <code>TRUE</code>, the <code>file.dir</code> and <code>work.dir</code> will be updated in the registry. Note that this is
 likely to break computation on the system! Only do this if no jobs are currently running. Default is <code>FALSE</code>.
 If the provided <code>file.dir</code> does not match the stored <code>file.dir</code>, <code>loadRegistry</code> will return a
-registry in read-only mode.</dd>
-    </dl>
+registry in read-only mode.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

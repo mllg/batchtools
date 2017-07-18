@@ -79,7 +79,7 @@ Default is \code{TRUE}.}
   \describe{
     \item{\code{file.dir} [path]:}{File directory.}
     \item{\code{work.dir} [path]:}{Working directory.}
-    \item{\code{temp.dir} [path]:}{Temporary directory. Used if \code{file.dir} is \code{NA}.}
+    \item{\code{temp.dir} [path]:}{Temporary directory. Used if \code{file.dir} is \code{NA} to create temporary registries.}
     \item{\code{packages} [character()]:}{Packages to load on the slaves.}
     \item{\code{namespaces} [character()]:}{Namespaces to load on the slaves.}
     \item{\code{seed} [integer(1)]:}{Registry seed. Before each job is executed, the seed \code{seed + job.id} is set.}

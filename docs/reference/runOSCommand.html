@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -86,25 +88,34 @@ The interface is similar to <code><a href='http://www.rdocumentation.org/package
 <em>and</em> the output.</p>
     
 
-    <pre><span class='fu'>runOSCommand</span>(<span class='no'>sys.cmd</span>, <span class='kw'>sys.args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>stdin</span> <span class='kw'>=</span> <span class='st'>""</span>,
+    <pre class="usage"><span class='fu'>runOSCommand</span>(<span class='no'>sys.cmd</span>, <span class='kw'>sys.args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>stdin</span> <span class='kw'>=</span> <span class='st'>""</span>,
   <span class='kw'>nodename</span> <span class='kw'>=</span> <span class='st'>"localhost"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>sys.cmd</dt>
-      <dd>[<code>character(1)</code>]
-Command to run.</dd>
-      <dt>sys.args</dt>
-      <dd>[<code>character</code>]
-Arguments for <code>sys.cmd</code>.</dd>
-      <dt>stdin</dt>
-      <dd>[<code>character(1)</code>]
-Argument passed to <code><a href='http://www.rdocumentation.org/packages/base/topics/system2'>system2</a></code>.</dd>
-      <dt>nodename</dt>
-      <dd>[<code>character(1)</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>sys.cmd</th>
+      <td><p>[<code>character(1)</code>]
+Command to run.</p></td>
+    </tr>
+    <tr>
+      <th>sys.args</th>
+      <td><p>[<code>character</code>]
+Arguments for <code>sys.cmd</code>.</p></td>
+    </tr>
+    <tr>
+      <th>stdin</th>
+      <td><p>[<code>character(1)</code>]
+Argument passed to <code><a href='http://www.rdocumentation.org/packages/base/topics/system2'>system2</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>nodename</th>
+      <td><p>[<code>character(1)</code>]
 Name of the SSH node to run the command on. If set to &#8220;localhost&#8221; (default), the command
-is not piped through SSH.</dd>
-    </dl>
+is not piped through SSH.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -121,11 +132,11 @@ is not piped through SSH.</dd>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
-<span class='co'># runOSCommand("ls")</span>
-<span class='co'># runOSCommand("ls", "-al")</span>
-<span class='co'># runOSCommand("notfound")</span>
-<span class='co'>## ---------------------------------------------</span></div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
+  <span class='fu'>runOSCommand</span>(<span class='st'>"ls"</span>)
+  <span class='fu'>runOSCommand</span>(<span class='st'>"ls"</span>, <span class='st'>"-al"</span>)
+  <span class='fu'>runOSCommand</span>(<span class='st'>"notfound"</span>)
+})</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

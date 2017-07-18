@@ -67,7 +67,7 @@
 #' fun = function(n, p) colMeans(matrix(runif(n*p), n, p))
 #'
 #' # Arguments to fun:
-#' args = expand.grid(n = c(1e4, 1e5), p = c(10, 50))
+#' args = CJ(n = c(1e4, 1e5), p = c(10, 50)) # like expand.grid()
 #' print(args)
 #'
 #' # Map function to create jobs
@@ -156,7 +156,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = default.sleep, reg
   # handle max.concurrent.jobs
   max.concurrent.jobs = NA_integer_
   if (hasName(reg, "max.concurrent.jobs")) {
-    assertInt(reg$max.concurrent.jobs, lower = 0L)
+    assertCount(reg$max.concurrent.jobs)
     if (uniqueN(on.sys, by = "batch.id") + length(chunks) > reg$max.concurrent.jobs) {
       "!DEBUG [submitJobs]: Limiting the number of concurrent jobs to `reg$max.concurrent.jobs`"
       max.concurrent.jobs = reg$max.concurrent.jobs
@@ -205,7 +205,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = default.sleep, reg
 
     # remove old result files
     fns = getResultFiles(reg, ids.chunk)
-    file.remove(fns[file.exists(fns)])
+    file.remove.safely(fns)
 
     i = 1L
     repeat {

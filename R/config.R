@@ -1,15 +1,15 @@
 findConfFile = function() {
   x = "batchtools.conf.R"
   if (file.exists(x))
-    return(npath(x))
+    return(normalizePath(x))
 
   x = file.path(user_config_dir("batchtools", expand = FALSE), "config.R")
   if (file.exists(x))
     return(x)
 
-  x = npath(file.path("~", ".batchtools.conf.R"), must.work = FALSE)
+  x = normalizePath(file.path("~", ".batchtools.conf.R"), mustWork = FALSE)
   if (file.exists(x))
-    return(npath(x))
+    return(x)
 
   return(character(0L))
 }
@@ -26,6 +26,9 @@ setSystemConf = function(reg, conf.file) {
 
     assertClass(reg$cluster.functions, "ClusterFunctions")
     assertList(reg$default.resources, names = "unique")
-    assertDirectoryExists(reg$temp.dir, access = "w")
+    if (!dir.exists(reg$temp.dir))
+      dir.create(reg$temp.dir, recursive = TRUE)
+  } else {
+    info("No configuration file found")
   }
 }

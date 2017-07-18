@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -85,19 +87,24 @@
 If you wish to remove only intermediate files, use <code><a href='sweepRegistry.html'>sweepRegistry</a></code>.</p>
     
 
-    <pre><span class='fu'>removeRegistry</span>(<span class='kw'>wait</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
+    <pre class="usage"><span class='fu'>removeRegistry</span>(<span class='kw'>wait</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>wait</dt>
-      <dd>[<code>numeric(1)</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>wait</th>
+      <td><p>[<code>numeric(1)</code>]
 Seconds to wait before proceeding. This is a safety measure to not
 accidentally remove your precious files. Set to 0 in
-non-interactive scripts to disable this precaution.</dd>
-      <dt>reg</dt>
-      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
-    </dl>
+non-interactive scripts to disable this precaution.</p></td>
+    </tr>
+    <tr>
+      <th>reg</th>
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -113,7 +120,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'>removeRegistry</span>(<span class='fl'>0</span>, <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Recursively removing files in &#39;/tmp/RtmpNj0vFl/registry3c832d40f1e3&#39; ...</span></div><div class='output co'>#&gt; [1] TRUE</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'><span class='fu'>removeRegistry</span>(<span class='fl'>0</span>, <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Recursively removing files in '/scratch/registry676a1dd49bfa' ...</span></div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

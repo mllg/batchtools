@@ -9,7 +9,7 @@
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
@@ -66,7 +66,7 @@
 <div class="contents">
 <div id="cluster-functions" class="section level1">
 <h1 class="hasAnchor">
-<html><body><a href="#cluster-functions" class="anchor"> </a></body></html>Cluster Functions</h1>
+<a href="#cluster-functions" class="anchor"></a>Cluster Functions</h1>
 <p>The communication with the batch system is managed via so-called cluster functions. They are created with the constructor <a href="https://mllg.github.io/batchtools/reference/makeClusterFunctions">makeClusterFunctions</a> which defines how jobs are submitted on your system. Furthermore, you may provide functions to list queued/running jobs and to kill jobs.</p>
 <p>Usually you do not have to start from scratch but can just use one of the cluster functions which ship with the package:</p>
 <ul>
@@ -93,7 +93,8 @@
 </ul>
 <p>To use the package with the socket cluster functions, you would call the respective constructor <a href="https://mllg.github.io/batchtools/reference/makeClusterFunctionsSocket">makeClusterFunctionsSocket()</a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistry.html">makeRegistry</a></span>(<span class="ot">NA</span>)</code></pre></div>
-<pre><code>## Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</code></pre>
+<pre><code>## Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</code></pre>
+<pre><code>## Loading required package: methods</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reg<span class="op">$</span>cluster.functions =<span class="st"> </span><span class="kw"><a href="../reference/makeClusterFunctionsSocket.html">makeClusterFunctionsSocket</a></span>(<span class="dv">2</span>)</code></pre></div>
 <p>To make this selection permanent for this registry, save the Registry with <a href="https://mllg.github.io/batchtools/reference/makeRegistry">saveRegistry</a>. To make your cluster function selection permanent for a specific system across R sessions for all new Registries, you can set up a configuration file (see below).</p>
 <p>If you have trouble debugging your cluster functions, you can enable the debug mode for extra output. To do so, install the <a href="https://cran.r-project.org/package=debugme">debugme package</a> and set the environment variable <code>DEBUGME</code> to <code>batchtools</code> before you load the <code>batchtools</code> package:</p>
@@ -102,14 +103,14 @@
 </div>
 <div id="template-files" class="section level1">
 <h1 class="hasAnchor">
-<html><body><a href="#template-files" class="anchor"> </a></body></html>Template files</h1>
+<a href="#template-files" class="anchor"></a>Template files</h1>
 <p>Many cluster functions require a template file as argument. These templates are used to communicate with the scheduler and contain placeholders to evaluate arbitrary R expressions. Internally, the <a href="https://cran.r-project.org/package=brew">brew package</a> is used for this purpose. Some exemplary template files can be found <a href="https://github.com/mllg/batchtools/tree/master/inst/templates">here</a>. It would be great if you would help expand this collection to cover more exotic configurations. To do so, please send your template via <a href="mailto:michellang@gmail.com">mail</a> or open a new pull request.</p>
 <p>Note that all variables defined in a <a href="https://mllg.github.io/batchtools/reference/JobCollection">JobCollection</a> can be used inside the template. If you need to pass extra variables, you can set them via the argument <code>resources</code> of <a href="https://mllg.github.io/batchtools/reference/submitJobs">submitJobs</a>.</p>
 <p>If the flexibility which comes with templating is not sufficient, you can still construct a custom cluster function implementation yourself using the provided <a href="https://mllg.github.io/batchtools/reference/makeClusterFunctions">constructor</a>.</p>
 </div>
 <div id="configuration-file" class="section level1">
 <h1 class="hasAnchor">
-<html><body><a href="#configuration-file" class="anchor"> </a></body></html>Configuration file</h1>
+<a href="#configuration-file" class="anchor"></a>Configuration file</h1>
 <p>The configuration file can be used to set system specific options. Its default location depends on the operating system (see <a href="https://mllg.github.io/batchtools/reference/makeRegistry">Registry</a>), but for the first time setup you can put one in the current working directory (as reported by <code>getwd()</code>). In order to set the cluster function implementation, you would generate a file with the following content:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cluster.functions =<span class="st"> </span><span class="kw"><a href="../reference/makeClusterFunctionsInteractive.html">makeClusterFunctionsInteractive</a></span>()</code></pre></div>
 <p>The configuration file is parsed whenever you create or load a <a href="https://mllg.github.io/batchtools/reference/makeRegistry">Registry</a>. It is sourced inside of your registry which has the advantage that you can (a) access all of the parameters which are passed to <a href="https://mllg.github.io/batchtools/reference/makeRegistry">makeRegistry</a> and (b) you can also directly change them. Lets say you always want your working directory in your home directory and you always want to load the <code>checkmate</code> package on the nodes, you can just append these lines:</p>

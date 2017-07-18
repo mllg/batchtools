@@ -1,9 +1,10 @@
 #include <R.h>
 #include <Rinternals.h>
+#include <R_ext/Visibility.h>
 
 /* similar to last observation carried forward, but resets to NA if the last observation is spotted again */
 /* used in log file reading: jobs have a start and stop marker, the lines in between belong to the job */
-SEXP fill_gaps(SEXP x) {
+SEXP attribute_hidden fill_gaps(SEXP x) {
     const R_len_t n = length(x);
     int last = NA_INTEGER;
 

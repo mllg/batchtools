@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -83,53 +85,52 @@
     
     <p>Cluster functions for Univa Grid Engine / Oracle Grid Engine /
 Sun Grid Engine (<a href = 'http://www.univa.com/'>http://www.univa.com/</a>).</p>
-
-    <p>Job files are created based on the brew template <code>template</code>. This
+<p>Job files are created based on the brew template <code>template</code>. This
 file is processed with brew and then submitted to the queue using the
 <code>qsub</code> command. Jobs are killed using the <code>qdel</code> command and the
 list of running jobs is retrieved using <code>qselect</code>. The user must have
 the appropriate privileges to submit, delete and list jobs on the cluster
 (this is usually the case).</p>
-
-    <p>The template file can access all resources passed to <code><a href='submitJobs.html'>submitJobs</a></code>
-as well as all variables stored in the <code><a href='makeJobCollection.html'>JobCollection</a></code>.
-It is the template file&#39;s job to choose a queue for the job and handle the desired resource
+<p>The template file can access all resources passed to <code><a href='submitJobs.html'>submitJobs</a></code>
+as well as all variables stored in the <code><a href='JobCollection.html'>JobCollection</a></code>.
+It is the template file's job to choose a queue for the job and handle the desired resource
 allocations.</p>
     
 
-    <pre><span class='fu'>makeClusterFunctionsSGE</span>(<span class='kw'>template</span> <span class='kw'>=</span> <span class='fu'>findTemplateFile</span>(<span class='st'>"sge"</span>),
+    <pre class="usage"><span class='fu'>makeClusterFunctionsSGE</span>(<span class='kw'>template</span> <span class='kw'>=</span> <span class='fu'>findTemplateFile</span>(<span class='st'>"sge"</span>),
   <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>template</dt>
-      <dd>[<code>character(1)</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>template</th>
+      <td><p>[<code>character(1)</code>]
 Path to a brew template file that can be used for the job description.
 Alternatively, the template as a single string (including at least one newline &#8220;\n&#8221;).
 Defaults to a heuristic which looks for a template file in the following locations and picks
-the first one found:
-<ol>
-<li> &#8220;batchtools.sge.tmpl&#8221; in the current working directory.
-  </li>
-<li> &#8220;sge.tmpl&#8221; in the user config directory (see <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>user_config_dir</a></code>); on linux is is usually &#8220;~/.config/batchtools/sge.tmpl&#8221;.
-  </li>
-<li> &#8220;.batchtools.sge.tmpl&#8221; in the home directory.
-  </li>
-<li> &#8220;sge.default.tmpl&#8221; in the package installation directory in the subfolder &#8220;templates&#8221; (this probably does not exist for your cluster system or needs adaptation).
-</li>
-</ol>
-</dd>
-      <dt>scheduler.latency</dt>
-      <dd>[<code>numeric(1)</code>]
+the first one found:</p><ol>
+<li><p>&#8220;batchtools.sge.tmpl&#8221; in the current working directory.</p></li>
+<li><p>&#8220;sge.tmpl&#8221; in the user config directory (see <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>user_config_dir</a></code>); on linux is is usually &#8220;~/.config/batchtools/sge.tmpl&#8221;.</p></li>
+<li><p>&#8220;.batchtools.sge.tmpl&#8221; in the home directory.</p></li>
+<li><p>&#8220;sge.default.tmpl&#8221; in the package installation directory in the subfolder &#8220;templates&#8221; (this probably does not exist for your cluster system or needs adaptation).</p></li>
+</ol></td>
+    </tr>
+    <tr>
+      <th>scheduler.latency</th>
+      <td><p>[<code>numeric(1)</code>]
 Time to sleep after important interactions with the scheduler to ensure a sane state.
-Currently only triggered after calling <code><a href='submitJobs.html'>submitJobs</a></code>.</dd>
-      <dt>fs.latency</dt>
-      <dd>[<code>numeric(1)</code>]
+Currently only triggered after calling <code><a href='submitJobs.html'>submitJobs</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>fs.latency</th>
+      <td><p>[<code>numeric(1)</code>]
 Expected maximum latency of the file system, in seconds.
 Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 access files and directories.
-Usually safe to set to <code>NA</code> which disables the expensive heuristic if you are working on a local file system.</dd>
-    </dl>
+Usually safe to set to <code>NA</code> which disables the expensive heuristic if you are working on a local file system.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

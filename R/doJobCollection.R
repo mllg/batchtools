@@ -28,6 +28,7 @@ doJobCollection = function(jc, output = NULL) {
 #' @export
 doJobCollection.character = function(jc, output = NULL) {
   obj = readRDS(jc)
+  force(obj)
   if (!batchtools$debug && !obj$array.jobs)
     file.remove(jc)
   doJobCollection.JobCollection(obj, output = output)
@@ -108,13 +109,13 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   catf("### [bt %s]: Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"))
 
   # try to pre-fetch some objects from the file system
-  cache = Cache$new(jc$file.dir)
+  reader = RDSReader$new(n.jobs > 1L)
   buf = UpdateBuffer$new(jc$jobs$job.id)
 
-  runHook(jc, "pre.do.collection", cache = cache)
+  runHook(jc, "pre.do.collection", reader = reader)
 
   for (i in seq_len(n.jobs)) {
-    job = getJob(jc, i, cache = cache)
+    job = getJob(jc, i, reader = reader)
     id = job$id
 
     update = list(started = ustamp(), done = NA_integer_, error = NA_character_, memory = NA_real_)
@@ -139,7 +140,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     buf$flush(jc)
   }
 
-  runHook(jc, "post.do.collection", updates = buf$updates, cache = cache)
+  runHook(jc, "post.do.collection", updates = buf$updates, reader = reader)
   buf$save(jc)
   catf("### [bt %s]: Calculation finished!", now())
 
@@ -154,7 +155,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
     next.update = NA_real_,
     initialize = function(ids) {
       self$updates = data.table(job.id = ids, started = NA_real_, done = NA_real_, error = NA_character_, memory = NA_real_, written = FALSE, key = "job.id")
-      self$next.update = Sys.time() + runif(1L, 300, 1800)
+      self$next.update = Sys.time() + runif(1L, 60, 300)
     },
 
     add = function(i, x) {
@@ -174,7 +175,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
       now = Sys.time()
       if (now > self$next.update) {
         self$save(jc)
-        self$next.update = now + runif(1L, 300, 1800)
+        self$next.update = now + runif(1L, 60, 300)
       }
     }
   )

@@ -79,7 +79,7 @@
 #'   \describe{
 #'     \item{\code{file.dir} [path]:}{File directory.}
 #'     \item{\code{work.dir} [path]:}{Working directory.}
-#'     \item{\code{temp.dir} [path]:}{Temporary directory. Used if \code{file.dir} is \code{NA}.}
+#'     \item{\code{temp.dir} [path]:}{Temporary directory. Used if \code{file.dir} is \code{NA} to create temporary registries.}
 #'     \item{\code{packages} [character()]:}{Packages to load on the slaves.}
 #'     \item{\code{namespaces} [character()]:}{Namespaces to load on the slaves.}
 #'     \item{\code{seed} [integer(1)]:}{Registry seed. Before each job is executed, the seed \code{seed + job.id} is set.}
@@ -174,6 +174,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   class(reg) = "Registry"
   saveRegistry(reg)
+  info("Created registry in '%s' using cluster functions '%s'", reg$file.dir, reg$cluster.functions$name)
   if (make.default)
     batchtools$default.registry = reg
   return(reg)
@@ -182,11 +183,11 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 #' @export
 print.Registry = function(x, ...) {
   cat("Job Registry\n")
-  catf("  Name    : %s", x$cluster.functions$name)
-  catf("  File dir: %s", x$file.dir)
-  catf("  Work dir: %s", x$work.dir)
-  catf("  Jobs    : %i", nrow(x$status))
-  catf("  Seed    : %i", x$seed)
+  catf("  ClusterFunction : %s", x$cluster.functions$name)
+  catf("  File dir        : %s", x$file.dir)
+  catf("  Work dir        : %s", x$work.dir)
+  catf("  Jobs            : %i", nrow(x$status))
+  catf("  Seed            : %i", x$seed)
 }
 
 assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, running.ok = TRUE) {

@@ -39,8 +39,25 @@ See this [vignette](https://mllg.github.io/batchtools/articles/v01_Migration) fo
 * [NEWS](https://mllg.github.io/batchtools/news/)
 * [Function reference](https://mllg.github.io/batchtools/reference)
 * [Vignettes](https://mllg.github.io/batchtools/articles)
+* [JOSS Paper](http://dx.doi.org/10.21105/joss.00135): Short paper on batchtools. Please cite this if you use batchtools.
 * [Paper on BatchJobs/BatchExperiments](http://www.jstatsoft.org/v64/i11): The described concept still holds for batchtools and most examples work analogously (see this [vignette](https://mllg.github.io/batchtools/articles/v01_Migration) for differences between the packages).
 
+## Citation
+Please cite the [JOSS paper](http://dx.doi.org/10.21105/joss.00135) using the following BibTeX entry:
+```
+@article{,
+  doi = {10.21105/joss.00135},
+  url = {https://doi.org/10.21105/joss.00135},
+  year  = {2017},
+  month = {feb},
+  publisher = {The Open Journal},
+  volume = {2},
+  number = {10},
+  author = {Michel Lang and Bernd Bischl and Dirk Surmann},
+  title = {batchtools: Tools for R to work on batch systems},
+  journal = {The Journal of Open Source Software}
+}
+```
 
 ## Related Software
 * The [High Performance Computing Task View](https://cran.r-project.org/view=HighPerformanceComputing) lists the most relevant packages for scientific computing with R

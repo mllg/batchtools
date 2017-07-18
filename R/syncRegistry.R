@@ -1,4 +1,4 @@
-#' @title Syncronize the Registry
+#' @title Synchronize the Registry
 #'
 #' @description
 #' Parses update files written by the slaves to the file system and updates the
@@ -10,7 +10,7 @@
 #' @export
 syncRegistry = function(reg = getDefaultRegistry()) {
   "!DEBUG [syncRegistry]: Triggered syncRegistry"
-  fns = list.files(getUpdatePath(reg), full.names = TRUE)
+  fns = list.files(dir(reg, "updates"), full.names = TRUE)
   if (length(fns) == 0L)
     return(invisible(TRUE))
 
@@ -35,7 +35,7 @@ syncRegistry = function(reg = getDefaultRegistry()) {
     expr = quote(`:=`(started = i.started, done = i.done, error = i.error, memory = i.memory))
     reg$status[updates, eval(expr), on = "job.id"]
     saveRegistry(reg)
-    unlink(fns[!failed])
+    file.remove.safely(fns[!failed])
   }
 
   runHook(reg, "post.sync", updates = updates)

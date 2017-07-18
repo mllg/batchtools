@@ -8,6 +8,14 @@
 #' \code{addExperiments} creates experiments for all parameters for the combinations \code{(p1, a1)}, \code{(p1, a2)},
 #' \code{(p1, a3)}, \code{(p2, a1)}, \code{(p2, a2)} and \code{(p2, a3)}.
 #'
+#' @note
+#' R's \code{data.frame} converts character vectors to factors by default which frequently resulted in problems using \code{addExperiments}.
+#' Therefore, this function will warn about factor variables if the following conditions hold:
+#' \enumerate{
+#'   \item The design is passed as a \code{data.frame}, not a \code{\link[data.table]{data.table}} or \code{\link[tibble]{tibble}}.
+#'   \item The option \dQuote{stringsAsFactors} is not set or set to \code{TRUE}.
+#' }
+#'
 #' @param prob.designs [named list of \code{\link[base]{data.frame}}]\cr
 #'   Named list of data frames (or \code{\link[data.table]{data.table}}).
 #'   The name must match the problem name while the column names correspond to parameters of the problem.
@@ -32,28 +40,28 @@
 #'
 #' # add first problem
 #' fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd)
-#' addProblem("p1", fun = fun, reg = tmp)
+#' addProblem("rnorm", fun = fun, reg = tmp)
 #'
 #' # add second problem
-#' fun = function(job, data, n, lamba, ...) rexp(n, lambda = lambda)
-#' addProblem("p2", fun = fun, reg = tmp)
+#' fun = function(job, data, n, lambda, ...) rexp(n, rate = lambda)
+#' addProblem("rexp", fun = fun, reg = tmp)
 #'
 #' # add first algorithm
 #' fun = function(instance, method, ...) if (method == "mean") mean(instance) else median(instance)
-#' addAlgorithm("a1", fun = fun, reg = tmp)
+#' addAlgorithm("average", fun = fun, reg = tmp)
 #'
 #' # add second algorithm
-#' fun = function(instance, ...) se(instance)
-#' addAlgorithm("a2", reg = tmp)
+#' fun = function(instance, ...) sd(instance)
+#' addAlgorithm("deviation", fun = fun, reg = tmp)
 #'
 #' # define problem and algorithm designs
 #' prob.designs = algo.designs = list()
-#' prob.designs$p1 = expand.grid(n = 100, mean = -1:1, sd = 1:5)
-#' prob.designs$p2 = data.table(lambda = 1:5)
-#' algo.designs$a1 = data.table(method = c("mean", "median"))
-#' algo.designs$a2 = data.table()
+#' prob.designs$rnorm = CJ(n = 100, mean = -1:1, sd = 1:5)
+#' prob.designs$rexp = data.table(n = 100, lambda = 1:5)
+#' algo.designs$average = data.table(method = c("mean", "median"))
+#' algo.designs$deviation = data.table()
 #'
-#' # add experiments
+#' # add experiments and submit
 #' addExperiments(prob.designs, algo.designs, reg = tmp)
 #'
 #' # check what has been created
@@ -61,8 +69,17 @@
 #' getJobPars(reg = tmp)
 addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, combine = "crossprod", reg = getDefaultRegistry()) {
   convertDesigns = function(type, designs, keywords) {
+    check.factors = default.stringsAsFactors()
+
     Map(function(id, design) {
-      design = as.data.table(design)
+      if (check.factors && identical(class(design)[1L], "data.frame")) {
+        i = which(vlapply(design, is.factor))
+        if (length(i) > 0L) {
+          warningf("%s design '%s' passed as 'data.frame' and 'stringsAsFactors' is TRUE. Column(s) '%s' may be encoded as factors accidentally.", type, id, stri_flatten(names(design)[i]), "','")
+        }
+      }
+      if (!is.data.table(design))
+        design = as.data.table(design)
       i = wf(keywords %chin% names(design))
       if (length(i) > 0L)
         stopf("%s design %s contains reserved keyword '%s'", type, id, keywords[i])
@@ -124,6 +141,9 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
 
       # create hash of each row of tab
       tab$pars.hash = unlist(.mapply(function(...) digest(list(...)), tab, list()))
+
+      # FIXME: This would be slightly faster, but is not backward compatible
+      # tab[, pars.hash := digest(as.list(.SD)), by = 1:nrow(tab), .SDcols = names(tab)]
 
       # merge with already defined experiments to get def.ids
       tab = merge(reg$defs[, !c("pars", "problem", "algorithm")], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)

@@ -33,7 +33,7 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   id = convertId(reg, id)
 
   if (external) {
-    td      = npath(tempdir())
+    td      = normalizePath(tempdir())
     fn.r    = file.path(td, "batchtools-testJob.R")
     fn.jc   = file.path(td, "batchtools-testJob.jc")
     fn.res  = file.path(td, "batchtools-testJob.rds")
@@ -42,7 +42,7 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
     brew(file = system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE),
       output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))
 
-    res = runOSCommand(Rscript(), fn.r)
+    res = runOSCommand(Rscript(), normalizePath(fn.r, winslash = "/"))
 
     writeLines(res$output)
     if (res$exit.code == 0L)

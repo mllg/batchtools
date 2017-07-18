@@ -59,9 +59,11 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
   } else {
     assert(checkFunction(fun, args = c("job", "data")), checkFunction(fun, args = "..."))
   }
-  if (!is.null(seed))
+  if (!is.null(seed)) {
     seed = asCount(seed, positive = TRUE)
+  }
 
+  info("Adding problem '%s'", name)
   prob = setClasses(list(name = name, seed = seed, data = data, fun = fun), "Problem")
   writeRDS(prob, file = getProblemURI(reg, name))
   reg$defs$problem = addlevel(reg$defs$problem, name)
@@ -82,7 +84,7 @@ removeProblems = function(name, reg = getDefaultRegistry()) {
     job.ids = filter(def.ids, reg$status, "job.id")
 
     info("Removing Problem '%s' and %i corresponding jobs ...", nn, nrow(job.ids))
-    file.remove(getProblemURI(reg, nn))
+    file.remove.safely(getProblemURI(reg, nn))
     reg$defs = reg$defs[!def.ids]
     reg$status = reg$status[!job.ids]
     reg$defs$problem = rmlevel(reg$defs$problem, nn)
@@ -97,8 +99,4 @@ removeProblems = function(name, reg = getDefaultRegistry()) {
 getProblemIds = function(reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg)
   levels(reg$defs$problem)
-}
-
-getProblemURI = function(reg, name) {
-  file.path(reg$file.dir, "problems", mangle(name))
 }

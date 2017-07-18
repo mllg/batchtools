@@ -12,7 +12,8 @@ submitJobs(ids = NULL, resources = list(), sleep = default.sleep,
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})
 with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to the return value of \code{\link{findNotSubmitted}}.}
+If not set, defaults to the return value of \code{\link{findNotSubmitted}}.
+Invalid ids are ignored.}
 
 \item{resources}{[\code{named list}]\cr
 Computational  resources for the batch jobs. The elements of this list
@@ -84,7 +85,7 @@ tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 fun = function(n, p) colMeans(matrix(runif(n*p), n, p))
 
 # Arguments to fun:
-args = expand.grid(n = c(1e4, 1e5), p = c(10, 50))
+args = CJ(n = c(1e4, 1e5), p = c(10, 50)) # like expand.grid()
 print(args)
 
 # Map function to create jobs

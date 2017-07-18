@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -81,48 +83,53 @@
     </div>
 
     
-    <p>Executes every job in a <code><a href='makeJobCollection.html'>JobCollection</a></code>.
+    <p>Executes every job in a <code><a href='JobCollection.html'>JobCollection</a></code>.
 This function is intended to be called on the slave.</p>
     
 
-    <pre><span class='fu'>doJobCollection</span>(<span class='no'>jc</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>doJobCollection</span>(<span class='no'>jc</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>jc</dt>
-      <dd>[<code><a href='makeJobCollection.html'>JobCollection</a></code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>jc</th>
+      <td><p>[<code><a href='JobCollection.html'>JobCollection</a></code>]
 Either an object of class &#8220;JobCollection&#8221; as returned by
-<code><a href='makeJobCollection.html'>makeJobCollection</a></code> or a string with the path to file
-containing a &#8220;JobCollection&#8221; as RDS file (as stored by <code><a href='submitJobs.html'>submitJobs</a></code>).</dd>
-      <dt>output</dt>
-      <dd>[<code>character(1)</code>]
+<code><a href='JobCollection.html'>makeJobCollection</a></code> or a string with the path to file
+containing a &#8220;JobCollection&#8221; as RDS file (as stored by <code><a href='submitJobs.html'>submitJobs</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>output</th>
+      <td><p>[<code>character(1)</code>]
 Path to a file to write the output to. Defaults to <code>NULL</code> which means
 that output is written to the active <code><a href='http://www.rdocumentation.org/packages/base/topics/sink'>sink</a></code>.
-Do not set this if your scheduler redirects output to a log file.</dd>
-    </dl>
+Do not set this if your scheduler redirects output to a log file.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>[<code>character(1)</code>]: Hash of the <code><a href='makeJobCollection.html'>JobCollection</a></code> executed.</p>
+    <p>[<code>character(1)</code>]: Hash of the <code><a href='JobCollection.html'>JobCollection</a></code> executed.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other JobCollection: <code><a href='makeJobCollection.html'>makeJobCollection</a></code></p>
+    <p>Other JobCollection: <code><a href='JobCollection.html'>makeJobCollection</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 jobs ...</span></div><div class='input'><span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'><a href='makeJobCollection.html'>makeJobCollection</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>doJobCollection</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt; ### [bt 2017-02-23 10:29:49]: This is batchtools v0.9.1.9002
-#&gt; ### [bt 2017-02-23 10:29:49]: Starting calculation of 2 jobs
-#&gt; ### [bt 2017-02-23 10:29:49]: Setting working directory to &#39;/home/michel/Projekte/batchtools/docs/reference&#39;
-#&gt; ### [bt 2017-02-23 10:29:49]: Memory measurement disabled
-#&gt; ### [bt 2017-02-23 10:29:49]: Starting job [batchtools job.id=1]
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 jobs ...</span></div><div class='input'><span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'><a href='JobCollection.html'>makeJobCollection</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'>doJobCollection</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt; ### [bt 2017-04-20 12:07:52]: This is batchtools v0.9.2.9000
+#&gt; ### [bt 2017-04-20 12:07:52]: Starting calculation of 2 jobs
+#&gt; ### [bt 2017-04-20 12:07:52]: Setting working directory to '/home/lang/Projekte/batchtools/docs/reference'
+#&gt; ### [bt 2017-04-20 12:07:52]: Memory measurement disabled
+#&gt; ### [bt 2017-04-20 12:07:52]: Starting job [batchtools job.id=1]
 #&gt; 
-#&gt; ### [bt 2017-02-23 10:29:49]: Job terminated successfully [batchtools job.id=1]
-#&gt; ### [bt 2017-02-23 10:29:49]: Starting job [batchtools job.id=2]
+#&gt; ### [bt 2017-04-20 12:07:52]: Job terminated successfully [batchtools job.id=1]
+#&gt; ### [bt 2017-04-20 12:07:52]: Starting job [batchtools job.id=2]
 #&gt; 
-#&gt; ### [bt 2017-02-23 10:29:49]: Job terminated successfully [batchtools job.id=2]
-#&gt; ### [bt 2017-02-23 10:29:49]: Calculation finished!</div></pre>
+#&gt; ### [bt 2017-04-20 12:07:52]: Job terminated successfully [batchtools job.id=2]
+#&gt; ### [bt 2017-04-20 12:07:52]: Calculation finished!</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

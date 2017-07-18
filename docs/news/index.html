@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -82,34 +84,52 @@
     </div>
 
     <div class="contents">
+    <div id="batchtools-0-9-3" class="section level1">
+<h1 class="hasAnchor">
+<a href="#batchtools-0-9-3" class="anchor"></a>batchtools 0.9.3</h1>
+<ul>
+<li>Running jobs now are also included while querying for status “started”. This affects <code><a href="../reference/findJobs.html">findStarted()</a></code>, <code>findNotStarted</code> and <code><a href="../reference/getStatus.html">getStatus()</a></code>.</li>
+<li>
+<code><a href="../reference/findJobs.html">findExperiments()</a></code> now performs an exact string match (instead of matching substrings) for patterns specified via <code>prob.name</code> and <code>algo.name</code>. For substring matching, use <code>prob.pattern</code> or <code>algo.pattern</code>, respectively.</li>
+<li>Changed arguments for <code><a href="../reference/reduceResultsList.html">reduceResultsDataTable()</a></code>
+<ul>
+<li>Removed <code>fill</code>, now is always <code>TRUE</code>
+</li>
+<li>Introduced <code>flatten</code> to control if the result should be represented as a column of lists or flattened as separate columns. Defaults to a backward-compatible heuristic, similar to <code>getJobPars</code>.</li>
+</ul>
+</li>
+</ul>
+</div>
     <div id="batchtools-0-9-2" class="section level1">
 <h1 class="hasAnchor">
-<a href="#batchtools-0-9-2" class="anchor"> </a>batchtools 0.9.2</h1>
+<a href="#batchtools-0-9-2" class="anchor"></a>batchtools 0.9.2</h1>
 <ul>
-<li>Full support for array jobs on Slurm and TORQUE. Array jobs have been disabled for SGE and LSF (due to missing information about the output format) but will be re-enable in a future release. Note that the variable <code>n.array.jobs</code> has been removed from <code>JobCollection</code> in favor of the new logical variable <code>array.jobs</code>.</li>
+<li>Full support for array jobs on Slurm and TORQUE.</li>
+<li>Array jobs have been disabled for SGE and LSF (due to missing information about the output format) but will be re-enable in a future release. Note that the variable <code>n.array.jobs</code> has been removed from <code>JobCollection</code> in favor of the new variable <code>array.jobs</code> (logical).</li>
 <li>
-<code><a href="../reference/findJobs.html">findExperiments()</a></code> now has two additional arguments to match for regular expressions. The possibility to prefix a string with “~” to enable regular expression matching has been removed.</li>
+<code><a href="../reference/findJobs.html">findExperiments()</a></code> now has two additional arguments to match using regular expressions. The possibility to prefix a string with “~” to enable regular expression matching has been removed.</li>
 <li>New function <code><a href="../reference/batchReduce.html">batchReduce()</a></code>.</li>
 <li>New function <code><a href="../reference/estimateRuntimes.html">estimateRuntimes()</a></code>.</li>
 <li>New function <code><a href="../reference/removeRegistry.html">removeRegistry()</a></code>.</li>
 <li>Missing result files are now handled more consistently, raising an exception in its defaults if the result is not available. The argument <code>missing.val</code> has been added to <code><a href="../reference/reduceResultsList.html">reduceResultsList()</a></code> and <code><a href="../reference/reduceResultsList.html">reduceResultsDataTable()</a></code> and removed from <code><a href="../reference/loadResult.html">loadResult()</a></code> and <code><a href="../reference/batchMapResults.html">batchMapResults()</a></code>.</li>
 <li>Timestamps are now stored with sub-second accuracy.</li>
-<li>Renamed Torque to TORQUE. This especially affects the function <code>makeClusterFunctionsTorque</code> which must now be called via <code><a href="../reference/makeClusterFunctionsTORQUE.html">makeClusterFunctionsTORQUE()</a></code>
+<li>Renamed Torque to TORQUE. This especially affects the constructor <code>makeClusterFunctionsTorque</code> which now must be called via <code><a href="../reference/makeClusterFunctionsTORQUE.html">makeClusterFunctionsTORQUE()</a></code>
 </li>
 <li>
 <code><a href="../reference/chunkIds.html">chunkIds()</a></code> has been deprecated. Use <code><a href="../reference/chunk.html">chunk()</a></code>, <code><a href="../reference/chunk.html">lpt()</a></code> or <code><a href="../reference/chunk.html">binpack()</a></code> instead.</li>
 <li>Fixed listing of jobs for <code>ClusterFunctionsLSF</code> and <code>ClusterFunctionsOpenLava</code> (thanks to @phaverty).</li>
 <li>Job hashes are now prefixed with the literal string ‘job’ to ensure they start with a letter as required by some SGE systems.</li>
-<li>Fixed handling of results being <code>NULL</code> in <code><a href="../reference/reduceResultsList.html">reduceResultsList()</a></code>
+<li>Fixed handling of <code>NULL</code> results in <code><a href="../reference/reduceResultsList.html">reduceResultsList()</a></code>
 </li>
-<li>Fixed broken key lookup heuristic join functions.</li>
+<li>Fixed key lookup heuristic join functions.</li>
 <li>Fixed a bug where <code><a href="../reference/getJobTable.html">getJobTable()</a></code> returned <code>difftimes</code> with the wrong unit (e.g., in minutes instead of seconds).</li>
-<li>Deactivated swap allocation for <code>clusterFunctionsDocker</code>.</li>
+<li>Deactivated swap allocation for <code>clusterFunctionsDocker()</code>.</li>
+<li>The package is now more patient while communicating with the scheduler or file system by using a timeout-based approach. This should make the package more reliable and robust under heavy load.</li>
 </ul>
 </div>
     <div id="batchtools-0-9-0" class="section level1">
 <h1 class="hasAnchor">
-<a href="#batchtools-0-9-0" class="anchor"> </a>batchtools 0.9.0</h1>
+<a href="#batchtools-0-9-0" class="anchor"></a>batchtools 0.9.0</h1>
 <p>Initial CRAN release. See this <a href="https://mllg.github.io/batchtools/articles/v01_Migration">vignette</a> for a brief comparison with <a href="https://cran.r-project.org/package=BatchJobs">BatchJobs</a>/<a href="https://cran.r-project.org/package=BatchExperiments">BatchExperiments</a>.</p>
 </div>
     </div>
@@ -119,6 +139,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#batchtools-0-9-3">0.9.3</a></li>
         <li><a href="#batchtools-0-9-2">0.9.2</a></li>
         <li><a href="#batchtools-0-9-0">0.9.0</a></li>
       </ul>

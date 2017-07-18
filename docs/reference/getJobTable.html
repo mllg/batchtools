@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -84,12 +86,12 @@
     <p><code>getJobStatus</code> returns the internal table which stores information about the computational
 status of jobs, <code>getJobPars</code> a table with the job parameters, <code>getJobResources</code> a table
 with the resources which were set to submit the jobs, and <code>getJobTags</code> the tags of the jobs
-(see <a href='Tags.html'>Tags</a>).</p>
+(see <a href='Tags.html'>Tags</a>).
 
-    <p><code>getJobTable</code> returns all these tables joined.</p>
+    <code>getJobTable</code> returns all these tables joined.</p>
     
 
-    <pre><span class='fu'>getJobTable</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <pre class="usage"><span class='fu'>getJobTable</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())
 
 <span class='fu'>getJobStatus</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())
@@ -103,70 +105,80 @@ with the resources which were set to submit the jobs, and <code>getJobTags</code
 <span class='fu'>getJobTags</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>ids</dt>
-      <dd>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>ids</th>
+      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
 A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to all jobs.</dd>
-      <dt>flatten</dt>
-      <dd>[<code>logical(1)</code>]
+If not set, defaults to all jobs.
+Invalid ids are ignored.</p></td>
+    </tr>
+    <tr>
+      <th>flatten</th>
+      <td><p>[<code>logical(1)</code>]
 Transform the job parameters and/or resource specifications to data frame columns?
-Defaults to <code>TRUE</code> if all parameters or resources are atomics,
-<code>FALSE</code> otherwise where each row of the column will hold a named list.
-New columns will be named using <code>prefix</code>.</dd>
-      <dt>prefix</dt>
-      <dd>[<code>logical(1)</code>]
+Defaults to <code>TRUE</code> if all parameters (or resources) are scalar atomics.
+Otherwise each row of the column will hold a named list.
+New columns will be named using <code>prefix</code>.</p></td>
+    </tr>
+    <tr>
+      <th>prefix</th>
+      <td><p>[<code>logical(1)</code>]
 If set to <code>TRUE</code>, the prefix &#8220;par.&#8221; is used to name column names of parameters
 for a <code><a href='makeRegistry.html'>Registry</a></code> and prefixes &#8220;prob.par.&#8221; and &#8220;algo.par.&#8221; are used to name
-the columns of a <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>. Resources are prefixed with &#8220;res.&#8221;.</dd>
-      <dt>reg</dt>
-      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>]
-Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</dd>
-    </dl>
+the columns of a <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>. Resources are prefixed with &#8220;res.&#8221;.</p></td>
+    </tr>
+    <tr>
+      <th>reg</th>
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>[<code>data.table</code>] with the following columns (not necessarily in this order):
-  <dl class='dl-horizontal'>
-    <dt>job.id</dt><dd>Unique Job ID as integer.</dd>
-    <dt>submitted</dt><dd>Time the job was submitted to the batch system as <code><a href='http://www.rdocumentation.org/packages/base/topics/DateTimeClasses'>POSIXct</a></code>.</dd>
-    <dt>started</dt><dd>Time the job was started on the batch system as <code><a href='http://www.rdocumentation.org/packages/base/topics/DateTimeClasses'>POSIXct</a></code>.</dd>
-    <dt>done</dt><dd>Time the job terminated (successfully or with an error) as <code><a href='http://www.rdocumentation.org/packages/base/topics/DateTimeClasses'>POSIXct</a></code>.</dd>
-    <dt>error</dt><dd>Either <code>NA</code> if the job terminated successfully or the error message.</dd>
-    <dt>memory</dt><dd>Estimate of the memory usage.</dd>
-    <dt>batch.id</dt><dd>Batch ID as reported by the scheduler.</dd>
-    <dt>log.file</dt><dd>Log file. If missing, defaults to <code>[job.hash].log</code>.</dd>
-    <dt>job.hash</dt><dd>Unique string identifying the job or chunk.</dd>
-    <dt>time.queued</dt><dd>Time in seconds (as <code><a href='http://www.rdocumentation.org/packages/base/topics/difftime'>difftime</a></code>) the job was queued.</dd>
-    <dt>time.running</dt><dd>Time in seconds (as <code><a href='http://www.rdocumentation.org/packages/base/topics/difftime'>difftime</a></code>) the job was running.</dd>
-    <dt>pars</dt><dd>List of parameters/arguments for this job. Possibly expanded to separate columns (see <code>prefix</code>.</dd>
-    <dt>resources</dt><dd>List of computational resources set for this job. Possibly expanded to separate columns (see <code>prefix</code>.</dd>
-    <dt>tags</dt><dd>Tags as joined string, delimited by &#8220;,&#8221;.</dd>
-    <dt>problem</dt><dd>Only for <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>: the problem identifier.</dd>
-    <dt>algorithm</dt><dd>Only for <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>: the algorithm identifier.</dd>
-  </dl></p>
+    <p>[<code>data.table</code>] with the following columns (not necessarily in this order):</p><dl class='dl-horizontal'>
+    <dt>job.id</dt><dd><p>Unique Job ID as integer.</p></dd>
+    <dt>submitted</dt><dd><p>Time the job was submitted to the batch system as <code><a href='http://www.rdocumentation.org/packages/base/topics/DateTimeClasses'>POSIXct</a></code>.</p></dd>
+    <dt>started</dt><dd><p>Time the job was started on the batch system as <code><a href='http://www.rdocumentation.org/packages/base/topics/DateTimeClasses'>POSIXct</a></code>.</p></dd>
+    <dt>done</dt><dd><p>Time the job terminated (successfully or with an error) as <code><a href='http://www.rdocumentation.org/packages/base/topics/DateTimeClasses'>POSIXct</a></code>.</p></dd>
+    <dt>error</dt><dd><p>Either <code>NA</code> if the job terminated successfully or the error message.</p></dd>
+    <dt>memory</dt><dd><p>Estimate of the memory usage.</p></dd>
+    <dt>batch.id</dt><dd><p>Batch ID as reported by the scheduler.</p></dd>
+    <dt>log.file</dt><dd><p>Log file. If missing, defaults to <code>[job.hash].log</code>.</p></dd>
+    <dt>job.hash</dt><dd><p>Unique string identifying the job or chunk.</p></dd>
+    <dt>time.queued</dt><dd><p>Time in seconds (as <code><a href='http://www.rdocumentation.org/packages/base/topics/difftime'>difftime</a></code>) the job was queued.</p></dd>
+    <dt>time.running</dt><dd><p>Time in seconds (as <code><a href='http://www.rdocumentation.org/packages/base/topics/difftime'>difftime</a></code>) the job was running.</p></dd>
+    <dt>pars</dt><dd><p>List of parameters/arguments for this job. Possibly expanded to separate columns (see <code>prefix</code>.</p></dd>
+    <dt>resources</dt><dd><p>List of computational resources set for this job. Possibly expanded to separate columns (see <code>prefix</code>.</p></dd>
+    <dt>tags</dt><dd><p>Tags as joined string, delimited by &#8220;,&#8221;.</p></dd>
+    <dt>problem</dt><dd><p>Only for <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>: the problem identifier.</p></dd>
+    <dt>algorithm</dt><dd><p>Only for <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>: the algorithm identifier.</p></dd>
+  </dl>
+
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file &#39;/home/michel/.config/batchtools/config.R&#39; ...</span></div><div class='input'><span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>) <span class='fu'>stop</span>(<span class='st'>"x must be &gt; 0"</span>) <span class='kw'>else</span> <span class='fu'>sqrt</span>(<span class='no'>x</span>)
-<span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>f</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions &#39;Interactive&#39; ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 3 files ...</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='st'>"tag1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'><span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>) <span class='fu'>stop</span>(<span class='st'>"x must be &gt; 0"</span>) <span class='kw'>else</span> <span class='fu'>sqrt</span>(<span class='no'>x</span>)
+<span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>f</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions 'Interactive'</span></div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 3 files ...</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='st'>"tag1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>2</span>, <span class='st'>"tag2"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
 <span class='co'># Complete table:</span>
 <span class='fu'>getJobTable</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;    job.id           submitted             started                done
-#&gt; 1:      1 2017-02-23 10:29:51 2017-02-23 10:29:51 2017-02-23 10:29:51
-#&gt; 2:      2 2017-02-23 10:29:51 2017-02-23 10:29:51 2017-02-23 10:29:51
-#&gt; 3:      3 2017-02-23 10:29:51 2017-02-23 10:29:51 2017-02-23 10:29:51
+#&gt; 1:      1 2017-04-20 12:08:12 2017-04-20 12:08:12 2017-04-20 12:08:12
+#&gt; 2:      2 2017-04-20 12:08:12 2017-04-20 12:08:12 2017-04-20 12:08:12
+#&gt; 3:      3 2017-04-20 12:08:12 2017-04-20 12:08:12 2017-04-20 12:08:13
 #&gt;                                      error memory      batch.id log.file
 #&gt; 1: Error in (function (x)  : x must be &gt; 0     NA cfInteractive       NA
 #&gt; 2:                                      NA     NA cfInteractive       NA
 #&gt; 3:                                      NA     NA cfInteractive       NA
 #&gt;                               job.hash time.queued time.running   pars
-#&gt; 1: job80e4783fc6c71af64b7d9fb412ddd689      0 secs       0 secs &lt;list&gt;
-#&gt; 2: job578ea80518c6db75c639e2bb8d7a8740      0 secs       0 secs &lt;list&gt;
-#&gt; 3: jobc7011440f7623b2267543022a5986cea      0 secs       0 secs &lt;list&gt;
+#&gt; 1: jobafaaf049f3c25713ded0761afb34235b      0 secs       0 secs &lt;list&gt;
+#&gt; 2: job3125ad762aadc12e1f59c51ac3c683ff      0 secs       0 secs &lt;list&gt;
+#&gt; 3: job4412281d6f41a843b319e850715c19c7      0 secs       1 secs &lt;list&gt;
 #&gt;    resources      tags
 #&gt; 1:    &lt;list&gt;      tag1
 #&gt; 2:    &lt;list&gt; tag1,tag2

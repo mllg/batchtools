@@ -19,9 +19,10 @@
 \usage{
 findJobs(expr, ids = NULL, reg = getDefaultRegistry())
 
-findExperiments(prob.name = NA_character_, prob.pattern = NA_character_,
-  algo.name = NA_character_, algo.pattern = NA_character_, prob.pars,
-  algo.pars, repls = NULL, ids = NULL, reg = getDefaultRegistry())
+findExperiments(ids = NULL, prob.name = NA_character_,
+  prob.pattern = NA_character_, algo.name = NA_character_,
+  algo.pattern = NA_character_, prob.pars, algo.pars, repls = NULL,
+  reg = getDefaultRegistry())
 
 findSubmitted(ids = NULL, reg = getDefaultRegistry())
 
@@ -56,13 +57,14 @@ Jobs for which \code{expr} evaluates to \code{TRUE} are returned.}
 A \code{\link[base]{data.frame}} (or \code{\link[data.table]{data.table}})
 with a column named \dQuote{job.id}.
 Alternatively, you may also pass a vector of integerish job ids.
-If not set, defaults to all jobs.}
+If not set, defaults to all jobs.
+Invalid ids are ignored.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 
 \item{prob.name}{[\code{character}]\cr
-Fixed string to match problem names.
+Exact name of the problem (no substring matching).
 If not provided, all problems are matched.}
 
 \item{prob.pattern}{[\code{character}]\cr
@@ -70,7 +72,7 @@ Regular expression pattern to match problem names.
 If not provided, all problems are matched.}
 
 \item{algo.name}{[\code{character}]\cr
-Fixed string to match algorithm names.
+Exact name of the problem (no substring matching).
 If not provided, all algorithms are matched.}
 
 \item{algo.pattern}{[\code{character}]\cr

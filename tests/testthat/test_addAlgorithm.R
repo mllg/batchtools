@@ -22,3 +22,20 @@ test_that("addAlgorithm", {
   expect_set_equal(as.character(getJobPars(reg = reg)$algorithm), "a2")
   checkTables(reg)
 })
+
+
+test_that("addAlgorithm overwrites old algo", {
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) 2)
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) instance * 2)
+  ids = addExperiments(list(p1 = data.table()), list(a1 = data.table()), reg = reg)
+  run = function(id) suppressAll(execJob(makeJob(id, reg = reg)))
+
+  expect_equal(run(1), 4)
+
+  prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) 4)
+  expect_equal(run(1), 8)
+
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) instance * 8)
+  expect_equal(run(1), 32)
+})

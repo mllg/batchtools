@@ -20,7 +20,8 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsTORQUE = function(template = findTemplateFile("torque"), scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1, fs.latency = 65) { # nocov start
+  template = findTemplateFile(template)
   template = cfReadBrewTemplate(template, "##")
 
   submitJob = function(reg, jc) {
@@ -28,7 +29,7 @@ makeClusterFunctionsTORQUE = function(template = findTemplateFile("torque"), sch
     assertClass(jc, "JobCollection")
 
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("qsub", outfile)
+    res = runOSCommand("qsub", shQuote(outfile))
 
     max.jobs.msg = "Maximum number of jobs already in queue"
     output = stri_flatten(stri_trim_both(res$output), "\n")
