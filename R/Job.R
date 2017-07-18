@@ -71,15 +71,10 @@ Experiment = R6Class("Experiment", cloneable = FALSE, inherit = BaseJob,
       p = self$problem
       seed = if (is.null(p$seed)) self$seed else c(p$seed, self$repl - 1L)
       rng = getRNG("mersenne", seed[1L], seed[2L])
-      catf("Setting prob seed: %i/%i", seed[1], seed[2])
+      # catf("Setting prob seed: %i/%i", seed[1], seed[2])
       on.exit(rng$restore())
       wrapper = function(...) p$fun(job = self, data = p$data, ...)
       do.call(wrapper, self$pars$prob.pars, envir = .GlobalEnv)
-    },
-    external.dir = function() {
-      path = file.path(self$cache$file.dir, "external", self$id)
-      dir.create(path, recursive = TRUE, showWarnings = FALSE)
-      path
     }
   )
 )
@@ -154,7 +149,7 @@ makeJob = function(id, reader = NULL, reg = getDefaultRegistry()) {
 makeJob.Registry = function(id, reader = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Job$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Job$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, pars = row$pars[[1L]], seed = c(reg$seed, row$job.id),
     resources = resources)
 }
 
@@ -162,7 +157,7 @@ makeJob.Registry = function(id, reader = NULL, reg = getDefaultRegistry()) {
 makeJob.ExperimentRegistry = function(id, reader = NULL, reg = getDefaultRegistry()) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "pars", "problem", "algorithm", "repl", "resource.id"))
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Experiment$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, pars = row$pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Experiment$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, pars = row$pars[[1L]], seed = c(reg$seed, row$job.id),
     repl = row$repl, resources = resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
@@ -172,11 +167,11 @@ getJob = function(jc, i, reader = NULL) {
 
 getJob.JobCollection = function(jc, i, reader = RDSReader$new(FALSE)) {
   row = jc$jobs[i]
-  Job$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id), resources = jc$resources)
+  Job$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, pars = row$pars[[1L]], seed = c(jc$seed, row$job.id), resources = jc$resources)
 }
 
 getJob.ExperimentCollection = function(jc, i, reader = RDSReader$new(FALSE)) {
   row = jc$jobs[i]
-  Experiment$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, pars = row$pars[[1L]], seed = getSeed(jc$seed, row$job.id),
+  Experiment$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, pars = row$pars[[1L]], seed = c(jc$seed, row$job.id),
     repl = row$repl, resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm)
 }

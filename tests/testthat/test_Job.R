@@ -91,4 +91,6 @@ test_that("External directory is created", {
   sweepRegistry(reg = reg)
   expect_true(file.exists(file.path(reg$file.dir, "external", "1", "1.rds")))
   expect_identical(loadResult(1, reg = reg), "1.rds")
+
+  checkTables(reg)
 })
