@@ -268,5 +268,5 @@ findTagged = function(tags = character(0L), ids = NULL, reg = getDefaultRegistry
   assertCharacter(tags, any.missing = FALSE, pattern = "^[[:alnum:]_.]+$", min.len = 1L)
   tag = NULL
 
-  ids[unique(reg$tags[tag %in% tags, "job.id"], by = "job.id")]
+  ids[unique(reg$tags[tag %chin% tags, "job.id"], by = "job.id")]
 }
