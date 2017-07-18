@@ -32,7 +32,8 @@ execJob.JobCollection = function(job) {
 
 #' @export
 execJob.Job = function(job) {
-  rng = getRNG("mersenne", job$seed[1L], job$seed[2L])
+  print(job$resources)
+  rng = getRNG(job$resources$rng.kind %??% "mersenne", job$seed[1L], job$seed[2L])
   on.exit(rng$restore())
 
   if (".job" %chin% names(formals(job$fun))) {
@@ -50,7 +51,7 @@ execJob.Experiment = function(job) {
   job$allow.access.to.instance = FALSE
 
   catf("Applying algorithm '%s' on problem '%s' ...", job$algo.name, job$prob.name)
-  rng = getRNG("mersenne", job$seed[1L], job$seed[2L])
+  rng = getRNG(job$resources$rng.kind %??% "mersenne", job$seed[1L], job$seed[2L])
   on.exit(rng$restore())
   wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, instance = instance, ...)
   do.call(wrapper, job$pars$algo.pars, envir = .GlobalEnv)

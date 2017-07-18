@@ -51,7 +51,7 @@ RNGMersenne = R6Class("RNGMersenne",
       private$i = private$i + 1L
       if (private$i > length(self$states))
         stop("No more RNG Streams remaining")
-      set.seed(self$states[private$i])
+      set.seed(self$states[private$i], kind = self$kind)
     }
   ),
 

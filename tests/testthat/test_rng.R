@@ -124,10 +124,6 @@ test_that("L'Ecuyer", {
   rng$restore()
 })
 
-test_that("start + 0", {
-  rng = getRNG("mersenne", 123, 1)
-})
-
 test_that("Problem and Algorithm seed", {
   reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE, seed = 42)
   addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) runif(1), seed = 1L)
@@ -158,4 +154,23 @@ test_that("Problem and Algorithm seed", {
     results = rbindlist(reduceResultsList(ids, reg = reg))
   })
   expect_true(all(results$instance == p2))
+})
+
+
+test_that("resources$rng.kind is used", {
+  reg = makeRegistry(NA, make.default = FALSE, seed = 99L)
+  batchMap(function(...) runif(1), i = 1:3, reg = reg)
+  submitAndWait(reg = reg)
+  mersenne = as.numeric(reduceResultsList(reg = reg))
+
+  submitAndWait(ids = 1:3, reg = reg, resources = list(rng.kind = "lecuyer"))
+  lecuyer = as.numeric(reduceResultsList(reg = reg))
+
+  set.seed(100L); runif(1)
+  set.seed(101L); runif(1)
+  set.seed(102L); runif(1)
+  mersenne
+
+  with_rng("L'Ecuyer-CMRG", {set.seed(99); runif(1)})
+  with_rng("L'Ecuyer-CMRG", {set.seed(101); runif(1)})
 })
