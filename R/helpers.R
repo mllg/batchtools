@@ -10,7 +10,7 @@ auto_increment = function(ids, n = 1L) {
 }
 
 ustamp = function() {
-  round(as.numeric(Sys.time(), 4L))
+  round(as.numeric(Sys.time()), 4L)
 }
 
 names2 = function (x, missing.val = NA_character_) {
