@@ -2,11 +2,13 @@
 #'
 #' @description
 #' These functions are used to find and filter jobs, depending on either their parameters (\code{findJobs} and
-#' \code{findExperiments}), their tags (\code{findTagged}), or their computational status (all other functions).
+#' \code{findExperiments}), their tags (\code{findTagged}), or their computational status (all other functions,
+#' see \code{\link{getStatus}} for an overview).
 #'
-#' For a summarizing overview over the status, see \code{\link{getStatus}}.
-#' Note that \code{findOnSystem} and \code{findExpired} are somewhat heuristic and may report misleading results,
-#' depending on the state of the system and the \code{\link{ClusterFunctions}} implementation.
+#' Note that \code{findQueued}, \code{findRunning}, \code{findOnSystem} and \code{findExpired} are somewhat heuristic
+#' and may report misleading results, depending on the state of the system and the \code{\link{ClusterFunctions}} implementation.
+#'
+#' See \code{\link{JoinTables}} for convenient set operations (unions, intersects, differences) on tables with job ids.
 #'
 #' @param expr [\code{expression}]\cr
 #'   Predicate expression evaluated in the job parameters.
@@ -15,6 +17,7 @@
 #' @template ids
 #' @template reg
 #' @return [\code{\link{data.table}}] with column \dQuote{job.id} containing matched jobs.
+#' @seealso \code{\link{getStatus}} \code{\link{JoinTables}}<`3`>
 #' @export
 #' @examples
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
