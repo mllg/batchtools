@@ -231,7 +231,7 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
 
   if (length(x$source) > 0L) {
     for (fn in x$source) {
-      sys.source(fn, envir = .GlobalEnv)
+      ok = try(sys.source(fn, envir = .GlobalEnv))
       if (is.error(ok))
         stopf("Error sourcing file '%s': %s", fn, as.character(ok))
     }
