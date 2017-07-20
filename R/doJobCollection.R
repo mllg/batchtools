@@ -89,7 +89,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
 
   # load registry dependencies: packages, source files, ...
   # note that this should happen _before_ parallelMap is initialized
-  ok = try(loadRegistryDependencies(jc, switch.wd = FALSE), silent = TRUE)
+  ok = try(loadRegistryDependencies(jc), silent = TRUE)
   if (is.error(ok))
     return(error("Error loading registry dependencies: %s", as.character(ok)))
 

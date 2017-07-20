@@ -7,7 +7,7 @@ test_that("export works", {
   expect_set_equal(names(x), c("name", "uri"))
   expect_equal(x$name, "exported_obj")
   expect_file_exists(file.path(reg$file.dir, "exports", mangle("exported_obj")))
-  loadRegistryDependencies(reg)
+  withr::with_dir(reg$work.dir, loadRegistryDependencies(reg))
   expect_equal(get("exported_obj", envir = .GlobalEnv), 42L)
 
   x = batchExport(reg = reg)
@@ -35,7 +35,7 @@ test_that("export works with funny variable names", {
   expect_set_equal(names(x), c("name", "uri"))
   expect_equal(x$name, "%bla%")
   expect_file_exists(file.path(reg$file.dir, "exports", mangle("%bla%")))
-  loadRegistryDependencies(reg)
+  withr::with_dir(reg$work.dir, loadRegistryDependencies(reg))
   expect_function(get("%bla%", envir = .GlobalEnv))
   expect_equal(1 %bla% 2, 42)
 

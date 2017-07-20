@@ -64,11 +64,13 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
     reg$work.dir = npath(work.dir)
   }
 
-  wd.exists = dir.exists(reg$work.dir)
-  if (!wd.exists)
+  if (dir.exists(reg$work.dir)) {
+    with_dir(reg$work.dir, loadRegistryDependencies(reg))
+  } else {
     warningf("The work.dir '%s' does not exist, jobs might fail to run on this system.", reg$work.dir)
+    loadRegistryDependencies(reg)
+  }
 
-  loadRegistryDependencies(reg, switch.wd = wd.exists)
   reg$cluster.functions = makeClusterFunctionsInteractive()
   setSystemConf(reg, conf.file)
   if (make.default)

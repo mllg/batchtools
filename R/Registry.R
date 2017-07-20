@@ -170,7 +170,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
     dir.create(d, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)
 
-  loadRegistryDependencies(list(file.dir = file.dir, work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
+  with_dir(reg$work.dir, loadRegistryDependencies(reg))
 
   class(reg) = "Registry"
   saveRegistry(reg)
@@ -212,7 +212,7 @@ assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, 
   invisible(TRUE)
 }
 
-loadRegistryDependencies = function(x, switch.wd = TRUE) {
+loadRegistryDependencies = function(x) {
   "!DEBUG [loadRegistryDependencies]: Starting ..."
   pkgs = union(x$packages, "methods")
   ok = vlapply(pkgs, require, character.only = TRUE)
@@ -222,12 +222,6 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
   ok = vlapply(x$namespaces, requireNamespace)
   if (!all(ok))
     stopf("Failed to load namespaces: %s", stri_flatten(x$namespaces[!ok], ", "))
-
-  if (switch.wd) {
-    wd = getwd()
-    on.exit(setwd(wd))
-    setwd(x$work.dir)
-  }
 
   if (length(x$source) > 0L) {
     for (fn in x$source) {

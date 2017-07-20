@@ -39,7 +39,8 @@ Imports:
     rappdirs,
     stats,
     stringi,
-    utils
+    utils,
+    withr
 Suggests:
     debugme,
     e1071,
@@ -50,7 +51,6 @@ Suggests:
     rpart,
     snow,
     testthat,
-    tibble,
-    withr
+    tibble
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1

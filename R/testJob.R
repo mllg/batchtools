@@ -49,7 +49,9 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
       return(readRDS(fn.res))
     stopf("testJob() failed for job with id=%i. To properly debug, re-run with external=FALSE", id$job.id)
   } else {
-    loadRegistryDependencies(reg, switch.wd = TRUE)
-    execJob(job = makeJob(id, reg = reg))
+    with_dir(reg$work.dir, {
+      loadRegistryDependencies(reg)
+      execJob(job = makeJob(id, reg = reg))
+    })
   }
 }
