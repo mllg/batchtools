@@ -23,7 +23,7 @@ getResultFiles = function(reg, ids) {
 }
 
 getLogFiles = function(reg, ids) {
-  job.hash = NULL
+  job.hash = log.file = NULL
   tab = reg$status[list(ids), c("job.id", "job.hash", "log.file")]
   tab[is.na(log.file) & !is.na(job.hash), log.file := sprintf("%s.log", job.hash)]
   tab[!is.na(log.file), log.file := fp(dir(reg, "logs"), log.file)]$log.file
