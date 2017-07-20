@@ -50,7 +50,7 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
     stopf("testJob() failed for job with id=%i. To properly debug, re-run with external=FALSE", id$job.id)
   } else {
     with_dir(reg$work.dir, {
-      loadRegistryDependencies(reg)
+      loadRegistryDependencies(reg, must.work = TRUE)
       execJob(job = makeJob(id, reg = reg))
     })
   }

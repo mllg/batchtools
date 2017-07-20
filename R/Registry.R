@@ -212,22 +212,23 @@ assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, 
   invisible(TRUE)
 }
 
-loadRegistryDependencies = function(x) {
+loadRegistryDependencies = function(x, must.work = FALSE) {
   "!DEBUG [loadRegistryDependencies]: Starting ..."
   pkgs = union(x$packages, "methods")
+  handler = if (must.work) stopf else warningf
   ok = vlapply(pkgs, require, character.only = TRUE)
   if (!all(ok))
-    stopf("Failed to load packages: %s", stri_flatten(pkgs[!ok], ", "))
+    handler("Failed to load packages: %s", stri_flatten(pkgs[!ok], ", "))
 
   ok = vlapply(x$namespaces, requireNamespace)
   if (!all(ok))
-    stopf("Failed to load namespaces: %s", stri_flatten(x$namespaces[!ok], ", "))
+    handler("Failed to load namespaces: %s", stri_flatten(x$namespaces[!ok], ", "))
 
   if (length(x$source) > 0L) {
     for (fn in x$source) {
-      ok = try(sys.source(fn, envir = .GlobalEnv))
+      ok = try(sys.source(fn, envir = .GlobalEnv), silent = TRUE)
       if (is.error(ok))
-        stopf("Error sourcing file '%s': %s", fn, as.character(ok))
+        handler("Failed to source file '%s': %s", fn, as.character(ok))
     }
   }
 
@@ -235,7 +236,7 @@ loadRegistryDependencies = function(x) {
     for (fn in x$load) {
       ok = try(load(fn, envir = .GlobalEnv), silent = TRUE)
       if (is.error(ok))
-        stopf("Error loading file '%s': %s", fn, as.character(ok))
+        handler("Failed to load file '%s': %s", fn, as.character(ok))
     }
   }
 

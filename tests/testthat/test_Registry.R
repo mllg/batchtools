@@ -85,6 +85,14 @@ test_that("loadRegistry", {
   expect_null(x$cluster.functions)
 })
 
+test_that("loadRegistry with missing dependencies is still usable (#122)", {
+  expect_warning(reg <- makeRegistry(file.dir = NA, make.default = FALSE, source = tempfile()), "Failed to source")
+  saveRegistry(reg)
+  expect_warning(loadRegistry(reg$file.dir), "Failed to source")
+  batchMap(identity, 1, reg = reg)
+  expect_error(testJob(1, external = FALSE, reg = reg), "Failed to source file")
+})
+
 test_that("clearRegistry", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   reg$foo = TRUE
