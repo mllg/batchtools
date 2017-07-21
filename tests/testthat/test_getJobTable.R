@@ -149,3 +149,22 @@ test_that("flatten autodetection", {
   expect_data_table(tab, ncols = 2, key = "job.id")
   expect_set_equal(names(tab), c("job.id", "pars"))
 })
+
+test_that("flatten heuristic for experiment registries (#123)", {
+  tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+
+  fun = function(job, data, n, mean, sd, ...) rnorm(sum(n), mean = mean, sd = sd)
+  addProblem("rnorm", fun = fun, reg = tmp)
+  fun = function(instance, ...) sd(instance)
+  addAlgorithm("deviation", fun = fun, reg = tmp)
+
+  prob.designs = algo.designs = list()
+  prob.designs$rnorm = data.table(expand.grid(n = list(100, 1:4), mean = 0, sd = 1:2))
+  algo.designs$deviation = data.table()
+  addExperiments(prob.designs, algo.designs, reg = tmp)
+  submitAndWait(reg = tmp)
+
+  res = getJobPars(reg = tmp)
+  expect_data_table(res, ncol = 4)
+  expect_list(res$pars, len = 4)
+})
