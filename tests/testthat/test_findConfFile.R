@@ -5,6 +5,6 @@ test_that("findConfFile", {
   fn = file.path(d, "batchtools.conf.R")
   writeLines("hello", fn)
   withr::with_dir(d,
-    expect_equal(findConfFile(), normalizePath(fn))
+    expect_equal(findConfFile(), normalizePath(fn, winslash = "/"))
   )
 })
