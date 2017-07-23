@@ -20,7 +20,7 @@ removeExperiments = function(ids = NULL, reg = getDefaultRegistry()) {
   reg$status = reg$status[!ids]
   i = reg$defs[!reg$status, on = "def.id", which = TRUE]
   if (length(i) > 0L) {
-    info("Cleaning up %i job definitions ...", length(i))
+    info("Removing %i job definitions ...", length(i))
     reg$defs = reg$defs[-i]
   }
   fns = getResultFiles(reg, ids)
