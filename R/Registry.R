@@ -148,6 +148,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
     batch.id    = character(0L),
     log.file    = character(0L),
     job.hash    = character(0L),
+    job.name    = character(0L),
     key         = "job.id")
 
   reg$resources = data.table(
