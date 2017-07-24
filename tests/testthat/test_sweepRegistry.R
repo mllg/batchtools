@@ -7,19 +7,19 @@ test_that("sweepRegistry", {
 
   submitAndWait(reg, 1, resources = list(foo = 1))
   submitAndWait(reg, 1, resources = list(foo = 2))
-  writeRDS(makeJobCollection(1, reg = reg), file.path(reg$file.dir, "jobs", "test.rds"))
+  writeRDS(makeJobCollection(1, reg = reg), fp(reg$file.dir, "jobs", "test.rds"))
 
   expect_data_table(reg$resources, nrow = 2)
   expect_character(list.files(dir(reg, "logs")), len = 2L)
-  expect_character(list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.rds$"), len = 1L + (array.jobs && reg$cluster.functions$store.job) * 2L)
-  expect_character(list.files(file.path(reg$file.dir, "jobs"), pattern = "\\.job$"), len = (batchtools$debug && array.jobs) * 2L)
+  expect_character(list.files(fp(reg$file.dir, "jobs"), pattern = "\\.rds$"), len = 1L + (array.jobs && reg$cluster.functions$store.job) * 2L)
+  expect_character(list.files(fp(reg$file.dir, "jobs"), pattern = "\\.job$"), len = (batchtools$debug && array.jobs) * 2L)
 
   expect_true(sweepRegistry(reg))
 
   expect_data_table(reg$resources, nrow = 1)
   expect_character(list.files(dir(reg, "logs")), len = 1L)
   if (reg$cluster.functions$store.job)
-    expect_character(list.files(file.path(reg$file.dir, "jobs")), len = 0L)
+    expect_character(list.files(fp(reg$file.dir, "jobs")), len = 0L)
   checkTables(reg)
 
 

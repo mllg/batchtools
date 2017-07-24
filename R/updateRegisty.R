@@ -23,12 +23,12 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
 
   if (reg$version < "0.9.1-9001") {
     ### hotfix for base32 encoding of exports
-    fns = list.files(file.path(reg$file.dir, "exports"), pattern = "\\.rds$", all.files = TRUE, no.. = TRUE)
+    fns = list.files(fp(reg$file.dir, "exports"), pattern = "\\.rds$", all.files = TRUE, no.. = TRUE)
     if (length(fns)) {
       info("Renaming export files")
       file.rename(
-        file.path(reg$file.dir, fns),
-        file.path(reg$file.dir, mangle(stri_sub(fns, to = -5L)))
+        fp(reg$file.dir, fns),
+        fp(reg$file.dir, mangle(stri_sub(fns, to = -5L)))
       )
     }
   }
@@ -36,9 +36,9 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
   if (reg$version < "0.9.1-9002" && inherits(reg, "ExperimentRegistry")) {
     info("Renaming problems and algorithm files")
     for (prob in getProblemIds(reg))
-      file.rename(file.path(reg$file.dir, "problems", sprintf("%s.rds", digest(prob))), getProblemURI(reg, prob))
+      file.rename(fp(reg$file.dir, "problems", sprintf("%s.rds", digest(prob))), getProblemURI(reg, prob))
     for (algo in getAlgorithmIds(reg))
-      file.rename(file.path(reg$file.dir, "algorithms", sprintf("%s.rds", digest(algo))), getAlgorithmURI(reg, algo))
+      file.rename(fp(reg$file.dir, "algorithms", sprintf("%s.rds", digest(algo))), getAlgorithmURI(reg, algo))
   }
 
   reg$version = pv

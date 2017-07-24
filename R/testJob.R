@@ -34,12 +34,12 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
 
   if (external) {
     td      = normalizePath(tempdir(), winslash = "/")
-    fn.r    = file.path(td, "batchtools-testJob.R")
-    fn.jc   = file.path(td, "batchtools-testJob.jc")
-    fn.res  = file.path(td, "batchtools-testJob.rds")
+    fn.r    = fp(td, "batchtools-testJob.R")
+    fn.jc   = fp(td, "batchtools-testJob.jc")
+    fn.res  = fp(td, "batchtools-testJob.rds")
 
     writeRDS(makeJobCollection(id, reg = reg), file = fn.jc)
-    brew(file = system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE),
+    brew(file = system.file(fp("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE),
       output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))
 
     res = runOSCommand(Rscript(), normalizePath(fn.r, winslash = "/"))

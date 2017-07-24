@@ -18,8 +18,8 @@ loadRegistry = function(file.dir = getwd(), work.dir = NULL, conf.file = findCon
   assertFlag(update.paths)
 
   readRegistry = function() {
-    fn.old = file.path(file.dir, "registry.rds")
-    fn.new = file.path(file.dir, "registry.new.rds")
+    fn.old = fp(file.dir, "registry.rds")
+    fn.new = fp(file.dir, "registry.new.rds")
 
     if (file.exists(fn.new)) {
       reg = try(readRDS(fn.new), silent = TRUE)

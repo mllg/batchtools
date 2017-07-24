@@ -76,7 +76,7 @@ test_that("Special chars in directory names", {
   base.dir = tempfile(pattern = "test", tmpdir = dirname(reg$file.dir))
   dir.create(base.dir, recursive = TRUE)
 
-  file.dir = file.path(base.dir, "test#some_frequently-used chars")
+  file.dir = fp(base.dir, "test#some_frequently-used chars")
   reg = makeRegistry(file.dir, make.default = FALSE)
   batchMap(identity, 1:2, reg = reg)
   submitAndWait(reg = reg)

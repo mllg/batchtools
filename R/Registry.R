@@ -166,7 +166,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   if (is.na(file.dir))
     reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
   "!DEBUG [makeRegistry]: Creating directories in '`reg$file.dir`'"
-  for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
+  for (d in fp(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
     dir.create(d, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)
 
@@ -240,13 +240,13 @@ loadRegistryDependencies = function(x, must.work = FALSE) {
     }
   }
 
-  path = file.path(x$file.dir, "exports")
+  path = fp(x$file.dir, "exports")
   fns = list.files(path, pattern = "\\.rds$")
   if (length(fns) > 0L) {
     ee = .GlobalEnv
     Map(function(name, fn) {
       assign(x = name, value = readRDS(fn), envir = ee)
-    }, name = unmangle(fns), fn = file.path(path, fns))
+    }, name = unmangle(fns), fn = fp(path, fns))
   }
 
   invisible(TRUE)

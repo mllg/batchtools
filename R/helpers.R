@@ -135,7 +135,7 @@ stri_trunc = function(str, length, append = "") {
 }
 
 Rscript = function() {
-  file.path(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
+  fp(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
 }
 
 getSeed = function(start.seed, id) {

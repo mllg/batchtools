@@ -181,7 +181,7 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 cfBrewTemplate = function(reg, text, jc) {
   assertString(text)
 
-  outfile = if (batchtools$debug) file.path(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
+  outfile = if (batchtools$debug) fp(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
   parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
   "!DEBUG [cfBrewTemplate]: Brewing template to file '`outfile`'"
@@ -291,11 +291,11 @@ findTemplateFile = function(name) {
   if (file.exists(x))
     return(normalizePath(x, winslash = "/"))
 
-  x = file.path(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", name))
+  x = fp(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", name))
   if (file.exists(x))
     return(x)
 
-  x = file.path("~", sprintf(".batchtools.%s.tmpl", name))
+  x = fp("~", sprintf(".batchtools.%s.tmpl", name))
   if (file.exists(x))
     return(normalizePath(x, winslash = "/"))
 

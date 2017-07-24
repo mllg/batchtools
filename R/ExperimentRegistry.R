@@ -52,8 +52,8 @@ makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), con
   reg = makeRegistry(file.dir = file.dir, work.dir = work.dir, conf.file = conf.file,
     packages = packages, namespaces = namespaces, source = source, load = load, seed = seed, make.default = make.default)
 
-  dir.create(file.path(reg$file.dir, "problems"))
-  dir.create(file.path(reg$file.dir, "algorithms"))
+  dir.create(fp(reg$file.dir, "problems"))
+  dir.create(fp(reg$file.dir, "algorithms"))
 
   reg$status$repl = integer(0L)
   reg$defs$problem = factor(character(0L))
