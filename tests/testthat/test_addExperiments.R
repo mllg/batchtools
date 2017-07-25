@@ -58,6 +58,17 @@ test_that("addExperiments / user provided designs", {
   ids = addExperiments(reg = reg, prob.designs = prob.designs, algo.designs = algo.designs, combine = "crossprod")
   expect_data_table(ids, nrow = 12, key = "job.id")
   expect_data_table(getJobPars(reg = reg), nrow = 28)
+
+  pd = list(p1 = data.frame(foo = letters[1:2]))
+  withr::with_options(list(stringsAsFactors = NULL), {
+    expect_warning(addExperiments(reg = reg, prob.designs = pd), "stringsAsFactors")
+  })
+  withr::with_options(list(stringsAsFactors = TRUE), {
+    expect_warning(addExperiments(reg = reg, prob.designs = pd), "stringsAsFactors")
+  })
+  withr::with_options(list(stringsAsFactors = FALSE), {
+    addExperiments(reg = reg, prob.designs = pd)
+  })
 })
 
 if (FALSE) {
@@ -68,7 +79,7 @@ if (FALSE) {
   prob.designs = list(p1 = data.table(x = 1:500))
   algo.designs = list(a1 = data.table(y = 1:20), a2 = data.table(y = 1:20))
   repls = 2
-  profvis(addExperiments(prob.designs, algo.designs = algo.designs, repls = repls, reg = reg))
+  profvis::profvis(addExperiments(prob.designs, algo.designs = algo.designs, repls = repls, reg = reg))
   ids = findExperiments(reg = reg)
-  profvis(submitJobs(ids = s.chunk(ids), reg = reg))
+  profvis::profvis(submitJobs(ids = s.chunk(ids), reg = reg))
 }

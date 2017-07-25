@@ -43,7 +43,7 @@ test_that("doJobCollection signals slave errors", {
   writeLines("x <- y_on_master", fn)
   rm(y_on_master, envir = .GlobalEnv)
 
-  expect_error(loadRegistryDependencies(reg), "y_on_master")
+  expect_error(withr::with_dir(reg$work.dir, loadRegistryDependencies(reg, must.work = TRUE)), "y_on_master")
   batchMap(identity, 1, reg = reg)
   submitAndWait(reg, 1)
   expect_data_table(findErrors(reg = reg), nrow = 1)

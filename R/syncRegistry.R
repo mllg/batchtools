@@ -10,7 +10,7 @@
 #' @export
 syncRegistry = function(reg = getDefaultRegistry()) {
   "!DEBUG [syncRegistry]: Triggered syncRegistry"
-  fns = list.files(getUpdatePath(reg), full.names = TRUE)
+  fns = list.files(dir(reg, "updates"), full.names = TRUE)
   if (length(fns) == 0L)
     return(invisible(TRUE))
 
@@ -29,7 +29,7 @@ syncRegistry = function(reg = getDefaultRegistry()) {
   })
 
   failed = vlapply(updates, is.null)
-  updates = rbindlist(updates)
+  updates = rbindlist(updates, fill = TRUE)
 
   if (nrow(updates) > 0L) {
     expr = quote(`:=`(started = i.started, done = i.done, error = i.error, memory = i.memory))

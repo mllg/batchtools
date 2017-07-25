@@ -79,7 +79,7 @@
 #'   \describe{
 #'     \item{\code{file.dir} [path]:}{File directory.}
 #'     \item{\code{work.dir} [path]:}{Working directory.}
-#'     \item{\code{temp.dir} [path]:}{Temporary directory. Used if \code{file.dir} is \code{NA}.}
+#'     \item{\code{temp.dir} [path]:}{Temporary directory. Used if \code{file.dir} is \code{NA} to create temporary registries.}
 #'     \item{\code{packages} [character()]:}{Packages to load on the slaves.}
 #'     \item{\code{namespaces} [character()]:}{Namespaces to load on the slaves.}
 #'     \item{\code{seed} [integer(1)]:}{Registry seed. Before each job is executed, the seed \code{seed + job.id} is set.}
@@ -166,11 +166,11 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   if (is.na(file.dir))
     reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
   "!DEBUG [makeRegistry]: Creating directories in '`reg$file.dir`'"
-  for (d in file.path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
+  for (d in fp(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
     dir.create(d, recursive = TRUE)
   reg$file.dir = npath(reg$file.dir)
 
-  loadRegistryDependencies(list(file.dir = file.dir, work.dir = work.dir, packages = packages, namespaces = namespaces, source = source, load = load), switch.wd = TRUE)
+  with_dir(reg$work.dir, loadRegistryDependencies(reg))
 
   class(reg) = "Registry"
   saveRegistry(reg)
@@ -212,28 +212,23 @@ assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, 
   invisible(TRUE)
 }
 
-loadRegistryDependencies = function(x, switch.wd = TRUE) {
+loadRegistryDependencies = function(x, must.work = FALSE) {
   "!DEBUG [loadRegistryDependencies]: Starting ..."
   pkgs = union(x$packages, "methods")
+  handler = if (must.work) stopf else warningf
   ok = vlapply(pkgs, require, character.only = TRUE)
   if (!all(ok))
-    stopf("Failed to load packages: %s", stri_flatten(pkgs[!ok], ", "))
+    handler("Failed to load packages: %s", stri_flatten(pkgs[!ok], ", "))
 
   ok = vlapply(x$namespaces, requireNamespace)
   if (!all(ok))
-    stopf("Failed to load namespaces: %s", stri_flatten(x$namespaces[!ok], ", "))
-
-  if (switch.wd) {
-    wd = getwd()
-    on.exit(setwd(wd))
-    setwd(x$work.dir)
-  }
+    handler("Failed to load namespaces: %s", stri_flatten(x$namespaces[!ok], ", "))
 
   if (length(x$source) > 0L) {
     for (fn in x$source) {
-      sys.source(fn, envir = .GlobalEnv)
+      ok = try(sys.source(fn, envir = .GlobalEnv), silent = TRUE)
       if (is.error(ok))
-        stopf("Error sourcing file '%s': %s", fn, as.character(ok))
+        handler("Failed to source file '%s': %s", fn, as.character(ok))
     }
   }
 
@@ -241,17 +236,17 @@ loadRegistryDependencies = function(x, switch.wd = TRUE) {
     for (fn in x$load) {
       ok = try(load(fn, envir = .GlobalEnv), silent = TRUE)
       if (is.error(ok))
-        stopf("Error loading file '%s': %s", fn, as.character(ok))
+        handler("Failed to load file '%s': %s", fn, as.character(ok))
     }
   }
 
-  path = file.path(x$file.dir, "exports")
+  path = fp(x$file.dir, "exports")
   fns = list.files(path, pattern = "\\.rds$")
   if (length(fns) > 0L) {
     ee = .GlobalEnv
     Map(function(name, fn) {
       assign(x = name, value = readRDS(fn), envir = ee)
-    }, name = unmangle(fns), fn = file.path(path, fns))
+    }, name = unmangle(fns), fn = fp(path, fns))
   }
 
   invisible(TRUE)

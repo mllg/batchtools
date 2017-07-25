@@ -9,7 +9,7 @@
 #' @templateVar ids.default none
 #' @template ids
 #' @template expreg
-#' @return [\code{\link{data.table}}] of removed job ids.
+#' @return [\code{\link{data.table}}] of removed job ids, invisibly.
 #' @export
 #' @family Experiment
 removeExperiments = function(ids = NULL, reg = getDefaultRegistry()) {
@@ -20,12 +20,12 @@ removeExperiments = function(ids = NULL, reg = getDefaultRegistry()) {
   reg$status = reg$status[!ids]
   i = reg$defs[!reg$status, on = "def.id", which = TRUE]
   if (length(i) > 0L) {
-    info("Cleaning up %i job definitions ...", length(i))
+    info("Removing %i job definitions ...", length(i))
     reg$defs = reg$defs[-i]
   }
   fns = getResultFiles(reg, ids)
   file.remove.safely(fns)
 
   sweepRegistry(reg)
-  return(ids)
+  invisible(ids)
 }

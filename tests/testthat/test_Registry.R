@@ -6,8 +6,8 @@ test_that("makeRegistry", {
   expect_true(is.environment(reg))
   expect_directory(reg$file.dir, access = "rw")
   expect_directory(reg$work.dir, access = "r")
-  expect_directory(file.path(reg$file.dir, c("jobs", "results", "updates", "logs")))
-  expect_file(file.path(reg$file.dir, "registry.rds"))
+  expect_directory(fp(reg$file.dir, c("jobs", "results", "updates", "logs")))
+  expect_file(fp(reg$file.dir, "registry.rds"))
   expect_character(reg$packages, any.missing = FALSE)
   expect_character(reg$namespaces, any.missing = FALSE)
   expect_int(reg$seed, na.ok = FALSE)
@@ -51,10 +51,10 @@ test_that("make.default does work", {
 test_that("extra files are loaded", {
   wd = tempfile()
   dir.create(wd, recursive = TRUE)
-  dir.create(file.path(wd, "subdir"), recursive = TRUE)
+  dir.create(fp(wd, "subdir"), recursive = TRUE)
 
   # define some files to source/load
-  fn = list(source = file.path(wd, "src_file.r"), load = file.path(wd, "subdir", "load_file.RData"))
+  fn = list(source = fp(wd, "src_file.r"), load = fp(wd, "subdir", "load_file.RData"))
   writeLines("x_from_source = 123", con = fn$source)
   x_from_load = 321
   save(x_from_load, file = fn$load)
@@ -66,7 +66,7 @@ test_that("extra files are loaded", {
   rm("x_from_source", envir = .GlobalEnv)
   rm("x_from_load", envir = .GlobalEnv)
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE, work.dir = wd, source = basename(fn$source), load = file.path("subdir", basename(fn$load)))
+  reg = makeRegistry(file.dir = NA, make.default = FALSE, work.dir = wd, source = basename(fn$source), load = fp("subdir", basename(fn$load)))
   expect_identical(get("x_from_source", .GlobalEnv), 123)
   expect_identical(get("x_from_load", .GlobalEnv), 321)
   rm("x_from_source", envir = .GlobalEnv)
@@ -81,8 +81,16 @@ test_that("loadRegistry", {
   checkTables(reg2)
   expect_equal(reg1, reg2)
 
-  x = readRDS(file.path(fd, "registry.rds"))
+  x = readRDS(fp(fd, "registry.rds"))
   expect_null(x$cluster.functions)
+})
+
+test_that("loadRegistry with missing dependencies is still usable (#122)", {
+  expect_warning(reg <- makeRegistry(file.dir = NA, make.default = FALSE, source = tempfile()), "Failed to source")
+  saveRegistry(reg)
+  expect_warning(loadRegistry(reg$file.dir), "Failed to source")
+  batchMap(identity, 1, reg = reg)
+  expect_error(testJob(1, external = FALSE, reg = reg), "Failed to source file")
 })
 
 test_that("clearRegistry", {
@@ -96,11 +104,11 @@ test_that("clearRegistry", {
   clearRegistry(reg)
   checkTables(reg, nrow = 0L)
 
-  expect_identical(list.files(getJobPath(reg)), character(0))
-  expect_identical(list.files(getLogPath(reg)), character(0))
-  expect_identical(list.files(getResultPath(reg)), character(0))
-  expect_identical(list.files(getUpdatePath(reg)), character(0))
-  expect_false(file.exists(file.path(reg$file.dir, "user.function.rds")))
+  expect_identical(list.files(dir(reg, "jobs")), character(0))
+  expect_identical(list.files(dir(reg, "logs")), character(0))
+  expect_identical(list.files(dir(reg, "results")), character(0))
+  expect_identical(list.files(dir(reg, "updates")), character(0))
+  expect_false(file.exists(fp(reg$file.dir, "user.function.rds")))
 
   expect_identical(batchMap(identity, 1:4, reg = reg), data.table(job.id = 1:4, key = "job.id"))
   expect_true(reg$foo)

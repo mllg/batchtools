@@ -44,7 +44,7 @@ The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchE
   Thus, algorithm function should have the formal arguments `job`, `data` and `instance`.
 * The function `makeDesign` has been removed.
   Parameters can be defined by just passing a `data.frame` or `data.table` to [addExperiments](https://mllg.github.io/batchtools/reference/addExperiments).
-  For exhaustive designs, use `expand.grid()` or `data.table::CJ()`.
+  For exhaustive designs, use `data.table::CJ()`.
 
 ## Template changes
 * The scheduler should directly execute the command `Rscript -e 'batchtools::doJobCollection(<filename>)'`.
