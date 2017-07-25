@@ -48,11 +48,11 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
 createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()) {
   jc              = new.env(parent = emptyenv())
   jc$jobs         = setkeyv(jobs, "job.id")
-  jc$job.name     = jobs$job.name[1L]
+  jc$job.hash     = stri_join("job", digest(list(runif(1L), as.numeric(Sys.time()))))
+  jc$job.name     = if (anyMissing(jobs$job.name)) jc$job.hash else jc$jobs$job.name[1L]
   jc$file.dir     = reg$file.dir
   jc$work.dir     = reg$work.dir
   jc$seed         = reg$seed
-  jc$job.hash     = stri_join("job", digest(list(runif(1L), as.numeric(Sys.time()))))
   jc$uri          = getJobFiles(reg, hash = jc$job.hash)
   jc$log.file     = fp(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
   jc$packages     = reg$packages
@@ -62,9 +62,6 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$resources    = resources
   jc$array.var    = reg$cluster.functions$array.var
   jc$array.jobs   = isTRUE(resources$chunks.as.arrayjobs)
-
-  if (is.na(jc$job.name))
-    jc$job.name = jc$job.hash
 
   hooks = chintersect(names(reg$cluster.functions$hooks), batchtools$hooks$remote)
   if (length(hooks) > 0L)

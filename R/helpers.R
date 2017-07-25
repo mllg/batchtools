@@ -123,6 +123,10 @@ filterNull = function(x) {
   x[!vlapply(x, is.null)]
 }
 
+filterNA = function(x) {
+  x[!is.na(x)]
+}
+
 stri_trunc = function(str, length, append = "") {
   if (is.na(str))
     return(str)

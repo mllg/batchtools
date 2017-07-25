@@ -2,15 +2,18 @@
 #' @name JobNames
 #'
 #' @description
-#' Set custom names for jobs. These are passed to the template as
-#' \sQuote{job.name}.
+#' Set custom names for jobs. These are passed to the template as \sQuote{job.name}.
+#' If no custom name is set (or any of the job names of the chunk is missing),
+#' the job hash is used as job name.
+#' Individual job names can be accessed via \code{jobs$job.name}.
 #'
 #' @templateVar ids.default all
 #' @template ids
 #' @param names [\code{character}]\cr
 #'  Character vector of the same length as provided ids.
 #' @template reg
-#' @return Nothing.
+#' @return \code{setJobNames} returns \code{NULL} invisibly, \code{getJobTable}
+#'  returns a \code{data.table} with columns \code{job.id} and \code{job.name}.
 #' @export
 #' @examples
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
@@ -22,8 +25,9 @@ setJobNames = function(ids = NULL, names, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids, default = noIds())
   assertCharacter(names, min.chars = 1L, len = nrow(ids), pattern = "^[[:alnum:]_.-]+$")
 
-  reg$status[ids, job.names := names]
+  reg$status[ids, job.name := names]
   saveRegistry(reg)
+  invisible(NULL)
 }
 
 #' @export

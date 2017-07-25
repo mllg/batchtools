@@ -25,11 +25,13 @@ Character vector of the same length as provided ids.}
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
-Nothing.
+\code{setJobNames} returns \code{NULL} invisibly, \code{getJobTable}
+ returns a \code{data.table} with columns \code{job.id} and \code{job.name}.
 }
 \description{
 Set custom names for jobs. These are passed to the template as
-\sQuote{job.name}.
+\sQuote{job.name}. For chunked jobs, the first job name is used.
+Individual job names can be accessed via \code{jobs$job.name}.
 }
 \examples{
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
