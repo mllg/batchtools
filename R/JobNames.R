@@ -1,5 +1,9 @@
 #' @title Set Custom Job Names
 #'
+#' @description
+#' Set custom names for jobs. These are passed to the template as
+#' \sQuote{job.name}.
+#'
 #' @templateVar ids.default none
 #' @template ids
 #' @param names [\code{character}]\cr
