@@ -30,7 +30,7 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
   sleep = getSleepFunction(sleep)
   ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
 
-  old.warn.level <- options("warn")
+  old.warn.level <- getOption("warn")
   options(warn = 1)
   on.exit(options(warn = old.warn.level))
 
@@ -94,11 +94,15 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
     ids.on.sys = .findOnSystem(reg, ids, batch.ids = batch.ids)
     if (nrow(ids.disappeared) > 0L) {
       if (nrow(ids.nt[!ids.on.sys, on = "job.id"][ids.disappeared, on = "job.id", nomatch = 0L]) > 0L) {
-        if(warn.disappreared) {
+        if(warn.disappeared) {
           warning("Some jobs might have disappeared from the system")
-          warn.disappreared <- FALSE
+          warn.disappeared <- FALSE
         }
         waitForResults(reg, ids)
+      }
+      if (!nrow(ids.on.sys)) {
+        # No jobs left on system
+        break
       }
     }
 
@@ -114,12 +118,11 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
     "!DEBUG [waitForJobs]: New batch.ids: `stri_flatten(batch.ids$batch.id, ',')`"
   }
 
-  options(warn = old.warn.level)
-
   # case 4: jobs disappeared, we cannot find them on the system
   # heuristic:
   #   job is not terminated, not on system and has not been on the system
   #   in the previous iteration
+  sleep(i)
   suppressMessages(syncRegistry(reg = reg))
   ids.nt = .findNotTerminated(reg, ids)
   ids.on.sys = .findOnSystem(reg, ids, batch.ids = batch.ids)
