@@ -12,6 +12,9 @@ test_that("setJobNames", {
   expect_identical(x$job.name, letters[1:3])
   expect_identical(reg$status$job.name, letters[1:3])
 
+  expect_data_table(ijoin(getJobNames(1:2, reg = reg), getJobPars(reg = reg)),
+    ncol = 3, nrow = 2, key = "job.id")
+
   jc = makeJobCollection(1, reg = reg)
   expect_identical(jc$job.name, "a")
 
