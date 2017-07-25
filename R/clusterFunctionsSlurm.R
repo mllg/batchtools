@@ -61,7 +61,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
       if (jc$array.jobs) {
         if (!array.jobs)
           stop("Array jobs not supported by cluster function")
-        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), log.file = jc$log.file)
+        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), log.file = sprintf("%s_%i", jc$log.file, seq_row(jc$jobs)))
       } else {
         makeSubmitJobResult(status = 0L, batch.id = id)
       }
