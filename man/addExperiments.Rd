@@ -41,6 +41,14 @@ E.g., if you have two problems \code{p1} and \code{p2} and three algorithms \cod
 \code{addExperiments} creates experiments for all parameters for the combinations \code{(p1, a1)}, \code{(p1, a2)},
 \code{(p1, a3)}, \code{(p2, a1)}, \code{(p2, a2)} and \code{(p2, a3)}.
 }
+\note{
+R's \code{data.frame} converts character vectors to factors by default which frequently resulted in problems using \code{addExperiments}.
+Therefore, this function will warn about factor variables if the following conditions hold:
+\enumerate{
+  \item The design is passed as a \code{data.frame}, not a \code{\link[data.table]{data.table}} or \code{\link[tibble]{tibble}}.
+  \item The option \dQuote{stringsAsFactors} is not set or set to \code{TRUE}.
+}
+}
 \examples{
 tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 
@@ -62,7 +70,7 @@ addAlgorithm("deviation", fun = fun, reg = tmp)
 
 # define problem and algorithm designs
 prob.designs = algo.designs = list()
-prob.designs$rnorm = expand.grid(n = 100, mean = -1:1, sd = 1:5)
+prob.designs$rnorm = CJ(n = 100, mean = -1:1, sd = 1:5)
 prob.designs$rexp = data.table(n = 100, lambda = 1:5)
 algo.designs$average = data.table(method = c("mean", "median"))
 algo.designs$deviation = data.table()

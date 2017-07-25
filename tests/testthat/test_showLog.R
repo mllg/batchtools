@@ -4,7 +4,7 @@ test_that("showLog/getLog", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(function(x) print("GREPME"), 1:2, reg = reg)
   expect_error(showLog(id = 1, reg = reg), "not available")
-  expect_error(readLog(id = 1, reg = reg), "not available")
+  expect_error(readLog(id = data.table(job.id = 1L), reg = reg), "not available")
   submitAndWait(reg)
 
   lines = getLog(id = 1, reg = reg)
@@ -17,7 +17,7 @@ test_that("showLog/getLog", {
   lines = getLog(id = 2, reg = reg)
   expect_false(any(stri_endswith_fixed(lines, "[batchtools job.id=1]")))
 
-  with_options(list(pager = function(files, header, title, delete.file) files), {
+  withr::with_options(list(pager = function(files, header, title, delete.file) files), {
     x = showLog(id = 2, reg = reg)
     expect_equal(basename(x), "2.log")
     expect_equal(sum(stri_detect_fixed(readLines(x), "GREPME")), 1L)
@@ -33,11 +33,11 @@ test_that("empty log files", {
   submitAndWait(reg)
 
   # overwrite log file
-  log.file = getLogFiles(reg, reg$status[1])
+  log.file = getLogFiles(reg, 1)
   expect_true(file.remove(log.file))
   expect_true(file.create(log.file))
 
-  x = readLog(list(1), reg = reg)
+  x = readLog(data.table(job.id = 1), reg = reg)
   expect_data_table(x, ncol = 2, nrow = 0, index = "job.id")
 
   expect_equal(getLog(1, reg = reg), character(0L))

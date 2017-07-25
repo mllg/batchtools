@@ -10,7 +10,7 @@ auto_increment = function(ids, n = 1L) {
 }
 
 ustamp = function() {
-  round(as.numeric(Sys.time(), 4L))
+  round(as.numeric(Sys.time()), 4L)
 }
 
 names2 = function (x, missing.val = NA_character_) {
@@ -135,7 +135,7 @@ stri_trunc = function(str, length, append = "") {
 }
 
 Rscript = function() {
-  file.path(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
+  fp(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
 }
 
 getSeed = function(start.seed, id) {

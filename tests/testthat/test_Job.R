@@ -65,22 +65,22 @@ test_that("External directory is created", {
   reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   addProblem(reg = reg, "p1", fun = function(job, data, ...) list(data = data, ...))
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) {
-    saveRDS(job$id, file = file.path(job$external.dir, sprintf("%s.rds", job$id)))
+    saveRDS(job$id, file = fp(job$external.dir, sprintf("%s.rds", job$id)))
     job$external.dir
   })
   ids = addExperiments(list(p1 = data.table(i = 1:3)), list(a1 = data.table()), reg = reg)
   submitAndWait(reg, c(1, 3))
   paths = reduceResultsList(1:3, missing.val = NULL, reg = reg)
   expect_directory_exists(paths[[1]])
-  expect_true(file.exists(file.path(reg$file.dir, "external", "1", "1.rds")))
+  expect_true(file.exists(fp(reg$file.dir, "external", "1", "1.rds")))
   expect_null(paths[[2]])
-  expect_false(dir.exists(file.path(reg$file.dir, "external", "2")))
+  expect_false(dir.exists(fp(reg$file.dir, "external", "2")))
   expect_directory_exists(paths[[3]])
-  expect_true(file.exists(file.path(reg$file.dir, "external", "3", "3.rds")))
+  expect_true(file.exists(fp(reg$file.dir, "external", "3", "3.rds")))
   expect_equal(reduceResultsList(1:3, fun = function(job, ...) job$external.dir, reg = reg, missing.val = NULL), paths)
   resetJobs(3, reg = reg)
-  expect_false(dir.exists(file.path(reg$file.dir, "external", "3")))
-  expect_true(dir.exists(file.path(reg$file.dir, "external", "1")))
+  expect_false(dir.exists(fp(reg$file.dir, "external", "3")))
+  expect_true(dir.exists(fp(reg$file.dir, "external", "1")))
 
   # directory is persistent between submits?
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) {
@@ -89,6 +89,6 @@ test_that("External directory is created", {
 
   submitAndWait(reg, 1)
   sweepRegistry(reg = reg)
-  expect_true(file.exists(file.path(reg$file.dir, "external", "1", "1.rds")))
+  expect_true(file.exists(fp(reg$file.dir, "external", "1", "1.rds")))
   expect_identical(loadResult(1, reg = reg), "1.rds")
 })

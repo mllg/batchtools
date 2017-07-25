@@ -2,11 +2,26 @@
 #'
 #' @description
 #' This function gives an encompassing overview over the computational status on your system.
+#' The status can be one or many of the following:
+#' \itemize{
+#'  \item \dQuote{defined}: Jobs which are defined via \code{\link{batchMap}} or \code{\link{addExperiments}}, but are not yet submitted.
+#'  \item \dQuote{submitted}: Jobs which are submitted to the batch system via \code{\link{submitJobs}}, scheduled for execution.
+#'  \item \dQuote{started}: Jobs which have been started.
+#'  \item \dQuote{done}: Jobs which terminated successfully.
+#'  \item \dQuote{error}: Jobs which terminated with an exception.
+#'  \item \dQuote{running}: Jobs which are listed by the cluster functions to be running on the live system. Not supported for all cluster functions.
+#'  \item \dQuote{queued}: Jobs which are listed by the cluster functions to be queued on the live system. Not supported for all cluster functions.
+#'  \item \dQuote{system}: Jobs which are listed by the cluster functions to be queued or running. Not supported for all cluster functions.
+#'  \item \dQuote{expired}: Jobs which have been submitted, but vanished from the live system. Note that this is determined heuristically and may include some false positives.
+#' }
+#' Here, a job which terminated successfully counts towards the jobs which are submitted, started and done.
+#' To retrieve the corresponding job ids, see \code{\link{findJobs}}.
 #'
 #' @templateVar ids.default all
 #' @template ids
 #' @template reg
 #' @return [\code{\link[data.table]{data.table}}] (with class \dQuote{Status} for printing).
+#' @seealso \code{\link{findJobs}}<`3`>
 #' @export
 #' @family debug
 #' @examples
@@ -27,15 +42,15 @@ getStatus = function(ids = NULL, reg = getDefaultRegistry()) {
 
 getStatusTable = function(ids = NULL, batch.ids = getBatchIds(reg = reg), reg = getDefaultRegistry()) {
   submitted = started = done = error = batch.id = status = NULL
-  stats = filter(reg$status, ids)[, list(
+  stats = merge(filter(reg$status, ids), batch.ids, by = "batch.id", all.x = TRUE, all.y = FALSE, sort = FALSE)[, list(
     defined   = .N,
     submitted = count(submitted),
-    started   = sum(!is.na(started) | batch.id %chin% batch.ids[status == "running"]$batch.id),
+    started   = sum(!is.na(started) | !is.na(status) & status == "running"),
     done      = count(done),
     error     = count(error),
-    queued    = sum(batch.id %chin% batch.ids[status == "queued"]$batch.id),
-    running   = sum(batch.id %chin% batch.ids[status == "running"]$batch.id),
-    expired   = sum(!is.na(submitted) & is.na(done) & batch.id %nin% batch.ids$batch.id)
+    queued    = sum(status == "queued", na.rm = TRUE),
+    running   = sum(status == "running", na.rm = TRUE),
+    expired   = sum(!is.na(submitted) & is.na(done) & is.na(status))
   )]
   stats$done = stats$done - stats$error
   stats$system = stats$queued + stats$running
@@ -49,10 +64,10 @@ print.Status = function(x, ...) {
 
   catf("Status for %i jobs:", x$defined)
   pr("Submitted", x$submitted)
-  pr("Queued", x$queued)
   pr("Started", x$started)
-  pr("Running", x$running)
   pr("Done", x$done)
   pr("Error", x$error)
+  pr("Queued", x$queued)
+  pr("Running", x$running)
   pr("Expired", x$expired)
 }

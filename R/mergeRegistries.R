@@ -34,7 +34,7 @@
 mergeRegistries = function(source, target = getDefaultRegistry()) {
   assertRegistry(source, writeable = TRUE, running.ok = FALSE)
   assertRegistry(target, writeable = TRUE, running.ok = FALSE)
-  if (source$file.dir == target$file.dir)
+  if (normalizePath(source$file.dir, winslash = "/") == normalizePath(target$file.dir, winslash = "/"))
     stop("You must provide two different registries (using different file directories")
   hash = function(x) unlist(.mapply(function(...) digest(list(...)), x[, !"def.id"], list()))
 
@@ -65,14 +65,14 @@ mergeRegistries = function(source, target = getDefaultRegistry()) {
     to = getLogFiles(target, status)
   )
 
-  ext.dirs = chintersect(list.files(getExternalPath(source)), as.character(status$job.id))
+  ext.dirs = chintersect(list.files(dir(source, "external")), as.character(status$job.id))
   if (length(ext.dirs) > 0L) {
     info("Copying external directories ...")
     target.dirs = getExternalDirs(target, ext.dirs)
     lapply(target.dirs[!dir.exists(target.dirs)], dir.create)
     file.copy(
       from = getExternalDirs(source, ext.dirs),
-      to = rep.int(getExternalPath(target), length(ext.dirs)),
+      to = rep.int(dir(target, "external"), length(ext.dirs)),
       recursive = TRUE
     )
   }

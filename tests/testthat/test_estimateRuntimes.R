@@ -31,4 +31,8 @@ test_that("estimateRuntimes", {
   res = ijoin(res$runtimes, tab)
   res = res[, list(t = mean(runtime)), by = y]
   expect_true(all(res[y == "a", t] > res[y %in% c("c", "d", "e"), t]))
+
+  # remaining is suppressed if nothing more to submit, no error
+  res = estimateRuntimes(getJobPars(findDone(reg = reg), reg = reg), reg = reg)
+  expect_output(print(res, n = 2))
 })

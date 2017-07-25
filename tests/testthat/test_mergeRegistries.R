@@ -2,13 +2,13 @@ context("mergeRegistries")
 
 test_that("mergeRegistries", {
   target = makeRegistry(NA, make.default = FALSE)
-  f = function(.job, x) { if (x %in% c(2, 7)) file.create(file.path(.job$external.dir, "foo")); x^2 }
+  f = function(.job, x) { if (x %in% c(2, 7)) file.create(fp(.job$external.dir, "foo")); x^2 }
   batchMap(f, 1:10, reg = target)
 
-  td = file.path(target$temp.dir, basename(tempfile()))
+  td = fp(target$temp.dir, basename(tempfile()))
   dir.create(td)
   file.copy(target$file.dir, td, recursive = TRUE)
-  file.dir = file.path(td, basename(target$file.dir))
+  file.dir = fp(td, basename(target$file.dir))
   source = loadRegistry(file.dir, update.paths = TRUE)
 
   submitAndWait(target, data.table(job.id = 1:4, chunk = 1L))
@@ -22,7 +22,7 @@ test_that("mergeRegistries", {
 
   checkTables(target)
 
-  expect_set_equal(list.files(getExternalPath(target)), as.character(c(2, 7)))
+  expect_set_equal(list.files(dir(target, "external")), as.character(c(2, 7)))
   expect_equal(reduceResultsDataTable(reg = target)$V1, c(1,2,3,4,6,7,8,9)^2)
-  expect_file_exists(file.path(target$file.dir, "external", c("2", "7"), "foo"))
+  expect_file_exists(fp(target$file.dir, "external", c("2", "7"), "foo"))
 })

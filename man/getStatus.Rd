@@ -22,6 +22,20 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 }
 \description{
 This function gives an encompassing overview over the computational status on your system.
+The status can be one or many of the following:
+\itemize{
+ \item \dQuote{defined}: Jobs which are defined via \code{\link{batchMap}} or \code{\link{addExperiments}}, but are not yet submitted.
+ \item \dQuote{submitted}: Jobs which are submitted to the batch system via \code{\link{submitJobs}}, scheduled for execution.
+ \item \dQuote{started}: Jobs which have been started.
+ \item \dQuote{done}: Jobs which terminated successfully.
+ \item \dQuote{error}: Jobs which terminated with an exception.
+ \item \dQuote{running}: Jobs which are listed by the cluster functions to be running on the live system. Not supported for all cluster functions.
+ \item \dQuote{queued}: Jobs which are listed by the cluster functions to be queued on the live system. Not supported for all cluster functions.
+ \item \dQuote{system}: Jobs which are listed by the cluster functions to be queued or running. Not supported for all cluster functions.
+ \item \dQuote{expired}: Jobs which have been submitted, but vanished from the live system. Note that this is determined heuristically and may include some false positives.
+}
+Here, a job which terminated successfully counts towards the jobs which are submitted, started and done.
+To retrieve the corresponding job ids, see \code{\link{findJobs}}.
 }
 \examples{
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
@@ -35,6 +49,8 @@ print(tab)
 str(tab)
 }
 \seealso{
+\code{\link{findJobs}}<`3`>
+
 Other debug: \code{\link{getErrorMessages}},
   \code{\link{grepLogs}}, \code{\link{killJobs}},
   \code{\link{resetJobs}}, \code{\link{showLog}},

@@ -1,5 +1,6 @@
 #include <R.h>
 #include <Rinternals.h>
+#include <R_ext/Visibility.h>
 
 static R_len_t count_not_missing_logical(SEXP x) {
     const int * xp = LOGICAL(x);
@@ -54,7 +55,7 @@ static R_len_t count_not_missing_list(SEXP x) {
     return count;
 }
 
-SEXP count_not_missing(SEXP x) {
+SEXP attribute_hidden count_not_missing(SEXP x) {
     switch(TYPEOF(x)) {
         case LGLSXP:  return ScalarInteger(count_not_missing_logical(x));
         case INTSXP:  return ScalarInteger(count_not_missing_integer(x));
