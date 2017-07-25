@@ -30,7 +30,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.jobs = TRUE, scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.jobs = TRUE, scheduler.latency = 1, fs.latency = 65, nodename = "localhost") { # nocov start
   if (!is.null(clusters))
     assertString(clusters, min.chars = 1L)
   assertFlag(array.jobs)
@@ -42,12 +42,8 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
     assertClass(jc, "JobCollection")
 
     jc$clusters = clusters
-    if (jc$array.jobs) {
-      logs = sprintf("%s_%i", basename(jc$log.file), seq_row(jc$jobs))
-      jc$log.file = stri_join(jc$log.file, "_%a")
-    }
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("sbatch", shQuote(outfile))
+    res = runOSCommand("sbatch", shQuote(outfile), nodename = nodename)
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
     temp.error = "Socket timed out on send/recv operation"
@@ -65,7 +61,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
       if (jc$array.jobs) {
         if (!array.jobs)
           stop("Array jobs not supported by cluster function")
-        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), log.file = logs)
+        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), log.file = sprintf("%s_%i", jc$log.file, seq_row(jc$jobs)))
       } else {
         makeSubmitJobResult(status = 0L, batch.id = id)
       }
@@ -77,7 +73,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
     cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t PD", sprintf("--clusters=%s", clusters))
     if (array.jobs)
       cmd = c(cmd, "-r")
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L], nodename = nodename)$output
     if (!is.null(clusters))
       batch.ids = tail(batch.ids, -1L)
     batch.ids
@@ -88,7 +84,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
     cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t R,S,CG", sprintf("--clusters=%s", clusters))
     if (array.jobs)
       cmd = c(cmd, "-r")
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
+    batch.ids = runOSCommand(cmd[1L], cmd[-1L], nodename = nodename)$output
     if (!is.null(clusters))
       batch.ids = tail(batch.ids, -1L)
     batch.ids
