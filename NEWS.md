@@ -4,6 +4,8 @@
 * Fixed order of arguments in `findExperiments()` (argument `ids` is now first).
 * Removed code to upgrade registries created with versions prior to v0.9.0 (first CRAN release).
 * `addExperiments()` now warns if a design is passed as `data.frame` with factor columns and `stringsAsFactors` is `TRUE`.
+* Added functions `setJobNames()` and `getJobNames()` to control the name of jobs on batch systems.
+  Templates should be adapted to use `job.name` instead of `job.hash` for naming.
 
 # batchtools 0.9.3
 
