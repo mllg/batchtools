@@ -16,17 +16,23 @@
 #' @param stop.on.error [\code{logical(1)}]\cr
 #'   Immediately cancel if a job terminates with an error? Default is
 #'   \code{FALSE}.
+#' @param warn.disappeared [\code{logical(1)}]\cr
+#'   Issue a warning if jobs might have disappeared. Default is \code{TRUE}.
 #' @template reg
 #' @return [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated
 #'   successfully and \code{FALSE} if either the timeout is reached or at least
 #'   one job terminated with an exception.
 #' @export
-waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
+waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop.on.error = FALSE, warn.disappeared = TRUE, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = FALSE, sync = TRUE)
   assertNumber(timeout, lower = 0)
   assertFlag(stop.on.error)
   sleep = getSleepFunction(sleep)
   ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
+
+  old.warn.level <- getOption("warn")
+  options(warn = 1)
+  on.exit(options(warn = old.warn.level))
 
   .findNotTerminated = function(reg, ids = NULL) {
     done = NULL
@@ -52,18 +58,20 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
 
   repeat {
     # case 1: all jobs terminated -> nothing on system
+    suppressMessages(syncRegistry(reg = reg))
     ids.nt = .findNotTerminated(reg, ids)
     if (nrow(ids.nt) == 0L) {
       "!DEBUG [waitForJobs]: All jobs terminated"
       pb$update(1)
       waitForResults(reg, ids)
-      return(nrow(.findErrors(reg, ids)) == 0L)
+      break
     }
 
     stats = getStatusTable(ids = ids, batch.ids = batch.ids, reg = reg)
     pb$update((n.jobs - nrow(ids.nt)) / n.jobs, tokens = as.list(stats))
 
     # case 2: there are errors and stop.on.error is TRUE
+    suppressMessages(syncRegistry(reg = reg))
     if (stop.on.error && nrow(.findErrors(reg, ids)) > 0L) {
       "!DEBUG [waitForJobs]: Errors found and stop.on.error is TRUE"
       pb$update(1)
@@ -81,16 +89,25 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
     # heuristic:
     #   job is not terminated, not on system and has not been on the system
     #   in the previous iteration
+    suppressMessages(syncRegistry(reg = reg))
+    ids.nt = .findNotTerminated(reg, ids)
     ids.on.sys = .findOnSystem(reg, ids, batch.ids = batch.ids)
     if (nrow(ids.disappeared) > 0L) {
       if (nrow(ids.nt[!ids.on.sys, on = "job.id"][ids.disappeared, on = "job.id", nomatch = 0L]) > 0L) {
-        warning("Some jobs disappeared from the system")
-        pb$update(1)
+        if(warn.disappeared) {
+          warning("Some jobs might have disappeared from the system")
+          warn.disappeared <- FALSE
+        }
         waitForResults(reg, ids)
-        return(FALSE)
+      }
+      if (!nrow(ids.on.sys)) {
+        # No jobs left on system
+        break
       }
     }
 
+    suppressMessages(syncRegistry(reg = reg))
+    ids.on.sys = .findOnSystem(reg, ids, batch.ids = batch.ids)
     ids.disappeared = ids[!ids.on.sys, on = "job.id"]
     "!DEBUG [waitForJobs]: `nrow(ids.disappeared)` jobs disappeared"
 
@@ -100,4 +117,22 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
     batch.ids = getBatchIds(reg)
     "!DEBUG [waitForJobs]: New batch.ids: `stri_flatten(batch.ids$batch.id, ',')`"
   }
+
+  # case 4: jobs disappeared, we cannot find them on the system
+  # heuristic:
+  #   job is not terminated, not on system and has not been on the system
+  #   in the previous iteration
+  sleep(i)
+  suppressMessages(syncRegistry(reg = reg))
+  ids.nt = .findNotTerminated(reg, ids)
+  ids.on.sys = .findOnSystem(reg, ids, batch.ids = batch.ids)
+  if (nrow(ids.disappeared) > 0L) {
+    if (nrow(ids.nt[!ids.on.sys, on = "job.id"][ids.disappeared, on = "job.id", nomatch = 0L]) > 0L) {
+      warning("Some jobs disappeared from the system")
+      pb$update(1)
+      waitForResults(reg, ids)
+      return(FALSE)
+    }
+  }
+  return(nrow(.findErrors(reg, ids)) == 0L)
 }
