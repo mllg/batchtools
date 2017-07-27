@@ -42,6 +42,10 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
     assertClass(jc, "JobCollection")
 
     jc$clusters = clusters
+    if (jc$array.jobs) {
+      logs = sprintf("%s_%i", basename(jc$log.file), seq_row(jc$jobs))
+      jc$log.file = stri_join(jc$log.file, "_%a")
+    }
     outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("sbatch", shQuote(outfile), nodename = nodename)
 
@@ -97,6 +101,6 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
   }
 
   makeClusterFunctions(name = "Slurm", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    listJobsQueued = listJobsQueued, array.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE,
-    scheduler.latency = scheduler.latency, fs.latency = fs.latency)
+                       listJobsQueued = listJobsQueued, array.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE,
+                       scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end
