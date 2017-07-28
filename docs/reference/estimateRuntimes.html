@@ -152,7 +152,7 @@ Number of parallel jobs to assume for runtime estimation.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Create a simple toy registry</span>
 <span class='fu'>set.seed</span>(<span class='fl'>1</span>)
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry59d74b7cb347' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"iris"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>, <span class='no'>...</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'iris'</span></div><div class='input'><span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"nrow"</span>, <span class='kw'>function</span>(<span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>nrow</span>(<span class='no'>instance</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'nrow'</span></div><div class='input'><span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"ncol"</span>, <span class='kw'>function</span>(<span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>ncol</span>(<span class='no'>instance</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'ncol'</span></div><div class='input'><span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='kw'>algo.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fu'>CJ</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>50</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>5</span>])), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 250 experiments ('iris'[1] x 'nrow'[250] x repls[1]) ...</span></div><div class='input'><span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='kw'>algo.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fu'>CJ</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>50</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>5</span>])), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 250 experiments ('iris'[1] x 'ncol'[250] x repls[1]) ...</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry62e652230057' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"iris"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>, <span class='no'>...</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'iris'</span></div><div class='input'><span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"nrow"</span>, <span class='kw'>function</span>(<span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>nrow</span>(<span class='no'>instance</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'nrow'</span></div><div class='input'><span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"ncol"</span>, <span class='kw'>function</span>(<span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>ncol</span>(<span class='no'>instance</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'ncol'</span></div><div class='input'><span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='kw'>algo.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fu'>CJ</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>50</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>5</span>])), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 250 experiments ('iris'[1] x 'nrow'[250] x repls[1]) ...</span></div><div class='input'><span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='kw'>algo.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fu'>CJ</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>50</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>5</span>])), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 250 experiments ('iris'[1] x 'ncol'[250] x repls[1]) ...</span></div><div class='input'>
 <span class='co'># We use the job parameters to predict runtimes</span>
 <span class='no'>tab</span> <span class='kw'>=</span> <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
@@ -194,236 +194,236 @@ Number of parallel jobs to assume for runtime estimation.</p></td>
 #&gt; 500:       NA       NA     1</div><div class='input'><span class='fu'><a href='JoinTables.html'>rjoin</a></span>(<span class='fu'><a href='JoinTables.html'>sjoin</a></span>(<span class='no'>tab</span>, <span class='no'>ids</span>), <span class='fu'><a href='getJobTable.html'>getJobStatus</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>c</span>(<span class='st'>"job.id"</span>, <span class='st'>"time.running"</span>)])</div><div class='output co'>#&gt;     job.id problem algorithm     x      y   time.running
 #&gt;      &lt;int&gt;  &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt; &lt;char&gt;     &lt;difftime&gt;
 #&gt;  1:     12    iris      nrow     3      b 1100.0023 secs
-#&gt;  2:     30    iris      nrow     6      e  100.0087 secs
-#&gt;  3:     43    iris      nrow     9      c  100.0024 secs
-#&gt;  4:     46    iris      nrow    10      a 1100.0026 secs
-#&gt;  5:     53    iris      nrow    11      c  100.0027 secs
-#&gt;  6:     55    iris      nrow    11      e  100.0030 secs
-#&gt;  7:     65    iris      nrow    13      e  100.0032 secs
-#&gt;  8:     66    iris      nrow    14      a 1100.0032 secs
-#&gt;  9:     89    iris      nrow    18      d  100.0026 secs
+#&gt;  2:     30    iris      nrow     6      e  100.0085 secs
+#&gt;  3:     43    iris      nrow     9      c  100.0032 secs
+#&gt;  4:     46    iris      nrow    10      a 1100.0030 secs
+#&gt;  5:     53    iris      nrow    11      c  100.0026 secs
+#&gt;  6:     55    iris      nrow    11      e  100.0028 secs
+#&gt;  7:     65    iris      nrow    13      e  100.0033 secs
+#&gt;  8:     66    iris      nrow    14      a 1100.0028 secs
+#&gt;  9:     89    iris      nrow    18      d  100.0029 secs
 #&gt; 10:     91    iris      nrow    19      a 1100.0025 secs
-#&gt; 11:     93    iris      nrow    19      c  100.0030 secs
-#&gt; 12:    124    iris      nrow    25      d  100.0033 secs
-#&gt; 13:    136    iris      nrow    28      a 1100.0031 secs
-#&gt; 14:    147    iris      nrow    30      b 1100.0033 secs
-#&gt; 15:    157    iris      nrow    32      b 1100.0025 secs
-#&gt; 16:    160    iris      nrow    32      e  100.0025 secs
-#&gt; 17:    163    iris      nrow    33      c  100.0026 secs
-#&gt; 18:    178    iris      nrow    36      c  100.0029 secs
-#&gt; 19:    179    iris      nrow    36      d  100.0033 secs
-#&gt; 20:    211    iris      nrow    43      a 1100.0031 secs
-#&gt; 21:    222    iris      nrow    45      b 1100.0035 secs
-#&gt; 22:    232    iris      nrow    47      b 1100.0028 secs
-#&gt; 23:    235    iris      nrow    47      e  100.0032 secs
-#&gt; 24:    239    iris      nrow    48      d  100.0031 secs
-#&gt; 25:    244    iris      nrow    49      d  100.0026 secs
-#&gt; 26:    251    iris      ncol     1      a 1500.0026 secs
-#&gt; 27:    260    iris      ncol     2      e  500.0032 secs
-#&gt; 28:    278    iris      ncol     6      c  500.0032 secs
-#&gt; 29:    292    iris      ncol     9      b 1500.0035 secs
-#&gt; 30:    326    iris      ncol    16      a 1500.0031 secs
-#&gt; 31:    341    iris      ncol    19      a 1500.0030 secs
-#&gt; 32:    343    iris      ncol    19      c  500.0032 secs
-#&gt; 33:    346    iris      ncol    20      a 1500.0030 secs
-#&gt; 34:    365    iris      ncol    23      e  500.0031 secs
-#&gt; 35:    367    iris      ncol    24      b 1500.0026 secs
-#&gt; 36:    372    iris      ncol    25      b 1500.0027 secs
-#&gt; 37:    374    iris      ncol    25      d  500.0030 secs
-#&gt; 38:    379    iris      ncol    26      d  500.0033 secs
-#&gt; 39:    397    iris      ncol    30      b 1500.0032 secs
-#&gt; 40:    409    iris      ncol    32      d  500.0030 secs
-#&gt; 41:    410    iris      ncol    32      e  500.0034 secs
-#&gt; 42:    418    iris      ncol    34      c  500.0029 secs
-#&gt; 43:    423    iris      ncol    35      c  500.0031 secs
-#&gt; 44:    425    iris      ncol    35      e  500.0028 secs
-#&gt; 45:    439    iris      ncol    38      d  500.0027 secs
-#&gt; 46:    442    iris      ncol    39      b 1500.0032 secs
-#&gt; 47:    443    iris      ncol    39      c  500.0031 secs
-#&gt; 48:    450    iris      ncol    40      e  500.0027 secs
-#&gt; 49:    451    iris      ncol    41      a 1500.0030 secs
-#&gt; 50:    459    iris      ncol    42      d  500.0031 secs
+#&gt; 11:     93    iris      nrow    19      c  100.0035 secs
+#&gt; 12:    124    iris      nrow    25      d  100.0030 secs
+#&gt; 13:    136    iris      nrow    28      a 1100.0038 secs
+#&gt; 14:    147    iris      nrow    30      b 1100.0032 secs
+#&gt; 15:    157    iris      nrow    32      b 1100.0039 secs
+#&gt; 16:    160    iris      nrow    32      e  100.0033 secs
+#&gt; 17:    163    iris      nrow    33      c  100.0033 secs
+#&gt; 18:    178    iris      nrow    36      c  100.0035 secs
+#&gt; 19:    179    iris      nrow    36      d  100.0027 secs
+#&gt; 20:    211    iris      nrow    43      a 1100.0034 secs
+#&gt; 21:    222    iris      nrow    45      b 1100.0033 secs
+#&gt; 22:    232    iris      nrow    47      b 1100.0039 secs
+#&gt; 23:    235    iris      nrow    47      e  100.0037 secs
+#&gt; 24:    239    iris      nrow    48      d  100.0039 secs
+#&gt; 25:    244    iris      nrow    49      d  100.0032 secs
+#&gt; 26:    251    iris      ncol     1      a 1500.0036 secs
+#&gt; 27:    260    iris      ncol     2      e  500.0034 secs
+#&gt; 28:    278    iris      ncol     6      c  500.0033 secs
+#&gt; 29:    292    iris      ncol     9      b 1500.0041 secs
+#&gt; 30:    326    iris      ncol    16      a 1500.0035 secs
+#&gt; 31:    341    iris      ncol    19      a 1500.0033 secs
+#&gt; 32:    343    iris      ncol    19      c  500.0036 secs
+#&gt; 33:    346    iris      ncol    20      a 1500.0033 secs
+#&gt; 34:    365    iris      ncol    23      e  500.0035 secs
+#&gt; 35:    367    iris      ncol    24      b 1500.0038 secs
+#&gt; 36:    372    iris      ncol    25      b 1500.0033 secs
+#&gt; 37:    374    iris      ncol    25      d  500.0033 secs
+#&gt; 38:    379    iris      ncol    26      d  500.0035 secs
+#&gt; 39:    397    iris      ncol    30      b 1500.0028 secs
+#&gt; 40:    409    iris      ncol    32      d  500.0037 secs
+#&gt; 41:    410    iris      ncol    32      e  500.0036 secs
+#&gt; 42:    418    iris      ncol    34      c  500.0030 secs
+#&gt; 43:    423    iris      ncol    35      c  500.0034 secs
+#&gt; 44:    425    iris      ncol    35      e  500.0035 secs
+#&gt; 45:    439    iris      ncol    38      d  500.0035 secs
+#&gt; 46:    442    iris      ncol    39      b 1500.0041 secs
+#&gt; 47:    443    iris      ncol    39      c  500.0032 secs
+#&gt; 48:    450    iris      ncol    40      e  500.0038 secs
+#&gt; 49:    451    iris      ncol    41      a 1500.0032 secs
+#&gt; 50:    459    iris      ncol    42      d  500.0041 secs
 #&gt;     job.id problem algorithm     x      y   time.running</div><div class='input'>
 <span class='co'># Estimate runtimes:</span>
 <span class='no'>est</span> <span class='kw'>=</span> <span class='fu'>estimateRuntimes</span>(<span class='no'>tab</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='no'>est</span>)</div><div class='output co'>#&gt; Runtime Estimate for 500 jobs with 1 CPUs
 #&gt;   Done     : 0d 09h 43m 20.2s
-#&gt;   Remaining: 3d 15h 18m 42.8s
-#&gt;   Total    : 4d 01h 02m 3.0s</div><div class='input'><span class='fu'><a href='JoinTables.html'>rjoin</a></span>(<span class='no'>tab</span>, <span class='no'>est</span>$<span class='no'>runtimes</span>)</div><div class='output co'>#&gt;      job.id problem algorithm     x      y      type   runtime
+#&gt;   Remaining: 3d 15h 16m 19.7s
+#&gt;   Total    : 4d 00h 59m 39.9s</div><div class='input'><span class='fu'><a href='JoinTables.html'>rjoin</a></span>(<span class='no'>tab</span>, <span class='no'>est</span>$<span class='no'>runtimes</span>)</div><div class='output co'>#&gt;      job.id problem algorithm     x      y      type   runtime
 #&gt;       &lt;int&gt;  &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt; &lt;char&gt;    &lt;fctr&gt;     &lt;num&gt;
-#&gt;   1:      1    iris      nrow     1      a estimated 1089.1902
-#&gt;   2:      2    iris      nrow     1      b estimated 1092.8479
-#&gt;   3:      3    iris      nrow     1      c estimated  295.5748
-#&gt;   4:      4    iris      nrow     1      d estimated  280.3962
+#&gt;   1:      1    iris      nrow     1      a estimated 1090.3905
+#&gt;   2:      2    iris      nrow     1      b estimated 1092.8482
+#&gt;   3:      3    iris      nrow     1      c estimated  294.7750
+#&gt;   4:      4    iris      nrow     1      d estimated  279.9963
 #&gt;  ---                                                          
-#&gt; 496:    496    iris      ncol    50      a estimated 1261.9932
-#&gt; 497:    497    iris      ncol    50      b estimated 1260.6980
-#&gt; 498:    498    iris      ncol    50      c estimated  481.1342
-#&gt; 499:    499    iris      ncol    50      d estimated  467.3116
-#&gt; 500:    500    iris      ncol    50      e estimated  468.4937</div><div class='input'><span class='fu'>print</span>(<span class='no'>est</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; Runtime Estimate for 500 jobs with 10 CPUs
+#&gt; 496:    496    iris      ncol    50      a estimated 1261.2737
+#&gt; 497:    497    iris      ncol    50      b estimated 1259.1252
+#&gt; 498:    498    iris      ncol    50      c estimated  481.9347
+#&gt; 499:    499    iris      ncol    50      d estimated  468.5123
+#&gt; 500:    500    iris      ncol    50      e estimated  469.5611</div><div class='input'><span class='fu'>print</span>(<span class='no'>est</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; Runtime Estimate for 500 jobs with 10 CPUs
 #&gt;   Done     : 0d 09h 43m 20.2s
-#&gt;   Remaining: 3d 15h 18m 42.8s
-#&gt;   Parallel : 0d 08h 45m 4.0s
-#&gt;   Total    : 4d 01h 02m 3.0s</div><div class='input'>
+#&gt;   Remaining: 3d 15h 16m 19.7s
+#&gt;   Parallel : 0d 08h 44m 50.2s
+#&gt;   Total    : 4d 00h 59m 39.9s</div><div class='input'>
 <span class='co'># Submit jobs with longest runtime first:</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='no'>est</span>$<span class='no'>runtimes</span>[<span class='no'>type</span> <span class='kw'>==</span> <span class='st'>"estimated"</span>][<span class='fu'>order</span>(<span class='no'>runtime</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)]
 <span class='fu'>print</span>(<span class='no'>ids</span>)</div><div class='output co'>#&gt;      job.id      type   runtime
 #&gt;       &lt;int&gt;    &lt;fctr&gt;     &lt;num&gt;
-#&gt;   1:    347 estimated 1436.5599
-#&gt;   2:    352 estimated 1436.5599
-#&gt;   3:    362 estimated 1434.0983
-#&gt;   4:    357 estimated 1433.6316
+#&gt;   1:    347 estimated 1437.3605
+#&gt;   2:    352 estimated 1437.3605
+#&gt;   3:    362 estimated 1434.8989
+#&gt;   4:    357 estimated 1434.4322
 #&gt;  ---                           
-#&gt; 446:    184 estimated  149.5917
-#&gt; 447:     64 estimated  146.2500
-#&gt; 448:     54 estimated  144.7398
-#&gt; 449:     60 estimated  143.5308
-#&gt; 450:     59 estimated  140.2064</div><span class='co'># NOT RUN {</span>
+#&gt; 446:    184 estimated  149.3252
+#&gt; 447:     64 estimated  145.8502
+#&gt; 448:     54 estimated  144.3399
+#&gt; 449:     60 estimated  143.5309
+#&gt; 450:     59 estimated  139.8066</div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='co'># }</span><div class='input'>
 <span class='co'># Group jobs into chunks with runtime &lt; 1h</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='no'>est</span>$<span class='no'>runtimes</span>[<span class='no'>type</span> <span class='kw'>==</span> <span class='st'>"estimated"</span>]
 <span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'><a href='chunk.html'>binpack</a></span>(<span class='no'>runtime</span>, <span class='fl'>3600</span>)]</div><div class='output co'>#&gt;      job.id      type   runtime chunk
 #&gt;       &lt;int&gt;    &lt;fctr&gt;     &lt;num&gt; &lt;int&gt;
-#&gt;   1:      1 estimated 1089.1902    46
-#&gt;   2:      2 estimated 1092.8479    46
-#&gt;   3:      3 estimated  295.5748    27
-#&gt;   4:      4 estimated  280.3962    24
+#&gt;   1:      1 estimated 1090.3905    46
+#&gt;   2:      2 estimated 1092.8482    46
+#&gt;   3:      3 estimated  294.7750    27
+#&gt;   4:      4 estimated  279.9963    22
 #&gt;  ---                                 
-#&gt; 446:    496 estimated 1261.9932    44
-#&gt; 447:    497 estimated 1260.6980    45
-#&gt; 448:    498 estimated  481.1342    86
-#&gt; 449:    499 estimated  467.3116    87
-#&gt; 450:    500 estimated  468.4937    87</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>)</div><div class='output co'>#&gt;      job.id      type   runtime chunk
+#&gt; 446:    496 estimated 1261.2737    44
+#&gt; 447:    497 estimated 1259.1252    45
+#&gt; 448:    498 estimated  481.9347    86
+#&gt; 449:    499 estimated  468.5123    87
+#&gt; 450:    500 estimated  469.5611    87</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>)</div><div class='output co'>#&gt;      job.id      type   runtime chunk
 #&gt;       &lt;int&gt;    &lt;fctr&gt;     &lt;num&gt; &lt;int&gt;
-#&gt;   1:      1 estimated 1089.1902    46
-#&gt;   2:      2 estimated 1092.8479    46
-#&gt;   3:      3 estimated  295.5748    27
-#&gt;   4:      4 estimated  280.3962    24
+#&gt;   1:      1 estimated 1090.3905    46
+#&gt;   2:      2 estimated 1092.8482    46
+#&gt;   3:      3 estimated  294.7750    27
+#&gt;   4:      4 estimated  279.9963    22
 #&gt;  ---                                 
-#&gt; 446:    496 estimated 1261.9932    44
-#&gt; 447:    497 estimated 1260.6980    45
-#&gt; 448:    498 estimated  481.1342    86
-#&gt; 449:    499 estimated  467.3116    87
-#&gt; 450:    500 estimated  468.4937    87</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>[, <span class='fu'>list</span>(<span class='kw'>runtime</span> <span class='kw'>=</span> <span class='fu'>sum</span>(<span class='no'>runtime</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>chunk</span>])</div><div class='output co'>#&gt;     chunk  runtime
-#&gt;     &lt;int&gt;    &lt;num&gt;
-#&gt;  1:    46 3597.627
-#&gt;  2:    27 3598.802
-#&gt;  3:    24 3598.047
-#&gt;  4:    25 3598.548
-#&gt;  5:    54 3561.240
-#&gt;  6:    51 3585.918
-#&gt;  7:    16 3598.754
-#&gt;  8:    22 3551.822
-#&gt;  9:    14 3594.369
-#&gt; 10:    43 3599.714
-#&gt; 11:    17 3597.781
-#&gt; 12:    23 3550.029
-#&gt; 13:    18 3584.449
-#&gt; 14:    60 3525.710
-#&gt; 15:    57 3542.911
-#&gt; 16:    15 3595.574
-#&gt; 17:    11 3598.541
-#&gt; 18:    26 3539.670
-#&gt; 19:    64 3484.045
-#&gt; 20:    62 3513.619
-#&gt; 21:    40 3599.867
-#&gt; 22:    65 3479.009
-#&gt; 23:    63 3499.426
-#&gt; 24:    47 3598.773
-#&gt; 25:    66 3473.485
-#&gt; 26:    61 3521.343
-#&gt; 27:    48 3599.477
-#&gt; 28:    88 3514.271
-#&gt; 29:    87 3530.049
-#&gt; 30:    39 3599.230
-#&gt; 31:    59 3532.773
-#&gt; 32:    68 3599.492
-#&gt; 33:    89  759.052
-#&gt; 34:    38 3598.448
-#&gt; 35:    36 3599.521
-#&gt; 36:    67 3599.437
-#&gt; 37:    37 3596.836
-#&gt; 38:    53 3565.475
-#&gt; 39:    75 3531.920
-#&gt; 40:    55 3558.675
-#&gt; 41:    50 3594.795
-#&gt; 42:    49 3599.436
-#&gt; 43:    58 3538.009
-#&gt; 44:    76 3519.276
-#&gt; 45:     5 3599.838
-#&gt; 46:    77 3506.855
-#&gt; 47:    45 3599.494
-#&gt; 48:    44 3599.564
-#&gt; 49:    52 3574.829
-#&gt; 50:    56 3552.241
-#&gt; 51:     8 3598.851
-#&gt; 52:    41 3599.155
-#&gt; 53:    69 3599.996
-#&gt; 54:    71 3599.084
-#&gt; 55:     2 3599.915
-#&gt; 56:    72 3599.786
-#&gt; 57:    78 3489.613
-#&gt; 58:    70 3599.274
-#&gt; 59:    86 3598.407
-#&gt; 60:     4 3599.880
-#&gt; 61:     3 3599.903
-#&gt; 62:    73 3594.268
-#&gt; 63:    10 3594.940
-#&gt; 64:    21 3558.320
-#&gt; 65:    35 3461.277
-#&gt; 66:    31 3494.709
-#&gt; 67:    19 3573.133
-#&gt; 68:    33 3470.481
-#&gt; 69:    30 3501.713
-#&gt; 70:    20 3562.084
-#&gt; 71:     9 3598.559
-#&gt; 72:    29 3506.579
-#&gt; 73:    13 3599.540
-#&gt; 74:    34 3466.124
-#&gt; 75:    32 3488.814
-#&gt; 76:    12 3596.851
-#&gt; 77:    28 3515.640
-#&gt; 78:     7 3599.618
-#&gt; 79:    42 3599.426
-#&gt; 80:     6 3599.733
-#&gt; 81:    74 3516.857
-#&gt; 82:     1 3463.104
-#&gt; 83:    82 3588.468
-#&gt; 84:    83 3564.256
-#&gt; 85:    84 3545.823
-#&gt; 86:    79 3598.553
-#&gt; 87:    85 3524.288
-#&gt; 88:    81 3599.507
-#&gt; 89:    80 3598.224
-#&gt;     chunk  runtime</div><span class='co'># NOT RUN {</span>
+#&gt; 446:    496 estimated 1261.2737    44
+#&gt; 447:    497 estimated 1259.1252    45
+#&gt; 448:    498 estimated  481.9347    86
+#&gt; 449:    499 estimated  468.5123    87
+#&gt; 450:    500 estimated  469.5611    87</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>[, <span class='fu'>list</span>(<span class='kw'>runtime</span> <span class='kw'>=</span> <span class='fu'>sum</span>(<span class='no'>runtime</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>chunk</span>])</div><div class='output co'>#&gt;     chunk   runtime
+#&gt;     &lt;int&gt;     &lt;num&gt;
+#&gt;  1:    46 3599.2328
+#&gt;  2:    27 3593.4574
+#&gt;  3:    22 3599.3331
+#&gt;  4:    25 3594.4494
+#&gt;  5:    52 3571.5298
+#&gt;  6:    51 3585.5359
+#&gt;  7:    16 3599.0866
+#&gt;  8:    23 3547.2571
+#&gt;  9:    13 3598.9816
+#&gt; 10:    58 3537.1411
+#&gt; 11:    17 3597.7464
+#&gt; 12:    24 3545.5876
+#&gt; 13:    14 3595.1848
+#&gt; 14:    60 3524.6409
+#&gt; 15:    15 3596.5435
+#&gt; 16:    28 3521.3986
+#&gt; 17:    26 3535.7043
+#&gt; 18:    64 3485.9042
+#&gt; 19:    62 3513.4606
+#&gt; 20:    41 3599.4367
+#&gt; 21:    55 3557.2928
+#&gt; 22:    53 3563.8812
+#&gt; 23:    65 3478.9043
+#&gt; 24:    63 3500.6728
+#&gt; 25:     7 3599.0355
+#&gt; 26:    56 3551.7630
+#&gt; 27:    66 3473.1697
+#&gt; 28:    61 3517.8383
+#&gt; 29:    48 3599.3250
+#&gt; 30:    67 3596.7067
+#&gt; 31:    88 3506.7256
+#&gt; 32:    87 3528.2838
+#&gt; 33:    59 3532.2201
+#&gt; 34:    68 3596.6111
+#&gt; 35:    89  756.4566
+#&gt; 36:    36 3597.2318
+#&gt; 37:    37 3599.0557
+#&gt; 38:     2 3599.7579
+#&gt; 39:    50 3590.1906
+#&gt; 40:    49 3597.6894
+#&gt; 41:    43 3599.1331
+#&gt; 42:    54 3562.0891
+#&gt; 43:    77 3495.8279
+#&gt; 44:    45 3595.5484
+#&gt; 45:    57 3544.6045
+#&gt; 46:    47 3599.8675
+#&gt; 47:    44 3599.8453
+#&gt; 48:    78 3478.1622
+#&gt; 49:    73 3590.5278
+#&gt; 50:    40 3597.5775
+#&gt; 51:     3 3599.7475
+#&gt; 52:    76 3508.8096
+#&gt; 53:    75 3521.8978
+#&gt; 54:     5 3599.7072
+#&gt; 55:     6 3599.9608
+#&gt; 56:    39 3599.3068
+#&gt; 57:    69 3599.4841
+#&gt; 58:    70 3598.7686
+#&gt; 59:    71 3599.6841
+#&gt; 60:    72 3599.9577
+#&gt; 61:    86 3598.5098
+#&gt; 62:     4 3599.7902
+#&gt; 63:    11 3594.1493
+#&gt; 64:     8 3599.8776
+#&gt; 65:    20 3560.6566
+#&gt; 66:    35 3465.7659
+#&gt; 67:    31 3496.1678
+#&gt; 68:    19 3571.3215
+#&gt; 69:    34 3469.5853
+#&gt; 70:    30 3498.4430
+#&gt; 71:    21 3556.1970
+#&gt; 72:     9 3598.3857
+#&gt; 73:    29 3500.7084
+#&gt; 74:    18 3583.5274
+#&gt; 75:    33 3473.6857
+#&gt; 76:    32 3487.8816
+#&gt; 77:    12 3597.7197
+#&gt; 78:    38 3599.8980
+#&gt; 79:    10 3597.5876
+#&gt; 80:    42 3596.7140
+#&gt; 81:    74 3510.7331
+#&gt; 82:     1 3466.7049
+#&gt; 83:    81 3599.9559
+#&gt; 84:    83 3557.3393
+#&gt; 85:    82 3571.6814
+#&gt; 86:    84 3538.1496
+#&gt; 87:    85 3520.3145
+#&gt; 88:    80 3597.3409
+#&gt; 89:    79 3595.9922
+#&gt;     chunk   runtime</div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='co'># }</span><div class='input'>
 <span class='co'># Group jobs into 10 chunks with similar runtime</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='no'>est</span>$<span class='no'>runtimes</span>[<span class='no'>type</span> <span class='kw'>==</span> <span class='st'>"estimated"</span>]
 <span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'><a href='chunk.html'>lpt</a></span>(<span class='no'>runtime</span>, <span class='fl'>10</span>)]</div><div class='output co'>#&gt;      job.id      type   runtime chunk
 #&gt;       &lt;int&gt;    &lt;fctr&gt;     &lt;num&gt; &lt;int&gt;
-#&gt;   1:      1 estimated 1089.1902     1
-#&gt;   2:      2 estimated 1092.8479     5
-#&gt;   3:      3 estimated  295.5748     9
-#&gt;   4:      4 estimated  280.3962     4
+#&gt;   1:      1 estimated 1090.3905     3
+#&gt;   2:      2 estimated 1092.8482     8
+#&gt;   3:      3 estimated  294.7750     2
+#&gt;   4:      4 estimated  279.9963     8
 #&gt;  ---                                 
-#&gt; 446:    496 estimated 1261.9932     4
-#&gt; 447:    497 estimated 1260.6980     1
-#&gt; 448:    498 estimated  481.1342     2
-#&gt; 449:    499 estimated  467.3116     6
-#&gt; 450:    500 estimated  468.4937     2</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>[, <span class='fu'>list</span>(<span class='kw'>runtime</span> <span class='kw'>=</span> <span class='fu'>sum</span>(<span class='no'>runtime</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>chunk</span>])</div><div class='output co'>#&gt;     chunk  runtime
+#&gt; 446:    496 estimated 1261.2737     2
+#&gt; 447:    497 estimated 1259.1252     3
+#&gt; 448:    498 estimated  481.9347     3
+#&gt; 449:    499 estimated  468.5123     9
+#&gt; 450:    500 estimated  469.5611     3</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>[, <span class='fu'>list</span>(<span class='kw'>runtime</span> <span class='kw'>=</span> <span class='fu'>sum</span>(<span class='no'>runtime</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>chunk</span>])</div><div class='output co'>#&gt;     chunk  runtime
 #&gt;     &lt;int&gt;    &lt;num&gt;
-#&gt;  1:     1 31368.19
-#&gt;  2:     5 31503.99
-#&gt;  3:     9 31367.45
-#&gt;  4:     4 31366.86
-#&gt;  5:    10 31361.24
-#&gt;  6:     2 31495.70
-#&gt;  7:     7 31360.19
-#&gt;  8:     8 31498.84
-#&gt;  9:     3 31499.51
-#&gt; 10:     6 31500.85</div></pre>
+#&gt;  1:     3 31485.85
+#&gt;  2:     8 31353.17
+#&gt;  3:     2 31354.26
+#&gt;  4:     1 31354.14
+#&gt;  5:     5 31490.23
+#&gt;  6:     4 31486.02
+#&gt;  7:    10 31343.06
+#&gt;  8:     6 31343.43
+#&gt;  9:     7 31482.38
+#&gt; 10:     9 31487.18</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -446,9 +446,10 @@ reg = makeRegistry(file.dir = NA, seed = 1)
 if (dir.exists("/tmp"))
   reg$work.dir = "/tmp"
 ```
-Ten jobs are created, two of them will throw an exception.
+Ten jobs are created, one will trow a warning and two of them will raise an exception.
 ```{r}
 flakeyFunction <- function(value) {
+  if (value == 5) warning("Just a simple warning")
   if (value %in% c(2, 9)) stop("Ooops.")
   value^2
 }
@@ -480,12 +481,14 @@ If we want to peek into the R log file of a job to see more context for the erro
 writeLines(getLog(id = 9))
 ```
 
-You can also grep for error or warning messages:
+You can also grep for messages:
 ```{r}
-ids = grepLogs(pattern = "ooops", ignore.case = TRUE)
+ids = grepLogs(pattern = "simple", ignore.case = TRUE)
 print(ids)
 ```
 
+<!--
+WIP
 # Workflow
 
 1. Prototype
@@ -500,3 +503,4 @@ print(ids)
       * re-run the script you've used to populate the registry with jobs locally.
 4.  Monitor
 5.  Collect
+-->
