@@ -1,6 +1,7 @@
 # batchtools 0.9.4
 
 * Fixed handling of `file.dir` with special chars like whitespace.
+* All backward slashes will now be converted to forward slashes on windows.
 * Fixed order of arguments in `findExperiments()` (argument `ids` is now first).
 * Removed code to upgrade registries created with versions prior to v0.9.0 (first CRAN release).
 * `addExperiments()` now warns if a design is passed as `data.frame` with factor columns and `stringsAsFactors` is `TRUE`.
@@ -45,4 +46,4 @@
 # batchtools 0.9.0
 
 Initial CRAN release.
-See this [vignette](https://mllg.github.io/batchtools/articles/v01_Migration) for a brief comparison with [BatchJobs](https://cran.r-project.org/package=BatchJobs)/[BatchExperiments](https://cran.r-project.org/package=BatchExperiments).
+See the vignette for a brief comparison with [BatchJobs](https://cran.r-project.org/package=BatchJobs)/[BatchExperiments](https://cran.r-project.org/package=BatchExperiments).

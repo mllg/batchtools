@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -162,42 +169,49 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'><span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>) <span class='fu'>stop</span>(<span class='st'>"x must be &gt; 0"</span>) <span class='kw'>else</span> <span class='fu'>sqrt</span>(<span class='no'>x</span>)
-<span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>f</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions 'Interactive'</span></div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 3 files ...</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='st'>"tag1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry59d7469f5aca' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>) <span class='fu'>stop</span>(<span class='st'>"x must be &gt; 0"</span>) <span class='kw'>else</span> <span class='fu'>sqrt</span>(<span class='no'>x</span>)
+<span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>f</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Syncing 3 files ...</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='st'>"tag1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>2</span>, <span class='st'>"tag2"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
 <span class='co'># Complete table:</span>
 <span class='fu'>getJobTable</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;    job.id           submitted             started                done
-#&gt; 1:      1 2017-04-20 12:08:12 2017-04-20 12:08:12 2017-04-20 12:08:12
-#&gt; 2:      2 2017-04-20 12:08:12 2017-04-20 12:08:12 2017-04-20 12:08:12
-#&gt; 3:      3 2017-04-20 12:08:12 2017-04-20 12:08:12 2017-04-20 12:08:13
+#&gt;     &lt;int&gt;              &lt;POSc&gt;              &lt;POSc&gt;              &lt;POSc&gt;
+#&gt; 1:      1 2017-07-28 16:03:09 2017-07-28 16:03:09 2017-07-28 16:03:09
+#&gt; 2:      2 2017-07-28 16:03:09 2017-07-28 16:03:09 2017-07-28 16:03:09
+#&gt; 3:      3 2017-07-28 16:03:09 2017-07-28 16:03:09 2017-07-28 16:03:09
 #&gt;                                      error memory      batch.id log.file
+#&gt;                                     &lt;char&gt;  &lt;num&gt;        &lt;char&gt;   &lt;char&gt;
 #&gt; 1: Error in (function (x)  : x must be &gt; 0     NA cfInteractive       NA
 #&gt; 2:                                      NA     NA cfInteractive       NA
 #&gt; 3:                                      NA     NA cfInteractive       NA
-#&gt;                               job.hash time.queued time.running   pars
-#&gt; 1: jobafaaf049f3c25713ded0761afb34235b      0 secs       0 secs &lt;list&gt;
-#&gt; 2: job3125ad762aadc12e1f59c51ac3c683ff      0 secs       0 secs &lt;list&gt;
-#&gt; 3: job4412281d6f41a843b319e850715c19c7      0 secs       1 secs &lt;list&gt;
+#&gt;                               job.hash      time.queued     time.running   pars
+#&gt;                                 &lt;char&gt;       &lt;difftime&gt;       &lt;difftime&gt; &lt;list&gt;
+#&gt; 1: jobcc3646f1603ce49d0da294118c12a744 0.002799988 secs 0.003000021 secs &lt;list&gt;
+#&gt; 2: job2a11103ed81d1c6a279e055ea47b93a2 0.003100157 secs 0.001799822 secs &lt;list&gt;
+#&gt; 3: job43d236385fd6ea0992e4bd07a8ac13e1 0.002799988 secs 0.001999855 secs &lt;list&gt;
 #&gt;    resources      tags
+#&gt;       &lt;list&gt;    &lt;char&gt;
 #&gt; 1:    &lt;list&gt;      tag1
 #&gt; 2:    &lt;list&gt; tag1,tag2
 #&gt; 3:    &lt;list&gt;        NA</div><div class='input'>
 <span class='co'># Job parameters:</span>
 <span class='fu'>getJobPars</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;    job.id   pars
+#&gt;     &lt;int&gt; &lt;list&gt;
 #&gt; 1:      1 &lt;list&gt;
 #&gt; 2:      2 &lt;list&gt;
 #&gt; 3:      3 &lt;list&gt;</div><div class='input'>
 <span class='co'># Set and retrieve tags:</span>
 <span class='fu'>getJobTags</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id      tags
+#&gt;     &lt;int&gt;    &lt;char&gt;
 #&gt; 1:      1      tag1
 #&gt; 2:      2 tag1,tag2
 #&gt; 3:      3        NA</div><div class='input'>
 <span class='co'># Job parameters with tags right-joined:</span>
-<span class='fu'><a href='JoinTables.html'>rjoin</a></span>(<span class='fu'>getJobPars</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='fu'>getJobTags</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt;    job.id  x      tags
-#&gt; 1:      1 -1      tag1
-#&gt; 2:      2  0 tag1,tag2
-#&gt; 3:      3  1        NA</div></pre>
+<span class='fu'><a href='JoinTables.html'>rjoin</a></span>(<span class='fu'>getJobPars</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>), <span class='fu'>getJobTags</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt;    job.id     x      tags
+#&gt;     &lt;int&gt; &lt;num&gt;    &lt;char&gt;
+#&gt; 1:      1    -1      tag1
+#&gt; 2:      2     0 tag1,tag2
+#&gt; 3:      3     1        NA</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -158,7 +165,7 @@ This way, the used resources for inner parallelization are set in the same place
 The user function just has to call <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></code> to start parallelization using the preconfigured backend.</p>
 <p>Note that you should set the resource <code>ncpus</code> to control the number of CPUs to use in <span class="pkg">parallelMap</span>.
 <code>ncpus</code> defaults to the number of available CPUs (as reported by (see <code><a href='http://www.rdocumentation.org/packages/parallel/topics/detectCores'>detectCores</a></code>))
-on the executing machine for multicore and socket mode and defaults to the return value of <code><a href='http://www.rdocumentation.org/packages/Rmpi/topics/mpi.universe.size'>mpi.universe.size</a>-1</code> for MPI.
+on the executing machine for multicore and socket mode and defaults to the return value of <code>mpi.universe.size-1</code> for MPI.
 Your template must be set up to handle the parallelization, e.g. start R with <code>mpirun</code> or request the right number of CPUs.
 You may pass further options like <code>level</code> to <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStart'>parallelStart</a></code> via the named list &#8220;pm.opts&#8221;.</p>
 <p>Also note that if you have thousands of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
@@ -167,41 +174,44 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>### Example 1: Using memory measurement</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry59d7517081df' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Toy function which creates a large matrix and returns the column sums</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>n</span>, <span class='no'>p</span>) <span class='fu'>colMeans</span>(<span class='fu'>matrix</span>(<span class='fu'>runif</span>(<span class='no'>n</span>*<span class='no'>p</span>), <span class='no'>n</span>, <span class='no'>p</span>))
 
 <span class='co'># Arguments to fun:</span>
-<span class='no'>args</span> <span class='kw'>=</span> <span class='fu'>expand.grid</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1e4</span>, <span class='fl'>1e5</span>), <span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>10</span>, <span class='fl'>50</span>))
-<span class='fu'>print</span>(<span class='no'>args</span>)</div><div class='output co'>#&gt;       n  p
-#&gt; 1 1e+04 10
-#&gt; 2 1e+05 10
-#&gt; 3 1e+04 50
-#&gt; 4 1e+05 50</div><div class='input'>
+<span class='no'>args</span> <span class='kw'>=</span> <span class='fu'>CJ</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1e4</span>, <span class='fl'>1e5</span>), <span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>10</span>, <span class='fl'>50</span>)) <span class='co'># like expand.grid()</span>
+<span class='fu'>print</span>(<span class='no'>args</span>)</div><div class='output co'>#&gt;        n     p
+#&gt;    &lt;num&gt; &lt;num&gt;
+#&gt; 1: 1e+04    10
+#&gt; 2: 1e+04    50
+#&gt; 3: 1e+05    10
+#&gt; 4: 1e+05    50</div><div class='input'>
 <span class='co'># Map function to create jobs</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>fun</span>, <span class='kw'>args</span> <span class='kw'>=</span> <span class='no'>args</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 4 jobs ...</span></div><div class='input'>
 <span class='co'># Set resources: enable memory measurement</span>
 <span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>measure.memory</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Submit jobs using the currently configured cluster functions</span>
-<span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions 'Interactive'</span></div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='input'>
+<span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='input'>
 <span class='co'># Retrive information about memory, combine with parameters</span>
-<span class='no'>info</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='fu'><a href='getJobTable.html'>getJobStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>memory</span>)], <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; <span class='message'>Syncing 4 files ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>info</span>)</div><div class='output co'>#&gt;    job.id memory     n  p
-#&gt; 1:      1   70.8 1e+04 10
-#&gt; 2:      2   83.6 1e+05 10
-#&gt; 3:      3   76.3 1e+04 50
-#&gt; 4:      4  144.7 1e+05 50</div><div class='input'>
+<span class='no'>info</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='fu'><a href='getJobTable.html'>getJobStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>memory</span>)], <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; <span class='message'>Syncing 4 files ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>info</span>)</div><div class='output co'>#&gt;    job.id memory     n     p
+#&gt;     &lt;int&gt;  &lt;num&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:      1  110.9 1e+04    10
+#&gt; 2:      2  115.5 1e+04    50
+#&gt; 3:      3  122.8 1e+05    10
+#&gt; 4:      4  183.8 1e+05    50</div><div class='input'>
 <span class='co'># Combine job info with results -&gt; each job is aggregated using mean()</span>
-<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt;    job.id memory     n  p       res
-#&gt; 1:      1   70.8 1e+04 10 0.4990537
-#&gt; 2:      2   83.6 1e+05 10 0.4999915
-#&gt; 3:      3   76.3 1e+04 50 0.5003790
-#&gt; 4:      4  144.7 1e+05 50 0.4998443</div><div class='input'>
+<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt;    job.id memory     n     p       res
+#&gt;     &lt;int&gt;  &lt;num&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;
+#&gt; 1:      1  110.9 1e+04    10 0.5003912
+#&gt; 2:      2  115.5 1e+04    50 0.4997547
+#&gt; 3:      3  122.8 1e+05    10 0.5001089
+#&gt; 4:      4  183.8 1e+05    50 0.4999913</div><div class='input'>
 <span class='co'>### Example 2: Multicore execution on the slave</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry59d7207f596c' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Function which sleeps 10 seconds, i-times</span>
 <span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
-  <span class='kw'>parallelMap</span><span class='kw'>::</span><span class='fu'>parallelMap</span>(<span class='no'>Sys.sleep</span>, <span class='fu'>rep</span>(<span class='fl'>10</span>, <span class='no'>i</span>))
+  <span class='kw pkg'>parallelMap</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></span>(<span class='no'>Sys.sleep</span>, <span class='fu'>rep</span>(<span class='fl'>10</span>, <span class='no'>i</span>))
 }
 
 <span class='co'># Create one job with parameter i=4</span>
@@ -210,19 +220,17 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
 <span class='co'># batchtools internally loads the namespace of parallelMap and then</span>
 <span class='co'># calls parallelStart() before the job and parallelStop() right</span>
 <span class='co'># after the job last job in the chunk terminated.</span>
-<span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>pm.backend</span> <span class='kw'>=</span> <span class='st'>"multicore"</span>, <span class='kw'>ncpus</span> <span class='kw'>=</span> <span class='fl'>4</span>)
+<span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>pm.backend</span> <span class='kw'>=</span> <span class='st'>"multicore"</span>, <span class='kw'>ncpus</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><span class='co'># NOT RUN {</span>
+<span class='co'># Submit both jobs and wait for them</span>
+<span class='fu'>submitJobs</span>(<span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
-<span class='fu'>not_run</span>({
-  <span class='co'># Submit both jobs and wait for them</span>
-  <span class='fu'>submitJobs</span>(<span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-  <span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='co'># If successfull, the running time should be ~10s</span>
+<span class='fu'><a href='getJobTable.html'>getJobTable</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>time.running</span>)]
 
-  <span class='co'># If successfull, the running time should be ~10s</span>
-  <span class='fu'><a href='getJobTable.html'>getJobTable</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>time.running</span>)]
-
-  <span class='co'># There should also be a note in the log:</span>
-  <span class='fu'><a href='grepLogs.html'>grepLogs</a></span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"parallelMap"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-})</div></pre>
+<span class='co'># There should also be a note in the log:</span>
+<span class='fu'><a href='grepLogs.html'>grepLogs</a></span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"parallelMap"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

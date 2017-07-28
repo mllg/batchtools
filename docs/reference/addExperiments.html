@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -134,6 +141,14 @@ Registry. If not explicitly passed, uses the last created registry.</p></td>
 
     <p>[<code>data.table</code>] with ids of added jobs stored in column &#8220;job.id&#8221;.</p>
     
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>R's <code>data.frame</code> converts character vectors to factors by default which frequently resulted in problems using <code>addExperiments</code>.
+Therefore, this function will warn about factor variables if the following conditions hold:</p><ol>
+<li><p>The design is passed as a <code>data.frame</code>, not a <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> or <code><a href='http://www.rdocumentation.org/packages/tibble/topics/tibble'>tibble</a></code>.</p></li>
+<li><p>The option &#8220;stringsAsFactors&#8221; is not set or set to <code>TRUE</code>.</p></li>
+</ol>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <p>Other Experiment: <code><a href='removeExperiments.html'>removeExperiments</a></code>,
@@ -141,26 +156,22 @@ Registry. If not explicitly passed, uses the last created registry.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry59d7609013de' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># add first problem</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>...</span>) <span class='fu'>rnorm</span>(<span class='no'>n</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>sd</span>)
-<span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"rnorm"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-
+<span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"rnorm"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'rnorm'</span></div><div class='input'>
 <span class='co'># add second problem</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>lambda</span>, <span class='no'>...</span>) <span class='fu'>rexp</span>(<span class='no'>n</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='no'>lambda</span>)
-<span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"rexp"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-
+<span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"rexp"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'rexp'</span></div><div class='input'>
 <span class='co'># add first algorithm</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>instance</span>, <span class='no'>method</span>, <span class='no'>...</span>) <span class='kw'>if</span> (<span class='no'>method</span> <span class='kw'>==</span> <span class='st'>"mean"</span>) <span class='fu'>mean</span>(<span class='no'>instance</span>) <span class='kw'>else</span> <span class='fu'>median</span>(<span class='no'>instance</span>)
-<span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='st'>"average"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-
+<span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='st'>"average"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'average'</span></div><div class='input'>
 <span class='co'># add second algorithm</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>sd</span>(<span class='no'>instance</span>)
-<span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='st'>"deviation"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-
+<span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='st'>"deviation"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'deviation'</span></div><div class='input'>
 <span class='co'># define problem and algorithm designs</span>
 <span class='no'>prob.designs</span> <span class='kw'>=</span> <span class='no'>algo.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>()
-<span class='no'>prob.designs</span>$<span class='no'>rnorm</span> <span class='kw'>=</span> <span class='fu'>expand.grid</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>mean</span> <span class='kw'>=</span> -<span class='fl'>1</span>:<span class='fl'>1</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
+<span class='no'>prob.designs</span>$<span class='no'>rnorm</span> <span class='kw'>=</span> <span class='fu'>CJ</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>mean</span> <span class='kw'>=</span> -<span class='fl'>1</span>:<span class='fl'>1</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
 <span class='no'>prob.designs</span>$<span class='no'>rexp</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)
 <span class='no'>algo.designs</span>$<span class='no'>average</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"mean"</span>, <span class='st'>"median"</span>))
 <span class='no'>algo.designs</span>$<span class='no'>deviation</span> <span class='kw'>=</span> <span class='fu'>data.table</span>()
@@ -169,71 +180,73 @@ Registry. If not explicitly passed, uses the last created registry.</p></td>
 <span class='fu'>addExperiments</span>(<span class='no'>prob.designs</span>, <span class='no'>algo.designs</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 30 experiments ('rnorm'[15] x 'average'[2] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 15 experiments ('rnorm'[15] x 'deviation'[1] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 10 experiments ('rexp'[5] x 'average'[2] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 5 experiments ('rexp'[5] x 'deviation'[1] x repls[1]) ...</span></div><div class='input'>
 <span class='co'># check what has been created</span>
 <span class='fu'><a href='summarizeExperiments.html'>summarizeExperiments</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    problem algorithm .count
+#&gt;     &lt;fctr&gt;    &lt;fctr&gt;  &lt;int&gt;
 #&gt; 1:   rnorm   average     30
 #&gt; 2:   rnorm deviation     15
 #&gt; 3:    rexp   average     10
-#&gt; 4:    rexp deviation      5</div><div class='input'><span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;     job.id problem algorithm   n mean sd method lambda
-#&gt;  1:      1   rnorm   average 100   -1  1   mean     NA
-#&gt;  2:      2   rnorm   average 100   -1  1 median     NA
-#&gt;  3:      3   rnorm   average 100    0  1   mean     NA
-#&gt;  4:      4   rnorm   average 100    0  1 median     NA
-#&gt;  5:      5   rnorm   average 100    1  1   mean     NA
-#&gt;  6:      6   rnorm   average 100    1  1 median     NA
-#&gt;  7:      7   rnorm   average 100   -1  2   mean     NA
-#&gt;  8:      8   rnorm   average 100   -1  2 median     NA
-#&gt;  9:      9   rnorm   average 100    0  2   mean     NA
-#&gt; 10:     10   rnorm   average 100    0  2 median     NA
-#&gt; 11:     11   rnorm   average 100    1  2   mean     NA
-#&gt; 12:     12   rnorm   average 100    1  2 median     NA
-#&gt; 13:     13   rnorm   average 100   -1  3   mean     NA
-#&gt; 14:     14   rnorm   average 100   -1  3 median     NA
-#&gt; 15:     15   rnorm   average 100    0  3   mean     NA
-#&gt; 16:     16   rnorm   average 100    0  3 median     NA
-#&gt; 17:     17   rnorm   average 100    1  3   mean     NA
-#&gt; 18:     18   rnorm   average 100    1  3 median     NA
-#&gt; 19:     19   rnorm   average 100   -1  4   mean     NA
-#&gt; 20:     20   rnorm   average 100   -1  4 median     NA
-#&gt; 21:     21   rnorm   average 100    0  4   mean     NA
-#&gt; 22:     22   rnorm   average 100    0  4 median     NA
-#&gt; 23:     23   rnorm   average 100    1  4   mean     NA
-#&gt; 24:     24   rnorm   average 100    1  4 median     NA
-#&gt; 25:     25   rnorm   average 100   -1  5   mean     NA
-#&gt; 26:     26   rnorm   average 100   -1  5 median     NA
-#&gt; 27:     27   rnorm   average 100    0  5   mean     NA
-#&gt; 28:     28   rnorm   average 100    0  5 median     NA
-#&gt; 29:     29   rnorm   average 100    1  5   mean     NA
-#&gt; 30:     30   rnorm   average 100    1  5 median     NA
-#&gt; 31:     31   rnorm deviation 100   -1  1     NA     NA
-#&gt; 32:     32   rnorm deviation 100    0  1     NA     NA
-#&gt; 33:     33   rnorm deviation 100    1  1     NA     NA
-#&gt; 34:     34   rnorm deviation 100   -1  2     NA     NA
-#&gt; 35:     35   rnorm deviation 100    0  2     NA     NA
-#&gt; 36:     36   rnorm deviation 100    1  2     NA     NA
-#&gt; 37:     37   rnorm deviation 100   -1  3     NA     NA
-#&gt; 38:     38   rnorm deviation 100    0  3     NA     NA
-#&gt; 39:     39   rnorm deviation 100    1  3     NA     NA
-#&gt; 40:     40   rnorm deviation 100   -1  4     NA     NA
-#&gt; 41:     41   rnorm deviation 100    0  4     NA     NA
-#&gt; 42:     42   rnorm deviation 100    1  4     NA     NA
-#&gt; 43:     43   rnorm deviation 100   -1  5     NA     NA
-#&gt; 44:     44   rnorm deviation 100    0  5     NA     NA
-#&gt; 45:     45   rnorm deviation 100    1  5     NA     NA
-#&gt; 46:     46    rexp   average 100   NA NA   mean      1
-#&gt; 47:     47    rexp   average 100   NA NA median      1
-#&gt; 48:     48    rexp   average 100   NA NA   mean      2
-#&gt; 49:     49    rexp   average 100   NA NA median      2
-#&gt; 50:     50    rexp   average 100   NA NA   mean      3
-#&gt; 51:     51    rexp   average 100   NA NA median      3
-#&gt; 52:     52    rexp   average 100   NA NA   mean      4
-#&gt; 53:     53    rexp   average 100   NA NA median      4
-#&gt; 54:     54    rexp   average 100   NA NA   mean      5
-#&gt; 55:     55    rexp   average 100   NA NA median      5
-#&gt; 56:     56    rexp deviation 100   NA NA     NA      1
-#&gt; 57:     57    rexp deviation 100   NA NA     NA      2
-#&gt; 58:     58    rexp deviation 100   NA NA     NA      3
-#&gt; 59:     59    rexp deviation 100   NA NA     NA      4
-#&gt; 60:     60    rexp deviation 100   NA NA     NA      5
-#&gt;     job.id problem algorithm   n mean sd method lambda</div></pre>
+#&gt; 4:    rexp deviation      5</div><div class='input'><span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;     job.id problem algorithm     n  mean    sd method lambda
+#&gt;      &lt;int&gt;  &lt;fctr&gt;    &lt;fctr&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;char&gt;  &lt;int&gt;
+#&gt;  1:      1   rnorm   average   100    -1     1   mean     NA
+#&gt;  2:      2   rnorm   average   100    -1     1 median     NA
+#&gt;  3:      3   rnorm   average   100    -1     2   mean     NA
+#&gt;  4:      4   rnorm   average   100    -1     2 median     NA
+#&gt;  5:      5   rnorm   average   100    -1     3   mean     NA
+#&gt;  6:      6   rnorm   average   100    -1     3 median     NA
+#&gt;  7:      7   rnorm   average   100    -1     4   mean     NA
+#&gt;  8:      8   rnorm   average   100    -1     4 median     NA
+#&gt;  9:      9   rnorm   average   100    -1     5   mean     NA
+#&gt; 10:     10   rnorm   average   100    -1     5 median     NA
+#&gt; 11:     11   rnorm   average   100     0     1   mean     NA
+#&gt; 12:     12   rnorm   average   100     0     1 median     NA
+#&gt; 13:     13   rnorm   average   100     0     2   mean     NA
+#&gt; 14:     14   rnorm   average   100     0     2 median     NA
+#&gt; 15:     15   rnorm   average   100     0     3   mean     NA
+#&gt; 16:     16   rnorm   average   100     0     3 median     NA
+#&gt; 17:     17   rnorm   average   100     0     4   mean     NA
+#&gt; 18:     18   rnorm   average   100     0     4 median     NA
+#&gt; 19:     19   rnorm   average   100     0     5   mean     NA
+#&gt; 20:     20   rnorm   average   100     0     5 median     NA
+#&gt; 21:     21   rnorm   average   100     1     1   mean     NA
+#&gt; 22:     22   rnorm   average   100     1     1 median     NA
+#&gt; 23:     23   rnorm   average   100     1     2   mean     NA
+#&gt; 24:     24   rnorm   average   100     1     2 median     NA
+#&gt; 25:     25   rnorm   average   100     1     3   mean     NA
+#&gt; 26:     26   rnorm   average   100     1     3 median     NA
+#&gt; 27:     27   rnorm   average   100     1     4   mean     NA
+#&gt; 28:     28   rnorm   average   100     1     4 median     NA
+#&gt; 29:     29   rnorm   average   100     1     5   mean     NA
+#&gt; 30:     30   rnorm   average   100     1     5 median     NA
+#&gt; 31:     31   rnorm deviation   100    -1     1     NA     NA
+#&gt; 32:     32   rnorm deviation   100    -1     2     NA     NA
+#&gt; 33:     33   rnorm deviation   100    -1     3     NA     NA
+#&gt; 34:     34   rnorm deviation   100    -1     4     NA     NA
+#&gt; 35:     35   rnorm deviation   100    -1     5     NA     NA
+#&gt; 36:     36   rnorm deviation   100     0     1     NA     NA
+#&gt; 37:     37   rnorm deviation   100     0     2     NA     NA
+#&gt; 38:     38   rnorm deviation   100     0     3     NA     NA
+#&gt; 39:     39   rnorm deviation   100     0     4     NA     NA
+#&gt; 40:     40   rnorm deviation   100     0     5     NA     NA
+#&gt; 41:     41   rnorm deviation   100     1     1     NA     NA
+#&gt; 42:     42   rnorm deviation   100     1     2     NA     NA
+#&gt; 43:     43   rnorm deviation   100     1     3     NA     NA
+#&gt; 44:     44   rnorm deviation   100     1     4     NA     NA
+#&gt; 45:     45   rnorm deviation   100     1     5     NA     NA
+#&gt; 46:     46    rexp   average   100    NA    NA   mean      1
+#&gt; 47:     47    rexp   average   100    NA    NA median      1
+#&gt; 48:     48    rexp   average   100    NA    NA   mean      2
+#&gt; 49:     49    rexp   average   100    NA    NA median      2
+#&gt; 50:     50    rexp   average   100    NA    NA   mean      3
+#&gt; 51:     51    rexp   average   100    NA    NA median      3
+#&gt; 52:     52    rexp   average   100    NA    NA   mean      4
+#&gt; 53:     53    rexp   average   100    NA    NA median      4
+#&gt; 54:     54    rexp   average   100    NA    NA   mean      5
+#&gt; 55:     55    rexp   average   100    NA    NA median      5
+#&gt; 56:     56    rexp deviation   100    NA    NA     NA      1
+#&gt; 57:     57    rexp deviation   100    NA    NA     NA      2
+#&gt; 58:     58    rexp deviation   100    NA    NA     NA      3
+#&gt; 59:     59    rexp deviation   100    NA    NA     NA      4
+#&gt; 60:     60    rexp deviation   100    NA    NA     NA      5
+#&gt;     job.id problem algorithm     n  mean    sd method lambda</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -241,6 +254,8 @@ Registry. If not explicitly passed, uses the last created registry.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#note">Note</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

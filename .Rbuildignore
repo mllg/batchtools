@@ -4,11 +4,11 @@
 \.swp$
 ^\.ignore$
 ^\.editorconfig$
-^.travis.yml$
+^\.travis\.yml$
 ^man-roxygen$
 ^appveyor\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^docs$
 ^paper$
-^_pkgdown.yml$
+^_pkgdown\.yml$
