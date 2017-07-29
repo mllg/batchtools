@@ -25,7 +25,7 @@
 #' @importFrom rappdirs user_config_dir
 #' @importFrom stats runif predict pexp
 #' @importFrom base64url base32_encode base32_decode
-#' @importFrom withr with_dir
+#' @importFrom withr with_dir with_seed local_options local_dir
 "_PACKAGE"
 
 #' @title Deprecated function in the batchtools package

@@ -40,7 +40,7 @@ Imports:
     stats,
     stringi,
     utils,
-    withr
+    withr (>= 2.0.0)
 Suggests:
     debugme,
     e1071,

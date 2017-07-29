@@ -145,17 +145,6 @@ getSeed = function(start.seed, id) {
     start.seed + id
 }
 
-with_seed = function(seed, expr) {
-  if (!is.null(seed)) {
-    if (!exists(".Random.seed", .GlobalEnv))
-      set.seed(NULL)
-    state = get(".Random.seed", .GlobalEnv)
-    set.seed(seed)
-    on.exit(assign(".Random.seed", state, envir = .GlobalEnv))
-  }
-  eval.parent(expr)
-}
-
 chsetdiff = function(x, y) {
   # Note: assumes that x has no duplicates
   x[chmatch(x, y, 0L) == 0L]
