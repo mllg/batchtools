@@ -3,3 +3,5 @@ inst/doc
 src/*.so
 src/*.o
 vignettes/*.html
+.Rproj.user
+batchtools.Rproj
