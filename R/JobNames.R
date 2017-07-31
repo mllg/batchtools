@@ -23,7 +23,7 @@
 setJobNames = function(ids = NULL, names, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE)
   ids = convertIds(reg, ids, default = noIds())
-  assertCharacter(names, min.chars = 1L, len = nrow(ids), pattern = "^[[:alnum:]_.-]+$")
+  assertCharacter(names, min.chars = 1L, len = nrow(ids))
 
   reg$status[ids, "job.name" := names]
   saveRegistry(reg)
