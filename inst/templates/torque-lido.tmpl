@@ -41,7 +41,7 @@ if (length(grep("^/data/", log.file)) > 0L) {
 }
 -%>
 
-#PBS -N <%= job.hash %>
+#PBS -N <%= job.name %>
 #PBS -o <%= log.file %>
 #PBS -l walltime=<%= resources$walltime %>,nodes=<%= if (use.mpi) resources$ncpus else 1 %>:ppn=<%= if (use.mpi) 1 else resources$ncpus %><%= if (!is.null(resources$type)) paste0(":", resources$type) %>,vmem=<%= resources$memory %>M
 #PBS -q <%= queue %>

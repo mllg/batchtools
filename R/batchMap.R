@@ -100,6 +100,7 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
     batch.id    = NA_character_,
     log.file    = NA_character_,
     job.hash    = NA_character_,
+    job.name    = NA_character_,
     key         = "job.id")
 
   saveRegistry(reg)
