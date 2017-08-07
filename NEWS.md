@@ -7,6 +7,9 @@
 * `addExperiments()` now warns if a design is passed as `data.frame` with factor columns and `stringsAsFactors` is `TRUE`.
 * Added functions `setJobNames()` and `getJobNames()` to control the name of jobs on batch systems.
   Templates should be adapted to use `job.name` instead of `job.hash` for naming.
+* Argument `flatten` of `getJobResources()`, `getJobPars` and `getJobTable` is deprecated and will be removed.
+  Future versions of the functions will behave like `flatten` is set to `FALSE` explicitly.
+  Single resources/parameters must be extracted manually (or using `unnest` in package `tidyr`).
 
 # batchtools 0.9.3
 
