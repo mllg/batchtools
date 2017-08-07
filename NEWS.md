@@ -7,13 +7,13 @@
 * `addExperiments()` now warns if a design is passed as `data.frame` with factor columns and `stringsAsFactors` is `TRUE`.
 * Added functions `setJobNames()` and `getJobNames()` to control the name of jobs on batch systems.
   Templates should be adapted to use `job.name` instead of `job.hash` for naming.
-* Argument `flatten` of `getJobResources()`, `getJobPars` and `getJobTable` is deprecated and will be removed.
+* Argument `flatten` of `getJobResources()`, `getJobPars()` and `getJobTable()` is deprecated and will be removed.
   Future versions of the functions will behave like `flatten` is set to `FALSE` explicitly.
-  Single resources/parameters must be extracted manually (or using `unnest` in package `tidyr`).
+  Single resources/parameters must be extracted manually (or with `tidyr::unnest()`).
 
 # batchtools 0.9.3
 
-* Running jobs now are also included while querying for status "started". This affects `findStarted()`, `findNotStarted` and `getStatus()`.
+* Running jobs now are also included while querying for status "started". This affects `findStarted()`, `findNotStarted()` and `getStatus()`.
 * `findExperiments()` now performs an exact string match (instead of matching substrings) for patterns specified via `prob.name` and `algo.name`.
   For substring matching, use `prob.pattern` or `algo.pattern`, respectively.
 * Changed arguments for `reduceResultsDataTable()`
@@ -44,7 +44,7 @@
 * Fixed handling of `NULL` results in `reduceResultsList()`
 * Fixed key lookup heuristic join functions.
 * Fixed a bug where `getJobTable()` returned `difftimes` with the wrong unit (e.g., in minutes instead of seconds).
-* Deactivated swap allocation for `clusterFunctionsDocker()`.
+* Deactivated swap allocation for `ClusterFunctionsDocker`.
 * The package is now more patient while communicating with the scheduler or file system by using a timeout-based approach.
   This should make the package more reliable and robust under heavy load.
 
