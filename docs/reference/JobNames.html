@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Run Jobs Interactively — testJob • batchtools</title>
+<title>Set and Retrieve Job Names — JobNames • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -86,36 +86,36 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Run Jobs Interactively</h1>
+    <h1>Set and Retrieve Job Names</h1>
     </div>
 
     
-    <p>Starts a single job on the local machine.</p>
+    <p>Set custom names for jobs. These are passed to the template as &#8216;job.name&#8217;.
+If no custom name is set (or any of the job names of the chunk is missing),
+the job hash is used as job name.
+Individual job names can be accessed via <code>jobs$job.name</code>.</p>
     
 
-    <pre class="usage"><span class='fu'>testJob</span>(<span class='no'>id</span>, <span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
+    <pre class="usage"><span class='fu'>setJobNames</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>names</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())
+
+<span class='fu'>getJobNames</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>id</th>
-      <td><p>[<code>integer(1)</code> or <code>data.table</code>]
-Single integer to specify the job or a <code>data.table</code> with column <code>job.id</code>
-and exactly one row.</p></td>
+      <th>ids</th>
+      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
+with a column named &#8220;job.id&#8221;.
+Alternatively, you may also pass a vector of integerish job ids.
+If not set, defaults to all jobs.
+Invalid ids are ignored.</p></td>
     </tr>
     <tr>
-      <th>external</th>
-      <td><p>[<code>logical(1)</code>]
- Run the job in an external R session? If <code>TRUE</code>, starts a fresh R
- session on the local machine to execute the with <code><a href='execJob.html'>execJob</a></code>.
- You will not be able to use debug tools like <code><a href='http://www.rdocumentation.org/packages/base/topics/traceback'>traceback</a></code>
- or <code><a href='http://www.rdocumentation.org/packages/base/topics/browser'>browser</a></code>.</p>
-<p>If <code>external</code> is set to <code>FALSE</code> (default) on the other hand,
- <code>testJob</code> will execute the job in the current R session and the usual
- debugging tools work. However, spotting missing variable declarations (as they
- are possibly resolved in the global environment) is impossible.
- Same holds for missing package dependency declarations.</p></td>
+      <th>names</th>
+      <td><p>[<code>character</code>]
+Character vector of the same length as provided ids.</p></td>
     </tr>
     <tr>
       <th>reg</th>
@@ -126,20 +126,24 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns the result of the job if successful.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
-  <code><a href='getStatus.html'>getStatus</a></code>, <code><a href='grepLogs.html'>grepLogs</a></code>,
-  <code><a href='killJobs.html'>killJobs</a></code>, <code><a href='resetJobs.html'>resetJobs</a></code>,
-  <code><a href='showLog.html'>showLog</a></code></p>
+    <p><code>setJobNames</code> returns <code>NULL</code> invisibly, <code>getJobTable</code>
+ returns a <code>data.table</code> with columns <code>job.id</code> and <code>job.name</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpP9I8YP/registry1f2210af997c' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>2</span>) <span class='no'>xxx</span> <span class='kw'>else</span> <span class='no'>x</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 jobs ...</span></div><div class='input'><span class='fu'>testJob</span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] 1</div><span class='co'># NOT RUN {</span>
-<span class='fu'>testJob</span>(<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpP9I8YP/registry1f22719f833b' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 10 jobs ...</span></div><div class='input'><span class='fu'>setJobNames</span>(<span class='no'>ids</span>, <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fu'>nrow</span>(<span class='no'>ids</span>)], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'>getJobNames</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;     job.id job.name
+#&gt;      &lt;int&gt;   &lt;char&gt;
+#&gt;  1:      1        a
+#&gt;  2:      2        b
+#&gt;  3:      3        c
+#&gt;  4:      4        d
+#&gt;  5:      5        e
+#&gt;  6:      6        f
+#&gt;  7:      7        g
+#&gt;  8:      8        h
+#&gt;  9:      9        i
+#&gt; 10:     10        j</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -147,8 +151,6 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
