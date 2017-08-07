@@ -102,14 +102,14 @@
 <li>
 <code><a href="../reference/addExperiments.html">addExperiments()</a></code> now warns if a design is passed as <code>data.frame</code> with factor columns and <code>stringsAsFactors</code> is <code>TRUE</code>.</li>
 <li>Added functions <code><a href="../reference/JobNames.html">setJobNames()</a></code> and <code><a href="../reference/JobNames.html">getJobNames()</a></code> to control the name of jobs on batch systems. Templates should be adapted to use <code>job.name</code> instead of <code>job.hash</code> for naming.</li>
-<li>Argument <code>flatten</code> of <code><a href="../reference/getJobTable.html">getJobResources()</a></code>, <code>getJobPars</code> and <code>getJobTable</code> is deprecated and will be removed. Future versions of the functions will behave like <code>flatten</code> is set to <code>FALSE</code> explicitly. Single resources/parameters must be extracted manually (or using <code>unnest</code> in package <code>tidyr</code>).</li>
+<li>Argument <code>flatten</code> of <code><a href="../reference/getJobTable.html">getJobResources()</a></code>, <code><a href="../reference/getJobTable.html">getJobPars()</a></code> and <code><a href="../reference/getJobTable.html">getJobTable()</a></code> is deprecated and will be removed. Future versions of the functions will behave like <code>flatten</code> is set to <code>FALSE</code> explicitly. Single resources/parameters must be extracted manually (or with <code><a href="http://www.rdocumentation.org/packages/tidyr/topics/unnest">tidyr::unnest()</a></code>).</li>
 </ul>
 </div>
     <div id="batchtools-0-9-3" class="section level1">
 <h1 class="hasAnchor">
 <a href="#batchtools-0-9-3" class="anchor"></a>batchtools 0.9.3</h1>
 <ul>
-<li>Running jobs now are also included while querying for status “started”. This affects <code><a href="../reference/findJobs.html">findStarted()</a></code>, <code>findNotStarted</code> and <code><a href="../reference/getStatus.html">getStatus()</a></code>.</li>
+<li>Running jobs now are also included while querying for status “started”. This affects <code><a href="../reference/findJobs.html">findStarted()</a></code>, <code><a href="../reference/findJobs.html">findNotStarted()</a></code> and <code><a href="../reference/getStatus.html">getStatus()</a></code>.</li>
 <li>
 <code><a href="../reference/findJobs.html">findExperiments()</a></code> now performs an exact string match (instead of matching substrings) for patterns specified via <code>prob.name</code> and <code>algo.name</code>. For substring matching, use <code>prob.pattern</code> or <code>algo.pattern</code>, respectively.</li>
 <li>Changed arguments for <code><a href="../reference/reduceResultsList.html">reduceResultsDataTable()</a></code>
@@ -146,7 +146,7 @@
 </li>
 <li>Fixed key lookup heuristic join functions.</li>
 <li>Fixed a bug where <code><a href="../reference/getJobTable.html">getJobTable()</a></code> returned <code>difftimes</code> with the wrong unit (e.g., in minutes instead of seconds).</li>
-<li>Deactivated swap allocation for <code>clusterFunctionsDocker()</code>.</li>
+<li>Deactivated swap allocation for <code>ClusterFunctionsDocker</code>.</li>
 <li>The package is now more patient while communicating with the scheduler or file system by using a timeout-based approach. This should make the package more reliable and robust under heavy load.</li>
 </ul>
 </div>

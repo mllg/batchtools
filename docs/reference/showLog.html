@@ -127,7 +127,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpZmp9mQ/registry3616135820be' using cluster functions 'Interactive'</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpFgx6O2/registry4fc12099306d' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Create some dummy jobs</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
   <span class='kw'>if</span> (<span class='no'>i</span> <span class='kw'>==</span> <span class='fl'>3</span>) <span class='fu'>stop</span>(<span class='no'>i</span>)
@@ -141,14 +141,14 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt;   Queued    : 0 (  0.0%)
 #&gt;   Running   : 0 (  0.0%)
 #&gt;   Expired   : 0 (  0.0%)</div><div class='input'>
-<span class='fu'>writeLines</span>(<span class='fu'>getLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; ### [bt 2017-08-07 19:31:44]: This is batchtools v0.9.4
-#&gt; ### [bt 2017-08-07 19:31:44]: Starting calculation of 1 jobs
-#&gt; ### [bt 2017-08-07 19:31:44]: Setting working directory to '/home/michel/Projekte/batchtools/docs/reference'
-#&gt; ### [bt 2017-08-07 19:31:44]: Memory measurement disabled
-#&gt; ### [bt 2017-08-07 19:31:45]: Starting job [batchtools job.id=1]
+<span class='fu'>writeLines</span>(<span class='fu'>getLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; ### [bt 2017-08-07 19:53:22]: This is batchtools v0.9.4
+#&gt; ### [bt 2017-08-07 19:53:22]: Starting calculation of 1 jobs
+#&gt; ### [bt 2017-08-07 19:53:22]: Setting working directory to '/home/michel/Projekte/batchtools/docs/reference'
+#&gt; ### [bt 2017-08-07 19:53:22]: Memory measurement disabled
+#&gt; ### [bt 2017-08-07 19:53:22]: Starting job [batchtools job.id=1]
 #&gt; 
-#&gt; ### [bt 2017-08-07 19:31:45]: Job terminated successfully [batchtools job.id=1]
-#&gt; ### [bt 2017-08-07 19:31:45]: Calculation finished!</div><span class='co'># NOT RUN {</span>
+#&gt; ### [bt 2017-08-07 19:53:22]: Job terminated successfully [batchtools job.id=1]
+#&gt; ### [bt 2017-08-07 19:53:22]: Calculation finished!</div><span class='co'># NOT RUN {</span>
 <span class='fu'>showLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='co'># }</span><div class='input'>
 <span class='fu'><a href='grepLogs.html'>grepLogs</a></span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"warning"</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; Empty data.table (0 rows) of 2 cols: job.id,matches</div></pre>
