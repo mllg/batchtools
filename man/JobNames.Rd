@@ -29,8 +29,9 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
  returns a \code{data.table} with columns \code{job.id} and \code{job.name}.
 }
 \description{
-Set custom names for jobs. These are passed to the template as
-\sQuote{job.name}. For chunked jobs, the first job name is used.
+Set custom names for jobs. These are passed to the template as \sQuote{job.name}.
+If no custom name is set (or any of the job names of the chunk is missing),
+the job hash is used as job name.
 Individual job names can be accessed via \code{jobs$job.name}.
 }
 \examples{
