@@ -105,7 +105,8 @@ The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchE
   [submitJobs()](https://mllg.github.io/batchtools/reference/submitJobs) stores a temporary object of type [JobCollection](https://mllg.github.io/batchtools/reference/JobCollection) on the file system which holds all the information necessary to execute a chunk of jobs via [doJobCollection()](https://mllg.github.io/batchtools/reference/doJobCollection) on the node.
   This avoids file system locks because each job accesses only one file exclusively.
 * `ClusterFunctionsMulticore` now uses the parallel package for multicore execution.
-  `ClusterFunctionsSSH` can still be used to emulate a scheduler-like system which respects the work load on the local machine.
+* `ClusterFunctionsSSH` can still be used to emulate a scheduler-like system which respects the work load on the local machine.
+  Setting the hostname to `"localhost"` just strips out `ssh` of the command issued.
 
 ## Interface Changes
 * batchtools remembers the last created or loaded Registry and sets it as default registry.
@@ -120,8 +121,11 @@ The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchE
   For exhaustive designs, use `data.table::CJ()`.
 
 ## Template changes
-* The scheduler should directly execute the command `Rscript -e 'batchtools::doJobCollection(<filename>)'`.
-  There is no intermediate R source file like in BatchJobs.
+* The scheduler should directly execute the command:
+```
+Rscript -e 'batchtools::doJobCollection(<filename>)'
+```
+  There is no intermediate R source file like there was in `BatchJobs`.
 * All information stored in the object [`JobCollection`](https://mllg.github.io/batchtools/reference/JobCollection) can be accessed while brewing the template.
 * Extra variables may be passed via the argument `resoures` of [submitJobs](https://mllg.github.io/batchtools/reference/submitJobs).
 
