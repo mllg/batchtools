@@ -6,7 +6,7 @@ output:
 urlcolor: blue
 linkcolor: blue
 vignette: >
-  %\VignetteIndexEntry{Setup}
+  %\VignetteIndexEntry{batchtools}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
