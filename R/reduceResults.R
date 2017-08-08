@@ -36,7 +36,7 @@
 #' submitJobs(reg = tmp)
 #' waitForJobs(reg = tmp)
 #'
-#' # Extract element sum
+#' # Extract element sum from each result
 #' reduceResults(function(aggr, res) c(aggr, res$sum), init = list(), reg = tmp)
 #'
 #' # Aggregate element sum via '+'
@@ -50,8 +50,24 @@
 #' }
 #' reduceResults(reduce, init = 1, reg = tmp)
 #'
-#' # Reduce to data.frame() (inefficient)
+#' # Reduce to data.frame() (inefficient, use reduceResultsDataTable() instead)
 #' reduceResults(rbind, init = data.frame(), reg = tmp)
+#'
+#' # Reduce to data.frame by collecting results first, then utilize vectorization of rbind:
+#' res = reduceResultsList(fun = as.data.frame, reg = tmp)
+#' do.call(rbind, res)
+#'
+#' # Reduce with custom combine function:
+#' comb = function(x, y) list(sum = x$sum + y$sum, prod = x$prod * y$prod)
+#' reduceResults(comb, reg = tmp)
+#'
+#' # The same with neutral element NULL
+#' comb = function(x, y) if (is.null(x)) y else list(sum = x$sum + y$sum, prod = x$prod * y$prod)
+#' reduceResults(comb, init = NULL, reg = tmp)
+#'
+#' # Alternative: Reduce in list, reduce manually in a 2nd step
+#' res = reduceResultsList(reg = tmp)
+#' Reduce(comb, res)
 reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   ids = convertIds(reg, ids, default = .findDone(reg = reg), keep.order = TRUE)
