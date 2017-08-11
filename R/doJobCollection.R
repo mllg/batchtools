@@ -160,7 +160,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
       i = self$updates[!is.na(started) & (!written), which = TRUE]
       if (length(i) > 0L) {
         first.id = self$updates$job.id[i[1L]]
-        writeRDS(self$updates[i], file = fp(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, first.id)))
+        writeRDS(self$updates[i, !"written"], file = fp(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, first.id)))
         set(self$updates, i, "written", TRUE)
       }
     },
