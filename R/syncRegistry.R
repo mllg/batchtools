@@ -29,7 +29,7 @@ sync = function(reg) {
   })
 
   failed = vlapply(updates, is.null)
-  updates = rbindlist(updates)
+  updates = rbindlist(updates, fill = TRUE) # -> fill = TRUE for #135
 
   if (nrow(updates) > 0L) {
     expr = quote(`:=`(started = i.started, done = i.done, error = i.error, memory = i.memory))
