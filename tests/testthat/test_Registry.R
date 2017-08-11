@@ -77,8 +77,11 @@ test_that("loadRegistry", {
   reg1 = makeRegistry(file.dir = NA, make.default = FALSE)
   fd = reg1$file.dir
   setDefaultRegistry(NULL)
-  reg2 = loadRegistry(fd, make.default = FALSE)
+  reg2 = loadRegistry(fd, make.default = FALSE, writeable = TRUE)
+  checkTables(reg1)
   checkTables(reg2)
+  nn = union(ls(reg1, all.names = TRUE), ls(reg2, all.names = TRUE))
+  foo = lapply(nn, function(x) expect_equal(reg1[[x]], reg2[[x]], info = x))
   expect_equal(reg1, reg2)
 
   x = readRDS(fp(fd, "registry.rds"))
@@ -88,7 +91,7 @@ test_that("loadRegistry", {
 test_that("loadRegistry with missing dependencies is still usable (#122)", {
   expect_warning(reg <- makeRegistry(file.dir = NA, make.default = FALSE, source = tempfile()), "Failed to source")
   saveRegistry(reg)
-  expect_warning(loadRegistry(reg$file.dir), "Failed to source")
+  expect_warning(loadRegistry(reg$file.dir, writeable = TRUE), "Failed to source")
   batchMap(identity, 1, reg = reg)
   expect_error(testJob(1, external = FALSE, reg = reg), "Failed to source file")
 })

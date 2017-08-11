@@ -9,7 +9,7 @@ test_that("mergeRegistries", {
   dir.create(td)
   file.copy(target$file.dir, td, recursive = TRUE)
   file.dir = fp(td, basename(target$file.dir))
-  source = loadRegistry(file.dir, update.paths = TRUE)
+  source = loadRegistry(file.dir, writeable = TRUE)
 
   submitAndWait(target, data.table(job.id = 1:4, chunk = 1L))
   submitAndWait(source, data.table(job.id = 6:9, chunk = c(1L, 1L, 1L, 2L)))

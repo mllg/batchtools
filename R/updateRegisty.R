@@ -1,8 +1,9 @@
+# returns TRUE if the state possibly changed
 updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
   "!DEBUG [updateRegistry]: Running updateRegistry"
   pv = packageVersion("batchtools")
   if (identical(pv, reg$version))
-    return(TRUE)
+    return(FALSE)
 
   if (is.null(reg$version) || reg$version < "0.9.0")
     stop("Your registry is too old.")
@@ -42,5 +43,5 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
   }
 
   reg$version = pv
-  saveRegistry(reg)
+  return(TRUE)
 } # nocov end

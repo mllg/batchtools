@@ -78,5 +78,5 @@ mergeRegistries = function(source, target = getDefaultRegistry()) {
   }
 
   target$status = ujoin(target$status, status, by = "job.id")
-  saveRegistry(target)
+  saveRegistry(reg = target)
 }

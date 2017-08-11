@@ -95,8 +95,9 @@ waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop
     "!DEBUG [waitForJobs]: `nrow(ids.disappeared)` jobs disappeared"
 
     sleep(i)
-    i = 1 + 1L
-    suppressMessages(syncRegistry(reg = reg))
+    i = i + 1L
+    suppressMessages(sync(reg = reg))
+    saveRegistry(reg)
     batch.ids = getBatchIds(reg)
     "!DEBUG [waitForJobs]: New batch.ids: `stri_flatten(batch.ids$batch.id, ',')`"
   }
