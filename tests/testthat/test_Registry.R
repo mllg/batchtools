@@ -98,8 +98,7 @@ test_that("loadRegistry after early node error still usable (#135)", {
   batchMap(identity, 1:2, reg = reg)
   jc = makeJobCollection(1, reg = reg)
   jc$packages = "not_existing_package"
-  writeRDS(jc, jc$uri)
-  suppressAll(runOSCommand(Rscript(), sprintf("-e 'batchtools::doJobCollection(\"%s\")'", jc$uri)))
+  suppressAll(doJobCollection(jc))
   expect_character(list.files(fp(reg$file.dir, "updates")), len = 1L)
   expect_true(syncRegistry(reg = reg))
   expect_string(getErrorMessages(reg = reg)$message, fixed = "not_existing_package")
