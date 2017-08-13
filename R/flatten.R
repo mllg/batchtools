@@ -1,14 +1,28 @@
-x = iris
-x$xxx = list(replicate(150, list(a = runif(1), b = rnorm(2), simplify = FALSE)))
-col = "xxx"
-
+if (FALSE) {
+  x = data.table(a = 1, col1 = replicate(5, list(a = runif(1)), simplify = FALSE))
+}
 flatten = function(x, cols = NULL, sep = NULL) {
   assertDataFrame(x)
-  if (is.null(cols))
+  if (is.null(cols)) {
     cols = names(x)[vlapply(x, is.list)]
-  assertNames(cols, subset.of = names(x))
+  } else {
+    assertNames(cols, "unique", subset.of = names(x))
+  }
+
+  res = data.table(..row = seq_row(x))
+  for (col in setdiff(names(x), cols))
+    set(res, j = col, value = x[[col]])
 
   for (col in cols) {
-    rbindlist(x[[col]],fill = TRUE)
+    new = rbindlist(x[[col]], fill = TRUE)
+    if (ncol(new) > 0L) {
+      if (nrow(new) != nrow(x))
+        stopf("Cannot unnest column '%s'", col)
+      if (!is.null(sep))
+        setnames(new, names(new), stri_paste(col, sep, names(new)))
+      res[, names(new) := new]
+    }
   }
+
+  res[, !"..row"]
 }

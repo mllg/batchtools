@@ -5,12 +5,13 @@ test_that("getJobTable.Registry", {
   fun = function(i, j) i + j
   ids = batchMap(fun, i = 1:4, j = rep(1, 4), reg = reg)
 
-  tab = getJobTable(reg = reg, flatten = FALSE)
+  tab = getJobTable(reg = reg)
   expect_data_table(tab, nrows = 4, ncols = 15, key = "job.id")
   expect_list(tab$pars)
   expect_equal(tab$pars[[1]], list(i = 1L, j = 1))
 
-  tab = getJobTable(reg = reg, flatten = TRUE)
+  tab = getJobTable(reg = reg)
+  flatten(tab, sep = ".")
   expect_data_table(tab, nrows = 4, ncols = 15, key = "job.id")
   expect_null(tab[["pars"]])
   expect_equal(tab$i, 1:4)
