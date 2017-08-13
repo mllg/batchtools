@@ -10,8 +10,7 @@ test_that("getJobTable.Registry", {
   expect_list(tab$pars)
   expect_equal(tab$pars[[1]], list(i = 1L, j = 1))
 
-  tab = getJobTable(reg = reg)
-  flatten(tab, sep = ".")
+  tab = flatten(tab)
   expect_data_table(tab, nrows = 4, ncols = 15, key = "job.id")
   expect_null(tab[["pars"]])
   expect_equal(tab$i, 1:4)
@@ -27,10 +26,10 @@ test_that("getJobTable.Registry", {
   expect_character(tab$tags)
   expect_true(allMissing(tab$tags))
 
-  tab = getJobTable(reg = reg, flatten = TRUE, prefix = TRUE)
+  tab = flatten(getJobTable(reg = reg), sep = ".")
   expect_null(tab[["pars"]])
-  expect_equal(tab$par.i, 1:4)
-  expect_equal(tab$par.j, rep(1, 4))
+  expect_equal(tab$pars.i, 1:4)
+  expect_equal(tab$pars.j, rep(1, 4))
 
   # be sure that the original tables are untouched
   checkTables(reg)
@@ -38,7 +37,7 @@ test_that("getJobTable.Registry", {
   submitAndWait(reg = reg, ids = s.chunk(ids), resources = list(my.walltime = 42L))
   addJobTags(2:3, "my_tag", reg = reg)
 
-  tab = getJobTable(reg = reg, flatten = TRUE)
+  tab = flatten(getJobTable(reg = reg))
   expect_data_table(tab, key = "job.id")
   expect_copied(tab, reg$status)
   expect_is(tab$submitted, "POSIXct")
@@ -50,14 +49,14 @@ test_that("getJobTable.Registry", {
   expect_numeric(tab$time.running, lower = 0)
   expect_character(tab$tags, min.len = 1L)
 
-  tab = getJobResources(reg = reg, flatten = FALSE)
+  tab = getJobResources(reg = reg)
   expect_data_table(tab, nrow = 4, ncols = 2, key = "job.id")
   expect_copied(tab, reg$resources)
   expect_set_equal(tab$resource.hash[1], tab$resource.hash)
   expect_list(tab$resources)
   expect_true(all(vlapply(tab$resources, function(r) r$my.walltime == 42)))
 
-  tab = getJobResources(reg = reg, flatten = TRUE)
+  tab = flatten(getJobResources(reg = reg))
   expect_null(tab[["resources"]])
   expect_integer(tab$my.walltime, any.missing = FALSE)
 })
@@ -66,18 +65,18 @@ test_that("getJobPars", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   fun = function(i, j) i + j
   ids = batchMap(fun, i = 1:4, j = rep(1, 4), reg = reg)
-  tab = getJobPars(reg = reg, flatten = NULL)
+  tab = flatten(getJobPars(reg = reg))
   expect_data_table(tab, nrow = 4, ncol = 3, key = "job.id")
   expect_copied(tab, reg$defs)
   expect_null(tab$pars)
   expect_equal(tab$i, 1:4)
   expect_equal(tab$j, rep(1, 4))
-  tab = getJobPars(reg = reg, ids = 1:2, flatten = NULL)
+  tab = flatten(getJobPars(reg = reg, ids = 1:2))
   expect_data_table(tab, nrow = 2, ncol = 3, key = "job.id")
-  tab = getJobPars(reg = reg, prefix = TRUE, flatten = NULL)
+  tab = flatten(getJobPars(reg = reg), sep = ".")
   expect_data_table(tab, nrow = 4, ncol = 3, key = "job.id")
-  expect_equal(tab$par.i, 1:4)
-  expect_equal(tab$par.j, rep(1, 4))
+  expect_equal(tab$pars.i, 1:4)
+  expect_equal(tab$pars.j, rep(1, 4))
 })
 
 test_that("flatten auto-detection works", {
@@ -85,19 +84,15 @@ test_that("flatten auto-detection works", {
   fun = function(i, j) i
   ids = batchMap(fun, i = 1:4, j = list(1, iris, 3, iris), reg = reg)
 
-  x = getJobPars(reg = reg, flatten = NULL)
-  y = getJobPars(reg = reg, flatten = FALSE)
+  x = getJobPars(reg = reg)
   expect_data_table(x, key = "job.id", nrow = 4, ncol = 2)
-  expect_data_table(y, key = "job.id", nrow = 4, ncol = 2)
-  expect_equal(x, y)
+  expect_error(flatten(x))
 
   reg$cluster.functions = makeClusterFunctionsInteractive()
   submitJobs(resources = list(ncpus = 2, strange.stuff = matrix(1:9)), reg = reg)
-  x = getJobResources(reg = reg, flatten = NULL)
-  y = getJobResources(reg = reg, flatten = FALSE)
+  x = getJobResources(reg = reg)
   expect_data_table(x, key = "job.id", nrow = 4, ncol = 2)
-  expect_data_table(y, key = "job.id", nrow = 4, ncol = 2)
-  expect_equal(x, y)
+  expect_error(flatten(x))
 })
 
 test_that("getJobPars with repls", {
@@ -119,53 +114,30 @@ test_that("getJobTable.ExperimentRegistry", {
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq) instance^sq)
   ids = addExperiments(list(p1 = data.table(k = 1)), list(a1 = data.table(sq = 1:3)), reg = reg)
 
-  tab = getJobTable(reg = reg, flatten = FALSE)
-  expect_data_table(tab, nrows = 3, ncols = 18, key = "job.id")
+  tab = getJobTable(reg = reg)
+  expect_data_table(tab, nrows = 3, ncols = 19, key = "job.id")
   expect_copied(tab, reg$status)
-  expect_list(tab$pars)
-  expect_equal(tab$pars[[1]], list(prob.pars = list(k = 1), algo.pars = list(sq = 1)))
-  expect_equal(tab$pars[[2]], list(prob.pars = list(k = 1), algo.pars = list(sq = 2)))
-  expect_equal(tab$pars[[3]], list(prob.pars = list(k = 1), algo.pars = list(sq = 3)))
+  expect_list(tab$prob.pars)
+  expect_list(tab$algo.pars)
+  expect_equal(tab$prob.pars[[1]], list(k = 1))
+  expect_equal(tab$algo.pars[[2]], list(sq = 2))
+  expect_equal(tab$prob.pars[[3]], list(k = 1))
+  expect_equal(tab$algo.pars[[3]], list(sq = 3))
   expect_equal(tab$problem[1], factor("p1"))
   expect_equal(tab$algorithm[1], factor("a1"))
 
-  tab = getJobTable(ids = 1:3, reg = reg, flatten = TRUE)
+  tab = flatten(getJobTable(ids = 1:3, reg = reg))
   expect_data_table(tab, nrows = 3, ncols = 18, key = "job.id")
   expect_null(tab[["pars"]])
+  expect_null(tab[["prob.pars"]])
+  expect_null(tab[["algo.pars"]])
   expect_set_equal(tab$k, rep(1, 3))
   expect_set_equal(tab$sq, 1:3)
 
-  tab = getJobTable(reg = reg, flatten = TRUE, prefix = TRUE)
+  tab = flatten(getJobTable(reg = reg), sep = ".")
   expect_null(tab[["pars"]])
-  expect_set_equal(tab$prob.par.k, rep(1, 3))
-  expect_set_equal(tab$algo.par.sq, 1:3)
-})
-
-
-test_that("flatten autodetection", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
-  input = list(1, NULL, iris, letters)
-  batchMap(identity, x = input, reg = reg)
-  tab = getJobPars(reg = reg, flatten = NULL)
-  expect_data_table(tab, ncols = 2, key = "job.id")
-  expect_set_equal(names(tab), c("job.id", "pars"))
-})
-
-test_that("flatten heuristic for experiment registries (#123)", {
-  tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
-
-  fun = function(job, data, n, mean, sd, ...) rnorm(sum(n), mean = mean, sd = sd)
-  addProblem("rnorm", fun = fun, reg = tmp)
-  fun = function(instance, ...) sd(instance)
-  addAlgorithm("deviation", fun = fun, reg = tmp)
-
-  prob.designs = algo.designs = list()
-  prob.designs$rnorm = data.table(expand.grid(n = list(100, 1:4), mean = 0, sd = 1:2))
-  algo.designs$deviation = data.table()
-  addExperiments(prob.designs, algo.designs, reg = tmp)
-  submitAndWait(reg = tmp)
-
-  res = getJobPars(reg = tmp)
-  expect_data_table(res, ncol = 4)
-  expect_list(res$pars, len = 4)
+  expect_null(tab[["prob.pars"]])
+  expect_null(tab[["algo.pars"]])
+  expect_set_equal(tab$prob.pars.k, rep(1, 3))
+  expect_set_equal(tab$algo.pars.sq, 1:3)
 })
