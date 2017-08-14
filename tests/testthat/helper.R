@@ -29,6 +29,8 @@ suppressAll = function (expr) {
 }
 
 checkTables = function(reg, ...) {
+  expect_is(reg$mtime, "POSIXct")
+
   if (class(reg)[1L] == "Registry") {
     cols = c("def.id", "pars")
     types = c("integer", "list")
