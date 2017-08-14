@@ -31,8 +31,6 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
   if (nodename != "localhost") {
     sys.args = c(nodename, shQuote(stri_flatten(c(sys.cmd, sys.args), " ")))
     sys.cmd = "ssh"
-  } else if (length(sys.args) == 0L) {
-      sys.args = ""
   }
 
   "!DEBUG [runOSCommand]: cmd: `sys.cmd` `stri_flatten(sys.args, ' ')`"
@@ -53,6 +51,6 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
 }
 
 OSError = function(msg, res) {
-  stopf("%s (exit code %i);\nCommand: %s %s.\nOutput; %s",
-    msg, res$exit.code, res$sys.cmd, stri_flatten(res$sys.args, " "), res$output)
+  stopf("%s (exit code %i); cmd: '%s'; output: %s",
+    msg, res$exit.code, stri_flatten(c(res$sys.cmd, res$sys.args), collapse = " "), res$output)
 }

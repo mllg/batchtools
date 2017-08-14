@@ -15,6 +15,9 @@ test_that("command not found", {
   expect_list(res, len = 4)
   expect_identical(res$exit.code, 127L)
   expect_identical(res$output, "command not found")
+  expect_error(OSError("Command not found", res), pattern = "Command not found")
+  expect_error(OSError("Command not found", res), pattern = "'notfoundcommand'")
+  expect_error(OSError("Command not found", res), pattern = "exit code 127")
 })
 
 test_that("stdin", {
