@@ -22,7 +22,7 @@ Name of the SSH node to run the command on. If set to \dQuote{localhost} (defaul
 is not piped through SSH.}
 }
 \value{
-[\code{named list}] with \dQuote{exit.code} (integer) and \dQuote{output} (character).
+[\code{named list}] with \dQuote{sys.cmd}, \dQuote{sys.args}, \dQuote{exit.code} (integer), \dQuote{output} (character).
 }
 \description{
 This is a helper function to run arbitrary OS commands on local or remote machines.

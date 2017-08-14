@@ -44,7 +44,7 @@ To use the package with the socket cluster functions, you would call the respect
 reg = makeRegistry(NA)
 reg$cluster.functions = makeClusterFunctionsSocket(2)
 ```
-To make this selection permanent for this registry, save the Registry with [saveRegistry](https://mllg.github.io/batchtools/reference/makeRegistry).
+To make this selection permanent for this registry, save the Registry with [saveRegistry()](https://mllg.github.io/batchtools/reference/makeRegistry).
 To make your cluster function selection permanent for a specific system across R sessions for all new Registries, you can set up a configuration file (see below).
 
 If you have trouble debugging your cluster functions, you can enable the debug mode for extra output.
@@ -148,25 +148,25 @@ The table does not cover functions which are (a) used only internally in BatchJo
 
 | BatchJobs                | batchtools                                        |
 | -------------            | :-------------:                                   |
-| `addRegistryPackages`    | Set `reg$packages` or `reg$namespaces`, call [saveRegistry](https://mllg.github.io/batchtools/reference/saveRegistry) |
-| `addRegistrySourceDirs`  | -                                                                                                                     |
-| `addRegistrySourceFiles` | Set `reg$source`, call [saveRegistry](https://mllg.github.io/batchtools/reference/saveRegistry)                       |
-| `batchExpandGrid`        | [batchMap](https://mllg.github.io/batchtools/reference/batchMap): `batchMap(..., args = CJ(x = 1:3, y = 1:10))`       |
-| `batchMapQuick`          | [btmapply](https://mllg.github.io/batchtools/reference/btlapply)                                                      |
-| `batchReduceResults`     | -                                                                                                                     |
-| `batchUnexport`          | [batchExport](https://mllg.github.io/batchtools/reference/batchExport)                                                |
-| `filterResults`          | -                                                                                                                     |
-| `getJobIds`              | [findJobs](https://mllg.github.io/batchtools/reference/findJobs)                                                      |
-| `getJobInfo`             | [getJobStatus](https://mllg.github.io/batchtools/reference/getJobTable)                                               |
-| `getJob`                 | [makeJob](https://mllg.github.io/batchtools/reference/JobExperiment)                                                  |
-| `getJobParamDf`          | [getJobPars](https://mllg.github.io/batchtools/reference/getJobTable)                                                 |
-| `loadResults`            | [reduceResultsList](https://mllg.github.io/batchtools/reference/reduceResultsList)                                    |
-| `reduceResultsDataFrame` | [reduceResultsDataTable](https://mllg.github.io/batchtools/reference/reduceResultsList)                               |
-| `reduceResultsMatrix`    | [reduceResultsList](https://mllg.github.io/batchtools/reference/reduceResultsList) + `do.call(rbind, res)`            |
-| `reduceResultsVector`    | [reduceResultsDataTable](https://mllg.github.io/batchtools/reference/reduceResultsList)                               |
-| `setJobFunction`         | -                                                                                                                     |
-| `setJobNames`            | -                                                                                                                     |
-| `showStatus`             | [getStatus](https://mllg.github.io/batchtools/reference/getStatus)                                                    |
+| `addRegistryPackages`    | Set `reg$packages` or `reg$namespaces`, call [saveRegistry()](https://mllg.github.io/batchtools/reference/saveRegistry) |
+| `addRegistrySourceDirs`  | -                                                                                                                       |
+| `addRegistrySourceFiles` | Set `reg$source`, call [saveRegistry()](https://mllg.github.io/batchtools/reference/saveRegistry)                       |
+| `batchExpandGrid`        | [batchMap](https://mllg.github.io/batchtools/reference/batchMap): `batchMap(..., args = CJ(x = 1:3, y = 1:10))`         |
+| `batchMapQuick`          | [btmapply](https://mllg.github.io/batchtools/reference/btlapply)                                                        |
+| `batchReduceResults`     | -                                                                                                                       |
+| `batchUnexport`          | [batchExport](https://mllg.github.io/batchtools/reference/batchExport)                                                  |
+| `filterResults`          | -                                                                                                                       |
+| `getJobIds`              | [findJobs](https://mllg.github.io/batchtools/reference/findJobs)                                                        |
+| `getJobInfo`             | [getJobStatus](https://mllg.github.io/batchtools/reference/getJobTable)                                                 |
+| `getJob`                 | [makeJob](https://mllg.github.io/batchtools/reference/JobExperiment)                                                    |
+| `getJobParamDf`          | [getJobPars](https://mllg.github.io/batchtools/reference/getJobTable)                                                   |
+| `loadResults`            | [reduceResultsList](https://mllg.github.io/batchtools/reference/reduceResultsList)                                      |
+| `reduceResultsDataFrame` | [reduceResultsDataTable](https://mllg.github.io/batchtools/reference/reduceResultsList)                                 |
+| `reduceResultsMatrix`    | [reduceResultsList](https://mllg.github.io/batchtools/reference/reduceResultsList) + `do.call(rbind, res)`              |
+| `reduceResultsVector`    | [reduceResultsDataTable](https://mllg.github.io/batchtools/reference/reduceResultsList)                                 |
+| `setJobFunction`         | -                                                                                                                       |
+| `setJobNames`            | -                                                                                                                       |
+| `showStatus`             | [getStatus](https://mllg.github.io/batchtools/reference/getStatus)                                                      |
 
 
 

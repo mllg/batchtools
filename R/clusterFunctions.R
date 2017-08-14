@@ -223,9 +223,9 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 #' @description
 #' This function is only intended for use in your own cluster functions implementation.
 #'
-#' Calls the OS command to kill a job via \code{system} like this: \dQuote{cmd batch.job.id}. If the
+#' Calls the OS command to kill a job via \code{\link[base]{system}} like this: \dQuote{cmd batch.job.id}. If the
 #' command returns an exit code > 0, the command is repeated after a 1 second sleep
-#' \code{max.tries-1} times. If the command failed in all tries, an exception is generated.
+#' \code{max.tries-1} times. If the command failed in all tries, an error is generated.
 #'
 #' @template reg
 #' @param cmd [\code{character(1)}]\cr
