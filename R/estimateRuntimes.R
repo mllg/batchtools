@@ -83,6 +83,7 @@
 estimateRuntimes = function(tab, ..., reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   data = copy(convertIds(reg, tab, keep.extra = names(tab)))
+  data = flatten(data)
 
   if (!requireNamespace("ranger", quietly = TRUE))
     stop("Please install package 'ranger' for runtime estimation")
@@ -112,7 +113,7 @@ print.RuntimeEstimate = function(x, n = 1L, ...) {
       floor((x / 3600) %% 24L),
       floor((x / 60) %% 60L),
       x %% 60L
-      )
+    )
   }
 
   assertCount(n, positive = TRUE)

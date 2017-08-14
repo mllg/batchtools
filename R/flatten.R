@@ -14,8 +14,15 @@ flatten = function(x, cols = NULL, sep = NULL) {
   for (col in chsetdiff(names(x), cols))
     set(res, j = col, value = x[[col]])
 
+  fix.data.table = packageVersion("data.table") <= "1.10.4"
   for (col in cols) {
-    new = rbindlist(x[[col]], fill = TRUE, idcol = "..row")
+    xc = x[[col]]
+    if (fix.data.table) {
+      xn = unique(unlist(lapply(xc, names)))
+      xe = setNames(vector("list", length(xn)), xn)
+      xc = lapply(xc, function(x) insert(xe, x))
+    }
+    new = rbindlist(xc, fill = TRUE, idcol = "..row")
     if (ncol(new) > 0L) {
       if (nrow(new) > uniqueN(new, by = "..row"))
         stopf("Cannot unnest column '%s'", col)
