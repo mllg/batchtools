@@ -72,26 +72,24 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
     }
   }
 
-  listJobsQueued = function(reg) {
+  listJobs = function(reg, args) {
     assertRegistry(reg, writeable = FALSE)
-    cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t PD", sprintf("--clusters=%s", clusters))
     if (array.jobs)
-      cmd = c(cmd, "-r")
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
-    if (!is.null(clusters))
-      batch.ids = tail(batch.ids, -1L)
-    batch.ids
+      args = c(args, "-r")
+    res = runOSCommand("squeue", args)
+    if (res$exit.code > 0L)
+      OSError("Listing of jobs failed", res)
+    if (!is.null(clusters)) tail(res$output, -1L) else res$output
+  }
+
+  listJobsQueued = function(reg) {
+    args = c("-h", "-o %i", "-u $USER", "-t PD", sprintf("--clusters=%s", clusters))
+    listJobs(reg, args)
   }
 
   listJobsRunning = function(reg) {
-    assertRegistry(reg, writeable = FALSE)
-    cmd = c("squeue", "-h", "-o %i", "-u $USER", "-t R,S,CG", sprintf("--clusters=%s", clusters))
-    if (array.jobs)
-      cmd = c(cmd, "-r")
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
-    if (!is.null(clusters))
-      batch.ids = tail(batch.ids, -1L)
-    batch.ids
+    args = c("-h", "-o %i", "-u $USER", "-t R,S,CG", sprintf("--clusters=%s", clusters))
+    listJobs(reg, args)
   }
 
   killJob = function(reg, batch.id) {
