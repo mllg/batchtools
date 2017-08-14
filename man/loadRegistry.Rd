@@ -64,6 +64,8 @@ Here, it does not matter if the sessions run on the same system or different sys
 If you just need to check on the status or peek into some preliminary results, you can load the registry in a
 read-only mode by setting \code{writeable} to \code{FALSE}.
 All operations that need to change the registry will raise an exception in this mode.
+Files communicated back by the computational nodes are parsed to update the registry in memory, but remain on the file system
+in order to be read and cleaned up by an R session with read-write access.
 
 A heuristic tries to detect if the registry has been altered in the background.
 However, you should not completely rely on it.

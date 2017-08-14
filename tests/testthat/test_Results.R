@@ -110,7 +110,9 @@ test_that("multiRowResults", {
     fun = function(a) data.table(y1 = rep(a, 3), y2 = rep(a/2, 3))
     ids = batchMap(fun, a = c(10, 100), reg = reg)
     submitAndWait(reg, ids)
-    expect_error(reduceResultsDataTable(reg = reg, flatten = TRUE), "one row")
+    tab = reduceResultsDataTable(reg = reg, flatten = TRUE)
+    expect_data_table(tab, ncol = 2)
+    expect_error(flatten(tab), "unnest column 'result'")
   })
 })
 

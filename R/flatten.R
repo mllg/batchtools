@@ -26,8 +26,10 @@ flatten = function(x, cols = NULL, sep = NULL) {
     if (ncol(new) > 0L) {
       if (nrow(new) > uniqueN(new, by = "..row"))
         stopf("Cannot unnest column '%s'", col)
-      if (!is.null(sep))
-        setnames(new, names(new), stri_paste(col, sep, names(new)))
+      if (!is.null(sep)) {
+        nn = chsetdiff(names(new), "..row")
+        setnames(new, nn, stri_paste(col, sep, nn))
+      }
       res = merge(res, new, all.x = TRUE, by = "..row")
     }
   }
