@@ -14,7 +14,7 @@
 #' @param nodename [\code{character(1)}]\cr
 #'   Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
 #'   is not piped through SSH.
-#' @return [\code{named list}] with \dQuote{exit.code} (integer) and \dQuote{output} (character).
+#' @return [\code{named list}] with \dQuote{sys.cmd}, \dQuote{sys.args}, \dQuote{exit.code} (integer), \dQuote{output} (character).
 #' @export
 #' @family ClusterFunctionsHelper
 #' @examples
@@ -49,5 +49,10 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
   "!DEBUG [runOSCommand]: OS result (stdin '`stdin`', exit code `exit.code`):"
   "!DEBUG [runOSCommand]: `paste0(output, sep = '\n')`"
 
-  return(list(exit.code = exit.code, output = output))
+  return(list(sys.cmd = sys.cmd, sys.args = sys.args, exit.code = exit.code, output = output))
+}
+
+OSError = function(msg, res) {
+  stopf("%s (exit code %i);\nCommand: %s %s.\nOutput; %s",
+    msg, res$exit.code, res$sys.cmd, stri_flatten(res$sys.args, " "), res$output)
 }
