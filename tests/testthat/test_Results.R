@@ -60,12 +60,23 @@ test_that("reduceResultsDataTable", {
 
     tab = flatten(reduceResultsDataTable(reg = reg, fun = function(x) x$a))
     expect_data_table(tab, nrow = 3, ncol = 2, key = "job.id")
-    expect_equal(tab$V1, 1:3)
+    expect_equal(tab$result, 1:3)
 
     tab = reduceResultsDataTable(reg = reg, fun = function(x, y) x$a + y, y = 1)
+    tab = flatten(tab)
     expect_data_table(tab, nrow = 3, ncol = 2, key = "job.id")
-    expect_equal(tab$V1, 1:3 + 1L)
+    expect_equal(tab$result, 1:3 + 1L)
   })
+})
+
+test_that("batchMapResults", {
+  target = makeRegistry(NA, make.default = FALSE)
+  x = batchMapResults(target = target, function(x, c, d) x$a+x$b + c + d, c = 11:13, source = reg, more.args = list(d = 2))
+  expect_data_table(x, ncol = 1, nrow = 3, key = "job.id")
+  expect_data_table(target$status, nrow = 3)
+  submitAndWait(target)
+  res = flatten(reduceResultsDataTable(reg = target))
+  expect_equal(res[[2L]], 11:13 + rep(5, 3) + 2)
 })
 
 test_that("reduceResults with no results reg", {
@@ -92,16 +103,6 @@ test_that("reduceResultsList/NULL", {
   submitAndWait(ids, reg = reg)
   res = reduceResultsList(ids = ids, reg = reg)
   expect_equal(res, replicate(3, NULL, simplify = FALSE))
-})
-
-test_that("batchMapResults", {
-  target = makeRegistry(NA, make.default = FALSE)
-  x = batchMapResults(target = target, function(x, c, d) x$a+x$b + c + d, c = 11:13, source = reg, more.args = list(d = 2))
-  expect_data_table(x, nrow = 3, key = "job.id")
-  expect_data_table(target$status, nrow = 3)
-  submitAndWait(target)
-  res = reduceResultsDataTable(reg = target)
-  expect_equal(res[[2L]], 11:13 + rep(5, 3) + 2)
 })
 
 test_that("multiRowResults", {
