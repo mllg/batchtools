@@ -1,7 +1,28 @@
-if (FALSE) {
-  x = data.table(a = 1, col1 = replicate(5, list(a = runif(1)), simplify = FALSE))
-}
-
+#' @title Convert a Nested Data Frames to a Flat Representation
+#'
+#' @description
+#' Some functions (e.g., \code{\link{getJobPars}}, \code{\link{getJobResources}} or \code{\link{reduceResultsDataTable}}
+#' return a \code{data.table} with columns of type \code{list}.
+#' These columns can be unnested, iff each row hols
+#' \itemize{
+#'   \item a single atomic value (an atomic scalar),
+#'   \item a named list of atomic scalars, or
+#'   \item a \code{data.frame} with one row.
+#' }
+#' The values will be transformed to a \code{data.frame} and \code{\link[base]{cbind}}-ed to the input data.frame \code{x}.
+#'
+#' @param x [\code{\link{data.frame}}]\cr
+#'   Data frame to flatten.
+#' @param cols [\code{character}]\cr
+#'   Columns to consider for this operation. If set to \code{NULL} (default),
+#'   will operate on all columns of type \dQuote{list}.
+#' @param sep [\code{character(1)}]\cr
+#'   If \code{NULL} (default), the column names of the additional columns will re-use the names
+#'   of the inner \code{list}/\code{data.frame}.
+#'   If you provide \code{sep}, the variable column name will be constructed as
+#'   \dQuote{[column name of x][sep][inner name]}.
+#' @return [\code{\link{data.table}}] with unnested columns.
+#' @export
 flatten = function(x, cols = NULL, sep = NULL) {
   assertDataFrame(x)
   if (is.null(cols)) {
