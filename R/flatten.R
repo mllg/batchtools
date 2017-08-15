@@ -3,11 +3,11 @@
 #' @description
 #' Some functions (e.g., \code{\link{getJobPars}}, \code{\link{getJobResources}} or \code{\link{reduceResultsDataTable}}
 #' return a \code{data.table} with columns of type \code{list}.
-#' These columns can be unnested, iff each row hols
-#' \itemize{
-#'   \item a single atomic value (an atomic scalar),
-#'   \item a named list of atomic scalars, or
-#'   \item a \code{data.frame} with one row.
+#' These columns can be unnested to create a flat data.frame, iff each row holds
+#' \describe{
+#'   \item{(a)}{a single atomic value (an atomic scalar),}
+#'   \item{(b)}{a named list of atomic scalars, or}
+#'   \item{(c)}{a \code{data.frame} with one row.}
 #' }
 #' The values will be transformed to a \code{data.frame} and \code{\link[base]{cbind}}-ed to the input data.frame \code{x}.
 #'
@@ -38,20 +38,16 @@ flatten = function(x, cols = NULL, sep = NULL) {
   fix.data.table = packageVersion("data.table") <= "1.10.4"
   for (col in cols) {
     xc = x[[col]]
-    if (qtestr(xc, "a1", depth = 1L)) { # atomic in list
+    if (qtestr(xc, "a1", depth = 1L)) { # atomic scalars in list
       set(res, j = col, value = unlist(xc, use.names = FALSE))
-    } else {
+    } else if (qtestr(xc, c("d+", "l+"), depth = 1L)) {
       if (fix.data.table) {
-        x.items = max(lengths(xc))
-        x.names = unique(unlist(lapply(xc, names)))
-        if (x.items > length(x.names)) {
-          xc = lapply(xc, function(x) {
-            i = which(is.na(names2(x)))
-            setNames(x, replace(names(x), i, sprintf("V%i", seq_along(i))))
-          })
-        }
-          # x.template = setNames(vector("list", length(x.names)), x.names)
-          # xc = lapply(xc, function(x) insert(x.template, x))
+        xc.names = lapply(xc, names2)
+        xc.unames = unique(unlist(nc.names))
+        if (anyMissing(xc.unames))
+          stopf("Unnamed items in column '%s'", col)
+        xc.template = setNames(vector("list", length(xc.unames)), xc.unames)
+        xc = lapply(xc, function(x) insert(xc.template, x))
       }
 
       new = rbindlist(xc, fill = TRUE, idcol = "..row")
