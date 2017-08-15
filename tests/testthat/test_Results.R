@@ -113,7 +113,7 @@ test_that("multiRowResults", {
     submitAndWait(reg, ids)
     tab = reduceResultsDataTable(reg = reg, flatten = TRUE)
     expect_data_table(tab, ncol = 2)
-    expect_error(flatten(tab), "unnest column 'result'")
+    expect_error(flatten(tab), "duplicating rows")
   })
 })
 

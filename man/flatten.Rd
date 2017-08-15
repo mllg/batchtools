@@ -7,30 +7,30 @@
 flatten(x, cols = NULL, sep = NULL)
 }
 \arguments{
-\item{x}{\link{\code{\link{data.frame}}}\cr
+\item{x}{[\code{\link{data.frame}}]\cr
 Data frame to flatten.}
 
-\item{cols}{\link{\code{character}}\cr
+\item{cols}{[\code{character}]\cr
 Columns to consider for this operation. If set to \code{NULL} (default),
 will operate on all columns of type \dQuote{list}.}
 
-\item{sep}{\link{\code{character(1)}}\cr
+\item{sep}{[\code{character(1)}]\cr
 If \code{NULL} (default), the column names of the additional columns will re-use the names
 of the inner \code{list}/\code{data.frame}.
 If you provide \code{sep}, the variable column name will be constructed as
 \dQuote{[column name of x][sep][inner name]}.}
 }
 \value{
-\link{\code{\link{data.table}}} with unnested columns.
+[\code{\link{data.table}}] with unnested columns.
 }
 \description{
 Some functions (e.g., \code{\link{getJobPars}}, \code{\link{getJobResources}} or \code{\link{reduceResultsDataTable}}
 return a \code{data.table} with columns of type \code{list}.
 These columns can be unnested to create a flat data.frame, iff each row holds
-\itemize{
-\item a single atomic value (an atomic scalar),
-\item a named list of atomic scalars, or
-\item a \code{data.frame} with one row.
-The values will be transformed to a \code{data.frame} and \code{\link[base]{cbind}}-ed to the input data.frame \code{x}.
+\describe{
+  \item{(a)}{a single atomic value (an atomic scalar),}
+  \item{(b)}{a named list of atomic scalars, or}
+  \item{(c)}{a \code{data.frame} with one row.}
 }
+The values will be transformed to a \code{data.frame} and \code{\link[base]{cbind}}-ed to the input data.frame \code{x}.
 }

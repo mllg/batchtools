@@ -1,6 +1,6 @@
 context("flatten")
 
-testthat("flatten behaves", {
+test_that("flatten behaves", {
   x = data.table(
     id = 1:3,
     nested.atomic = list(1, 2, 3),
@@ -48,6 +48,4 @@ testthat("flatten behaves", {
   expect_set_equal(names(res), c(setdiff(names(x), col), "nested.df_a", "nested.df_b"))
   expect_numeric(res[["nested.df_a"]])
   expect_numeric(res[["nested.df_b"]])
-
-
 })

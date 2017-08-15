@@ -38,12 +38,24 @@ flatten = function(x, cols = NULL, sep = NULL) {
   fix.data.table = packageVersion("data.table") <= "1.10.4"
   for (col in cols) {
     xc = x[[col]]
+
+    # all NULL/empty
+    if (all(lengths(xc) == 0L)) {
+      next
+    }
+
     if (qtestr(xc, "a1", depth = 1L)) { # atomic scalars in list
       set(res, j = col, value = unlist(xc, use.names = FALSE))
-    } else if (qtestr(xc, c("d+", "l+"), depth = 1L)) {
+      next
+    }
+
+    if (qtestr(xc, c("l", "d"), depth = 1L)) {
+      if (any(unique(unlist(lapply(xc, lengths), use.names = FALSE)) > 1L))
+        stopf("Column '%s' has length > 1 and cannot be converted to a column without duplicating rows", col)
+
       if (fix.data.table) {
         xc.names = lapply(xc, names2)
-        xc.unames = unique(unlist(nc.names))
+        xc.unames = unique(unlist(xc.names))
         if (anyMissing(xc.unames))
           stopf("Unnamed items in column '%s'", col)
         xc.template = setNames(vector("list", length(xc.unames)), xc.unames)
@@ -60,7 +72,11 @@ flatten = function(x, cols = NULL, sep = NULL) {
         }
         res = merge(res, new, all.x = TRUE, by = "..row")
       }
+
+      next
     }
+
+    stopf("Unsupported type in column '%s'", col)
   }
 
   if (all(key(x) %chin% names(res)))
