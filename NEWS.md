@@ -1,9 +1,10 @@
 # batchtools 0.9.5
 
+* Added a missing routine to upgrade registries created with batchtools prior to v0.9.3.
 * Fixed a bug where the registry could not be synced if jobs failed during initialization (#135).
 * A new heuristic will try to detect if the registry has been altered by a simultaneously running R session.
   If this is detected, the registry will be set to a read-only state.
-* New argument `writeable` for `loadRegistry()`.
+* New argument `writeable` for `loadRegistry()` to allow loading registries explicitly as read-only.
 * Removed argument `update.paths` from `loadRegistry()`.
 
 # batchtools 0.9.4
