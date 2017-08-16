@@ -235,16 +235,18 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 #' @param max.tries [\code{integer(1)}]\cr
 #'   Number of total times to try execute the OS command in cases of failures.
 #'   Default is \code{3}.
+#' @inheritParams runOSCommand
 #' @return \code{TRUE} on success. An exception is raised otherwise.
 #' @family ClusterFunctionsHelper
 #' @export
-cfKillJob = function(reg, cmd, args = character(0L), max.tries = 3L) {
+cfKillJob = function(reg, cmd, args = character(0L), max.tries = 3L, nodename = "localhost") {
   assertString(cmd, min.chars = 1L)
   assertCharacter(args, any.missing = FALSE)
+  assertString(nodename)
   max.tries = asCount(max.tries)
 
   for (i in seq_len(max.tries)) {
-    res = runOSCommand(cmd, args)
+    res = runOSCommand(cmd, args, nodename = nodename)
     if (res$exit.code == 0L)
       return(TRUE)
     Sys.sleep(1)

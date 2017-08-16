@@ -17,7 +17,7 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
     }
 
     ### hotfix for log.file column
-    if ("log.file" %nin% names(reg$status)) {
+    if ("log.file" %chnin% names(reg$status)) {
       info("Adding column 'log.file'")
       reg$status[, ("log.file") := rep(NA_character_, .N)]
     }
@@ -44,7 +44,7 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
   }
 
   if (reg$version < "0.9.4-9001") {
-    if ("job.name" %nin% names(reg$status)) {
+    if ("job.name" %chnin% names(reg$status)) {
       info("Adding column 'job.name'")
       reg$status[, ("job.name") := rep(NA_character_, .N)]
     }

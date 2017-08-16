@@ -5,7 +5,8 @@
 \title{ClusterFunctions for Slurm Systems}
 \usage{
 makeClusterFunctionsSlurm(template = "slurm", clusters = NULL,
-  array.jobs = TRUE, scheduler.latency = 1, fs.latency = 65)
+  array.jobs = TRUE, nodename = "localhost", scheduler.latency = 1,
+  fs.latency = 65)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr

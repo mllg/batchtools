@@ -4,7 +4,8 @@
 \alias{cfKillJob}
 \title{Cluster Functions Helper to Kill Batch Jobs}
 \usage{
-cfKillJob(reg, cmd, args = character(0L), max.tries = 3L)
+cfKillJob(reg, cmd, args = character(0L), max.tries = 3L,
+  nodename = "localhost")
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -19,6 +20,10 @@ Arguments to \code{cmd}, including the batch id.}
 \item{max.tries}{[\code{integer(1)}]\cr
 Number of total times to try execute the OS command in cases of failures.
 Default is \code{3}.}
+
+\item{nodename}{[\code{character(1)}]\cr
+Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
+is not piped through SSH.}
 }
 \value{
 \code{TRUE} on success. An exception is raised otherwise.

@@ -30,10 +30,11 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.jobs = TRUE, scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.jobs = TRUE, nodename = "localhost", scheduler.latency = 1, fs.latency = 65) { # nocov start
   if (!is.null(clusters))
     assertString(clusters, min.chars = 1L)
   assertFlag(array.jobs)
+  assertString(nodename)
   template = findTemplateFile(template)
   template = cfReadBrewTemplate(template, "##")
 
@@ -47,7 +48,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
       jc$log.file = stri_join(jc$log.file, "_%a")
     }
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("sbatch", shQuote(outfile))
+    res = runOSCommand("sbatch", shQuote(outfile), nodename = nodename)
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
     temp.error = "Socket timed out on send/recv operation"
@@ -76,7 +77,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
     assertRegistry(reg, writeable = FALSE)
     if (array.jobs)
       args = c(args, "-r")
-    res = runOSCommand("squeue", args)
+    res = runOSCommand("squeue", args, nodename = nodename)
     if (res$exit.code > 0L)
       OSError("Listing of jobs failed", res)
     if (!is.null(clusters)) tail(res$output, -1L) else res$output
@@ -95,7 +96,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-    cfKillJob(reg, "scancel", c(sprintf("--clusters=%s", clusters), batch.id))
+    cfKillJob(reg, "scancel", c(sprintf("--clusters=%s", clusters), batch.id), nodename = nodename)
   }
 
   makeClusterFunctions(name = "Slurm", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,

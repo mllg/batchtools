@@ -28,7 +28,7 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
   assertCharacter(sys.args, any.missing = FALSE)
   assertString(nodename, min.chars = 1L)
 
-  if (nodename != "localhost") {
+  if (nodename %chnin% c("localhost", "127.0.0.1", "::1")) {
     sys.args = c(nodename, shQuote(stri_flatten(c(sys.cmd, sys.args), " ")))
     sys.cmd = "ssh"
   }

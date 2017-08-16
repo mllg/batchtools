@@ -4,7 +4,7 @@
 \alias{waitForJobs}
 \title{Wait for Termination of Jobs}
 \usage{
-waitForJobs(ids = NULL, sleep = default.sleep, timeout = 604800,
+waitForJobs(ids = NULL, sleep = NULL, timeout = 604800,
   stop.on.error = FALSE, reg = getDefaultRegistry())
 }
 \arguments{
@@ -16,8 +16,12 @@ If not set, defaults to the return value of \code{\link{findSubmitted}}.
 Invalid ids are ignored.}
 
 \item{sleep}{[\code{function(i)} | \code{numeric(1)}]\cr
-Function which returns the duration to sleep in the \code{i}-th iteration.
-Alternatively, you can pass a single positive numeric value.}
+Parameter to control the duration to sleep between queries.
+You can pass an absolute numeric value in seconds or a \code{function(i)} which returns
+the number of seconds to sleep in the \code{i}-th iteration.
+If not provided (\code{NULL}), tries to read the value (number/function) from the configuration file
+(stored in \code{reg$sleep}) or defaults to a function with exponential backoff between
+5 and 120 seconds.}
 
 \item{timeout}{[\code{numeric(1)}]\cr
 After waiting \code{timeout} seconds, show a message and return
