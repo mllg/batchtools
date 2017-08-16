@@ -6,8 +6,12 @@
 #' @templateVar ids.default findSubmitted
 #' @template ids
 #' @param sleep [\code{function(i)} | \code{numeric(1)}]\cr
-#'   Function which returns the duration to sleep in the \code{i}-th iteration.
-#'   Alternatively, you can pass a single positive numeric value.
+#'   Parameter to control the duration to sleep between queries.
+#'   You can pass an absolute numeric value in seconds or a \code{function(i)} which returns
+#'   the number of seconds to sleep in the \code{i}-th iteration.
+#'   If not provided (\code{NULL}), tries to read the value (number/function) from the configuration file
+#'   (stored in \code{reg$sleep}) or defaults to a function with exponential backoff between
+#'   5 and 120 seconds.
 #' @param timeout [\code{numeric(1)}]\cr
 #'   After waiting \code{timeout} seconds, show a message and return
 #'   \code{FALSE}. This argument may be required on some systems where, e.g.,
@@ -21,11 +25,11 @@
 #'   successfully and \code{FALSE} if either the timeout is reached or at least
 #'   one job terminated with an exception.
 #' @export
-waitForJobs = function(ids = NULL, sleep = default.sleep, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
+waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = FALSE, sync = TRUE)
   assertNumber(timeout, lower = 0)
   assertFlag(stop.on.error)
-  sleep = getSleepFunction(sleep)
+  sleep = getSleepFunction(reg, sleep)
   ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
 
   .findNotTerminated = function(reg, ids = NULL) {

@@ -73,6 +73,6 @@ makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1
   }
 
   makeClusterFunctions(name = "TORQUE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, array.var = "PBS_ARRAYID", store.job = TRUE,
+    listJobsRunning = listJobsRunning, array.var = "PBS_ARRAYID", store.job.collection = TRUE,
     scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end

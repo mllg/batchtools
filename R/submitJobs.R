@@ -54,8 +54,11 @@
 #'   Defaults can be stored in the configuration file by providing the named list \code{default.resources}.
 #'   Settings in \code{resources} overwrite those in \code{default.resources}.
 #' @param sleep [\code{function(i)} | \code{numeric(1)}]\cr
-#'   Function which returns the duration to sleep in the \code{i}-th iteration between temporary errors.
-#'   Alternatively, you can pass a single positive numeric value.
+#'   Parameter to control the duration to sleep between temporary errors.
+#'   You can pass an absolute numeric value in seconds or a \code{function(i)} which returns the number of seconds to sleep in the \code{i}-th
+#'   iteration between temporary errors.
+#'   If not provided (\code{NULL}), tries to read the value (number/function) from the configuration file (stored in \code{reg$sleep}) or defaults to
+#'   a function with exponential backoff between 5 and 120 seconds.
 #' @template reg
 #' @return [\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 #' @export
@@ -114,7 +117,7 @@
 #' # There should also be a note in the log:
 #' grepLogs(pattern = "parallelMap", reg = tmp)
 #' }
-submitJobs = function(ids = NULL, resources = list(), sleep = default.sleep, reg = getDefaultRegistry()) {
+submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, sync = TRUE)
   assertList(resources, names = "strict")
   resources = insert(reg$default.resources, resources)
@@ -133,7 +136,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = default.sleep, reg
       resources$chunks.as.arrayjobs = NULL
     }
   }
-  sleep = getSleepFunction(sleep)
+  sleep = getSleepFunction(reg, sleep)
 
   ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk")
   if (nrow(ids) == 0L)
@@ -185,7 +188,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = default.sleep, reg
   for (ch in chunks) {
     ids.chunk = ids[chunk == ch, "job.id"]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
-    if (reg$cluster.functions$store.job)
+    if (reg$cluster.functions$store.job.collection)
       writeRDS(jc, file = jc$uri)
 
     if (!is.na(max.concurrent.jobs)) {

@@ -62,5 +62,5 @@ makeClusterFunctionsSSH = function(workers, fs.latency = 65) { # nocov start
   }
 
   makeClusterFunctions(name = "SSH", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    store.job = TRUE, fs.latency = fs.latency)
+    store.job.collection = TRUE, fs.latency = fs.latency)
 } # nocov end

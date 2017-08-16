@@ -98,13 +98,17 @@ stopf = function (...) {
   !match(x, y, nomatch = 0L)
 }
 
+`%chnin%` = function(x, y) {
+  !chmatch(x, y, nomatch = 0L)
+}
+
 setClasses = function(x, cl) {
   setattr(x, "class", cl)
   x
 }
 
 addlevel = function(x, lvl) {
-  if (lvl %nin% levels(x))
+  if (lvl %chnin% levels(x))
     levels(x) = c(levels(x), lvl)
   x
 }

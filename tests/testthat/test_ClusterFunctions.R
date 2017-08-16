@@ -4,7 +4,7 @@ test_that("clusterFunctions constructor", {
   check = function(cf) {
     expect_is(cf, "ClusterFunctions")
     expect_set_equal(names(cf), c("name", "submitJob", "killJob", "listJobsQueued", "listJobsRunning",
-        "store.job", "array.var", "scheduler.latency", "fs.latency", "hooks"))
+        "store.job.collection", "store.job.files", "array.var", "scheduler.latency", "fs.latency", "hooks"))
     expect_output(print(cf), "ClusterFunctions for mode")
   }
   reg = makeRegistry(file.dir = NA, make.default = FALSE)

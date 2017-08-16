@@ -31,9 +31,13 @@
 #' @param array.var [\code{character(1)}]\cr
 #'   Name of the environment variable set by the scheduler to identify IDs of job arrays.
 #'   Default is \code{NA} for no array support.
-#' @param store.job [\code{logical(1)}]\cr
+#' @param store.job.collection [\code{logical(1)}]\cr
 #'   Flag to indicate that the cluster function implementation of \code{submitJob} can not directly handle \code{\link{JobCollection}} objects.
 #'   If set to \code{FALSE}, the \code{\link{JobCollection}} is serialized to the file system before submitting the job.
+#' @param store.job.files [\code{logical(1)}]\cr
+#'   Flag to indicate that job files need to be stored in the file directory.
+#'   If set to \code{FALSE} (default), the job file is created in a temporary directory, otherwise (or if the debug mode is enabled) in
+#'   the subdirectory \code{jobs} of the \code{file.dir}.
 #' @param scheduler.latency [\code{numeric(1)}]\cr
 #'   Time to sleep after important interactions with the scheduler to ensure a sane state.
 #'   Currently only triggered after calling \code{\link{submitJobs}}.
@@ -50,7 +54,8 @@
 #' @family ClusterFunctions
 #' @family ClusterFunctionsHelper
 makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL,
-  array.var = NA_character_, store.job = FALSE, scheduler.latency = 0, fs.latency = NA_real_, hooks = list()) {
+  array.var = NA_character_, store.job.collection = FALSE, store.job.files = FALSE, scheduler.latency = 0,
+  fs.latency = NA_real_, hooks = list()) {
   assertList(hooks, types = "function", names = "unique")
   assertSubset(names(hooks), unlist(batchtools$hooks, use.names = FALSE))
 
@@ -61,7 +66,8 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
       listJobsQueued = assertFunction(listJobsQueued, "reg", null.ok = TRUE),
       listJobsRunning = assertFunction(listJobsRunning, "reg", null.ok = TRUE),
       array.var = assertString(array.var, na.ok = TRUE),
-      store.job = assertFlag(store.job),
+      store.job.collection = assertFlag(store.job.collection),
+      store.job.files = assertFlag(store.job.files),
       scheduler.latency = assertNumber(scheduler.latency, lower = 0),
       fs.latency = assertNumber(fs.latency, lower = 0, na.ok = TRUE),
       hooks = hooks),
@@ -181,7 +187,11 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 cfBrewTemplate = function(reg, text, jc) {
   assertString(text)
 
-  outfile = if (batchtools$debug) fp(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash)) else tempfile("job")
+  outfile = if (batchtools$debug || reg$cluster.functions$store.job.files) {
+    fp(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash))
+  } else {
+    tempfile(fileext = "job")
+  }
   parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
   "!DEBUG [cfBrewTemplate]: Brewing template to file '`outfile`'"
@@ -235,16 +245,18 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 #' @param max.tries [\code{integer(1)}]\cr
 #'   Number of total times to try execute the OS command in cases of failures.
 #'   Default is \code{3}.
+#' @inheritParams runOSCommand
 #' @return \code{TRUE} on success. An exception is raised otherwise.
 #' @family ClusterFunctionsHelper
 #' @export
-cfKillJob = function(reg, cmd, args = character(0L), max.tries = 3L) {
+cfKillJob = function(reg, cmd, args = character(0L), max.tries = 3L, nodename = "localhost") {
   assertString(cmd, min.chars = 1L)
   assertCharacter(args, any.missing = FALSE)
+  assertString(nodename)
   max.tries = asCount(max.tries)
 
   for (i in seq_len(max.tries)) {
-    res = runOSCommand(cmd, args)
+    res = runOSCommand(cmd, args, nodename = nodename)
     if (res$exit.code == 0L)
       return(TRUE)
     Sys.sleep(1)

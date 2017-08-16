@@ -28,8 +28,8 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
   assertCharacter(sys.args, any.missing = FALSE)
   assertString(nodename, min.chars = 1L)
 
-  if (nodename != "localhost") {
-    sys.args = c(nodename, shQuote(stri_flatten(c(sys.cmd, sys.args), " ")))
+  if (!isLocalHost(nodename)) {
+    sys.args = c("-q", nodename, shQuote(stri_flatten(c(sys.cmd, sys.args), " ")))
     sys.cmd = "ssh"
   }
 
@@ -50,7 +50,11 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
   return(list(sys.cmd = sys.cmd, sys.args = sys.args, exit.code = exit.code, output = output))
 }
 
+isLocalHost = function(nodename) {
+  is.null(nodename) || nodename %chin% c("localhost", "127.0.0.1", "::1")
+}
+
 OSError = function(msg, res) {
-  stopf("%s (exit code %i); cmd: '%s'; output: %s",
-    msg, res$exit.code, stri_flatten(c(res$sys.cmd, res$sys.args), collapse = " "), res$output)
+  stopf("%s (exit code %i);\ncmd: '%s'\noutput:\n%s",
+    msg, res$exit.code, stri_flatten(c(res$sys.cmd, res$sys.args), collapse = " "), stri_flatten(res$output, "\n"))
 }
