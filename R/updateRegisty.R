@@ -18,7 +18,8 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
 
     ### hotfix for log.file column
     if ("log.file" %nin% names(reg$status)) {
-      reg$status$log.file = NA_character_
+      info("Adding column 'log.file'")
+      reg$status[, ("log.file") := rep(NA_character_, .N)]
     }
   }
 
@@ -40,6 +41,13 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
       file.rename(fp(reg$file.dir, "problems", sprintf("%s.rds", digest(prob))), getProblemURI(reg, prob))
     for (algo in getAlgorithmIds(reg))
       file.rename(fp(reg$file.dir, "algorithms", sprintf("%s.rds", digest(algo))), getAlgorithmURI(reg, algo))
+  }
+
+  if (reg$version < "0.9.4-9001") {
+    if ("job.name" %nin% names(reg$status)) {
+      info("Adding column 'job.name'")
+      reg$status[, ("job.name") := rep(NA_character_, .N)]
+    }
   }
 
   reg$version = pv
