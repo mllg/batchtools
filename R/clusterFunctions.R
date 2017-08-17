@@ -153,7 +153,7 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
     "!DEBUG [cfReadBrewTemplate]: Parsing template from string"
     lines = stri_trim_both(stri_split_lines(template)[[1L]])
   } else {
-    "!DEBUG [cfReadBrewTemplate]: Parsing template form file '`template`'"
+    "!DEBUG [cfReadBrewTemplate]: Parsing template file '`template`'"
     lines = stri_trim_both(readLines(template))
   }
 
