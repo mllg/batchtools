@@ -42,7 +42,9 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, stop.on.error
   if (nrow(ids) == 0L)
     return(TRUE)
 
+  terminated = on.sys = expire.counter = NULL
   ids$terminated = FALSE
+  ids$on.sys = FALSE
   ids$expire.counter = 0L
 
   timeout = Sys.time() + timeout
@@ -51,7 +53,7 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, stop.on.error
 
   repeat {
     ### case 1: all jobs terminated -> nothing on system
-    ids[.findTerminated(reg, ids), ("terminated") := TRUE]
+    ids[.findTerminated(reg, ids), "terminated" := TRUE]
     if (ids[!(terminated), .N] == 0L) {
       "!DEBUG [waitForJobs]: All jobs terminated"
       pb$update(1)
@@ -67,8 +69,8 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, stop.on.error
     }
 
     batch.ids = getBatchIds(reg)
-    ids$on.sys = ids$job.id %in% .findOnSystem(reg, ids, batch.ids = batch.ids)
-    ids[!(on.sys) & !(terminated), expire.counter := expire.counter + 1L]
+    ids[, "on.sys" := FALSE][.findOnSystem(reg, ids, batch.ids = batch.ids), "on.sys" := TRUE]
+    ids[!(on.sys) & !(terminated), "expire.counter" := expire.counter + 1L]
     stats = getStatusTable(ids = ids, batch.ids = batch.ids, reg = reg)
     pb$update(mean(ids$terminated), tokens = as.list(stats))
     "!DEBUG [waitForJobs]: batch.ids: `stri_flatten(batch.ids$batch.id, ',')`"
