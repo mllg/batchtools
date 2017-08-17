@@ -34,3 +34,11 @@ test_that("waitForJobs: filter out unsubmitted jobs", {
     expect_true(res)
   })
 })
+
+if (FALSE) {
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg$cluster.functions = makeClusterFunctionsMulticore(4)
+  ids = batchMap(reg = reg, Sys.sleep, c(10, 10, 15, 20)/2)
+  submitJobs(ids, reg = reg)
+  waitForJobs(reg = reg, sleep = 1)
+}
