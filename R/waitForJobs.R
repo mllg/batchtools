@@ -17,6 +17,14 @@
 #'   \code{FALSE}. This argument may be required on some systems where, e.g.,
 #'   expired jobs or jobs on hold are problematic to detect. If you don't want
 #'   a timeout, set this to \code{Inf}. Default is \code{604800} (one week).
+#' @param expire.after [\code{integer(1)}]\cr
+#'   Jobs count as \dQuote{expired} if they are not found on the system but have not communicated back
+#'   their results (or error message). This frequently happens on managed system if the scheduler kills
+#'   a job because the job has hit the walltime or request more memory than reserved.
+#'   On the other hand, network file systems often require several seconds for new files to be found,
+#'   which can lead to false positives in the detection heuristic.
+#'   \code{waitForJobs} treats such jobs as expired after they have not been detected on the system
+#'   for \code{expire.after} iterations (default 3 iterations).
 #' @param stop.on.error [\code{logical(1)}]\cr
 #'   Immediately cancel if a job terminates with an error? Default is
 #'   \code{FALSE}.
@@ -25,22 +33,22 @@
 #'   successfully and \code{FALSE} if either the timeout is reached or at least
 #'   one job terminated with an exception.
 #' @export
-waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, stop.on.error = FALSE, reg = getDefaultRegistry()) {
-  expire.after = 3L
+waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after = 3L, stop.on.error = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = FALSE, sync = TRUE)
   assertNumber(timeout, lower = 0)
+  assertCount(expire.after, positive = TRUE)
   assertFlag(stop.on.error)
   sleep = getSleepFunction(reg, sleep)
   ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
-
 
   if (nrow(.findNotSubmitted(ids = ids, reg = reg)) > 0L) {
     warning("Cannot wait for unsubmitted jobs. Removing from ids.")
     ids = ids[.findSubmitted(ids = ids, reg = reg), nomatch = 0L]
   }
 
-  if (nrow(ids) == 0L)
+  if (nrow(ids) == 0L) {
     return(TRUE)
+  }
 
   terminated = on.sys = expire.counter = NULL
   ids$terminated = FALSE

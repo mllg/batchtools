@@ -7,7 +7,7 @@ test_that("waitForJobs", {
   silent({
     submitJobs(ids, reg = reg)
     expect_true(waitForJobs(ids = ids[1], reg = reg, sleep = 1))
-    expect_false(waitForJobs(ids = ids, stop.on.error = TRUE, sleep = 1, reg = reg))
+    expect_false(waitForJobs(ids = ids, stop.on.error = TRUE, sleep = 1, expire.after = 1, reg = reg))
   })
 })
 
@@ -34,11 +34,3 @@ test_that("waitForJobs: filter out unsubmitted jobs", {
     expect_true(res)
   })
 })
-
-if (FALSE) {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
-  reg$cluster.functions = makeClusterFunctionsMulticore(4)
-  ids = batchMap(reg = reg, Sys.sleep, c(10, 10, 15, 20)/2)
-  submitJobs(ids, reg = reg)
-  waitForJobs(reg = reg, sleep = 1)
-}
