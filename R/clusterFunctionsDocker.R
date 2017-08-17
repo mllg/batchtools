@@ -108,6 +108,6 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
   }
 
   makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    store.job = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency,
+    store.job.collection = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency,
     hooks = list(post.submit = housekeeping, post.sync = housekeeping))
 } # nocov end

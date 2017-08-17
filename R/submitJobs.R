@@ -188,7 +188,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
   for (ch in chunks) {
     ids.chunk = ids[chunk == ch, "job.id"]
     jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
-    if (reg$cluster.functions$store.job)
+    if (reg$cluster.functions$store.job.collection)
       writeRDS(jc, file = jc$uri)
 
     if (!is.na(max.concurrent.jobs)) {

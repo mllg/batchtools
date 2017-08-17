@@ -100,6 +100,6 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
   }
 
   makeClusterFunctions(name = "Slurm", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    listJobsQueued = listJobsQueued, array.var = "SLURM_ARRAY_TASK_ID", store.job = TRUE,
-    scheduler.latency = scheduler.latency, fs.latency = fs.latency)
+    listJobsQueued = listJobsQueued, array.var = "SLURM_ARRAY_TASK_ID", store.job.collection = TRUE,
+    store.job.files = !isLocalHost(nodename), scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end
