@@ -2,11 +2,18 @@
 
 * Added a missing routine to upgrade registries created with batchtools prior to v0.9.3.
 * Fixed a bug where the registry could not be synced if jobs failed during initialization (#135).
-* The sleep duration used in `waitForJobs()` and `submitJobs()` can now be set via the configuration file.
+* The sleep duration for `waitForJobs()` and `submitJobs()` can now be set via the configuration file.
 * A new heuristic will try to detect if the registry has been altered by a simultaneously running R session.
-  If this is detected, the registry will be set to a read-only state.
+  If this is detected, the registry in the current session will be set to a read-only state.
+* `waitForJobs()` has been reworked to allow control over the heuristic to detect expired jobs.
+  Jobs are treated as expired if they have been submitted but are not detected on the system for `expire.after` iterations
+  (default 3 iterations, before 1 iteration).
 * New argument `writeable` for `loadRegistry()` to allow loading registries explicitly as read-only.
 * Removed argument `update.paths` from `loadRegistry()`.
+  Paths are always updated, but the registry on the file system remains unchanged unless loaded in read-write mode.
+* `ClusterFunctionsSlurm` now come with an experimental nodename argument. If set, all communication with the master is
+  handled via SSH which effectively allows you to submit jobs from your local machine instead of the head node.
+  Note that mounting the file system (e.g., via SSHFS) is mandatory.
 
 # batchtools 0.9.4
 

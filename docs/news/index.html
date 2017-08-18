@@ -91,6 +91,22 @@
     </div>
 
     <div class="contents">
+    <div id="batchtools-0-9-5" class="section level1">
+<h1 class="hasAnchor">
+<a href="#batchtools-0-9-5" class="anchor"></a>batchtools 0.9.5</h1>
+<ul>
+<li>Added a missing routine to upgrade registries created with batchtools prior to v0.9.3.</li>
+<li>Fixed a bug where the registry could not be synced if jobs failed during initialization (#135).</li>
+<li>The sleep duration for <code><a href="../reference/waitForJobs.html">waitForJobs()</a></code> and <code><a href="../reference/submitJobs.html">submitJobs()</a></code> can now be set via the configuration file.</li>
+<li>A new heuristic will try to detect if the registry has been altered by a simultaneously running R session. If this is detected, the registry in the current session will be set to a read-only state.</li>
+<li>
+<code><a href="../reference/waitForJobs.html">waitForJobs()</a></code> has been reworked to allow control over the heuristic to detect expired jobs. Jobs are treated as expired if they have been submitted but are not detected on the system for <code>expire.after</code> iterations (default 3 iterations, before 1 iteration).</li>
+<li>New argument <code>writeable</code> for <code><a href="../reference/loadRegistry.html">loadRegistry()</a></code> to allow loading registries explicitly as read-only.</li>
+<li>Removed argument <code>update.paths</code> from <code><a href="../reference/loadRegistry.html">loadRegistry()</a></code>. Paths are always updated, but the registry on the file system remains unchanged unless loaded in read-write mode.</li>
+<li>
+<code>ClusterFunctionsSlurm</code> now come with an experimental nodename argument. If set, all communication with the master is handled via SSH which effectively allows you to submit jobs from your local machine instead of the head node. Note that mounting the file system (e.g., via SSHFS) is mandatory.</li>
+</ul>
+</div>
     <div id="batchtools-0-9-4" class="section level1">
 <h1 class="hasAnchor">
 <a href="#batchtools-0-9-4" class="anchor"></a>batchtools 0.9.4</h1>
@@ -162,6 +178,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#batchtools-0-9-5">0.9.5</a></li>
         <li><a href="#batchtools-0-9-4">0.9.4</a></li>
         <li><a href="#batchtools-0-9-3">0.9.3</a></li>
         <li><a href="#batchtools-0-9-2">0.9.2</a></li>

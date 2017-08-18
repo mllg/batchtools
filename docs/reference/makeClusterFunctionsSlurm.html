@@ -106,7 +106,8 @@ otherwise the commands for listing and killing jobs will not work.</p>
     
 
     <pre class="usage"><span class='fu'>makeClusterFunctionsSlurm</span>(<span class='kw'>template</span> <span class='kw'>=</span> <span class='st'>"slurm"</span>, <span class='kw'>clusters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>array.jobs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
+  <span class='kw'>array.jobs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>nodename</span> <span class='kw'>=</span> <span class='st'>"localhost"</span>, <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -133,6 +134,16 @@ Note that you should not select the cluster in your template file via <code>#SBA
       <th>array.jobs</th>
       <td><p>[<code>logical(1)</code>]
 If array jobs are disabled on the computing site, set to <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>nodename</th>
+      <td><p>[<code>character(1)</code>]
+Nodename of the master. All commands are send via SSH to this host. Only works iff</p><ol>
+<li><p>Passwordless authentication (e.g., via SSH public key authentication) is set up.</p></li>
+<li><p>The file directory is shared across machines, e.g. mounted via SSHFS.</p></li>
+<li><p>The absolute path to the <code>file.dir</code> are identical on the machines, or paths are provided relative to the
+    home directory.</p></li>
+</ol></td>
     </tr>
     <tr>
       <th>scheduler.latency</th>
