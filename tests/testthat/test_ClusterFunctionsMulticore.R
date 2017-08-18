@@ -9,7 +9,7 @@ test_that("cf multicore", {
   silent({
     submitJobs(1:2, reg = reg)
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
-    expect_true(waitForJobs(sleep = 0.2, reg = reg))
+    expect_true(waitForJobs(sleep = 0.2, expire.after = 1, reg = reg))
   })
   expect_data_table(findOnSystem(reg = reg), nrow = 0)
   expect_equal(findDone(reg = reg), findJobs(reg = reg))

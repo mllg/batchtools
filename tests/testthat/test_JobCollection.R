@@ -23,6 +23,20 @@ test_that("makeJobCollection", {
   expect_output(print(jc), "Collection")
 })
 
+
+test_that("makeJobCollection does not expand relative paths", {
+  skip_on_os("windows")
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  batchMap(identity, 1, reg = reg)
+  reg$file.dir = npath("~/foo", must.work = FALSE)
+  reg$work.dir = npath("~/bar", must.work = FALSE)
+  jc = makeJobCollection(1, reg = reg)
+  expect_true(stri_startswith_fixed(jc$file.dir, "~/foo"))
+  expect_true(stri_startswith_fixed(jc$uri, "~/foo/jobs/"))
+  expect_true(stri_startswith_fixed(jc$log.file, "~/foo/logs"))
+  expect_true(stri_startswith_fixed(jc$work.dir, "~/bar"))
+})
+
 test_that("makeJobCollection.ExperimentCollection", {
   reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
   addProblem(reg = reg, "p1", fun = function(job, data, ...) list(data = data, ...))

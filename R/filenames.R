@@ -30,7 +30,7 @@ getLogFiles = function(reg, ids) {
 }
 
 getJobFiles = function(reg, hash) {
-  fp(dir(reg, "jobs"), sprintf("%s.rds", hash))
+  fp(reg$file.dir, "jobs", sprintf("%s.rds", hash))
 }
 
 getExternalDirs = function(reg, ids) {
