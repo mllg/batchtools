@@ -28,8 +28,8 @@ test_that("makeJobCollection does not expand relative paths", {
   skip_on_os("windows")
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(identity, 1, reg = reg)
-  reg$file.dir = "~/foo"
-  reg$work.dir = "~/bar"
+  reg$file.dir = npath("~/foo", must.work = FALSE)
+  reg$work.dir = npath("~/bar", must.work = FALSE)
   jc = makeJobCollection(1, reg = reg)
   expect_true(stri_startswith_fixed(jc$file.dir, "~/foo"))
   expect_true(stri_startswith_fixed(jc$uri, "~/foo/jobs/"))

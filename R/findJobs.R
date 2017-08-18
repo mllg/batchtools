@@ -220,6 +220,13 @@ findErrors = function(ids = NULL, reg = getDefaultRegistry()) {
 }
 
 
+# used in waitForJobs: find jobs which are done or error
+.findTerminated = function(reg, ids = NULL) {
+  done = NULL
+  filter(reg$status, ids, c("job.id", "done"))[!is.na(done), "job.id"]
+}
+
+
 #' @export
 #' @rdname findJobs
 findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {

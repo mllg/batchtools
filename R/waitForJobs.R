@@ -105,12 +105,3 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
   }
 }
 
-.findNotTerminated = function(reg, ids = NULL) {
-  done = NULL
-  filter(reg$status, ids, c("job.id", "done"))[is.na(done), "job.id"]
-}
-
-.findTerminated = function(reg, ids = NULL) {
-  done = NULL
-  filter(reg$status, ids, c("job.id", "done"))[!is.na(done), "job.id"]
-}
