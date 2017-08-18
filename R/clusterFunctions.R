@@ -187,11 +187,10 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 cfBrewTemplate = function(reg, text, jc) {
   assertString(text)
 
-  outfile = if (batchtools$debug || reg$cluster.functions$store.job.files) {
-    fp(reg$file.dir, "jobs", sprintf("%s.job", jc$job.hash))
-  } else {
-    tempfile(fileext = "job")
-  }
+  path = if (batchtools$debug || reg$cluster.functions$store.job.files) fp(reg$file.dir, "jobs") else tempdir()
+  fn = sprintf("%s.job", jc$job.hash)
+  outfile = fp(path, fn)
+
   parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
   "!DEBUG [cfBrewTemplate]: Brewing template to file '`outfile`'"
@@ -199,6 +198,7 @@ cfBrewTemplate = function(reg, text, jc) {
   z = try(brew(text = text, output = outfile, envir = jc), silent = TRUE)
   if (is.error(z))
     stopf("Error brewing template: %s", as.character(z))
+  waitForFiles(path, fn, reg$cluster.functions$scheduler.latency)
   return(outfile)
 }
 
