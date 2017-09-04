@@ -188,8 +188,8 @@ It can then be reused later, e.g., when you login to the system again, by callin
 
 When a registry object is created or loaded, it is stored for the active R session as the default.
 Therefore the argument `reg` will be ignored in functions calls of this example, assuming the correct registry is set as default.
-To get the current default registry, [`getDefaultRegistry`](https://mllg.github.io/batchtools/reference/makeRegistry) can be used.
-To switch to another registry, use [`setDefaultRegistry()`](https://mllg.github.io/batchtools/reference/makeRegistry).
+To get the current default registry, [`getDefaultRegistry`](https://mllg.github.io/batchtools/reference/getDefaultRegistry) can be used.
+To switch to another registry, use [`setDefaultRegistry()`](https://mllg.github.io/batchtools/reference/getDefaultRegistry).
 
 First, we create a function which samples $n$ points $(x_i, y_i)$ whereas $x_i$ and $y_i$ are distributed uniformly, i.e. $x_i, y_i \sim \mathcal{U}(0,1)$.
 Next, the distance to the origin $(0, 0)$ is calculated and the fraction of points in the unit circle ($d \leq 1$) is returned.
