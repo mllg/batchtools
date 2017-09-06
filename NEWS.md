@@ -1,3 +1,8 @@
+# batchtools 0.9.6
+
+* Fixed a bug where the wrong problem was retrieved from the cache. This was only triggered for chunked jobs in
+  combination with an `ExperimentRegistry`.
+
 # batchtools 0.9.5
 
 * Added a missing routine to upgrade registries created with batchtools prior to v0.9.3.

@@ -74,3 +74,17 @@ test_that("lpt", {
 
   expect_equal(lpt(numeric(0), 1), integer(0))
 })
+
+test_that("caching works", {
+  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  p1 = addProblem(reg = reg, "p1", data = iris)
+  p2 = addProblem(reg = reg, "p2", data = data.frame(a = 1:10))
+  a = addAlgorithm(reg = reg, name = "a", fun = function(data, ...) nrow(data))
+
+  addExperiments(reg = reg)
+  ids = findJobs(reg = reg)
+  ids$chunk = 1L
+  submitJobs(ids, reg = reg)
+
+  expect_equal(unlist(reduceResultsList(ids, reg = reg)), c(150, 10))
+})

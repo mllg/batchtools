@@ -291,7 +291,7 @@ There is no intermediate R source file like there was in <code>BatchJobs</code>.
 <p>First, a so-called registry object has to be created, which defines a directory where all relevant information, files and results of the computational jobs will be stored. There are two different types of registry objects: First, a regular <a href="https://mllg.github.io/batchtools/reference/makeRegistry"><code>Registry</code></a> which we will use in this example. Second, an <a href="https://mllg.github.io/batchtools/reference/makeExperimentRegistry"><code>ExperimentRegistry</code></a> which provides an alternative way to define computational jobs and thereby is tailored for a broad range of large scale computer experiments (see, for example, <a href="ExampleExperiment.html">this vignette</a>). Here, we use a temporary registry which is stored in the temp directory of the system and gets automatically deleted if you close the R session.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistry.html">makeRegistry</a></span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</code></pre></div>
 <p>For a permanent registry, set the <code>file.dir</code> to a valid path. It can then be reused later, e.g., when you login to the system again, by calling the function <code><a href="../reference/loadRegistry.html">loadRegistry(file.dir)</a></code>.</p>
-<p>When a registry object is created or loaded, it is stored for the active R session as the default. Therefore the argument <code>reg</code> will be ignored in functions calls of this example, assuming the correct registry is set as default. To get the current default registry, <a href="https://mllg.github.io/batchtools/reference/makeRegistry"><code>getDefaultRegistry</code></a> can be used. To switch to another registry, use <a href="https://mllg.github.io/batchtools/reference/makeRegistry"><code><a href="../reference/getDefaultRegistry.html">setDefaultRegistry()</a></code></a>.</p>
+<p>When a registry object is created or loaded, it is stored for the active R session as the default. Therefore the argument <code>reg</code> will be ignored in functions calls of this example, assuming the correct registry is set as default. To get the current default registry, <a href="https://mllg.github.io/batchtools/reference/getDefaultRegistry"><code>getDefaultRegistry</code></a> can be used. To switch to another registry, use <a href="https://mllg.github.io/batchtools/reference/getDefaultRegistry"><code><a href="../reference/getDefaultRegistry.html">setDefaultRegistry()</a></code></a>.</p>
 <p>First, we create a function which samples <span class="math inline">\(n\)</span> points <span class="math inline">\((x_i, y_i)\)</span> whereas <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> are distributed uniformly, i.e. <span class="math inline">\(x_i, y_i \sim \mathcal{U}(0,1)\)</span>. Next, the distance to the origin <span class="math inline">\((0, 0)\)</span> is calculated and the fraction of points in the unit circle (<span class="math inline">\(d \leq 1\)</span>) is returned.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">piApprox =<span class="st"> </span><span class="cf">function</span>(n) {
   nums =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>n), <span class="dt">ncol =</span> <span class="dv">2</span>)
@@ -299,7 +299,7 @@ There is no intermediate R source file like there was in <code>BatchJobs</code>.
   <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">mean</span>(d <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1</span>)
 }
 <span class="kw">piApprox</span>(<span class="dv">1000</span>)</code></pre></div>
-<pre><code>## [1] 3.172</code></pre>
+<pre><code>## [1] 3.232</code></pre>
 <p>We now parallelize <code>piApprox()</code> with <code>batchtools</code>: We create 10 jobs, each doing a MC simulation with <span class="math inline">\(10^5\)</span> jobs. We use <a href="https://mllg.github.io/batchtools/reference/batchMap"><code><a href="../reference/batchMap.html">batchMap()</a></code></a> to define the jobs (note that this does not yet start the calculation):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/batchMap.html">batchMap</a></span>(<span class="dt">fun =</span> piApprox, <span class="dt">n =</span> <span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>))</code></pre></div>
 <pre><code>## Adding 10 jobs ...</code></pre>
@@ -332,7 +332,7 @@ There is no intermediate R source file like there was in <code>BatchJobs</code>.
 <p>If you are absolutely sure that your function works, you can take a shortcut and use <em>batchtools</em> in an <code>lapply</code> fashion using <a href="https://mllg.github.io/batchtools/reference/btlapply"><code><a href="../reference/btlapply.html">btlapply()</a></code></a>. This function creates a temporary registry (but you may also pass one yourself), calls <a href="https://mllg.github.io/batchtools/reference/reduceResultsList"><code><a href="../reference/batchMap.html">batchMap()</a></code></a>, wait for the jobs to terminate with <a href="https://mllg.github.io/batchtools/reference/waitForJobs"><code><a href="../reference/waitForJobs.html">waitForJobs()</a></code></a> and then uses <a href="https://mllg.github.io/batchtools/reference/reduceResultsList"><code><a href="../reference/reduceResultsList.html">reduceResultsList()</a></code></a> to return the results.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res =<span class="st"> </span><span class="kw"><a href="../reference/btlapply.html">btlapply</a></span>(<span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>), piApprox)
 <span class="kw">mean</span>(<span class="kw">unlist</span>(res))</code></pre></div>
-<pre><code>## [1] 3.143092</code></pre>
+<pre><code>## [1] 3.142924</code></pre>
 </div>
 <div id="example-2-machine-learning" class="section level1">
 <h1 class="hasAnchor">
@@ -547,12 +547,12 @@ reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistr
 ## 2:      9       TRUE   TRUE Error in (function (value)  : Ooops.</code></pre>
 <p>If we want to peek into the R log file of a job to see more context for the error we can use <a href="https://mllg.github.io/batchtools/reference/showLog"><code><a href="../reference/showLog.html">showLog()</a></code></a> which opens a pager or use <a href="https://mllg.github.io/batchtools/reference/showLog"><code><a href="../reference/showLog.html">getLog()</a></code></a> to get the log as character vector:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tail</span>(<span class="kw"><a href="../reference/showLog.html">getLog</a></span>(<span class="dt">id =</span> <span class="dv">9</span>))</code></pre></div>
-<pre><code>## [1] "### [bt 2017-08-18 15:20:55]: Memory measurement disabled"                           
-## [2] "### [bt 2017-08-18 15:20:55]: Starting job [batchtools job.id=9]"                    
+<pre><code>## [1] "### [bt 2017-09-06 14:58:15]: Memory measurement disabled"                           
+## [2] "### [bt 2017-09-06 14:58:15]: Starting job [batchtools job.id=9]"                    
 ## [3] "Error in (function (value)  : Ooops."                                                
 ## [4] ""                                                                                    
-## [5] "### [bt 2017-08-18 15:20:55]: Job terminated with an exception [batchtools job.id=9]"
-## [6] "### [bt 2017-08-18 15:20:55]: Calculation finished!"</code></pre>
+## [5] "### [bt 2017-09-06 14:58:15]: Job terminated with an exception [batchtools job.id=9]"
+## [6] "### [bt 2017-09-06 14:58:15]: Calculation finished!"</code></pre>
 <p>You can also grep for messages (output suppressed in this vignette for technical reasons):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/grepLogs.html">grepLogs</a></span>(<span class="dt">pattern =</span> <span class="st">"simple"</span>, <span class="dt">ignore.case =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
