@@ -1,6 +1,6 @@
 Package: batchtools
 Title: Tools for Computation on Batch Systems
-Version: 0.9.6
+Version: 0.9.6-9000
 Authors@R: c(
     person("Michel", "Lang", NULL, "michellang@gmail.com", role = c("cre", "aut")),
     person("Bernd", "Bischl", NULL, "bernd_bischl@gmx.de", role = "aut"),
