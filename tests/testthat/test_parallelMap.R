@@ -28,6 +28,17 @@ test_that("pm/socket", {
   expect_equal(nrow(findDone(reg = reg)), 4L)
 })
 
+test_that("parallelMap works with batchtools", {
+  skip_if_not_installed("parallelMap")
+  skip_if_not(packageVersion("parallelMap") >= "1.4")
+  requireNamespace("parallelMap")
+
+  parallelMap::parallelStartBatchtools(storagedir = tempdir(), show.info = FALSE)
+  res = parallelMap::parallelMap(function(x, y) x + y, x = 1:2, y = 1)
+  parallelMap::parallelStop()
+  expect_equal(res, list(2, 3))
+})
+
 # test_that("pm/mpi", {
 #   skip_on_os("mac")
 #   skip_on_cran()
