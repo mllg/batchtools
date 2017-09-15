@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -119,7 +126,7 @@ is not piped through SSH.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>[<code>named list</code>] with &#8220;exit.code&#8221; (integer) and &#8220;output&#8221; (character).</p>
+    <p>[<code>named list</code>] with &#8220;sys.cmd&#8221;, &#8220;sys.args&#8221;, &#8220;exit.code&#8221; (integer), &#8220;output&#8221; (character).</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -132,11 +139,11 @@ is not piped through SSH.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
-  <span class='fu'>runOSCommand</span>(<span class='st'>"ls"</span>)
-  <span class='fu'>runOSCommand</span>(<span class='st'>"ls"</span>, <span class='st'>"-al"</span>)
-  <span class='fu'>runOSCommand</span>(<span class='st'>"notfound"</span>)
-})</div></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'>runOSCommand</span>(<span class='st'>"ls"</span>)
+<span class='fu'>runOSCommand</span>(<span class='st'>"ls"</span>, <span class='st'>"-al"</span>)
+<span class='fu'>runOSCommand</span>(<span class='st'>"notfound"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -1,5 +1,8 @@
 .DS_Store
-inst/doc
-src/*.so
-src/*.o
-vignettes/*.html
+/inst/doc
+/src/*.so
+/src/*.o
+/vignettes/*.html
+/vignettes/*.pdf
+/.Rproj.user
+/batchtools.Rproj

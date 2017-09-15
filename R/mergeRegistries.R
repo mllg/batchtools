@@ -34,7 +34,7 @@
 mergeRegistries = function(source, target = getDefaultRegistry()) {
   assertRegistry(source, writeable = TRUE, running.ok = FALSE)
   assertRegistry(target, writeable = TRUE, running.ok = FALSE)
-  if (normalizePath(source$file.dir) == normalizePath(target$file.dir))
+  if (normalizePath(source$file.dir, winslash = "/") == normalizePath(target$file.dir, winslash = "/"))
     stop("You must provide two different registries (using different file directories")
   hash = function(x) unlist(.mapply(function(...) digest(list(...)), x[, !"def.id"], list()))
 
@@ -78,5 +78,5 @@ mergeRegistries = function(source, target = getDefaultRegistry()) {
   }
 
   target$status = ujoin(target$status, status, by = "job.id")
-  saveRegistry(target)
+  saveRegistry(reg = target)
 }

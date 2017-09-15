@@ -10,7 +10,7 @@ auto_increment = function(ids, n = 1L) {
 }
 
 ustamp = function() {
-  round(as.numeric(Sys.time(), 4L))
+  round(as.numeric(Sys.time()), 4L)
 }
 
 names2 = function (x, missing.val = NA_character_) {
@@ -102,13 +102,17 @@ stopf = function (...) {
   !match(x, y, nomatch = 0L)
 }
 
+`%chnin%` = function(x, y) {
+  !chmatch(x, y, nomatch = 0L)
+}
+
 setClasses = function(x, cl) {
   setattr(x, "class", cl)
   x
 }
 
 addlevel = function(x, lvl) {
-  if (lvl %nin% levels(x))
+  if (lvl %chnin% levels(x))
     levels(x) = c(levels(x), lvl)
   x
 }
@@ -139,7 +143,7 @@ stri_trunc = function(str, length, append = "") {
 }
 
 Rscript = function() {
-  file.path(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
+  fp(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
 }
 
 chsetdiff = function(x, y) {

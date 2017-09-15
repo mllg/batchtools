@@ -124,10 +124,12 @@ print.RuntimeEstimate = function(x, n = 1L, ...) {
 
   catf("Runtime Estimate for %i jobs with %i CPUs", nrow(x$runtimes), n)
   catf("  Done     : %s", ps(calculated, nc = nc))
-  catf("  Remaining: %s", ps(remaining, nc = nc))
-  if (n >= 2L) {
-    rt = x$runtimes[type == "estimated"]$runtime
-    catf("  Parallel : %s", ps(max(vnapply(split(rt, lpt(rt, n)), sum)), nc = nc))
+  if (x$runtimes[type == "estimated", .N] > 0L) {
+    catf("  Remaining: %s", ps(remaining, nc = nc))
+    if (n >= 2L) {
+      rt = x$runtimes[type == "estimated"]$runtime
+      catf("  Parallel : %s", ps(max(vnapply(split(rt, lpt(rt, n)), sum)), nc = nc))
+    }
   }
   catf("  Total    : %s", ps(total, nc = nc))
 }

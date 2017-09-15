@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -142,7 +149,7 @@ and thus allows you to start over.</p>
   thus you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.</p>
 <p>The file lookup defaults to a heuristic which first tries to read &#8220;batchtools.conf.R&#8221; in the current working directory.
   If not found, it looks for a configuration file &#8220;config.R&#8221; in the OS dependent user configuration directory
-  as reported by via <code>rappdirs::user_config_dir("batchtools", expand = FALSE)</code> (e.g., on linux this
+  as reported by via <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>rappdirs::user_config_dir("batchtools", expand = FALSE)</a></code> (e.g., on linux this
   usually resolves to &#8220;~/.config/batchtools/config.R&#8221;).
   If this file is also not found, the heuristic finally tries to read the file &#8220;.batchtools.conf.R&#8221; in the
   home directory (&#8220;~&#8221;).
@@ -195,7 +202,7 @@ Default is <code>TRUE</code>.</p></td>
     <p>[<code>environment</code>] of class &#8220;Registry&#8221; with the following slots:</p><dl class='dl-horizontal'>
     <dt><code>file.dir</code> [path]:</dt><dd><p>File directory.</p></dd>
     <dt><code>work.dir</code> [path]:</dt><dd><p>Working directory.</p></dd>
-    <dt><code>temp.dir</code> [path]:</dt><dd><p>Temporary directory. Used if <code>file.dir</code> is <code>NA</code>.</p></dd>
+    <dt><code>temp.dir</code> [path]:</dt><dd><p>Temporary directory. Used if <code>file.dir</code> is <code>NA</code> to create temporary registries.</p></dd>
     <dt><code>packages</code> [character()]:</dt><dd><p>Packages to load on the slaves.</p></dd>
     <dt><code>namespaces</code> [character()]:</dt><dd><p>Namespaces to load on the slaves.</p></dd>
     <dt><code>seed</code> [integer(1)]:</dt><dd><p>Registry seed. Before each job is executed, the seed <code>seed + job.id</code> is set.</p></dd>
@@ -220,12 +227,13 @@ Default is <code>TRUE</code>.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
-#&gt;   Name    : Interactive
-#&gt;   File dir: /scratch/registry676a33542a85
-#&gt;   Work dir: /home/lang/Projekte/batchtools/docs/reference
-#&gt;   Jobs    : 0
-#&gt;   Seed    : 396414167</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry7c5846bafd23' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
+#&gt;   Backend  : Interactive
+#&gt;   File dir : /scratch/registry7c5846bafd23
+#&gt;   Work dir : /home/lang/Projekte/batchtools/docs/reference
+#&gt;   Jobs     : 0
+#&gt;   Seed     : 778897980
+#&gt;   Writeable: TRUE</div><div class='input'>
 <span class='co'># Set cluster functions to interactive mode and start jobs in external R sessions</span>
 <span class='no'>tmp</span>$<span class='no'>cluster.functions</span> <span class='kw'>=</span> <span class='fu'><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></span>(<span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 

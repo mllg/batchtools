@@ -44,19 +44,20 @@ makeClusterFunctionsSGE = function(template = "sge", scheduler.latency = 1, fs.l
     }
   }
 
-  listJobs = function(reg, cmd) {
-    batch.ids = runOSCommand(cmd[1L], cmd[-1L])$output
-    stri_extract_first_regex(tail(batch.ids, -2L), "\\d+")
+  listJobs = function(reg, args) {
+    assertRegistry(reg, writeable = FALSE)
+    res = runOSCommand("qstat", args)
+    if (res$exit.code > 0L)
+      OSError("Listing of jobs failed", res)
+    stri_extract_first_regex(tail(res$output, -2L), "\\d+")
   }
 
   listJobsQueued = function(reg) {
-    assertRegistry(reg, writeable = FALSE)
-    listJobs(reg, c("qstat",  "-u $USER", "-s p"))
+    listJobs(reg, c("-u $USER", "-s p"))
   }
 
   listJobsRunning = function(reg) {
-    assertRegistry(reg, writeable = FALSE)
-    listJobs(reg, c("qstat",  "-u $USER", "-s rs"))
+    listJobs(reg, c("-u $USER", "-s rs"))
   }
 
   killJob = function(reg, batch.id) {
@@ -66,5 +67,5 @@ makeClusterFunctionsSGE = function(template = "sge", scheduler.latency = 1, fs.l
   }
 
   makeClusterFunctions(name = "SGE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, store.job = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency)
+    listJobsRunning = listJobsRunning, store.job.collection = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end

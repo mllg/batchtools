@@ -14,7 +14,7 @@
 #' @param nodename [\code{character(1)}]\cr
 #'   Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
 #'   is not piped through SSH.
-#' @return [\code{named list}] with \dQuote{exit.code} (integer) and \dQuote{output} (character).
+#' @return [\code{named list}] with \dQuote{sys.cmd}, \dQuote{sys.args}, \dQuote{exit.code} (integer), \dQuote{output} (character).
 #' @export
 #' @family ClusterFunctionsHelper
 #' @examples
@@ -28,11 +28,9 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
   assertCharacter(sys.args, any.missing = FALSE)
   assertString(nodename, min.chars = 1L)
 
-  if (nodename != "localhost") {
-    sys.args = c(nodename, shQuote(stri_flatten(c(sys.cmd, sys.args), " ")))
+  if (!isLocalHost(nodename)) {
+    sys.args = c("-q", nodename, sys.cmd, sys.args)
     sys.cmd = "ssh"
-  } else if (length(sys.args) == 0L) {
-      sys.args = ""
   }
 
   "!DEBUG [runOSCommand]: cmd: `sys.cmd` `stri_flatten(sys.args, ' ')`"
@@ -49,5 +47,14 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
   "!DEBUG [runOSCommand]: OS result (stdin '`stdin`', exit code `exit.code`):"
   "!DEBUG [runOSCommand]: `paste0(output, sep = '\n')`"
 
-  return(list(exit.code = exit.code, output = output))
+  return(list(sys.cmd = sys.cmd, sys.args = sys.args, exit.code = exit.code, output = output))
+}
+
+isLocalHost = function(nodename) {
+  is.null(nodename) || nodename %chin% c("localhost", "127.0.0.1", "::1")
+}
+
+OSError = function(msg, res) {
+  stopf("%s (exit code %i);\ncmd: '%s'\noutput:\n%s",
+    msg, res$exit.code, stri_flatten(c(res$sys.cmd, res$sys.args), collapse = " "), stri_flatten(res$output, "\n"))
 }

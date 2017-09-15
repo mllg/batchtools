@@ -1,11 +1,18 @@
-default.sleep = function(i) {
-   5 + 115 * pexp(i - 1, rate = 0.01)
-}
+getSleepFunction = function(reg, sleep) {
+  if (is.null(sleep)) {
+    if (is.null(reg$sleep))
+      return(function(i) { 5 + 115 * pexp(i - 1, rate = 0.01) })
+    sleep = reg$sleep
+  }
 
-getSleepFunction = function(sleep) {
-  assert(checkNumber(sleep, lower = 0), checkFunction(sleep, args = "i"))
-  if (is.numeric(sleep))
-    function(i) Sys.sleep(sleep)
-  else
-    function(i) Sys.sleep(sleep(i))
+  if (is.numeric(sleep)) {
+    assertNumber(sleep, lower = 0)
+    return(function(i) Sys.sleep(sleep))
+  }
+
+  if (is.function(sleep)) {
+    return(function(i) Sys.sleep(sleep(i)))
+  }
+
+  stop("Argument 'sleep' must be either a numeric value or function(i)")
 }

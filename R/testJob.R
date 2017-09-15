@@ -33,13 +33,13 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   id = convertId(reg, id)
 
   if (external) {
-    td      = normalizePath(tempdir())
-    fn.r    = file.path(td, "batchtools-testJob.R")
-    fn.jc   = file.path(td, "batchtools-testJob.jc")
-    fn.res  = file.path(td, "batchtools-testJob.rds")
+    td      = normalizePath(tempdir(), winslash = "/")
+    fn.r    = fp(td, "batchtools-testJob.R")
+    fn.jc   = fp(td, "batchtools-testJob.jc")
+    fn.res  = fp(td, "batchtools-testJob.rds")
 
     writeRDS(makeJobCollection(id, reg = reg), file = fn.jc)
-    brew(file = system.file(file.path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE),
+    brew(file = system.file(fp("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE),
       output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))
 
     res = runOSCommand(Rscript(), normalizePath(fn.r, winslash = "/"))
@@ -49,7 +49,9 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
       return(readRDS(fn.res))
     stopf("testJob() failed for job with id=%i. To properly debug, re-run with external=FALSE", id$job.id)
   } else {
-    loadRegistryDependencies(reg, switch.wd = TRUE)
-    execJob(job = makeJob(id, reg = reg))
+    with_dir(reg$work.dir, {
+      loadRegistryDependencies(reg, must.work = TRUE)
+      execJob(job = makeJob(id, reg = reg))
+    })
   }
 }

@@ -108,7 +108,7 @@ showLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   id = convertId(reg, id)
   lines = extractLog(readLog(id, reg = reg), id)
-  log.file = file.path(tempdir(), sprintf("%i.log", id$job.id))
+  log.file = fp(tempdir(), sprintf("%i.log", id$job.id))
   writeLines(text = lines, con = log.file)
   file.show(log.file, delete.file = TRUE)
 }

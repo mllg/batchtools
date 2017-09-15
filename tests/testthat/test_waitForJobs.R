@@ -7,7 +7,7 @@ test_that("waitForJobs", {
   silent({
     submitJobs(ids, reg = reg)
     expect_true(waitForJobs(ids = ids[1], reg = reg, sleep = 1))
-    expect_false(waitForJobs(ids = ids, stop.on.error = TRUE, sleep = 1, reg = reg))
+    expect_false(waitForJobs(ids = ids, stop.on.error = TRUE, sleep = 1, expire.after = 1, reg = reg))
   })
 })
 

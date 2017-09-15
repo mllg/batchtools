@@ -4,8 +4,8 @@
 \alias{loadRegistry}
 \title{Load a Registry from the File System}
 \usage{
-loadRegistry(file.dir = getwd(), work.dir = NULL,
-  conf.file = findConfFile(), make.default = TRUE, update.paths = FALSE)
+loadRegistry(file.dir, work.dir = NULL, conf.file = findConfFile(),
+  make.default = TRUE, writeable = FALSE)
 }
 \arguments{
 \item{file.dir}{[\code{character(1)}]\cr
@@ -49,17 +49,27 @@ namespace and acts as default registry. You might want to switch this
 off if you work with multiple registries simultaneously.
 Default is \code{TRUE}.}
 
-\item{update.paths}{[\code{logical(1)}]\cr
-If set to \code{TRUE}, the \code{file.dir} and \code{work.dir} will be updated in the registry. Note that this is
-likely to break computation on the system! Only do this if no jobs are currently running. Default is \code{FALSE}.
-If the provided \code{file.dir} does not match the stored \code{file.dir}, \code{loadRegistry} will return a
-registry in read-only mode.}
+\item{writeable}{[\code{logical(1)}]\cr
+Loads the registry in read-write mode. Default is \code{FALSE}.}
 }
 \value{
 [\code{\link{Registry}}].
 }
 \description{
 Loads a registry from its \code{file.dir}.
+
+Multiple R sessions accessing the same registry simultaneously can lead to database inconsistencies.
+Here, it does not matter if the sessions run on the same system or different systems via a file system mount.
+
+If you just need to check on the status or peek into some preliminary results, you can load the registry in a
+read-only mode by setting \code{writeable} to \code{FALSE}.
+All operations that need to change the registry will raise an exception in this mode.
+Files communicated back by the computational nodes are parsed to update the registry in memory, but remain on the file system
+in order to be read and cleaned up by an R session with read-write access.
+
+A heuristic tries to detect if the registry has been altered in the background.
+However, you should not completely rely on it.
+Thus, set to \code{writeable} to \code{TRUE} if and only if you are absolutely sure other R processes are terminated.
 }
 \seealso{
 Other Registry: \code{\link{clearRegistry}},

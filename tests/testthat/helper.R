@@ -15,7 +15,7 @@ s.chunk = function(ids) {
 
 submitAndWait = function(reg, ids = NULL, ..., sleep = 1) {
   ids = if (is.null(ids)) findNotSubmitted(reg = reg) else convertIds(reg, ids, keep.extra = names(ids))
-  if ("chunk" %nin% names(ids))
+  if ("chunk" %chnin% names(ids))
     ids = s.chunk(ids)
   silent({
     ids = submitJobs(ids = ids, ..., reg = reg)
@@ -29,6 +29,8 @@ suppressAll = function (expr) {
 }
 
 checkTables = function(reg, ...) {
+  expect_is(reg$mtime, "POSIXct")
+
   if (class(reg)[1L] == "Registry") {
     cols = c("def.id", "pars")
     types = c("integer", "list")
@@ -44,11 +46,11 @@ checkTables = function(reg, ...) {
   expect_equal(anyDuplicated(reg$defs, by = "def.id"), 0L)
 
   if (class(reg)[1L] == "Registry") {
-    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "memory",  "resource.id", "batch.id",  "log.file", "job.hash")
-    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric", "integer",     "character", "character",  "character")
+    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "memory",  "resource.id", "batch.id",  "log.file", "job.hash", "job.name")
+    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric", "integer",     "character", "character",  "character", "character")
   } else {
-    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "memory",  "resource.id", "batch.id",  "log.file", "job.hash",  "repl")
-    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric", "integer",     "character", "character",  "character", "integer")
+    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "memory",  "resource.id", "batch.id",  "log.file", "job.hash",  "job.name", "repl")
+    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric", "integer",     "character", "character",  "character", "character", "integer")
   }
   expect_is(reg$status, "data.table")
   expect_data_table(reg$status, ncols = length(cols), ...)

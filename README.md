@@ -6,9 +6,9 @@
 [![Build Status](https://ci.appveyor.com/api/projects/status/ypp14tiiqfhnv92k/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/batchtools/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/mllg/batchtools.svg)](https://coveralls.io/r/mllg/batchtools?branch=master)
 
-As a successor of the packages [BatchJobs](https://github.com/tudo-r/BatchJobs) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments), batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, TORQUE/OpenPBS, Load Sharing Facility (LSF) or Docker Swarm (see the [Setup vignette](https://mllg.github.io/batchtools/articles/v00_Setup)).
+As a successor of the packages [BatchJobs](https://github.com/tudo-r/BatchJobs) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments), batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, TORQUE/OpenPBS, Load Sharing Facility (LSF) or Docker Swarm (see the setup section in the [vignette](https://mllg.github.io/batchtools/articles/batchtools.html)).
 
-The main features conclude:
+Main features:
 * Convenience: All relevant batch system operations (submitting, listing, killing) are either handled internally or abstracted via simple R functions
 * Portability: With a well-defined interface, the source is independent from the underlying batch system - prototype locally, deploy on any high performance cluster
 * Reproducibility: Every computational part has an associated seed stored in a data base which ensures reproducibility even when the underlying batch system changes
@@ -32,15 +32,15 @@ The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchE
 * Data base issues: Although we invested weeks to mitigate issues with locks of the SQLite data base or file system (staged queries, file system timeouts, ...), `BatchJobs` kept working unreliable on some systems with high latency or specific file systems. This made `BatchJobs` unusable for many users.
 
 [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) will remain on CRAN, but new features are unlikely to be ported back.
-See this [vignette](https://mllg.github.io/batchtools/articles/v01_Migration) for a comparison of the packages.
+The [vignette](https://mllg.github.io/batchtools/articles/batchtools.html#migration) contains a section comparing the packages.
 
 
 ## Resources
 * [NEWS](https://mllg.github.io/batchtools/news/)
 * [Function reference](https://mllg.github.io/batchtools/reference)
-* [Vignettes](https://mllg.github.io/batchtools/articles)
+* [Vignette](https://mllg.github.io/batchtools/articles/batchtools.html)
 * [JOSS Paper](http://dx.doi.org/10.21105/joss.00135): Short paper on batchtools. Please cite this if you use batchtools.
-* [Paper on BatchJobs/BatchExperiments](http://www.jstatsoft.org/v64/i11): The described concept still holds for batchtools and most examples work analogously (see this [vignette](https://mllg.github.io/batchtools/articles/v01_Migration) for differences between the packages).
+* [Paper on BatchJobs/BatchExperiments](http://www.jstatsoft.org/v64/i11): The described concept still holds for batchtools and most examples work analogously (see the [vignette](https://mllg.github.io/batchtools/articles/batchtools.html#migration) for differences between the packages).
 
 ## Citation
 Please cite the [JOSS paper](http://dx.doi.org/10.21105/joss.00135) using the following BibTeX entry:

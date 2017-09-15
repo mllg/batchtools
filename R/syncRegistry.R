@@ -9,17 +9,17 @@
 #' @family Registry
 #' @export
 syncRegistry = function(reg = getDefaultRegistry()) {
+  assertRegistry(reg, writeable = TRUE)
+  sync(reg)
+  saveRegistry(reg)
+}
+
+
+sync = function(reg) {
   "!DEBUG [syncRegistry]: Triggered syncRegistry"
   fns = list.files(dir(reg, "updates"), full.names = TRUE)
   if (length(fns) == 0L)
-    return(invisible(TRUE))
-
-  if (reg$writeable) {
-    info("Syncing %i files ...", length(fns))
-  } else {
-    info("Skipping %i updates in read-only mode ...", length(fns))
     return(invisible(FALSE))
-  }
 
   runHook(reg, "pre.sync", fns = fns)
 
@@ -29,13 +29,13 @@ syncRegistry = function(reg = getDefaultRegistry()) {
   })
 
   failed = vlapply(updates, is.null)
-  updates = rbindlist(updates)
+  updates = rbindlist(updates, fill = TRUE) # -> fill = TRUE for #135
 
   if (nrow(updates) > 0L) {
     expr = quote(`:=`(started = i.started, done = i.done, error = i.error, memory = i.memory))
     reg$status[updates, eval(expr), on = "job.id"]
-    saveRegistry(reg)
-    file.remove.safely(fns[!failed])
+    if (reg$writeable)
+      file.remove.safely(fns[!failed])
   }
 
   runHook(reg, "post.sync", updates = updates)

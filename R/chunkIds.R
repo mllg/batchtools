@@ -23,7 +23,7 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
 
   if (length(group.by) > 0L) {
     job.id = NULL
-    if (any(group.by %nin% names(ids)))
+    if (any(group.by %chnin% names(ids)))
       stop("All columns to group by must be provided in the 'ids' table")
     ids[, "chunk" := chunk(job.id, n.chunks = n.chunks, chunk.size = chunk.size), by = group.by]
     ids[, "chunk" := .GRP, by = c(group.by, "chunk")]

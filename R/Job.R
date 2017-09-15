@@ -18,7 +18,7 @@ BaseJob = R6Class("BaseJob", cloneable = FALSE,
 
   active = list(
     external.dir = function() {
-      path = file.path(self$file.dir, "external", self$id)
+      path = fp(self$file.dir, "external", self$id)
       dir.create(path, recursive = TRUE, showWarnings = FALSE)
       path
     }
@@ -33,10 +33,10 @@ Job = R6Class("Job", cloneable = FALSE, inherit = BaseJob,
   ),
   active = list(
     fun = function() {
-      self$reader$get(file.path(self$file.dir, "user.function.rds"))
+      self$reader$get(fp(self$file.dir, "user.function.rds"))
     },
     pars = function() {
-      c(self$job.pars, self$reader$get(file.path(self$file.dir, "more.args.rds")))
+      c(self$job.pars, self$reader$get(fp(self$file.dir, "more.args.rds")))
     }
   )
 )

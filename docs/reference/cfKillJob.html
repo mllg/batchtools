@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -84,12 +91,13 @@
 
     
     <p>This function is only intended for use in your own cluster functions implementation.</p>
-<p>Calls the OS command to kill a job via <code>system</code> like this: &#8220;cmd batch.job.id&#8221;. If the
+<p>Calls the OS command to kill a job via <code><a href='http://www.rdocumentation.org/packages/base/topics/system'>system</a></code> like this: &#8220;cmd batch.job.id&#8221;. If the
 command returns an exit code &gt; 0, the command is repeated after a 1 second sleep
-<code>max.tries-1</code> times. If the command failed in all tries, an exception is generated.</p>
+<code>max.tries-1</code> times. If the command failed in all tries, an error is generated.</p>
     
 
-    <pre class="usage"><span class='fu'>cfKillJob</span>(<span class='no'>reg</span>, <span class='no'>cmd</span>, <span class='kw'>args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>max.tries</span> <span class='kw'>=</span> <span class='fl'>3L</span>)</pre>
+    <pre class="usage"><span class='fu'>cfKillJob</span>(<span class='no'>reg</span>, <span class='no'>cmd</span>, <span class='kw'>args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>max.tries</span> <span class='kw'>=</span> <span class='fl'>3L</span>,
+  <span class='kw'>nodename</span> <span class='kw'>=</span> <span class='st'>"localhost"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -114,6 +122,12 @@ Arguments to <code>cmd</code>, including the batch id.</p></td>
       <td><p>[<code>integer(1)</code>]
 Number of total times to try execute the OS command in cases of failures.
 Default is <code>3</code>.</p></td>
+    </tr>
+    <tr>
+      <th>nodename</th>
+      <td><p>[<code>character(1)</code>]
+Name of the SSH node to run the command on. If set to &#8220;localhost&#8221; (default), the command
+is not piped through SSH.</p></td>
     </tr>
     </table>
     

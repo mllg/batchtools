@@ -1,13 +1,41 @@
+# batchtools 0.9.6
+
+* Fixed a bug where the wrong problem was retrieved from the cache. This was only triggered for chunked jobs in
+  combination with an `ExperimentRegistry`.
+
+# batchtools 0.9.5
+
+* Added a missing routine to upgrade registries created with batchtools prior to v0.9.3.
+* Fixed a bug where the registry could not be synced if jobs failed during initialization (#135).
+* The sleep duration for `waitForJobs()` and `submitJobs()` can now be set via the configuration file.
+* A new heuristic will try to detect if the registry has been altered by a simultaneously running R session.
+  If this is detected, the registry in the current session will be set to a read-only state.
+* `waitForJobs()` has been reworked to allow control over the heuristic to detect expired jobs.
+  Jobs are treated as expired if they have been submitted but are not detected on the system for `expire.after` iterations
+  (default 3 iterations, before 1 iteration).
+* New argument `writeable` for `loadRegistry()` to allow loading registries explicitly as read-only.
+* Removed argument `update.paths` from `loadRegistry()`.
+  Paths are always updated, but the registry on the file system remains unchanged unless loaded in read-write mode.
+* `ClusterFunctionsSlurm` now come with an experimental nodename argument. If set, all communication with the master is
+  handled via SSH which effectively allows you to submit jobs from your local machine instead of the head node.
+  Note that mounting the file system (e.g., via SSHFS) is mandatory.
+
 # batchtools 0.9.4
 
 * Fixed handling of `file.dir` with special chars like whitespace.
+* All backward slashes will now be converted to forward slashes on windows.
 * Fixed order of arguments in `findExperiments()` (argument `ids` is now first).
 * Removed code to upgrade registries created with versions prior to v0.9.0 (first CRAN release).
 * `addExperiments()` now warns if a design is passed as `data.frame` with factor columns and `stringsAsFactors` is `TRUE`.
+* Added functions `setJobNames()` and `getJobNames()` to control the name of jobs on batch systems.
+  Templates should be adapted to use `job.name` instead of `job.hash` for naming.
+* Argument `flatten` of `getJobResources()`, `getJobPars()` and `getJobTable()` is deprecated and will be removed.
+  Future versions of the functions will behave like `flatten` is set to `FALSE` explicitly.
+  Single resources/parameters must be extracted manually (or with `tidyr::unnest()`).
 
 # batchtools 0.9.3
 
-* Running jobs now are also included while querying for status "started". This affects `findStarted()`, `findNotStarted` and `getStatus()`.
+* Running jobs now are also included while querying for status "started". This affects `findStarted()`, `findNotStarted()` and `getStatus()`.
 * `findExperiments()` now performs an exact string match (instead of matching substrings) for patterns specified via `prob.name` and `algo.name`.
   For substring matching, use `prob.pattern` or `algo.pattern`, respectively.
 * Changed arguments for `reduceResultsDataTable()`
@@ -38,11 +66,11 @@
 * Fixed handling of `NULL` results in `reduceResultsList()`
 * Fixed key lookup heuristic join functions.
 * Fixed a bug where `getJobTable()` returned `difftimes` with the wrong unit (e.g., in minutes instead of seconds).
-* Deactivated swap allocation for `clusterFunctionsDocker()`.
+* Deactivated swap allocation for `ClusterFunctionsDocker`.
 * The package is now more patient while communicating with the scheduler or file system by using a timeout-based approach.
   This should make the package more reliable and robust under heavy load.
 
 # batchtools 0.9.0
 
 Initial CRAN release.
-See this [vignette](https://mllg.github.io/batchtools/articles/v01_Migration) for a brief comparison with [BatchJobs](https://cran.r-project.org/package=BatchJobs)/[BatchExperiments](https://cran.r-project.org/package=BatchExperiments).
+See the vignette for a brief comparison with [BatchJobs](https://cran.r-project.org/package=BatchJobs)/[BatchExperiments](https://cran.r-project.org/package=BatchExperiments).

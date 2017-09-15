@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -89,7 +96,8 @@ with the package.</p>
     
 
     <pre class="usage"><span class='fu'>makeClusterFunctions</span>(<span class='no'>name</span>, <span class='no'>submitJob</span>, <span class='kw'>killJob</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>listJobsQueued</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>listJobsRunning</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>array.var</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>store.job</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>listJobsRunning</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>array.var</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
+  <span class='kw'>store.job.collection</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>store.job.files</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>NA_real_</span>, <span class='kw'>hooks</span> <span class='kw'>=</span> <span class='fu'>list</span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -140,10 +148,17 @@ Name of the environment variable set by the scheduler to identify IDs of job arr
 Default is <code>NA</code> for no array support.</p></td>
     </tr>
     <tr>
-      <th>store.job</th>
+      <th>store.job.collection</th>
       <td><p>[<code>logical(1)</code>]
 Flag to indicate that the cluster function implementation of <code>submitJob</code> can not directly handle <code><a href='JobCollection.html'>JobCollection</a></code> objects.
 If set to <code>FALSE</code>, the <code><a href='JobCollection.html'>JobCollection</a></code> is serialized to the file system before submitting the job.</p></td>
+    </tr>
+    <tr>
+      <th>store.job.files</th>
+      <td><p>[<code>logical(1)</code>]
+Flag to indicate that job files need to be stored in the file directory.
+If set to <code>FALSE</code> (default), the job file is created in a temporary directory, otherwise (or if the debug mode is enabled) in
+the subdirectory <code>jobs</code> of the <code>file.dir</code>.</p></td>
     </tr>
     <tr>
       <th>scheduler.latency</th>
