@@ -174,3 +174,30 @@ test_that("resources$rng.kind is used", {
   with_rng("L'Ecuyer-CMRG", {set.seed(99); runif(1)})
   with_rng("L'Ecuyer-CMRG", {set.seed(101); runif(1)})
 })
+
+test_that("mclapply does the same thing", {
+  set.seed(123, "L'Ecuyer-CMRG")
+  fun = function(i) sample(1000L, 1)
+  res.mclapply = parallel::mclapply(1:5, fun)
+  RNGkind("Mersenne")
+  set.seed(NULL)
+
+  reg = makeRegistry(NA, make.default = FALSE, seed = 123)
+  res.btlapply = btlapply(1:5, fun, resources = list(rng.kind = "lecuyer"), reg = reg)
+  expect_equal(RNGkind(), c("Mersenne-Twister", "Inversion"))
+
+  #expect_equal(as.integer(res.mclapply), as.integer(res.btlapply))
+})
+
+test_that("backward compatible with older rng mechanism", {
+  reg = makeRegistry(NA, make.default = FALSE, seed = 999)
+  fun = function(i) list(x = as.integer(sample(1000, 1)))
+  ids = batchMap(fun, 1:50, reg = reg)
+  submitAndWait(reg, ids = ids)
+  res = reduceResultsDataTable(reg = reg)$x
+
+  expected = c(328L, 986L, 446L, 473L, 272L, 153L, 71L, 699L, 668L, 858L, 553L, 807L, 210L, 391L, 81L, 823L, 782L, 36L, 815L, 713L, 21L,
+    368L, 265L, 250L, 219L, 541L, 305L, 446L, 973L, 82L, 869L, 806L, 463L, 395L, 4L, 330L, 63L, 951L, 195L, 126L, 787L, 201L, 6L,
+    701L, 479L, 914L, 755L, 713L, 145L, 140L) # computed with batchtools-0.9.6
+  expect_identical(res, expected)
+})

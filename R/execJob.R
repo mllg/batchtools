@@ -32,7 +32,6 @@ execJob.JobCollection = function(job) {
 
 #' @export
 execJob.Job = function(job) {
-  print(job$resources)
   rng = getRNG(job$resources$rng.kind %??% "mersenne", job$seed[1L], job$seed[2L])
   on.exit(rng$restore())
 

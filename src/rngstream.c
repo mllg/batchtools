@@ -42,7 +42,7 @@ static void avance(Uint64 * seed, Uint64 * nseed) {
 
 SEXP next_streams(SEXP x_, SEXP i_) {
     const int n = length(i_);
-    Uint64 seed[6], nseed[6], tmp;
+    Uint64 seed[6], nseed[6];
 
     /* copy over contents of x_ */
     for (int i = 0; i < 6; i++)
@@ -55,10 +55,10 @@ SEXP next_streams(SEXP x_, SEXP i_) {
     /* allocate output matrix */
     SEXP ans = PROTECT(allocMatrix(INTSXP, 7, n));
 
-    R_len_t needle = INTEGER(i_)[ord[0]] - 1;
+    R_len_t needle = INTEGER(i_)[ord[0]];
     R_len_t count = 0;
 
-    for (R_len_t nstate = 0;; nstate++) {
+    for (R_len_t nstate = 1;; nstate++) {
         if (nstate == needle) {
             /* store state in ans */
             int col = ord[count] * 7;
@@ -68,7 +68,7 @@ SEXP next_streams(SEXP x_, SEXP i_) {
 
             if (++count == n)
                 break;
-            needle = INTEGER(i_)[ord[count]] - 1;
+            needle = INTEGER(i_)[ord[count]];
         }
         avance(seed, nseed);
     }
