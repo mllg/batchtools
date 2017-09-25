@@ -75,6 +75,7 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
     listJobs(reg)[toSchedule == TRUE]$batch.id
   }
 
+
   makeClusterFunctions(name = "DockerQueue", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    listJobsQueued = listJobsQueued, store.job = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency)
+    listJobsQueued = listJobsQueued, store.job.collection = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end
