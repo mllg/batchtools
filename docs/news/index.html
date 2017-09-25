@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -84,11 +91,48 @@
     </div>
 
     <div class="contents">
+    <div id="batchtools-0-9-6" class="section level1">
+<h1 class="hasAnchor">
+<a href="#batchtools-0-9-6" class="anchor"></a>batchtools 0.9.6</h1>
+<ul>
+<li>Fixed a bug where the wrong problem was retrieved from the cache. This was only triggered for chunked jobs in combination with an <code>ExperimentRegistry</code>.</li>
+</ul>
+</div>
+    <div id="batchtools-0-9-5" class="section level1">
+<h1 class="hasAnchor">
+<a href="#batchtools-0-9-5" class="anchor"></a>batchtools 0.9.5</h1>
+<ul>
+<li>Added a missing routine to upgrade registries created with batchtools prior to v0.9.3.</li>
+<li>Fixed a bug where the registry could not be synced if jobs failed during initialization (#135).</li>
+<li>The sleep duration for <code><a href="../reference/waitForJobs.html">waitForJobs()</a></code> and <code><a href="../reference/submitJobs.html">submitJobs()</a></code> can now be set via the configuration file.</li>
+<li>A new heuristic will try to detect if the registry has been altered by a simultaneously running R session. If this is detected, the registry in the current session will be set to a read-only state.</li>
+<li>
+<code><a href="../reference/waitForJobs.html">waitForJobs()</a></code> has been reworked to allow control over the heuristic to detect expired jobs. Jobs are treated as expired if they have been submitted but are not detected on the system for <code>expire.after</code> iterations (default 3 iterations, before 1 iteration).</li>
+<li>New argument <code>writeable</code> for <code><a href="../reference/loadRegistry.html">loadRegistry()</a></code> to allow loading registries explicitly as read-only.</li>
+<li>Removed argument <code>update.paths</code> from <code><a href="../reference/loadRegistry.html">loadRegistry()</a></code>. Paths are always updated, but the registry on the file system remains unchanged unless loaded in read-write mode.</li>
+<li>
+<code>ClusterFunctionsSlurm</code> now come with an experimental nodename argument. If set, all communication with the master is handled via SSH which effectively allows you to submit jobs from your local machine instead of the head node. Note that mounting the file system (e.g., via SSHFS) is mandatory.</li>
+</ul>
+</div>
+    <div id="batchtools-0-9-4" class="section level1">
+<h1 class="hasAnchor">
+<a href="#batchtools-0-9-4" class="anchor"></a>batchtools 0.9.4</h1>
+<ul>
+<li>Fixed handling of <code>file.dir</code> with special chars like whitespace.</li>
+<li>All backward slashes will now be converted to forward slashes on windows.</li>
+<li>Fixed order of arguments in <code><a href="../reference/findJobs.html">findExperiments()</a></code> (argument <code>ids</code> is now first).</li>
+<li>Removed code to upgrade registries created with versions prior to v0.9.0 (first CRAN release).</li>
+<li>
+<code><a href="../reference/addExperiments.html">addExperiments()</a></code> now warns if a design is passed as <code>data.frame</code> with factor columns and <code>stringsAsFactors</code> is <code>TRUE</code>.</li>
+<li>Added functions <code><a href="../reference/JobNames.html">setJobNames()</a></code> and <code><a href="../reference/JobNames.html">getJobNames()</a></code> to control the name of jobs on batch systems. Templates should be adapted to use <code>job.name</code> instead of <code>job.hash</code> for naming.</li>
+<li>Argument <code>flatten</code> of <code><a href="../reference/getJobTable.html">getJobResources()</a></code>, <code><a href="../reference/getJobTable.html">getJobPars()</a></code> and <code><a href="../reference/getJobTable.html">getJobTable()</a></code> is deprecated and will be removed. Future versions of the functions will behave like <code>flatten</code> is set to <code>FALSE</code> explicitly. Single resources/parameters must be extracted manually (or with <code><a href="http://www.rdocumentation.org/packages/tidyr/topics/unnest">tidyr::unnest()</a></code>).</li>
+</ul>
+</div>
     <div id="batchtools-0-9-3" class="section level1">
 <h1 class="hasAnchor">
 <a href="#batchtools-0-9-3" class="anchor"></a>batchtools 0.9.3</h1>
 <ul>
-<li>Running jobs now are also included while querying for status “started”. This affects <code><a href="../reference/findJobs.html">findStarted()</a></code>, <code>findNotStarted</code> and <code><a href="../reference/getStatus.html">getStatus()</a></code>.</li>
+<li>Running jobs now are also included while querying for status “started”. This affects <code><a href="../reference/findJobs.html">findStarted()</a></code>, <code><a href="../reference/findJobs.html">findNotStarted()</a></code> and <code><a href="../reference/getStatus.html">getStatus()</a></code>.</li>
 <li>
 <code><a href="../reference/findJobs.html">findExperiments()</a></code> now performs an exact string match (instead of matching substrings) for patterns specified via <code>prob.name</code> and <code>algo.name</code>. For substring matching, use <code>prob.pattern</code> or <code>algo.pattern</code>, respectively.</li>
 <li>Changed arguments for <code><a href="../reference/reduceResultsList.html">reduceResultsDataTable()</a></code>
@@ -98,6 +142,8 @@
 <li>Introduced <code>flatten</code> to control if the result should be represented as a column of lists or flattened as separate columns. Defaults to a backward-compatible heuristic, similar to <code>getJobPars</code>.</li>
 </ul>
 </li>
+<li>Improved heuristic to lookup template files. Templates shipped with the package can now be used by providing just the file name (w/o extension).</li>
+<li>Updated CITATION</li>
 </ul>
 </div>
     <div id="batchtools-0-9-2" class="section level1">
@@ -123,14 +169,14 @@
 </li>
 <li>Fixed key lookup heuristic join functions.</li>
 <li>Fixed a bug where <code><a href="../reference/getJobTable.html">getJobTable()</a></code> returned <code>difftimes</code> with the wrong unit (e.g., in minutes instead of seconds).</li>
-<li>Deactivated swap allocation for <code>clusterFunctionsDocker()</code>.</li>
+<li>Deactivated swap allocation for <code>ClusterFunctionsDocker</code>.</li>
 <li>The package is now more patient while communicating with the scheduler or file system by using a timeout-based approach. This should make the package more reliable and robust under heavy load.</li>
 </ul>
 </div>
     <div id="batchtools-0-9-0" class="section level1">
 <h1 class="hasAnchor">
 <a href="#batchtools-0-9-0" class="anchor"></a>batchtools 0.9.0</h1>
-<p>Initial CRAN release. See this <a href="https://mllg.github.io/batchtools/articles/v01_Migration">vignette</a> for a brief comparison with <a href="https://cran.r-project.org/package=BatchJobs">BatchJobs</a>/<a href="https://cran.r-project.org/package=BatchExperiments">BatchExperiments</a>.</p>
+<p>Initial CRAN release. See the vignette for a brief comparison with <a href="https://cran.r-project.org/package=BatchJobs">BatchJobs</a>/<a href="https://cran.r-project.org/package=BatchExperiments">BatchExperiments</a>.</p>
 </div>
     </div>
   </div>
@@ -139,6 +185,9 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#batchtools-0-9-6">0.9.6</a></li>
+        <li><a href="#batchtools-0-9-5">0.9.5</a></li>
+        <li><a href="#batchtools-0-9-4">0.9.4</a></li>
         <li><a href="#batchtools-0-9-3">0.9.3</a></li>
         <li><a href="#batchtools-0-9-2">0.9.2</a></li>
         <li><a href="#batchtools-0-9-0">0.9.0</a></li>

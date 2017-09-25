@@ -77,20 +77,16 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
   }
 
   listJobs = function(reg, filter = character(0L)) {
+    assertRegistry(reg, writeable = FALSE)
     # use a workaround for DockerSwarm: docker ps does not list all jobs correctly, only
     # docker inspect reports the status correctly
     args = c(docker.args, "ps", "--format={{.ID}}", "--filter 'label=batchtools'", filter)
-    ids = runOSCommand("docker", args)
-    if (ids$exit.code != 0L)
-      stop("docker returned non-zero exit code")
-    if (length(ids$output) == 0L)
+    res = runOSCommand("docker", args)
+    if (res$exit.code > 0L)
+      OSError("Listing of jobs failed", res)
+    if (length(res$output) == 0L || !nzchar(res$output))
       return(character(0L))
-    # TODO: is this still required? breaks housekeeping in its current state
-    # args = c(docker.args, "inspect", "--format '{{json .State.Status}}'", ids$output)
-    # status = runOSCommand("docker", args)
-    # ids$output[status$output == "\"running\""]
-    ids$output
-
+    res$output
   }
 
   housekeeping = function(reg, ...) {
@@ -112,6 +108,6 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
   }
 
   makeClusterFunctions(name = "Docker", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
-    store.job = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency,
+    store.job.collection = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency,
     hooks = list(post.submit = housekeeping, post.sync = housekeeping))
 } # nocov end

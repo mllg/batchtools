@@ -36,5 +36,5 @@ makeClusterFunctionsInteractive = function(external = FALSE, write.logs = TRUE, 
     }
   }
 
-  makeClusterFunctions(name = "Interactive", submitJob = submitJob, store.job = external, fs.latency = fs.latency)
+  makeClusterFunctions(name = "Interactive", submitJob = submitJob, store.job.collection = external, fs.latency = fs.latency)
 }

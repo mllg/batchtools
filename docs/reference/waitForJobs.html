@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -86,8 +93,8 @@
     <p>This function simply waits until all jobs are terminated.</p>
     
 
-    <pre class="usage"><span class='fu'>waitForJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sleep</span> <span class='kw'>=</span> <span class='no'>default.sleep</span>, <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fl'>604800</span>,
-  <span class='kw'>stop.on.error</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
+    <pre class="usage"><span class='fu'>waitForJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sleep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fl'>604800</span>,
+  <span class='kw'>expire.after</span> <span class='kw'>=</span> <span class='fl'>3L</span>, <span class='kw'>stop.on.error</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -104,8 +111,12 @@ Invalid ids are ignored.</p></td>
     <tr>
       <th>sleep</th>
       <td><p>[<code>function(i)</code> | <code>numeric(1)</code>]
-Function which returns the duration to sleep in the <code>i</code>-th iteration.
-Alternatively, you can pass a single positive numeric value.</p></td>
+Parameter to control the duration to sleep between queries.
+You can pass an absolute numeric value in seconds or a <code>function(i)</code> which returns
+the number of seconds to sleep in the <code>i</code>-th iteration.
+If not provided (<code>NULL</code>), tries to read the value (number/function) from the configuration file
+(stored in <code>reg$sleep</code>) or defaults to a function with exponential backoff between
+5 and 120 seconds.</p></td>
     </tr>
     <tr>
       <th>timeout</th>
@@ -114,6 +125,17 @@ After waiting <code>timeout</code> seconds, show a message and return
 <code>FALSE</code>. This argument may be required on some systems where, e.g.,
 expired jobs or jobs on hold are problematic to detect. If you don't want
 a timeout, set this to <code>Inf</code>. Default is <code>604800</code> (one week).</p></td>
+    </tr>
+    <tr>
+      <th>expire.after</th>
+      <td><p>[<code>integer(1)</code>]
+Jobs count as &#8220;expired&#8221; if they are not found on the system but have not communicated back
+their results (or error message). This frequently happens on managed system if the scheduler kills
+a job because the job has hit the walltime or request more memory than reserved.
+On the other hand, network file systems often require several seconds for new files to be found,
+which can lead to false positives in the detection heuristic.
+<code>waitForJobs</code> treats such jobs as expired after they have not been detected on the system
+for <code>expire.after</code> iterations (default 3 iterations).</p></td>
     </tr>
     <tr>
       <th>stop.on.error</th>

@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -83,7 +90,7 @@
     </div>
 
     
-    <p>Cluster functions for Slurm (<a href = 'http://slurm.schedmd.com/'>http://slurm.schedmd.com/</a>).</p>
+    <p>Cluster functions for Slurm (<a href='http://slurm.schedmd.com/'>http://slurm.schedmd.com/</a>).</p>
 <p>Job files are created based on the brew template <code>template.file</code>. This
 file is processed with brew and then submitted to the queue using the
 <code>sbatch</code> command. Jobs are killed using the <code>scancel</code> command and
@@ -98,8 +105,8 @@ allocations.</p>
 otherwise the commands for listing and killing jobs will not work.</p>
     
 
-    <pre class="usage"><span class='fu'>makeClusterFunctionsSlurm</span>(<span class='kw'>template</span> <span class='kw'>=</span> <span class='fu'>findTemplateFile</span>(<span class='st'>"slurm"</span>),
-  <span class='kw'>clusters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>array.jobs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+    <pre class="usage"><span class='fu'>makeClusterFunctionsSlurm</span>(<span class='kw'>template</span> <span class='kw'>=</span> <span class='st'>"slurm"</span>, <span class='kw'>clusters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>array.jobs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>nodename</span> <span class='kw'>=</span> <span class='st'>"localhost"</span>, <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -108,15 +115,13 @@ otherwise the commands for listing and killing jobs will not work.</p>
     <tr>
       <th>template</th>
       <td><p>[<code>character(1)</code>]
-Path to a brew template file that can be used for the job description.
-Alternatively, the template as a single string (including at least one newline &#8220;\n&#8221;).
-Defaults to a heuristic which looks for a template file in the following locations and picks
-the first one found:</p><ol>
-<li><p>&#8220;batchtools.slurm.tmpl&#8221; in the current working directory.</p></li>
-<li><p>&#8220;slurm.tmpl&#8221; in the user config directory (see <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>user_config_dir</a></code>); on linux is is usually &#8220;~/.config/batchtools/slurm.tmpl&#8221;.</p></li>
-<li><p>&#8220;.batchtools.slurm.tmpl&#8221; in the home directory.</p></li>
-<li><p>&#8220;slurm.default.tmpl&#8221; in the package installation directory in the subfolder &#8220;templates&#8221; (this probably does not exist for your cluster system or needs adaptation).</p></li>
-</ol></td>
+Either a path to a brew template file (with extension &#8220;tmpl&#8221;), or a short descriptive name enabling the following heuristic for the file lookup:</p><ol>
+<li><p>&#8220;batchtools.[template].tmpl&#8221; in the current working directory.</p></li>
+<li><p>&#8220;[template].tmpl&#8221; in the user config directory (see <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>user_config_dir</a></code>); on linux this is usually &#8220;~/.config/batchtools/[template].tmpl&#8221;.</p></li>
+<li><p>&#8220;.batchtools.[template].tmpl&#8221; in the home directory.</p></li>
+<li><p>&#8220;[template].tmpl&#8221; in the package installation directory in the subfolder &#8220;templates&#8221;.</p></li>
+</ol><p>Here, the default for <code>template</code> is &#8220;slurm&#8221;.
+Alternatively, the template itself can be provided as a single string (including at least one newline &#8220;\n&#8221;).</p></td>
     </tr>
     <tr>
       <th>clusters</th>
@@ -129,6 +134,16 @@ Note that you should not select the cluster in your template file via <code>#SBA
       <th>array.jobs</th>
       <td><p>[<code>logical(1)</code>]
 If array jobs are disabled on the computing site, set to <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>nodename</th>
+      <td><p>[<code>character(1)</code>]
+Nodename of the master. All commands are send via SSH to this host. Only works iff</p><ol>
+<li><p>Passwordless authentication (e.g., via SSH public key authentication) is set up.</p></li>
+<li><p>The file directory is shared across machines, e.g. mounted via SSHFS.</p></li>
+<li><p>The absolute path to the <code>file.dir</code> are identical on the machines, or paths are provided relative to the
+    home directory.</p></li>
+</ol></td>
     </tr>
     <tr>
       <th>scheduler.latency</th>

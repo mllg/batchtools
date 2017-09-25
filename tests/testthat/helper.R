@@ -2,16 +2,10 @@ library("testthat")
 library("data.table")
 library("checkmate")
 library("stringi")
-
-with_options = function(opts, expr) {
-  prev = options(names(opts))
-  on.exit(do.call(options, prev))
-  do.call(options, opts)
-  force(expr)
-}
+requireNamespace("withr")
 
 silent = function(expr) {
-  with_options(list(batchtools.progress = FALSE, batchtools.verbose = FALSE), expr)
+  withr::with_options(list(batchtools.progress = FALSE, batchtools.verbose = FALSE), expr)
 }
 
 s.chunk = function(ids) {
@@ -21,7 +15,7 @@ s.chunk = function(ids) {
 
 submitAndWait = function(reg, ids = NULL, ..., sleep = 1) {
   ids = if (is.null(ids)) findNotSubmitted(reg = reg) else convertIds(reg, ids, keep.extra = names(ids))
-  if ("chunk" %nin% names(ids))
+  if ("chunk" %chnin% names(ids))
     ids = s.chunk(ids)
   silent({
     ids = submitJobs(ids = ids, ..., reg = reg)
@@ -35,6 +29,8 @@ suppressAll = function (expr) {
 }
 
 checkTables = function(reg, ...) {
+  expect_is(reg$mtime, "POSIXct")
+
   if (class(reg)[1L] == "Registry") {
     cols = c("def.id", "pars")
     types = c("integer", "list")
@@ -50,11 +46,11 @@ checkTables = function(reg, ...) {
   expect_equal(anyDuplicated(reg$defs, by = "def.id"), 0L)
 
   if (class(reg)[1L] == "Registry") {
-    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "memory",  "resource.id", "batch.id",  "log.file", "job.hash")
-    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric", "integer",     "character", "character",  "character")
+    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "memory",  "resource.id", "batch.id",  "log.file", "job.hash", "job.name")
+    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric", "integer",     "character", "character",  "character", "character")
   } else {
-    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "memory",  "resource.id", "batch.id",  "log.file", "job.hash",  "repl")
-    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric", "integer",     "character", "character",  "character", "integer")
+    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "memory",  "resource.id", "batch.id",  "log.file", "job.hash",  "job.name", "repl")
+    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric", "integer",     "character", "character",  "character", "character", "integer")
   }
   expect_is(reg$status, "data.table")
   expect_data_table(reg$status, ncols = length(cols), ...)
@@ -62,6 +58,7 @@ checkTables = function(reg, ...) {
   expect_equal(as.character(reg$status[, lapply(.SD, class), .SDcols = cols]), types)
   expect_equal(key(reg$status), "job.id")
   expect_equal(anyDuplicated(reg$status, by = "job.id"), 0L)
+  checkStatusIntegrity(reg)
 
   cols = c("resource.id", "resource.hash", "resources")
   types = c("integer", "character", "list")
@@ -88,6 +85,22 @@ checkTables = function(reg, ...) {
     expect_subset(reg$tags$job.id, reg$status$job.id)
   else
     expect_equal(nrow(reg$tags), 0)
+}
+
+checkStatusIntegrity = function(reg) {
+  tab = reg$status[, list(job.id, code = (!is.na(submitted)) + 2L * (!is.na(started)) + 4L * (!is.na(done)) + 8L * (!is.na(error)))]
+
+  # submitted   started   done   error
+  #       2^0       2^1    2^2     2^3
+  #         1         2      4       8
+  # ------------------------------------------------------
+  #         0         0      0       0 -> 0  (unsubmitted)
+  #         1         0      0       0 -> 1  (submitted)
+  #         1         1      0       0 -> 3  (started)
+  #         1         1      1       0 -> 7  (done)
+  #         1         1      1       1 -> 15 (error)
+
+  expect_subset(tab$code, c(0L, 1L, 3L, 7L, 15L), info = "Status Integrity")
 }
 
 expect_copied = function(x, y) {

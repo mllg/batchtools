@@ -136,7 +136,7 @@ getJobPars.ExperimentRegistry = function(ids = NULL, flatten = NULL, prefix = FA
   ids = convertIds(reg, ids)
   tab = mergedJobs(reg, ids, c("job.id", "pars", "problem", "algorithm"))
 
-  if (flatten %??% qtestr(tab$pars, c("v1", "L"), depth = 2L)) {
+  if (flatten %??% qtestr(tab$pars, c("v1", "L"), depth = 3L)) {
     new.cols = rbindlist(.mapply(function(job.id, pars, ...) c(list(job.id = job.id), unlist(pars, recursive = FALSE)), tab, list()), fill = TRUE)
     if (ncol(new.cols) >= 2L) {
       pattern = "^(prob|algo)\\.pars\\."

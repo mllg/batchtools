@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -84,10 +91,20 @@
 
     
     <p>Loads a registry from its <code>file.dir</code>.</p>
+<p>Multiple R sessions accessing the same registry simultaneously can lead to database inconsistencies.
+Here, it does not matter if the sessions run on the same system or different systems via a file system mount.</p>
+<p>If you just need to check on the status or peek into some preliminary results, you can load the registry in a
+read-only mode by setting <code>writeable</code> to <code>FALSE</code>.
+All operations that need to change the registry will raise an exception in this mode.
+Files communicated back by the computational nodes are parsed to update the registry in memory, but remain on the file system
+in order to be read and cleaned up by an R session with read-write access.</p>
+<p>A heuristic tries to detect if the registry has been altered in the background.
+However, you should not completely rely on it.
+Thus, set to <code>writeable</code> to <code>TRUE</code> if and only if you are absolutely sure other R processes are terminated.</p>
     
 
-    <pre class="usage"><span class='fu'>loadRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fu'>getwd</span>(), <span class='kw'>work.dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>conf.file</span> <span class='kw'>=</span> <span class='fu'>findConfFile</span>(), <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>update.paths</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>loadRegistry</span>(<span class='no'>file.dir</span>, <span class='kw'>work.dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.file</span> <span class='kw'>=</span> <span class='fu'>findConfFile</span>(),
+  <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>writeable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -124,7 +141,7 @@
   thus you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.</p>
 <p>The file lookup defaults to a heuristic which first tries to read &#8220;batchtools.conf.R&#8221; in the current working directory.
   If not found, it looks for a configuration file &#8220;config.R&#8221; in the OS dependent user configuration directory
-  as reported by via <code>rappdirs::user_config_dir("batchtools", expand = FALSE)</code> (e.g., on linux this
+  as reported by via <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>rappdirs::user_config_dir("batchtools", expand = FALSE)</a></code> (e.g., on linux this
   usually resolves to &#8220;~/.config/batchtools/config.R&#8221;).
   If this file is also not found, the heuristic finally tries to read the file &#8220;.batchtools.conf.R&#8221; in the
   home directory (&#8220;~&#8221;).
@@ -139,12 +156,9 @@ off if you work with multiple registries simultaneously.
 Default is <code>TRUE</code>.</p></td>
     </tr>
     <tr>
-      <th>update.paths</th>
+      <th>writeable</th>
       <td><p>[<code>logical(1)</code>]
-If set to <code>TRUE</code>, the <code>file.dir</code> and <code>work.dir</code> will be updated in the registry. Note that this is
-likely to break computation on the system! Only do this if no jobs are currently running. Default is <code>FALSE</code>.
-If the provided <code>file.dir</code> does not match the stored <code>file.dir</code>, <code>loadRegistry</code> will return a
-registry in read-only mode.</p></td>
+Loads the registry in read-write mode. Default is <code>FALSE</code>.</p></td>
     </tr>
     </table>
     

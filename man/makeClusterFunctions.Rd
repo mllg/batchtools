@@ -6,7 +6,8 @@
 \title{ClusterFunctions Constructor}
 \usage{
 makeClusterFunctions(name, submitJob, killJob = NULL, listJobsQueued = NULL,
-  listJobsRunning = NULL, array.var = NA_character_, store.job = FALSE,
+  listJobsRunning = NULL, array.var = NA_character_,
+  store.job.collection = FALSE, store.job.files = FALSE,
   scheduler.latency = 0, fs.latency = NA_real_, hooks = list())
 }
 \arguments{
@@ -42,9 +43,14 @@ Set \code{listJobsRunning} to \code{NULL} if listing of running jobs is not supp
 Name of the environment variable set by the scheduler to identify IDs of job arrays.
 Default is \code{NA} for no array support.}
 
-\item{store.job}{[\code{logical(1)}]\cr
+\item{store.job.collection}{[\code{logical(1)}]\cr
 Flag to indicate that the cluster function implementation of \code{submitJob} can not directly handle \code{\link{JobCollection}} objects.
 If set to \code{FALSE}, the \code{\link{JobCollection}} is serialized to the file system before submitting the job.}
+
+\item{store.job.files}{[\code{logical(1)}]\cr
+Flag to indicate that job files need to be stored in the file directory.
+If set to \code{FALSE} (default), the job file is created in a temporary directory, otherwise (or if the debug mode is enabled) in
+the subdirectory \code{jobs} of the \code{file.dir}.}
 
 \item{scheduler.latency}{[\code{numeric(1)}]\cr
 Time to sleep after important interactions with the scheduler to ensure a sane state.

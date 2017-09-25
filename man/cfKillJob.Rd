@@ -4,7 +4,8 @@
 \alias{cfKillJob}
 \title{Cluster Functions Helper to Kill Batch Jobs}
 \usage{
-cfKillJob(reg, cmd, args = character(0L), max.tries = 3L)
+cfKillJob(reg, cmd, args = character(0L), max.tries = 3L,
+  nodename = "localhost")
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -19,6 +20,10 @@ Arguments to \code{cmd}, including the batch id.}
 \item{max.tries}{[\code{integer(1)}]\cr
 Number of total times to try execute the OS command in cases of failures.
 Default is \code{3}.}
+
+\item{nodename}{[\code{character(1)}]\cr
+Name of the SSH node to run the command on. If set to \dQuote{localhost} (default), the command
+is not piped through SSH.}
 }
 \value{
 \code{TRUE} on success. An exception is raised otherwise.
@@ -26,9 +31,9 @@ Default is \code{3}.}
 \description{
 This function is only intended for use in your own cluster functions implementation.
 
-Calls the OS command to kill a job via \code{system} like this: \dQuote{cmd batch.job.id}. If the
+Calls the OS command to kill a job via \code{\link[base]{system}} like this: \dQuote{cmd batch.job.id}. If the
 command returns an exit code > 0, the command is repeated after a 1 second sleep
-\code{max.tries-1} times. If the command failed in all tries, an exception is generated.
+\code{max.tries-1} times. If the command failed in all tries, an error is generated.
 }
 \seealso{
 Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},

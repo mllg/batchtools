@@ -54,19 +54,25 @@ makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1
     cfKillJob(reg, "qdel", batch.id)
   }
 
-  listJobsQueued = function(reg) {
+  listJobs = function(reg, args) {
     assertRegistry(reg, writeable = FALSE)
-    cmd = c("qselect", "-u $USER", "-s QW")
-    runOSCommand(cmd[1L], cmd[-1L])$output
+    res = runOSCommand("qselect", args)
+    if (res$exit.code > 0L)
+      OSError("Listing of jobs failed", res)
+    res$output
+  }
+
+  listJobsQueued = function(reg) {
+    args = c("-u $USER", "-s QW")
+    listJobs(reg, args)
   }
 
   listJobsRunning = function(reg) {
-    assertRegistry(reg, writeable = FALSE)
-    cmd = c("qselect", "-u $USER", "-s EHRT")
-    runOSCommand(cmd[1L], cmd[-1L])$output
+    args = c("-u $USER", "-s EHRT")
+    listJobs(reg, args)
   }
 
   makeClusterFunctions(name = "TORQUE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
-    listJobsRunning = listJobsRunning, array.var = "PBS_ARRAYID", store.job = TRUE,
+    listJobsRunning = listJobsRunning, array.var = "PBS_ARRAYID", store.job.collection = TRUE,
     scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end

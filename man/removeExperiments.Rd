@@ -18,7 +18,7 @@ Invalid ids are ignored.}
 Registry. If not explicitly passed, uses the last created registry.}
 }
 \value{
-[\code{\link{data.table}}] of removed job ids.
+[\code{\link{data.table}}] of removed job ids, invisibly.
 }
 \description{
 Remove Experiments from an \code{\link{ExperimentRegistry}}.

@@ -8,15 +8,13 @@ install:
   ps: Bootstrap
 
 cache:
-  - C:\RLibrary
+  - C:\RLibrary -> appveyor.yml # v01
 
 environment:
   matrix:
     - R_VERSION: devel
     - R_VERSION: release
     - R_VERSION: oldrel
-      RTOOLS_VERSION: 32
-      CRAN: http://cran.rstudio.com
 
 build_script:
   - travis-tool.sh install_deps
@@ -45,4 +43,3 @@ artifacts:
 
   - path: '\*_*.zip'
     name: Bits
-

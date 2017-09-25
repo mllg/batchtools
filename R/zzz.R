@@ -15,7 +15,6 @@
 #' setting the environment variable \dQuote{DEBUGME} to \dQuote{batchtools} before
 #' loading \pkg{batchtools}.
 #' @import utils
-#' @import backports
 #' @import checkmate
 #' @import data.table
 #' @import stringi
@@ -26,6 +25,7 @@
 #' @importFrom rappdirs user_config_dir
 #' @importFrom stats runif predict pexp
 #' @importFrom base64url base32_encode base32_decode
+#' @importFrom withr with_dir with_seed local_options local_dir
 "_PACKAGE"
 
 #' @title Deprecated function in the batchtools package
@@ -50,6 +50,7 @@ batchtools$hooks = list(
     debugme::debugme()
     batchtools$debug = TRUE
   }
+  backports::import(pkgname, c("dir.exists", "hasName"))
 } # nocov end
 
 .onUnload = function (libpath) { # nocov start

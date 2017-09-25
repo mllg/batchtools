@@ -52,8 +52,8 @@ makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), con
   reg = makeRegistry(file.dir = file.dir, work.dir = work.dir, conf.file = conf.file,
     packages = packages, namespaces = namespaces, source = source, load = load, seed = seed, make.default = make.default)
 
-  dir.create(file.path(reg$file.dir, "problems"))
-  dir.create(file.path(reg$file.dir, "algorithms"))
+  dir.create(fp(reg$file.dir, "problems"))
+  dir.create(fp(reg$file.dir, "algorithms"))
 
   reg$status$repl = integer(0L)
   reg$defs$problem = factor(character(0L))
@@ -68,13 +68,14 @@ makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), con
 #' @export
 print.ExperimentRegistry = function(x, ...) {
   cat("Experiment Registry\n")
-  catf("  Name      : %s", x$cluster.functions$name)
+  catf("  Backend   : %s", x$cluster.functions$name)
   catf("  File dir  : %s", x$file.dir)
   catf("  Work dir  : %s", x$work.dir)
   catf("  Jobs      : %i", nrow(x$status))
   catf("  Problems  : %i", nlevels(x$defs$problem))
   catf("  Algorithms: %i", nlevels(x$defs$algorithm))
   catf("  Seed      : %i", x$seed)
+  catf("  Writeable : %s", x$writeable)
 }
 
 assertExperimentRegistry = function(reg, writeable = FALSE, sync = FALSE, running.ok = TRUE) {

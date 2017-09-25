@@ -29,10 +29,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="/index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="articles/index.html">Articles</a>
+  <a href="articles/batchtools.html">Get Started</a>
+</li>
+<li>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li>
   <a href="news/index.html">News</a>
@@ -60,8 +66,8 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#batchtools" class="anchor"></a>batchtools</h1></div>
 
-<p>As a successor of the packages <a href="https://github.com/tudo-r/BatchJobs">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a>, batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, TORQUE/OpenPBS, Load Sharing Facility (LSF) or Docker Swarm (see the <a href="https://mllg.github.io/batchtools/articles/v00_Setup">Setup vignette</a>).</p>
-<p>The main features conclude:</p>
+<p>As a successor of the packages <a href="https://github.com/tudo-r/BatchJobs">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a>, batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, TORQUE/OpenPBS, Load Sharing Facility (LSF) or Docker Swarm (see the setup section in the <a href="https://mllg.github.io/batchtools/articles/batchtools.html">vignette</a>).</p>
+<p>Main features:</p>
 <ul>
 <li>Convenience: All relevant batch system operations (submitting, listing, killing) are either handled internally or abstracted via simple R functions</li>
 <li>Portability: With a well-defined interface, the source is independent from the underlying batch system - prototype locally, deploy on any high performance cluster</li>
@@ -74,7 +80,7 @@
 <p>Install the stable version from CRAN:</p>
 <pre class="{r}"><code>install.packages("batchtools")</code></pre>
 <p>For the development version, use <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
-<pre class="{r}"><code>devtools::install_github("mllg/batchtools")</code></pre>
+<pre class="{r}"><code><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">devtools::install_github("mllg/batchtools")</a></code></pre>
 </div>
 <div id="why-batchtools" class="section level2">
 <h2 class="hasAnchor">
@@ -84,7 +90,7 @@
 <li>Maintainability: The packages <a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> are tightly connected which makes maintenance difficult. Changes have to be synchronized and tested against the current CRAN versions for compatibility. Furthermore, BatchExperiments violates CRAN policies by calling internal functions of BatchJobs.</li>
 <li>Data base issues: Although we invested weeks to mitigate issues with locks of the SQLite data base or file system (staged queries, file system timeouts, …), <code>BatchJobs</code> kept working unreliable on some systems with high latency or specific file systems. This made <code>BatchJobs</code> unusable for many users.</li>
 </ul>
-<p><a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> will remain on CRAN, but new features are unlikely to be ported back. See this <a href="https://mllg.github.io/batchtools/articles/v01_Migration">vignette</a> for a comparison of the packages.</p>
+<p><a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> will remain on CRAN, but new features are unlikely to be ported back. The <a href="https://mllg.github.io/batchtools/articles/batchtools.html#migration">vignette</a> contains a section comparing the packages.</p>
 </div>
 <div id="resources" class="section level2">
 <h2 class="hasAnchor">
@@ -92,11 +98,11 @@
 <ul>
 <li><a href="https://mllg.github.io/batchtools/news/">NEWS</a></li>
 <li><a href="https://mllg.github.io/batchtools/reference">Function reference</a></li>
-<li><a href="https://mllg.github.io/batchtools/articles">Vignettes</a></li>
+<li><a href="https://mllg.github.io/batchtools/articles/batchtools.html">Vignette</a></li>
 <li>
 <a href="http://dx.doi.org/10.21105/joss.00135">JOSS Paper</a>: Short paper on batchtools. Please cite this if you use batchtools.</li>
 <li>
-<a href="http://www.jstatsoft.org/v64/i11">Paper on BatchJobs/BatchExperiments</a>: The described concept still holds for batchtools and most examples work analogously (see this <a href="https://mllg.github.io/batchtools/articles/v01_Migration">vignette</a> for differences between the packages).</li>
+<a href="http://www.jstatsoft.org/v64/i11">Paper on BatchJobs/BatchExperiments</a>: The described concept still holds for batchtools and most examples work analogously (see the <a href="https://mllg.github.io/batchtools/articles/batchtools.html#migration">vignette</a> for differences between the packages).</li>
 </ul>
 </div>
 <div id="citation" class="section level2">
@@ -147,6 +153,10 @@
 </ul>
 <h2>License</h2>
 <p><a href="https://www.r-project.org/Licenses/LGPL-3">LGPL-3</a></p>
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing batchtools</a></li>
+</ul>
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Michel Lang <br><small class="roles"> Maintainer, author </small> </li>

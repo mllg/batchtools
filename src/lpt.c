@@ -1,8 +1,9 @@
 #include <R.h>
 #include <Rinternals.h>
+#include <R_ext/Visibility.h>
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 
-SEXP c_lpt(SEXP x_, SEXP order_, SEXP chunks_) {
+SEXP attribute_hidden c_lpt(SEXP x_, SEXP order_, SEXP chunks_) {
     const double * x = REAL(x_);
     const R_len_t n = length(x_);
     const int * order = INTEGER(order_);

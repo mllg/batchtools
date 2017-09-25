@@ -52,7 +52,7 @@ convertIds = function(reg, ids, default = NULL, keep.extra = character(0L), keep
 
   invalid = ids[!reg$status, on = "job.id", which = TRUE]
   if (length(invalid) > 0L) {
-    info("Ignoring %i invalid job id", length(invalid), if (length(ids) > 1L) "s" else "")
+    info("Ignoring %i invalid job id%s", length(invalid), if (length(ids) > 1L) "s" else "")
     ids = ids[-invalid]
   }
 

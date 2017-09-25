@@ -28,16 +28,27 @@ test_that("pm/socket", {
   expect_equal(nrow(findDone(reg = reg)), 4L)
 })
 
-test_that("pm/mpi", {
-  skip_on_os("mac")
-  skip_on_cran()
+test_that("parallelMap works with batchtools", {
   skip_if_not_installed("parallelMap")
-  skip_if_not_installed("snow")
-  skip_if_not_installed("Rmpi")
-  skip_on_travis()
-  if (reg$cluster.functions$name %chin% c("Parallel", "Socket"))
-    skip("Nested local parallelization not supported")
+  skip_if_not(packageVersion("parallelMap") >= "1.4")
+  requireNamespace("parallelMap")
 
-  submitAndWait(reg, ids = ids, resources = list(pm.backend = "mpi", ncpus = 2))
-  expect_equal(nrow(findDone(reg = reg)), 4)
+  parallelMap::parallelStartBatchtools(storagedir = tempdir(), show.info = FALSE)
+  res = parallelMap::parallelMap(function(x, y) x + y, x = 1:2, y = 1)
+  parallelMap::parallelStop()
+  expect_equal(res, list(2, 3))
 })
+
+# test_that("pm/mpi", {
+#   skip_on_os("mac")
+#   skip_on_cran()
+#   skip_if_not_installed("parallelMap")
+#   skip_if_not_installed("snow")
+#   skip_if_not_installed("Rmpi")
+#   skip_on_travis()
+#   if (reg$cluster.functions$name %chin% c("Parallel", "Socket"))
+#     skip("Nested local parallelization not supported")
+
+#   submitAndWait(reg, ids = ids, resources = list(pm.backend = "mpi", ncpus = 2))
+#   expect_equal(nrow(findDone(reg = reg)), 4)
+# })

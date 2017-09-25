@@ -22,7 +22,7 @@ If not set, defaults to all jobs.
 Invalid ids are ignored.}
 
 \item{tags}{[\code{character}]\cr
-Tags to add or remove as strings. May use letters, numbers, underscore and dots (pattern \dQuote{^[[:alnum:]_.]+}).}
+Tags to add or remove as strings. Each tag may consist of letters, numbers, underscore and dots (pattern \dQuote{^[[:alnum:]_.]+}).}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}

@@ -28,6 +28,7 @@ doJobCollection = function(jc, output = NULL) {
 #' @export
 doJobCollection.character = function(jc, output = NULL) {
   obj = readRDS(jc)
+  force(obj)
   if (!batchtools$debug && !obj$array.jobs)
     file.remove(jc)
   doJobCollection.JobCollection(obj, output = output)
@@ -43,16 +44,12 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     updates = data.table(job.id = jc$jobs$job.id, started = now, done = now,
       error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),
       memory = NA_real_, key = "job.id")
-    writeRDS(updates, file = file.path(jc$file.dir, "updates", sprintf("%s.rds", jc$job.hash)))
+    writeRDS(updates, file = fp(jc$file.dir, "updates", sprintf("%s.rds", jc$job.hash)))
     invisible(NULL)
   }
 
   # signal warnings immediately
-  warn = getOption("warn")
-  if (!identical(warn, 1L)) {
-    on.exit(options(warn = warn))
-    options(warn = 1L)
-  }
+  local_options(c(warn = 1L))
 
   # setup output connection
   if (!is.null(output)) {
@@ -82,13 +79,11 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   # set work dir
   if (!dir.exists(jc$work.dir))
     return(error("Work dir does not exist"))
-  prev.wd = getwd()
-  setwd(jc$work.dir)
-  on.exit(setwd(prev.wd), add = TRUE)
+  local_dir(jc$work.dir)
 
   # load registry dependencies: packages, source files, ...
   # note that this should happen _before_ parallelMap is initialized
-  ok = try(loadRegistryDependencies(jc, switch.wd = FALSE), silent = TRUE)
+  ok = try(loadRegistryDependencies(jc, must.work = TRUE), silent = TRUE)
   if (is.error(ok))
     return(error("Error loading registry dependencies: %s", as.character(ok)))
 
@@ -165,7 +160,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
       i = self$updates[!is.na(started) & (!written), which = TRUE]
       if (length(i) > 0L) {
         first.id = self$updates$job.id[i[1L]]
-        writeRDS(self$updates[i], file = file.path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, first.id)))
+        writeRDS(self$updates[i, !"written"], file = fp(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, first.id)))
         set(self$updates, i, "written", TRUE)
       }
     },

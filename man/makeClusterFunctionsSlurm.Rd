@@ -5,7 +5,8 @@
 \title{ClusterFunctions for Slurm Systems}
 \usage{
 makeClusterFunctionsSlurm(template = "slurm", clusters = NULL,
-  array.jobs = TRUE, scheduler.latency = 1, fs.latency = 65)
+  array.jobs = TRUE, nodename = "localhost", scheduler.latency = 1,
+  fs.latency = 65)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -26,6 +27,15 @@ Note that you should not select the cluster in your template file via \code{#SBA
 
 \item{array.jobs}{[\code{logical(1)}]\cr
 If array jobs are disabled on the computing site, set to \code{FALSE}.}
+
+\item{nodename}{[\code{character(1)}]\cr
+Nodename of the master. All commands are send via SSH to this host. Only works iff
+\enumerate{
+  \item{Passwordless authentication (e.g., via SSH public key authentication) is set up.}
+  \item{The file directory is shared across machines, e.g. mounted via SSHFS.}
+  \item{The absolute path to the \code{file.dir} are identical on the machines, or paths are provided relative to the
+    home directory.}
+}}
 
 \item{scheduler.latency}{[\code{numeric(1)}]\cr
 Time to sleep after important interactions with the scheduler to ensure a sane state.

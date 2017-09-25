@@ -99,5 +99,5 @@ makeClusterFunctionsMulticore = function(ncpus = NA_integer_, fs.latency = NA_re
   }
 
   makeClusterFunctions(name = "Multicore", submitJob = submitJob, listJobsRunning = listJobsRunning,
-    store.job = FALSE, fs.latency = fs.latency, hooks = list(pre.sync = function(reg, fns) p$collect(1)))
+    store.job.collection = FALSE, fs.latency = fs.latency, hooks = list(pre.sync = function(reg, fns) p$collect(1)))
 }

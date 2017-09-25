@@ -1,6 +1,6 @@
 Package: batchtools
 Title: Tools for Computation on Batch Systems
-Version: 0.9.3-9000
+Version: 0.9.6-9000
 Authors@R: c(
     person("Michel", "Lang", NULL, "michellang@gmail.com", role = c("cre", "aut")),
     person("Bernd", "Bischl", NULL, "bernd_bischl@gmx.de", role = "aut"),
@@ -28,10 +28,10 @@ Depends:
     R (>= 3.0.0),
     data.table (>= 1.9.8)
 Imports:
-    backports (>= 1.0.4),
+    backports (>= 1.1.0),
     base64url (>= 1.1),
     brew,
-    checkmate (>= 1.8.2),
+    checkmate (>= 1.8.3),
     digest (>= 0.6.9),
     parallel,
     progress (>= 1.1.1),
@@ -39,7 +39,8 @@ Imports:
     rappdirs,
     stats,
     stringi,
-    utils
+    utils,
+    withr (>= 2.0.0)
 Suggests:
     debugme,
     e1071,
@@ -51,6 +52,7 @@ Suggests:
     rmarkdown,
     rpart,
     snow,
-    testthat
+    testthat,
+    tibble
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1

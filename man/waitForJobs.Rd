@@ -4,8 +4,8 @@
 \alias{waitForJobs}
 \title{Wait for Termination of Jobs}
 \usage{
-waitForJobs(ids = NULL, sleep = default.sleep, timeout = 604800,
-  stop.on.error = FALSE, reg = getDefaultRegistry())
+waitForJobs(ids = NULL, sleep = NULL, timeout = 604800,
+  expire.after = 3L, stop.on.error = FALSE, reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -16,14 +16,27 @@ If not set, defaults to the return value of \code{\link{findSubmitted}}.
 Invalid ids are ignored.}
 
 \item{sleep}{[\code{function(i)} | \code{numeric(1)}]\cr
-Function which returns the duration to sleep in the \code{i}-th iteration.
-Alternatively, you can pass a single positive numeric value.}
+Parameter to control the duration to sleep between queries.
+You can pass an absolute numeric value in seconds or a \code{function(i)} which returns
+the number of seconds to sleep in the \code{i}-th iteration.
+If not provided (\code{NULL}), tries to read the value (number/function) from the configuration file
+(stored in \code{reg$sleep}) or defaults to a function with exponential backoff between
+5 and 120 seconds.}
 
 \item{timeout}{[\code{numeric(1)}]\cr
 After waiting \code{timeout} seconds, show a message and return
 \code{FALSE}. This argument may be required on some systems where, e.g.,
 expired jobs or jobs on hold are problematic to detect. If you don't want
 a timeout, set this to \code{Inf}. Default is \code{604800} (one week).}
+
+\item{expire.after}{[\code{integer(1)}]\cr
+Jobs count as \dQuote{expired} if they are not found on the system but have not communicated back
+their results (or error message). This frequently happens on managed system if the scheduler kills
+a job because the job has hit the walltime or request more memory than reserved.
+On the other hand, network file systems often require several seconds for new files to be found,
+which can lead to false positives in the detection heuristic.
+\code{waitForJobs} treats such jobs as expired after they have not been detected on the system
+for \code{expire.after} iterations (default 3 iterations).}
 
 \item{stop.on.error}{[\code{logical(1)}]\cr
 Immediately cancel if a job terminates with an error? Default is

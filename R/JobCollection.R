@@ -48,12 +48,13 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
 createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()) {
   jc              = new.env(parent = emptyenv())
   jc$jobs         = setkeyv(jobs, "job.id")
+  jc$job.hash     = stri_join("job", digest(list(runif(1L), as.numeric(Sys.time()))))
+  jc$job.name     = if (anyMissing(jobs$job.name)) jc$job.hash else jc$jobs$job.name[1L]
   jc$file.dir     = reg$file.dir
   jc$work.dir     = reg$work.dir
   jc$seed         = reg$seed
-  jc$job.hash     = stri_join("job", digest(list(runif(1L), as.numeric(Sys.time()))))
   jc$uri          = getJobFiles(reg, hash = jc$job.hash)
-  jc$log.file     = getLogFiles(reg, hash = jc$job.hash, log.file = NA_character_)
+  jc$log.file     = fp(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
   jc$packages     = reg$packages
   jc$namespaces   = reg$namespaces
   jc$source       = reg$source
@@ -70,13 +71,13 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
 
 #' @export
 makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "pars")), resources, reg)
+  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "job.name", "pars")), resources, reg)
   setClasses(jc, "JobCollection")
 }
 
 #' @export
 makeJobCollection.ExperimentRegistry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "pars", "problem", "algorithm", "repl")), resources, reg)
+  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "job.name", "pars", "problem", "algorithm", "repl")), resources, reg)
   setClasses(jc, c("ExperimentCollection", "JobCollection"))
 }
 

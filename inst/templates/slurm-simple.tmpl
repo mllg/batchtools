@@ -23,13 +23,14 @@ log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
 -%>
 
 
-#SBATCH --job-name=<%= job.hash %>
+#SBATCH --job-name=<%= job.name %>
 #SBATCH --output=<%= log.file %>
 #SBATCH --error=<%= log.file %>
 #SBATCH --time=<%= ceiling(resources$walltime / 60) %>
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=<%= resources$ncpus %>
 #SBATCH --mem-per-cpu=<%= resources$memory %>
+<%= if (!is.null(resources$partition)) sprintf(paste0("#SBATCH --partition='", resources$partition, "'")) %>
 <%= if (array.jobs) sprintf("#SBATCH --array=1-%i", nrow(jobs)) else "" %>
 
 ## Initialize work environment like

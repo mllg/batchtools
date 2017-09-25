@@ -17,7 +17,7 @@ if (backend == "mpi") {
 log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
 -%>
 
-#SBATCH --job-name=<%= job.hash %>
+#SBATCH --job-name=<%= job.name %>
 #SBATCH --output=<%= log.file %>
 #SBATCH --error=<%= log.file %>
 #SBATCH --time=<%= ceiling(walltime / 60L)%>
