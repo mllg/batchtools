@@ -25,7 +25,7 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
     assertIntegerish(jc$resources$memory, lower = 1L, any.missing = FALSE, .var.name = "resources$memory")
     timeout = if (is.null(jc$resources$walltime)) character(0L) else sprintf("timeout %i", asInt(jc$resources$walltime, lower = 0L))
 
-    batch.id = sprintf("%s_bt_%s", user, jc$job.hash)
+    batch.id = sprintf("%s-bt_%s", user, jc$job.hash)
     cmd = c("docker", docker.args, "create", "--label queue", "--label rm", image.args,
       sprintf("-e DEBUGME='%s'", Sys.getenv("DEBUGME")),
       sprintf("-e OMP_NUM_THREADS=%i", jc$resources$threads %??% 1L),
