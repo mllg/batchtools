@@ -28,16 +28,20 @@
 #' @param stop.on.error [\code{logical(1)}]\cr
 #'   Immediately cancel if a job terminates with an error? Default is
 #'   \code{FALSE}.
+#' @param stop.on.expire [\code{logical(1)}]\cr
+#'   Immediately cancel if jobs are detected to be expired? Default is \code{FALSE}.
+#'   Expired jobs will then be ignored for the remainder of \code{waitForJobs()}.
 #' @template reg
 #' @return [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated
 #'   successfully and \code{FALSE} if either the timeout is reached or at least
 #'   one job terminated with an exception.
 #' @export
-waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after = 3L, stop.on.error = FALSE, reg = getDefaultRegistry()) {
+waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after = 3L, stop.on.error = FALSE, stop.on.expire = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = FALSE, sync = TRUE)
   assertNumber(timeout, lower = 0)
   assertCount(expire.after, positive = TRUE)
   assertFlag(stop.on.error)
+  assertFlag(stop.on.expire)
   sleep = getSleepFunction(reg, sleep)
   ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
 
@@ -84,11 +88,17 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
     "!DEBUG [waitForJobs]: batch.ids: `stri_flatten(batch.ids$batch.id, ',')`"
 
     ### case 3: jobs disappeared, we cannot find them on the system in [expire.after] iterations
-    if (ids[!(terminated) & expire.counter > expire.after, .N] > 0L) {
-      warning("Some jobs disappeared from the system")
-      pb$update(1)
-      waitForResults(reg, ids)
-      return(FALSE)
+    expired = ids[!(terminated) & expire.counter > expire.after]
+    if (nrow(expired) > 0L) {
+      warningf("%i jobs disappeared from the system", nrow(expired))
+      if (stop.on.expire) {
+        pb$update(1)
+        waitForResults(reg, ids)
+        return(FALSE)
+      }
+
+      # remove expired ids
+      ids = ids[!expired]
     }
 
     # case 4: we reach a timeout

@@ -5,7 +5,8 @@
 \title{Wait for Termination of Jobs}
 \usage{
 waitForJobs(ids = NULL, sleep = NULL, timeout = 604800,
-  expire.after = 3L, stop.on.error = FALSE, reg = getDefaultRegistry())
+  expire.after = 3L, stop.on.error = FALSE, stop.on.expire = FALSE,
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -41,6 +42,10 @@ for \code{expire.after} iterations (default 3 iterations).}
 \item{stop.on.error}{[\code{logical(1)}]\cr
 Immediately cancel if a job terminates with an error? Default is
 \code{FALSE}.}
+
+\item{stop.on.expire}{[\code{logical(1)}]\cr
+Immediately cancel if jobs are detected to be expired? Default is \code{FALSE}.
+Expired jobs will then be ignored for the remainder of \code{waitForJobs()}.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
