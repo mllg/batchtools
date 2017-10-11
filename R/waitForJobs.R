@@ -64,9 +64,9 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
   i = 0L
 
   repeat {
-    ### case 1: all jobs terminated -> nothing on system
+    ### case 1: all jobs terminated or expired -> nothing on system
     ids[.findTerminated(reg, ids), "terminated" := TRUE]
-    if (ids[!(terminated) | expire.counter > expire.after, .N] == 0L) {
+    if (ids[!(terminated) & expire.counter <= expire.after, .N] == 0L) {
       "!DEBUG [waitForJobs]: All jobs terminated"
       pb$update(1)
       waitForResults(reg, ids)
