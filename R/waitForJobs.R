@@ -66,7 +66,7 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
   repeat {
     ### case 1: all jobs terminated -> nothing on system
     ids[.findTerminated(reg, ids), "terminated" := TRUE]
-    if (ids[!(terminated), .N] == 0L) {
+    if (ids[!(terminated) | expire.counter > expire.after, .N] == 0L) {
       "!DEBUG [waitForJobs]: All jobs terminated"
       pb$update(1)
       waitForResults(reg, ids)
@@ -82,23 +82,18 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
 
     batch.ids = getBatchIds(reg)
     ids[, "on.sys" := FALSE][.findOnSystem(reg, ids, batch.ids = batch.ids), "on.sys" := TRUE]
+    ids[(on.sys), "expire.counter" := 0L]
     ids[!(on.sys) & !(terminated), "expire.counter" := expire.counter + 1L]
     stats = getStatusTable(ids = ids, batch.ids = batch.ids, reg = reg)
     pb$update(mean(ids$terminated), tokens = as.list(stats))
     "!DEBUG [waitForJobs]: batch.ids: `stri_flatten(batch.ids$batch.id, ',')`"
 
     ### case 3: jobs disappeared, we cannot find them on the system in [expire.after] iterations
-    expired = ids[!(terminated) & expire.counter > expire.after]
-    if (nrow(expired) > 0L) {
-      warningf("%i jobs disappeared from the system", nrow(expired))
-      if (stop.on.expire) {
-        pb$update(1)
-        waitForResults(reg, ids)
-        return(FALSE)
-      }
-
-      # remove expired ids
-      ids = ids[!expired]
+    if (stop.on.expire && ids[!(terminated) & expire.counter > expire.after, .N] > 0L) {
+      warning("Jobs disappeared from the system")
+      pb$update(1)
+      waitForResults(reg, ids)
+      return(FALSE)
     }
 
     # case 4: we reach a timeout
