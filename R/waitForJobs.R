@@ -34,7 +34,7 @@
 #' @template reg
 #' @return [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated
 #'   successfully and \code{FALSE} if either the timeout is reached or at least
-#'   one job terminated with an exception.
+#'   one job terminated with an exception or expired.
 #' @export
 waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after = 3L, stop.on.error = FALSE, stop.on.expire = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = FALSE, sync = TRUE)
@@ -70,7 +70,7 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
       "!DEBUG [waitForJobs]: All jobs terminated"
       pb$update(1)
       waitForResults(reg, ids)
-      return(nrow(.findErrors(reg, ids)) == 0L)
+      return(nrow(.findTerminated(reg, ids)) == nrow(ids))
     }
 
     ### case 2: there are errors and stop.on.error is TRUE
