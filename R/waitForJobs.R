@@ -60,7 +60,7 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
   ids$expire.counter = 0L
 
   timeout = Sys.time() + timeout
-  pb = makeProgressBar(total = nrow(ids), format = "Waiting (S::system R::running D::done E::error ?::expired) [:bar] :percent eta: :eta")
+  pb = makeProgressBar(total = nrow(ids), format = "Waiting (Q::queued R::running D::done E::error ?::expired) [:bar] :percent eta: :eta")
   i = 0L
 
   repeat {
