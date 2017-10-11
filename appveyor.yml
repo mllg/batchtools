@@ -8,11 +8,11 @@ install:
   ps: Bootstrap
 
 cache:
-  - C:\RLibrary -> appveyor.yml # v01
+  - C:\RLibrary -> appveyor.yml
 
 environment:
   matrix:
-    - R_VERSION: devel
+    # - R_VERSION: devel
     - R_VERSION: release
     - R_VERSION: oldrel
 
