@@ -53,7 +53,7 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 \value{
 [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated
   successfully and \code{FALSE} if either the timeout is reached or at least
-  one job terminated with an exception.
+  one job terminated with an exception or expired.
 }
 \description{
 This function simply waits until all jobs are terminated.
