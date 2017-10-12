@@ -70,7 +70,7 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
       "!DEBUG [waitForJobs]: All jobs terminated"
       pb$update(1)
       waitForResults(reg, ids)
-      return(nrow(.findTerminated(reg, ids)) == nrow(ids))
+      return(nrow(.findDone(reg, ids)) == nrow(ids))
     }
 
     ### case 2: there are errors and stop.on.error is TRUE
