@@ -4,6 +4,7 @@ language: r
 cache: packages
 
 env:
+  - _R_CHECK_TESTS_NLINES_=999
   - _R_CHECK_LENGTH_1_CONDITION_=true
 
 addons:
