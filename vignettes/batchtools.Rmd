@@ -403,6 +403,12 @@ tab = ijoin(getJobPars(), results)
 head(tab)
 ```
 
+To unnest the lists in columns `prob.pars`, `algo.pars` and `results`, [`flatten()`]((https://mllg.github.io/batchtools/reference/flatten) can be used:
+```{r}
+tab = flatten(tab)
+head(tab)
+```
+
 We now aggregate the results group-wise.
 You can use [`data.table`](https://cran.r-project.org/package=data.table), `base::aggregate()`, or the [`dplyr`](https://cran.r-project.org/package=dplyr) package for this purpose.
 Here, we use [`data.table`](https://cran.r-project.org/package=data.table) to subset the table to jobs where the ratio is `0.67` and group by algorithm the algorithm hyperparameters:
