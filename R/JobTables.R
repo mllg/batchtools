@@ -11,6 +11,8 @@
 #' @templateVar ids.default all
 #' @template ids
 #' @param flatten [\code{logical(1)}]\cr
+#'   DEPRECATED! Set to \code{FALSE} to be compatible with future versions.\cr
+#'
 #'   Transform the job parameters and/or resource specifications to data frame columns?
 #'   Defaults to \code{TRUE} if all parameters (or resources) are scalar atomics.
 #'   Otherwise each row of the column will hold a named list.
