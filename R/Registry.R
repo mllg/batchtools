@@ -21,6 +21,14 @@
 #' \code{\link{clearRegistry}} completely erases all jobs from a registry, including log files and results,
 #' and thus allows you to start over.
 #'
+#' @details
+#' Currently \pkg{batchtools} understands the following options set via the configuration file:
+#' \describe{
+#'   \item{\code{cluster.functions}:}{As returned by a constructor, e.g. \code{\link{makeClusterFunctionsSlurm}}.}
+#'   \item{\code{default.resources}:}{List of resources to use. Will be overruled by resources specified via \code{\link{submitJobs}}.}
+#'   \item{\code{temp.dir}:}{Path to directory to use for temporary registries.}
+#' }
+#'
 #' @param file.dir [\code{character(1)}]\cr
 #'   Path where all files of the registry are saved.
 #'   Default is directory \dQuote{registry} in the current working directory.
