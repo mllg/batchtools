@@ -33,7 +33,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Michel Lang \email{michellang@gmail.com}
+\strong{Maintainer}: Michel Lang \email{michellang@gmail.com} (0000-0001-9754-0393)
 
 Authors:
 \itemize{
