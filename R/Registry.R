@@ -126,7 +126,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   assertCharacter(source, any.missing = FALSE, min.chars = 1L)
   assertCharacter(load, any.missing = FALSE, min.chars = 1L)
   assertFlag(make.default)
-  seed = if (is.null(seed)) as.integer(runif(1L, 1, .Machine$integer.max / 2L)) else asCount(seed, positive = TRUE)
+  seed = if (is.null(seed)) as.integer(runif(1L, 0, 32768)) else asCount(seed, positive = TRUE)
 
   reg = new.env(parent = asNamespace("batchtools"))
   reg$file.dir = file.dir
