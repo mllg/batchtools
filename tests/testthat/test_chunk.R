@@ -85,7 +85,7 @@ test_that("caching works", {
   addExperiments(reg = reg)
   ids = findJobs(reg = reg)
   ids$chunk = 1L
-  submitJobs(ids, reg = reg)
+  submitAndWait(reg, ids)
 
   expect_identical(unlist(reduceResultsList(ids, reg = reg)), as.integer(c(150, 300, 10, 20)))
 })
