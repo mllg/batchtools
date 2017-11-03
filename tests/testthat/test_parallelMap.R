@@ -33,7 +33,7 @@ test_that("parallelMap works with batchtools", {
   skip_if_not(packageVersion("parallelMap") >= "1.4")
   requireNamespace("parallelMap")
 
-  parallelMap::parallelStartBatchtools(storagedir = tempdir(), show.info = FALSE)
+  parallelMap::parallelStartBatchtools(storagedir = reg$temp.dir %??% tempdir(), show.info = FALSE)
   res = parallelMap::parallelMap(function(x, y) x + y, x = 1:2, y = 1)
   parallelMap::parallelStop()
   expect_equal(res, list(2, 3))
