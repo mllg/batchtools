@@ -88,7 +88,7 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
     pb$update(mean(ids$terminated), tokens = as.list(stats))
     "!DEBUG [waitForJobs]: batch.ids: `stri_flatten(batch.ids$batch.id, ',')`"
 
-    ### case 3: jobs disappeared, we cannot find them on the system in [expire.after] iterations
+    ### case 3: jobs disappeared, we cannot find them on the system after [expire.after] iterations
     if (stop.on.expire && ids[!(terminated) & expire.counter > expire.after, .N] > 0L) {
       warning("Jobs disappeared from the system")
       pb$update(1)
