@@ -8,8 +8,8 @@
 reduceResultsList(ids = NULL, fun = NULL, ..., missing.val,
   reg = getDefaultRegistry())
 
-reduceResultsDataTable(ids = NULL, fun = NULL, ..., flatten = NULL,
-  missing.val, reg = getDefaultRegistry())
+reduceResultsDataTable(ids = NULL, fun = NULL, ..., missing.val,
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -32,11 +32,6 @@ If not provided and a result is missing, an exception is raised.}
 
 \item{reg}{[\code{\link{Registry}}]\cr
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
-
-\item{flatten}{[\code{logical(1)}]\cr
-Transform results into separate \code{\link[data.table]{data.table}} columns.
-Defaults to \code{TRUE} if all results are (a list of) scalar atomics,
-Otherwise each row of the column will hold a named list.}
 }
 \value{
 \code{reduceResultsList} returns a list of the results in the same order as the provided ids.
