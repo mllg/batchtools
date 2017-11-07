@@ -26,9 +26,9 @@ test_that("addProblem", {
 
   removeProblems(reg = reg, "p1")
   expect_integer(reg$status$job.id, len = 2L)
-  expect_set_equal(reg$problems, "p2")
+  expect_set_equal("p2", reg$problems)
   expect_false(file.exists(getProblemURI(reg, "p1")))
   expect_true(file.exists(getProblemURI(reg, "p2")))
-  expect_set_equal(as.character(getJobPars(reg = reg)$problem), "p2")
+  expect_set_equal(getJobPars(reg = reg)$problem, "p2")
   checkTables(reg)
 })

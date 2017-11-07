@@ -19,7 +19,7 @@ test_that("addAlgorithm", {
   expect_set_equal(reg$algorithms, "a2")
   expect_false(file.exists(getAlgorithmURI(reg, "a1")))
   expect_true(file.exists(getAlgorithmURI(reg, "a2")))
-  expect_set_equal(as.character(getJobPars(reg = reg)$algorithm), "a2")
+  expect_set_equal(getJobPars(reg = reg)$algorithm, "a2")
   checkTables(reg)
 })
 

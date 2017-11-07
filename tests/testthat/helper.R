@@ -81,10 +81,10 @@ checkTables = function(reg, ...) {
     expect_subset(reg$defs$algorithm, reg$algorithms)
   }
 
-  expect_set_equal(reg$defs$def.id, reg$status$def.id)
-  expect_set_equal(na.omit(reg$status$resource.id), reg$resources$resource.id)
+  expect_key_set_equal(reg$defs, reg$status, by = "def.id")
+  expect_key_set_equal(reg$status[!is.na(resource.id)], reg$resources, by = "resource.id")
   if (nrow(reg$status) > 0L)
-    expect_subset(reg$tags$job.id, reg$status$job.id)
+    expect_data_table(ajoin(reg$tags, reg$status, by = "job.id"), nrow = 0)
   else
     expect_equal(nrow(reg$tags), 0)
 }
@@ -107,4 +107,8 @@ checkStatusIntegrity = function(reg) {
 
 expect_copied = function(x, y) {
   expect_false(data.table:::address(x) == data.table:::address(y))
+}
+
+expect_key_set_equal = function(x, y, by = NULL) {
+  expect_true(nrow(ajoin(x, y, by = by)) == 0 && nrow(ajoin(y, x, by = by)) == 0)
 }
