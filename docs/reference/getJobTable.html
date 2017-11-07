@@ -151,16 +151,16 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry76a4332d87f7' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>) <span class='fu'>stop</span>(<span class='st'>"x must be &gt; 0"</span>) <span class='kw'>else</span> <span class='fu'>sqrt</span>(<span class='no'>x</span>)
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry7fbc5830d262' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>) <span class='fu'>stop</span>(<span class='st'>"x must be &gt; 0"</span>) <span class='kw'>else</span> <span class='fu'>sqrt</span>(<span class='no'>x</span>)
 <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>f</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='st'>"tag1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>2</span>, <span class='st'>"tag2"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
 <span class='co'># Complete table:</span>
 <span class='fu'>getJobTable</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id           submitted             started                done
 #&gt;     &lt;int&gt;              &lt;POSc&gt;              &lt;POSc&gt;              &lt;POSc&gt;
-#&gt; 1:      1 2017-11-07 13:26:32 2017-11-07 13:26:32 2017-11-07 13:26:32
-#&gt; 2:      2 2017-11-07 13:26:32 2017-11-07 13:26:32 2017-11-07 13:26:32
-#&gt; 3:      3 2017-11-07 13:26:32 2017-11-07 13:26:32 2017-11-07 13:26:32
+#&gt; 1:      1 2017-11-07 13:38:06 2017-11-07 13:38:06 2017-11-07 13:38:06
+#&gt; 2:      2 2017-11-07 13:38:06 2017-11-07 13:38:06 2017-11-07 13:38:06
+#&gt; 3:      3 2017-11-07 13:38:06 2017-11-07 13:38:06 2017-11-07 13:38:06
 #&gt;                                      error memory      batch.id log.file
 #&gt;                                     &lt;char&gt;  &lt;num&gt;        &lt;char&gt;   &lt;char&gt;
 #&gt; 1: Error in (function (x)  : x must be &gt; 0     NA cfInteractive       NA
@@ -168,13 +168,13 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt; 3:                                      NA     NA cfInteractive       NA
 #&gt;                               job.hash job.name      time.queued
 #&gt;                                 &lt;char&gt;   &lt;char&gt;       &lt;difftime&gt;
-#&gt; 1: jobb6e81f1646fdb136a90d986f4e4a2c7a       NA 0.002900124 secs
-#&gt; 2: job8c0d52416c48038f138369a7538660ce       NA 0.008199930 secs
-#&gt; 3: job471831a40bad3a69afbbca991a7087ea       NA 0.005100012 secs
+#&gt; 1: job7c5658107330b3a79d6d49636845fa58       NA 0.002600193 secs
+#&gt; 2: job832cb04ca42c79c34b4056bc018ed4c2       NA 0.002799988 secs
+#&gt; 3: job500d7acc333d6ad444983d63fcabe37c       NA 0.004700184 secs
 #&gt;        time.running   pars resources      tags
 #&gt;          &lt;difftime&gt; &lt;list&gt;    &lt;list&gt;    &lt;char&gt;
-#&gt; 1: 0.002199888 secs &lt;list&gt;    &lt;list&gt;      tag1
-#&gt; 2: 0.001500130 secs &lt;list&gt;    &lt;list&gt; tag1,tag2
+#&gt; 1: 0.001699924 secs &lt;list&gt;    &lt;list&gt;      tag1
+#&gt; 2: 0.001399994 secs &lt;list&gt;    &lt;list&gt; tag1,tag2
 #&gt; 3: 0.001699924 secs &lt;list&gt;    &lt;list&gt;        NA</div><div class='input'>
 <span class='co'># Job parameters:</span>
 <span class='fu'>getJobPars</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id   pars
