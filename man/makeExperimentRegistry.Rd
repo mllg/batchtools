@@ -96,8 +96,8 @@ addAlgorithm(reg = tmp, "a2", fun = function(job, data, instance, ...) median(in
 ids = addExperiments(reg = tmp, list(p1 = CJ(n = c(50, 100), mean = -2:2, sd = 1:4)))
 
 # Overview over defined experiments:
-getProblemIds(reg = tmp)
-getAlgorithmIds(reg = tmp)
+tmp$problems
+tmp$algorithms
 summarizeExperiments(reg = tmp)
 summarizeExperiments(reg = tmp, by = c("problem", "algorithm", "n"))
 ids = findExperiments(prob.pars = (n == 50), reg = tmp)

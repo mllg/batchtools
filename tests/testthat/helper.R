@@ -32,11 +32,11 @@ checkTables = function(reg, ...) {
   expect_is(reg$mtime, "POSIXct")
 
   if (class(reg)[1L] == "Registry") {
-    cols = c("def.id", "pars")
+    cols = c("def.id",   "job.pars")
     types = c("integer", "list")
   } else {
-    cols = c("def.id", "pars", "problem", "algorithm", "pars.hash")
-    types = c("integer", "list", "factor", "factor", "character")
+    cols = c("def.id",   "problem",   "prob.pars", "algorithm", "algo.pars", "pars.hash")
+    types = c("integer", "character", "list",      "character", "list",      "character")
   }
   expect_is(reg$defs, "data.table")
   expect_data_table(reg$defs, ncols = length(cols), ...)
@@ -77,6 +77,8 @@ checkTables = function(reg, ...) {
 
   if (class(reg)[1L] == "ExperimentRegistry") {
     expect_integer(reg$status$repl, lower = 1L, any.missing = FALSE)
+    expect_subset(reg$defs$problem, reg$problems)
+    expect_subset(reg$defs$algorithm, reg$algorithms)
   }
 
   expect_set_equal(reg$defs$def.id, reg$status$def.id)

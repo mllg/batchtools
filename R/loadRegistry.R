@@ -63,7 +63,6 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
   return(reg)
 }
 
-
 readRegistry = function(file.dir) {
   fn.old = fp(file.dir, "registry.rds")
   fn.new = fp(file.dir, "registry.new.rds")

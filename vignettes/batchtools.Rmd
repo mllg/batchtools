@@ -320,8 +320,8 @@ The algorithms get recorded in the registry and the corresponding functions are 
 
 Defined problems and algorithms can be queried:
 ```{r}
-getProblemIds()
-getAlgorithmIds()
+reg$problems
+reg$algorithms
 ```
 The flow to define experiments is summarized in the following figure:
 

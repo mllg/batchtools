@@ -107,17 +107,6 @@ setClasses = function(x, cl) {
   x
 }
 
-addlevel = function(x, lvl) {
-  if (lvl %chnin% levels(x))
-    levels(x) = c(levels(x), lvl)
-  x
-}
-
-rmlevel = function(x, lvl) {
-  levels(x) = replace(levels(x), levels(x) == lvl, NA_character_)
-  x
-}
-
 #' @useDynLib batchtools count_not_missing
 count = function(x) {
   .Call(count_not_missing, x)

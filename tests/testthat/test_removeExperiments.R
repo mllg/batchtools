@@ -18,13 +18,13 @@ test_that("removeExperiments", {
   expect_data_table(removeExperiments(ids, reg = reg), nrow = 4, key = "job.id")
   expect_equal(findExperiments(reg = reg)$job.id, 6:N)
   expect_true(file.exists(getProblemURI(reg, "p1")))
-  expect_set_equal(levels(reg$defs$problem), c("p1", "p2"))
+  expect_set_equal(reg$problems, c("p1", "p2"))
 
   ids = findExperiments(algo.name = "a2", reg = reg)
   expect_data_table(removeExperiments(ids, reg = reg), nrow = 4, key = "job.id")
   expect_equal(findExperiments(reg = reg)$job.id, 6:(N-nrow(ids)))
   expect_true(file.exists(getAlgorithmURI(reg, "a2")))
-  expect_set_equal(levels(reg$defs$algorithm), c("a1", "a2"))
+  expect_set_equal(reg$algorithms, c("a1", "a2"))
 
   checkTables(reg)
 })

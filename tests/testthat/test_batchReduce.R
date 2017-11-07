@@ -7,7 +7,7 @@ test_that("batchReduce", {
   expect_data_table(ids, nrow = 10, key = "job.id")
 
   submitAndWait(reg = reg)
-  y = reduceResults(fun=function(aggr, job, res) aggr+res, init = 0, reg = reg)
+  y = reduceResults(fun = function(aggr, job, res) aggr+res, init = 0, reg = reg)
   expect_equal(y, sum(1:20))
 })
 

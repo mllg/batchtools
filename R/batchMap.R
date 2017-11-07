@@ -84,9 +84,9 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
   ids = seq_row(ddd)
 
   reg$defs = data.table(
-    def.id = ids,
-    pars   = .mapply(list, dots = ddd, MoreArgs = list()),
-    key    = "def.id")
+    def.id   = ids,
+    job.pars = .mapply(list, dots = ddd, MoreArgs = list()),
+    key      = "def.id")
 
   reg$status = data.table(
     job.id      = ids,

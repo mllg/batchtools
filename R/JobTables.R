@@ -93,7 +93,7 @@ getJobPars = function(ids = NULL, reg = getDefaultRegistry()) {
 #' @export
 getJobPars.Registry = function(ids = NULL, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids)
-  tab = mergedJobs(reg, ids, c("job.id", "pars"))
+  tab = mergedJobs(reg, ids, c("job.id", "job.pars"))
   setkeyv(tab, "job.id")[]
 }
 
@@ -101,10 +101,7 @@ getJobPars.Registry = function(ids = NULL, reg = getDefaultRegistry()) {
 #' @export
 getJobPars.ExperimentRegistry = function(ids = NULL, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids)
-  tab = mergedJobs(reg, ids, c("job.id", "pars", "problem", "algorithm"))
-  tab$prob.pars = lapply(tab$pars, `[[`, "prob.pars")
-  tab$algo.pars = lapply(tab$pars, `[[`, "algo.pars")
-  tab$pars = NULL
+  tab = mergedJobs(reg, ids, c("job.id", "problem", "prob.pars", "algorithm", "algo.pars"))
   setkeyv(tab, "job.id")[]
 }
 

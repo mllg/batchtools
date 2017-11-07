@@ -7,12 +7,12 @@ test_that("getJobTable.Registry", {
 
   tab = getJobTable(reg = reg)
   expect_data_table(tab, nrows = 4, ncols = 15, key = "job.id")
-  expect_list(tab$pars)
-  expect_equal(tab$pars[[1]], list(i = 1L, j = 1))
+  expect_list(tab$job.pars)
+  expect_equal(tab$job.pars[[1]], list(i = 1L, j = 1))
 
   tab = flatten(tab)
   expect_data_table(tab, nrows = 4, ncols = 15, key = "job.id")
-  expect_null(tab[["pars"]])
+  expect_null(tab[["job.pars"]])
   expect_equal(tab$i, 1:4)
   expect_equal(tab$j, rep(1, 4))
 
@@ -27,9 +27,9 @@ test_that("getJobTable.Registry", {
   expect_true(allMissing(tab$tags))
 
   tab = flatten(getJobTable(reg = reg), sep = ".")
-  expect_null(tab[["pars"]])
-  expect_equal(tab$pars.i, 1:4)
-  expect_equal(tab$pars.j, rep(1, 4))
+  expect_null(tab[["job.pars"]])
+  expect_equal(tab$job.pars.i, 1:4)
+  expect_equal(tab$job.pars.j, rep(1, 4))
 
   # be sure that the original tables are untouched
   checkTables(reg)
@@ -69,15 +69,15 @@ test_that("getJobPars", {
   expect_data_table(tab, nrow = 4, ncol = 2, key = "job.id")
   tab = flatten(tab)
   expect_copied(tab, reg$defs)
-  expect_null(tab$pars)
+  expect_null(tab$job.pars)
   expect_equal(tab$i, 1:4)
   expect_equal(tab$j, rep(1, 4))
   tab = flatten(getJobPars(reg = reg, ids = 1:2))
   expect_data_table(tab, nrow = 2, ncol = 3, key = "job.id")
   tab = flatten(getJobPars(reg = reg), sep = ".")
   expect_data_table(tab, nrow = 4, ncol = 3, key = "job.id")
-  expect_equal(tab$pars.i, 1:4)
-  expect_equal(tab$pars.j, rep(1, 4))
+  expect_equal(tab$job.pars.i, 1:4)
+  expect_equal(tab$job.pars.j, rep(1, 4))
 })
 
 test_that("getJobPars with repls", {
@@ -102,24 +102,24 @@ test_that("getJobTable.ExperimentRegistry", {
   tab = getJobTable(reg = reg)
   expect_data_table(tab, nrows = 3, ncols = 19, key = "job.id")
   expect_copied(tab, reg$status)
-  expect_null(tab$pars)
+  expect_null(tab$job.pars)
   expect_list(tab$prob.pars)
   expect_list(tab$algo.pars)
   for (i in 1:3) {
     expect_equal(tab$prob.pars[[i]], list(k = 1))
     expect_equal(tab$algo.pars[[i]], list(sq = i))
   }
-  expect_equal(tab$problem[1], factor("p1"))
-  expect_equal(tab$algorithm[1], factor("a1"))
+  expect_equal(tab$problem[1], "p1")
+  expect_equal(tab$algorithm[1], "a1")
 
   tab = flatten(getJobTable(ids = 1:3, reg = reg), c("prob.pars", "algo.pars"))
   expect_data_table(tab, nrows = 3, ncols = 19, key = "job.id")
-  expect_null(tab[["pars"]])
+  expect_null(tab[["job.pars"]])
   expect_set_equal(tab$k, rep(1, 3))
   expect_set_equal(tab$sq, 1:3)
 
   tab = flatten(getJobPars(reg = reg), sep = ".")
-  expect_null(tab[["pars"]])
+  expect_null(tab[["job.pars"]])
   expect_set_equal(tab$prob.pars.k, rep(1, 3))
   expect_set_equal(tab$algo.pars.sq, 1:3)
 })

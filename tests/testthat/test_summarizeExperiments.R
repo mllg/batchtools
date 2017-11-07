@@ -9,8 +9,8 @@ test_that("summarizeExperiments", {
   s = summarizeExperiments(reg = reg)
   expect_data_table(s, nrows = 2, ncols = 3)
   expect_equal(s$.count, c(3, 6))
-  expect_equal(s$problem, factor(c("p1", "p2")))
-  expect_equal(s$algorithm, factor(c("a1", "a1")))
+  expect_equal(s$problem, c("p1", "p2"))
+  expect_equal(s$algorithm, c("a1", "a1"))
 
   s = summarizeExperiments(reg = reg, by = c("problem", "algorithm", "x"))
   expect_data_table(s, nrows = 3, ncols = 4)

@@ -24,8 +24,8 @@
 #' ids = addExperiments(reg = tmp, list(p1 = CJ(n = c(50, 100), mean = -2:2, sd = 1:4)))
 #'
 #' # Overview over defined experiments:
-#' getProblemIds(reg = tmp)
-#' getAlgorithmIds(reg = tmp)
+#' tmp$problems
+#' tmp$algorithms
 #' summarizeExperiments(reg = tmp)
 #' summarizeExperiments(reg = tmp, by = c("problem", "algorithm", "n"))
 #' ids = findExperiments(prob.pars = (n == 50), reg = tmp)
@@ -55,9 +55,14 @@ makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), con
   dir.create(fp(reg$file.dir, "problems"))
   dir.create(fp(reg$file.dir, "algorithms"))
 
-  reg$status$repl = integer(0L)
-  reg$defs$problem = factor(character(0L))
-  reg$defs$algorithm = factor(character(0L))
+  reg$problems       = character(0L)
+  reg$algorithms     = character(0L)
+  reg$status$repl    = integer(0L)
+  reg$defs$problem   = character(0L)
+  reg$defs$algorithm = character(0L)
+  reg$defs$job.pars  = NULL
+  reg$defs$prob.pars = list()
+  reg$defs$algo.pars = list()
   reg$defs$pars.hash = character(0L)
   class(reg) = c("ExperimentRegistry", "Registry")
 

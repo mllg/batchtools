@@ -71,13 +71,13 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
 
 #' @export
 makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "job.name", "pars")), resources, reg)
+  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "job.name", "job.pars")), resources, reg)
   setClasses(jc, "JobCollection")
 }
 
 #' @export
 makeJobCollection.ExperimentRegistry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "job.name", "pars", "problem", "algorithm", "repl")), resources, reg)
+  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "job.name", "problem", "prob.pars", "algorithm", "algo.pars", "repl")), resources, reg)
   setClasses(jc, c("ExperimentCollection", "JobCollection"))
 }
 
