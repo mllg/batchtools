@@ -92,11 +92,9 @@
     
     <p>Some functions (e.g., <code><a href='getJobTable.html'>getJobPars</a></code>, <code><a href='getJobTable.html'>getJobResources</a></code> or <code><a href='reduceResultsList.html'>reduceResultsDataTable</a></code>
 return a <code>data.table</code> with columns of type <code>list</code>.
-These columns can be unnested to create a flat data.frame, iff each row holds</p><dl class='dl-horizontal'>
-  <dt>(a)</dt><dd><p>vector of atomic values,</p></dd>
-  <dt>(b)</dt><dd><p>a named list of atomic scalars, or</p></dd>
-  <dt>(c)</dt><dd><p>a <code>data.frame</code>.</p></dd>
-</dl><p>The values will be transformed to a <code>data.frame</code> and <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code>-ed to the input data.frame <code>x</code>.</p>
+These columns can be unnested/unwrapped with this function.
+The values will be transformed to a <code>data.frame</code> and <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code>-ed to the input data.frame <code>x</code>,
+replacing the original nested column.</p>
     
 
     <pre class="usage"><span class='fu'>flatten</span>(<span class='no'>x</span>, <span class='kw'>cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
@@ -130,6 +128,20 @@ If you provide <code>sep</code>, the variable column name will be constructed as
     <p>[<code>data.table</code>] where nested columns are replaced with flattened columns.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(
+  <span class='kw'>id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>,
+  <span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='fu'>list</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='fu'>list</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='fu'>list</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>3</span>))
+)
+<span class='fu'>flatten</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;       id     a     b
+#&gt;    &lt;int&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1     1     3
+#&gt; 2:     2     2     2
+#&gt; 3:     3     3    NA</div><div class='input'><span class='fu'>flatten</span>(<span class='no'>x</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>)</div><div class='output co'>#&gt;       id values.a values.b
+#&gt;    &lt;int&gt;    &lt;num&gt;    &lt;num&gt;
+#&gt; 1:     1        1        3
+#&gt; 2:     2        2        2
+#&gt; 3:     3        3       NA</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -137,7 +149,9 @@ If you provide <code>sep</code>, the variable column name will be constructed as
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

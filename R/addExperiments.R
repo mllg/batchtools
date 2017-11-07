@@ -66,7 +66,7 @@
 #'
 #' # check what has been created
 #' summarizeExperiments(reg = tmp)
-#' getJobPars(reg = tmp)
+#' flatten(getJobPars(reg = tmp))
 addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, combine = "crossprod", reg = getDefaultRegistry()) {
   convertDesigns = function(type, designs, keywords) {
     check.factors = default.stringsAsFactors()

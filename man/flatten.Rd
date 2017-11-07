@@ -26,11 +26,15 @@ If you provide \code{sep}, the variable column name will be constructed as
 \description{
 Some functions (e.g., \code{\link{getJobPars}}, \code{\link{getJobResources}} or \code{\link{reduceResultsDataTable}}
 return a \code{data.table} with columns of type \code{list}.
-These columns can be unnested to create a flat data.frame, iff each row holds
-\describe{
-  \item{(a)}{vector of atomic values,}
-  \item{(b)}{a named list of atomic scalars, or}
-  \item{(c)}{a \code{data.frame}.}
+These columns can be unnested/unwrapped with this function.
+The values will be transformed to a \code{data.frame} and \code{\link[base]{cbind}}-ed to the input data.frame \code{x},
+replacing the original nested column.
 }
-The values will be transformed to a \code{data.frame} and \code{\link[base]{cbind}}-ed to the input data.frame \code{x}.
+\examples{
+x = data.table(
+  id = 1:3,
+  values = list(list(a = 1, b = 3), list(a = 2, b = 2), list(a = 3))
+)
+flatten(x)
+flatten(x, sep = ".")
 }
