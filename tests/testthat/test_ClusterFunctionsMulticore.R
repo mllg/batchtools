@@ -1,23 +1,22 @@
 context("cf multicore")
 
-# test_that("cf multicore", {
-#   skip_on_os("windows")
+test_that("cf multicore", {
+  skip_on_os("windows")
 
-#   reg = makeRegistry(file.dir = NA, make.default = FALSE)
-#   reg$cluster.functions = makeClusterFunctionsMulticore(2)
-#   ids = batchMap(Sys.sleep, time = c(2, 2), reg = reg)
-#   silent({
-#     submitJobs(1:2, reg = reg)
-#     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
-#     expect_true(waitForJobs(sleep = 0.2, expire.after = 1, reg = reg))
-#   })
-#   expect_data_table(findOnSystem(reg = reg), nrow = 0)
-#   expect_equal(findDone(reg = reg), findJobs(reg = reg))
-# })
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg$cluster.functions = makeClusterFunctionsMulticore(2)
+  ids = batchMap(Sys.sleep, time = c(2, 2), reg = reg)
+  silent({
+    submitJobs(1:2, reg = reg)
+    expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
+    expect_true(waitForJobs(sleep = 0.2, expire.after = 1, reg = reg))
+  })
+  expect_data_table(findOnSystem(reg = reg), nrow = 0)
+  expect_equal(findDone(reg = reg), findJobs(reg = reg))
+})
 
-test_that("Multicore cleans up finished processes", {
-  skip("Interactive test")
-
+if (FALSE) {
+  # Multicore cleans up finished processes
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(Sys.sleep, rep(0.8, 8), reg = reg)
   parallel::mccollect()
@@ -36,4 +35,4 @@ test_that("Multicore cleans up finished processes", {
   p$collect(1)
   x = parallel::mccollect()
   expect_true(is.null(x))
-})
+}
