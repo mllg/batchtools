@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -100,8 +100,8 @@ See <code><a href='http://www.rdocumentation.org/packages/data.table/topics/rbin
     <pre class="usage"><span class='fu'>reduceResultsList</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='no'>missing.val</span>,
   <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())
 
-<span class='fu'>reduceResultsDataTable</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>missing.val</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
+<span class='fu'>reduceResultsDataTable</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='no'>missing.val</span>,
+  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -137,13 +137,6 @@ If not provided and a result is missing, an exception is raised.</p></td>
       <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
     </tr>
-    <tr>
-      <th>flatten</th>
-      <td><p>[<code>logical(1)</code>]
-Transform results into separate <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> columns.
-Defaults to <code>TRUE</code> if all results are (a list of) scalar atomics,
-Otherwise each row of the column will hold a named list.</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -166,7 +159,7 @@ can significantly increase the performance.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>### Example 1 - reduceResultsList</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry7c5879ea2f45' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 10 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>reduceResultsList</span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>sqrt</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry76a476644ca' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 10 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>reduceResultsList</span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>sqrt</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1
 #&gt; 
 #&gt; [[2]]
@@ -197,7 +190,7 @@ can significantly increase the performance.</p>
 #&gt; [1] 10
 #&gt; </div><div class='input'>
 <span class='co'>### Example 2 - reduceResultsDataTable</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry7c583ba50d49' using cluster functions 'Interactive'</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry76a424553c79' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># add first problem</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>...</span>) <span class='fu'>rnorm</span>(<span class='no'>n</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>sd</span>)
 <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"rnorm"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'rnorm'</span></div><div class='input'>
@@ -220,72 +213,135 @@ can significantly increase the performance.</p>
 <span class='co'># add experiments and submit</span>
 <span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='no'>prob.designs</span>, <span class='no'>algo.designs</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 30 experiments ('rnorm'[15] x 'average'[2] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 15 experiments ('rnorm'[15] x 'deviation'[1] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 10 experiments ('rexp'[5] x 'average'[2] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 5 experiments ('rexp'[5] x 'deviation'[1] x repls[1]) ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 60 jobs in 60 chunks using cluster functions 'Interactive' ...</span></div><div class='input'>
 <span class='co'># collect results and join them # with problem and algorithm paramters</span>
-<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(
+<span class='fu'><a href='flatten.html'>flatten</a></span>(<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(
   <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>),
   <span class='fu'>reduceResultsDataTable</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='no'>x</span>))
-)</div><div class='output co'>#&gt;     job.id problem algorithm     n  mean    sd method lambda         res
-#&gt;      &lt;int&gt;  &lt;fctr&gt;    &lt;fctr&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;char&gt;  &lt;int&gt;       &lt;num&gt;
-#&gt;  1:      1   rnorm   average   100    -1     1   mean     NA -1.03092335
-#&gt;  2:      2   rnorm   average   100    -1     1 median     NA -1.09193236
-#&gt;  3:      3   rnorm   average   100    -1     2   mean     NA -0.67885778
-#&gt;  4:      4   rnorm   average   100    -1     2 median     NA -0.79856997
-#&gt;  5:      5   rnorm   average   100    -1     3   mean     NA -1.67194910
-#&gt;  6:      6   rnorm   average   100    -1     3 median     NA -1.54841149
-#&gt;  7:      7   rnorm   average   100    -1     4   mean     NA -1.87850580
-#&gt;  8:      8   rnorm   average   100    -1     4 median     NA -0.62072520
-#&gt;  9:      9   rnorm   average   100    -1     5   mean     NA -1.06936614
-#&gt; 10:     10   rnorm   average   100    -1     5 median     NA -0.51983799
-#&gt; 11:     11   rnorm   average   100     0     1   mean     NA  0.01717658
-#&gt; 12:     12   rnorm   average   100     0     1 median     NA  0.07116721
-#&gt; 13:     13   rnorm   average   100     0     2   mean     NA  0.05934450
-#&gt; 14:     14   rnorm   average   100     0     2 median     NA  0.09531172
-#&gt; 15:     15   rnorm   average   100     0     3   mean     NA -0.08971524
-#&gt; 16:     16   rnorm   average   100     0     3 median     NA  0.65120875
-#&gt; 17:     17   rnorm   average   100     0     4   mean     NA  0.58022370
-#&gt; 18:     18   rnorm   average   100     0     4 median     NA  1.04515507
-#&gt; 19:     19   rnorm   average   100     0     5   mean     NA  0.34010298
-#&gt; 20:     20   rnorm   average   100     0     5 median     NA  0.77314379
-#&gt; 21:     21   rnorm   average   100     1     1   mean     NA  1.09241448
-#&gt; 22:     22   rnorm   average   100     1     1 median     NA  1.10664442
-#&gt; 23:     23   rnorm   average   100     1     2   mean     NA  0.83024516
-#&gt; 24:     24   rnorm   average   100     1     2 median     NA  1.13635050
-#&gt; 25:     25   rnorm   average   100     1     3   mean     NA  0.57841953
-#&gt; 26:     26   rnorm   average   100     1     3 median     NA  1.14485380
-#&gt; 27:     27   rnorm   average   100     1     4   mean     NA  0.97827546
-#&gt; 28:     28   rnorm   average   100     1     4 median     NA  0.23115031
-#&gt; 29:     29   rnorm   average   100     1     5   mean     NA  0.86009224
-#&gt; 30:     30   rnorm   average   100     1     5 median     NA  1.52628409
-#&gt; 31:     31   rnorm deviation   100    -1     1     NA     NA  1.00789728
-#&gt; 32:     32   rnorm deviation   100    -1     2     NA     NA  1.93576611
-#&gt; 33:     33   rnorm deviation   100    -1     3     NA     NA  3.06922268
-#&gt; 34:     34   rnorm deviation   100    -1     4     NA     NA  4.52038823
-#&gt; 35:     35   rnorm deviation   100    -1     5     NA     NA  4.72436529
-#&gt; 36:     36   rnorm deviation   100     0     1     NA     NA  0.98484606
-#&gt; 37:     37   rnorm deviation   100     0     2     NA     NA  2.16470621
-#&gt; 38:     38   rnorm deviation   100     0     3     NA     NA  2.90804627
-#&gt; 39:     39   rnorm deviation   100     0     4     NA     NA  4.51527817
-#&gt; 40:     40   rnorm deviation   100     0     5     NA     NA  5.10206112
-#&gt; 41:     41   rnorm deviation   100     1     1     NA     NA  0.98106938
-#&gt; 42:     42   rnorm deviation   100     1     2     NA     NA  2.07716612
-#&gt; 43:     43   rnorm deviation   100     1     3     NA     NA  2.83850959
-#&gt; 44:     44   rnorm deviation   100     1     4     NA     NA  4.01032896
-#&gt; 45:     45   rnorm deviation   100     1     5     NA     NA  4.69268499
-#&gt; 46:     46    rexp   average   100    NA    NA   mean      1  1.18753506
-#&gt; 47:     47    rexp   average   100    NA    NA median      1  0.66870853
-#&gt; 48:     48    rexp   average   100    NA    NA   mean      2  0.36403045
-#&gt; 49:     49    rexp   average   100    NA    NA median      2  0.35749457
-#&gt; 50:     50    rexp   average   100    NA    NA   mean      3  0.35583467
-#&gt; 51:     51    rexp   average   100    NA    NA median      3  0.23735029
-#&gt; 52:     52    rexp   average   100    NA    NA   mean      4  0.30408752
-#&gt; 53:     53    rexp   average   100    NA    NA median      4  0.16366624
-#&gt; 54:     54    rexp   average   100    NA    NA   mean      5  0.21408259
-#&gt; 55:     55    rexp   average   100    NA    NA median      5  0.13066213
-#&gt; 56:     56    rexp deviation   100    NA    NA     NA      1  1.03778337
-#&gt; 57:     57    rexp deviation   100    NA    NA     NA      2  0.50034279
-#&gt; 58:     58    rexp deviation   100    NA    NA     NA      3  0.40798912
-#&gt; 59:     59    rexp deviation   100    NA    NA     NA      4  0.23243882
-#&gt; 60:     60    rexp deviation   100    NA    NA     NA      5  0.23601934
-#&gt;     job.id problem algorithm     n  mean    sd method lambda         res</div></pre>
+), <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>)</div><div class='output co'>#&gt;     job.id problem algorithm prob.pars.n prob.pars.mean prob.pars.sd
+#&gt;      &lt;int&gt;  &lt;fctr&gt;    &lt;fctr&gt;       &lt;num&gt;          &lt;int&gt;        &lt;int&gt;
+#&gt;  1:      1   rnorm   average         100             -1            1
+#&gt;  2:      2   rnorm   average         100             -1            1
+#&gt;  3:      3   rnorm   average         100             -1            2
+#&gt;  4:      4   rnorm   average         100             -1            2
+#&gt;  5:      5   rnorm   average         100             -1            3
+#&gt;  6:      6   rnorm   average         100             -1            3
+#&gt;  7:      7   rnorm   average         100             -1            4
+#&gt;  8:      8   rnorm   average         100             -1            4
+#&gt;  9:      9   rnorm   average         100             -1            5
+#&gt; 10:     10   rnorm   average         100             -1            5
+#&gt; 11:     11   rnorm   average         100              0            1
+#&gt; 12:     12   rnorm   average         100              0            1
+#&gt; 13:     13   rnorm   average         100              0            2
+#&gt; 14:     14   rnorm   average         100              0            2
+#&gt; 15:     15   rnorm   average         100              0            3
+#&gt; 16:     16   rnorm   average         100              0            3
+#&gt; 17:     17   rnorm   average         100              0            4
+#&gt; 18:     18   rnorm   average         100              0            4
+#&gt; 19:     19   rnorm   average         100              0            5
+#&gt; 20:     20   rnorm   average         100              0            5
+#&gt; 21:     21   rnorm   average         100              1            1
+#&gt; 22:     22   rnorm   average         100              1            1
+#&gt; 23:     23   rnorm   average         100              1            2
+#&gt; 24:     24   rnorm   average         100              1            2
+#&gt; 25:     25   rnorm   average         100              1            3
+#&gt; 26:     26   rnorm   average         100              1            3
+#&gt; 27:     27   rnorm   average         100              1            4
+#&gt; 28:     28   rnorm   average         100              1            4
+#&gt; 29:     29   rnorm   average         100              1            5
+#&gt; 30:     30   rnorm   average         100              1            5
+#&gt; 31:     31   rnorm deviation         100             -1            1
+#&gt; 32:     32   rnorm deviation         100             -1            2
+#&gt; 33:     33   rnorm deviation         100             -1            3
+#&gt; 34:     34   rnorm deviation         100             -1            4
+#&gt; 35:     35   rnorm deviation         100             -1            5
+#&gt; 36:     36   rnorm deviation         100              0            1
+#&gt; 37:     37   rnorm deviation         100              0            2
+#&gt; 38:     38   rnorm deviation         100              0            3
+#&gt; 39:     39   rnorm deviation         100              0            4
+#&gt; 40:     40   rnorm deviation         100              0            5
+#&gt; 41:     41   rnorm deviation         100              1            1
+#&gt; 42:     42   rnorm deviation         100              1            2
+#&gt; 43:     43   rnorm deviation         100              1            3
+#&gt; 44:     44   rnorm deviation         100              1            4
+#&gt; 45:     45   rnorm deviation         100              1            5
+#&gt; 46:     46    rexp   average         100             NA           NA
+#&gt; 47:     47    rexp   average         100             NA           NA
+#&gt; 48:     48    rexp   average         100             NA           NA
+#&gt; 49:     49    rexp   average         100             NA           NA
+#&gt; 50:     50    rexp   average         100             NA           NA
+#&gt; 51:     51    rexp   average         100             NA           NA
+#&gt; 52:     52    rexp   average         100             NA           NA
+#&gt; 53:     53    rexp   average         100             NA           NA
+#&gt; 54:     54    rexp   average         100             NA           NA
+#&gt; 55:     55    rexp   average         100             NA           NA
+#&gt; 56:     56    rexp deviation         100             NA           NA
+#&gt; 57:     57    rexp deviation         100             NA           NA
+#&gt; 58:     58    rexp deviation         100             NA           NA
+#&gt; 59:     59    rexp deviation         100             NA           NA
+#&gt; 60:     60    rexp deviation         100             NA           NA
+#&gt;     job.id problem algorithm prob.pars.n prob.pars.mean prob.pars.sd
+#&gt;     prob.pars.lambda algo.pars.method  result.res
+#&gt;                &lt;int&gt;           &lt;char&gt;       &lt;num&gt;
+#&gt;  1:               NA             mean -1.02471632
+#&gt;  2:               NA           median -0.77565242
+#&gt;  3:               NA             mean -0.79506421
+#&gt;  4:               NA           median -0.98540729
+#&gt;  5:               NA             mean -1.09137272
+#&gt;  6:               NA           median -2.31843512
+#&gt;  7:               NA             mean -0.94663865
+#&gt;  8:               NA           median -1.42339758
+#&gt;  9:               NA             mean -0.17953933
+#&gt; 10:               NA           median -1.95951869
+#&gt; 11:               NA             mean -0.04221738
+#&gt; 12:               NA           median -0.14800193
+#&gt; 13:               NA             mean -0.22319840
+#&gt; 14:               NA           median  0.46372498
+#&gt; 15:               NA             mean  0.14903502
+#&gt; 16:               NA           median -0.14969080
+#&gt; 17:               NA             mean -0.71727573
+#&gt; 18:               NA           median -0.38224008
+#&gt; 19:               NA             mean  0.25593813
+#&gt; 20:               NA           median -0.20927905
+#&gt; 21:               NA             mean  1.00462117
+#&gt; 22:               NA           median  1.16684243
+#&gt; 23:               NA             mean  1.28903628
+#&gt; 24:               NA           median  0.79149398
+#&gt; 25:               NA             mean  1.10634266
+#&gt; 26:               NA           median  1.03629822
+#&gt; 27:               NA             mean  1.47471927
+#&gt; 28:               NA           median  0.80084166
+#&gt; 29:               NA             mean  1.16415980
+#&gt; 30:               NA           median  0.59233043
+#&gt; 31:               NA               NA  1.05130248
+#&gt; 32:               NA               NA  2.08538907
+#&gt; 33:               NA               NA  2.90477427
+#&gt; 34:               NA               NA  3.79605815
+#&gt; 35:               NA               NA  4.74672327
+#&gt; 36:               NA               NA  0.97786927
+#&gt; 37:               NA               NA  2.09466296
+#&gt; 38:               NA               NA  3.01046073
+#&gt; 39:               NA               NA  4.11380656
+#&gt; 40:               NA               NA  5.13915413
+#&gt; 41:               NA               NA  0.94999601
+#&gt; 42:               NA               NA  2.21216590
+#&gt; 43:               NA               NA  2.69046588
+#&gt; 44:               NA               NA  4.24511415
+#&gt; 45:               NA               NA  5.66236544
+#&gt; 46:                1             mean  1.07648970
+#&gt; 47:                1           median  0.78271911
+#&gt; 48:                2             mean  0.54386061
+#&gt; 49:                2           median  0.35473550
+#&gt; 50:                3             mean  0.31759767
+#&gt; 51:                3           median  0.24956639
+#&gt; 52:                4             mean  0.24791578
+#&gt; 53:                4           median  0.17533374
+#&gt; 54:                5             mean  0.21273258
+#&gt; 55:                5           median  0.14242142
+#&gt; 56:                1               NA  1.19064598
+#&gt; 57:                2               NA  0.48701085
+#&gt; 58:                3               NA  0.36181945
+#&gt; 59:                4               NA  0.29286338
+#&gt; 60:                5               NA  0.20130201
+#&gt;     prob.pars.lambda algo.pars.method  result.res</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

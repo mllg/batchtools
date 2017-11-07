@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -94,7 +94,8 @@
     
 
     <pre class="usage"><span class='fu'>waitForJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sleep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fl'>604800</span>,
-  <span class='kw'>expire.after</span> <span class='kw'>=</span> <span class='fl'>3L</span>, <span class='kw'>stop.on.error</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
+  <span class='kw'>expire.after</span> <span class='kw'>=</span> <span class='fl'>3L</span>, <span class='kw'>stop.on.error</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>stop.on.expire</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -144,6 +145,12 @@ Immediately cancel if a job terminates with an error? Default is
 <code>FALSE</code>.</p></td>
     </tr>
     <tr>
+      <th>stop.on.expire</th>
+      <td><p>[<code>logical(1)</code>]
+Immediately cancel if jobs are detected to be expired? Default is <code>FALSE</code>.
+Expired jobs will then be ignored for the remainder of <code>waitForJobs()</code>.</p></td>
+    </tr>
+    <tr>
       <th>reg</th>
       <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
 Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
@@ -154,7 +161,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
     <p>[<code>logical(1)</code>]. Returns <code>TRUE</code> if all jobs terminated
   successfully and <code>FALSE</code> if either the timeout is reached or at least
-  one job terminated with an exception.</p>
+  one job terminated with an exception or expired.</p>
     
 
   </div>
