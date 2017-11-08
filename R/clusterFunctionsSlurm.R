@@ -62,7 +62,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
     temp.error = "Socket timed out on send/recv operation"
     output = stri_flatten(stri_trim_both(res$output), "\n")
 
-    if (stri_detect_fixed(max.jobs.msg, output)) {
+    if (stri_detect_fixed(output, max.jobs.msg)) {
       makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = max.jobs.msg)
     } else if (stri_detect_fixed(temp.error, output)) {
       # another temp error we want to catch

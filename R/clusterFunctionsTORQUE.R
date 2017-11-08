@@ -34,7 +34,7 @@ makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1
     max.jobs.msg = "Maximum number of jobs already in queue"
     output = stri_flatten(stri_trim_both(res$output), "\n")
 
-    if (stri_detect_fixed(max.jobs.msg, output)) {
+    if (stri_detect_fixed(output, max.jobs.msg) || res$exit.code == 228L) {
       makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = max.jobs.msg)
     } else if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
