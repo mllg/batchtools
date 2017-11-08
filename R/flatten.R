@@ -1,23 +1,24 @@
-#' @title Convert Nested Data Frames to a Flat Representation
+#' @title Unwrap Nested Data Frames
 #'
 #' @description
 #' Some functions (e.g., \code{\link{getJobPars}}, \code{\link{getJobResources}} or \code{\link{reduceResultsDataTable}}
 #' return a \code{data.table} with columns of type \code{list}.
 #' These columns can be unnested/unwrapped with this function.
-#' The values will be transformed to a \code{data.frame} and \code{\link[base]{cbind}}-ed to the input data.frame \code{x},
-#' replacing the original nested column.
+#' The contents of these columns  will be transformed to a \code{data.table} and \code{\link[base]{cbind}}-ed
+#' to the input data.frame \code{x}, replacing the original nested column.
 #'
-#' @param x [\code{\link{data.frame}}]\cr
+#' @param x [\code{\link{data.frame}} | \code{\link[data.table]{data.table}}]\cr
 #'   Data frame to flatten.
 #' @param cols [\code{character}]\cr
 #'   Columns to consider for this operation. If set to \code{NULL} (default),
 #'   will operate on all columns of type \dQuote{list}.
 #' @param sep [\code{character(1)}]\cr
 #'   If \code{NULL} (default), the column names of the additional columns will re-use the names
-#'   of the inner \code{list}/\code{data.frame}.
+#'   of the nested \code{list}/\code{data.frame}.
+#'   This may lead to name clashes.
 #'   If you provide \code{sep}, the variable column name will be constructed as
 #'   \dQuote{[column name of x][sep][inner name]}.
-#' @return [\code{\link{data.table}}] where nested columns are replaced with flattened columns.
+#' @return [\code{\link{data.table}}].
 #' @export
 #' @examples
 #' x = data.table(
@@ -40,6 +41,10 @@ flatten = function(x, cols = NULL, sep = NULL) {
   assertString(sep, null.ok = TRUE)
 
   res = data.table(..row = seq_row(x), key = "..row")
+  extra.cols = chsetdiff(names(x), cols)
+  if (length(extra.cols))
+    res = cbind(res, x[, extra.cols, with = FALSE])
+
   for (col in cols) {
     xc = x[[col]]
 
@@ -47,7 +52,7 @@ flatten = function(x, cols = NULL, sep = NULL) {
       x = xc[[i]]
       if (is.null(x))
         return(list(..row = i))
-      x = lapply(x, function(x) if (!qtest(x, c("l", "v1"))) list(x) else x)
+      x = lapply(x, function(x) if (!qtest(x, c("l", "d", "v1"))) list(x) else x)
       na = which(is.na(names2(x)))
       if (length(na) > 0L)
         names(x)[na] = sprintf("%s.%i", col, seq_along(na))
@@ -56,21 +61,20 @@ flatten = function(x, cols = NULL, sep = NULL) {
     })
     new.cols = rbindlist(new.cols, fill = TRUE)
 
-    if (ncol(new.cols) >= 2L) {
+    if (ncol(new.cols) > 1L) {
+      if (nrow(new.cols) != nrow(x) || anyDuplicated(new.cols$..row) > 0L)
+        stop("Some rows are unsuitable for unnesting. Flattening leads to data duplication.")
+      new.cols$..row = NULL
       if (!is.null(sep))
-        setnames(new.cols, chsetdiff(names(new.cols), "..row"), stri_paste(col, chsetdiff(names(new.cols), "..row"), sep = sep))
+        setnames(new.cols, names(new.cols), stri_paste(col, names(new.cols), sep = sep))
       clash = chintersect(names(res), names(new.cols))
-      if (length(clash) >= 2L)
-        stopf("Name clash while flattening data.table: Duplicated column names: %s", stri_flatten(chsetdiff(clash, "..row")))
-      res = rjoin(res, new.cols, by = "..row")
+      if (length(clash) > 0L)
+        stopf("Name clash while flattening data.table: Duplicated column names: %s", stri_flatten(clash, ", "))
+      res[, names(new.cols) := new.cols]
     }
   }
 
-  for (col in chsetdiff(names(x), cols))
-    set(res, j = col, value = x[[col]])
   res[, "..row" := NULL]
-  setcolorder(res, c(chsetdiff(names(x), cols), chsetdiff(names(res), names(x))))
-
   kx = key(x)
   if (!is.null(kx) && all(kx %chin% names(res)))
     setkeyv(res, kx)

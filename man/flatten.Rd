@@ -2,12 +2,12 @@
 % Please edit documentation in R/flatten.R
 \name{flatten}
 \alias{flatten}
-\title{Convert Nested Data Frames to a Flat Representation}
+\title{Unwrap Nested Data Frames}
 \usage{
 flatten(x, cols = NULL, sep = NULL)
 }
 \arguments{
-\item{x}{[\code{\link{data.frame}}]\cr
+\item{x}{[\code{\link{data.frame}} | \code{\link[data.table]{data.table}}]\cr
 Data frame to flatten.}
 
 \item{cols}{[\code{character}]\cr
@@ -16,19 +16,20 @@ will operate on all columns of type \dQuote{list}.}
 
 \item{sep}{[\code{character(1)}]\cr
 If \code{NULL} (default), the column names of the additional columns will re-use the names
-of the inner \code{list}/\code{data.frame}.
+of the nested \code{list}/\code{data.frame}.
+This may lead to name clashes.
 If you provide \code{sep}, the variable column name will be constructed as
 \dQuote{[column name of x][sep][inner name]}.}
 }
 \value{
-[\code{\link{data.table}}] where nested columns are replaced with flattened columns.
+[\code{\link{data.table}}].
 }
 \description{
 Some functions (e.g., \code{\link{getJobPars}}, \code{\link{getJobResources}} or \code{\link{reduceResultsDataTable}}
 return a \code{data.table} with columns of type \code{list}.
 These columns can be unnested/unwrapped with this function.
-The values will be transformed to a \code{data.frame} and \code{\link[base]{cbind}}-ed to the input data.frame \code{x},
-replacing the original nested column.
+The contents of these columns  will be transformed to a \code{data.table} and \code{\link[base]{cbind}}-ed
+to the input data.frame \code{x}, replacing the original nested column.
 }
 \examples{
 x = data.table(
