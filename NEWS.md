@@ -2,6 +2,12 @@
 
 * Added a workaround for a test to be compatible with testthat v2.0.0.
 * Better and more customizable handling of expired jobs in `waitForJobs()`.
+* Depreciated argument flatten has been removed.
+* New helper function `flatten()` to manually unnest/unwrap lists in data frames.
+* Removed functions `getProblemIds()` and `getAlgorithmIds()`.
+  Instead, you can just access `reg$problems` or `reg$algorithms`, respectively.
+* Internal data base changes to speed up some operations.
+  Old registries are updated on first load by `loadRegistry()`.
 
 # batchtools 0.9.6
 

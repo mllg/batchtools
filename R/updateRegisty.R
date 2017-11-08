@@ -37,6 +37,9 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
 
   if (reg$version < "0.9.1-9002" && inherits(reg, "ExperimentRegistry")) {
     info("Renaming problems and algorithm files")
+    getProblemIds = function(reg) levels(reg$defs$problem)
+    getAlgorithmIds = function(reg) levels(reg$defs$algorithm)
+
     for (prob in getProblemIds(reg))
       file.rename(fp(reg$file.dir, "problems", sprintf("%s.rds", digest(prob))), getProblemURI(reg, prob))
     for (algo in getAlgorithmIds(reg))
@@ -47,6 +50,24 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
     if ("job.name" %chnin% names(reg$status)) {
       info("Adding column 'job.name'")
       reg$status[, ("job.name") := rep(NA_character_, .N)]
+    }
+  }
+
+  if (reg$version < "0.9.6-9001") {
+    info("Updating registry internals")
+    if (!inherits(reg, "ExperimentRegistry")) {
+      setnames(reg$defs, "pars", "job.pars")
+    } else {
+      alloc.col(reg$defs, ncol(reg$defs) + 1L)
+      reg$problems = levels(reg$defs$problem)
+      reg$algorithms = levels(reg$defs$algorithm)
+      reg$defs$problem = as.character(reg$defs$problem)
+      reg$defs$algorithm = as.character(reg$defs$algorithm)
+      reg$defs$prob.pars = lapply(reg$defs$pars, `[[`, "prob.pars")
+      reg$defs$algo.pars = lapply(reg$defs$pars, `[[`, "algo.pars")
+      reg$defs$pars = NULL
+      info("Recalculating job hashes")
+      reg$defs$pars.hash = calculateHash(reg$defs)
     }
   }
 

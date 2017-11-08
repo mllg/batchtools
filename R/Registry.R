@@ -141,7 +141,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   reg$defs = data.table(
     def.id    = integer(0L),
-    pars      = list(),
+    job.pars  = list(),
     key       = "def.id")
 
   reg$status = data.table(

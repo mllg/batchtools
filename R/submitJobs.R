@@ -84,10 +84,10 @@
 #'
 #' # Retrive information about memory, combine with parameters
 #' info = ijoin(getJobStatus(reg = tmp)[, .(job.id, memory)], getJobPars(reg = tmp))
-#' print(info)
+#' print(flatten(info))
 #'
 #' # Combine job info with results -> each job is aggregated using mean()
-#' ijoin(info, reduceResultsDataTable(fun = function(res) list(res = mean(res)), reg = tmp))
+#' flatten(ijoin(info, reduceResultsDataTable(fun = function(res) list(res = mean(res)), reg = tmp)))
 #'
 #' ### Example 2: Multicore execution on the slave
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)

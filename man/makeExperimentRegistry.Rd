@@ -96,12 +96,12 @@ addAlgorithm(reg = tmp, "a2", fun = function(job, data, instance, ...) median(in
 ids = addExperiments(reg = tmp, list(p1 = CJ(n = c(50, 100), mean = -2:2, sd = 1:4)))
 
 # Overview over defined experiments:
-getProblemIds(reg = tmp)
-getAlgorithmIds(reg = tmp)
+tmp$problems
+tmp$algorithms
 summarizeExperiments(reg = tmp)
 summarizeExperiments(reg = tmp, by = c("problem", "algorithm", "n"))
 ids = findExperiments(prob.pars = (n == 50), reg = tmp)
-getJobPars(ids, reg = tmp)
+print(flatten(getJobPars(ids, reg = tmp)))
 
 # Submit jobs
 submitJobs(reg = tmp)
@@ -114,8 +114,8 @@ reduceResults(ids.mean, fun = function(aggr, res, ...) c(aggr, res), reg = tmp)
 # Join info table with all results and calculate mean of results
 # grouped by n and algorithm
 ids = findDone(reg = tmp)
-pars = getJobPars(ids, reg = tmp)
-results = reduceResultsDataTable(ids, fun = function(res) list(res = res), reg = tmp)
+pars = flatten(getJobPars(ids, reg = tmp))
+results = flatten(reduceResultsDataTable(ids, fun = function(res) list(res = res), reg = tmp))
 tab = ljoin(pars, results)
 tab[, list(mres = mean(res)), by = c("n", "algorithm")]
 }

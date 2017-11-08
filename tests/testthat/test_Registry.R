@@ -74,18 +74,24 @@ test_that("extra files are loaded", {
 })
 
 test_that("loadRegistry", {
-  reg1 = makeRegistry(file.dir = NA, make.default = FALSE)
-  fd = reg1$file.dir
-  setDefaultRegistry(NULL)
-  reg2 = loadRegistry(fd, make.default = FALSE, writeable = TRUE)
-  checkTables(reg1)
-  checkTables(reg2)
-  nn = union(ls(reg1, all.names = TRUE), ls(reg2, all.names = TRUE))
-  foo = lapply(nn, function(x) expect_equal(reg1[[x]], reg2[[x]], info = x))
-  expect_equal(reg1, reg2)
+  regs = list(
+    makeRegistry(file.dir = NA, make.default = FALSE),
+    makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  )
+  for (reg1 in regs) {
+    fd = reg1$file.dir
+    setDefaultRegistry(NULL)
+    reg2 = loadRegistry(fd, make.default = FALSE, writeable = TRUE)
+    checkTables(reg1)
+    checkTables(reg2)
+    nms = union(ls(reg1, all.names = TRUE), ls(reg2, all.names = TRUE))
+    for (nm in nms)
+      expect_equal(reg1[[nm]], reg2[[nm]], info = nm)
+    expect_equal(reg1, reg2)
 
-  x = readRDS(fp(fd, "registry.rds"))
-  expect_null(x$cluster.functions)
+    x = readRDS(fp(fd, "registry.rds"))
+    expect_null(x$cluster.functions)
+  }
 })
 
 test_that("loadRegistry with missing dependencies is still usable (#122)", {

@@ -41,9 +41,9 @@ test_that("addExperiments / user provided designs", {
   repls = 1
   ids = addExperiments(reg = reg, prob.designs = prob.designs, algo.designs = algo.designs, combine = "bind")
   expect_data_table(ids, nrow = 9, key = "job.id")
-  pars = getJobPars(reg = reg)
-  expect_set_equal(as.character(pars$problem), "p1")
-  expect_set_equal(as.character(pars$algorithm), c("a1", "a2"))
+  pars = flatten(getJobPars(reg = reg))
+  expect_set_equal(pars$problem, "p1")
+  expect_set_equal(pars$algorithm, c("a1", "a2"))
   expect_equal(pars$a, rep(1L, 9))
   expect_equal(pars$b, rep(2:4, 3))
   expect_equal(pars$c, c(3:8, rep(NA, 3)))
@@ -53,11 +53,11 @@ test_that("addExperiments / user provided designs", {
   prob.designs = c(prob.designs, list(p2 = data.table()))
   ids = addExperiments(reg = reg, prob.designs = prob.designs, algo.designs = algo.designs, combine = "bind")
   expect_data_table(ids, nrow = 7, key = "job.id")
-  expect_data_table(getJobPars(reg = reg), nrow = 16)
+  expect_data_table(flatten(getJobPars(reg = reg)), nrow = 16)
 
   ids = addExperiments(reg = reg, prob.designs = prob.designs, algo.designs = algo.designs, combine = "crossprod")
   expect_data_table(ids, nrow = 12, key = "job.id")
-  expect_data_table(getJobPars(reg = reg), nrow = 28)
+  expect_data_table(flatten(getJobPars(reg = reg)), nrow = 28)
 
   pd = list(p1 = data.frame(foo = letters[1:2]))
   withr::with_options(list(stringsAsFactors = NULL), {
@@ -77,9 +77,11 @@ if (FALSE) {
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
   addAlgorithm(reg = reg, "a2", fun = function(job, data, instance, ...) NULL)
   prob.designs = list(p1 = data.table(x = 1:500))
-  algo.designs = list(a1 = data.table(y = 1:20), a2 = data.table(y = 1:20))
+  algo.designs = list(a1 = data.table(y = 1:50), a2 = data.table(y = 1:20))
   repls = 2
   profvis::profvis(addExperiments(prob.designs, algo.designs = algo.designs, repls = repls, reg = reg))
   ids = findExperiments(reg = reg)
   profvis::profvis(submitJobs(ids = s.chunk(ids), reg = reg))
+
+  profvis::profvis(flatten(getJobPars(reg = reg)))
 }

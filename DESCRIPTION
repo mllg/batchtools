@@ -1,6 +1,6 @@
 Package: batchtools
 Title: Tools for Computation on Batch Systems
-Version: 0.9.6-9000
+Version: 0.9.6-9001
 Authors@R: c(
     person("Michel", "Lang", NULL, "michellang@gmail.com",
       role = c("cre", "aut"), comment = c(ORCID = "0000-0001-9754-0393")),
@@ -27,12 +27,12 @@ NeedsCompilation: yes
 ByteCompile: yes
 Depends:
     R (>= 3.0.0),
-    data.table (>= 1.9.8)
+    data.table (>= 1.10.4)
 Imports:
     backports (>= 1.1.0),
     base64url (>= 1.1),
     brew,
-    checkmate (>= 1.8.3),
+    checkmate (>= 1.8.5),
     digest (>= 0.6.9),
     parallel,
     progress (>= 1.1.1),

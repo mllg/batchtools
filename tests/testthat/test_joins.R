@@ -3,7 +3,7 @@ context("joins")
 test_that("joins", {
   reg = makeRegistry(file.dir = NA, make.default = FALSE)
   batchMap(identity, x = 1:6, reg = reg)
-  x = getJobPars(reg = reg)[1:5]
+  x = flatten(getJobPars(reg = reg)[1:5])
   y = findJobs(x >= 2 & x <= 5, reg = reg)
   y$extra.col = head(letters, nrow(y))
 

@@ -16,7 +16,7 @@ test_that("makeJobCollection", {
   expect_list(jc$resources, names = "unique")
   expect_string(jc$uri)
   expect_directory(jc$work.dir)
-  expect_list(jc$jobs$pars)
+  expect_list(jc$jobs$job.pars)
   expect_string(jc$array.var, na.ok = TRUE)
   expect_flag(jc$array.jobs)
 
@@ -53,9 +53,10 @@ test_that("makeJobCollection.ExperimentCollection", {
   expect_list(jc$resources, names = "unique")
   expect_string(jc$uri)
   expect_directory(jc$work.dir)
-  expect_list(jc$jobs$pars)
-  expect_factor(jc$jobs$problem)
-  expect_factor(jc$jobs$algorithm)
+  expect_list(jc$jobs$prob.pars)
+  expect_list(jc$jobs$algo.pars)
+  expect_character(jc$jobs$problem)
+  expect_character(jc$jobs$algorithm)
   expect_string(jc$array.var, na.ok = TRUE)
   expect_flag(jc$array.jobs)
 
