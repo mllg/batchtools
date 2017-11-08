@@ -45,6 +45,7 @@ Imports:
 Suggests:
     debugme,
     e1071,
+    future.batchtools,
     knitr,
     parallelMap,
     ranger,
