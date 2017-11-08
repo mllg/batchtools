@@ -16,6 +16,7 @@ test_that("waitForJobs: detection of expired jobs", {
   if (is.null(reg$cluster.functions$killJob))
     skip("Test requires killJobs")
   ids = batchMap(reg = reg, Sys.sleep, c(20, 20))
+  ids$chunk = 1L
 
   silent({
     submitJobs(ids, reg = reg)

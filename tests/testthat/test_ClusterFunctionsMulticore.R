@@ -1,19 +1,29 @@
 context("cf multicore")
 
-# test_that("cf multicore", {
-#   skip_on_os("windows")
+test_that("cf multicore", {
+  skip_on_os("windows")
 
-#   reg = makeRegistry(file.dir = NA, make.default = FALSE)
-#   reg$cluster.functions = makeClusterFunctionsMulticore(2)
-#   ids = batchMap(Sys.sleep, time = c(2, 2), reg = reg)
-#   silent({
-#     submitJobs(1:2, reg = reg)
-#     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
-#     expect_true(waitForJobs(sleep = 0.2, expire.after = 1, reg = reg))
-#   })
-#   expect_data_table(findOnSystem(reg = reg), nrow = 0)
-#   expect_equal(findDone(reg = reg), findJobs(reg = reg))
-# })
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg$cluster.functions = makeClusterFunctionsMulticore(2)
+  ids = batchMap(Sys.sleep, time = c(2, 2), reg = reg)
+  silent({
+    submitJobs(1:2, reg = reg)
+    expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
+    expect_true(waitForJobs(sleep = 0.2, expire.after = 1, reg = reg))
+  })
+  expect_data_table(findOnSystem(reg = reg), nrow = 0)
+  expect_equal(findDone(reg = reg), findJobs(reg = reg))
+
+
+  # check that max.concurrent.jobs works
+  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg$cluster.functions = makeClusterFunctionsMulticore(2)
+  reg$max.concurrent.jobs = 1
+  ids = batchMap(Sys.sleep, time = c(2, 0), reg = reg)
+  submitAndWait(1:2, reg = reg)
+  tab = getJobStatus(reg = reg)
+  expect_true(diff(tab$started) > 1)
+})
 
 if (FALSE) {
   # Multicore cleans up finished processes
