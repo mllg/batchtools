@@ -8,6 +8,8 @@
   Instead, you can just access `reg$problems` or `reg$algorithms`, respectively.
 * Internal data base changes to speed up some operations.
   Old registries are updated on first load by `loadRegistry()`.
+* Fixed a bug where the sleep mechanism between queries was not working.
+* Fixed a bug where submit errors on SLURM and TORQUE were not detected as temporary.
 
 # batchtools 0.9.6
 
