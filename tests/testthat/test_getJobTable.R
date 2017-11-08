@@ -37,7 +37,7 @@ test_that("getJobTable.Registry", {
   submitAndWait(reg = reg, ids = s.chunk(ids), resources = list(my.walltime = 42L))
   addJobTags(2:3, "my_tag", reg = reg)
 
-  tab = flatten(getJobTable(reg = reg))
+  tab = getJobTable(reg = reg)
   expect_data_table(tab, key = "job.id")
   expect_copied(tab, reg$status)
   expect_is(tab$submitted, "POSIXct")
