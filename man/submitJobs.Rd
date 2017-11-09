@@ -52,18 +52,31 @@ to collect partial results.
 The progress can be monitored with \code{\link{getStatus}}.
 }
 \note{
+If you a large number of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
+can significantly increase the performance of \code{submitJobs}.
+}
+\section{Memory Measurement}{
+
 Setting the resource \code{measure.memory} to \code{TRUE} turns on memory measurement:
-\code{\link[base]{gc}} is called  directly before
-and after the job and the difference is stored in the internal database. Note that this is just a rough estimate and does
+\code{\link[base]{gc}} is called  directly before and after the job and the difference is
+stored in the internal database. Note that this is just a rough estimate and does
 neither work reliably for external code like C/C++ nor in combination with threading.
+}
+
+\section{Array Jobs}{
 
 If your cluster supports array jobs, you can set the resource \code{chunks.as.arrayjobs} to \code{TRUE} in order
 to execute chunks as job arrays. To do so, the job must be repeated \code{nrow(jobs)} times via the cluster functions template.
 The function \code{\link{doJobCollection}} (which is called on the slave) now retrieves the repetition number from the environment
 and restricts the computation to the respective job in the \code{\link{JobCollection}}.
+}
 
-Furthermore, the package provides support for inner parallelization using threading, sockets or MPI via the
-package \pkg{parallelMap}.
+\section{Inner Parallelization}{
+
+Inner parallelization is typically done via threading, sockets or MPI.
+Two backends are supported to assist in setting up inner parallelization.
+
+The first package is \pkg{parallelMap}.
 If you set the resource \dQuote{pm.backend} to \dQuote{multicore}, \dQuote{socket} or \dQuote{mpi},
 \code{\link[parallelMap]{parallelStart}} is called on the slave before the first job in the chunk is started
 and \code{\link[parallelMap]{parallelStop}} is called after the last job terminated.
@@ -72,14 +85,20 @@ This way, the used resources for inner parallelization are set in the same place
 The user function just has to call \code{\link[parallelMap]{parallelMap}} to start parallelization using the preconfigured backend.
 
 Note that you should set the resource \code{ncpus} to control the number of CPUs to use in \pkg{parallelMap}.
-\code{ncpus} defaults to the number of available CPUs (as reported by (see \code{\link[parallel]{detectCores}}))
+Otherwise \code{ncpus} defaults to the number of available CPUs (as reported by (see \code{\link[parallel]{detectCores}}))
 on the executing machine for multicore and socket mode and defaults to the return value of \code{\link[Rmpi]{mpi.universe.size}-1} for MPI.
 Your template must be set up to handle the parallelization, e.g. start R with \code{mpirun} or request the right number of CPUs.
 You may pass further options like \code{level} to \code{\link[parallelMap]{parallelStart}} via the named list \dQuote{pm.opts}.
 
-Also note that if you have thousands of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
-can significantly increase the performance of \code{submitJobs}.
+The second supported parallelization backend is \pkg{foreach}.
+If you set the resource \dQuote{foreach.backend} to \dQuote{seq} (sequential mode), \dQuote{parallel} (\pkg{doParallel}) or
+\dQuote{mpi} (\pkg{doMPI}), the requested \pkg{foreach} backend is automatically registered on the slave.
+Again, the resource \code{ncpus} is used to determine the number of CPUs.
+
+Neither the namespace of \pkg{parallelMap} nor the namespace \pkg{foreach} are attached.
+You have to do this manually via \code{\link[base]{library}} or let the registry load the packages for you.
 }
+
 \examples{
 ### Example 1: Using memory measurement
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)

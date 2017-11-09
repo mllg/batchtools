@@ -44,7 +44,10 @@ Imports:
     withr (>= 2.0.0)
 Suggests:
     debugme,
+    doParallel,
+    doMPI,
     e1071,
+    foreach,
     future.batchtools,
     knitr,
     parallelMap,

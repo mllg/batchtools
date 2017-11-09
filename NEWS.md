@@ -2,6 +2,7 @@
 
 * Added a workaround for a test to be compatible with testthat v2.0.0.
 * Better and more customizable handling of expired jobs in `waitForJobs()`.
+* Package `foreach` is now supported for nested parallelization as an alternative to `parallelMap`.
 * Depreciated argument flatten has been removed.
 * New helper function `flatten()` to manually unnest/unwrap lists in data frames.
 * Removed functions `getProblemIds()` and `getAlgorithmIds()`.
