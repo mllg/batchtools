@@ -13,7 +13,8 @@ makeTestRegistry = function(file.dir = NA, make.default = FALSE, ...) {
 
 makeTestExperimentRegistry = function(file.dir = NA, make.default = FALSE, ...) {
   reg = makeExperimentRegistry(file.dir = file.dir, make.default = make.default, ...)
-  reg.finalizer(e = reg, f = function(reg) unlink(reg$file.dir, recursive = TRUE), onexit = TRUE)
+  fd = reg$file.dir
+  reg.finalizer(e = reg, f = function(reg) unlink(fd, recursive = TRUE), onexit = TRUE)
   return(reg)
 }
 
