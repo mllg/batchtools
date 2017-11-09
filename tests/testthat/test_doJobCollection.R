@@ -2,7 +2,7 @@ context("doJobCollection")
 
 test_that("doJobCollection handles bulky log output", {
   N = 1e5
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(N) print(paste(rep("a", N), collapse = ""))
   batchMap(fun, N, reg = reg)
   jc = makeJobCollection(1, reg = reg)
@@ -10,11 +10,12 @@ test_that("doJobCollection handles bulky log output", {
   doJobCollection(jc, output = fn)
   lines = readLines(fn)
   expect_true(any(nchar(lines) >= N))
+  file.remove(fn)
 })
 
 test_that("doJobCollection truncates error messages", {
   N = 5000 # R truncates stop() at 2^13 chars
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(N) stop(paste(rep("a", N), collapse = ""))
   batchMap(fun, N, reg = reg)
   jc = makeJobCollection(1, reg = reg)
@@ -23,10 +24,11 @@ test_that("doJobCollection truncates error messages", {
   syncRegistry(reg = reg)
   msg = getErrorMessages(reg = reg)$message
   expect_true(stri_endswith_fixed(msg, " [truncated]"))
+  file.remove(fn)
 })
 
 test_that("doJobCollection does not swallow warning messages", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   reg$cluster.functions = makeClusterFunctionsInteractive(external = TRUE)
   fun = function(x) warning("GREPME")
   batchMap(fun, 1, reg = reg)
@@ -35,7 +37,7 @@ test_that("doJobCollection does not swallow warning messages", {
 })
 
 test_that("doJobCollection signals slave errors", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fn = tempfile(fileext = ".R", tmpdir = reg$temp.dir)
   reg$source = fn
   saveRegistry(reg)

@@ -1,7 +1,7 @@
 context("addAlgorithm")
 
 test_that("addAlgorithm", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
   expect_is(algo, "Algorithm")
   expect_equal(algo$name, "a1")
@@ -25,7 +25,7 @@ test_that("addAlgorithm", {
 
 
 test_that("addAlgorithm overwrites old algo", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) 2)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) instance * 2)
   ids = addExperiments(list(p1 = data.table()), list(a1 = data.table()), reg = reg)

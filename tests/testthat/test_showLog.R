@@ -1,7 +1,7 @@
 context("showLog/getLog")
 
 test_that("showLog/getLog", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   batchMap(function(x) print("GREPME"), 1:2, reg = reg)
   expect_error(showLog(id = 1, reg = reg), "not available")
   expect_error(readLog(id = data.table(job.id = 1L), reg = reg), "not available")
@@ -28,7 +28,7 @@ test_that("showLog/getLog", {
 })
 
 test_that("empty log files", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   batchMap(identity, 1, reg = reg)
   submitAndWait(reg)
 

@@ -7,7 +7,7 @@ test_that("clusterFunctions constructor", {
         "store.job.collection", "store.job.files", "array.var", "scheduler.latency", "fs.latency", "hooks"))
     expect_output(print(cf), "ClusterFunctions for mode")
   }
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   check(reg$cluster.functions)
   check(makeClusterFunctionsInteractive())
   check(makeClusterFunctionsSGE(template = "foo\n"))
@@ -60,7 +60,7 @@ test_that("brew", {
   assertCharacter(res, len = 2)
   expect_equal(sum(stri_detect_fixed(res, "job.hash")), 1)
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   ids = batchMap(identity, 1:2, reg = reg)
   jc = makeJobCollection(1, reg = reg)
   text = cfReadBrewTemplate(fn, comment.string = "###")
@@ -69,23 +69,25 @@ test_that("brew", {
   brewed = readLines(fn)
   expect_equal(brewed[1], "!!!")
   expect_equal(brewed[2], sprintf("foo=%s", jc$job.hash))
+  file.remove(fn)
 })
 
 test_that("Special chars in directory names", {
-  reg = makeRegistry(NA, make.default = FALSE)
+  reg = makeTestRegistry()
   base.dir = tempfile(pattern = "test", tmpdir = dirname(reg$file.dir))
   dir.create(base.dir, recursive = TRUE)
 
   file.dir = fp(base.dir, "test#some_frequently-used chars")
-  reg = makeRegistry(file.dir, make.default = FALSE)
+  reg = makeTestRegistry()
   batchMap(identity, 1:2, reg = reg)
   submitAndWait(reg = reg)
   expect_equal(reduceResultsList(reg = reg), list(1L, 2L))
   expect_equal(testJob(1, external = TRUE, reg = reg), 1L)
+  unlink(base.dir, recursive = TRUE)
 })
 
 test_that("Export of environment variable DEBUGME", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   if (reg$cluster.functions$name == "Socket")
     skip("Environment variables not exported for CF socket")
   batchMap(function(i) Sys.getenv("DEBUGME"), i = 1, reg = reg)

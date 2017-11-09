@@ -1,7 +1,7 @@
 context("batchMap")
 
 test_that("batchMap", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, more.args = list(x = 1), reg = reg)
   expect_data_table(ids, any.missing = FALSE, ncols = 1L, nrow = 3L, key = "job.id")
@@ -15,24 +15,24 @@ test_that("batchMap", {
   expect_data_table(reg$resources, nrow = 0L)
   expect_equal(reg$defs$job.pars[[1L]], list(i = 1))
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(...) list(...)
   ids = batchMap(fun, 1:3, more.args = list(j = 1), reg = reg)
   expect_equal(readRDS(fp(reg$file.dir, "more.args.rds")), list(j = 1))
   expect_equal(reg$defs$job.pars, lapply(1:3, list))
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(...) list(...)
   ids = batchMap(fun, args = list(1:3), more.args = list(j = 1), reg = reg)
   expect_equal(readRDS(fp(reg$file.dir, "more.args.rds")), list(j = 1))
   expect_equal(reg$defs$job.pars, lapply(1:3, list))
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, j = 1L, reg = reg)
   expect_identical(reg$defs$job.pars[[3L]], list(i = 3L, j = 1L))
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(...) list(...)
   cj = CJ(a = 1:3, b = letters[1:3])
   ids = batchMap(fun, args = cj, reg = reg)

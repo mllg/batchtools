@@ -1,7 +1,7 @@
 context("reduceResults")
 
 suppressMessages({
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(...) list(...)
   ids = batchMap(fun, a = 1:4, b = 4:1, reg = reg)
   submitAndWait(reg, 1:3)
@@ -14,7 +14,7 @@ test_that("loadResult", {
 })
 
 test_that("batchMapResults", {
-  target = makeRegistry(NA, make.default = FALSE)
+  target = makeTestRegistry()
   x = batchMapResults(target = target, function(x, c, d) x$a+x$b + c + d, c = 11:13, source = reg, more.args = list(d = 2))
   expect_data_table(x, nrow = 3, key = "job.id")
   expect_data_table(target$status, nrow = 3)
@@ -91,7 +91,7 @@ test_that("reduceResultsDataTable/flatten simple", {
 })
 
 suppressMessages({
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", fun = function(job, data, ...) 2, seed = 42)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq) instance^sq)
   ids = addExperiments(list(p1 = data.table()), list(a1 = data.table(sq = 1:3)), reg = reg)
@@ -117,7 +117,7 @@ test_that("reduceResultsList/BatchExperiments", {
 
 test_that("reduceResults with no results reg", {
   silent({
-    reg = makeRegistry(file.dir = NA, make.default = FALSE)
+    reg = makeTestRegistry()
 
     expect_equal(reduceResults(fun = c, reg = reg), NULL)
     expect_equal(reduceResults(fun = c, reg = reg, init = 42), 42)
@@ -133,7 +133,7 @@ test_that("reduceResults with no results reg", {
 })
 
 test_that("reduceResultsList/NULL", {
-  reg = makeRegistry(NA, make.default = FALSE)
+  reg = makeTestRegistry()
   f = function(...) NULL
   ids = batchMap(f, 1:3, reg = reg)
   submitAndWait(ids, reg = reg)
@@ -143,7 +143,7 @@ test_that("reduceResultsList/NULL", {
 
 test_that("reduceResultsDataTable/multiRowResults", {
   silent({
-    reg = makeRegistry(file.dir = NA, make.default = FALSE)
+    reg = makeTestRegistry()
     fun = function(a) data.table(y1 = rep(a, 3), y2 = rep(a/2, 3))
     ids = batchMap(fun, a = c(10, 100), reg = reg)
     submitAndWait(reg, ids)
@@ -155,7 +155,7 @@ test_that("reduceResultsDataTable/multiRowResults", {
 
 test_that("reduceResultsDataTable/flatten objects", {
   silent({
-    reg = makeRegistry(file.dir = NA, make.default = FALSE)
+    reg = makeTestRegistry()
     fun = function(...) iris
     ids = batchMap(fun, i = 1:2, reg = reg)
     submitAndWait(reg, 1:2)

@@ -4,6 +4,19 @@ library("checkmate")
 library("stringi")
 requireNamespace("withr")
 
+makeTestRegistry = function(file.dir = NA, make.default = FALSE, ...) {
+  reg = makeRegistry(file.dir = file.dir, make.default = make.default, ...)
+  fd = reg$file.dir
+  reg.finalizer(e = reg, f = function(reg) unlink(fd, recursive = TRUE), onexit = TRUE)
+  return(reg)
+}
+
+makeTestExperimentRegistry = function(file.dir = NA, make.default = FALSE, ...) {
+  reg = makeExperimentRegistry(file.dir = file.dir, make.default = make.default, ...)
+  reg.finalizer(e = reg, f = function(reg) unlink(reg$file.dir, recursive = TRUE), onexit = TRUE)
+  return(reg)
+}
+
 silent = function(expr) {
   withr::with_options(list(batchtools.progress = FALSE, batchtools.verbose = FALSE), expr)
 }

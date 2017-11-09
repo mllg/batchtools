@@ -1,7 +1,7 @@
 context("killJobs")
 
 test_that("killJobs", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   if (is.null(reg$cluster.functions$killJob))
     skip("Test requires killJobs")
 

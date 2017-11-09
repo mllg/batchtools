@@ -1,7 +1,7 @@
 context("grepLogs")
 
 silent({
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
+reg = makeTestRegistry()
 ids = batchMap(reg = reg, function(x) {
   if (x == 1) {
     print("FOOBAR: AAA")

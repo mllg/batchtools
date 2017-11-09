@@ -1,7 +1,7 @@
 context("addExperiments")
 
 test_that("addExperiments handles parameters correctly", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, x, y, ...) stopifnot(is.numeric(x) && is.character(y)), seed = 42)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, a, b, ...) { print(str(a)); assertList(a, len = 1, names = "named"); assertDataFrame(b); } )
   prob.designs = list(p1 = data.table(x = 1:2, y = letters[1:2]))
@@ -19,7 +19,7 @@ test_that("addExperiments handles parameters correctly", {
 })
 
 test_that("addExperiments creates default designs", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris)
   prob = addProblem(reg = reg, "p2", data = cars)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance) nrow(data))
@@ -31,7 +31,7 @@ test_that("addExperiments creates default designs", {
 })
 
 test_that("addExperiments / user provided designs", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   addProblem(reg = reg, "p1", data = iris, fun = function(...) list(...))
   addProblem(reg = reg, "p2", data = cars, fun = function(...) list(...))
   addAlgorithm(reg = reg, "a1", fun = function(...) list(...))
@@ -72,7 +72,7 @@ test_that("addExperiments / user provided designs", {
 })
 
 if (FALSE) {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
   addAlgorithm(reg = reg, "a2", fun = function(job, data, instance, ...) NULL)

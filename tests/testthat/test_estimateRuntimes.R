@@ -1,7 +1,7 @@
 context("estimateRuntimes")
 
 test_that("estimateRuntimes", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   addProblem(name = "iris", data = iris, fun = function(data, ...) nrow(data), reg = reg)
   addAlgorithm(name = "nrow", function(instance, ...) nrow(instance), reg = reg)
   addAlgorithm(name = "ncol", function(instance, ...) ncol(instance), reg = reg)

@@ -1,7 +1,7 @@
 context("getErrorMessages")
 
 test_that("getErrorMessages", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(i) if (i == 3) stop("foobar") else i
   ids = batchMap(fun, i = 1:5, reg = reg)
   submitAndWait(reg, 1:4)

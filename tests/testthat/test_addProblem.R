@@ -1,7 +1,7 @@
 context("addProblem")
 
 test_that("addProblem", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
   expect_is(prob, "Problem")
   expect_equal(prob$data, iris)

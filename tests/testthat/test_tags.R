@@ -1,7 +1,7 @@
 context("Tags")
 
 test_that("tags work", {
-  reg = makeRegistry(NA, make.default = FALSE)
+  reg = makeTestRegistry()
   batchMap(identity, 1:10, reg = reg)
   expect_data_table(addJobTags(1:4, "walltime", reg = reg), nrow = 4, key = "job.id")
   expect_data_table(addJobTags(3:7, "broken", reg = reg), nrow = 5, key = "job.id")

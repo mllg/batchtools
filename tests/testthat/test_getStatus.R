@@ -1,7 +1,7 @@
 context("getStatus")
 
 test_that("getStatus", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(i) if (i == 4) stop("4!") else i
   ids = batchMap(fun, i = 1:10, reg = reg)
   submitAndWait(reg, 1:5)

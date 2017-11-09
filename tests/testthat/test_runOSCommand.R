@@ -29,4 +29,5 @@ test_that("stdin", {
   res = runOSCommand("cat", stdin = tf)
   expect_identical(res$exit.code, 0L)
   expect_identical(res$output, letters)
+  unlink(tf)
 })

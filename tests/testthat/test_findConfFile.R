@@ -7,4 +7,5 @@ test_that("findConfFile", {
   withr::with_dir(d,
     expect_equal(findConfFile(), normalizePath(fn, winslash = "/"))
   )
+  file.remove(fn)
 })

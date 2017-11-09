@@ -3,7 +3,7 @@ context("cf multicore")
 test_that("cf multicore", {
   skip_on_os("windows")
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   reg$cluster.functions = makeClusterFunctionsMulticore(2)
   ids = batchMap(Sys.sleep, time = c(2, 2), reg = reg)
   silent({
@@ -16,7 +16,7 @@ test_that("cf multicore", {
 
 
   # check that max.concurrent.jobs works
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   reg$cluster.functions = makeClusterFunctionsMulticore(2)
   reg$max.concurrent.jobs = 1
   ids = batchMap(Sys.sleep, time = c(2, 0), reg = reg)
@@ -27,7 +27,7 @@ test_that("cf multicore", {
 
 if (FALSE) {
   # Multicore cleans up finished processes
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   batchMap(Sys.sleep, rep(0.8, 8), reg = reg)
   parallel::mccollect()
   p = self = Multicore$new(4)

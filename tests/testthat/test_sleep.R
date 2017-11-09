@@ -1,7 +1,7 @@
 context("getSleepFunction")
 
 test_that("getSleepFunction", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   f = getSleepFunction(reg, NULL)
   expect_function(f)
   expect_true(any(grepl("Sys.sleep", as.character(body(f)))))

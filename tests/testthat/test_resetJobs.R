@@ -1,7 +1,7 @@
 context("resetJobs")
 
 test_that("resetJobs", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   f = function(x, .job) if (x == 2) stop(2) else .job$external.dir
   batchMap(f, 1:3, reg = reg)
   before = list(
@@ -35,7 +35,7 @@ test_that("resetJobs", {
 
 
 test_that("functions produce error after resetting jobs", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   f = function(x, .job) if (x == 2) stop(2) else .job$external.dir
   batchMap(f, 1:3, reg = reg)
   submitAndWait(reg, 1:3)

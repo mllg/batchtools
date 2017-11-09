@@ -76,7 +76,7 @@ test_that("lpt", {
 })
 
 test_that("caching works", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   p1 = addProblem(reg = reg, "p1", data = iris)
   p2 = addProblem(reg = reg, "p2", data = data.frame(a = 1:10))
   a1 = addAlgorithm(reg = reg, name = "a1", fun = function(data, ...) nrow(data))
