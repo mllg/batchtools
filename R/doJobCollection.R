@@ -106,7 +106,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     ncpus = jc$resources$ncpus
 
     if (backend == "seq") {
-      doParallel::registerDoSeq()
+      foreach::registerDoSEQ()
     } else if (backend == "parallel") {
       if (!requireNamespace("doParallel", quietly = TRUE))
         return(error("Package 'doParallel' is not installed"))
