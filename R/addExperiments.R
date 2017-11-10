@@ -141,7 +141,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
       tab$pars.hash = calculateHash(tab)
 
       # merge with already defined experiments to get def.ids
-      tab = merge(reg$defs[, !c("problem", "prob.pars", "algorithm", "algo.pars")], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
+      tab = merge(reg$defs[, !c("problem", "algorithm", "prob.pars", "algo.pars")], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 
       # generate def ids for new experiments
       w = which(is.na(tab$def.id))
