@@ -55,12 +55,13 @@ The progress can be monitored with \code{\link{getStatus}}.
 If you a large number of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
 can significantly increase the performance of \code{submitJobs}.
 }
-\section{Memory Measurement}{
+\section{Limiting the number of jobs}{
 
-Setting the resource \code{measure.memory} to \code{TRUE} turns on memory measurement:
-\code{\link[base]{gc}} is called  directly before and after the job and the difference is
-stored in the internal database. Note that this is just a rough estimate and does
-neither work reliably for external code like C/C++ nor in combination with threading.
+If requested, \code{submitJobs} tries to limit the number of concurrent jobs of the user by waiting until jobs terminate
+before submitting new ones.
+This can be controlled by setting \dQuote{max.concurrent.jobs} in the configuration file (see \code{\link{Registry}})
+or by setting the resource \dQuote{max.concurrent.jobs} to the maximum number of jobs to run simultaneously.
+If both are set, the setting via the resource takes precedence over the setting in the configuration.
 }
 
 \section{Array Jobs}{
@@ -69,6 +70,14 @@ If your cluster supports array jobs, you can set the resource \code{chunks.as.ar
 to execute chunks as job arrays. To do so, the job must be repeated \code{nrow(jobs)} times via the cluster functions template.
 The function \code{\link{doJobCollection}} (which is called on the slave) now retrieves the repetition number from the environment
 and restricts the computation to the respective job in the \code{\link{JobCollection}}.
+}
+
+\section{Memory Measurement}{
+
+Setting the resource \code{measure.memory} to \code{TRUE} turns on memory measurement:
+\code{\link[base]{gc}} is called  directly before and after the job and the difference is
+stored in the internal database. Note that this is just a rough estimate and does
+neither work reliably for external code like C/C++ nor in combination with threading.
 }
 
 \section{Inner Parallelization}{

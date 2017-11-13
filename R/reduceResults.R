@@ -169,11 +169,12 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' addExperiments(prob.designs, algo.designs, reg = tmp)
 #' submitJobs(reg = tmp)
 #'
-#' # collect results and join them # with problem and algorithm paramters
-#' flatten(ijoin(
+#' # collect results and join them with problem and algorithm paramters
+#' res = ijoin(
 #'   getJobPars(reg = tmp),
 #'   reduceResultsDataTable(reg = tmp, fun = function(x) list(res = x))
-#' ), sep = ".")
+#' )
+#' flatten(res, sep = ".")
 reduceResultsList = function(ids = NULL, fun = NULL, ..., missing.val, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   assertFunction(fun, null.ok = TRUE)

@@ -50,7 +50,7 @@ batchtools$hooks = list(
     debugme::debugme()
     batchtools$debug = TRUE
   }
-  backports::import(pkgname, c("dir.exists", "hasName"))
+  backports::import(pkgname, c("dir.exists", "hasName", "...length"))
 } # nocov end
 
 .onUnload = function (libpath) { # nocov start

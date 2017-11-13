@@ -36,3 +36,6 @@ This function serializes all components to the file system and registers the alg
 \code{removeAlgorithm} removes all jobs from the registry which depend on the specific algorithm.
 \code{reg$algorithms} holds the IDs of already defined algorithms.
 }
+\seealso{
+\code{\link{Problem}}, \code{\link{addExperiments}}
+}

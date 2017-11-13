@@ -37,6 +37,7 @@
 #' @template expreg
 #' @return [\code{Problem}]. Object of class \dQuote{Problem} (invisibly).
 #' @aliases Problem
+#' @seealso \code{\link{Algorithm}}, \code{\link{addExperiments}}
 #' @export
 #' @examples
 #' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)

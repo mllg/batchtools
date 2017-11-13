@@ -7,6 +7,7 @@
 * New helper function `flatten()` to manually unnest/unwrap lists in data frames.
 * Removed functions `getProblemIds()` and `getAlgorithmIds()`.
   Instead, you can just access `reg$problems` or `reg$algorithms`, respectively.
+* The number of the maximum concurrent jobs can now also be controlled via setting resources.
 * Internal data base changes to speed up some operations.
   Old registries are updated on first load by `loadRegistry()`.
 * Fixed a bug where the sleep mechanism between queries was not working.
