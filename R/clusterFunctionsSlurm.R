@@ -60,16 +60,14 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
     output = stri_flatten(stri_trim_both(res$output), "\n")
 
     if (res$exit.code > 0L) {
-      if (nzchar(output)) {
-        temp.errors = c(
-          "Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)",
-          "Socket timed out on send/recv operation",
-          "Submission rate too high, suggest using job arrays"
+      temp.errors = c(
+        "Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)",
+        "Socket timed out on send/recv operation",
+        "Submission rate too high, suggest using job arrays"
         )
-        i = wf(stri_detect_fixed(output, temp.errors))
-        if (length(i) == 1L)
-          return(makeSubmitJobResult(status = i, batch.id = NA_character_, msg = temp.errors[i]))
-      }
+      i = wf(stri_detect_fixed(output, temp.errors))
+      if (length(i) == 1L)
+        return(makeSubmitJobResult(status = i, batch.id = NA_character_, msg = temp.errors[i]))
       return(cfHandleUnknownSubmitError("sbatch", res$exit.code, res$output))
     }
 

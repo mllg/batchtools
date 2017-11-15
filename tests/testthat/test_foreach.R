@@ -1,6 +1,7 @@
 context("foreach")
 
 test_that("foreach/seq", {
+  skip_if_not_installed("foreach")
   reg = makeTestRegistry(packages = "foreach")
   fun = function(i) {
     foreach(j = 1:i, .combine = c) %dopar% { j^2 }
