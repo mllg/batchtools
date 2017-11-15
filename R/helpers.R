@@ -37,7 +37,7 @@ file.remove.safely = function(x) {
 writeRDS = function(object, file) {
   file.remove.safely(file)
   saveRDS(object, file = file)
-  while(!file.exists(file)) Sys.sleep(0.5)
+  waitForFile(file, 300)
   invisible(TRUE)
 }
 
