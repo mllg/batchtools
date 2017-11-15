@@ -16,18 +16,24 @@
 #' to collect partial results.
 #' The progress can be monitored with \code{\link{getStatus}}.
 #'
-#'
-#' @section Memory Measurement:
-#' Setting the resource \code{measure.memory} to \code{TRUE} turns on memory measurement:
-#' \code{\link[base]{gc}} is called  directly before and after the job and the difference is
-#' stored in the internal database. Note that this is just a rough estimate and does
-#' neither work reliably for external code like C/C++ nor in combination with threading.
+#' @section Limiting the number of jobs:
+#' If requested, \code{submitJobs} tries to limit the number of concurrent jobs of the user by waiting until jobs terminate
+#' before submitting new ones.
+#' This can be controlled by setting \dQuote{max.concurrent.jobs} in the configuration file (see \code{\link{Registry}})
+#' or by setting the resource \dQuote{max.concurrent.jobs} to the maximum number of jobs to run simultaneously.
+#' If both are set, the setting via the resource takes precedence over the setting in the configuration.
 #'
 #' @section Array Jobs:
 #' If your cluster supports array jobs, you can set the resource \code{chunks.as.arrayjobs} to \code{TRUE} in order
 #' to execute chunks as job arrays. To do so, the job must be repeated \code{nrow(jobs)} times via the cluster functions template.
 #' The function \code{\link{doJobCollection}} (which is called on the slave) now retrieves the repetition number from the environment
 #' and restricts the computation to the respective job in the \code{\link{JobCollection}}.
+#'
+#' @section Memory Measurement:
+#' Setting the resource \code{measure.memory} to \code{TRUE} turns on memory measurement:
+#' \code{\link[base]{gc}} is called  directly before and after the job and the difference is
+#' stored in the internal database. Note that this is just a rough estimate and does
+#' neither work reliably for external code like C/C++ nor in combination with threading.
 #'
 #' @section Inner Parallelization:
 #' Inner parallelization is typically done via threading, sockets or MPI.
@@ -173,12 +179,13 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
     stopf("Some jobs are already on the system, e.g. %i", ids.on.sys[1L, ]$job.id)
 
   # handle max.concurrent.jobs
-  max.concurrent.jobs = NA_integer_
-  if (hasName(reg, "max.concurrent.jobs")) {
-    assertCount(reg$max.concurrent.jobs)
-    if (uniqueN(on.sys, by = "batch.id") + length(chunks) > reg$max.concurrent.jobs) {
-      "!DEBUG [submitJobs]: Limiting the number of concurrent jobs to `reg$max.concurrent.jobs`"
-      max.concurrent.jobs = reg$max.concurrent.jobs
+  max.concurrent.jobs = assertCount(resources$max.concurrent.jobs, null.ok = TRUE) %??%
+    assertCount(reg$max.concurrent.jobs, null.ok = TRUE) %??% NA_integer_
+  if (!is.na(max.concurrent.jobs)) {
+    if (uniqueN(on.sys, by = "batch.id") + length(chunks) > max.concurrent.jobs) {
+      "!DEBUG [submitJobs]: Limiting the number of concurrent jobs to `max.concurrent.jobs`"
+    } else {
+      max.concurrent.jobs = NA_integer_
     }
   }
 

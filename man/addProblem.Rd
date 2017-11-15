@@ -70,3 +70,6 @@ removeProblems("p1", reg = tmp)
 tmp$problems
 tmp$algorithms
 }
+\seealso{
+\code{\link{Algorithm}}, \code{\link{addExperiments}}
+}

@@ -88,11 +88,12 @@ algo.designs$deviation = data.table()
 addExperiments(prob.designs, algo.designs, reg = tmp)
 submitJobs(reg = tmp)
 
-# collect results and join them # with problem and algorithm paramters
-flatten(ijoin(
+# collect results and join them with problem and algorithm paramters
+res = ijoin(
   getJobPars(reg = tmp),
   reduceResultsDataTable(reg = tmp, fun = function(x) list(res = x))
-), sep = ".")
+)
+flatten(res, sep = ".")
 }
 \seealso{
 \code{\link{reduceResults}}

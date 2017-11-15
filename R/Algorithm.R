@@ -20,6 +20,7 @@
 #' @template expreg
 #' @return [\code{Algorithm}]. Object of class \dQuote{Algorithm}.
 #' @aliases Algorithm
+#' @seealso \code{\link{Problem}}, \code{\link{addExperiments}}
 #' @export
 addAlgorithm = function(name, fun = NULL, reg = getDefaultRegistry())  {
   assertExperimentRegistry(reg, writeable = TRUE)
