@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert Nested Data Frames to a Flat Representation — flatten • batchtools</title>
+<title>Unwrap Nested Data Frames — flatten • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -86,15 +86,15 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert Nested Data Frames to a Flat Representation</h1>
+    <h1>Unwrap Nested Data Frames</h1>
     </div>
 
     
     <p>Some functions (e.g., <code><a href='getJobTable.html'>getJobPars</a></code>, <code><a href='getJobTable.html'>getJobResources</a></code> or <code><a href='reduceResultsList.html'>reduceResultsDataTable</a></code>
 return a <code>data.table</code> with columns of type <code>list</code>.
 These columns can be unnested/unwrapped with this function.
-The values will be transformed to a <code>data.frame</code> and <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code>-ed to the input data.frame <code>x</code>,
-replacing the original nested column.</p>
+The contents of these columns  will be transformed to a <code>data.table</code> and <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code>-ed
+to the input data.frame <code>x</code>, replacing the original nested column.</p>
     
 
     <pre class="usage"><span class='fu'>flatten</span>(<span class='no'>x</span>, <span class='kw'>cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
@@ -104,7 +104,7 @@ replacing the original nested column.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>[<code>data.frame</code>]
+      <td><p>[<code>data.frame</code> | <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]
 Data frame to flatten.</p></td>
     </tr>
     <tr>
@@ -117,7 +117,8 @@ will operate on all columns of type &#8220;list&#8221;.</p></td>
       <th>sep</th>
       <td><p>[<code>character(1)</code>]
 If <code>NULL</code> (default), the column names of the additional columns will re-use the names
-of the inner <code>list</code>/<code>data.frame</code>.
+of the nested <code>list</code>/<code>data.frame</code>.
+This may lead to name clashes.
 If you provide <code>sep</code>, the variable column name will be constructed as
 &#8220;[column name of x][sep][inner name]&#8221;.</p></td>
     </tr>
@@ -125,7 +126,7 @@ If you provide <code>sep</code>, the variable column name will be constructed as
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>[<code>data.table</code>] where nested columns are replaced with flattened columns.</p>
+    <p>[<code>data.table</code>].</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
