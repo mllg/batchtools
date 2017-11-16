@@ -35,7 +35,7 @@ waitForFile = function(fn, timeout = NA_real_) {
     if (fn %chin% list.files(dirname(fn), all.files = TRUE))
       return(TRUE)
     if (Sys.time() > timeout)
-      stopf("Timeout while waiting for %i files, e.g. '%s'", length(fns), fns[1L])
+      stopf("Timeout while waiting for file '%s'", fn)
   }
 }
 

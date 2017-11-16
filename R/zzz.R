@@ -59,7 +59,7 @@ batchtools$hooks = list(
 
 .onAttach = function(libname, pkgname) {
   msg = paste(
-    "Breaking change in batchtools v0.9.6:",
+    "Breaking change in batchtools v0.9.7:",
     "The format of the returned data.table of the functions `reduceResultsDataTable()`, getJobTable()`, `getJobPars()`, and `getJobResources()` has changed.",
     "List columns are not unnested automatically anymore.",
     "To manually unnest tables, batchtools provides the helper function `flatten()` now, e.g. `flatten(getJobPars())`."
