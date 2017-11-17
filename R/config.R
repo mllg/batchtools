@@ -1,4 +1,11 @@
 findConfFile = function() {
+  x = Sys.getenv("R_BATCHTOOLS_SEARCH_PATH")
+  if (nzchar(x)) {
+    x = fp(x, "batchtools.conf.R")
+    if (file.exists(x))
+      return(normalizePath(x, winslash = "/"))
+  }
+
   x = "batchtools.conf.R"
   if (file.exists(x))
     return(normalizePath(x, winslash = "/"))
