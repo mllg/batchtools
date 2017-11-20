@@ -24,7 +24,9 @@ saveRegistry = function(reg = getDefaultRegistry()) {
   list2env(mget(chsetdiff(ls(reg), exclude), reg), ee)
   class(ee) = class(reg)
   writeRDS(ee, file = fn[1L])
-  file.rename(fn[1L], fn[2L])
+  ok = file.rename(fn[1L], fn[2L])
+  if (!ok)
+    stop("Renaming of '%s' -> '%s' failed", fn[1L], fn[2L])
   reg$mtime = file.mtime(fn[2L])
   invisible(TRUE)
 }
