@@ -45,7 +45,7 @@
 #'   Expected maximum latency of the file system, in seconds.
 #'   Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 #'   access files and directories.
-#'   Usually safe to set to \code{NA} which disables the expensive heuristic if you are working on a local file system.
+#'   Usually safe to set to \code{NA} to disable the heuristic, e.g. if you are working on a local file system.
 #' @param hooks [\code{list}]\cr
 #'   Named list of functions which will we called on certain events like \dQuote{pre.submit} or \dQuote{post.sync}.
 #'   See \link{Hooks}.
@@ -297,6 +297,13 @@ findTemplateFile = function(name) {
   if (stri_endswith_fixed(name, ".tmpl")) {
     assertFileExists(name, access = "r")
     return(name)
+  }
+
+  x = Sys.getenv("R_BATCHTOOLS_SEARCH_PATH")
+  if (nzchar(x)) {
+    x = fp(x, sprintf("batchtools.%s.tmpl", name))
+    if (file.exists(x))
+      return(normalizePath(x, winslash = "/"))
   }
 
   x = sprintf("batchtools.%s.tmpl", name)

@@ -98,3 +98,13 @@ test_that("Export of environment variable DEBUGME", {
   res = loadResult(1, reg = reg)
   expect_string(res, min.chars = 1, fixed = "grepme")
 })
+
+test_that("findTemplateFile", {
+  d = tempdir()
+  fn = fp(d, "batchtools.slurm.tmpl")
+  file.create(fn)
+  withr::with_envvar(list(R_BATCHTOOLS_SEARCH_PATH = d),
+    expect_equal(findTemplateFile("slurm"), normalizePath(fn, winslash = "/"))
+  )
+  file.remove(fn)
+})
