@@ -1,3 +1,18 @@
+# batchtools 0.9.7
+
+* Added a workaround for a test to be compatible with testthat v2.0.0.
+* Better and more customizable handling of expired jobs in `waitForJobs()`.
+* Package `foreach` is now supported for nested parallelization as an alternative to `parallelMap`.
+* Depreciated argument flatten has been removed.
+* New helper function `flatten()` to manually unnest/unwrap lists in data frames.
+* Removed functions `getProblemIds()` and `getAlgorithmIds()`.
+  Instead, you can just access `reg$problems` or `reg$algorithms`, respectively.
+* The number of the maximum concurrent jobs can now also be controlled via setting resources.
+* Internal data base changes to speed up some operations.
+  Old registries are updated on first load by `loadRegistry()`.
+* Fixed a bug where the sleep mechanism between queries was not working.
+* Fixed a bug where submit errors on SLURM and TORQUE were not detected as temporary.
+
 # batchtools 0.9.6
 
 * Fixed a bug where the wrong problem was retrieved from the cache. This was only triggered for chunked jobs in

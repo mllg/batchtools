@@ -1,7 +1,7 @@
 context("hooks")
 
 test_that("hooks", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   if (!is.null(reg$cluster.functions$hooks$pre.do.collection) || !is.null(reg$cluster.functions$hooks$post.sync))
     skip("Hooks already defined by Cluster Functions")
   reg$cluster.functions$hooks = insert(reg$cluster.functions$hooks, list(
@@ -17,7 +17,6 @@ test_that("hooks", {
 
   batchMap(identity, 1, reg = reg)
   submitAndWait(reg, 1)
-
   syncRegistry(reg = reg)
   expect_true(file.exists(fn.ps))
 

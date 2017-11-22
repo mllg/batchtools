@@ -1,7 +1,7 @@
 context("sweepRegistry")
 
 test_that("sweepRegistry", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   array.jobs = isTRUE(reg$default.resources$chunks.as.arrayjobs)
   batchMap(identity, 1, reg = reg)
 
@@ -23,7 +23,7 @@ test_that("sweepRegistry", {
   checkTables(reg)
 
 
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
   addExperiments(prob.designs = list(p1 = data.table(i = 1:10)), reg = reg)
@@ -38,7 +38,7 @@ test_that("sweepRegistry", {
 test_that("relative paths work (#113)", {
   skip_if_not(identical(Sys.getenv("R_EXPENSIVE_EXAMPLE_OK"), "1"))
   fd = sprintf("~/batchtools-test-%s", basename(tempfile("")))
-  reg = makeExperimentRegistry(file.dir = fd, make.default = FALSE)
+  reg = makeTestExperimentRegistry(file.dir = fd)
 
   problems = list("a", "b")
   pdes = lapply(problems, function(p) {

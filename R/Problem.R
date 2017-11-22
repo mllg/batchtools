@@ -11,7 +11,7 @@
 #' This function serialize all components to the file system and registers the problem in the \code{\link{ExperimentRegistry}}.
 #'
 #' \code{removeProblem} removes all jobs from the registry which depend on the specific problem.
-#' \code{getProblemIds} can be used to retrieve the IDs of already defined problems.
+#' \code{reg$problems} holds the IDs of already defined problems.
 #'
 #' @param name [\code{character(1)}]\cr
 #'   Unique identifier for the problem.
@@ -37,18 +37,21 @@
 #' @template expreg
 #' @return [\code{Problem}]. Object of class \dQuote{Problem} (invisibly).
 #' @aliases Problem
+#' @seealso \code{\link{Algorithm}}, \code{\link{addExperiments}}
 #' @export
 #' @examples
 #' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #' addProblem("p1", fun = function(job, data) data, reg = tmp)
 #' addProblem("p2", fun = function(job, data) job, reg = tmp)
-#' getProblemIds(reg = tmp)
-#'
 #' addAlgorithm("a1", fun = function(job, data, instance) instance, reg = tmp)
-#' getAlgorithmIds(reg = tmp)
 #'
-#' removeAlgorithms("a1", reg = tmp)
-#' getAlgorithmIds(reg = tmp)
+#' tmp$problems
+#' tmp$algorithms
+#'
+#' removeProblems("p1", reg = tmp)
+#'
+#' tmp$problems
+#' tmp$algorithms
 addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
   assertString(name, min.chars = 1L)
@@ -66,7 +69,7 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
   info("Adding problem '%s'", name)
   prob = setClasses(list(name = name, seed = seed, data = data, fun = fun), "Problem")
   writeRDS(prob, file = getProblemURI(reg, name))
-  reg$defs$problem = addlevel(reg$defs$problem, name)
+  reg$problems = union(reg$problems, name)
   saveRegistry(reg)
   invisible(prob)
 }
@@ -76,7 +79,7 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
 removeProblems = function(name, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE, running.ok = FALSE)
   assertCharacter(name, any.missing = FALSE)
-  assertSubset(name, levels(reg$defs$problem))
+  assertSubset(name, reg$problems)
 
   problem = NULL
   for (nn in name) {
@@ -87,16 +90,9 @@ removeProblems = function(name, reg = getDefaultRegistry()) {
     file.remove.safely(getProblemURI(reg, nn))
     reg$defs = reg$defs[!def.ids]
     reg$status = reg$status[!job.ids]
-    reg$defs$problem = rmlevel(reg$defs$problem, nn)
+    reg$problems = chsetdiff(reg$problems, nn)
   }
 
   sweepRegistry(reg)
   invisible(TRUE)
-}
-
-#' @export
-#' @rdname addProblem
-getProblemIds = function(reg = getDefaultRegistry()) {
-  assertExperimentRegistry(reg)
-  levels(reg$defs$problem)
 }

@@ -30,21 +30,20 @@ makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1
 
     outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("qsub", shQuote(outfile))
-
-    max.jobs.msg = "Maximum number of jobs already in queue"
     output = stri_flatten(stri_trim_both(res$output), "\n")
 
-    if (stri_detect_fixed(max.jobs.msg, output)) {
-      makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = max.jobs.msg)
-    } else if (res$exit.code > 0L) {
-      cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
+    if (res$exit.code > 0L) {
+      max.jobs.msg = "Maximum number of jobs already in queue"
+      if (stri_detect_fixed(output, max.jobs.msg) || res$exit.code == 228L)
+        return(makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = max.jobs.msg))
+      return(cfHandleUnknownSubmitError("qsub", res$exit.code, res$output))
+    }
+
+    if (jc$array.jobs) {
+      logs = sprintf("%s-%i", basename(jc$log.file), seq_row(jc$jobs))
+      makeSubmitJobResult(status = 0L, batch.id = stri_replace_first_fixed(output, "[]", stri_paste("[", seq_row(jc$jobs), "]")), log.file = logs)
     } else {
-      if (jc$array.jobs) {
-        logs = sprintf("%s-%i", basename(jc$log.file), seq_row(jc$jobs))
-        makeSubmitJobResult(status = 0L, batch.id = stri_replace_first_fixed(output, "[]", stri_paste("[", seq_row(jc$jobs), "]")), log.file = logs)
-      } else {
-        makeSubmitJobResult(status = 0L, batch.id = output)
-      }
+      makeSubmitJobResult(status = 0L, batch.id = output)
     }
   }
 

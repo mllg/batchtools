@@ -1,7 +1,7 @@
 context("addProblem")
 
 test_that("addProblem", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
   expect_is(prob, "Problem")
   expect_equal(prob$data, iris)
@@ -26,10 +26,9 @@ test_that("addProblem", {
 
   removeProblems(reg = reg, "p1")
   expect_integer(reg$status$job.id, len = 2L)
-  expect_set_equal(levels(reg$defs$problem), "p2")
-  expect_set_equal(getProblemIds(reg), "p2")
+  expect_set_equal("p2", reg$problems)
   expect_false(file.exists(getProblemURI(reg, "p1")))
   expect_true(file.exists(getProblemURI(reg, "p2")))
-  expect_set_equal(as.character(getJobPars(reg = reg)$problem), "p2")
+  expect_set_equal(getJobPars(reg = reg)$problem, "p2")
   checkTables(reg)
 })

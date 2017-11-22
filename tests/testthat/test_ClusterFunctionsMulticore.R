@@ -3,7 +3,7 @@ context("cf multicore")
 test_that("cf multicore", {
   skip_on_os("windows")
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   reg$cluster.functions = makeClusterFunctionsMulticore(2)
   ids = batchMap(Sys.sleep, time = c(2, 2), reg = reg)
   silent({
@@ -13,12 +13,21 @@ test_that("cf multicore", {
   })
   expect_data_table(findOnSystem(reg = reg), nrow = 0)
   expect_equal(findDone(reg = reg), findJobs(reg = reg))
+
+
+  # check that max.concurrent.jobs works
+  reg = makeTestRegistry()
+  reg$cluster.functions = makeClusterFunctionsMulticore(2)
+  reg$max.concurrent.jobs = 1
+  ids = batchMap(Sys.sleep, time = c(2, 0), reg = reg)
+  submitAndWait(1:2, reg = reg)
+  tab = getJobStatus(reg = reg)
+  expect_true(diff(tab$started) > 1)
 })
 
-test_that("Multicore cleans up finished processes", {
-  skip("Interactive test")
-
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+if (FALSE) {
+  # Multicore cleans up finished processes
+  reg = makeTestRegistry()
   batchMap(Sys.sleep, rep(0.8, 8), reg = reg)
   parallel::mccollect()
   p = self = Multicore$new(4)
@@ -36,4 +45,4 @@ test_that("Multicore cleans up finished processes", {
   p$collect(1)
   x = parallel::mccollect()
   expect_true(is.null(x))
-})
+}

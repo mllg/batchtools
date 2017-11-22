@@ -16,7 +16,7 @@ and defaults to the heuristic implemented in \code{\link[parallel]{detectCores}}
 Expected maximum latency of the file system, in seconds.
 Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 access files and directories.
-Usually safe to set to \code{NA} which disables the expensive heuristic if you are working on a local file system.}
+Usually safe to set to \code{NA} to disable the heuristic, e.g. if you are working on a local file system.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

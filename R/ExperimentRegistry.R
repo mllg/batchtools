@@ -24,12 +24,12 @@
 #' ids = addExperiments(reg = tmp, list(p1 = CJ(n = c(50, 100), mean = -2:2, sd = 1:4)))
 #'
 #' # Overview over defined experiments:
-#' getProblemIds(reg = tmp)
-#' getAlgorithmIds(reg = tmp)
+#' tmp$problems
+#' tmp$algorithms
 #' summarizeExperiments(reg = tmp)
 #' summarizeExperiments(reg = tmp, by = c("problem", "algorithm", "n"))
 #' ids = findExperiments(prob.pars = (n == 50), reg = tmp)
-#' getJobPars(ids, reg = tmp)
+#' print(flatten(getJobPars(ids, reg = tmp)))
 #'
 #' # Submit jobs
 #' submitJobs(reg = tmp)
@@ -42,8 +42,8 @@
 #' # Join info table with all results and calculate mean of results
 #' # grouped by n and algorithm
 #' ids = findDone(reg = tmp)
-#' pars = getJobPars(ids, reg = tmp)
-#' results = reduceResultsDataTable(ids, fun = function(res) list(res = res), reg = tmp)
+#' pars = flatten(getJobPars(ids, reg = tmp))
+#' results = flatten(reduceResultsDataTable(ids, fun = function(res) list(res = res), reg = tmp))
 #' tab = ljoin(pars, results)
 #' tab[, list(mres = mean(res)), by = c("n", "algorithm")]
 makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = findConfFile(), packages = character(0L), namespaces = character(0L),
@@ -55,9 +55,14 @@ makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), con
   dir.create(fp(reg$file.dir, "problems"))
   dir.create(fp(reg$file.dir, "algorithms"))
 
-  reg$status$repl = integer(0L)
-  reg$defs$problem = factor(character(0L))
-  reg$defs$algorithm = factor(character(0L))
+  reg$problems       = character(0L)
+  reg$algorithms     = character(0L)
+  reg$status$repl    = integer(0L)
+  reg$defs$problem   = character(0L)
+  reg$defs$algorithm = character(0L)
+  reg$defs$job.pars  = NULL
+  reg$defs$prob.pars = list()
+  reg$defs$algo.pars = list()
   reg$defs$pars.hash = character(0L)
   class(reg) = c("ExperimentRegistry", "Registry")
 

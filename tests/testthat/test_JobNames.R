@@ -1,7 +1,7 @@
 context("JobNames")
 
 test_that("setJobNames", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, reg = reg)
 

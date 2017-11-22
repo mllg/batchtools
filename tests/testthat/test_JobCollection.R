@@ -1,7 +1,7 @@
 context("JobCollection")
 
 test_that("makeJobCollection", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, reg = reg, more.args = list(x = 1))
 
@@ -16,7 +16,7 @@ test_that("makeJobCollection", {
   expect_list(jc$resources, names = "unique")
   expect_string(jc$uri)
   expect_directory(jc$work.dir)
-  expect_list(jc$jobs$pars)
+  expect_list(jc$jobs$job.pars)
   expect_string(jc$array.var, na.ok = TRUE)
   expect_flag(jc$array.jobs)
 
@@ -26,7 +26,7 @@ test_that("makeJobCollection", {
 
 test_that("makeJobCollection does not expand relative paths", {
   skip_on_os("windows")
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry(file.dir = NA, make.default = FALSE)
   batchMap(identity, 1, reg = reg)
   reg$file.dir = npath("~/foo", must.work = FALSE)
   reg$work.dir = npath("~/bar", must.work = FALSE)
@@ -38,7 +38,7 @@ test_that("makeJobCollection does not expand relative paths", {
 })
 
 test_that("makeJobCollection.ExperimentCollection", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   addProblem(reg = reg, "p1", fun = function(job, data, ...) list(data = data, ...))
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) length(instance))
   ids = addExperiments(list(p1 = data.table(i = 1:3)), list(a1 = data.table()), reg = reg)
@@ -53,9 +53,10 @@ test_that("makeJobCollection.ExperimentCollection", {
   expect_list(jc$resources, names = "unique")
   expect_string(jc$uri)
   expect_directory(jc$work.dir)
-  expect_list(jc$jobs$pars)
-  expect_factor(jc$jobs$problem)
-  expect_factor(jc$jobs$algorithm)
+  expect_list(jc$jobs$prob.pars)
+  expect_list(jc$jobs$algo.pars)
+  expect_character(jc$jobs$problem)
+  expect_character(jc$jobs$algorithm)
   expect_string(jc$array.var, na.ok = TRUE)
   expect_flag(jc$array.jobs)
 

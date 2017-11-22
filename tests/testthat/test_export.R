@@ -1,7 +1,7 @@
 context("Export")
 
 test_that("export works", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   x = batchExport(list(exported_obj = 42L), reg = reg)
   expect_data_table(x, nrow = 1, ncol = 2)
   expect_set_equal(names(x), c("name", "uri"))
@@ -29,7 +29,7 @@ test_that("export works", {
 
 
 test_that("export works with funny variable names", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   x = batchExport(list(`%bla%` = function(x, y, ...) 42), reg = reg)
   expect_data_table(x, nrow = 1, ncol = 2)
   expect_set_equal(names(x), c("name", "uri"))

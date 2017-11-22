@@ -37,7 +37,7 @@ file.remove.safely = function(x) {
 writeRDS = function(object, file) {
   file.remove.safely(file)
   saveRDS(object, file = file)
-  while(!file.exists(file)) Sys.sleep(0.5)
+  waitForFile(file, 300)
   invisible(TRUE)
 }
 
@@ -104,17 +104,6 @@ stopf = function (...) {
 
 setClasses = function(x, cl) {
   setattr(x, "class", cl)
-  x
-}
-
-addlevel = function(x, lvl) {
-  if (lvl %chnin% levels(x))
-    levels(x) = c(levels(x), lvl)
-  x
-}
-
-rmlevel = function(x, lvl) {
-  levels(x) = replace(levels(x), levels(x) == lvl, NA_character_)
   x
 }
 

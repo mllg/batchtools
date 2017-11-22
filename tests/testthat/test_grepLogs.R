@@ -1,14 +1,21 @@
 context("grepLogs")
 
 silent({
-reg = makeRegistry(file.dir = NA, make.default = FALSE)
+reg = makeTestRegistry()
 ids = batchMap(reg = reg, function(x) {
   if (x == 1) {
     print("FOOBAR: AAA")
   } else if (x == 2) {
     cat("FOOBAR: BBB")
   } else {
-    message("FOOBAR: CCC")
+    if (identical(Sys.getenv("TESTTHAT"), "true")) {
+      # testthat uses muffle restarts which breaks our internal
+      # sink() somehow.
+      # https://github.com/r-lib/testthat/issues/460
+      cat("FOOBAR: CCC", file = stderr())
+    } else {
+      message("FOOBAR: CCC")
+    }
   }
   invisible(NULL)
 }, x = 1:5)

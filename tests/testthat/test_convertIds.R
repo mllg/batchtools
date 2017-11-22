@@ -1,7 +1,7 @@
 context("convertIds helper")
 
 test_that("convertIds", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   batchMap(identity, 1:10, reg = reg)
   reg$status = reg$status[-3, ]
 

@@ -3,7 +3,7 @@ context("findJobs")
 none = noIds()
 
 test_that("find[Status]", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
 
   expect_equal(findJobs(reg = reg), none)
   expect_equal(findSubmitted(reg = reg), none)
@@ -51,7 +51,7 @@ test_that("find[Status]", {
 })
 
 test_that("Subsetting", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(i) if (i == 3) stop(i) else i
   ids = batchMap(fun, i = 1:5, reg = reg)
   submitAndWait(reg, ids)
@@ -65,7 +65,7 @@ test_that("Subsetting", {
 })
 
 test_that("findJobs", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(i, j) i + j
   ids = batchMap(fun, i = 1:5, j = c(2, 2, 3, 4, 4), reg = reg)
   all = reg$status[, "job.id"]
@@ -77,7 +77,7 @@ test_that("findJobs", {
 })
 
 test_that("findOnSystem", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   if (is.null(reg$cluster.functions$listJobsRunning))
     skip("Test requires listJobsRunning")
   silent({
@@ -90,7 +90,7 @@ test_that("findOnSystem", {
 })
 
 test_that("findExperiments", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", fun = function(job, data, n, ...) mean(runif(n)), seed = 42)
   prob = addProblem(reg = reg, "p2", data = iris, fun = function(job, data) nrow(data))
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq) instance^sq)

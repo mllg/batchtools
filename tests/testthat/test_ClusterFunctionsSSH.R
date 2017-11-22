@@ -4,7 +4,7 @@ test_that("cf ssh", {
   skip_on_os("windows")
   skip_on_cran()
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   if (reg$cluster.functions$name == "Interactive") {
     workers = list(Worker$new("localhost", ncpus = 2, max.load = 9999))
     reg$cluster.functions = makeClusterFunctionsSSH(workers)
@@ -25,7 +25,7 @@ test_that("cf ssh", {
 })
 
 if (FALSE) {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   workers = list(Worker$new("129.217.207.53"), Worker$new("localhost", ncpus = 1))
   reg$cluster.functions = makeClusterFunctionsSSH(workers)
   expect_equal(workers[[1L]]$ncpus, 4L)

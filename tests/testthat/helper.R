@@ -4,6 +4,20 @@ library("checkmate")
 library("stringi")
 requireNamespace("withr")
 
+makeTestRegistry = function(file.dir = NA, make.default = FALSE, ...) {
+  reg = makeRegistry(file.dir = file.dir, make.default = make.default, ...)
+  fd = reg$file.dir
+  reg.finalizer(e = reg, f = function(reg) unlink(fd, recursive = TRUE), onexit = TRUE)
+  return(reg)
+}
+
+makeTestExperimentRegistry = function(file.dir = NA, make.default = FALSE, ...) {
+  reg = makeExperimentRegistry(file.dir = file.dir, make.default = make.default, ...)
+  fd = reg$file.dir
+  reg.finalizer(e = reg, f = function(reg) unlink(fd, recursive = TRUE), onexit = TRUE)
+  return(reg)
+}
+
 silent = function(expr) {
   withr::with_options(list(batchtools.progress = FALSE, batchtools.verbose = FALSE), expr)
 }
@@ -32,11 +46,11 @@ checkTables = function(reg, ...) {
   expect_is(reg$mtime, "POSIXct")
 
   if (class(reg)[1L] == "Registry") {
-    cols = c("def.id", "pars")
+    cols = c("def.id",   "job.pars")
     types = c("integer", "list")
   } else {
-    cols = c("def.id", "pars", "problem", "algorithm", "pars.hash")
-    types = c("integer", "list", "factor", "factor", "character")
+    cols = c("def.id",   "problem",   "prob.pars", "algorithm", "algo.pars", "pars.hash")
+    types = c("integer", "character", "list",      "character", "list",      "character")
   }
   expect_is(reg$defs, "data.table")
   expect_data_table(reg$defs, ncols = length(cols), ...)
@@ -77,12 +91,14 @@ checkTables = function(reg, ...) {
 
   if (class(reg)[1L] == "ExperimentRegistry") {
     expect_integer(reg$status$repl, lower = 1L, any.missing = FALSE)
+    expect_subset(reg$defs$problem, reg$problems)
+    expect_subset(reg$defs$algorithm, reg$algorithms)
   }
 
-  expect_set_equal(reg$defs$def.id, reg$status$def.id)
-  expect_set_equal(na.omit(reg$status$resource.id), reg$resources$resource.id)
+  expect_key_set_equal(reg$defs, reg$status, by = "def.id")
+  expect_key_set_equal(reg$status[!is.na(resource.id)], reg$resources, by = "resource.id")
   if (nrow(reg$status) > 0L)
-    expect_subset(reg$tags$job.id, reg$status$job.id)
+    expect_data_table(ajoin(reg$tags, reg$status, by = "job.id"), nrow = 0)
   else
     expect_equal(nrow(reg$tags), 0)
 }
@@ -105,4 +121,8 @@ checkStatusIntegrity = function(reg) {
 
 expect_copied = function(x, y) {
   expect_false(data.table:::address(x) == data.table:::address(y))
+}
+
+expect_key_set_equal = function(x, y, by = NULL) {
+  expect_true(nrow(ajoin(x, y, by = by)) == 0 && nrow(ajoin(y, x, by = by)) == 0)
 }

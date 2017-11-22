@@ -1,7 +1,7 @@
 context("removeExperiments")
 
 test_that("removeExperiments", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) nrow(data), seed = 42)
   prob = addProblem(reg = reg, "p2", data = iris, fun = function(job, data) nrow(data), seed = 42)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq) instance^sq)
@@ -18,13 +18,13 @@ test_that("removeExperiments", {
   expect_data_table(removeExperiments(ids, reg = reg), nrow = 4, key = "job.id")
   expect_equal(findExperiments(reg = reg)$job.id, 6:N)
   expect_true(file.exists(getProblemURI(reg, "p1")))
-  expect_set_equal(levels(reg$defs$problem), c("p1", "p2"))
+  expect_set_equal(c("p1", "p2"), reg$problems)
 
   ids = findExperiments(algo.name = "a2", reg = reg)
   expect_data_table(removeExperiments(ids, reg = reg), nrow = 4, key = "job.id")
   expect_equal(findExperiments(reg = reg)$job.id, 6:(N-nrow(ids)))
   expect_true(file.exists(getAlgorithmURI(reg, "a2")))
-  expect_set_equal(levels(reg$defs$algorithm), c("a1", "a2"))
+  expect_set_equal(c("a1", "a2"), reg$algorithms)
 
   checkTables(reg)
 })

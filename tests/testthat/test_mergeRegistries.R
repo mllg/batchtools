@@ -1,7 +1,7 @@
 context("mergeRegistries")
 
 test_that("mergeRegistries", {
-  target = makeRegistry(NA, make.default = FALSE)
+  target = makeTestRegistry()
   f = function(.job, x) { if (x %in% c(2, 7)) file.create(fp(.job$external.dir, "foo")); x^2 }
   batchMap(f, 1:10, reg = target)
 
@@ -23,6 +23,8 @@ test_that("mergeRegistries", {
   checkTables(target)
 
   expect_set_equal(list.files(dir(target, "external")), as.character(c(2, 7)))
-  expect_equal(reduceResultsDataTable(reg = target)$V1, c(1,2,3,4,6,7,8,9)^2)
+  expect_equal(flatten(reduceResultsDataTable(reg = target))$result.1, c(1,2,3,4,6,7,8,9)^2)
   expect_file_exists(fp(target$file.dir, "external", c("2", "7"), "foo"))
+
+  unlink(td, recursive = TRUE)
 })

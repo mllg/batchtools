@@ -66,7 +66,7 @@
 #'
 #' # check what has been created
 #' summarizeExperiments(reg = tmp)
-#' getJobPars(reg = tmp)
+#' flatten(getJobPars(reg = tmp))
 addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, combine = "crossprod", reg = getDefaultRegistry()) {
   convertDesigns = function(type, designs, keywords) {
     check.factors = default.stringsAsFactors()
@@ -89,21 +89,19 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
 
   assertExperimentRegistry(reg, writeable = TRUE)
   if (is.null(prob.designs)) {
-    probs = levels(reg$defs$problem)
-    prob.designs = replicate(length(probs), data.table(), simplify = FALSE)
-    names(prob.designs) = probs
+    prob.designs = replicate(length(reg$problems), data.table(), simplify = FALSE)
+    names(prob.designs) = reg$problems
   } else {
     assertList(prob.designs, types = "data.frame", names = "named")
-    assertSubset(names(prob.designs), levels(reg$defs$problem))
+    assertSubset(names(prob.designs), reg$problems)
     prob.designs = convertDesigns("Problem", prob.designs, c("job", "data"))
   }
   if (is.null(algo.designs)) {
-    algos = levels(reg$defs$algorithm)
-    algo.designs = replicate(length(algos), data.table(), simplify = FALSE)
-    names(algo.designs) = algos
+    algo.designs = replicate(length(reg$algorithms), data.table(), simplify = FALSE)
+    names(algo.designs) = reg$algorithms
   } else {
     assertList(algo.designs, types = "data.frame", names = "named")
-    assertSubset(names(algo.designs), levels(reg$defs$algorithm))
+    assertSubset(names(algo.designs), reg$algorithms)
     algo.designs = convertDesigns("Algorithm", algo.designs, c("job", "data", "instance"))
   }
   repls = asCount(repls)
@@ -133,20 +131,17 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
 
       # create temp tab with prob name, algo name and pars as list
       tab = data.table(
-        pars = Map(function(pp, ap) list(prob.pars = pp, algo.pars = ap),
-          pp = if (nrow(pd) > 0L) .mapply(list, pd[idx$.i], list()) else list(list()),
-          ap = if (nrow(ad) > 0L) .mapply(list, ad[idx$.j], list()) else list(list())),
         problem = pn,
-        algorithm = an)
+        algorithm = an,
+        prob.pars = if (nrow(pd) > 0L) .mapply(list, pd[idx$.i], list()) else list(list()),
+        algo.pars = if (nrow(ad) > 0L) .mapply(list, ad[idx$.j], list()) else list(list())
+      )
 
       # create hash of each row of tab
-      tab$pars.hash = unlist(.mapply(function(...) digest(list(...)), tab, list()))
-
-      # FIXME: This would be slightly faster, but is not backward compatible
-      # tab[, pars.hash := digest(as.list(.SD)), by = 1:nrow(tab), .SDcols = names(tab)]
+      tab$pars.hash = calculateHash(tab)
 
       # merge with already defined experiments to get def.ids
-      tab = merge(reg$defs[, !c("pars", "problem", "algorithm")], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
+      tab = merge(reg$defs[, !c("problem", "algorithm", "prob.pars", "algo.pars")], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
 
       # generate def ids for new experiments
       w = which(is.na(tab$def.id))
@@ -174,4 +169,9 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
   setkeyv(reg$status, "job.id")
   saveRegistry(reg)
   invisible(data.table(job.id = all.ids, key = "job.id"))
+}
+
+calculateHash = function(tab) {
+  cols = c("problem", "algorithm", "prob.pars", "algo.pars")
+  unlist(.mapply(function(...) digest(list(...)), tab[, cols, with = FALSE], list()))
 }

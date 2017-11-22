@@ -1,7 +1,7 @@
 context("Job")
 
 test_that("Job", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, reg = reg, more.args = list(x = 1))
   submitAndWait(reg, 1, resources = list(foo = "bar"))
@@ -27,7 +27,7 @@ test_that("Job", {
 })
 
 test_that("Experiment", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   addProblem(reg = reg, "p1", fun = function(job, data, ...) list(data = data, ...))
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) length(instance))
   ids = addExperiments(list(p1 = data.table(i = 1:3)), list(a1 = data.table()), reg = reg)
@@ -56,13 +56,13 @@ test_that("Experiment", {
 })
 
 test_that("External directory is created", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   fun = function(..., .job) .job$external.dir
   ids = batchMap(fun, i = 1:3, reg = reg, more.args = list(x = 1))
   submitAndWait(reg)
-  expect_directory_exists(reduceResultsDataTable(1:3, reg = reg)[[2]])
+  expect_directory_exists(flatten(reduceResultsDataTable(1:3, reg = reg))[[2]])
 
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   addProblem(reg = reg, "p1", fun = function(job, data, ...) list(data = data, ...))
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) {
     saveRDS(job$id, file = fp(job$external.dir, sprintf("%s.rds", job$id)))

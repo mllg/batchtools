@@ -34,17 +34,20 @@ makeRegistry(file.dir = "registry", work.dir = getwd(),
 
 \item{conf.file}{[\code{character(1)}]\cr
   Path to a configuration file which is sourced while the registry is created.
-  For example, you can set cluster functions or default resources in it.
-  The script is executed inside the environment of the registry after the defaults for all variables are set,
-  thus you can set and overwrite slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources.
+  In the configuration file you can define how \pkg{batchtools} interacts with the system via \code{\link{ClusterFunctions}}.
+  Separating the configuration of the underlying host system from the R code allows to easily move computation to another site.
 
-  The file lookup defaults to a heuristic which first tries to read \dQuote{batchtools.conf.R} in the current working directory.
-  If not found, it looks for a configuration file \dQuote{config.R} in the OS dependent user configuration directory
-  as reported by via \code{rappdirs::user_config_dir("batchtools", expand = FALSE)} (e.g., on linux this
-  usually resolves to \dQuote{~/.config/batchtools/config.R}).
-  If this file is also not found, the heuristic finally tries to read the file \dQuote{.batchtools.conf.R} in the
-  home directory (\dQuote{~}).
-  Set to \code{character(0)} if you want to disable this heuristic.}
+  The file lookup is implemented in \code{findConfFile} which returns the first file found of the following candidates:
+  \enumerate{
+   \item{File \dQuote{batchtools.conf.R} in the path specified by the environment variable \dQuote{R_BATCHTOOLS_SEARCH_PATH}.}
+   \item{File \dQuote{batchtools.conf.R} in the current working directory.}
+   \item{File \dQuote{config.R} in the OS dependent user configuration directory as reported by via \code{rappdirs::user_config_dir("batchtools", expand = FALSE)} (e.g., on linux this usually resolves to \dQuote{~/.config/batchtools/config.R}).}
+   \item{\dQuote{.batchtools.conf.R} in the home directory (\dQuote{~}).}
+  }
+  Set to \code{character(0)} if you want to suppress reading any configuration file.
+  If a configuration file is found, it gets sourced inside the environment of the registry after the defaults for all variables are set.
+  Therefore you can set and overwrite slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources or \dQuote{max.concurrent.jobs} to
+  limit the number of jobs allowed to run simultaneously on the system.}
 
 \item{packages}{[\code{character}]\cr
 Packages that will always be loaded on each node.
@@ -86,7 +89,7 @@ Default is \code{TRUE}.}
     \item{\code{cluster.functions} [cluster.functions]:}{Usually set in your \code{conf.file}. Set via a call to \code{\link{makeClusterFunctions}}. See example.}
     \item{\code{default.resources} [named list()]:}{Usually set in your \code{conf.file}. Named list of default resources.}
     \item{\code{max.concurrent.jobs} [integer(1)]:}{Usually set in your \code{conf.file}. Maximum number of concurrent jobs for a single user and current registry on the system.
-      \code{\link{submitJobs}} will try to respect this setting.}
+      \code{\link{submitJobs}} will try to respect this setting. The resource \dQuote{max.concurrent.jobs} has higher precedence.}
     \item{\code{defs} [data.table]:}{Table with job definitions (i.e. parameters).}
     \item{\code{status} [data.table]:}{Table holding information about the computational status. Also see \code{\link{getJobStatus}}.}
     \item{\code{resources} [data.table]:}{Table holding information about the computational resources used for the job. Also see \code{\link{getJobResources}}.}
@@ -113,6 +116,14 @@ Canceled jobs and jobs submitted multiple times may leave stray files behind.
 These can be swept using \code{\link{sweepRegistry}}.
 \code{\link{clearRegistry}} completely erases all jobs from a registry, including log files and results,
 and thus allows you to start over.
+}
+\details{
+Currently \pkg{batchtools} understands the following options set via the configuration file:
+\describe{
+  \item{\code{cluster.functions}:}{As returned by a constructor, e.g. \code{\link{makeClusterFunctionsSlurm}}.}
+  \item{\code{default.resources}:}{List of resources to use. Will be overruled by resources specified via \code{\link{submitJobs}}.}
+  \item{\code{temp.dir}:}{Path to directory to use for temporary registries.}
+}
 }
 \examples{
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)

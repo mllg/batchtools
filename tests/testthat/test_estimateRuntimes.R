@@ -1,13 +1,13 @@
 context("estimateRuntimes")
 
 test_that("estimateRuntimes", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   addProblem(name = "iris", data = iris, fun = function(data, ...) nrow(data), reg = reg)
   addAlgorithm(name = "nrow", function(instance, ...) nrow(instance), reg = reg)
   addAlgorithm(name = "ncol", function(instance, ...) ncol(instance), reg = reg)
   addExperiments(algo.designs = list(nrow = CJ(x = 1:50, y = letters[1:5])), reg = reg)
   addExperiments(algo.designs = list(ncol = CJ(x = 1:50, y = letters[1:5])), reg = reg)
-  tab = getJobPars(reg = reg)
+  tab = flatten(getJobPars(reg = reg))
 
   ids = tab[, .SD[sample(nrow(.SD), 4)], by = c("problem", "algorithm", "y")]
   setkeyv(ids, "job.id")
@@ -33,6 +33,6 @@ test_that("estimateRuntimes", {
   expect_true(all(res[y == "a", t] > res[y %in% c("c", "d", "e"), t]))
 
   # remaining is suppressed if nothing more to submit, no error
-  res = estimateRuntimes(getJobPars(findDone(reg = reg), reg = reg), reg = reg)
+  res = estimateRuntimes(flatten(getJobPars(findDone(reg = reg), reg = reg)), reg = reg)
   expect_output(print(res, n = 2))
 })

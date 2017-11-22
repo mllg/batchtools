@@ -1,7 +1,7 @@
 context("testJob")
 
 test_that("testJob", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   f = function(x) if (x %% 2 == 0) stop("foo") else x^2
   batchMap(reg = reg, f, 1:3)
   expect_equal(testJob(reg = reg, id = 1), 1)
@@ -17,7 +17,7 @@ test_that("testJob", {
 })
 
 test_that("testJob.ExperimentRegistry", {
-  reg = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data), seed = 42)
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, sq, ...) instance^sq)
   ids = addExperiments(prob.designs = list(p1 = data.table()), algo.designs = list(a1 = data.table(sq = 1:3)), reg = reg)
@@ -29,7 +29,7 @@ test_that("testJob.ExperimentRegistry", {
 })
 
 test_that("traceback works in external session", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   f = function(x) {
     g = function(x) findme(x)
     findme = function(x) h(x)

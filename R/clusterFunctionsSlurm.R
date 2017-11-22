@@ -57,27 +57,27 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
     }
     outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("sbatch", shQuote(outfile), nodename = nodename)
-
-    max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
-    temp.error = "Socket timed out on send/recv operation"
     output = stri_flatten(stri_trim_both(res$output), "\n")
 
-    if (stri_detect_fixed(max.jobs.msg, output)) {
-      makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = max.jobs.msg)
-    } else if (stri_detect_fixed(temp.error, output)) {
-      # another temp error we want to catch
-      makeSubmitJobResult(status = 2L, batch.id = NA_character_, msg = temp.error)
-    } else if (res$exit.code > 0L) {
-      cfHandleUnknownSubmitError("sbatch", res$exit.code, res$output)
+    if (res$exit.code > 0L) {
+      temp.errors = c(
+        "Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)",
+        "Socket timed out on send/recv operation",
+        "Submission rate too high, suggest using job arrays"
+        )
+      i = wf(stri_detect_fixed(output, temp.errors))
+      if (length(i) == 1L)
+        return(makeSubmitJobResult(status = i, batch.id = NA_character_, msg = temp.errors[i]))
+      return(cfHandleUnknownSubmitError("sbatch", res$exit.code, res$output))
+    }
+
+    id = stri_split_fixed(output[1L], " ")[[1L]][4L]
+    if (jc$array.jobs) {
+      if (!array.jobs)
+        stop("Array jobs not supported by cluster function")
+      makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), log.file = logs)
     } else {
-      id = stri_split_fixed(output[1L], " ")[[1L]][4L]
-      if (jc$array.jobs) {
-        if (!array.jobs)
-          stop("Array jobs not supported by cluster function")
-        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", id, seq_row(jc$jobs)), log.file = logs)
-      } else {
-        makeSubmitJobResult(status = 0L, batch.id = id)
-      }
+      makeSubmitJobResult(status = 0L, batch.id = id)
     }
   }
 

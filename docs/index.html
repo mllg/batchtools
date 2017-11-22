@@ -29,7 +29,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="/index.html">
+  <a href="index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -62,9 +62,7 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-    <div id="batchtools" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#batchtools" class="anchor"></a>batchtools</h1></div>
+    <section class="level1"><div class="page-header"><h1>batchtools</h1></div>
 
 <p>As a successor of the packages <a href="https://github.com/tudo-r/BatchJobs">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a>, batchtools provides a parallel implementation of Map for high performance computing systems managed by schedulers like Slurm, Sun Grid Engine, OpenLava, TORQUE/OpenPBS, Load Sharing Facility (LSF) or Docker Swarm (see the setup section in the <a href="https://mllg.github.io/batchtools/articles/batchtools.html">vignette</a>).</p>
 <p>Main features:</p>
@@ -74,27 +72,19 @@
 <li>Reproducibility: Every computational part has an associated seed stored in a data base which ensures reproducibility even when the underlying batch system changes</li>
 <li>Abstraction: The code layers for algorithms, experiment definitions and execution are cleanly separated and allow to write readable and maintainable code to manage large scale computer experiments</li>
 </ul>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<section class="level2"><h2>Installation</h2>
 <p>Install the stable version from CRAN:</p>
 <pre class="{r}"><code>install.packages("batchtools")</code></pre>
 <p>For the development version, use <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
 <pre class="{r}"><code><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">devtools::install_github("mllg/batchtools")</a></code></pre>
-</div>
-<div id="why-batchtools" class="section level2">
-<h2 class="hasAnchor">
-<a href="#why-batchtools" class="anchor"></a>Why batchtools?</h2>
+</section><section class="level2"><h2>Why batchtools?</h2>
 <p>The development of <a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> is discontinued for the following reasons:</p>
 <ul>
 <li>Maintainability: The packages <a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> are tightly connected which makes maintenance difficult. Changes have to be synchronized and tested against the current CRAN versions for compatibility. Furthermore, BatchExperiments violates CRAN policies by calling internal functions of BatchJobs.</li>
-<li>Data base issues: Although we invested weeks to mitigate issues with locks of the SQLite data base or file system (staged queries, file system timeouts, …), <code>BatchJobs</code> kept working unreliable on some systems with high latency or specific file systems. This made <code>BatchJobs</code> unusable for many users.</li>
+<li>Data base issues: Although we invested weeks to mitigate issues with locks of the SQLite data base or file system (staged queries, file system timeouts, …), <code>BatchJobs</code> kept working unreliable on some systems with high latency under certain conditions. This made <code>BatchJobs</code> unusable for many users.</li>
 </ul>
 <p><a href="https://github.com/tudo-r/BatchJobs/">BatchJobs</a> and <a href="https://github.com/tudo-r/Batchexperiments">BatchExperiments</a> will remain on CRAN, but new features are unlikely to be ported back. The <a href="https://mllg.github.io/batchtools/articles/batchtools.html#migration">vignette</a> contains a section comparing the packages.</p>
-</div>
-<div id="resources" class="section level2">
-<h2 class="hasAnchor">
-<a href="#resources" class="anchor"></a>Resources</h2>
+</section><section class="level2"><h2>Resources</h2>
 <ul>
 <li><a href="https://mllg.github.io/batchtools/news/">NEWS</a></li>
 <li><a href="https://mllg.github.io/batchtools/reference">Function reference</a></li>
@@ -103,11 +93,7 @@
 <a href="http://dx.doi.org/10.21105/joss.00135">JOSS Paper</a>: Short paper on batchtools. Please cite this if you use batchtools.</li>
 <li>
 <a href="http://www.jstatsoft.org/v64/i11">Paper on BatchJobs/BatchExperiments</a>: The described concept still holds for batchtools and most examples work analogously (see the <a href="https://mllg.github.io/batchtools/articles/batchtools.html#migration">vignette</a> for differences between the packages).</li>
-</ul>
-</div>
-<div id="citation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#citation" class="anchor"></a>Citation</h2>
+</ul></section><section class="level2"><h2>Citation</h2>
 <p>Please cite the <a href="http://dx.doi.org/10.21105/joss.00135">JOSS paper</a> using the following BibTeX entry:</p>
 <pre><code>@article{,
   doi = {10.21105/joss.00135},
@@ -121,25 +107,23 @@
   title = {batchtools: Tools for R to work on batch systems},
   journal = {The Journal of Open Source Software}
 }</code></pre>
-</div>
-<div id="related-software" class="section level2">
-<h2 class="hasAnchor">
-<a href="#related-software" class="anchor"></a>Related Software</h2>
+</section><section class="level2"><h2>Related Software</h2>
 <ul>
-<li>The <a href="https://cran.r-project.org/view=HighPerformanceComputing">High Performance Computing Task View</a> lists the most relevant packages for scientific computing with R</li>
+<li>The <a href="https://cran.r-project.org/view=HighPerformanceComputing">High Performance Computing Task View</a> lists the most relevant packages for scientific computing with R.</li>
 <li>
-<a href="https://cran.r-project.org/package=batch">batch</a> assists in splitting and submitting jobs to LSF and MOSIX clusters</li>
+<a href="https://cran.r-project.org/package=batch">batch</a> assists in splitting and submitting jobs to LSF and MOSIX clusters.</li>
 <li>
-<a href="https://cran.r-project.org/package=flowr">flowr</a> supports LSF, Slurm, TORQUE and Moab and provides a scatter-gather approach to define computational jobs</li>
-</ul>
-</div>
-<div id="contributing-to-batchtools" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing-to-batchtools" class="anchor"></a>Contributing to batchtools</h2>
+<a href="https://cran.r-project.org/package=flowr">flowr</a> supports LSF, Slurm, TORQUE and Moab and provides a scatter-gather approach to define computational jobs.</li>
+<li>
+<a href="https://cran.r-project.org/package=future.batchtools">future.batchtools</a> implements <code>batchtools</code> as backend for <a href="https://cran.r-project.org/package=future.batchtools">future</a>.</li>
+<li>
+<a href="https://cran.r-project.org/package=doFuture">doFuture</a> together with <a href="https://cran.r-project.org/package=future.batchtools">future.batchtools</a> connects <code>batchtools</code> to <a href="https://cran.r-project.org/package=foreach">foreach</a>.</li>
+<li>
+<a href="https://cran.r-project.org/package=drake">drake</a> uses graphs to define computational jobs. <code>batchtools</code> is used as a backend via <a href="https://cran.r-project.org/package=future.batchtools">future.batchtools</a>.</li>
+</ul></section><section class="level2"><h2>Contributing to batchtools</h2>
 <p>This R package is licensed under the <a href="https://www.gnu.org/licenses/lgpl-3.0.en.html">LGPL-3</a>. If you encounter problems using this software (lack of documentation, misleading or wrong documentation, unexpected behaviour, bugs, …) or just want to suggest features, please open an issue in the <a href="https://github.com/mllg/batchtools/issues">issue tracker</a>. Pull requests are welcome and will be included at the discretion of the author. If you have customized a template file for your (larger) computing site, please share it: fork the repository, place your template in <code>inst/templates</code> and send a pull request.</p>
+</section></section>
 </div>
-</div>
-  </div>
 
   <div class="col-md-3" id="sidebar">
     <h2>Links</h2>
@@ -159,7 +143,8 @@
 </ul>
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Michel Lang <br><small class="roles"> Maintainer, author </small> </li>
+<li>Michel Lang <br><small class="roles"> Maintainer, author </small> <br><small>(0000-0001-9754-0393)</small>
+</li>
 <li>Bernd Bischl <br><small class="roles"> Author </small> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>

@@ -1,7 +1,7 @@
 context("Registry")
 
 test_that("makeRegistry", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   expect_is(reg, "Registry")
   expect_true(is.environment(reg))
   expect_directory(reg$file.dir, access = "rw")
@@ -16,7 +16,7 @@ test_that("makeRegistry", {
   expect_list(reg$default.resources, names = "strict")
   checkTables(reg, any.missing = FALSE, nrows = 0L)
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE, packages = "checkmate", seed = 123)
+  reg = makeTestRegistry(packages = "checkmate", seed = 123)
   expect_equal(reg$packages, "checkmate")
   expect_int(reg$seed)
   expect_identical(reg$seed, 123L)
@@ -27,17 +27,18 @@ test_that("makeRegistry", {
 test_that("reading conf file", {
   fn = tempfile("conf")
   writeLines(con = fn, "default.resources = list(walltime = 42)")
-  reg = makeRegistry(file.dir = NA, make.default = FALSE, conf.file = fn)
+  reg = makeTestRegistry(conf.file = fn)
   expect_identical(reg$default.resources, list(walltime = 42))
+  file.remove(fn)
 })
 
 test_that("make.default does work", {
   if (!interactive()) {
     setDefaultRegistry(NULL)
     expect_error(getDefaultRegistry(), "No default")
-    reg = makeRegistry(file.dir = NA, make.default = TRUE, seed = 123)
+    reg = makeTestRegistry(make.default = TRUE, seed = 123)
     expect_equal(reg$seed, 123L)
-    reg = makeRegistry(file.dir = NA, make.default = FALSE, seed = 124)
+    reg = makeTestRegistry(seed = 124)
     expect_equal(reg$seed, 124L)
     expect_equal(getDefaultRegistry()$seed, 123L)
 
@@ -60,36 +61,43 @@ test_that("extra files are loaded", {
   save(x_from_load, file = fn$load)
   rm(x_from_load)
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE, work.dir = wd, source = fn$source, load = fn$load)
+  reg = makeTestRegistry(work.dir = wd, source = fn$source, load = fn$load)
   expect_identical(get("x_from_source", .GlobalEnv), 123)
   expect_identical(get("x_from_load", .GlobalEnv), 321)
   rm("x_from_source", envir = .GlobalEnv)
   rm("x_from_load", envir = .GlobalEnv)
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE, work.dir = wd, source = basename(fn$source), load = fp("subdir", basename(fn$load)))
+  reg = makeTestRegistry(work.dir = wd, source = basename(fn$source), load = fp("subdir", basename(fn$load)))
   expect_identical(get("x_from_source", .GlobalEnv), 123)
   expect_identical(get("x_from_load", .GlobalEnv), 321)
   rm("x_from_source", envir = .GlobalEnv)
   rm("x_from_load", envir = .GlobalEnv)
+  unlink(wd, recursive = TRUE)
 })
 
 test_that("loadRegistry", {
-  reg1 = makeRegistry(file.dir = NA, make.default = FALSE)
-  fd = reg1$file.dir
-  setDefaultRegistry(NULL)
-  reg2 = loadRegistry(fd, make.default = FALSE, writeable = TRUE)
-  checkTables(reg1)
-  checkTables(reg2)
-  nn = union(ls(reg1, all.names = TRUE), ls(reg2, all.names = TRUE))
-  foo = lapply(nn, function(x) expect_equal(reg1[[x]], reg2[[x]], info = x))
-  expect_equal(reg1, reg2)
+  regs = list(
+    makeTestRegistry(),
+    makeTestExperimentRegistry()
+  )
+  for (reg1 in regs) {
+    fd = reg1$file.dir
+    setDefaultRegistry(NULL)
+    reg2 = loadRegistry(fd, make.default = FALSE, writeable = TRUE)
+    checkTables(reg1)
+    checkTables(reg2)
+    nms = union(ls(reg1, all.names = TRUE), ls(reg2, all.names = TRUE))
+    for (nm in nms)
+      expect_equal(reg1[[nm]], reg2[[nm]], info = nm)
+    expect_equal(reg1, reg2)
 
-  x = readRDS(fp(fd, "registry.rds"))
-  expect_null(x$cluster.functions)
+    x = readRDS(fp(fd, "registry.rds"))
+    expect_null(x$cluster.functions)
+  }
 })
 
 test_that("loadRegistry with missing dependencies is still usable (#122)", {
-  expect_warning(reg <- makeRegistry(file.dir = NA, make.default = FALSE, source = tempfile()), "Failed to source")
+  expect_warning(reg <- makeTestRegistry(source = tempfile()), "Failed to source")
   saveRegistry(reg)
   expect_warning(loadRegistry(reg$file.dir, writeable = TRUE), "Failed to source")
   batchMap(identity, 1, reg = reg)
@@ -97,7 +105,7 @@ test_that("loadRegistry with missing dependencies is still usable (#122)", {
 })
 
 test_that("loadRegistry after early node error still usable (#135)", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   batchMap(identity, 1:2, reg = reg)
   jc = makeJobCollection(1, reg = reg)
   jc$packages = "not_existing_package"
@@ -108,7 +116,7 @@ test_that("loadRegistry after early node error still usable (#135)", {
 })
 
 test_that("clearRegistry", {
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   reg$foo = TRUE
   ids = batchMap(identity, 1:3, reg = reg)
   addJobTags(1:2, "bar", reg = reg)

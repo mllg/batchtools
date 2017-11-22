@@ -47,5 +47,5 @@ execJob.Experiment = function(job) {
 
   catf("Applying algorithm '%s' on problem '%s' ...", job$algo.name, job$prob.name)
   wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, instance = instance, ...)
-  with_seed(job$seed, do.call(wrapper, job$pars$algo.pars, envir = .GlobalEnv))
+  with_seed(job$seed, do.call(wrapper, job$algo.pars, envir = .GlobalEnv))
 }

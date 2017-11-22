@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -156,7 +156,7 @@ Therefore, this function will warn about factor variables if the following condi
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry7c583f148a3c' using cluster functions 'Interactive'</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a36bc6ae0b' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># add first problem</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>...</span>) <span class='fu'>rnorm</span>(<span class='no'>n</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>sd</span>)
 <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"rnorm"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'rnorm'</span></div><div class='input'>
@@ -180,42 +180,42 @@ Therefore, this function will warn about factor variables if the following condi
 <span class='fu'>addExperiments</span>(<span class='no'>prob.designs</span>, <span class='no'>algo.designs</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 30 experiments ('rnorm'[15] x 'average'[2] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 15 experiments ('rnorm'[15] x 'deviation'[1] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 10 experiments ('rexp'[5] x 'average'[2] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 5 experiments ('rexp'[5] x 'deviation'[1] x repls[1]) ...</span></div><div class='input'>
 <span class='co'># check what has been created</span>
 <span class='fu'><a href='summarizeExperiments.html'>summarizeExperiments</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    problem algorithm .count
-#&gt;     &lt;fctr&gt;    &lt;fctr&gt;  &lt;int&gt;
+#&gt;     &lt;char&gt;    &lt;char&gt;  &lt;int&gt;
 #&gt; 1:   rnorm   average     30
 #&gt; 2:   rnorm deviation     15
 #&gt; 3:    rexp   average     10
-#&gt; 4:    rexp deviation      5</div><div class='input'><span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;     job.id problem algorithm     n  mean    sd method lambda
-#&gt;      &lt;int&gt;  &lt;fctr&gt;    &lt;fctr&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;char&gt;  &lt;int&gt;
-#&gt;  1:      1   rnorm   average   100    -1     1   mean     NA
-#&gt;  2:      2   rnorm   average   100    -1     1 median     NA
-#&gt;  3:      3   rnorm   average   100    -1     2   mean     NA
-#&gt;  4:      4   rnorm   average   100    -1     2 median     NA
-#&gt;  5:      5   rnorm   average   100    -1     3   mean     NA
-#&gt;  6:      6   rnorm   average   100    -1     3 median     NA
-#&gt;  7:      7   rnorm   average   100    -1     4   mean     NA
-#&gt;  8:      8   rnorm   average   100    -1     4 median     NA
-#&gt;  9:      9   rnorm   average   100    -1     5   mean     NA
-#&gt; 10:     10   rnorm   average   100    -1     5 median     NA
-#&gt; 11:     11   rnorm   average   100     0     1   mean     NA
-#&gt; 12:     12   rnorm   average   100     0     1 median     NA
-#&gt; 13:     13   rnorm   average   100     0     2   mean     NA
-#&gt; 14:     14   rnorm   average   100     0     2 median     NA
-#&gt; 15:     15   rnorm   average   100     0     3   mean     NA
-#&gt; 16:     16   rnorm   average   100     0     3 median     NA
-#&gt; 17:     17   rnorm   average   100     0     4   mean     NA
-#&gt; 18:     18   rnorm   average   100     0     4 median     NA
-#&gt; 19:     19   rnorm   average   100     0     5   mean     NA
-#&gt; 20:     20   rnorm   average   100     0     5 median     NA
-#&gt; 21:     21   rnorm   average   100     1     1   mean     NA
-#&gt; 22:     22   rnorm   average   100     1     1 median     NA
-#&gt; 23:     23   rnorm   average   100     1     2   mean     NA
-#&gt; 24:     24   rnorm   average   100     1     2 median     NA
-#&gt; 25:     25   rnorm   average   100     1     3   mean     NA
-#&gt; 26:     26   rnorm   average   100     1     3 median     NA
-#&gt; 27:     27   rnorm   average   100     1     4   mean     NA
-#&gt; 28:     28   rnorm   average   100     1     4 median     NA
-#&gt; 29:     29   rnorm   average   100     1     5   mean     NA
-#&gt; 30:     30   rnorm   average   100     1     5 median     NA
+#&gt; 4:    rexp deviation      5</div><div class='input'><span class='fu'><a href='flatten.html'>flatten</a></span>(<span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt;     job.id problem algorithm     n  mean    sd lambda method
+#&gt;      &lt;int&gt;  &lt;char&gt;    &lt;char&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt; &lt;char&gt;
+#&gt;  1:      1   rnorm   average   100    -1     1     NA   mean
+#&gt;  2:      2   rnorm   average   100    -1     1     NA median
+#&gt;  3:      3   rnorm   average   100    -1     2     NA   mean
+#&gt;  4:      4   rnorm   average   100    -1     2     NA median
+#&gt;  5:      5   rnorm   average   100    -1     3     NA   mean
+#&gt;  6:      6   rnorm   average   100    -1     3     NA median
+#&gt;  7:      7   rnorm   average   100    -1     4     NA   mean
+#&gt;  8:      8   rnorm   average   100    -1     4     NA median
+#&gt;  9:      9   rnorm   average   100    -1     5     NA   mean
+#&gt; 10:     10   rnorm   average   100    -1     5     NA median
+#&gt; 11:     11   rnorm   average   100     0     1     NA   mean
+#&gt; 12:     12   rnorm   average   100     0     1     NA median
+#&gt; 13:     13   rnorm   average   100     0     2     NA   mean
+#&gt; 14:     14   rnorm   average   100     0     2     NA median
+#&gt; 15:     15   rnorm   average   100     0     3     NA   mean
+#&gt; 16:     16   rnorm   average   100     0     3     NA median
+#&gt; 17:     17   rnorm   average   100     0     4     NA   mean
+#&gt; 18:     18   rnorm   average   100     0     4     NA median
+#&gt; 19:     19   rnorm   average   100     0     5     NA   mean
+#&gt; 20:     20   rnorm   average   100     0     5     NA median
+#&gt; 21:     21   rnorm   average   100     1     1     NA   mean
+#&gt; 22:     22   rnorm   average   100     1     1     NA median
+#&gt; 23:     23   rnorm   average   100     1     2     NA   mean
+#&gt; 24:     24   rnorm   average   100     1     2     NA median
+#&gt; 25:     25   rnorm   average   100     1     3     NA   mean
+#&gt; 26:     26   rnorm   average   100     1     3     NA median
+#&gt; 27:     27   rnorm   average   100     1     4     NA   mean
+#&gt; 28:     28   rnorm   average   100     1     4     NA median
+#&gt; 29:     29   rnorm   average   100     1     5     NA   mean
+#&gt; 30:     30   rnorm   average   100     1     5     NA median
 #&gt; 31:     31   rnorm deviation   100    -1     1     NA     NA
 #&gt; 32:     32   rnorm deviation   100    -1     2     NA     NA
 #&gt; 33:     33   rnorm deviation   100    -1     3     NA     NA
@@ -231,22 +231,22 @@ Therefore, this function will warn about factor variables if the following condi
 #&gt; 43:     43   rnorm deviation   100     1     3     NA     NA
 #&gt; 44:     44   rnorm deviation   100     1     4     NA     NA
 #&gt; 45:     45   rnorm deviation   100     1     5     NA     NA
-#&gt; 46:     46    rexp   average   100    NA    NA   mean      1
-#&gt; 47:     47    rexp   average   100    NA    NA median      1
-#&gt; 48:     48    rexp   average   100    NA    NA   mean      2
-#&gt; 49:     49    rexp   average   100    NA    NA median      2
-#&gt; 50:     50    rexp   average   100    NA    NA   mean      3
-#&gt; 51:     51    rexp   average   100    NA    NA median      3
-#&gt; 52:     52    rexp   average   100    NA    NA   mean      4
-#&gt; 53:     53    rexp   average   100    NA    NA median      4
-#&gt; 54:     54    rexp   average   100    NA    NA   mean      5
-#&gt; 55:     55    rexp   average   100    NA    NA median      5
-#&gt; 56:     56    rexp deviation   100    NA    NA     NA      1
-#&gt; 57:     57    rexp deviation   100    NA    NA     NA      2
-#&gt; 58:     58    rexp deviation   100    NA    NA     NA      3
-#&gt; 59:     59    rexp deviation   100    NA    NA     NA      4
-#&gt; 60:     60    rexp deviation   100    NA    NA     NA      5
-#&gt;     job.id problem algorithm     n  mean    sd method lambda</div></pre>
+#&gt; 46:     46    rexp   average   100    NA    NA      1   mean
+#&gt; 47:     47    rexp   average   100    NA    NA      1 median
+#&gt; 48:     48    rexp   average   100    NA    NA      2   mean
+#&gt; 49:     49    rexp   average   100    NA    NA      2 median
+#&gt; 50:     50    rexp   average   100    NA    NA      3   mean
+#&gt; 51:     51    rexp   average   100    NA    NA      3 median
+#&gt; 52:     52    rexp   average   100    NA    NA      4   mean
+#&gt; 53:     53    rexp   average   100    NA    NA      4 median
+#&gt; 54:     54    rexp   average   100    NA    NA      5   mean
+#&gt; 55:     55    rexp   average   100    NA    NA      5 median
+#&gt; 56:     56    rexp deviation   100    NA    NA      1     NA
+#&gt; 57:     57    rexp deviation   100    NA    NA      2     NA
+#&gt; 58:     58    rexp deviation   100    NA    NA      3     NA
+#&gt; 59:     59    rexp deviation   100    NA    NA      4     NA
+#&gt; 60:     60    rexp deviation   100    NA    NA      5     NA
+#&gt;     job.id problem algorithm     n  mean    sd lambda method</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

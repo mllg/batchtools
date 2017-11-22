@@ -28,10 +28,6 @@ RDSReader = R6Class("RDSReader",
       if (is.null(self$cache[[slot]]) || self$cache[[slot]]$uri != uri)
         self$cache[[slot]] = list(obj = read(uri), uri = uri)
       return(self$cache[[slot]]$obj)
-    },
-
-    clear = function() {
-      self$cache = list()
     }
   )
 )

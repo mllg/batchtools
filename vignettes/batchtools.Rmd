@@ -318,10 +318,10 @@ Note that using the `...` argument in the wrapper definitions allows us to circu
 This is an advantage if we later want to extend the set of algorithm parameters in the experiment.
 The algorithms get recorded in the registry and the corresponding functions are stored on the file system.
 
-Defined problems and algorithms can be queried:
+Defined problems and algorithms can be queried with:
 ```{r}
-getProblemIds()
-getAlgorithmIds()
+reg$problems
+reg$algorithms
 ```
 The flow to define experiments is summarized in the following figure:
 
@@ -393,13 +393,14 @@ waitForJobs()
 After jobs are finished, the results can be collected with [`reduceResultsDataTable()`](https://mllg.github.io/batchtools/reference/reduceResultsList) where we directly extract the mean misclassification error:
 ```{r}
 reduce = function(res) list(mce = (sum(res) - sum(diag(res))) / sum(res))
-results = reduceResultsDataTable(fun = reduce)
+results = flatten(reduceResultsDataTable(fun = reduce))
 head(results)
 ```
 
 Next, we merge the results table with the table of job parameters using one of the [join helpers](https://mllg.github.io/batchtools/reference/JoinTables) provided by `batchtools` (here, we use an inner join):
 ```{r}
-tab = ijoin(getJobPars(), results)
+pars = flatten(getJobPars())
+tab = ijoin(pars, results)
 head(tab)
 ```
 
@@ -507,8 +508,8 @@ After some jobs are finished, the `file.dir` can be copied back (do not merge wi
 
 This approach is totally viable as long as some general rules are followed:
 
-1. Make sure you have all packages installed. Package versions can be synchronized with [`checkpoint`](https://cran.r-project.org/package=checkpoint) or [`packrat`](https://cran.r-project.org/package=packrat).
-2. Test jobs on the remote system before submitting to ensure that paths are resolved correctly.
+1. Make sure you have all packages installed. Package versions can be synchronized across machines with [`checkpoint`](https://cran.r-project.org/package=checkpoint) or [`packrat`](https://cran.r-project.org/package=packrat).
+2. Test jobs on the remote system prior to submit to ensure that paths are resolved correctly.
 3. Make sure you have set the cluster functions in a configuration file, and stick to one backend as long as jobs are running.
 4. The status can only be monitored on the remote system (for obvious reasons).
 5. Partial results can be inspected both on the remote system and on the local system.
@@ -516,6 +517,7 @@ This approach is totally viable as long as some general rules are followed:
    Overwriting/merging directories is not advised as this may lead to inconsistencies if you added or removed experiments on the remote.
    If you have to merge, use `rsync` with option `--delete`.
    Load the registry locally with [`loadRegistry()`](https://mllg.github.io/batchtools/reference/loadRegistry) and collect results. Do not copy back and forth.
-6. Never access the `file.dir` with multiple sessions simultaneously.
-   Also never mount the file dir to work with it in a local R session.
-   This may lead to inconsistencies and missing results.
+6. Avoid accessing the `file.dir` with multiple sessions simultaneously.
+   This includes accessing the registry via a mount!
+   Simultaneous access may lead to inconsistencies and missing results.
+

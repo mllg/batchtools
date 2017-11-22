@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -150,16 +150,40 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Setting the resource <code>measure.memory</code> to <code>TRUE</code> turns on memory measurement:
-<code><a href='http://www.rdocumentation.org/packages/base/topics/gc'>gc</a></code> is called  directly before
-and after the job and the difference is stored in the internal database. Note that this is just a rough estimate and does
-neither work reliably for external code like C/C++ nor in combination with threading.</p>
-<p>If your cluster supports array jobs, you can set the resource <code>chunks.as.arrayjobs</code> to <code>TRUE</code> in order
+    <p>If you a large number of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
+can significantly increase the performance of <code>submitJobs</code>.</p>
+    
+    <h2 class="hasAnchor" id="limiting-the-number-of-jobs"><a class="anchor" href="#limiting-the-number-of-jobs"></a>Limiting the number of jobs</h2>
+
+    
+    <p>If requested, <code>submitJobs</code> tries to limit the number of concurrent jobs of the user by waiting until jobs terminate
+before submitting new ones.
+This can be controlled by setting &#8220;max.concurrent.jobs&#8221; in the configuration file (see <code><a href='makeRegistry.html'>Registry</a></code>)
+or by setting the resource &#8220;max.concurrent.jobs&#8221; to the maximum number of jobs to run simultaneously.
+If both are set, the setting via the resource takes precedence over the setting in the configuration.</p>
+    
+    <h2 class="hasAnchor" id="array-jobs"><a class="anchor" href="#array-jobs"></a>Array Jobs</h2>
+
+    
+    <p>If your cluster supports array jobs, you can set the resource <code>chunks.as.arrayjobs</code> to <code>TRUE</code> in order
 to execute chunks as job arrays. To do so, the job must be repeated <code>nrow(jobs)</code> times via the cluster functions template.
 The function <code><a href='doJobCollection.html'>doJobCollection</a></code> (which is called on the slave) now retrieves the repetition number from the environment
 and restricts the computation to the respective job in the <code><a href='JobCollection.html'>JobCollection</a></code>.</p>
-<p>Furthermore, the package provides support for inner parallelization using threading, sockets or MPI via the
-package <span class="pkg">parallelMap</span>.
+    
+    <h2 class="hasAnchor" id="memory-measurement"><a class="anchor" href="#memory-measurement"></a>Memory Measurement</h2>
+
+    
+    <p>Setting the resource <code>measure.memory</code> to <code>TRUE</code> turns on memory measurement:
+<code><a href='http://www.rdocumentation.org/packages/base/topics/gc'>gc</a></code> is called  directly before and after the job and the difference is
+stored in the internal database. Note that this is just a rough estimate and does
+neither work reliably for external code like C/C++ nor in combination with threading.</p>
+    
+    <h2 class="hasAnchor" id="inner-parallelization"><a class="anchor" href="#inner-parallelization"></a>Inner Parallelization</h2>
+
+    
+    <p>Inner parallelization is typically done via threading, sockets or MPI.
+Two backends are supported to assist in setting up inner parallelization.</p>
+<p>The first package is <span class="pkg">parallelMap</span>.
 If you set the resource &#8220;pm.backend&#8221; to &#8220;multicore&#8221;, &#8220;socket&#8221; or &#8220;mpi&#8221;,
 <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStart'>parallelStart</a></code> is called on the slave before the first job in the chunk is started
 and <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStop'>parallelStop</a></code> is called after the last job terminated.
@@ -167,17 +191,21 @@ This way, the used resources for inner parallelization are set in the same place
 <span class="pkg">batchtools</span> and all resources get stored together in the <code><a href='makeRegistry.html'>Registry</a></code>.
 The user function just has to call <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></code> to start parallelization using the preconfigured backend.</p>
 <p>Note that you should set the resource <code>ncpus</code> to control the number of CPUs to use in <span class="pkg">parallelMap</span>.
-<code>ncpus</code> defaults to the number of available CPUs (as reported by (see <code><a href='http://www.rdocumentation.org/packages/parallel/topics/detectCores'>detectCores</a></code>))
+Otherwise <code>ncpus</code> defaults to the number of available CPUs (as reported by (see <code><a href='http://www.rdocumentation.org/packages/parallel/topics/detectCores'>detectCores</a></code>))
 on the executing machine for multicore and socket mode and defaults to the return value of <code><a href='http://www.rdocumentation.org/packages/Rmpi/topics/mpi.universe.size'>mpi.universe.size</a>-1</code> for MPI.
 Your template must be set up to handle the parallelization, e.g. start R with <code>mpirun</code> or request the right number of CPUs.
 You may pass further options like <code>level</code> to <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStart'>parallelStart</a></code> via the named list &#8220;pm.opts&#8221;.</p>
-<p>Also note that if you have thousands of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
-can significantly increase the performance of <code>submitJobs</code>.</p>
+<p>The second supported parallelization backend is <span class="pkg">foreach</span>.
+If you set the resource &#8220;foreach.backend&#8221; to &#8220;seq&#8221; (sequential mode), &#8220;parallel&#8221; (<span class="pkg">doParallel</span>) or
+&#8220;mpi&#8221; (<span class="pkg">doMPI</span>), the requested <span class="pkg">foreach</span> backend is automatically registered on the slave.
+Again, the resource <code>ncpus</code> is used to determine the number of CPUs.</p>
+<p>Neither the namespace of <span class="pkg">parallelMap</span> nor the namespace <span class="pkg">foreach</span> are attached.
+You have to do this manually via <code><a href='http://www.rdocumentation.org/packages/base/topics/library'>library</a></code> or let the registry load the packages for you.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>### Example 1: Using memory measurement</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry7c5825291232' using cluster functions 'Interactive'</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a33b922919' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Toy function which creates a large matrix and returns the column sums</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>n</span>, <span class='no'>p</span>) <span class='fu'>colMeans</span>(<span class='fu'>matrix</span>(<span class='fu'>runif</span>(<span class='no'>n</span>*<span class='no'>p</span>), <span class='no'>n</span>, <span class='no'>p</span>))
 
@@ -198,21 +226,21 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
 <span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='input'>
 <span class='co'># Retrive information about memory, combine with parameters</span>
 <span class='no'>info</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='fu'><a href='getJobTable.html'>getJobStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>memory</span>)], <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
-<span class='fu'>print</span>(<span class='no'>info</span>)</div><div class='output co'>#&gt;    job.id memory     n     p
+<span class='fu'>print</span>(<span class='fu'><a href='flatten.html'>flatten</a></span>(<span class='no'>info</span>))</div><div class='output co'>#&gt;    job.id memory     n     p
 #&gt;     &lt;int&gt;  &lt;num&gt; &lt;num&gt; &lt;num&gt;
-#&gt; 1:      1  112.1 1e+04    10
-#&gt; 2:      2  117.1 1e+04    50
-#&gt; 3:      3  124.3 1e+05    10
-#&gt; 4:      4  185.4 1e+05    50</div><div class='input'>
+#&gt; 1:      1  110.9 1e+04    10
+#&gt; 2:      2  116.9 1e+04    50
+#&gt; 3:      3  124.5 1e+05    10
+#&gt; 4:      4  185.2 1e+05    50</div><div class='input'>
 <span class='co'># Combine job info with results -&gt; each job is aggregated using mean()</span>
-<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt;    job.id memory     n     p       res
+<span class='fu'><a href='flatten.html'>flatten</a></span>(<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)))</div><div class='output co'>#&gt;    job.id memory     n     p       res
 #&gt;     &lt;int&gt;  &lt;num&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;
-#&gt; 1:      1  112.1 1e+04    10 0.5006977
-#&gt; 2:      2  117.1 1e+04    50 0.4992960
-#&gt; 3:      3  124.3 1e+05    10 0.5002269
-#&gt; 4:      4  185.4 1e+05    50 0.5001242</div><div class='input'>
+#&gt; 1:      1  110.9 1e+04    10 0.5000194
+#&gt; 2:      2  116.9 1e+04    50 0.4998074
+#&gt; 3:      3  124.5 1e+05    10 0.4997022
+#&gt; 4:      4  185.2 1e+05    50 0.5001358</div><div class='input'>
 <span class='co'>### Example 2: Multicore execution on the slave</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry7c584b914847' using cluster functions 'Interactive'</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a337f60a59' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Function which sleeps 10 seconds, i-times</span>
 <span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
   <span class='kw pkg'>parallelMap</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></span>(<span class='no'>Sys.sleep</span>, <span class='fu'>rep</span>(<span class='fl'>10</span>, <span class='no'>i</span>))
@@ -244,6 +272,14 @@ can significantly increase the performance of <code>submitJobs</code>.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#note">Note</a></li>
+
+      <li><a href="#limiting-the-number-of-jobs">Limiting the number of jobs</a></li>
+
+      <li><a href="#array-jobs">Array Jobs</a></li>
+
+      <li><a href="#memory-measurement">Memory Measurement</a></li>
+
+      <li><a href="#inner-parallelization">Inner Parallelization</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

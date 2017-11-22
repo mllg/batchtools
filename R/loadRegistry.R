@@ -31,6 +31,7 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
   assertFlag(writeable)
 
   # read registry
+  info("Reading registry in read-%s mode", ifelse(writeable, "write", "only"))
   file.dir = npath(file.dir)
   reg = readRegistry(file.dir)
 
@@ -62,7 +63,6 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
     saveRegistry(reg)
   return(reg)
 }
-
 
 readRegistry = function(file.dir) {
   fn.old = fp(file.dir, "registry.rds")

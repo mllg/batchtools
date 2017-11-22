@@ -4,14 +4,11 @@
 \alias{addAlgorithm}
 \alias{Algorithm}
 \alias{removeAlgorithms}
-\alias{getAlgorithmIds}
 \title{Define Algorithms for Experiments}
 \usage{
 addAlgorithm(name, fun = NULL, reg = getDefaultRegistry())
 
 removeAlgorithms(name, reg = getDefaultRegistry())
-
-getAlgorithmIds(reg = getDefaultRegistry())
 }
 \arguments{
 \item{name}{[\code{character(1)}]\cr
@@ -37,17 +34,8 @@ function defined in \code{\link{Problem}}) and return an arbitrary R object.
 This function serializes all components to the file system and registers the algorithm in the \code{\link{ExperimentRegistry}}.
 
 \code{removeAlgorithm} removes all jobs from the registry which depend on the specific algorithm.
-\code{getAlgorithmIds} can be used to retrieve the IDs of already algorithms.
+\code{reg$algorithms} holds the IDs of already defined algorithms.
 }
-\examples{
-tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
-addProblem("p1", fun = function(job, data) data, reg = tmp)
-addProblem("p2", fun = function(job, data) job, reg = tmp)
-getProblemIds(reg = tmp)
-
-addAlgorithm("a1", fun = function(job, data, instance) instance, reg = tmp)
-getAlgorithmIds(reg = tmp)
-
-removeAlgorithms("a1", reg = tmp)
-getAlgorithmIds(reg = tmp)
+\seealso{
+\code{\link{Problem}}, \code{\link{addExperiments}}
 }

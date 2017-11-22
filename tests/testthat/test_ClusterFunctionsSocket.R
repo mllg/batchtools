@@ -4,7 +4,7 @@ test_that("cf socket", {
   skip_if_not_installed("snow")
   # skip_on_travis()
 
-  reg = makeRegistry(file.dir = NA, make.default = FALSE)
+  reg = makeTestRegistry()
   reg$cluster.functions = makeClusterFunctionsSocket(2)
   ids = batchMap(Sys.sleep, time = c(5, 5), reg = reg)
   silent({

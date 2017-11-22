@@ -1,13 +1,13 @@
 #' @title Map Operation for Batch Systems
 #'
 #' @description
-#' A parallel and asynchronous \code{\link[base]{Map}} for batch systems.
+#' A parallel and asynchronous \code{\link[base]{Map}}/\code{\link[base]{mapply}} for batch systems.
 #' Note that this function only defines the computational jobs.
 #' The actual computation is started with \code{\link{submitJobs}}.
 #' Results and partial results can be collected with \code{\link{reduceResultsList}}, \code{\link{reduceResults}} or
 #' \code{\link{loadResult}}.
 #'
-#' For a synchronous \code{\link[base]{Map}}-like execution see \code{\link{btmapply}}.
+#' For a synchronous \code{\link[base]{Map}}-like execution, see \code{\link{btmapply}}.
 #'
 #' @param fun [\code{function}]\cr
 #'   Function to map over arguments provided via \code{...}.
@@ -64,7 +64,7 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
   assertList(more.args, names = "strict")
 
   if (length(args) > 0L) {
-    if (length(list(...)) > 0L)
+    if (...length() > 0L)
       stop("You may only provide arguments via '...' *or* 'args'")
     ddd = list2dt(args)
   } else {
@@ -84,9 +84,9 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
   ids = seq_row(ddd)
 
   reg$defs = data.table(
-    def.id = ids,
-    pars   = .mapply(list, dots = ddd, MoreArgs = list()),
-    key    = "def.id")
+    def.id   = ids,
+    job.pars = .mapply(list, dots = ddd, MoreArgs = list()),
+    key      = "def.id")
 
   reg$status = data.table(
     job.id      = ids,

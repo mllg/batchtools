@@ -1,7 +1,7 @@
 getSleepFunction = function(reg, sleep) {
   if (is.null(sleep)) {
     if (is.null(reg$sleep))
-      return(function(i) { 5 + 115 * pexp(i - 1, rate = 0.01) })
+      return(function(i) { Sys.sleep(5 + 115 * pexp(i - 1, rate = 0.01)) })
     sleep = reg$sleep
   }
 

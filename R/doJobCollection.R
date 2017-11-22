@@ -82,12 +82,12 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   local_dir(jc$work.dir)
 
   # load registry dependencies: packages, source files, ...
-  # note that this should happen _before_ parallelMap is initialized
+  # note that this should happen _before_ parallelMap or foreach is initialized
   ok = try(loadRegistryDependencies(jc, must.work = TRUE), silent = TRUE)
   if (is.error(ok))
     return(error("Error loading registry dependencies: %s", as.character(ok)))
 
-  # setup inner parallelization
+  # setup inner parallelization with parallelMap
   if (hasName(jc$resources, "pm.backend")) {
     if (!requireNamespace("parallelMap", quietly = TRUE))
       return(error("parallelMap not installed"))
@@ -96,6 +96,31 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     on.exit(parallelMap::parallelStop(), add = TRUE)
     pm.opts = parallelMap::parallelGetOptions()$settings
     catf("### [bt %s]: Using %i CPUs for parallelMap/%s on level '%s'", s, pm.opts$cpus, pm.opts$mode, if (is.na(pm.opts$level)) "default" else pm.opts$level)
+  }
+
+  # setup inner parallelization with foreach
+  if (hasName(jc$resources, "foreach.backend")) {
+    if (!requireNamespace("foreach", quietly = TRUE))
+      return(error("Package 'foreach' is not installed"))
+    backend = jc$resources$foreach.backend
+    ncpus = jc$resources$ncpus
+
+    if (backend == "seq") {
+      foreach::registerDoSEQ()
+    } else if (backend == "parallel") {
+      if (!requireNamespace("doParallel", quietly = TRUE))
+        return(error("Package 'doParallel' is not installed"))
+      doParallel::registerDoParallel(cores = ncpus)
+    } else if (backend == "mpi") {
+      if (!requireNamespace("doMPI", quietly = TRUE))
+        return(error("Package 'doMPI' is not installed"))
+      cl = doMPI::startMPIcluster(count = ncpus)
+      doMPI::registerDoMPI(cl)
+      on.exit(doMPI::closeCluster(cl), add = TRUE)
+    } else {
+      return(error("Unknwon foreach backend: '%s'", backend))
+    }
+    catf("### [bt %s]: Using %i CPUs for foreach/%s", s, ncpus, backend)
   }
 
   # setup memory measurement

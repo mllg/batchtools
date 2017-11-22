@@ -4,15 +4,12 @@
 \alias{addProblem}
 \alias{Problem}
 \alias{removeProblems}
-\alias{getProblemIds}
 \title{Define Problems for Experiments}
 \usage{
 addProblem(name, data = NULL, fun = NULL, seed = NULL,
   reg = getDefaultRegistry())
 
 removeProblems(name, reg = getDefaultRegistry())
-
-getProblemIds(reg = getDefaultRegistry())
 }
 \arguments{
 \item{name}{[\code{character(1)}]\cr
@@ -57,17 +54,22 @@ This instance is then typically passed to a learning algorithm like a wrapper ar
 This function serialize all components to the file system and registers the problem in the \code{\link{ExperimentRegistry}}.
 
 \code{removeProblem} removes all jobs from the registry which depend on the specific problem.
-\code{getProblemIds} can be used to retrieve the IDs of already defined problems.
+\code{reg$problems} holds the IDs of already defined problems.
 }
 \examples{
 tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 addProblem("p1", fun = function(job, data) data, reg = tmp)
 addProblem("p2", fun = function(job, data) job, reg = tmp)
-getProblemIds(reg = tmp)
-
 addAlgorithm("a1", fun = function(job, data, instance) instance, reg = tmp)
-getAlgorithmIds(reg = tmp)
 
-removeAlgorithms("a1", reg = tmp)
-getAlgorithmIds(reg = tmp)
+tmp$problems
+tmp$algorithms
+
+removeProblems("p1", reg = tmp)
+
+tmp$problems
+tmp$algorithms
+}
+\seealso{
+\code{\link{Algorithm}}, \code{\link{addExperiments}}
 }

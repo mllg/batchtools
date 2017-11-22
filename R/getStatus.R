@@ -59,15 +59,15 @@ getStatusTable = function(ids = NULL, batch.ids = getBatchIds(reg = reg), reg = 
 
 #' @export
 print.Status = function(x, ...) {
-  fmt = sprintf("  %%-10s: %%%ii (%%5.1f%%%%)", stri_width(x$defined))
+  fmt = sprintf("  %%-13s: %%%ii (%%5.1f%%%%)", stri_width(x$defined))
   pr = function(label, h) catf(fmt, label, h, h / x$defined * 100)
 
   catf("Status for %i jobs:", x$defined)
   pr("Submitted", x$submitted)
-  pr("Started", x$started)
-  pr("Done", x$done)
-  pr("Error", x$error)
-  pr("Queued", x$queued)
-  pr("Running", x$running)
-  pr("Expired", x$expired)
+  pr("-- Queued", x$queued)
+  pr("-- Started", x$started)
+  pr("---- Running", x$running)
+  pr("---- Done", x$done)
+  pr("---- Error", x$error)
+  pr("---- Expired", x$expired)
 }

@@ -28,16 +28,20 @@
 #' @param stop.on.error [\code{logical(1)}]\cr
 #'   Immediately cancel if a job terminates with an error? Default is
 #'   \code{FALSE}.
+#' @param stop.on.expire [\code{logical(1)}]\cr
+#'   Immediately cancel if jobs are detected to be expired? Default is \code{FALSE}.
+#'   Expired jobs will then be ignored for the remainder of \code{waitForJobs()}.
 #' @template reg
 #' @return [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated
 #'   successfully and \code{FALSE} if either the timeout is reached or at least
-#'   one job terminated with an exception.
+#'   one job terminated with an exception or expired.
 #' @export
-waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after = 3L, stop.on.error = FALSE, reg = getDefaultRegistry()) {
+waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after = 3L, stop.on.error = FALSE, stop.on.expire = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = FALSE, sync = TRUE)
   assertNumber(timeout, lower = 0)
   assertCount(expire.after, positive = TRUE)
   assertFlag(stop.on.error)
+  assertFlag(stop.on.expire)
   sleep = getSleepFunction(reg, sleep)
   ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
 
@@ -56,17 +60,17 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
   ids$expire.counter = 0L
 
   timeout = Sys.time() + timeout
-  pb = makeProgressBar(total = nrow(ids), format = "Waiting (S::system R::running D::done E::error) [:bar] :percent eta: :eta")
+  pb = makeProgressBar(total = nrow(ids), format = "Waiting (Q::queued R::running D::done E::error ?::expired) [:bar] :percent eta: :eta")
   i = 0L
 
   repeat {
-    ### case 1: all jobs terminated -> nothing on system
+    ### case 1: all jobs terminated or expired -> nothing on system
     ids[.findTerminated(reg, ids), "terminated" := TRUE]
-    if (ids[!(terminated), .N] == 0L) {
+    if (ids[!(terminated) & expire.counter <= expire.after, .N] == 0L) {
       "!DEBUG [waitForJobs]: All jobs terminated"
       pb$update(1)
       waitForResults(reg, ids)
-      return(nrow(.findErrors(reg, ids)) == 0L)
+      return(nrow(.findDone(reg, ids)) == nrow(ids))
     }
 
     ### case 2: there are errors and stop.on.error is TRUE
@@ -78,14 +82,15 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
 
     batch.ids = getBatchIds(reg)
     ids[, "on.sys" := FALSE][.findOnSystem(reg, ids, batch.ids = batch.ids), "on.sys" := TRUE]
+    ids[(on.sys), "expire.counter" := 0L]
     ids[!(on.sys) & !(terminated), "expire.counter" := expire.counter + 1L]
     stats = getStatusTable(ids = ids, batch.ids = batch.ids, reg = reg)
     pb$update(mean(ids$terminated), tokens = as.list(stats))
     "!DEBUG [waitForJobs]: batch.ids: `stri_flatten(batch.ids$batch.id, ',')`"
 
-    ### case 3: jobs disappeared, we cannot find them on the system in [expire.after] iterations
-    if (ids[!(terminated) & expire.counter > expire.after, .N] > 0L) {
-      warning("Some jobs disappeared from the system")
+    ### case 3: jobs disappeared, we cannot find them on the system after [expire.after] iterations
+    if (stop.on.expire && ids[!(terminated) & expire.counter > expire.after, .N] > 0L) {
+      warning("Jobs disappeared from the system")
       pb$update(1)
       waitForResults(reg, ids)
       return(FALSE)
