@@ -8,14 +8,18 @@
 #'   Additional arguments passed to \dQuote{docker} *before* the command (\dQuote{run}, \dQuote{ps} or \dQuote{kill}) to execute (e.g., the docker host).
 #' @param image.args [\code{character}]\cr
 #'   Additional arguments passed to \dQuote{docker run} (e.g., to define mounts or environment variables).
+#' @param docker.scheduler.url [\code{character}]\cr
+#'   URL of the docker scheduler API.
 #' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), image.args = character(0L), scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), image.args = character(0L), scheduler.latency = 1, fs.latency = 65, docker.scheduler.url = "https://s876cnsm:2350/v1.30") { # nocov start
   assertString(image)
   assertCharacter(docker.args, any.missing = FALSE)
   assertCharacter(image.args, any.missing = FALSE)
+  docker.scheduler.url = stri_replace_all_regex("test", "\\/$", replacement = "")
+  assertCharacter(docker.scheduler.url, any.missing = FALSE)
   user = Sys.info()["user"]
 
   submitJob = function(reg, jc) {
@@ -49,10 +53,10 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
   listJobs = function(reg) {
     if (!requireNamespace("jsonlite", quietly = TRUE))
       stop("Package 'jsonlite' is required")
-    tab = jsonlite::fromJSON(sprintf("http://s876cnsm:2376/v1.21/jobs/%s/json", user))
+    tab = jsonlite::fromJSON(sprintf("%s/jobs/%s/json", docker.scheduler.url, user))
     if (length(tab) == 0L)
       return(data.table(id = integer(0L), batch.id = character(0L), toSchedule = logical(0)))
-    tab = as.data.table(tab[, c("id", "containerName", "toSchedule")])[containerName %chin% reg$status$batch.id]
+    tab = as.data.table(tab[, c("id", "containerName", "toSchedule")])[get("containerName") %chin% reg$status$batch.id]
     setnames(tab, "containerName", "batch.id")
     tab[]
   }
@@ -61,18 +65,18 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
     if (!requireNamespace("RCurl", quietly = TRUE))
       stop("Package 'RCurl' is required")
     id = listJobs(reg)[batch.id == batch.id]$id
-    res = RCurl::httpDELETE(sprintf("http://s876cnsm:2376/v1.21/jobs/%i/delete", id))
+    res = RCurl::httpDELETE(sprintf("%s/jobs/%i/delete", docker.scheduler.url, id))
     stri_startswith_fixed(res, "Successfully deleted")
   }
 
   listJobsRunning = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    listJobs(reg)[toSchedule == FALSE]$batch.id
+    listJobs(reg)[get("toSchedule") == FALSE]$batch.id
   }
 
   listJobsQueued = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    listJobs(reg)[toSchedule == TRUE]$batch.id
+    listJobs(reg)[get("toSchedule") == TRUE]$batch.id
   }
 
 
