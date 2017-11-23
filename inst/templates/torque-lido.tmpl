@@ -22,7 +22,7 @@ queue = c("short", "med", "long", "ultralong")[wf(resources$walltime <= walltime
 modules.default = c(binutils = "binutils/2.25", gcc = "gcc/4.9.3", openblas = "openblas/0.2.17")
 modules = resources$modules
 for (i in seq_along(modules.default)) {
-  if (!any(grepl(names(modules.default[i]), modules))) {
+  if (!any(grepl(paste0("^", names(modules.default[i]), "/?[0-9\\.]*$"), modules))) {
     modules = paste(modules, modules.default[i])
   }
 }
