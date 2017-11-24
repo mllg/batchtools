@@ -37,14 +37,6 @@ getExternalDirs = function(reg, ids) {
   fp(dir(reg, "external"), if (is.atomic(ids)) ids else ids$job.id)
 }
 
-getProblemURI = function(reg, name) {
-  fp(dir(reg, "problems"), mangle(name))
-}
-
-getAlgorithmURI = function(reg, name) {
-  fp(dir(reg, "algorithms"), mangle(name))
-}
-
 mangle = function(x) {
   sprintf("%s.rds", base32_encode(x, use.padding = FALSE))
 }
