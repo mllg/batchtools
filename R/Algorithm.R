@@ -63,3 +63,7 @@ removeAlgorithms = function(name, reg = getDefaultRegistry()) {
   sweepRegistry(reg)
   invisible(TRUE)
 }
+
+getAlgorithmURI = function(reg, name) {
+  fp(dir(reg, "algorithms"), mangle(name))
+}

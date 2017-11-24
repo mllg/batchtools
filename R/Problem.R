@@ -34,6 +34,11 @@
 #'   see \code{\link{ExperimentRegistry}}.
 #'   If \code{seed} is set to \code{NULL} (default), the job seed is used to instantiate the problem and
 #'   different algorithms see different stochastic instances of the same problem.
+#' @param cache [\code{logical(1)}]\cr
+#'   If \code{TRUE} and \code{seed} is set, problem instances will be cached on the file system.
+#'   This assumes that each problem instance is deterministic for each combination of hyperparameter setting
+#'   and each replication number.
+#'   This feature is experimental.
 #' @template expreg
 #' @return [\code{Problem}]. Object of class \dQuote{Problem} (invisibly).
 #' @aliases Problem
@@ -44,15 +49,21 @@
 #' addProblem("p1", fun = function(job, data) data, reg = tmp)
 #' addProblem("p2", fun = function(job, data) job, reg = tmp)
 #' addAlgorithm("a1", fun = function(job, data, instance) instance, reg = tmp)
+#' addExperiments(repls = 2, reg = tmp)
 #'
+#' # List problems, algorithms and job parameters:
 #' tmp$problems
 #' tmp$algorithms
+#' getJobPars(reg = tmp)
 #'
+#' # Remove one problem
 #' removeProblems("p1", reg = tmp)
 #'
+#' # List problems and algorithms:
 #' tmp$problems
 #' tmp$algorithms
-addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefaultRegistry()) {
+#' getJobPars(reg = tmp)
+addProblem = function(name, data = NULL, fun = NULL, seed = NULL, cache = FALSE, reg = getDefaultRegistry()) {
   assertExperimentRegistry(reg, writeable = TRUE)
   assertString(name, min.chars = 1L)
   if (!stri_detect_regex(name, "^[[:alnum:]_.-]+$"))
@@ -62,14 +73,22 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, reg = getDefau
   } else {
     assert(checkFunction(fun, args = c("job", "data")), checkFunction(fun, args = "..."))
   }
-  if (!is.null(seed)) {
+  if (is.null(seed)) {
+    cache = FALSE
+  } else {
     seed = asCount(seed, positive = TRUE)
+    cache = assertFlag(cache)
   }
 
   info("Adding problem '%s'", name)
-  prob = setClasses(list(name = name, seed = seed, data = data, fun = fun), "Problem")
+  prob = setClasses(list(name = name, seed = seed, cache = cache, data = data, fun = fun), "Problem")
   writeRDS(prob, file = getProblemURI(reg, name))
   reg$problems = union(reg$problems, name)
+  cache.dir = getProblemCacheDir(reg, name)
+  if (dir.exists(cache.dir))
+    unlink(cache.dir, recursive = TRUE)
+  if (cache)
+    dir.create(cache.dir, recursive = TRUE)
   saveRegistry(reg)
   invisible(prob)
 }
@@ -91,8 +110,21 @@ removeProblems = function(name, reg = getDefaultRegistry()) {
     reg$defs = reg$defs[!def.ids]
     reg$status = reg$status[!job.ids]
     reg$problems = chsetdiff(reg$problems, nn)
+    unlink(getProblemCacheDir(reg, nn), recursive = TRUE)
   }
 
   sweepRegistry(reg)
   invisible(TRUE)
+}
+
+getProblemURI = function(reg, name) {
+  fp(dir(reg, "problems"), mangle(name))
+}
+
+getProblemCacheDir = function(reg, name) {
+  fp(dir(reg, "cache"), "problems", base32_encode(name, use.padding = FALSE))
+}
+
+getProblemCacheURI = function(job) {
+  fp(getProblemCacheDir(job, job$prob.name), sprintf("%s.rds", digest(list(job$prob.name, job$prob.pars, job$repl))))
 }

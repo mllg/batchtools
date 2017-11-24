@@ -5,7 +5,7 @@ resources$walltime = asInt(resources$walltime, lower = 60L, upper = 3600L * 672L
 resources$memory = asInt(resources$memory, lower = 100L, upper = 64L * 1024L)
 resources$ncpus = if (is.null(resources$ncpus)) 1L else asInt(resources$ncpus, lower = 1L)
 resources$modules = if (is.null(resources$modules)) character(0L) else assertCharacter(resources$modules, any.missing = FALSE)
-resources$R = if (is.null(resources$R)) "R/3.3.1-gcc48-base" else assertString(resources$R)
+resources$R = if (is.null(resources$R)) "R/3.4.1-gcc49-base" else assertString(resources$R)
 resources$omp.threads = if (is.null(resources$omp.threads)) 1L else asInt(resources$omp.threads, lower = 1L)
 resources$blas.threads = if (is.null(resources$blas.threads)) 1L else asInt(resources$blas.threads, lower = 1L)
 
@@ -18,9 +18,19 @@ use.mpi = (resources$pm.backend %??% "default") == "mpi"
 ## first string of queue, selected by walltime
 walltimes = 3600L * c(1L, 8L, 48L, 672L)
 queue = c("short", "med", "long", "ultralong")[wf(resources$walltime <= walltimes)]
-modules = paste("binutils/2.25", "gcc/4.8.5", "openblas/0.2.17", resources$R)
+## check default modules
+modules.default = c(binutils = "binutils/2.25", gcc = "gcc/4.9.3", openblas = "openblas/0.2.17")
+modules = resources$modules
+for (i in seq_along(modules.default)) {
+  if (!any(grepl(paste0("^", names(modules.default[i]), "/?[0-9\\.]*$"), modules))) {
+    modules = paste(modules, modules.default[i])
+  }
+}
+## add R
+modules = paste(modules, resources$R)
+## add mpi
 if (use.mpi)
-  modules = paste(modules, "openmpi/gcc4.8.x")
+  modules = paste(modules, "openmpi/gcc4.9.x")
 
 ## very ugly hack because we cannot log to data (nobackup) filesystem on lido,
 ## only home fs is available

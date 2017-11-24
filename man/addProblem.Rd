@@ -6,7 +6,7 @@
 \alias{removeProblems}
 \title{Define Problems for Experiments}
 \usage{
-addProblem(name, data = NULL, fun = NULL, seed = NULL,
+addProblem(name, data = NULL, fun = NULL, seed = NULL, cache = FALSE,
   reg = getDefaultRegistry())
 
 removeProblems(name, reg = getDefaultRegistry())
@@ -36,6 +36,11 @@ instantiated. (3) From now on the usual experiment seed of the registry is used,
 see \code{\link{ExperimentRegistry}}.
 If \code{seed} is set to \code{NULL} (default), the job seed is used to instantiate the problem and
 different algorithms see different stochastic instances of the same problem.}
+
+\item{cache}{[\code{logical(1)}]\cr
+If \code{TRUE} and \code{seed} is set, problem instances will be cached on the file system.
+This assumes that each problem instance is deterministic for each combination of hyperparameter settings
+replication number.}
 
 \item{reg}{[\code{\link{ExperimentRegistry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
