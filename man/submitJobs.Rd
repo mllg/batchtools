@@ -129,7 +129,7 @@ res = list(measure.memory = TRUE)
 submitJobs(ids, resources = res, reg = tmp)
 
 # Retrive information about memory, combine with parameters
-info = ijoin(getJobStatus(reg = tmp)[, .(job.id, memory)], getJobPars(reg = tmp))
+info = ijoin(getJobStatus(reg = tmp)[, .(job.id, mem.used)], getJobPars(reg = tmp))
 print(flatten(info))
 
 # Combine job info with results -> each job is aggregated using mean()

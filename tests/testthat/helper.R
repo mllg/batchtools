@@ -60,11 +60,11 @@ checkTables = function(reg, ...) {
   expect_equal(anyDuplicated(reg$defs, by = "def.id"), 0L)
 
   if (class(reg)[1L] == "Registry") {
-    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "memory",  "resource.id", "batch.id",  "log.file", "job.hash", "job.name")
-    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric", "integer",     "character", "character",  "character", "character")
+    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "mem.used", "resource.id", "batch.id",  "log.file", "job.hash", "job.name")
+    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric",  "integer",     "character", "character",  "character", "character")
   } else {
-    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "memory",  "resource.id", "batch.id",  "log.file", "job.hash",  "job.name", "repl")
-    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric", "integer",     "character", "character",  "character", "character", "integer")
+    cols  = c("job.id",  "def.id",  "submitted", "started", "done",    "error",     "mem.used", "resource.id", "batch.id",  "log.file", "job.hash",  "job.name", "repl")
+    types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric",  "integer",     "character", "character",  "character", "character", "integer")
   }
   expect_is(reg$status, "data.table")
   expect_data_table(reg$status, ncols = length(cols), ...)

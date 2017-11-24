@@ -103,7 +103,7 @@
 #' submitJobs(ids, resources = res, reg = tmp)
 #'
 #' # Retrive information about memory, combine with parameters
-#' info = ijoin(getJobStatus(reg = tmp)[, .(job.id, memory)], getJobPars(reg = tmp))
+#' info = ijoin(getJobStatus(reg = tmp)[, .(job.id, mem.used)], getJobPars(reg = tmp))
 #' print(flatten(info))
 #'
 #' # Combine job info with results -> each job is aggregated using mean()
@@ -241,8 +241,8 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
 
       if (submit$status == 0L) {
         reg$status[ids.chunk,
-          c("submitted", "started", "done",   "error",       "memory", "resource.id", "batch.id",      "log.file",      "job.hash") :=
-          list(now,      NA_real_,  NA_real_, NA_character_, NA_real_, res.id,        submit$batch.id, submit$log.file, jc$job.hash)]
+          c("submitted", "started", "done",   "error",       "mem.used", "resource.id", "batch.id",      "log.file",      "job.hash") :=
+          list(now,      NA_real_,  NA_real_, NA_character_, NA_real_,   res.id,        submit$batch.id, submit$log.file, jc$job.hash)]
         runHook(reg, "post.submit.job")
         break
       } else if (submit$status > 0L && submit$status < 100L) {

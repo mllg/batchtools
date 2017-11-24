@@ -39,8 +39,9 @@ different algorithms see different stochastic instances of the same problem.}
 
 \item{cache}{[\code{logical(1)}]\cr
 If \code{TRUE} and \code{seed} is set, problem instances will be cached on the file system.
-This assumes that each problem instance is deterministic for each combination of hyperparameter settings
-replication number.}
+This assumes that each problem instance is deterministic for each combination of hyperparameter setting
+and each replication number.
+This feature is experimental.}
 
 \item{reg}{[\code{\link{ExperimentRegistry}}]\cr
 Registry. If not explicitly passed, uses the last created registry.}
@@ -66,14 +67,20 @@ tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 addProblem("p1", fun = function(job, data) data, reg = tmp)
 addProblem("p2", fun = function(job, data) job, reg = tmp)
 addAlgorithm("a1", fun = function(job, data, instance) instance, reg = tmp)
+addExperiments(repls = 2, reg = tmp)
 
+# List problems, algorithms and job parameters:
 tmp$problems
 tmp$algorithms
+getJobPars(reg = tmp)
 
+# Remove one problem
 removeProblems("p1", reg = tmp)
 
+# List problems and algorithms:
 tmp$problems
 tmp$algorithms
+getJobPars(reg = tmp)
 }
 \seealso{
 \code{\link{Algorithm}}, \code{\link{addExperiments}}
