@@ -1,3 +1,6 @@
+# batchtools 0.9.8
+* Renamed column "memory" in the status table to "mem.used" to avoid name clashes with the resource specification.
+
 # batchtools 0.9.7
 
 * Added a workaround for a test to be compatible with testthat v2.0.0.

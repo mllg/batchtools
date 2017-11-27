@@ -154,7 +154,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
     started     = double(0L),
     done        = double(0L),
     error       = character(0L),
-    memory      = double(0L),
+    mem.used    = double(0L),
     resource.id = integer(0L),
     batch.id    = character(0L),
     log.file    = character(0L),
