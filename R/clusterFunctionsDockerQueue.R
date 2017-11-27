@@ -18,8 +18,9 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
   assertString(image)
   assertCharacter(docker.args, any.missing = FALSE)
   assertCharacter(image.args, any.missing = FALSE)
-  docker.scheduler.url = stri_replace_all_regex("test", "\\/$", replacement = "")
+  docker.scheduler.url = stri_replace_all_regex(docker.scheduler.url, "\\/$", replacement = "")
   assertCharacter(docker.scheduler.url, any.missing = FALSE)
+  assertCharacter(curl.args, any.missing = FALSE)
   user = Sys.info()["user"]
 
   submitJob = function(reg, jc) {
@@ -41,7 +42,8 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
       sprintf("--label user=%s", user),
       sprintf("--name=%s", batch.id),
       image, timeout, "Rscript", stri_join("-e", shQuote(sprintf("batchtools::doJobCollection('%s', '%s')", jc$uri, jc$log.file)), sep = " "))
-    res = runOSCommand(cmd[1L], cmd[-1L])
+   
+    res = runOSCommand(cmd[1L], paste0(cmd[-1L], collapse = " "))
 
     if (res$exit.code > 0L) {
       return(cfHandleUnknownSubmitError(stri_flatten(cmd, " "), res$exit.code, res$output))
@@ -53,7 +55,7 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
   listJobs = function(reg) {
     if (!requireNamespace("jsonlite", quietly = TRUE))
       stop("Package 'jsonlite' is required")
-    curl.res = runOSCommand("curl", c("-k", "-s", curl.args, sprintf("%s/jobs/%s/json", docker.scheduler.url, user)))
+    curl.res = runOSCommand("curl", unique(c("-s", curl.args, sprintf("%s/jobs/%s/json", docker.scheduler.url, user)))) 
     tab = jsonlite::fromJSON(curl.res$output)
     if (length(tab) == 0L)
       return(data.table(id = integer(0L), batch.id = character(0L), toSchedule = logical(0)))
