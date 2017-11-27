@@ -14,7 +14,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), image.args = character(0L), scheduler.latency = 1, fs.latency = 65, docker.scheduler.url = "https://s876cnsm:2350/v1.30") { # nocov start
+makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), image.args = character(0L), scheduler.latency = 1, fs.latency = 65, docker.scheduler.url = "https://s876cnsm:2350/v1.30", curl.args = character(0L)) { # nocov start
   assertString(image)
   assertCharacter(docker.args, any.missing = FALSE)
   assertCharacter(image.args, any.missing = FALSE)
@@ -53,7 +53,8 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
   listJobs = function(reg) {
     if (!requireNamespace("jsonlite", quietly = TRUE))
       stop("Package 'jsonlite' is required")
-    tab = jsonlite::fromJSON(sprintf("%s/jobs/%s/json", docker.scheduler.url, user))
+    curl.res = runOSCommand("curl", c("-k", "-s", curl.args, sprintf("%s/jobs/%s/json", docker.scheduler.url, user)))
+    tab = jsonlite::fromJSON(curl.res$output)
     if (length(tab) == 0L)
       return(data.table(id = integer(0L), batch.id = character(0L), toSchedule = logical(0)))
     tab = as.data.table(tab[, c("id", "containerName", "toSchedule")])[get("containerName") %chin% reg$status$batch.id]
@@ -62,11 +63,9 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
   }
 
   killJob = function(reg, batch.id) {
-    if (!requireNamespace("RCurl", quietly = TRUE))
-      stop("Package 'RCurl' is required")
     id = listJobs(reg)[batch.id == batch.id]$id
-    res = RCurl::httpDELETE(sprintf("%s/jobs/%i/delete", docker.scheduler.url, id))
-    stri_startswith_fixed(res, "Successfully deleted")
+    curl.res = runOSCommand("curl", c("-XDELETE", "-k", "-s", curl.args, sprintf("%s/jobs/%i/delete", docker.scheduler.url, id)))
+    stri_startswith_fixed(res$output, "Successfully deleted")
   }
 
   listJobsRunning = function(reg) {
