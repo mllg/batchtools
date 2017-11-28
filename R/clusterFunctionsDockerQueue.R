@@ -68,7 +68,7 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
     if (res$exit.code > 0L)
       OSError("Listing of jobs failed", res)
 
-    stri_extract_last_regex(res$output, "[0-9a-z_-]+"))
+    stri_extract_last_regex(res$output, "[0-9a-z_-]+")
   }
 
   listJobsQueued = function(reg) {
