@@ -83,7 +83,7 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
     }
   }
 
-  if (reg$version < "0.9.7-9001") {
+  if (reg$version < "0.9.7-9002") {
     info("Renaming memory column in data base")
     setnames(reg$status, "memory", "mem.used")
   }
