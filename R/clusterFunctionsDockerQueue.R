@@ -52,18 +52,6 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
     }
   }
 
-  listJobs = function(reg) {
-    if (!requireNamespace("jsonlite", quietly = TRUE))
-      stop("Package 'jsonlite' is required")
-    curl.res = runOSCommand("curl", unique(c("-s", curl.args, sprintf("%s/jobs/%s/json", docker.scheduler.url, user)))) 
-    tab = jsonlite::fromJSON(curl.res$output)
-    if (length(tab) == 0L)
-      return(data.table(id = integer(0L), batch.id = character(0L), toSchedule = logical(0)))
-    tab = as.data.table(tab[, c("id", "containerName", "toSchedule")])[get("containerName") %chin% reg$status$batch.id]
-    setnames(tab, "containerName", "batch.id")
-    tab[]
-  }
-
   killJob = function(reg, batch.id) {
     id = listJobs(reg)[batch.id == batch.id]$id
     curl.res = runOSCommand("curl", c("-XDELETE", "-k", "-s", curl.args, sprintf("%s/jobs/%i/delete", docker.scheduler.url, id)))
@@ -71,13 +59,29 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
   }
 
   listJobsRunning = function(reg) {
+    
     assertRegistry(reg, writeable = FALSE)
-    listJobs(reg)[get("toSchedule") == FALSE]$batch.id
+
+    # list running (see clusterFunctionDocker.R)
+    args = c(docker.args, "ps", "--format='{{.Names}}'", "--filter 'label=batchtools'", sprintf("--filter 'user=%s'", user))
+    res = runOSCommand("docker", args)
+    if (res$exit.code > 0L)
+      OSError("Listing of jobs failed", res)
+
+    stri_extract_last_regex(res$output, "[0-9a-z_-]+"))
   }
 
   listJobsQueued = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    listJobs(reg)[get("toSchedule") == TRUE]$batch.id
+    
+    if (!requireNamespace("jsonlite", quietly = TRUE))
+      stop("Package 'jsonlite' is required")
+
+    # list scheduled but not running
+    curl.res = runOSCommand("curl", unique(c("-s", curl.args, sprintf("%s/jobs/%s/json", docker.scheduler.url, user)))) 
+    tab = jsonlite::fromJSON(curl.res$output)
+    tab = as.data.table(tab[, c("id", "containerName", "toSchedule")])[get("containerName") %chin% reg$status$batch.id]
+    tab$containerName
   }
 
 
