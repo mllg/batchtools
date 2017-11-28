@@ -80,6 +80,9 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
     # list scheduled but not running
     curl.res = runOSCommand("curl", unique(c("-s", curl.args, sprintf("%s/jobs/%s/json", docker.scheduler.url, user)))) 
     tab = jsonlite::fromJSON(curl.res$output)
+    if (length(tab) == 0L) {
+      return(character(0L))
+    }
     tab = as.data.table(tab[, c("id", "containerName", "toSchedule")])[get("containerName") %chin% reg$status$batch.id]
     tab$containerName
   }
