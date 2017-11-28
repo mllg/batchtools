@@ -182,7 +182,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
   max.concurrent.jobs = assertCount(resources$max.concurrent.jobs, null.ok = TRUE) %??%
     assertCount(reg$max.concurrent.jobs, null.ok = TRUE) %??% NA_integer_
   if (!is.na(max.concurrent.jobs)) {
-    if (uniqueN(on.sys, by = "batch.id") + length(chunks) > max.concurrent.jobs) {
+    if (uniqueN(on.sys, by = "batch.id") + nrow(ids) > max.concurrent.jobs) {
       "!DEBUG [submitJobs]: Limiting the number of concurrent jobs to `max.concurrent.jobs`"
     } else {
       max.concurrent.jobs = NA_integer_
