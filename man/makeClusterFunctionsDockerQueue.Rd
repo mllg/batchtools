@@ -33,6 +33,9 @@ Usually safe to set to \code{NA} to disable the heuristic, e.g. if you are worki
 
 \item{docker.scheduler.url}{[\code{character}]\cr
 URL of the docker scheduler API.}
+
+\item{curl.args}{[\code{character}]\cr
+arguments that should be passed to curl when accessing the DockerQueue-API.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

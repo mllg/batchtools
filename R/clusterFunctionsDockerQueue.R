@@ -10,6 +10,8 @@
 #'   Additional arguments passed to \dQuote{docker run} (e.g., to define mounts or environment variables).
 #' @param docker.scheduler.url [\code{character}]\cr
 #'   URL of the docker scheduler API.
+#' @param curl.args [\code{character}]\cr
+#'   arguments that should be passed to curl when accessing the DockerQueue-API.
 #' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
@@ -52,28 +54,20 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
     }
   }
 
-  killJob = function(reg, batch.id) {
-    id = listJobs(reg)[batch.id == batch.id]$id
-    curl.res = runOSCommand("curl", c("-XDELETE", "-k", "-s", curl.args, sprintf("%s/jobs/%i/delete", docker.scheduler.url, id)))
-    stri_startswith_fixed(res$output, "Successfully deleted")
-  }
-
-  listJobsRunning = function(reg) {
-    
-    assertRegistry(reg, writeable = FALSE)
-
-    # list running (see clusterFunctionDocker.R)
-    args = c(docker.args, "ps", "--format='{{.Names}}'", "--filter 'label=batchtools'", sprintf("--filter 'user=%s'", user))
+  dfJobsRunning = function(reg) {
+    args = c(docker.args, "ps", "--format='{{.ID}};{{.Names}}'", "--filter 'label=batchtools'", sprintf("--filter 'user=%s'", user))
     res = runOSCommand("docker", args)
     if (res$exit.code > 0L)
       OSError("Listing of jobs failed", res)
-
-    stri_extract_last_regex(res$output, "[0-9a-z_-]+")
+    res.jobs = stri_split_fixed(res$output, ";")
+    res.jobs = do.call(rbind, res.jobs)
+    colnames(res.jobs) = c("docker.id", "batch.id")
+    res.jobs = as.data.table(res.jobs)
+    res.jobs$batch.id = stri_extract_last_regex(res.jobs$batch.id, "[0-9a-z_-]+")
+    return(res.jobs)
   }
 
-  listJobsQueued = function(reg) {
-    assertRegistry(reg, writeable = FALSE)
-    
+  dfJobsQueued = function(reg) {
     if (!requireNamespace("jsonlite", quietly = TRUE))
       stop("Package 'jsonlite' is required")
 
@@ -83,8 +77,42 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
     if (length(tab) == 0L) {
       return(character(0L))
     }
-    tab = as.data.table(tab[, c("id", "containerName", "toSchedule")])[get("containerName") %chin% reg$status$batch.id]
-    tab$containerName
+    tab = as.data.table(tab[, c("id", "containerName")])[get("containerName") %chin% reg$status$batch.id]
+    colnames(tab) = c("schedule.id", "batch.id")
+    return(tab)
+  }
+
+  killJob = function(reg, batch.id) {
+    assertRegistry(reg, writeable = TRUE)
+    assertString(batch.id)
+    df.queued = dfJobsQueued(reg)
+    if (batch.id %in% df.queued$batch.id) {
+      id = df.queued[get(batch.id) == batch.id]$schedule.id
+      curl.res = runOSCommand("curl", c("-XDELETE", "-k", "-s", curl.args, sprintf("%s/jobs/%i/delete", docker.scheduler.url, id)))
+      success = stri_startswith_fixed(curl.res$output, "Successfully deleted")
+    } else {
+      df.running = dfJobsRunning(reg)
+      if (batch.id %in% df.running$batch.id) {
+        docker.id = df.running[get(batch.id) == batch.id]$docker.id
+        success = cfKillJob(reg, "docker", c(docker.args, "kill", docker.id))
+      } else {
+        success = FALSE
+      }
+    }
+    return(success)
+  }
+
+  listJobsRunning = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
+    tab = dfJobsRunning(reg)
+    tab$batch.id
+  }
+
+  listJobsQueued = function(reg) {
+    assertRegistry(reg, writeable = FALSE)
+    
+    tab = dfJobsQueued(reg)
+    tab$batch.id
   }
 
 
