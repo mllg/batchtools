@@ -43,7 +43,7 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
       sprintf("--name=%s", batch.id),
       image, timeout, "Rscript", stri_join("-e", shQuote(sprintf("batchtools::doJobCollection('%s', '%s')", jc$uri, jc$log.file)), sep = " "))
    
-    res = runOSCommand(cmd[1L], paste0(cmd[-1L], collapse = " "))
+    res = runOSCommand(cmd[1L], cmd[-1L])
 
     if (res$exit.code > 0L) {
       return(cfHandleUnknownSubmitError(stri_flatten(cmd, " "), res$exit.code, res$output))
