@@ -1,5 +1,6 @@
 #' @title ClusterFunctions for DockerQueue
 #'
+#' @description
 #' Customized cluster functions for the isolated application running on the SFB876 cluster.
 #'
 #' @param image [\code{character(1)}]\cr
