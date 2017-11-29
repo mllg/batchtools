@@ -15,6 +15,11 @@ BaseJob = R6Class("BaseJob", cloneable = FALSE,
   ),
 
   active = list(
+    job.id = function() {
+      # alias for id. This is confusing not to have.
+      self$id
+    },
+
     external.dir = function() {
       path = fp(self$file.dir, "external", self$id)
       dir.create(path, recursive = TRUE, showWarnings = FALSE)
