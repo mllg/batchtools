@@ -151,13 +151,6 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
     assertCount(resources$ncpus, positive = TRUE)
   if (hasName(resources, "measure.memory"))
     assertFlag(resources$measure.memory)
-  if (hasName(resources, "chunks.as.arrayjobs")) {
-    assertFlag(resources$chunks.as.arrayjobs)
-    if (resources$chunks.as.arrayjobs && is.na(reg$cluster.functions$array.var)) {
-      info("Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions '%s'", reg$cluster.functions$name)
-      resources$chunks.as.arrayjobs = NULL
-    }
-  }
   sleep = getSleepFunction(reg, sleep)
 
   ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk")
@@ -181,8 +174,22 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
   # handle max.concurrent.jobs
   max.concurrent.jobs = assertCount(resources$max.concurrent.jobs, null.ok = TRUE) %??%
     assertCount(reg$max.concurrent.jobs, null.ok = TRUE) %??% NA_integer_
+
+  # handle chunks.as.arrayjobs
+  chunks.as.arrayjobs = FALSE
+  if (hasName(resources, "chunks.as.arrayjobs")) {
+    assertFlag(resources$chunks.as.arrayjobs)
+    if (resources$chunks.as.arrayjobs) {
+      if (is.na(reg$cluster.functions$array.var)) {
+        info("Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions '%s'", reg$cluster.functions$name)
+      } else {
+        chunks.as.arrayjobs = TRUE
+      }
+    }
+  }
+
   if (!is.na(max.concurrent.jobs)) {
-    if (uniqueN(on.sys, by = "batch.id") + length(chunks) > max.concurrent.jobs) {
+    if (uniqueN(on.sys, by = "batch.id") + !chunks.as.arrayjobs * length(chunks) + chunks.as.arrayjobs * nrow(ids) > max.concurrent.jobs) {
       "!DEBUG [submitJobs]: Limiting the number of concurrent jobs to `max.concurrent.jobs`"
     } else {
       max.concurrent.jobs = NA_integer_
