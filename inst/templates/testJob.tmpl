@@ -1,4 +1,4 @@
-options(warn = 1L, error = function() { traceback(2L); quit(save = "no", status = 1L) })
+options(warn = 1L)
 Sys.setenv(DEBUGME = "<%= Sys.getenv('DEBUGME') %>")
 requireNamespace("batchtools", quietly = TRUE)
 jc = readRDS("<%= jc %>")
