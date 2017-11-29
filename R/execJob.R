@@ -31,6 +31,7 @@ execJob.JobCollection = function(job) {
 
 #' @export
 execJob.Job = function(job) {
+  local_options(list(error = function(e) traceback(2L)))
   if (".job" %chin% names(formals(job$fun))) {
     with_seed(job$seed, do.call(job$fun, c(job$pars, list(.job = job)), envir = .GlobalEnv))
   } else {
@@ -40,6 +41,7 @@ execJob.Job = function(job) {
 
 #' @export
 execJob.Experiment = function(job) {
+  local_options(list(error = function(e) traceback(2L)))
   catf("Generating problem instance for problem '%s' ...", job$prob.name)
   instance = job$instance
   force(instance)
