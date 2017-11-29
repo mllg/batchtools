@@ -2,9 +2,7 @@
 % Please edit documentation in R/clusterFunctionsDockerQueue.R
 \name{makeClusterFunctionsDockerQueue}
 \alias{makeClusterFunctionsDockerQueue}
-\title{ClusterFunctions for DockerQueue
-
-Customized cluster functions for the isolated application running on the SFB876 cluster.}
+\title{ClusterFunctions for DockerQueue}
 \usage{
 makeClusterFunctionsDockerQueue(image, docker.args = character(0L),
   image.args = character(0L), scheduler.latency = 1, fs.latency = 65,
@@ -39,6 +37,9 @@ arguments that should be passed to curl when accessing the DockerQueue-API.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
+}
+\description{
+Customized cluster functions for the isolated application running on the SFB876 cluster.
 }
 \seealso{
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
