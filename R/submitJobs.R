@@ -189,7 +189,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
   }
 
   if (!is.na(max.concurrent.jobs)) {
-    if (uniqueN(on.sys, by = "batch.id") + !chunks.as.arrayjobs * length(chunks) + chunks.as.arrayjobs * nrow(ids) > max.concurrent.jobs) {
+    if (uniqueN(on.sys, by = "batch.id") + (!chunks.as.arrayjobs) * length(chunks) + chunks.as.arrayjobs * nrow(ids) > max.concurrent.jobs) {
       "!DEBUG [submitJobs]: Limiting the number of concurrent jobs to `max.concurrent.jobs`"
     } else {
       max.concurrent.jobs = NA_integer_
