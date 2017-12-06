@@ -23,10 +23,9 @@ Function to apply.}
 Additional arguments passed to \code{fun} (\code{btlapply}) or vectors to map over (\code{btmapply}).}
 
 \item{resources}{[\code{named list}]\cr
-Computational  resources for the batch jobs. The elements of this list
-(e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file.
-See notes for reserved special resource names.
-Defaults can be stored in the configuration file by providing the named list \code{default.resources}.
+Computational  resources for the jobs. The actual elements of this list
+(e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the details.
+Default settings can be set in the configuration file by defining the named list \code{default.resources}.
 Settings in \code{resources} overwrite those in \code{default.resources}.}
 
 \item{n.chunks}{[\code{integer(1)}]\cr

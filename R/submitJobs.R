@@ -3,25 +3,18 @@
 #' @description
 #' Submits defined jobs to the batch system.
 #'
-#' If an additional column \dQuote{chunk} is found in the table \code{ids},
-#' jobs will be grouped accordingly to be executed sequentially on the same slave.
-#' The utility functions \code{\link{chunk}}, \code{\link{binpack}} and \code{\link{lpt}}
-#' can assist in grouping jobs.
-#' Jobs are submitted in the order of chunks, i.e. jobs which have chunk number
-#' \code{unique(ids$chunk)[1]} first, then jobs with chunk number \code{unique(ids$chunk)[2]}
-#' and so on. If no chunks are provided, jobs are submitted in the order of \code{ids$job.id}.
-#'
 #' After submitting the jobs, you can use \code{\link{waitForJobs}} to wait for the
 #' termination of jobs or call \code{\link{reduceResultsList}}/\code{\link{reduceResults}}
 #' to collect partial results.
 #' The progress can be monitored with \code{\link{getStatus}}.
 #'
-#' @section Limiting the number of jobs:
-#' If requested, \code{submitJobs} tries to limit the number of concurrent jobs of the user by waiting until jobs terminate
-#' before submitting new ones.
-#' This can be controlled by setting \dQuote{max.concurrent.jobs} in the configuration file (see \code{\link{Registry}})
-#' or by setting the resource \dQuote{max.concurrent.jobs} to the maximum number of jobs to run simultaneously.
-#' If both are set, the setting via the resource takes precedence over the setting in the configuration.
+#' @section Chunking of Jobs:
+#' Multiple jobs can be grouped (chunked) together to be executed sequentially on the batch system as a single batch job.
+#' This is especially useful to avoid overburding the scheduler by submitting thousands of jobs simultaneously.
+#' To chunk jobs together, job ids must be provided as \code{data.frame} with columns \dQuote{job.id} and \dQuote{chunk} (integer).
+#' All jobs with the same chunk number will be executed sequentially inside the same batch job.
+#' The utility functions \code{\link{chunk}}, \code{\link{binpack}} and \code{\link{lpt}}
+#' can assist in grouping jobs.
 #'
 #' @section Array Jobs:
 #' If your cluster supports array jobs, you can set the resource \code{chunks.as.arrayjobs} to \code{TRUE} in order
@@ -29,7 +22,19 @@
 #' The function \code{\link{doJobCollection}} (which is called on the slave) now retrieves the repetition number from the environment
 #' and restricts the computation to the respective job in the \code{\link{JobCollection}}.
 #'
-#' @section Memory Measurement:
+#' @section Order of Submission:
+#' Jobs are submitted in the order of chunks, i.e. jobs which have chunk number
+#' \code{sort(unique(ids$chunk))[1]} first, then jobs with chunk number \code{sort(unique(ids$chunk))[2]}
+#' and so on. If no chunks are provided, jobs are submitted in the order of \code{ids$job.id}.
+#'
+#' @section Limiting the Number of Jobs:
+#' If requested, \code{submitJobs} tries to limit the number of concurrent jobs of the user by waiting until jobs terminate
+#' before submitting new ones.
+#' This can be controlled by setting \dQuote{max.concurrent.jobs} in the configuration file (see \code{\link{Registry}})
+#' or by setting the resource \dQuote{max.concurrent.jobs} to the maximum number of jobs to run simultaneously.
+#' If both are set, the setting via the resource takes precedence over the setting in the configuration.
+#'
+#' @section Measuring Memory:
 #' Setting the resource \code{measure.memory} to \code{TRUE} turns on memory measurement:
 #' \code{\link[base]{gc}} is called  directly before and after the job and the difference is
 #' stored in the internal database. Note that this is just a rough estimate and does
@@ -43,14 +48,13 @@
 #' If you set the resource \dQuote{pm.backend} to \dQuote{multicore}, \dQuote{socket} or \dQuote{mpi},
 #' \code{\link[parallelMap]{parallelStart}} is called on the slave before the first job in the chunk is started
 #' and \code{\link[parallelMap]{parallelStop}} is called after the last job terminated.
-#' This way, the used resources for inner parallelization are set in the same place as the resources for the outer parallelization done by
-#' \pkg{batchtools} and all resources get stored together in the \code{\link{Registry}}.
-#' The user function just has to call \code{\link[parallelMap]{parallelMap}} to start parallelization using the preconfigured backend.
+#' This way, the resources for inner parallelization can be set and get automatically stored just like other computational resources.
+#' The function provided by the user just has to call \code{\link[parallelMap]{parallelMap}} to start parallelization using the preconfigured backend.
 #'
-#' Note that you should set the resource \code{ncpus} to control the number of CPUs to use in \pkg{parallelMap}.
+#' To control the number of CPUs, you have to set the resource \code{ncpus}.
 #' Otherwise \code{ncpus} defaults to the number of available CPUs (as reported by (see \code{\link[parallel]{detectCores}}))
 #' on the executing machine for multicore and socket mode and defaults to the return value of \code{\link[Rmpi]{mpi.universe.size}-1} for MPI.
-#' Your template must be set up to handle the parallelization, e.g. start R with \code{mpirun} or request the right number of CPUs.
+#' Your template must be set up to handle the parallelization, e.g. request the right number of CPUs or start R with \code{mpirun}.
 #' You may pass further options like \code{level} to \code{\link[parallelMap]{parallelStart}} via the named list \dQuote{pm.opts}.
 #'
 #' The second supported parallelization backend is \pkg{foreach}.
@@ -68,10 +72,9 @@
 #' @templateVar ids.default findNotSubmitted
 #' @template ids
 #' @param resources [\code{named list}]\cr
-#'   Computational  resources for the batch jobs. The elements of this list
-#'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file.
-#'   See notes for reserved special resource names.
-#'   Defaults can be stored in the configuration file by providing the named list \code{default.resources}.
+#'   Computational  resources for the jobs. The actual elements of this list
+#'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the details.
+#'   Default settings can be set in the configuration file by defining the named list \code{default.resources}.
 #'   Settings in \code{resources} overwrite those in \code{default.resources}.
 #' @param sleep [\code{function(i)} | \code{numeric(1)}]\cr
 #'   Parameter to control the duration to sleep between temporary errors.
@@ -160,7 +163,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
   # handle chunks
   if (hasName(ids, "chunk")) {
     ids$chunk = asInteger(ids$chunk, any.missing = FALSE)
-    chunks = unique(ids$chunk)
+    chunks = sort(unique(ids$chunk))
   } else {
     chunks = ids$chunk = seq_row(ids)
   }
