@@ -72,10 +72,13 @@
 #' @templateVar ids.default findNotSubmitted
 #' @template ids
 #' @param resources [\code{named list}]\cr
-#'   Computational  resources for the jobs. The actual elements of this list
+#'   Computational  resources for the jobs to submit. The actual elements of this list
 #'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the details.
-#'   Default settings can be set in the configuration file by defining the named list \code{default.resources}.
-#'   Settings in \code{resources} overwrite those in \code{default.resources}.
+#'   In case you need to set individual job resources, \code{ids} may be provided as \code{data.frame} with the additional
+#'   column \dQuote{resources} (see example).
+#'   Default settings for a system can be set in the configuration file by defining the named list \code{default.resources}.
+#'   Note that these settings are merged by name, e.g. merging \code{list(walltime = 300)} into \code{list(walltime = 400, memory = 512)}
+#'   will result in \code{list(walltime = 300, memory = 512)}.
 #' @param sleep [\code{function(i)} | \code{numeric(1)}]\cr
 #'   Parameter to control the duration to sleep between temporary errors.
 #'   You can pass an absolute numeric value in seconds or a \code{function(i)} which returns the number of seconds to sleep in the \code{i}-th
@@ -199,7 +202,6 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
     }
   }
 
-  # handle resources
   res.hash = digest(resources)
   resource.hash = NULL
   res.id = reg$resources[resource.hash == res.hash, "resource.id"]$resource.id
