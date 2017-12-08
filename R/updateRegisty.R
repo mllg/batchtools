@@ -93,7 +93,8 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
       x = try(readRDS(fn), silent = TRUE)
       if (is.error(x))
         file.remove(x)
-      setnames(x, "memory", "mem.used")
+      if ("memory" %in% names(x))
+        setnames(x, "memory", "mem.used")
       saveRDS(x, file = fn)
     })
   }
