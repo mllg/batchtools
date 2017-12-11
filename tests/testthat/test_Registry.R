@@ -87,12 +87,16 @@ test_that("loadRegistry", {
     checkTables(reg1)
     checkTables(reg2)
     nms = union(ls(reg1, all.names = TRUE), ls(reg2, all.names = TRUE))
+    nms = chsetdiff(nms, "hash")
     for (nm in nms)
       expect_equal(reg1[[nm]], reg2[[nm]], info = nm)
-    expect_equal(reg1, reg2)
 
     x = readRDS(fp(fd, "registry.rds"))
     expect_null(x$cluster.functions)
+    expect_null(x$default.resources)
+    expect_null(x$temp.dir)
+    expect_null(x$mtime)
+    expect_null(x$writeable)
   }
 })
 

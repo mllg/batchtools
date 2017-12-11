@@ -187,6 +187,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   class(reg) = "Registry"
   saveRegistry(reg)
   reg$mtime = file.mtime(fp(reg$file.dir, "registry.rds"))
+  reg$hash = rnd_hash()
   info("Created registry in '%s' using cluster functions '%s'", reg$file.dir, reg$cluster.functions$name)
   if (make.default)
     batchtools$default.registry = reg

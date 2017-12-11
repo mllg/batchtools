@@ -147,3 +147,7 @@ chintersect = function(x, y) {
   # Note: assumes that x has no duplicates
   x[chmatch(y, x, 0L)]
 }
+
+rnd_hash = function(prefix = "") {
+  stri_join(prefix, digest(list(runif(1L), as.numeric(Sys.time()))))
+}

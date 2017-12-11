@@ -48,7 +48,7 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
 createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()) {
   jc              = new.env(parent = emptyenv())
   jc$jobs         = setkeyv(jobs, "job.id")
-  jc$job.hash     = stri_join("job", digest(list(runif(1L), as.numeric(Sys.time()))))
+  jc$job.hash     = rnd_hash("job")
   jc$job.name     = if (anyMissing(jobs$job.name)) jc$job.hash else jobs$job.name[1L]
   jc$file.dir     = reg$file.dir
   jc$work.dir     = reg$work.dir
