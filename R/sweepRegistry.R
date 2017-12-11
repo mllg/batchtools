@@ -9,7 +9,7 @@
 #' @family Registry
 #' @export
 sweepRegistry = function(reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE, running.ok = FALSE)
+  assertRegistry(reg, writeable = TRUE, sync = TRUE, running.ok = FALSE)
   "!DEBUG [sweepRegistry]: Running sweepRegistry"
 
   submitted = reg$status[.findSubmitted(reg = reg), c("job.id", "job.hash")]

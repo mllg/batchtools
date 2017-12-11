@@ -40,7 +40,7 @@
 #' ijoin(results, flatten(reduceResultsDataTable(reg = tmp)), by = c("..id" = "job.id"))
 batchMapResults = function(fun, ids = NULL, ..., more.args = list(), target, source = getDefaultRegistry()) {
   assertRegistry(source, sync = TRUE)
-  assertRegistry(target, sync = TRUE)
+  assertRegistry(target, writeable = TRUE, sync = TRUE)
   assertFunction(fun)
   ids = convertIds(source, ids, default = .findDone(reg = source))
   assertList(more.args, names = "strict")

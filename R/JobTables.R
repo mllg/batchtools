@@ -89,14 +89,12 @@ getJobPars = function(ids = NULL, reg = getDefaultRegistry()) {
   UseMethod("getJobPars", object = reg)
 }
 
-
 #' @export
 getJobPars.Registry = function(ids = NULL, reg = getDefaultRegistry()) {
   ids = convertIds(reg, ids)
   tab = mergedJobs(reg, ids, c("job.id", "job.pars"))
   setkeyv(tab, "job.id")[]
 }
-
 
 #' @export
 getJobPars.ExperimentRegistry = function(ids = NULL, reg = getDefaultRegistry()) {

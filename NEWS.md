@@ -1,5 +1,7 @@
 # batchtools 0.9.8
+
 * Renamed column "memory" in the status table to "mem.used" to avoid name clashes with the resource specification.
+* Exported function `assertRegistry()`.
 
 # batchtools 0.9.7
 

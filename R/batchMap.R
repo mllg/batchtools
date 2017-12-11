@@ -56,7 +56,7 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
     as.data.table(x)
   }
 
-  assertRegistry(reg, writeable = TRUE, strict = TRUE)
+  assertRegistry(reg, class = "Registry", writeable = TRUE)
   if (nrow(reg$defs) > 0L)
     stop("Registry must be empty")
   assertFunction(fun)

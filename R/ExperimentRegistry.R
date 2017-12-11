@@ -82,8 +82,3 @@ print.ExperimentRegistry = function(x, ...) {
   catf("  Seed      : %i", x$seed)
   catf("  Writeable : %s", x$writeable)
 }
-
-assertExperimentRegistry = function(reg, writeable = FALSE, sync = FALSE, running.ok = TRUE) {
-  assertClass(reg, "ExperimentRegistry")
-  assertRegistry(reg, writeable = writeable, sync = sync, running.ok = running.ok)
-}

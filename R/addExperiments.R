@@ -87,7 +87,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
     }, id = names(designs), design = designs)
   }
 
-  assertExperimentRegistry(reg, writeable = TRUE)
+  assertRegistry(reg, class = "ExperimentRegistry", writeable = TRUE)
   if (is.null(prob.designs)) {
     prob.designs = replicate(length(reg$problems), data.table(), simplify = FALSE)
     names(prob.designs) = reg$problems

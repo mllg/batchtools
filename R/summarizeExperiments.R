@@ -13,7 +13,7 @@
 #' @export
 #' @family Experiment
 summarizeExperiments = function(ids = NULL, by = c("problem", "algorithm"), reg = getDefaultRegistry()) {
-  assertExperimentRegistry(reg)
+  assertRegistry(reg, class = "ExperimentRegistry")
   assertCharacter(by, any.missing = FALSE, min.chars = 1L, min.len = 1L, unique = TRUE)
   tab = getJobPars(ids = ids, reg = reg)
   if (!setequal(by, c("problem", "algorithm")))

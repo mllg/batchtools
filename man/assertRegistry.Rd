@@ -4,31 +4,32 @@
 \alias{assertRegistry}
 \title{assertRegistry}
 \usage{
-assertRegistry(reg, writeable = FALSE, sync = FALSE, strict = FALSE,
+assertRegistry(reg, class = NULL, writeable = FALSE, sync = FALSE,
   running.ok = TRUE)
 }
 \arguments{
-\item{reg}{The object asserted to be a \code{Registry}}
+\item{reg}{[\code{\link{Registry}}]\cr
+The object asserted to be a \code{Registry}.}
 
-\item{writeable}{Optional check if the registry is writeable}
+\item{class}{[\code{character(1)}]\cr
+If \code{NULL} (default), \code{reg} must only inherit from class \dQuote{Registry}.
+Otherwise check that \code{reg} is of class \code{class}.
+E.g., if set to \dQuote{Registry}, a \code{\link{ExperimentRegistry}} would not pass.}
 
-\item{sync}{Whether to sync the registry before writing}
+\item{writeable}{[\code{logical(1)}]\cr
+Check if the registry is writeable.}
 
-\item{strict}{If \code{FALSE} allow subclasses of \code{Registry}
-otherwise.}
+\item{sync}{[\code{logical(1)}]\cr
+Whether to sync the registry before writing.}
 
-\item{running.ok}{If \code{FALSE} throw an error if jobs associated
-with the registry are currently running.}
+\item{running.ok}{[\code{logical(1)}]\cr
+If \code{FALSE} throw an error if jobs associated with the registry are currently running.}
 }
 \value{
-\code{TRUE} invisibily
+\code{TRUE} invisibly.
 }
 \description{
 Assert that a given object is a \code{batchtools} registry.
-Additionally can sync the registry, check if it is writeable,
-check if it is running.
-}
-\details{
-If any check fails, throws an error indicting
-the reason for the failure.
+Additionally can sync the registry, check if it is writeable, or check if jobs are running.
+If any check fails, throws an error indicting the reason for the failure.
 }

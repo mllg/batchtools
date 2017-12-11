@@ -35,7 +35,7 @@
 btlapply = function(X, fun, ..., resources = list(), n.chunks = NULL, chunk.size = NULL, reg = makeRegistry(file.dir = NA)) {
   assertVector(X)
   assertFunction(fun)
-  assertRegistry(reg, writeable = TRUE, strict = TRUE)
+  assertRegistry(reg, class = "Registry", writeable = TRUE)
 
   ids = batchMap(fun, X, more.args = list(...), reg = reg)
   if (!is.null(n.chunks) || !is.null(chunk.size))
@@ -55,7 +55,7 @@ btmapply = function(fun, ..., more.args = list(), simplify = FALSE, use.names = 
   assertFunction(fun)
   assertFlag(simplify)
   assertFlag(use.names)
-  assertRegistry(reg, writeable = TRUE, strict = TRUE)
+  assertRegistry(reg, class = "Registry", writeable = TRUE)
 
   ids = batchMap(fun, ..., more.args = more.args, reg = reg)
   if (!is.null(n.chunks) || !is.null(chunk.size))

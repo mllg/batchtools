@@ -17,7 +17,7 @@
 #' @template ids
 #' @template reg
 #' @return [\code{\link{data.table}}] with column \dQuote{job.id} containing matched jobs.
-#' @seealso \code{\link{getStatus}} \code{\link{JoinTables}}<`3`>
+#' @seealso \code{\link{getStatus}} \code{\link{JoinTables}}
 #' @export
 #' @examples
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
@@ -75,7 +75,7 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
 #' @param repls [\code{integer}]\cr
 #'   Whitelist of replication numbers. If not provided, all replications are matched.
 findExperiments = function(ids = NULL, prob.name = NA_character_, prob.pattern = NA_character_, algo.name = NA_character_, algo.pattern = NA_character_, prob.pars, algo.pars, repls = NULL, reg = getDefaultRegistry()) {
-  assertExperimentRegistry(reg, sync = TRUE)
+  assertRegistry(reg, class = "ExperimentRegistry", sync = TRUE)
   assertString(prob.name, na.ok = TRUE, min.chars = 1L)
   assertString(prob.pattern, na.ok = TRUE, min.chars = 1L)
   assertString(algo.name, na.ok = TRUE, min.chars = 1L)

@@ -23,7 +23,7 @@
 #' @seealso \code{\link{Problem}}, \code{\link{addExperiments}}
 #' @export
 addAlgorithm = function(name, fun = NULL, reg = getDefaultRegistry())  {
-  assertExperimentRegistry(reg, writeable = TRUE)
+  assertRegistry(reg, class = "ExperimentRegistry", writeable = TRUE)
   assertString(name, min.chars = 1L)
   if (!stri_detect_regex(name, "^[[:alnum:]_.-]+$"))
     stopf("Illegal characters in problem name: %s", name)
@@ -44,7 +44,7 @@ addAlgorithm = function(name, fun = NULL, reg = getDefaultRegistry())  {
 #' @export
 #' @rdname addAlgorithm
 removeAlgorithms = function(name, reg = getDefaultRegistry()) {
-  assertExperimentRegistry(reg, writeable = TRUE, running.ok = FALSE)
+  assertRegistry(reg, class = "ExperimentRegistry", writeable = TRUE, running.ok = FALSE)
   assertCharacter(name, any.missing = FALSE)
   assertSubset(name, reg$algorithms)
 
