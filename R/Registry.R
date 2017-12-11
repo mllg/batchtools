@@ -204,6 +204,23 @@ print.Registry = function(x, ...) {
   catf("  Writeable: %s", x$writeable)
 }
 
+#' assertRegistry
+#'
+#' Assert that a given object is a \code{batchtools} registry.
+#' Additionally can sync the registry, check if it is writeable,
+#' check if it is running.
+#'
+#' @param reg The object asserted to be a \code{Registry}
+#' @param writeable Optional check if the registry is writeable
+#' @param sync Whether to sync the registry before writing
+#' @param strict If \code{FALSE} allow subclasses of \code{Registry}
+#'        otherwise.
+#' @param running.ok If \code{FALSE} throw an error if jobs associated
+#' with the registry are currently running.
+#' @return \code{TRUE} invisibily
+#' @details If any check fails, throws an error indicting
+#' the reason for the failure.
+#' @export
 assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, running.ok = TRUE) {
   assertClass(reg, "Registry", ordered = strict)
   if (batchtools$debug) {
