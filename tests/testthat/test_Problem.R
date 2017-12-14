@@ -54,6 +54,6 @@ test_that("instance caching", {
   expect_file_exists(getProblemCacheURI(j))
 
   submitAndWait(reg = reg)
-  tab = flatten(ljoin(getJobTable(reg = reg)[, c("job.id", "repl", "problem", "prob.pars", "algorithm")], reduceResultsDataTable(reg = reg)))
+  tab = unwrap(ljoin(getJobTable(reg = reg)[, c("job.id", "repl", "problem", "prob.pars", "algorithm")], reduceResultsDataTable(reg = reg)))
   expect_equal(tab[, list(v = var(result)), by = c("param", "problem", "repl")]$v, rep(0, 4))
 })

@@ -3,7 +3,7 @@ context("joins")
 test_that("joins", {
   reg = makeTestRegistry()
   batchMap(identity, x = 1:6, reg = reg)
-  x = flatten(getJobPars(reg = reg)[1:5])
+  x = unwrap(getJobPars(reg = reg)[1:5])
   y = findJobs(x >= 2 & x <= 5, reg = reg)
   y$extra.col = head(letters, nrow(y))
 

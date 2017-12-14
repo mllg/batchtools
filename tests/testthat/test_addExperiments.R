@@ -41,7 +41,7 @@ test_that("addExperiments / user provided designs", {
   repls = 1
   ids = addExperiments(reg = reg, prob.designs = prob.designs, algo.designs = algo.designs, combine = "bind")
   expect_data_table(ids, nrow = 9, key = "job.id")
-  pars = flatten(getJobPars(reg = reg))
+  pars = unwrap(getJobPars(reg = reg))
   expect_set_equal(pars$problem, "p1")
   expect_set_equal(pars$algorithm, c("a1", "a2"))
   expect_equal(pars$a, rep(1L, 9))
@@ -53,11 +53,11 @@ test_that("addExperiments / user provided designs", {
   prob.designs = c(prob.designs, list(p2 = data.table()))
   ids = addExperiments(reg = reg, prob.designs = prob.designs, algo.designs = algo.designs, combine = "bind")
   expect_data_table(ids, nrow = 7, key = "job.id")
-  expect_data_table(flatten(getJobPars(reg = reg)), nrow = 16)
+  expect_data_table(unwrap(getJobPars(reg = reg)), nrow = 16)
 
   ids = addExperiments(reg = reg, prob.designs = prob.designs, algo.designs = algo.designs, combine = "crossprod")
   expect_data_table(ids, nrow = 12, key = "job.id")
-  expect_data_table(flatten(getJobPars(reg = reg)), nrow = 28)
+  expect_data_table(unwrap(getJobPars(reg = reg)), nrow = 28)
 
   pd = list(p1 = data.frame(foo = letters[1:2]))
   withr::with_options(list(stringsAsFactors = NULL), {
@@ -83,5 +83,5 @@ if (FALSE) {
   ids = findExperiments(reg = reg)
   profvis::profvis(submitJobs(ids = s.chunk(ids), reg = reg))
 
-  profvis::profvis(flatten(getJobPars(reg = reg)))
+  profvis::profvis(unwrap(getJobPars(reg = reg)))
 }

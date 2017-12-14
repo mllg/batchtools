@@ -23,7 +23,7 @@ test_that("mergeRegistries", {
   checkTables(target)
 
   expect_set_equal(list.files(dir(target, "external")), as.character(c(2, 7)))
-  expect_equal(flatten(reduceResultsDataTable(reg = target))$result.1, c(1,2,3,4,6,7,8,9)^2)
+  expect_equal(unwrap(reduceResultsDataTable(reg = target))$result.1, c(1,2,3,4,6,7,8,9)^2)
   expect_file_exists(fp(target$file.dir, "external", c("2", "7"), "foo"))
 
   unlink(td, recursive = TRUE)

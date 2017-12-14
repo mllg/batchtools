@@ -37,5 +37,5 @@ test_that("batchMap", {
   cj = CJ(a = 1:3, b = letters[1:3])
   ids = batchMap(fun, args = cj, reg = reg)
   expect_data_table(ids, nrow = 9, key = "job.id")
-  expect_equivalent(flatten(getJobPars(reg = reg))[, c("a", "b")], cj)
+  expect_equivalent(unwrap(getJobPars(reg = reg))[, c("a", "b")], cj)
 })

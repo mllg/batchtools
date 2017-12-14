@@ -7,6 +7,10 @@
 #' The contents of these columns  will be transformed to a \code{data.table} and \code{\link[base]{cbind}}-ed
 #' to the input data.frame \code{x}, replacing the original nested column.
 #'
+#' @note
+#' There is a name clash with function \code{flatten} in package \pkg{purrr}.
+#' The function \code{flatten} is discouraged to use for this reason in favor of \code{unwrap}.
+#'
 #' @param x [\code{\link{data.frame}} | \code{\link[data.table]{data.table}}]\cr
 #'   Data frame to flatten.
 #' @param cols [\code{character}]\cr
@@ -25,9 +29,9 @@
 #'   id = 1:3,
 #'   values = list(list(a = 1, b = 3), list(a = 2, b = 2), list(a = 3))
 #' )
-#' flatten(x)
-#' flatten(x, sep = ".")
-flatten = function(x, cols = NULL, sep = NULL) {
+#' unwrap(x)
+#' unwrap(x, sep = ".")
+unwrap = function(x, cols = NULL, sep = NULL) {
   assertDataFrame(x)
   if (!is.data.table(x))
     x = as.data.table(x)
@@ -69,7 +73,7 @@ flatten = function(x, cols = NULL, sep = NULL) {
         setnames(new.cols, names(new.cols), stri_paste(col, names(new.cols), sep = sep))
       clash = chintersect(names(res), names(new.cols))
       if (length(clash) > 0L)
-        stopf("Name clash while flattening data.table: Duplicated column names: %s", stri_flatten(clash, ", "))
+        stopf("Name clash while unwrapping data.table: Duplicated column names: %s", stri_flatten(clash, ", "))
       res[, names(new.cols) := new.cols]
     }
   }
@@ -80,3 +84,10 @@ flatten = function(x, cols = NULL, sep = NULL) {
     setkeyv(res, kx)
   res[]
 }
+
+#' @rdname unwrap
+#' @export
+flatten = function(x, cols = NULL, sep = NULL) { #nocov start
+  "!DEBUG Call of soon-to-be deprecated function flatten. Use unwrap() instead!"
+  unwrap(x, cols, sep)
+} #nocov end

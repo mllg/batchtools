@@ -53,11 +53,11 @@ submitJobs(reg = target)
 waitForJobs(reg = target)
 
 # Map old to new ids. First, get a table with results and parameters
-results = flatten(rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target)))
+results = unwrap(rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target)))
 print(results)
 
 # Parameter '..id' points to job.id in 'source'. Use a inner join to combine:
-ijoin(results, flatten(reduceResultsDataTable(reg = tmp)), by = c("..id" = "job.id"))
+ijoin(results, unwrap(reduceResultsDataTable(reg = tmp)), by = c("..id" = "job.id"))
 }
 \seealso{
 Other Results: \code{\link{loadResult}},

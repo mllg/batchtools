@@ -393,13 +393,13 @@ waitForJobs()
 After jobs are finished, the results can be collected with [`reduceResultsDataTable()`](https://mllg.github.io/batchtools/reference/reduceResultsList) where we directly extract the mean misclassification error:
 ```{r}
 reduce = function(res) list(mce = (sum(res) - sum(diag(res))) / sum(res))
-results = flatten(reduceResultsDataTable(fun = reduce))
+results = unwrap(reduceResultsDataTable(fun = reduce))
 head(results)
 ```
 
 Next, we merge the results table with the table of job parameters using one of the [join helpers](https://mllg.github.io/batchtools/reference/JoinTables) provided by `batchtools` (here, we use an inner join):
 ```{r}
-pars = flatten(getJobPars())
+pars = unwrap(getJobPars())
 tab = ijoin(pars, results)
 head(tab)
 ```

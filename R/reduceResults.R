@@ -174,7 +174,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #'   getJobPars(reg = tmp),
 #'   reduceResultsDataTable(reg = tmp, fun = function(x) list(res = x))
 #' )
-#' flatten(res, sep = ".")
+#' unwrap(res, sep = ".")
 reduceResultsList = function(ids = NULL, fun = NULL, ..., missing.val, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   assertFunction(fun, null.ok = TRUE)
