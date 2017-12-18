@@ -37,7 +37,7 @@
 #'   one job terminated with an exception or expired.
 #' @export
 waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after = 3L, stop.on.error = FALSE, stop.on.expire = FALSE, reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = FALSE, sync = TRUE)
+  assertRegistry(reg, sync = TRUE)
   assertNumber(timeout, lower = 0)
   assertCount(expire.after, positive = TRUE)
   assertFlag(stop.on.error)

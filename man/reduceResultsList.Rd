@@ -93,7 +93,7 @@ res = ijoin(
   getJobPars(reg = tmp),
   reduceResultsDataTable(reg = tmp, fun = function(x) list(res = x))
 )
-flatten(res, sep = ".")
+unwrap(res, sep = ".")
 }
 \seealso{
 \code{\link{reduceResults}}

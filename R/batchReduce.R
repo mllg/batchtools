@@ -37,7 +37,7 @@
 #' # now reduce one final time on master
 #' reduceResults(fun = function(aggr, job, res) f(aggr, res), reg = tmp)
 batchReduce = function(fun, xs, init = NULL, chunks = seq_along(xs), more.args = list(), reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE, strict = TRUE)
+  assertRegistry(reg, class = "Registry", writeable = TRUE)
   if (nrow(reg$defs) > 0L)
     stop("Registry must be empty")
   assertFunction(fun, c("aggr", "x"))

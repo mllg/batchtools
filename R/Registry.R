@@ -102,6 +102,7 @@
 #'     \item{\code{status} [data.table]:}{Table holding information about the computational status. Also see \code{\link{getJobStatus}}.}
 #'     \item{\code{resources} [data.table]:}{Table holding information about the computational resources used for the job. Also see \code{\link{getJobResources}}.}
 #'     \item{\code{tags} [data.table]:}{Table holding information about tags. See \link{Tags}.}
+#'     \item{\code{hash} [character(1)]:}{Unique hash which changes each time the registry gets saved to the file system. Can be utilized to invalidate the cache of \pkg{knitr}.}
 #'   }
 #' @aliases Registry
 #' @family Registry
@@ -187,6 +188,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   class(reg) = "Registry"
   saveRegistry(reg)
   reg$mtime = file.mtime(fp(reg$file.dir, "registry.rds"))
+  reg$hash = rnd_hash()
   info("Created registry in '%s' using cluster functions '%s'", reg$file.dir, reg$cluster.functions$name)
   if (make.default)
     batchtools$default.registry = reg
@@ -204,8 +206,28 @@ print.Registry = function(x, ...) {
   catf("  Writeable: %s", x$writeable)
 }
 
-assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, running.ok = TRUE) {
-  assertClass(reg, "Registry", ordered = strict)
+#' @title assertRegistry
+#'
+#' @description
+#' Assert that a given object is a \code{batchtools} registry.
+#' Additionally can sync the registry, check if it is writeable, or check if jobs are running.
+#' If any check fails, throws an error indicting the reason for the failure.
+#'
+#' @param reg [\code{\link{Registry}}]\cr
+#'   The object asserted to be a \code{Registry}.
+#' @param class [\code{character(1)}]\cr
+#'   If \code{NULL} (default), \code{reg} must only inherit from class \dQuote{Registry}.
+#'   Otherwise check that \code{reg} is of class \code{class}.
+#'   E.g., if set to \dQuote{Registry}, a \code{\link{ExperimentRegistry}} would not pass.
+#' @param writeable [\code{logical(1)}]\cr
+#'   Check if the registry is writeable.
+#' @param sync [\code{logical(1)}]\cr
+#'   Whether to sync the registry before writing.
+#' @param running.ok [\code{logical(1)}]\cr
+#'   If \code{FALSE} throw an error if jobs associated with the registry are currently running.
+#' @return \code{TRUE} invisibly.
+#' @export
+assertRegistry = function(reg, class = NULL, writeable = FALSE, sync = FALSE, running.ok = TRUE) {
   if (batchtools$debug) {
     if (!identical(key(reg$status), "job.id"))
       stop("Key of reg$job.id lost")
@@ -215,6 +237,15 @@ assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, 
       stop("Key of reg$resources lost")
   }
 
+  if (is.null(class)) {
+    assertClass(reg, "Registry")
+  } else {
+    assertString(class)
+    assertClass(reg, class, ordered = TRUE)
+  }
+  assertFlag(writeable)
+  assertFlag(sync)
+  assertFlag(running.ok)
 
   if (reg$writeable && !identical(reg$mtime, file.mtime(fp(reg$file.dir, "registry.rds")))) {
     warning("Registry has been altered since last read. Switching to read-only mode in this session.")
@@ -224,10 +255,11 @@ assertRegistry = function(reg, writeable = FALSE, sync = FALSE, strict = FALSE, 
   if (writeable && !reg$writeable)
     stop("Registry must be writeable")
 
-  if (sync || !running.ok) {
-    if (sync(reg))
-      saveRegistry(reg)
-  }
+  if (sync && !reg$writeable)
+    stop("Registry must be writeable to be synced")
+
+  if ((sync || !running.ok) && sync(reg))
+    saveRegistry(reg)
 
   if (!running.ok && nrow(.findOnSystem(reg = reg)) > 0L)
     stop("This operation is not allowed while jobs are running on the system")

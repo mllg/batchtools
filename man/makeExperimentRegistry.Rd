@@ -104,7 +104,7 @@ tmp$algorithms
 summarizeExperiments(reg = tmp)
 summarizeExperiments(reg = tmp, by = c("problem", "algorithm", "n"))
 ids = findExperiments(prob.pars = (n == 50), reg = tmp)
-print(flatten(getJobPars(ids, reg = tmp)))
+print(unwrap(getJobPars(ids, reg = tmp)))
 
 # Submit jobs
 submitJobs(reg = tmp)
@@ -117,8 +117,8 @@ reduceResults(ids.mean, fun = function(aggr, res, ...) c(aggr, res), reg = tmp)
 # Join info table with all results and calculate mean of results
 # grouped by n and algorithm
 ids = findDone(reg = tmp)
-pars = flatten(getJobPars(ids, reg = tmp))
-results = flatten(reduceResultsDataTable(ids, fun = function(res) list(res = res), reg = tmp))
+pars = unwrap(getJobPars(ids, reg = tmp))
+results = unwrap(reduceResultsDataTable(ids, fun = function(res) list(res = res), reg = tmp))
 tab = ljoin(pars, results)
 tab[, list(mres = mean(res)), by = c("n", "algorithm")]
 }

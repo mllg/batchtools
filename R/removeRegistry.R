@@ -17,7 +17,7 @@
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' removeRegistry(0, tmp)
 removeRegistry = function(wait = 5, reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE, running.ok = FALSE)
+  assertRegistry(reg, writeable = TRUE, sync = TRUE, running.ok = FALSE)
   assertNumber(wait, lower = 0)
 
   if (wait > 0) {

@@ -43,7 +43,8 @@ suppressAll = function (expr) {
 }
 
 checkTables = function(reg, ...) {
-  expect_is(reg$mtime, "POSIXct")
+  expect_string(reg$hash)
+  expect_posixct(reg$mtime, len = 1L)
 
   if (class(reg)[1L] == "Registry") {
     cols = c("def.id",   "job.pars")

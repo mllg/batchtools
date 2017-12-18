@@ -60,7 +60,7 @@ test_that("External directory is created", {
   fun = function(..., .job) .job$external.dir
   ids = batchMap(fun, i = 1:3, reg = reg, more.args = list(x = 1))
   submitAndWait(reg)
-  expect_directory_exists(flatten(reduceResultsDataTable(1:3, reg = reg))[[2]])
+  expect_directory_exists(unwrap(reduceResultsDataTable(1:3, reg = reg))[[2]])
 
   reg = makeTestExperimentRegistry()
   addProblem(reg = reg, "p1", fun = function(job, data, ...) list(data = data, ...))

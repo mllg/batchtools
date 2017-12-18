@@ -9,7 +9,7 @@
 #' @family Results
 #' @export
 loadResult = function(id, reg = getDefaultRegistry()) {
-  assertRegistry(reg)
+  assertRegistry(reg, sync = TRUE)
   id = convertId(reg, id)
   if (nrow(.findDone(reg, id)) == 0L)
     stopf("Job with id %i not terminated", id$job.id)

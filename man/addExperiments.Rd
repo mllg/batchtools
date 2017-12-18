@@ -80,7 +80,7 @@ addExperiments(prob.designs, algo.designs, reg = tmp)
 
 # check what has been created
 summarizeExperiments(reg = tmp)
-flatten(getJobPars(reg = tmp))
+unwrap(getJobPars(reg = tmp))
 }
 \seealso{
 Other Experiment: \code{\link{removeExperiments}},

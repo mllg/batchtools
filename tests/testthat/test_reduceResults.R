@@ -19,7 +19,7 @@ test_that("batchMapResults", {
   expect_data_table(x, nrow = 3, key = "job.id")
   expect_data_table(target$status, nrow = 3)
   submitAndWait(target)
-  res = flatten(reduceResultsDataTable(reg = target))
+  res = unwrap(reduceResultsDataTable(reg = target))
   expect_equal(res[[2L]], 11:13 + rep(5, 3) + 2)
 })
 
@@ -53,36 +53,36 @@ test_that("reduceResultsList", {
 
 test_that("reduceResultsDataTable", {
   silent({
-    tab = flatten(reduceResultsDataTable(reg = reg))
+    tab = unwrap(reduceResultsDataTable(reg = reg))
     expect_data_table(tab, nrow = 3, ncol = 3, key = "job.id")
     expect_null(tab$result)
     expect_equal(tab$a, 1:3)
 
-    tab = flatten(reduceResultsDataTable(reg = reg, fun = function(x) list(a = x$a)))
+    tab = unwrap(reduceResultsDataTable(reg = reg, fun = function(x) list(a = x$a)))
     expect_data_table(tab, nrow = 3, ncol = 2, key = "job.id")
     expect_equal(tab$a, 1:3)
 
-    tab = flatten(reduceResultsDataTable(reg = reg, ids = 3:2, fun = function(x) list(a = x$a)))
+    tab = unwrap(reduceResultsDataTable(reg = reg, ids = 3:2, fun = function(x) list(a = x$a)))
     expect_data_table(tab, nrow = 2, ncol = 2, key = "job.id")
     expect_equal(tab$a, 2:3)
 
-    tab = flatten(reduceResultsDataTable(reg = reg, fun = function(x) x$a))
+    tab = unwrap(reduceResultsDataTable(reg = reg, fun = function(x) x$a))
     expect_data_table(tab, nrow = 3, ncol = 2, key = "job.id")
     expect_equal(tab$result.1, 1:3)
 
-    tab = flatten(reduceResultsDataTable(reg = reg, fun = function(x, y) x$a + y, y = 1))
+    tab = unwrap(reduceResultsDataTable(reg = reg, fun = function(x, y) x$a + y, y = 1))
     expect_data_table(tab, nrow = 3, ncol = 2, key = "job.id")
     expect_equal(tab$result.1, 1:3 + 1L)
   })
 })
 
-test_that("reduceResultsDataTable/flatten simple", {
+test_that("reduceResultsDataTable/unwrap simple", {
   silent({
     tab = reduceResultsDataTable(reg = reg)
     expect_data_table(tab, nrow = 3, ncol = 2, key = "job.id")
     expect_set_equal(names(tab), c("job.id", "result"))
     expect_list(tab$result[[1]], types = "numeric", len = 2)
-    tab = flatten(tab)
+    tab = unwrap(tab)
     expect_data_table(tab, ncol = 3)
     expect_equal(tab$job.id, 1:3)
     expect_equal(tab$a, 1:3)
@@ -153,7 +153,7 @@ test_that("reduceResultsDataTable/multiRowResults", {
   })
 })
 
-test_that("reduceResultsDataTable/flatten objects", {
+test_that("reduceResultsDataTable/unwrap objects", {
   silent({
     reg = makeTestRegistry()
     fun = function(...) iris

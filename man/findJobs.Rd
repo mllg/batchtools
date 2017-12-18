@@ -128,5 +128,5 @@ findTagged(tags = "my_tag", reg = tmp)
 ajoin(findNotDone(reg = tmp), findTagged("my_tag", reg = tmp))
 }
 \seealso{
-\code{\link{getStatus}} \code{\link{JoinTables}}<`3`>
+\code{\link{getStatus}} \code{\link{JoinTables}}
 }

@@ -10,8 +10,10 @@
 #' @export
 syncRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE)
-  sync(reg)
-  saveRegistry(reg)
+  if (sync(reg))
+    saveRegistry(reg)
+  else
+    invisible(FALSE)
 }
 
 

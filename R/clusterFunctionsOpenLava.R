@@ -1,7 +1,7 @@
 #' @title ClusterFunctions for OpenLava
 #'
 #' @description
-#' Cluster functions for OpenLava (\url{http://www.openlava.org/}).
+#' Cluster functions for OpenLava.
 #'
 #' Job files are created based on the brew template \code{template}. This
 #' file is processed with brew and then submitted to the queue using the

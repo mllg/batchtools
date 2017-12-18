@@ -33,14 +33,14 @@
 #' waitForJobs(reg = target)
 #'
 #' # Map old to new ids. First, get a table with results and parameters
-#' results = flatten(rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target)))
+#' results = unwrap(rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target)))
 #' print(results)
 #'
 #' # Parameter '..id' points to job.id in 'source'. Use a inner join to combine:
-#' ijoin(results, flatten(reduceResultsDataTable(reg = tmp)), by = c("..id" = "job.id"))
+#' ijoin(results, unwrap(reduceResultsDataTable(reg = tmp)), by = c("..id" = "job.id"))
 batchMapResults = function(fun, ids = NULL, ..., more.args = list(), target, source = getDefaultRegistry()) {
   assertRegistry(source, sync = TRUE)
-  assertRegistry(target, sync = TRUE)
+  assertRegistry(target, writeable = TRUE, sync = TRUE)
   assertFunction(fun)
   ids = convertIds(source, ids, default = .findDone(reg = source))
   assertList(more.args, names = "strict")

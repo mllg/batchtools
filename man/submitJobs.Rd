@@ -140,10 +140,10 @@ submitJobs(ids, resources = res, reg = tmp)
 
 # Retrive information about memory, combine with parameters
 info = ijoin(getJobStatus(reg = tmp)[, .(job.id, mem.used)], getJobPars(reg = tmp))
-print(flatten(info))
+print(unwrap(info))
 
 # Combine job info with results -> each job is aggregated using mean()
-flatten(ijoin(info, reduceResultsDataTable(fun = function(res) list(res = mean(res)), reg = tmp)))
+unwrap(ijoin(info, reduceResultsDataTable(fun = function(res) list(res = mean(res)), reg = tmp)))
 
 ### Example 2: Multicore execution on the slave
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
