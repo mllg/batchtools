@@ -136,16 +136,17 @@ Thus, set to <code>writeable</code> to <code>TRUE</code> if and only if you are 
       <th>conf.file</th>
       <td><p>[<code>character(1)</code>]
   Path to a configuration file which is sourced while the registry is created.
-  For example, you can set cluster functions or default resources in it.
-  The script is executed inside the environment of the registry after the defaults for all variables are set,
-  thus you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.</p>
-<p>The file lookup defaults to a heuristic which first tries to read &#8220;batchtools.conf.R&#8221; in the current working directory.
-  If not found, it looks for a configuration file &#8220;config.R&#8221; in the OS dependent user configuration directory
-  as reported by via <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>rappdirs::user_config_dir("batchtools", expand = FALSE)</a></code> (e.g., on linux this
-  usually resolves to &#8220;~/.config/batchtools/config.R&#8221;).
-  If this file is also not found, the heuristic finally tries to read the file &#8220;.batchtools.conf.R&#8221; in the
-  home directory (&#8220;~&#8221;).
-  Set to <code>character(0)</code> if you want to disable this heuristic.</p></td>
+  In the configuration file you can define how <span class="pkg">batchtools</span> interacts with the system via <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>.
+  Separating the configuration of the underlying host system from the R code allows to easily move computation to another site.</p>
+<p>The file lookup is implemented in <code>findConfFile</code> which returns the first file found of the following candidates:</p><ol>
+<li><p>File &#8220;batchtools.conf.R&#8221; in the path specified by the environment variable &#8220;R_BATCHTOOLS_SEARCH_PATH&#8221;.</p></li>
+<li><p>File &#8220;batchtools.conf.R&#8221; in the current working directory.</p></li>
+<li><p>File &#8220;config.R&#8221; in the OS dependent user configuration directory as reported by via <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>rappdirs::user_config_dir("batchtools", expand = FALSE)</a></code> (e.g., on linux this usually resolves to &#8220;~/.config/batchtools/config.R&#8221;).</p></li>
+<li><p>&#8220;.batchtools.conf.R&#8221; in the home directory (&#8220;~&#8221;).</p></li>
+</ol><p>Set to <code>character(0)</code> if you want to suppress reading any configuration file.
+  If a configuration file is found, it gets sourced inside the environment of the registry after the defaults for all variables are set.
+  Therefore you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources or &#8220;max.concurrent.jobs&#8221; to
+  limit the number of jobs allowed to run simultaneously on the system.</p></td>
     </tr>
     <tr>
       <th>make.default</th>

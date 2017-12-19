@@ -129,11 +129,13 @@ Additional arguments passed to <code>fun</code> (<code>btlapply</code>) or vecto
     <tr>
       <th>resources</th>
       <td><p>[<code>named list</code>]
-Computational  resources for the batch jobs. The elements of this list
-(e.g. something like &#8220;walltime&#8221; or &#8220;nodes&#8221;) depend on your template file.
-See notes for reserved special resource names.
-Defaults can be stored in the configuration file by providing the named list <code>default.resources</code>.
-Settings in <code>resources</code> overwrite those in <code>default.resources</code>.</p></td>
+Computational  resources for the jobs to submit. The actual elements of this list
+(e.g. something like &#8220;walltime&#8221; or &#8220;nodes&#8221;) depend on your template file, exceptions are outlined in the details.
+In case you need to set individual job resources, <code>ids</code> may be provided as <code>data.frame</code> with the additional
+column &#8220;resources&#8221; (see example).
+Default settings for a system can be set in the configuration file by defining the named list <code>default.resources</code>.
+Note that these settings are merged by name, e.g. merging <code>list(walltime = 300)</code> into <code>list(walltime = 400, memory = 512)</code>
+will result in <code>list(walltime = 300, memory = 512)</code>.</p></td>
     </tr>
     <tr>
       <th>n.chunks</th>
@@ -173,7 +175,7 @@ Use names of the input to name the output?</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>btlapply</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a32d545b8e' using cluster functions 'Interactive'</span></div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; [[1]]
+    <pre class="examples"><div class='input'><span class='fu'>btlapply</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af98a2b584' using cluster functions 'Interactive'</span></div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1
 #&gt; 
 #&gt; [[2]]
@@ -181,7 +183,7 @@ Use names of the input to name the output?</p></td>
 #&gt; 
 #&gt; [[3]]
 #&gt; [1] 9
-#&gt; </div><div class='input'><span class='fu'>btmapply</span>(<span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>z</span>) <span class='no'>x</span> + <span class='no'>y</span> + <span class='no'>z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>more.args</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a318231711' using cluster functions 'Interactive'</span></div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; [1] 3 5 7</div></pre>
+#&gt; </div><div class='input'><span class='fu'>btmapply</span>(<span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>z</span>) <span class='no'>x</span> + <span class='no'>y</span> + <span class='no'>z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>more.args</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af965a36f13' using cluster functions 'Interactive'</span></div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; [1] 3 5 7</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

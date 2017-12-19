@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Unwrap Nested Data Frames — flatten • batchtools</title>
+<title>assertRegistry — assertRegistry • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -86,63 +86,55 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Unwrap Nested Data Frames</h1>
+    <h1>assertRegistry</h1>
     </div>
 
     
-    <p>Some functions (e.g., <code><a href='getJobTable.html'>getJobPars</a></code>, <code><a href='getJobTable.html'>getJobResources</a></code> or <code><a href='reduceResultsList.html'>reduceResultsDataTable</a></code>
-return a <code>data.table</code> with columns of type <code>list</code>.
-These columns can be unnested/unwrapped with this function.
-The contents of these columns  will be transformed to a <code>data.table</code> and <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code>-ed
-to the input data.frame <code>x</code>, replacing the original nested column.</p>
+    <p>Assert that a given object is a <code>batchtools</code> registry.
+Additionally can sync the registry, check if it is writeable, or check if jobs are running.
+If any check fails, throws an error indicting the reason for the failure.</p>
     
 
-    <pre class="usage"><span class='fu'>flatten</span>(<span class='no'>x</span>, <span class='kw'>cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>assertRegistry</span>(<span class='no'>reg</span>, <span class='kw'>class</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>writeable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>sync</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>running.ok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>[<code>data.frame</code> | <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]
-Data frame to flatten.</p></td>
+      <th>reg</th>
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+The object asserted to be a <code>Registry</code>.</p></td>
     </tr>
     <tr>
-      <th>cols</th>
-      <td><p>[<code>character</code>]
-Columns to consider for this operation. If set to <code>NULL</code> (default),
-will operate on all columns of type &#8220;list&#8221;.</p></td>
-    </tr>
-    <tr>
-      <th>sep</th>
+      <th>class</th>
       <td><p>[<code>character(1)</code>]
-If <code>NULL</code> (default), the column names of the additional columns will re-use the names
-of the nested <code>list</code>/<code>data.frame</code>.
-This may lead to name clashes.
-If you provide <code>sep</code>, the variable column name will be constructed as
-&#8220;[column name of x][sep][inner name]&#8221;.</p></td>
+If <code>NULL</code> (default), <code>reg</code> must only inherit from class &#8220;Registry&#8221;.
+Otherwise check that <code>reg</code> is of class <code>class</code>.
+E.g., if set to &#8220;Registry&#8221;, a <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code> would not pass.</p></td>
+    </tr>
+    <tr>
+      <th>writeable</th>
+      <td><p>[<code>logical(1)</code>]
+Check if the registry is writeable.</p></td>
+    </tr>
+    <tr>
+      <th>sync</th>
+      <td><p>[<code>logical(1)</code>]
+Whether to sync the registry before writing.</p></td>
+    </tr>
+    <tr>
+      <th>running.ok</th>
+      <td><p>[<code>logical(1)</code>]
+If <code>FALSE</code> throw an error if jobs associated with the registry are currently running.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>[<code>data.table</code>].</p>
+    <p><code>TRUE</code> invisibly.</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(
-  <span class='kw'>id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>,
-  <span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='fu'>list</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='fu'>list</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='fu'>list</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>3</span>))
-)
-<span class='fu'>flatten</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;       id     a     b
-#&gt;    &lt;int&gt; &lt;num&gt; &lt;num&gt;
-#&gt; 1:     1     1     3
-#&gt; 2:     2     2     2
-#&gt; 3:     3     3    NA</div><div class='input'><span class='fu'>flatten</span>(<span class='no'>x</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>)</div><div class='output co'>#&gt;       id values.a values.b
-#&gt;    &lt;int&gt;    &lt;num&gt;    &lt;num&gt;
-#&gt; 1:     1        1        3
-#&gt; 2:     2        2        2
-#&gt; 3:     3        3       NA</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -150,9 +142,7 @@ If you provide <code>sep</code>, the variable column name will be constructed as
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

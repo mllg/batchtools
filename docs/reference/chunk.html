@@ -169,35 +169,35 @@ Mutually exclusive with <code>n.chunks</code>.</p></td>
 <span class='fu'>sapply</span>(<span class='fu'>split</span>(<span class='no'>x</span>, <span class='no'>ch</span>), <span class='no'>sum</span>)</div><div class='output co'>#&gt;         1         2         3         4         5         6 
 #&gt; 0.9446753 0.9699941 0.8983897 0.9263065 0.8307960 0.9449773 </div><div class='input'>
 <span class='co'># Job chunking</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a3268f4e8a' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>25</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 25 jobs ...</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af96776bc29' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>25</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 25 jobs ...</span></div><div class='input'>
 <span class='co'>### Group into chunks with 10 jobs each</span>
 <span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'>chunk</span>(<span class='no'>job.id</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>10</span>)]</div><div class='output co'>#&gt;     job.id chunk
 #&gt;      &lt;int&gt; &lt;int&gt;
 #&gt;  1:      1     2
-#&gt;  2:      2     2
-#&gt;  3:      3     3
-#&gt;  4:      4     3
+#&gt;  2:      2     3
+#&gt;  3:      3     2
+#&gt;  4:      4     1
 #&gt;  5:      5     2
-#&gt;  6:      6     3
-#&gt;  7:      7     1
+#&gt;  6:      6     1
+#&gt;  7:      7     3
 #&gt;  8:      8     1
-#&gt;  9:      9     2
-#&gt; 10:     10     2
-#&gt; 11:     11     1
-#&gt; 12:     12     1
-#&gt; 13:     13     2
-#&gt; 14:     14     1
+#&gt;  9:      9     3
+#&gt; 10:     10     3
+#&gt; 11:     11     2
+#&gt; 12:     12     3
+#&gt; 13:     13     1
+#&gt; 14:     14     3
 #&gt; 15:     15     1
 #&gt; 16:     16     1
-#&gt; 17:     17     3
+#&gt; 17:     17     2
 #&gt; 18:     18     3
-#&gt; 19:     19     3
+#&gt; 19:     19     2
 #&gt; 20:     20     2
 #&gt; 21:     21     3
 #&gt; 22:     22     1
 #&gt; 23:     23     1
-#&gt; 24:     24     2
-#&gt; 25:     25     3
+#&gt; 24:     24     1
+#&gt; 25:     25     2
 #&gt;     job.id chunk</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>[, <span class='no'>.N</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>chunk</span>])</div><div class='output co'>#&gt;    chunk     N
 #&gt;    &lt;int&gt; &lt;int&gt;
 #&gt; 1:     2     8
@@ -206,40 +206,41 @@ Mutually exclusive with <code>n.chunks</code>.</p></td>
 <span class='co'>### Group into 4 chunks</span>
 <span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'>chunk</span>(<span class='no'>job.id</span>, <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='fl'>4</span>)]</div><div class='output co'>#&gt;     job.id chunk
 #&gt;      &lt;int&gt; &lt;int&gt;
-#&gt;  1:      1     4
-#&gt;  2:      2     3
-#&gt;  3:      3     1
+#&gt;  1:      1     3
+#&gt;  2:      2     4
+#&gt;  3:      3     3
 #&gt;  4:      4     2
-#&gt;  5:      5     2
+#&gt;  5:      5     4
 #&gt;  6:      6     1
 #&gt;  7:      7     3
-#&gt;  8:      8     2
+#&gt;  8:      8     1
 #&gt;  9:      9     1
 #&gt; 10:     10     1
-#&gt; 11:     11     1
+#&gt; 11:     11     4
 #&gt; 12:     12     3
-#&gt; 13:     13     3
-#&gt; 14:     14     1
-#&gt; 15:     15     2
-#&gt; 16:     16     4
-#&gt; 17:     17     4
-#&gt; 18:     18     2
-#&gt; 19:     19     3
+#&gt; 13:     13     4
+#&gt; 14:     14     2
+#&gt; 15:     15     3
+#&gt; 16:     16     2
+#&gt; 17:     17     2
+#&gt; 18:     18     3
+#&gt; 19:     19     4
 #&gt; 20:     20     2
 #&gt; 21:     21     4
-#&gt; 22:     22     4
+#&gt; 22:     22     1
 #&gt; 23:     23     1
-#&gt; 24:     24     3
-#&gt; 25:     25     4
+#&gt; 24:     24     1
+#&gt; 25:     25     2
 #&gt;     job.id chunk</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>[, <span class='no'>.N</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>chunk</span>])</div><div class='output co'>#&gt;    chunk     N
 #&gt;    &lt;int&gt; &lt;int&gt;
-#&gt; 1:     4     6
-#&gt; 2:     3     6
-#&gt; 3:     1     7
-#&gt; 4:     2     6</div><div class='input'>
-
+#&gt; 1:     3     6
+#&gt; 2:     4     6
+#&gt; 3:     2     6
+#&gt; 4:     1     7</div><div class='input'>
+<span class='co'>### Submit to batch system</span>
+<span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 25 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='input'>
 <span class='co'># Grouped chunking</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a3179044bb' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob1"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; <span class='message'>Adding problem 'prob1'</span></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob2"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Titanic</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; <span class='message'>Adding problem 'prob2'</span></div><div class='input'><span class='no'>algo</span> <span class='kw'>=</span> <span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"algo"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>i</span>, <span class='no'>...</span>) <span class='no'>problem</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'algo'</span></div><div class='input'><span class='no'>prob.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>prob1</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(), <span class='kw'>prob2</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>))
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af9734e00b4' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob1"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; <span class='message'>Adding problem 'prob1'</span></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob2"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Titanic</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; <span class='message'>Adding problem 'prob2'</span></div><div class='input'><span class='no'>algo</span> <span class='kw'>=</span> <span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"algo"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>i</span>, <span class='no'>...</span>) <span class='no'>problem</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'algo'</span></div><div class='input'><span class='no'>prob.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>prob1</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(), <span class='kw'>prob2</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>))
 <span class='no'>algo.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>algo</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>))
 <span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='no'>prob.designs</span>, <span class='no'>algo.designs</span>, <span class='kw'>repls</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 9 experiments ('prob1'[1] x 'algo'[3] x repls[3]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 18 experiments ('prob2'[2] x 'algo'[3] x repls[3]) ...</span></div><div class='input'>
 <span class='co'>### Group into chunks of 5 jobs, but do not put multiple problems into the same chunk</span>
@@ -248,68 +249,68 @@ Mutually exclusive with <code>n.chunks</code>.</p></td>
 <span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'>chunk</span>(<span class='no'>job.id</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>5</span>), <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"problem"</span>]</div><div class='output co'>#&gt;     job.id problem algorithm chunk
 #&gt;      &lt;int&gt;  &lt;char&gt;    &lt;char&gt; &lt;int&gt;
 #&gt;  1:      1   prob1      algo     1
-#&gt;  2:      2   prob1      algo     1
+#&gt;  2:      2   prob1      algo     2
 #&gt;  3:      3   prob1      algo     1
-#&gt;  4:      4   prob1      algo     2
+#&gt;  4:      4   prob1      algo     1
 #&gt;  5:      5   prob1      algo     2
-#&gt;  6:      6   prob1      algo     2
+#&gt;  6:      6   prob1      algo     1
 #&gt;  7:      7   prob1      algo     1
 #&gt;  8:      8   prob1      algo     2
-#&gt;  9:      9   prob1      algo     1
-#&gt; 10:     10   prob2      algo     4
+#&gt;  9:      9   prob1      algo     2
+#&gt; 10:     10   prob2      algo     1
 #&gt; 11:     11   prob2      algo     2
-#&gt; 12:     12   prob2      algo     1
-#&gt; 13:     13   prob2      algo     4
-#&gt; 14:     14   prob2      algo     1
-#&gt; 15:     15   prob2      algo     4
-#&gt; 16:     16   prob2      algo     1
-#&gt; 17:     17   prob2      algo     1
-#&gt; 18:     18   prob2      algo     2
+#&gt; 12:     12   prob2      algo     3
+#&gt; 13:     13   prob2      algo     2
+#&gt; 14:     14   prob2      algo     4
+#&gt; 15:     15   prob2      algo     3
+#&gt; 16:     16   prob2      algo     2
+#&gt; 17:     17   prob2      algo     2
+#&gt; 18:     18   prob2      algo     1
 #&gt; 19:     19   prob2      algo     4
 #&gt; 20:     20   prob2      algo     2
 #&gt; 21:     21   prob2      algo     3
-#&gt; 22:     22   prob2      algo     2
-#&gt; 23:     23   prob2      algo     3
-#&gt; 24:     24   prob2      algo     1
-#&gt; 25:     25   prob2      algo     3
-#&gt; 26:     26   prob2      algo     2
-#&gt; 27:     27   prob2      algo     3
+#&gt; 22:     22   prob2      algo     1
+#&gt; 23:     23   prob2      algo     1
+#&gt; 24:     24   prob2      algo     3
+#&gt; 25:     25   prob2      algo     1
+#&gt; 26:     26   prob2      algo     4
+#&gt; 27:     27   prob2      algo     4
 #&gt;     job.id problem algorithm chunk</div><div class='input'><span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='no'>.GRP</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"problem"</span>, <span class='st'>"chunk"</span>)]</div><div class='output co'>#&gt;     job.id problem algorithm chunk
 #&gt;      &lt;int&gt;  &lt;char&gt;    &lt;char&gt; &lt;int&gt;
 #&gt;  1:      1   prob1      algo     1
-#&gt;  2:      2   prob1      algo     1
+#&gt;  2:      2   prob1      algo     2
 #&gt;  3:      3   prob1      algo     1
-#&gt;  4:      4   prob1      algo     2
+#&gt;  4:      4   prob1      algo     1
 #&gt;  5:      5   prob1      algo     2
-#&gt;  6:      6   prob1      algo     2
+#&gt;  6:      6   prob1      algo     1
 #&gt;  7:      7   prob1      algo     1
 #&gt;  8:      8   prob1      algo     2
-#&gt;  9:      9   prob1      algo     1
+#&gt;  9:      9   prob1      algo     2
 #&gt; 10:     10   prob2      algo     3
 #&gt; 11:     11   prob2      algo     4
 #&gt; 12:     12   prob2      algo     5
-#&gt; 13:     13   prob2      algo     3
-#&gt; 14:     14   prob2      algo     5
-#&gt; 15:     15   prob2      algo     3
-#&gt; 16:     16   prob2      algo     5
-#&gt; 17:     17   prob2      algo     5
-#&gt; 18:     18   prob2      algo     4
-#&gt; 19:     19   prob2      algo     3
+#&gt; 13:     13   prob2      algo     4
+#&gt; 14:     14   prob2      algo     6
+#&gt; 15:     15   prob2      algo     5
+#&gt; 16:     16   prob2      algo     4
+#&gt; 17:     17   prob2      algo     4
+#&gt; 18:     18   prob2      algo     3
+#&gt; 19:     19   prob2      algo     6
 #&gt; 20:     20   prob2      algo     4
-#&gt; 21:     21   prob2      algo     6
-#&gt; 22:     22   prob2      algo     4
-#&gt; 23:     23   prob2      algo     6
+#&gt; 21:     21   prob2      algo     5
+#&gt; 22:     22   prob2      algo     3
+#&gt; 23:     23   prob2      algo     3
 #&gt; 24:     24   prob2      algo     5
-#&gt; 25:     25   prob2      algo     6
-#&gt; 26:     26   prob2      algo     4
+#&gt; 25:     25   prob2      algo     3
+#&gt; 26:     26   prob2      algo     6
 #&gt; 27:     27   prob2      algo     6
 #&gt;     job.id problem algorithm chunk</div><div class='input'><span class='fu'>dcast</span>(<span class='no'>ids</span>, <span class='no'>chunk</span> ~ <span class='no'>problem</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'chunk' as value column. Use 'value.var' to override</span></div><div class='output co'>#&gt; <span class='message'>Aggregate function missing, defaulting to 'length'</span></div><div class='output co'>#&gt;    chunk prob1 prob2
 #&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;
 #&gt; 1:     1     5     0
 #&gt; 2:     2     4     0
-#&gt; 3:     3     0     4
+#&gt; 3:     3     0     5
 #&gt; 4:     4     0     5
-#&gt; 5:     5     0     5
+#&gt; 5:     5     0     4
 #&gt; 6:     6     0     4</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

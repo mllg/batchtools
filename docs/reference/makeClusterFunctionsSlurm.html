@@ -115,13 +115,15 @@ otherwise the commands for listing and killing jobs will not work.</p>
     <tr>
       <th>template</th>
       <td><p>[<code>character(1)</code>]
-Either a path to a brew template file (with extension &#8220;tmpl&#8221;), or a short descriptive name enabling the following heuristic for the file lookup:</p><ol>
+Either a path to a <span class="pkg">brew</span> template file (with extension &#8220;tmpl&#8221;), or a short descriptive name enabling the following heuristic for the file lookup:</p><ol>
+<li><p>&#8220;batchtools.[template].tmpl&#8221; in the path specified by the environment variable &#8220;R_BATCHTOOLS_SEARCH_PATH&#8221;.</p></li>
 <li><p>&#8220;batchtools.[template].tmpl&#8221; in the current working directory.</p></li>
 <li><p>&#8220;[template].tmpl&#8221; in the user config directory (see <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>user_config_dir</a></code>); on linux this is usually &#8220;~/.config/batchtools/[template].tmpl&#8221;.</p></li>
 <li><p>&#8220;.batchtools.[template].tmpl&#8221; in the home directory.</p></li>
 <li><p>&#8220;[template].tmpl&#8221; in the package installation directory in the subfolder &#8220;templates&#8221;.</p></li>
 </ol><p>Here, the default for <code>template</code> is &#8220;slurm&#8221;.
-Alternatively, the template itself can be provided as a single string (including at least one newline &#8220;\n&#8221;).</p></td>
+Alternatively, the template itself can be provided directly as a string which is then passed to <span class="pkg">brew</span>.
+The string must include at least on newline (&#8220;\n&#8221;) in this case.</p></td>
     </tr>
     <tr>
       <th>clusters</th>
@@ -157,7 +159,7 @@ Currently only triggered after calling <code><a href='submitJobs.html'>submitJob
 Expected maximum latency of the file system, in seconds.
 Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 access files and directories.
-Usually safe to set to <code>NA</code> which disables the expensive heuristic if you are working on a local file system.</p></td>
+Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are working on a local file system.</p></td>
     </tr>
     </table>
     

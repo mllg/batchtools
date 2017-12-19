@@ -91,13 +91,6 @@
 
     
     <p>Submits defined jobs to the batch system.</p>
-<p>If an additional column &#8220;chunk&#8221; is found in the table <code>ids</code>,
-jobs will be grouped accordingly to be executed sequentially on the same slave.
-The utility functions <code><a href='chunk.html'>chunk</a></code>, <code><a href='chunk.html'>binpack</a></code> and <code><a href='chunk.html'>lpt</a></code>
-can assist in grouping jobs.
-Jobs are submitted in the order of chunks, i.e. jobs which have chunk number
-<code>unique(ids$chunk)[1]</code> first, then jobs with chunk number <code>unique(ids$chunk)[2]</code>
-and so on. If no chunks are provided, jobs are submitted in the order of <code>ids$job.id</code>.</p>
 <p>After submitting the jobs, you can use <code><a href='waitForJobs.html'>waitForJobs</a></code> to wait for the
 termination of jobs or call <code><a href='reduceResultsList.html'>reduceResultsList</a></code>/<code><a href='reduceResults.html'>reduceResults</a></code>
 to collect partial results.
@@ -122,11 +115,13 @@ Invalid ids are ignored.</p></td>
     <tr>
       <th>resources</th>
       <td><p>[<code>named list</code>]
-Computational  resources for the batch jobs. The elements of this list
-(e.g. something like &#8220;walltime&#8221; or &#8220;nodes&#8221;) depend on your template file.
-See notes for reserved special resource names.
-Defaults can be stored in the configuration file by providing the named list <code>default.resources</code>.
-Settings in <code>resources</code> overwrite those in <code>default.resources</code>.</p></td>
+Computational  resources for the jobs to submit. The actual elements of this list
+(e.g. something like &#8220;walltime&#8221; or &#8220;nodes&#8221;) depend on your template file, exceptions are outlined in the details.
+In case you need to set individual job resources, <code>ids</code> may be provided as <code>data.frame</code> with the additional
+column &#8220;resources&#8221; (see example).
+Default settings for a system can be set in the configuration file by defining the named list <code>default.resources</code>.
+Note that these settings are merged by name, e.g. merging <code>list(walltime = 300)</code> into <code>list(walltime = 400, memory = 512)</code>
+will result in <code>list(walltime = 300, memory = 512)</code>.</p></td>
     </tr>
     <tr>
       <th>sleep</th>
@@ -153,14 +148,15 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     <p>If you a large number of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
 can significantly increase the performance of <code>submitJobs</code>.</p>
     
-    <h2 class="hasAnchor" id="limiting-the-number-of-jobs"><a class="anchor" href="#limiting-the-number-of-jobs"></a>Limiting the number of jobs</h2>
+    <h2 class="hasAnchor" id="chunking-of-jobs"><a class="anchor" href="#chunking-of-jobs"></a>Chunking of Jobs</h2>
 
     
-    <p>If requested, <code>submitJobs</code> tries to limit the number of concurrent jobs of the user by waiting until jobs terminate
-before submitting new ones.
-This can be controlled by setting &#8220;max.concurrent.jobs&#8221; in the configuration file (see <code><a href='makeRegistry.html'>Registry</a></code>)
-or by setting the resource &#8220;max.concurrent.jobs&#8221; to the maximum number of jobs to run simultaneously.
-If both are set, the setting via the resource takes precedence over the setting in the configuration.</p>
+    <p>Multiple jobs can be grouped (chunked) together to be executed sequentially on the batch system as a single batch job.
+This is especially useful to avoid overburding the scheduler by submitting thousands of jobs simultaneously.
+To chunk jobs together, job ids must be provided as <code>data.frame</code> with columns &#8220;job.id&#8221; and &#8220;chunk&#8221; (integer).
+All jobs with the same chunk number will be executed sequentially inside the same batch job.
+The utility functions <code><a href='chunk.html'>chunk</a></code>, <code><a href='chunk.html'>binpack</a></code> and <code><a href='chunk.html'>lpt</a></code>
+can assist in grouping jobs.</p>
     
     <h2 class="hasAnchor" id="array-jobs"><a class="anchor" href="#array-jobs"></a>Array Jobs</h2>
 
@@ -170,7 +166,23 @@ to execute chunks as job arrays. To do so, the job must be repeated <code>nrow(j
 The function <code><a href='doJobCollection.html'>doJobCollection</a></code> (which is called on the slave) now retrieves the repetition number from the environment
 and restricts the computation to the respective job in the <code><a href='JobCollection.html'>JobCollection</a></code>.</p>
     
-    <h2 class="hasAnchor" id="memory-measurement"><a class="anchor" href="#memory-measurement"></a>Memory Measurement</h2>
+    <h2 class="hasAnchor" id="order-of-submission"><a class="anchor" href="#order-of-submission"></a>Order of Submission</h2>
+
+    
+    <p>Jobs are submitted in the order of chunks, i.e. jobs which have chunk number
+<code>sort(unique(ids$chunk))[1]</code> first, then jobs with chunk number <code>sort(unique(ids$chunk))[2]</code>
+and so on. If no chunks are provided, jobs are submitted in the order of <code>ids$job.id</code>.</p>
+    
+    <h2 class="hasAnchor" id="limiting-the-number-of-jobs"><a class="anchor" href="#limiting-the-number-of-jobs"></a>Limiting the Number of Jobs</h2>
+
+    
+    <p>If requested, <code>submitJobs</code> tries to limit the number of concurrent jobs of the user by waiting until jobs terminate
+before submitting new ones.
+This can be controlled by setting &#8220;max.concurrent.jobs&#8221; in the configuration file (see <code><a href='makeRegistry.html'>Registry</a></code>)
+or by setting the resource &#8220;max.concurrent.jobs&#8221; to the maximum number of jobs to run simultaneously.
+If both are set, the setting via the resource takes precedence over the setting in the configuration.</p>
+    
+    <h2 class="hasAnchor" id="measuring-memory"><a class="anchor" href="#measuring-memory"></a>Measuring Memory</h2>
 
     
     <p>Setting the resource <code>measure.memory</code> to <code>TRUE</code> turns on memory measurement:
@@ -187,13 +199,12 @@ Two backends are supported to assist in setting up inner parallelization.</p>
 If you set the resource &#8220;pm.backend&#8221; to &#8220;multicore&#8221;, &#8220;socket&#8221; or &#8220;mpi&#8221;,
 <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStart'>parallelStart</a></code> is called on the slave before the first job in the chunk is started
 and <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStop'>parallelStop</a></code> is called after the last job terminated.
-This way, the used resources for inner parallelization are set in the same place as the resources for the outer parallelization done by
-<span class="pkg">batchtools</span> and all resources get stored together in the <code><a href='makeRegistry.html'>Registry</a></code>.
-The user function just has to call <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></code> to start parallelization using the preconfigured backend.</p>
-<p>Note that you should set the resource <code>ncpus</code> to control the number of CPUs to use in <span class="pkg">parallelMap</span>.
+This way, the resources for inner parallelization can be set and get automatically stored just like other computational resources.
+The function provided by the user just has to call <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></code> to start parallelization using the preconfigured backend.</p>
+<p>To control the number of CPUs, you have to set the resource <code>ncpus</code>.
 Otherwise <code>ncpus</code> defaults to the number of available CPUs (as reported by (see <code><a href='http://www.rdocumentation.org/packages/parallel/topics/detectCores'>detectCores</a></code>))
 on the executing machine for multicore and socket mode and defaults to the return value of <code><a href='http://www.rdocumentation.org/packages/Rmpi/topics/mpi.universe.size'>mpi.universe.size</a>-1</code> for MPI.
-Your template must be set up to handle the parallelization, e.g. start R with <code>mpirun</code> or request the right number of CPUs.
+Your template must be set up to handle the parallelization, e.g. request the right number of CPUs or start R with <code>mpirun</code>.
 You may pass further options like <code>level</code> to <code><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelStart'>parallelStart</a></code> via the named list &#8220;pm.opts&#8221;.</p>
 <p>The second supported parallelization backend is <span class="pkg">foreach</span>.
 If you set the resource &#8220;foreach.backend&#8221; to &#8220;seq&#8221; (sequential mode), &#8220;parallel&#8221; (<span class="pkg">doParallel</span>) or
@@ -205,7 +216,7 @@ You have to do this manually via <code><a href='http://www.rdocumentation.org/pa
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>### Example 1: Using memory measurement</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a33b922919' using cluster functions 'Interactive'</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af92aa4f70e' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Toy function which creates a large matrix and returns the column sums</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>n</span>, <span class='no'>p</span>) <span class='fu'>colMeans</span>(<span class='fu'>matrix</span>(<span class='fu'>runif</span>(<span class='no'>n</span>*<span class='no'>p</span>), <span class='no'>n</span>, <span class='no'>p</span>))
 
@@ -225,22 +236,22 @@ You have to do this manually via <code><a href='http://www.rdocumentation.org/pa
 <span class='co'># Submit jobs using the currently configured cluster functions</span>
 <span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='input'>
 <span class='co'># Retrive information about memory, combine with parameters</span>
-<span class='no'>info</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='fu'><a href='getJobTable.html'>getJobStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>memory</span>)], <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
-<span class='fu'>print</span>(<span class='fu'><a href='flatten.html'>flatten</a></span>(<span class='no'>info</span>))</div><div class='output co'>#&gt;    job.id memory     n     p
-#&gt;     &lt;int&gt;  &lt;num&gt; &lt;num&gt; &lt;num&gt;
-#&gt; 1:      1  110.9 1e+04    10
-#&gt; 2:      2  116.9 1e+04    50
-#&gt; 3:      3  124.5 1e+05    10
-#&gt; 4:      4  185.2 1e+05    50</div><div class='input'>
+<span class='no'>info</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='fu'><a href='getJobTable.html'>getJobStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>mem.used</span>)], <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
+<span class='fu'>print</span>(<span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='no'>info</span>))</div><div class='output co'>#&gt;    job.id mem.used     n     p
+#&gt;     &lt;int&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:      1    140.7 1e+04    10
+#&gt; 2:      2    145.3 1e+04    50
+#&gt; 3:      3    153.0 1e+05    10
+#&gt; 4:      4    213.7 1e+05    50</div><div class='input'>
 <span class='co'># Combine job info with results -&gt; each job is aggregated using mean()</span>
-<span class='fu'><a href='flatten.html'>flatten</a></span>(<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)))</div><div class='output co'>#&gt;    job.id memory     n     p       res
-#&gt;     &lt;int&gt;  &lt;num&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;
-#&gt; 1:      1  110.9 1e+04    10 0.5000194
-#&gt; 2:      2  116.9 1e+04    50 0.4998074
-#&gt; 3:      3  124.5 1e+05    10 0.4997022
-#&gt; 4:      4  185.2 1e+05    50 0.5001358</div><div class='input'>
+<span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)))</div><div class='output co'>#&gt;    job.id mem.used     n     p       res
+#&gt;     &lt;int&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;
+#&gt; 1:      1    140.7 1e+04    10 0.5010869
+#&gt; 2:      2    145.3 1e+04    50 0.4993332
+#&gt; 3:      3    153.0 1e+05    10 0.4996469
+#&gt; 4:      4    213.7 1e+05    50 0.5000530</div><div class='input'>
 <span class='co'>### Example 2: Multicore execution on the slave</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a337f60a59' using cluster functions 'Interactive'</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af9ed7e0be' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Function which sleeps 10 seconds, i-times</span>
 <span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
   <span class='kw pkg'>parallelMap</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></span>(<span class='no'>Sys.sleep</span>, <span class='fu'>rep</span>(<span class='fl'>10</span>, <span class='no'>i</span>))
@@ -273,11 +284,15 @@ You have to do this manually via <code><a href='http://www.rdocumentation.org/pa
 
       <li><a href="#note">Note</a></li>
 
-      <li><a href="#limiting-the-number-of-jobs">Limiting the number of jobs</a></li>
+      <li><a href="#chunking-of-jobs">Chunking of Jobs</a></li>
 
       <li><a href="#array-jobs">Array Jobs</a></li>
 
-      <li><a href="#memory-measurement">Memory Measurement</a></li>
+      <li><a href="#order-of-submission">Order of Submission</a></li>
+
+      <li><a href="#limiting-the-number-of-jobs">Limiting the Number of Jobs</a></li>
+
+      <li><a href="#measuring-memory">Measuring Memory</a></li>
 
       <li><a href="#inner-parallelization">Inner Parallelization</a></li>
       

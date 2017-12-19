@@ -132,16 +132,17 @@ jobs.</p>
       <th>conf.file</th>
       <td><p>[<code>character(1)</code>]
   Path to a configuration file which is sourced while the registry is created.
-  For example, you can set cluster functions or default resources in it.
-  The script is executed inside the environment of the registry after the defaults for all variables are set,
-  thus you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources.</p>
-<p>The file lookup defaults to a heuristic which first tries to read &#8220;batchtools.conf.R&#8221; in the current working directory.
-  If not found, it looks for a configuration file &#8220;config.R&#8221; in the OS dependent user configuration directory
-  as reported by via <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>rappdirs::user_config_dir("batchtools", expand = FALSE)</a></code> (e.g., on linux this
-  usually resolves to &#8220;~/.config/batchtools/config.R&#8221;).
-  If this file is also not found, the heuristic finally tries to read the file &#8220;.batchtools.conf.R&#8221; in the
-  home directory (&#8220;~&#8221;).
-  Set to <code>character(0)</code> if you want to disable this heuristic.</p></td>
+  In the configuration file you can define how <span class="pkg">batchtools</span> interacts with the system via <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>.
+  Separating the configuration of the underlying host system from the R code allows to easily move computation to another site.</p>
+<p>The file lookup is implemented in <code>findConfFile</code> which returns the first file found of the following candidates:</p><ol>
+<li><p>File &#8220;batchtools.conf.R&#8221; in the path specified by the environment variable &#8220;R_BATCHTOOLS_SEARCH_PATH&#8221;.</p></li>
+<li><p>File &#8220;batchtools.conf.R&#8221; in the current working directory.</p></li>
+<li><p>File &#8220;config.R&#8221; in the OS dependent user configuration directory as reported by via <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>rappdirs::user_config_dir("batchtools", expand = FALSE)</a></code> (e.g., on linux this usually resolves to &#8220;~/.config/batchtools/config.R&#8221;).</p></li>
+<li><p>&#8220;.batchtools.conf.R&#8221; in the home directory (&#8220;~&#8221;).</p></li>
+</ol><p>Set to <code>character(0)</code> if you want to suppress reading any configuration file.
+  If a configuration file is found, it gets sourced inside the environment of the registry after the defaults for all variables are set.
+  Therefore you can set and overwrite slots, e.g. <code>default.resources = list(walltime = 3600)</code> to set default resources or &#8220;max.concurrent.jobs&#8221; to
+  limit the number of jobs allowed to run simultaneously on the system.</p></td>
     </tr>
     <tr>
       <th>packages</th>
@@ -191,7 +192,7 @@ Default is <code>TRUE</code>.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeExperimentRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a339c04deb' using cluster functions 'Interactive'</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeExperimentRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af92465464f' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Definde one problem, two algorithms and add them with some parameters:</span>
 <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"p1"</span>,
   <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>...</span>) <span class='fu'>rnorm</span>(<span class='no'>n</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>sd</span>))</div><div class='output co'>#&gt; <span class='message'>Adding problem 'p1'</span></div><div class='input'><span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"a1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>mean</span>(<span class='no'>instance</span>))</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'a1'</span></div><div class='input'><span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"a2"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>...</span>) <span class='fu'>median</span>(<span class='no'>instance</span>))</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'a2'</span></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='fu'>list</span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fu'>CJ</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>50</span>, <span class='fl'>100</span>), <span class='kw'>mean</span> <span class='kw'>=</span> -<span class='fl'>2</span>:<span class='fl'>2</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>)))</div><div class='output co'>#&gt; <span class='message'>Adding 40 experiments ('p1'[40] x 'a1'[1] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 40 experiments ('p1'[40] x 'a2'[1] x repls[1]) ...</span></div><div class='input'>
@@ -205,7 +206,7 @@ Default is <code>TRUE</code>.</p></td>
 #&gt; 2:      p1        a1   100     20
 #&gt; 3:      p1        a2    50     20
 #&gt; 4:      p1        a2   100     20</div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='findJobs.html'>findExperiments</a></span>(<span class='kw'>prob.pars</span> <span class='kw'>=</span> (<span class='no'>n</span> <span class='kw'>==</span> <span class='fl'>50</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>print</span>(<span class='fu'><a href='flatten.html'>flatten</a></span>(<span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)))</div><div class='output co'>#&gt;     job.id problem algorithm     n  mean    sd
+<span class='fu'>print</span>(<span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)))</div><div class='output co'>#&gt;     job.id problem algorithm     n  mean    sd
 #&gt;      &lt;int&gt;  &lt;char&gt;    &lt;char&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;
 #&gt;  1:      1      p1        a1    50    -2     1
 #&gt;  2:      2      p1        a1    50    -2     2
@@ -252,26 +253,26 @@ Default is <code>TRUE</code>.</p></td>
 <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 80 jobs in 80 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># Reduce the results of algorithm a1</span>
 <span class='no'>ids.mean</span> <span class='kw'>=</span> <span class='fu'><a href='findJobs.html'>findExperiments</a></span>(<span class='kw'>algo.name</span> <span class='kw'>=</span> <span class='st'>"a1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'><a href='reduceResults.html'>reduceResults</a></span>(<span class='no'>ids.mean</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>aggr</span>, <span class='no'>res</span>, <span class='no'>...</span>) <span class='fu'>c</span>(<span class='no'>aggr</span>, <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;  [1] -2.199698100 -1.981802954 -2.548222654 -2.827444821 -0.752073034
-#&gt;  [6] -1.259996160 -0.602050187 -1.439116470  0.015618190 -0.005596107
-#&gt; [11] -0.186685454 -0.957769113  0.956374978  0.789792700  1.003487427
-#&gt; [16]  1.120810239  1.856961528  1.957595708  2.481046698  2.532655615
-#&gt; [21] -2.013922279 -1.787490803 -2.147741221 -1.030852401 -1.082300907
-#&gt; [26] -1.029583968 -0.697300367 -1.066247494 -0.201504012  0.063306646
-#&gt; [31] -0.109562951  0.141792655  1.016983211  0.967942631  1.020128137
-#&gt; [36]  1.402089571  2.034691132  2.032193263  1.848221831  2.157403789</div><div class='input'>
+<span class='fu'><a href='reduceResults.html'>reduceResults</a></span>(<span class='no'>ids.mean</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>aggr</span>, <span class='no'>res</span>, <span class='no'>...</span>) <span class='fu'>c</span>(<span class='no'>aggr</span>, <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;  [1] -1.995858442 -2.094128333 -1.906246312 -2.216649348 -1.102260052
+#&gt;  [6] -1.438375302 -1.448527303 -0.626783718 -0.005136152 -0.208507036
+#&gt; [11] -0.188988909 -0.330537377  0.992915874  1.077347969  1.532747585
+#&gt; [16]  1.141535487  1.891082851  1.659017387  2.567949422  2.094191311
+#&gt; [21] -2.022534618 -2.090407594 -2.030574105 -1.609156323 -0.877929063
+#&gt; [26] -0.964072592 -1.004763415 -1.112109870  0.120145588 -0.362547115
+#&gt; [31]  0.479820467 -0.011324600  1.038297142  1.203669012  0.803390755
+#&gt; [36]  1.494115969  2.014685361  2.098439707  1.666848482  1.188690550</div><div class='input'>
 <span class='co'># Join info table with all results and calculate mean of results</span>
 <span class='co'># grouped by n and algorithm</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='findJobs.html'>findDone</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='no'>pars</span> <span class='kw'>=</span> <span class='fu'><a href='flatten.html'>flatten</a></span>(<span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
-<span class='no'>results</span> <span class='kw'>=</span> <span class='fu'><a href='flatten.html'>flatten</a></span>(<span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='no'>ids</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
+<span class='no'>pars</span> <span class='kw'>=</span> <span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
+<span class='no'>results</span> <span class='kw'>=</span> <span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='no'>ids</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
 <span class='no'>tab</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ljoin</a></span>(<span class='no'>pars</span>, <span class='no'>results</span>)
-<span class='no'>tab</span>[, <span class='fu'>list</span>(<span class='kw'>mres</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"n"</span>, <span class='st'>"algorithm"</span>)]</div><div class='output co'>#&gt;        n algorithm        mres
-#&gt;    &lt;num&gt;    &lt;char&gt;       &lt;num&gt;
-#&gt; 1:    50        a1 -0.10230560
-#&gt; 2:   100        a1  0.07591232
-#&gt; 3:    50        a2  0.12680699
-#&gt; 4:   100        a2 -0.05928508</div></pre>
+<span class='no'>tab</span>[, <span class='fu'>list</span>(<span class='kw'>mres</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"n"</span>, <span class='st'>"algorithm"</span>)]</div><div class='output co'>#&gt;        n algorithm         mres
+#&gt;    &lt;num&gt;    &lt;char&gt;        &lt;num&gt;
+#&gt; 1:    50        a1 -0.030260520
+#&gt; 2:   100        a1  0.001134187
+#&gt; 3:    50        a2  0.086598127
+#&gt; 4:   100        a2 -0.003841380</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
