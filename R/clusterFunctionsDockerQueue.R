@@ -45,7 +45,7 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
       sprintf("--label user=%s", user),
       sprintf("--name=%s", batch.id),
       image, timeout, "Rscript", stri_join("-e", shQuote(sprintf("batchtools::doJobCollection('%s', '%s')", jc$uri, jc$log.file)), sep = " "))
-   
+
     res = runOSCommand(cmd[1L], cmd[-1L])
 
     if (res$exit.code > 0L) {
@@ -61,7 +61,11 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
     if (res$exit.code > 0L)
       OSError("Listing of jobs failed", res)
     res.jobs = stri_split_fixed(res$output, ";")
-    res.jobs = do.call(rbind, res.jobs)
+    if (length(res.jobs) == 0) {
+      res.jobs = data.table(character(0), character(0))
+    } else {
+      res.jobs = do.call(rbind, res.jobs)
+    }
     colnames(res.jobs) = c("docker.id", "batch.id")
     res.jobs = as.data.table(res.jobs)
     res.jobs$batch.id = stri_extract_last_regex(res.jobs$batch.id, "[0-9a-z_-]+")
@@ -73,12 +77,13 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
       stop("Package 'jsonlite' is required")
 
     # list scheduled but not running
-    curl.res = runOSCommand("curl", unique(c("-s", curl.args, sprintf("%s/jobs/%s/json", docker.scheduler.url, user)))) 
+    curl.res = runOSCommand("curl", unique(c("-s", curl.args, sprintf("%s/jobs/%s/json", docker.scheduler.url, user))))
     tab = jsonlite::fromJSON(curl.res$output)
     if (length(tab) == 0L) {
-      return(character(0L))
+      tab = data.table(numeric(0), character(0))
+    } else {
+      tab = as.data.table(tab[, c("id", "containerName")])[get("containerName") %chin% reg$status$batch.id]
     }
-    tab = as.data.table(tab[, c("id", "containerName")])[get("containerName") %chin% reg$status$batch.id]
     colnames(tab) = c("schedule.id", "batch.id")
     return(tab)
   }
@@ -111,7 +116,7 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
 
   listJobsQueued = function(reg) {
     assertRegistry(reg, writeable = FALSE)
-    
+
     tab = dfJobsQueued(reg)
     tab$batch.id
   }
