@@ -159,7 +159,7 @@ can significantly increase the performance.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>### Example 1 - reduceResultsList</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a3521e30ad' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 10 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>reduceResultsList</span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>sqrt</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af99510381' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 10 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>reduceResultsList</span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>sqrt</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1
 #&gt; 
 #&gt; [[2]]
@@ -190,7 +190,7 @@ can significantly increase the performance.</p>
 #&gt; [1] 10
 #&gt; </div><div class='input'>
 <span class='co'>### Example 2 - reduceResultsDataTable</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/RtmpErAdYG/registry17a38a0178e' using cluster functions 'Interactive'</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af95d09f575' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># add first problem</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>...</span>) <span class='fu'>rnorm</span>(<span class='no'>n</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>sd</span>)
 <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"rnorm"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'rnorm'</span></div><div class='input'>
@@ -217,7 +217,7 @@ can significantly increase the performance.</p>
   <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>),
   <span class='fu'>reduceResultsDataTable</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='no'>x</span>))
 )
-<span class='fu'><a href='flatten.html'>flatten</a></span>(<span class='no'>res</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>)</div><div class='output co'>#&gt;     job.id problem algorithm prob.pars.n prob.pars.mean prob.pars.sd
+<span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='no'>res</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>)</div><div class='output co'>#&gt;     job.id problem algorithm prob.pars.n prob.pars.mean prob.pars.sd
 #&gt;      &lt;int&gt;  &lt;char&gt;    &lt;char&gt;       &lt;num&gt;          &lt;int&gt;        &lt;int&gt;
 #&gt;  1:      1   rnorm   average         100             -1            1
 #&gt;  2:      2   rnorm   average         100             -1            1
@@ -280,69 +280,69 @@ can significantly increase the performance.</p>
 #&gt; 59:     59    rexp deviation         100             NA           NA
 #&gt; 60:     60    rexp deviation         100             NA           NA
 #&gt;     job.id problem algorithm prob.pars.n prob.pars.mean prob.pars.sd
-#&gt;     prob.pars.lambda algo.pars.method  result.res
-#&gt;                &lt;int&gt;           &lt;char&gt;       &lt;num&gt;
-#&gt;  1:               NA             mean -1.02471632
-#&gt;  2:               NA           median -0.77565242
-#&gt;  3:               NA             mean -0.79506421
-#&gt;  4:               NA           median -0.98540729
-#&gt;  5:               NA             mean -1.09137272
-#&gt;  6:               NA           median -2.31843512
-#&gt;  7:               NA             mean -0.94663865
-#&gt;  8:               NA           median -1.42339758
-#&gt;  9:               NA             mean -0.17953933
-#&gt; 10:               NA           median -1.95951869
-#&gt; 11:               NA             mean -0.04221738
-#&gt; 12:               NA           median -0.14800193
-#&gt; 13:               NA             mean -0.22319840
-#&gt; 14:               NA           median  0.46372498
-#&gt; 15:               NA             mean  0.14903502
-#&gt; 16:               NA           median -0.14969080
-#&gt; 17:               NA             mean -0.71727573
-#&gt; 18:               NA           median -0.38224008
-#&gt; 19:               NA             mean  0.25593813
-#&gt; 20:               NA           median -0.20927905
-#&gt; 21:               NA             mean  1.00462117
-#&gt; 22:               NA           median  1.16684243
-#&gt; 23:               NA             mean  1.28903628
-#&gt; 24:               NA           median  0.79149398
-#&gt; 25:               NA             mean  1.10634266
-#&gt; 26:               NA           median  1.03629822
-#&gt; 27:               NA             mean  1.47471927
-#&gt; 28:               NA           median  0.80084166
-#&gt; 29:               NA             mean  1.16415980
-#&gt; 30:               NA           median  0.59233043
-#&gt; 31:               NA               NA  1.05130248
-#&gt; 32:               NA               NA  2.08538907
-#&gt; 33:               NA               NA  2.90477427
-#&gt; 34:               NA               NA  3.79605815
-#&gt; 35:               NA               NA  4.74672327
-#&gt; 36:               NA               NA  0.97786927
-#&gt; 37:               NA               NA  2.09466296
-#&gt; 38:               NA               NA  3.01046073
-#&gt; 39:               NA               NA  4.11380656
-#&gt; 40:               NA               NA  5.13915413
-#&gt; 41:               NA               NA  0.94999601
-#&gt; 42:               NA               NA  2.21216590
-#&gt; 43:               NA               NA  2.69046588
-#&gt; 44:               NA               NA  4.24511415
-#&gt; 45:               NA               NA  5.66236544
-#&gt; 46:                1             mean  1.07648970
-#&gt; 47:                1           median  0.78271911
-#&gt; 48:                2             mean  0.54386061
-#&gt; 49:                2           median  0.35473550
-#&gt; 50:                3             mean  0.31759767
-#&gt; 51:                3           median  0.24956639
-#&gt; 52:                4             mean  0.24791578
-#&gt; 53:                4           median  0.17533374
-#&gt; 54:                5             mean  0.21273258
-#&gt; 55:                5           median  0.14242142
-#&gt; 56:                1               NA  1.19064598
-#&gt; 57:                2               NA  0.48701085
-#&gt; 58:                3               NA  0.36181945
-#&gt; 59:                4               NA  0.29286338
-#&gt; 60:                5               NA  0.20130201
-#&gt;     prob.pars.lambda algo.pars.method  result.res</div></pre>
+#&gt;     prob.pars.lambda algo.pars.method   result.res
+#&gt;                &lt;int&gt;           &lt;char&gt;        &lt;num&gt;
+#&gt;  1:               NA             mean -0.869992112
+#&gt;  2:               NA           median -1.025899375
+#&gt;  3:               NA             mean -0.975119673
+#&gt;  4:               NA           median -1.256491263
+#&gt;  5:               NA             mean -0.881804662
+#&gt;  6:               NA           median -1.518282095
+#&gt;  7:               NA             mean -1.103852846
+#&gt;  8:               NA           median -1.064450374
+#&gt;  9:               NA             mean -0.552667414
+#&gt; 10:               NA           median -0.887186301
+#&gt; 11:               NA             mean  0.005931588
+#&gt; 12:               NA           median -0.113783258
+#&gt; 13:               NA             mean -0.313519972
+#&gt; 14:               NA           median  0.388512978
+#&gt; 15:               NA             mean  0.196598803
+#&gt; 16:               NA           median  0.632184760
+#&gt; 17:               NA             mean -0.786698230
+#&gt; 18:               NA           median -0.486595008
+#&gt; 19:               NA             mean -0.556593643
+#&gt; 20:               NA           median -0.090044089
+#&gt; 21:               NA             mean  1.096183829
+#&gt; 22:               NA           median  0.923400543
+#&gt; 23:               NA             mean  0.871488642
+#&gt; 24:               NA           median  0.995850380
+#&gt; 25:               NA             mean  1.165503396
+#&gt; 26:               NA           median  1.040704016
+#&gt; 27:               NA             mean  1.225310112
+#&gt; 28:               NA           median  0.727732654
+#&gt; 29:               NA             mean  1.408755570
+#&gt; 30:               NA           median  1.315751178
+#&gt; 31:               NA               NA  0.954128756
+#&gt; 32:               NA               NA  2.109668878
+#&gt; 33:               NA               NA  3.547528683
+#&gt; 34:               NA               NA  3.652085923
+#&gt; 35:               NA               NA  5.026616864
+#&gt; 36:               NA               NA  1.049808162
+#&gt; 37:               NA               NA  2.073053899
+#&gt; 38:               NA               NA  2.756029245
+#&gt; 39:               NA               NA  3.596593906
+#&gt; 40:               NA               NA  5.592943503
+#&gt; 41:               NA               NA  1.095757731
+#&gt; 42:               NA               NA  1.860470749
+#&gt; 43:               NA               NA  3.114341794
+#&gt; 44:               NA               NA  3.980134036
+#&gt; 45:               NA               NA  4.988786861
+#&gt; 46:                1             mean  0.951403995
+#&gt; 47:                1           median  0.522297416
+#&gt; 48:                2             mean  0.559016998
+#&gt; 49:                2           median  0.344682942
+#&gt; 50:                3             mean  0.346089420
+#&gt; 51:                3           median  0.225886826
+#&gt; 52:                4             mean  0.206335677
+#&gt; 53:                4           median  0.146995310
+#&gt; 54:                5             mean  0.172466252
+#&gt; 55:                5           median  0.142389320
+#&gt; 56:                1               NA  1.167929414
+#&gt; 57:                2               NA  0.573476442
+#&gt; 58:                3               NA  0.416546472
+#&gt; 59:                4               NA  0.259982000
+#&gt; 60:                5               NA  0.218127087
+#&gt;     prob.pars.lambda algo.pars.method   result.res</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

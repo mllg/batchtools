@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ClusterFunctions for Remote SSH Execution — makeClusterFunctionsSSH • batchtools</title>
+<title>Unwrap Nested Data Frames — unwrap • batchtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -86,65 +86,70 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>ClusterFunctions for Remote SSH Execution</h1>
+    <h1>Unwrap Nested Data Frames</h1>
     </div>
 
     
-    <p>Jobs are spawned by starting multiple R sessions via <code>Rscript</code> over SSH.
-If the hostname of the <code><a href='Worker.html'>Worker</a></code> equals &#8220;localhost&#8221;,
-<code>Rscript</code> is called directly so that you do not need to have an SSH client installed.</p>
+    <p>Some functions (e.g., <code><a href='getJobTable.html'>getJobPars</a></code>, <code><a href='getJobTable.html'>getJobResources</a></code> or <code><a href='reduceResultsList.html'>reduceResultsDataTable</a></code>
+return a <code>data.table</code> with columns of type <code>list</code>.
+These columns can be unnested/unwrapped with this function.
+The contents of these columns  will be transformed to a <code>data.table</code> and <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code>-ed
+to the input data.frame <code>x</code>, replacing the original nested column.</p>
     
 
-    <pre class="usage"><span class='fu'>makeClusterFunctionsSSH</span>(<span class='no'>workers</span>, <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
+    <pre class="usage"><span class='fu'>unwrap</span>(<span class='no'>x</span>, <span class='kw'>cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='fu'>flatten</span>(<span class='no'>x</span>, <span class='kw'>cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>workers</th>
-      <td><p>[<code>list</code> of <code><a href='Worker.html'>Worker</a></code>]
-List of Workers as constructed with <code><a href='Worker.html'>Worker</a></code>.</p></td>
+      <th>x</th>
+      <td><p>[<code>data.frame</code> | <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]
+Data frame to flatten.</p></td>
     </tr>
     <tr>
-      <th>fs.latency</th>
-      <td><p>[<code>numeric(1)</code>]
-Expected maximum latency of the file system, in seconds.
-Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
-access files and directories.
-Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are working on a local file system.</p></td>
+      <th>cols</th>
+      <td><p>[<code>character</code>]
+Columns to consider for this operation. If set to <code>NULL</code> (default),
+will operate on all columns of type &#8220;list&#8221;.</p></td>
+    </tr>
+    <tr>
+      <th>sep</th>
+      <td><p>[<code>character(1)</code>]
+If <code>NULL</code> (default), the column names of the additional columns will re-use the names
+of the nested <code>list</code>/<code>data.frame</code>.
+This may lead to name clashes.
+If you provide <code>sep</code>, the variable column name will be constructed as
+&#8220;[column name of x][sep][inner name]&#8221;.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>[<code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>].</p>
+    <p>[<code>data.table</code>].</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>If you use a custom &#8220;.ssh/config&#8221; file, make sure your
-ProxyCommand passes &#8216;-q&#8217; to ssh, otherwise each output will
-end with the message &#8220;Killed by signal 1&#8221; and this will break
-the communication with the nodes.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
-  <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
-  <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
-  <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
-  <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
-  <code><a href='makeClusterFunctionsSGE.html'>makeClusterFunctionsSGE</a></code>,
-  <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
-  <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
-  <code><a href='makeClusterFunctionsTORQUE.html'>makeClusterFunctionsTORQUE</a></code>,
-  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p>
+    <p>There is a name clash with function <code>flatten</code> in package <span class="pkg">purrr</span>.
+The function <code>flatten</code> is discouraged to use for this reason in favor of <code>unwrap</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># cluster functions for multicore execution on the local machine</span>
-<span class='fu'>makeClusterFunctionsSSH</span>(<span class='fu'>list</span>(<span class='no'>Worker</span>$<span class='fu'>new</span>(<span class='st'>"localhost"</span>, <span class='kw'>ncpus</span> <span class='kw'>=</span> <span class='fl'>2</span>)))
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(
+  <span class='kw'>id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>,
+  <span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='fu'>list</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='fu'>list</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='fu'>list</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>3</span>))
+)
+<span class='fu'>unwrap</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;       id     a     b
+#&gt;    &lt;int&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1     1     3
+#&gt; 2:     2     2     2
+#&gt; 3:     3     3    NA</div><div class='input'><span class='fu'>unwrap</span>(<span class='no'>x</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>)</div><div class='output co'>#&gt;       id values.a values.b
+#&gt;    &lt;int&gt;    &lt;num&gt;    &lt;num&gt;
+#&gt; 1:     1        1        3
+#&gt; 2:     2        2        2
+#&gt; 3:     3        3       NA</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -154,8 +159,6 @@ the communication with the nodes.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#note">Note</a></li>
-
-      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

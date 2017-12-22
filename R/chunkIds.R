@@ -102,6 +102,8 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
 #' ids[, chunk := chunk(job.id, n.chunks = 4)]
 #' print(ids[, .N, by = chunk])
 #'
+#' ### Submit to batch system
+#' submitJobs(ids = ids, reg = tmp)
 #'
 #' # Grouped chunking
 #' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
