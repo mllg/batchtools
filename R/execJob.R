@@ -32,6 +32,7 @@ execJob.JobCollection = function(job) {
 #' @export
 execJob.Job = function(job) {
   local_options(list(error = function(e) traceback(2L)))
+  catf("Starting job %i (seed = %i) ...", job$id, job$seed)
   if (".job" %chin% names(formals(job$fun))) {
     with_seed(job$seed, do.call(job$fun, c(job$pars, list(.job = job)), envir = .GlobalEnv))
   } else {
@@ -47,7 +48,7 @@ execJob.Experiment = function(job) {
   force(instance)
   job$allow.access.to.instance = FALSE
 
-  catf("Applying algorithm '%s' on problem '%s' ...", job$algo.name, job$prob.name)
   wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, instance = instance, ...)
+  catf("Applying algorithm '%s' on problem '%s' for job %i (seed = %i) ...", job$algo.name, job$prob.name, job$id, job$seed)
   with_seed(job$seed, do.call(wrapper, job$algo.pars, envir = .GlobalEnv))
 }
