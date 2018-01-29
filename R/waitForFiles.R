@@ -4,7 +4,7 @@ waitForFiles = function(path, fns, timeout = NA_real_) {
   if (is.na(timeout))
     return(TRUE)
 
-  fns = fns[!file.exists(fns)]
+  fns = fns[!fs::file_exists(fns)]
   if (length(fns) == 0L)
     return(TRUE)
 
@@ -25,14 +25,14 @@ waitForFiles = function(path, fns, timeout = NA_real_) {
 }
 
 waitForFile = function(fn, timeout = NA_real_) {
-  if (is.na(timeout) || file.exists(fn))
+  if (is.na(timeout) || fs::file_exists(fn))
     return(TRUE)
 
-  "!DEBUG [waitForFiles]: `fn` not found via 'file.exists()'"
+  "!DEBUG [waitForFile]: `fn` not found via 'file.exists()'"
   timeout = timeout + Sys.time()
   repeat {
     Sys.sleep(0.5)
-    if (fn %chin% list.files(dirname(fn), all.files = TRUE))
+    if (fn %chin% list.files(fs::path_dir(fn), all.files = TRUE))
       return(TRUE)
     if (Sys.time() > timeout)
       stopf("Timeout while waiting for file '%s'", fn)
@@ -41,7 +41,7 @@ waitForFile = function(fn, timeout = NA_real_) {
 
 waitForResults = function(reg, ids) {
   waitForFiles(
-    fp(reg$file.dir, "results"),
+    fs::path(reg$file.dir, "results"),
     sprintf("%i.rds", .findDone(reg, ids)$job.id),
     reg$cluster.functions$fs.latency
   )

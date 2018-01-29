@@ -24,7 +24,7 @@ removeExperiments = function(ids = NULL, reg = getDefaultRegistry()) {
     reg$defs = reg$defs[-i]
   }
   fns = getResultFiles(reg, ids)
-  file.remove.safely(fns)
+  file_remove(fns)
 
   sweepRegistry(reg)
   invisible(ids)

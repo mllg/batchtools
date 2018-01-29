@@ -54,7 +54,7 @@ removeAlgorithms = function(name, reg = getDefaultRegistry()) {
     job.ids = filter(def.ids, reg$status, "job.id")
 
     info("Removing Algorithm '%s' and %i corresponding jobs ...", nn, nrow(job.ids))
-    file.remove.safely(getAlgorithmURI(reg, nn))
+    file_remove(getAlgorithmURI(reg, nn))
     reg$defs = reg$defs[!def.ids]
     reg$status = reg$status[!job.ids]
     reg$algorithms = chsetdiff(reg$algorithms, nn)
@@ -65,5 +65,5 @@ removeAlgorithms = function(name, reg = getDefaultRegistry()) {
 }
 
 getAlgorithmURI = function(reg, name) {
-  fp(dir(reg, "algorithms"), mangle(name))
+  fs::path(dir(reg, "algorithms"), mangle(name))
 }

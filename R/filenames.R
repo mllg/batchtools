@@ -1,40 +1,24 @@
-npath = function(path, must.work = TRUE) {
-  if (any(stri_startswith_fixed(path, c("~", "$")))) {
-    # do not call normalizePath, we do not want to expand this paths relative to home
-    if (must.work && !file.exists(path))
-      stopf("File '%s' not found", path)
-    if (testOS("windows"))
-      path = stri_replace_all_fixed(path, "\\", "/")
-    return(path)
-  }
-  normalizePath(path, winslash = "/", mustWork = must.work)
-}
-
-fp = function(...) {
-  file.path(..., fsep = "/")
-}
-
 dir = function(reg, what) {
-  fp(normalizePath(reg$file.dir, winslash = "/"), what)
+  fs::path(fs::path_expand(reg$file.dir), what)
 }
 
 getResultFiles = function(reg, ids) {
-  fp(dir(reg, "results"), sprintf("%i.rds", if (is.atomic(ids)) ids else ids$job.id))
+  fs::path(dir(reg, "results"), sprintf("%i.rds", if (is.atomic(ids)) ids else ids$job.id))
 }
 
 getLogFiles = function(reg, ids) {
   job.hash = log.file = NULL
   tab = reg$status[list(ids), c("job.id", "job.hash", "log.file")]
   tab[is.na(log.file) & !is.na(job.hash), log.file := sprintf("%s.log", job.hash)]
-  tab[!is.na(log.file), log.file := fp(dir(reg, "logs"), log.file)]$log.file
+  tab[!is.na(log.file), log.file := fs::path(dir(reg, "logs"), log.file)]$log.file
 }
 
 getJobFiles = function(reg, hash) {
-  fp(reg$file.dir, "jobs", sprintf("%s.rds", hash))
+  fs::path(reg$file.dir, "jobs", sprintf("%s.rds", hash))
 }
 
 getExternalDirs = function(reg, ids) {
-  fp(dir(reg, "external"), if (is.atomic(ids)) ids else ids$job.id)
+  fs::path(dir(reg, "external"), if (is.atomic(ids)) ids else ids$job.id)
 }
 
 mangle = function(x) {

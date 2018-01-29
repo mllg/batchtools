@@ -37,7 +37,7 @@ sync = function(reg) {
     expr = quote(`:=`(started = i.started, done = i.done, error = i.error, mem.used = i.mem.used))
     reg$status[updates, eval(expr), on = "job.id"]
     if (reg$writeable)
-      file.remove.safely(fns[!failed])
+      file_remove(fns[!failed])
   }
 
   runHook(reg, "post.sync", updates = updates)

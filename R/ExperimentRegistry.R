@@ -52,8 +52,7 @@ makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), con
   reg = makeRegistry(file.dir = file.dir, work.dir = work.dir, conf.file = conf.file,
     packages = packages, namespaces = namespaces, source = source, load = load, seed = seed, make.default = make.default)
 
-  dir.create(fp(reg$file.dir, "problems"))
-  dir.create(fp(reg$file.dir, "algorithms"))
+  fs::dir_create(fs::path(reg$file.dir, c("problems", "algorithms")))
 
   reg$problems       = character(0L)
   reg$algorithms     = character(0L)

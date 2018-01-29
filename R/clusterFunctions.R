@@ -187,9 +187,9 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 cfBrewTemplate = function(reg, text, jc) {
   assertString(text)
 
-  path = if (batchtools$debug || reg$cluster.functions$store.job.files) fp(reg$file.dir, "jobs") else tempdir()
+  path = if (batchtools$debug || reg$cluster.functions$store.job.files) fs::path(reg$file.dir, "jobs") else fs::path_temp()
   fn = sprintf("%s.job", jc$job.hash)
-  outfile = fp(path, fn)
+  outfile = fs::path(path, fn)
 
   parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
@@ -301,25 +301,25 @@ findTemplateFile = function(name) {
 
   x = Sys.getenv("R_BATCHTOOLS_SEARCH_PATH")
   if (nzchar(x)) {
-    x = fp(x, sprintf("batchtools.%s.tmpl", name))
-    if (file.exists(x))
-      return(normalizePath(x, winslash = "/"))
+    x = fs::path(x, sprintf("batchtools.%s.tmpl", name))
+    if (fs::file_exists(x))
+      return(fs::path_real(x))
   }
 
   x = sprintf("batchtools.%s.tmpl", name)
-  if (file.exists(x))
-    return(normalizePath(x, winslash = "/"))
+  if (fs::file_exists(x))
+    return(fs::path_real(x))
 
-  x = fp(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", name))
-  if (file.exists(x))
+  x = fs::path(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", name))
+  if (fs::file_exists(x))
     return(x)
 
-  x = fp("~", sprintf(".batchtools.%s.tmpl", name))
-  if (file.exists(x))
-    return(normalizePath(x, winslash = "/"))
+  x = fs::path("~", sprintf(".batchtools.%s.tmpl", name))
+  if (fs::file_exists(x))
+    return(fs::path_real(x))
 
   x = system.file("templates", sprintf("%s.tmpl", name), package = "batchtools")
-  if (file.exists(x))
+  if (fs::file_exists(x))
     return(x)
 
   stopf("Argument 'template' (=\"%s\") must point to a template file or contain the template itself as string (containing at least one newline)", name)

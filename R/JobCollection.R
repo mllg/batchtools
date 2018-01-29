@@ -54,7 +54,7 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$work.dir     = reg$work.dir
   jc$seed         = reg$seed
   jc$uri          = getJobFiles(reg, hash = jc$job.hash)
-  jc$log.file     = fp(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
+  jc$log.file     = fs::path(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
   jc$packages     = reg$packages
   jc$namespaces   = reg$namespaces
   jc$source       = reg$source

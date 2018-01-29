@@ -16,7 +16,7 @@ non-interactive scripts to disable this precaution.}
 Registry. If not explicitly passed, uses the default registry (see \code{\link{setDefaultRegistry}}).}
 }
 \value{
-[\code{logical(1)}]: Success of \code{\link[base]{unlink}}.
+[\code{character(1)}]: Path of the deleted file directory.
 }
 \description{
 All files will be erased from the file system, including all results.

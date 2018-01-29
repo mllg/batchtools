@@ -40,7 +40,7 @@ makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1
     }
 
     if (jc$array.jobs) {
-      logs = sprintf("%s-%i", basename(jc$log.file), seq_row(jc$jobs))
+      logs = sprintf("%s-%i", fs::path_file(jc$log.file), seq_row(jc$jobs))
       makeSubmitJobResult(status = 0L, batch.id = stri_replace_first_fixed(output, "[]", stri_paste("[", seq_row(jc$jobs), "]")), log.file = logs)
     } else {
       makeSubmitJobResult(status = 0L, batch.id = output)

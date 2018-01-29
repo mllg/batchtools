@@ -243,7 +243,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
 
     # remove old result files
     fns = getResultFiles(reg, ids.chunk)
-    file.remove.safely(fns)
+    file_remove(fns)
 
     i = 1L
     repeat {

@@ -14,7 +14,7 @@ if (backend == "mpi") {
 }
 
 # relative paths are not handled well by Slurm
-log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
+log.file = fs::path_expand(log.file)
 -%>
 
 #SBATCH --job-name=<%= job.name %>

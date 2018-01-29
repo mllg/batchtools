@@ -30,21 +30,19 @@ doJobCollection.character = function(jc, output = NULL) {
   obj = readRDS(jc)
   force(obj)
   if (!batchtools$debug && !obj$array.jobs)
-    file.remove(jc)
+    fs::file_delete(jc)
   doJobCollection.JobCollection(obj, output = output)
 }
 
 
 #' @export
 doJobCollection.JobCollection = function(jc, output = NULL) {
-  now = function() strftime(Sys.time())
-
   error = function(msg, ...) {
     now = ustamp()
     updates = data.table(job.id = jc$jobs$job.id, started = now, done = now,
       error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),
       mem.used = NA_real_, key = "job.id")
-    writeRDS(updates, file = fp(jc$file.dir, "updates", sprintf("%s.rds", jc$job.hash)))
+    writeRDS(updates, file = fs::path(jc$file.dir, "updates", sprintf("%s.rds", jc$job.hash)))
     invisible(NULL)
   }
 
@@ -77,7 +75,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   catf("### [bt %s]: Setting working directory to '%s'", s, jc$work.dir)
 
   # set work dir
-  if (!dir.exists(jc$work.dir))
+  if (!fs::dir_exists(jc$work.dir))
     return(error("Work dir does not exist"))
   local_dir(jc$work.dir)
 
@@ -185,7 +183,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
       i = self$updates[!is.na(started) & (!written), which = TRUE]
       if (length(i) > 0L) {
         first.id = self$updates$job.id[i[1L]]
-        writeRDS(self$updates[i, !"written"], file = fp(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, first.id)))
+        writeRDS(self$updates[i, !"written"], file = fs::path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, first.id)))
         set(self$updates, i, "written", TRUE)
       }
     },

@@ -6,11 +6,11 @@ test_that("doJobCollection handles bulky log output", {
   fun = function(N) print(paste(rep("a", N), collapse = ""))
   batchMap(fun, N, reg = reg)
   jc = makeJobCollection(1, reg = reg)
-  fn = tempfile()
+  fn = fs::file_temp()
   doJobCollection(jc, output = fn)
   lines = readLines(fn)
   expect_true(any(nchar(lines) >= N))
-  file.remove(fn)
+  fs::file_delete(fn)
 })
 
 test_that("doJobCollection truncates error messages", {
@@ -19,12 +19,12 @@ test_that("doJobCollection truncates error messages", {
   fun = function(N) stop(paste(rep("a", N), collapse = ""))
   batchMap(fun, N, reg = reg)
   jc = makeJobCollection(1, reg = reg)
-  fn = tempfile()
+  fn = fs::file_temp()
   doJobCollection(jc, output = fn)
   syncRegistry(reg = reg)
   msg = getErrorMessages(reg = reg)$message
   expect_true(stri_endswith_fixed(msg, " [truncated]"))
-  file.remove(fn)
+  fs::file_delete(fn)
 })
 
 test_that("doJobCollection does not swallow warning messages", {
@@ -38,7 +38,7 @@ test_that("doJobCollection does not swallow warning messages", {
 
 test_that("doJobCollection signals slave errors", {
   reg = makeTestRegistry()
-  fn = tempfile(fileext = ".R", tmpdir = reg$temp.dir)
+  fn = fs::file_temp(ext = ".R", tmp_dir = reg$temp.dir)
   reg$source = fn
   saveRegistry(reg)
   assign("y_on_master", 2, envir = .GlobalEnv)
@@ -50,5 +50,5 @@ test_that("doJobCollection signals slave errors", {
   submitAndWait(reg, 1)
   expect_data_table(findErrors(reg = reg), nrow = 1)
   expect_string(getErrorMessages(reg = reg)$message, fixed = "y_on_master")
-  file.remove(fn)
+  fs::file_delete(fn)
 })
