@@ -38,6 +38,7 @@ Results and partial results can be collected with \code{\link{reduceResultsList}
 \code{\link{loadResult}}.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 # define function to reduce on slave, we want to sum a vector
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 xs = 1:100

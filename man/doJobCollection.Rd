@@ -25,6 +25,7 @@ Executes every job in a \code{\link{JobCollection}}.
 This function is intended to be called on the slave.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(identity, 1:2, reg = tmp)
 jc = makeJobCollection(1:2, reg = tmp)

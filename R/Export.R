@@ -14,6 +14,7 @@
 #' @return [\code{data.table}] with name and uri to the exported objects.
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #'
 #' # list exports

@@ -127,13 +127,13 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af9296b4fa8' using cluster functions 'Interactive'</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Create some dummy jobs</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
   <span class='kw'>if</span> (<span class='no'>i</span> <span class='kw'>==</span> <span class='fl'>3</span>) <span class='fu'>stop</span>(<span class='no'>i</span>)
   <span class='kw'>if</span> (<span class='no'>i</span> <span class='kw'>%%</span> <span class='fl'>2</span> <span class='kw'>==</span> <span class='fl'>1</span>) <span class='fu'>warning</span>(<span class='st'>"That's odd."</span>)
 }
-<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>fun</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 5 jobs in 5 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='warning'>Warning: That's odd.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: That's odd.</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='getStatus.html'>getStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; Status for 5 jobs:
+<span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>fun</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 5 jobs in 5 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='warning'>Warning: That's odd.</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 5 ...</span></div><div class='output co'>#&gt; <span class='warning'>Warning: That's odd.</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='getStatus.html'>getStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; Status for 5 jobs:
 #&gt;   Submitted    : 5 (100.0%)
 #&gt;   -- Queued    : 0 (  0.0%)
 #&gt;   -- Started   : 5 (100.0%)
@@ -141,14 +141,14 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt;   ---- Done    : 4 ( 80.0%)
 #&gt;   ---- Error   : 1 ( 20.0%)
 #&gt;   ---- Expired : 0 (  0.0%)</div><div class='input'>
-<span class='fu'>writeLines</span>(<span class='fu'>getLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; ### [bt 2017-12-19 15:34:22]: This is batchtools v0.9.8
-#&gt; ### [bt 2017-12-19 15:34:22]: Starting calculation of 1 jobs
-#&gt; ### [bt 2017-12-19 15:34:22]: Setting working directory to '/home/lang/Projekte/batchtools/docs/reference'
-#&gt; ### [bt 2017-12-19 15:34:22]: Memory measurement disabled
-#&gt; ### [bt 2017-12-19 15:34:22]: Starting job [batchtools job.id=1]
+<span class='fu'>writeLines</span>(<span class='fu'>getLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; ### [bt]: This is batchtools v0.9.8
+#&gt; ### [bt]: Starting calculation of 1 jobs
+#&gt; ### [bt]: Setting working directory to '/home/lang/Projekte/batchtools/docs/reference'
+#&gt; ### [bt]: Memory measurement disabled
+#&gt; ### [bt]: Starting job [batchtools job.id=1]
 #&gt; 
-#&gt; ### [bt 2017-12-19 15:34:22]: Job terminated successfully [batchtools job.id=1]
-#&gt; ### [bt 2017-12-19 15:34:22]: Calculation finished!</div><span class='co'># NOT RUN {</span>
+#&gt; ### [bt]: Job terminated successfully [batchtools job.id=1]
+#&gt; ### [bt]: Calculation finished!</div><span class='co'># NOT RUN {</span>
 <span class='fu'>showLog</span>(<span class='no'>ids</span>[<span class='fl'>1</span>], <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='co'># }</span><div class='input'>
 <span class='fu'><a href='grepLogs.html'>grepLogs</a></span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"warning"</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; Empty data.table (0 rows) of 2 cols: job.id,matches</div></pre>
@@ -174,7 +174,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

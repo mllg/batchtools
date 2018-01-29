@@ -141,6 +141,7 @@ Experiment = R6Class("Experiment", cloneable = FALSE, inherit = BaseJob,
 #' @rdname JobExperiment
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(function(x, y) x + y, x = 1:2, more.args = list(y = 99), reg = tmp)
 #' submitJobs(resources = list(foo = "bar"), reg = tmp)

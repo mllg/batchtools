@@ -51,6 +51,7 @@ If you have thousands of jobs, disabling the progress bar (\code{options(batchto
 can significantly increase the performance.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(2) }
 ### Example 1 - reduceResultsList
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(function(x) x^2, x = 1:10, reg = tmp)

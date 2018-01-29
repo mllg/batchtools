@@ -125,18 +125,16 @@ Do not set this if your scheduler redirects output to a log file.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af922539aa8' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 jobs ...</span></div><div class='input'><span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'><a href='JobCollection.html'>makeJobCollection</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>doJobCollection</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt; ### [bt 2017-12-19 15:33:42]: This is batchtools v0.9.8
-#&gt; ### [bt 2017-12-19 15:33:42]: Starting calculation of 2 jobs
-#&gt; ### [bt 2017-12-19 15:33:42]: Setting working directory to '/home/lang/Projekte/batchtools/docs/reference'
-#&gt; ### [bt 2017-12-19 15:33:42]: Memory measurement disabled
-#&gt; ### [bt 2017-12-19 15:33:42]: Starting job [batchtools job.id=1]
-#&gt; 
-#&gt; ### [bt 2017-12-19 15:33:42]: Job terminated successfully [batchtools job.id=1]
-#&gt; ### [bt 2017-12-19 15:33:42]: Starting job [batchtools job.id=2]
-#&gt; 
-#&gt; ### [bt 2017-12-19 15:33:42]: Job terminated successfully [batchtools job.id=2]
-#&gt; ### [bt 2017-12-19 15:33:42]: Calculation finished!</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 jobs ...</span></div><div class='input'><span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'><a href='JobCollection.html'>makeJobCollection</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
+<span class='fu'>doJobCollection</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt; ### [bt]: This is batchtools v0.9.8
+#&gt; ### [bt]: Starting calculation of 2 jobs
+#&gt; ### [bt]: Setting working directory to '/home/lang/Projekte/batchtools/docs/reference'
+#&gt; ### [bt]: Memory measurement disabled
+#&gt; ### [bt]: Starting job [batchtools job.id=1]</div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; 
+#&gt; ### [bt]: Job terminated successfully [batchtools job.id=1]
+#&gt; ### [bt]: Starting job [batchtools job.id=2]</div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; 
+#&gt; ### [bt]: Job terminated successfully [batchtools job.id=2]
+#&gt; ### [bt]: Calculation finished!</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -159,7 +157,7 @@ Do not set this if your scheduler redirects output to a log file.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

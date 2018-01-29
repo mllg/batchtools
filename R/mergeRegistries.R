@@ -20,6 +20,7 @@
 # @return [\code{\link{Registry}}].
 # @export
 # @examples
+# \dontshow{ batchtools:::example_push_temp(2) }
 # target = makeRegistry(NA, make.default = FALSE)
 # batchMap(identity, 1:10, reg = target)
 # td = tempdir()

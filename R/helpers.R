@@ -157,6 +157,15 @@ rnd_hash = function(prefix = "") {
 }
 
 now = function() {
-  strftime(Sys.time())
+  if (isTRUE(getOption("batchtools.timestamps", FALSE)))
+    sprintf(" %s", strftime(Sys.time()))
+  else
+    ""
 }
 
+example_push_temp = function(i = 1L) {
+  base = fs::path(dirname(tempdir()), "batchtools-example")
+  dirs = if (i == 1L) fs::path(base, "reg") else fs::path(base, sprintf("reg%i", seq_len(i)))
+  fs::dir_delete(dirs[fs::dir_exists(dirs)])
+  fs::file_temp_push(dirs)
+}

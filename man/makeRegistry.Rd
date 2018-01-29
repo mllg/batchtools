@@ -127,6 +127,7 @@ Currently \pkg{batchtools} understands the following options set via the configu
 }
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 print(tmp)
 

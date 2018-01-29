@@ -50,6 +50,7 @@ Therefore, this function will warn about factor variables if the following condi
 }
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 
 # add first problem

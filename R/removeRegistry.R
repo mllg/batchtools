@@ -14,6 +14,7 @@
 #' @export
 #' @family Registry
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' removeRegistry(0, tmp)
 removeRegistry = function(wait = 5, reg = getDefaultRegistry()) {

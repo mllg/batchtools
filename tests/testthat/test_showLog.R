@@ -10,7 +10,7 @@ test_that("showLog/getLog", {
   lines = getLog(id = 1, reg = reg)
   expect_character(lines, min.len = 3L, any.missing = FALSE)
   expect_equal(sum(stri_detect_fixed(lines, "GREPME")), 1L)
-  expect_true(any(stri_startswith_fixed(lines, "### [bt ")))
+  expect_true(any(stri_startswith_fixed(lines, "### [bt")))
   expect_identical(sum(stri_endswith_fixed(lines, "[batchtools job.id=1]")), 2L)
   expect_false(any(stri_endswith_fixed(lines, "[batchtools job.id=2]")))
 

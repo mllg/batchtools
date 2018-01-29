@@ -25,6 +25,7 @@
 #' @export
 #' @seealso \code{\link{binpack}} and \code{\link{lpt}} to chunk jobs according to their estimated runtimes.
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' # Create a simple toy registry
 #' set.seed(1)
 #' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE, seed = 1)

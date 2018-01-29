@@ -63,6 +63,7 @@ This function serialize all components to the file system and registers the prob
 \code{reg$problems} holds the IDs of already defined problems.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 addProblem("p1", fun = function(job, data) data, reg = tmp)
 addProblem("p2", fun = function(job, data) job, reg = tmp)

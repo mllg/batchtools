@@ -34,6 +34,7 @@
 #' @rdname JobCollection
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE, packages = "methods")
 #' batchMap(identity, 1:5, reg = tmp)
 #'

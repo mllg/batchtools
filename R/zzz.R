@@ -4,11 +4,14 @@
 #'
 #' @section Package options:
 #' \describe{
+#'   \item{\code{batchtools.verbose}}{
+#'     Verbosity. Set to \code{FALSE} to suppress info messages and progress bars.
+#'   }
 #'   \item{\code{batchtools.progress}}{
 #'     Progress bars. Set to \code{FALSE} to disable them.
 #'   }
-#'   \item{\code{batchtools.verbose}}{
-#'     Verbosity. Set to \code{FALSE} to suppress info messages and progress bars.
+#'   \item{\code{batchtools.timestamps}}{
+#'     Add time stamps to log output. Set to \code{FALSE} to disable them.
 #'   }
 #' }
 #' Furthermore, you may enable a debug mode using the \pkg{debugme} package by

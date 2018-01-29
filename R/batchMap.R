@@ -30,6 +30,7 @@
 #' @export
 #' @seealso \code{\link{batchReduce}}
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(3) }
 #' # example using "..." and more.args
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' f = function(x, y) x^2 + y

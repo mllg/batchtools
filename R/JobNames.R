@@ -16,6 +16,7 @@
 #'  returns a \code{data.table} with columns \code{job.id} and \code{job.name}.
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' ids = batchMap(identity, 1:10, reg = tmp)
 #' setJobNames(ids, letters[1:nrow(ids)], reg = tmp)

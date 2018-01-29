@@ -23,6 +23,7 @@ All files will be erased from the file system, including all results.
 If you wish to remove only intermediate files, use \code{\link{sweepRegistry}}.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 removeRegistry(0, tmp)
 }

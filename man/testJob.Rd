@@ -33,6 +33,7 @@ Returns the result of the job if successful.
 Starts a single job on the local machine.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(function(x) if (x == 2) xxx else x, 1:2, reg = tmp)
 testJob(1, reg = tmp)

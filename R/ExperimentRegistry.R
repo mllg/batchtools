@@ -14,6 +14,7 @@
 #' @export
 #' @family Registry Experiment
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #'
 #' # Definde one problem, two algorithms and add them with some parameters:

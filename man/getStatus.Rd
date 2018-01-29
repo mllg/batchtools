@@ -38,6 +38,7 @@ Here, a job which terminated successfully counts towards the jobs which are subm
 To retrieve the corresponding job ids, see \code{\link{findJobs}}.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 fun = function(i) if (i == 3) stop(i) else i
 ids = batchMap(fun, i = 1:5, reg = tmp)

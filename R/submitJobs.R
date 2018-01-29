@@ -89,6 +89,7 @@
 #' @return [\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(2) }
 #' ### Example 1: Using memory measurement
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #'

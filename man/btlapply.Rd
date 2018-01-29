@@ -66,6 +66,7 @@ on batch system. If some jobs fail, you have to retrieve partial results from th
 registry directory yourself.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 btlapply(1:3, function(x) x^2)
 btmapply(function(x, y, z) x + y + z, x = 1:3, y = 1:3, more.args = list(z = 1), simplify = TRUE)
 }

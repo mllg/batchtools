@@ -49,6 +49,7 @@ If your \link{ClusterFunctions} uses a template, \code{\link[brew]{brew}} will b
 a collection. Thus all variables available inside the job can be used in the template.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE, packages = "methods")
 batchMap(identity, 1:5, reg = tmp)
 
