@@ -119,6 +119,7 @@ You have to do this manually via \code{\link[base]{library}} or let the registry
 }
 
 \examples{
+\dontshow{ batchtools:::example_push_temp(2) }
 ### Example 1: Using memory measurement
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 

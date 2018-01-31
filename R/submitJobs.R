@@ -89,6 +89,7 @@
 #' @return [\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(2) }
 #' ### Example 1: Using memory measurement
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #'
@@ -243,7 +244,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
 
     # remove old result files
     fns = getResultFiles(reg, ids.chunk)
-    file.remove.safely(fns)
+    file_remove(fns)
 
     i = 1L
     repeat {

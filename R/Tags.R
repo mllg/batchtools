@@ -13,6 +13,7 @@
 #' @template reg
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' ids = batchMap(sqrt, x = -3:3, reg = tmp)
 #'

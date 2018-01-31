@@ -11,10 +11,10 @@ clearRegistry = function(reg = getDefaultRegistry()) {
   reg$status = reg$status[FALSE]
   reg$defs = reg$defs[FALSE]
   reg$resources = reg$resources[FALSE]
-  user.fun = fp(reg$file.dir, "user.function.rds")
-  if (file.exists(user.fun)) {
+  user.fun = fs::path(reg$file.dir, "user.function.rds")
+  if (fs::file_exists(user.fun)) {
     info("Removing user function ...")
-    file.remove.safely(user.fun)
+    file_remove(user.fun)
   }
   sweepRegistry(reg = reg)
 }

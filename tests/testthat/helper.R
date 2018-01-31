@@ -4,17 +4,23 @@ library("checkmate")
 library("stringi")
 requireNamespace("withr")
 
+is_on_ci = function() {
+  identical(Sys.getenv("APPVEYOR"), "True") || identical(Sys.getenv("TRAVIS"), "true")
+}
+
 makeTestRegistry = function(file.dir = NA, make.default = FALSE, ...) {
   reg = makeRegistry(file.dir = file.dir, make.default = make.default, ...)
   fd = reg$file.dir
-  reg.finalizer(e = reg, f = function(reg) unlink(fd, recursive = TRUE), onexit = TRUE)
+  if (!is_on_ci())
+    reg.finalizer(e = reg, f = function(reg) if (fs::dir_exists(fd)) fs::dir_delete(fd), onexit = TRUE)
   return(reg)
 }
 
 makeTestExperimentRegistry = function(file.dir = NA, make.default = FALSE, ...) {
   reg = makeExperimentRegistry(file.dir = file.dir, make.default = make.default, ...)
   fd = reg$file.dir
-  reg.finalizer(e = reg, f = function(reg) unlink(fd, recursive = TRUE), onexit = TRUE)
+  if (!is_on_ci())
+    reg.finalizer(e = reg, f = function(reg) if (fs::dir_exists(fd)) fs::dir_delete(fd), onexit = TRUE)
   return(reg)
 }
 

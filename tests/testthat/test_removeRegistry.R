@@ -2,10 +2,10 @@ context("removeRegistry")
 
 test_that("removeRegistry", {
   reg = makeTestRegistry()
-  expect_true(dir.exists(reg$file.dir))
+  expect_directory_exists(reg$file.dir)
   res = removeRegistry(0.01, reg = reg)
-  expect_true(res)
-  expect_false(dir.exists(reg$file.dir))
+  expect_string(res)
+  expect_false(fs::dir_exists(reg$file.dir))
 })
 
 test_that("removeRegistry resets default registry", {
@@ -13,7 +13,7 @@ test_that("removeRegistry resets default registry", {
   reg = makeTestExperimentRegistry(make.default = TRUE)
   expect_is(batchtools$default.registry, "Registry")
   res = removeRegistry(0, reg = reg)
-  expect_false(dir.exists(reg$file.dir))
+  expect_false(fs::dir_exists(reg$file.dir))
   expect_null(batchtools$default.registry)
   batchtools$default.registry = prev
 })

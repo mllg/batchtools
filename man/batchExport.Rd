@@ -27,6 +27,7 @@ They are automatically loaded and placed in the global environment
 each time the registry is loaded or a job collection is executed.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 
 # list exports

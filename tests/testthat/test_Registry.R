@@ -6,8 +6,8 @@ test_that("makeRegistry", {
   expect_true(is.environment(reg))
   expect_directory(reg$file.dir, access = "rw")
   expect_directory(reg$work.dir, access = "r")
-  expect_directory(fp(reg$file.dir, c("jobs", "results", "updates", "logs")))
-  expect_file(fp(reg$file.dir, "registry.rds"))
+  expect_directory(fs::path(reg$file.dir, c("jobs", "results", "updates", "logs")))
+  expect_file(fs::path(reg$file.dir, "registry.rds"))
   expect_character(reg$packages, any.missing = FALSE)
   expect_character(reg$namespaces, any.missing = FALSE)
   expect_int(reg$seed, na.ok = FALSE)
@@ -25,37 +25,35 @@ test_that("makeRegistry", {
 })
 
 test_that("reading conf file", {
-  fn = tempfile("conf")
+  fn = fs::file_temp("conf")
   writeLines(con = fn, "default.resources = list(walltime = 42)")
   reg = makeTestRegistry(conf.file = fn)
   expect_identical(reg$default.resources, list(walltime = 42))
-  file.remove(fn)
+  fs::file_delete(fn)
 })
 
 test_that("make.default does work", {
-  if (!interactive()) {
-    setDefaultRegistry(NULL)
-    expect_error(getDefaultRegistry(), "No default")
-    reg = makeTestRegistry(make.default = TRUE, seed = 123)
-    expect_equal(reg$seed, 123L)
-    reg = makeTestRegistry(seed = 124)
-    expect_equal(reg$seed, 124L)
-    expect_equal(getDefaultRegistry()$seed, 123L)
+  prev = batchtools$default.registry
 
-    expect_null(setDefaultRegistry(NULL))
-    expect_error(getDefaultRegistry(), "No default")
-    setDefaultRegistry(reg)
-    expect_class(getDefaultRegistry(), "Registry")
-  }
+  setDefaultRegistry(NULL)
+  expect_error(getDefaultRegistry(), "No default")
+
+  reg = makeTestRegistry(make.default = TRUE, seed = 123)
+  expect_equal(reg$seed, 123L)
+  reg = makeTestRegistry(make.default = FALSE, seed = 124)
+  expect_equal(reg$seed, 124L)
+  expect_class(getDefaultRegistry(), "Registry")
+  expect_equal(getDefaultRegistry()$seed, 123L)
+
+  batchtools$default.registry = prev
 })
 
 test_that("extra files are loaded", {
-  wd = tempfile()
-  dir.create(wd, recursive = TRUE)
-  dir.create(fp(wd, "subdir"), recursive = TRUE)
+  wd = fs::file_temp()
+  fs::dir_create(fs::path(wd, "subdir"))
 
   # define some files to source/load
-  fn = list(source = fp(wd, "src_file.r"), load = fp(wd, "subdir", "load_file.RData"))
+  fn = list(source = fs::path(wd, "src_file.r"), load = fs::path(wd, "subdir", "load_file.RData"))
   writeLines("x_from_source = 123", con = fn$source)
   x_from_load = 321
   save(x_from_load, file = fn$load)
@@ -67,12 +65,12 @@ test_that("extra files are loaded", {
   rm("x_from_source", envir = .GlobalEnv)
   rm("x_from_load", envir = .GlobalEnv)
 
-  reg = makeTestRegistry(work.dir = wd, source = basename(fn$source), load = fp("subdir", basename(fn$load)))
+  reg = makeTestRegistry(work.dir = wd, source = fs::path_file(fn$source), load = fs::path("subdir", fs::path_file(fn$load)))
   expect_identical(get("x_from_source", .GlobalEnv), 123)
   expect_identical(get("x_from_load", .GlobalEnv), 321)
   rm("x_from_source", envir = .GlobalEnv)
   rm("x_from_load", envir = .GlobalEnv)
-  unlink(wd, recursive = TRUE)
+  fs::dir_delete(wd)
 })
 
 test_that("loadRegistry", {
@@ -91,7 +89,7 @@ test_that("loadRegistry", {
     for (nm in nms)
       expect_equal(reg1[[nm]], reg2[[nm]], info = nm)
 
-    x = readRDS(fp(fd, "registry.rds"))
+    x = readRDS(fs::path(fd, "registry.rds"))
     expect_null(x$cluster.functions)
     expect_null(x$default.resources)
     expect_null(x$temp.dir)
@@ -101,7 +99,7 @@ test_that("loadRegistry", {
 })
 
 test_that("loadRegistry with missing dependencies is still usable (#122)", {
-  expect_warning(reg <- makeTestRegistry(source = tempfile()), "Failed to source")
+  expect_warning(reg <- makeTestRegistry(source = fs::file_temp()), "Failed to source")
   saveRegistry(reg)
   expect_warning(loadRegistry(reg$file.dir, writeable = TRUE), "Failed to source")
   batchMap(identity, 1, reg = reg)
@@ -114,7 +112,7 @@ test_that("loadRegistry after early node error still usable (#135)", {
   jc = makeJobCollection(1, reg = reg)
   jc$packages = "not_existing_package"
   suppressAll(doJobCollection(jc))
-  expect_character(list.files(fp(reg$file.dir, "updates")), len = 1L)
+  expect_character(list.files(fs::path(reg$file.dir, "updates")), len = 1L)
   expect_true(syncRegistry(reg = reg))
   expect_string(getErrorMessages(reg = reg)$message, fixed = "not_existing_package")
 })
@@ -134,7 +132,7 @@ test_that("clearRegistry", {
   expect_identical(list.files(dir(reg, "logs")), character(0))
   expect_identical(list.files(dir(reg, "results")), character(0))
   expect_identical(list.files(dir(reg, "updates")), character(0))
-  expect_false(file.exists(fp(reg$file.dir, "user.function.rds")))
+  expect_false(fs::file_exists(fs::path(reg$file.dir, "user.function.rds")))
 
   expect_identical(batchMap(identity, 1:4, reg = reg), data.table(job.id = 1:4, key = "job.id"))
   expect_true(reg$foo)

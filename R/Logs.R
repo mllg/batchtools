@@ -1,7 +1,7 @@
 #' @useDynLib batchtools fill_gaps
 readLog = function(id, missing.as.empty = FALSE, reg = getDefaultRegistry()) {
   log.file = getLogFiles(reg, id)
-  if (is.na(log.file) || !file.exists(log.file)) {
+  if (is.na(log.file) || !fs::file_exists(log.file)) {
     if (missing.as.empty)
       return(data.table(job.id = integer(0L), lines = character(0L)))
     stopf("Log file for job with id %i not available", id$job.id)
@@ -86,6 +86,7 @@ grepLogs = function(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE, reg
 #' @family debug
 #' @return Nothing.
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #'
 #' # Create some dummy jobs
@@ -108,7 +109,7 @@ showLog = function(id, reg = getDefaultRegistry()) {
   assertRegistry(reg, sync = TRUE)
   id = convertId(reg, id)
   lines = extractLog(readLog(id, reg = reg), id)
-  log.file = fp(tempdir(), sprintf("%i.log", id$job.id))
+  log.file = fs::path(fs::path_temp(), sprintf("%i.log", id$job.id))
   writeLines(text = lines, con = log.file)
   file.show(log.file, delete.file = TRUE)
 }

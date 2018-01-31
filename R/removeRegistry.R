@@ -10,10 +10,11 @@
 #'   non-interactive scripts to disable this precaution.
 #' @template reg
 #'
-#' @return [\code{logical(1)}]: Success of \code{\link[base]{unlink}}.
+#' @return [\code{character(1)}]: Path of the deleted file directory.
 #' @export
 #' @family Registry
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' removeRegistry(0, tmp)
 removeRegistry = function(wait = 5, reg = getDefaultRegistry()) {
@@ -31,5 +32,5 @@ removeRegistry = function(wait = 5, reg = getDefaultRegistry()) {
   }
 
   info("Recursively removing files in '%s' ...", reg$file.dir)
-  unlink(reg$file.dir, recursive = TRUE) == 0L
+  fs::dir_delete(reg$file.dir)
 }

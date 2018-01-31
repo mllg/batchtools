@@ -34,6 +34,7 @@ Imports:
     brew,
     checkmate (>= 1.8.5),
     digest (>= 0.6.9),
+    fs (>= 1.1.0),
     parallel,
     progress (>= 1.1.1),
     R6,

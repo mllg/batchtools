@@ -21,6 +21,7 @@
 #' @export
 #' @family debug
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(function(x) if (x == 2) xxx else x, 1:2, reg = tmp)
 #' testJob(1, reg = tmp)
@@ -33,16 +34,16 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   id = convertId(reg, id)
 
   if (external) {
-    td      = normalizePath(tempdir(), winslash = "/")
-    fn.r    = fp(td, "batchtools-testJob.R")
-    fn.jc   = fp(td, "batchtools-testJob.jc")
-    fn.res  = fp(td, "batchtools-testJob.rds")
+    td      = fs::path_real(fs::path_temp())
+    fn.r    = fs::path(td, "batchtools-testJob.R")
+    fn.jc   = fs::path(td, "batchtools-testJob.jc")
+    fn.res  = fs::path(td, "batchtools-testJob.rds")
 
     writeRDS(makeJobCollection(id, reg = reg), file = fn.jc)
-    brew(file = system.file(fp("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE),
+    brew(file = system.file(fs::path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE),
       output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))
 
-    res = runOSCommand(Rscript(), normalizePath(fn.r, winslash = "/"))
+    res = runOSCommand(Rscript(), fn.r)
 
     writeLines(res$output)
     if (res$exit.code == 0L)

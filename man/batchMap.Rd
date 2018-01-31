@@ -46,6 +46,7 @@ Results and partial results can be collected with \code{\link{reduceResultsList}
 For a synchronous \code{\link[base]{Map}}-like execution, see \code{\link{btmapply}}.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(3) }
 # example using "..." and more.args
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 f = function(x, y) x^2 + y

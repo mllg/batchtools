@@ -9,7 +9,7 @@ RDSReader = R6Class("RDSReader",
     },
 
     get = function(uri, slot = NA_character_) {
-      read = function(uri) if (file.exists(uri)) readRDS(uri) else NULL
+      read = function(uri) if (fs::file_exists(uri)) readRDS(uri) else NULL
 
       # no cache used, read object from disk and return
       if (!self$use.cache)

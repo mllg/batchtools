@@ -14,6 +14,7 @@
 #' @return [\code{data.table}] with name and uri to the exported objects.
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #'
 #' # list exports
@@ -37,12 +38,12 @@ batchExport = function(export = list(), unexport = character(0L), reg = getDefau
   assertList(export, names = "named")
   assertCharacter(unexport, any.missing = FALSE, min.chars = 1L)
 
-  path = fp(reg$file.dir, "exports")
+  path = fs::path(reg$file.dir, "exports")
 
   if (length(export) > 0L) {
     nn = names(export)
-    fn = fp(path, mangle(nn))
-    found = file.exists(fn)
+    fn = fs::path(path, mangle(nn))
+    found = fs::file_exists(fn)
     if (any(!found))
       info("Exporting new objects: '%s' ...", stri_flatten(nn[!found], "','"))
     if (any(found))
@@ -51,13 +52,13 @@ batchExport = function(export = list(), unexport = character(0L), reg = getDefau
   }
 
   if (length(unexport) > 0L) {
-    fn = fp(path, mangle(unexport))
-    found = file.exists(fn)
+    fn = fs::path(path, mangle(unexport))
+    found = fs::file_exists(fn)
     if (any(found))
       info("Un-exporting exported objects: '%s' ...", stri_flatten(unexport[found], "','"))
-    file.remove.safely(fn[found])
+    file_remove(fn[found])
   }
 
   fns = list.files(path, pattern = "\\.rds")
-  invisible(data.table(name = unmangle(fns), uri = fp(path, fns)))
+  invisible(data.table(name = unmangle(fns), uri = fs::path(path, fns)))
 }

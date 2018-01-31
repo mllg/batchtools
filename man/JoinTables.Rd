@@ -57,6 +57,7 @@ See \url{http://rpubs.com/ronasta/join_data_tables} for a overview of join opera
 data table or alternatively \pkg{dplyr}'s vignette on two table verbs.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 # Create two tables for demonstration
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(identity, x = 1:6, reg = tmp)

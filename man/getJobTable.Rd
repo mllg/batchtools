@@ -59,6 +59,7 @@ with the resources which were set to submit the jobs, and \code{getJobTags} the 
 \code{getJobTable} returns all these tables joined.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 f = function(x) if (x < 0) stop("x must be > 0") else sqrt(x)
 batchMap(f, x = c(-1, 0, 1), reg = tmp)

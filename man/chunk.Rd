@@ -53,6 +53,7 @@ not exceed the upper limit provided by \code{chunk.size}.
 See examples of \code{\link{estimateRuntimes}} for an application of \code{binpack} and \code{lpt}.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(2) }
 ch = chunk(1:10, n.chunks = 2)
 table(ch)
 

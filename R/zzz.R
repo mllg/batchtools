@@ -4,11 +4,14 @@
 #'
 #' @section Package options:
 #' \describe{
+#'   \item{\code{batchtools.verbose}}{
+#'     Verbosity. Set to \code{FALSE} to suppress info messages and progress bars.
+#'   }
 #'   \item{\code{batchtools.progress}}{
 #'     Progress bars. Set to \code{FALSE} to disable them.
 #'   }
-#'   \item{\code{batchtools.verbose}}{
-#'     Verbosity. Set to \code{FALSE} to suppress info messages and progress bars.
+#'   \item{\code{batchtools.timestamps}}{
+#'     Add time stamps to log output. Set to \code{FALSE} to disable them.
 #'   }
 #' }
 #' Furthermore, you may enable a debug mode using the \pkg{debugme} package by
@@ -50,21 +53,10 @@ batchtools$hooks = list(
     debugme::debugme()
     batchtools$debug = TRUE
   }
-  backports::import(pkgname, c("dir.exists", "...length", "file.mtime"))
+  backports::import(pkgname, "...length")
   backports::import(pkgname, "hasName", force = TRUE)
 } # nocov end
 
 .onUnload = function (libpath) { # nocov start
   library.dynam.unload("batchtools", libpath)
 } # nocov end
-
-.onAttach = function(libname, pkgname) {
-  msg = paste(
-    "Breaking change introduced in batchtools v0.9.6:",
-    "The format of the returned data.table of the functions `reduceResultsDataTable()`, getJobTable()`, `getJobPars()`, and `getJobResources()` has changed.",
-    "List columns are not unnested automatically anymore.",
-    "To manually unnest tables, batchtools provides the helper function `unwrap()` now, e.g. `unwrap(getJobPars())`.",
-    "The previously introduced helper function `flatten()` will be deprecated due to a name clash with `purrr::flatten()`."
-  )
-  packageStartupMessage(msg)
-}

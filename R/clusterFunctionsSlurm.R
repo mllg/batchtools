@@ -52,7 +52,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
 
     jc$clusters = clusters
     if (jc$array.jobs) {
-      logs = sprintf("%s_%i", basename(jc$log.file), seq_row(jc$jobs))
+      logs = sprintf("%s_%i", fs::path_file(jc$log.file), seq_row(jc$jobs))
       jc$log.file = stri_join(jc$log.file, "_%a")
     }
     outfile = cfBrewTemplate(reg, template, jc)

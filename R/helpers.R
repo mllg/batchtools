@@ -25,17 +25,21 @@ insert = function(x, y) {
   x[order(names2(x))]
 }
 
-file.remove.safely = function(x) {
-  file.remove(x[file.exists(x)])
+file_remove = function(x) {
+  fs::file_delete(x[fs::file_exists(x)])
 
-  while(any(i <- file.exists(x))) {
+  while(any(i <- fs::file_exists(x))) {
     Sys.sleep(0.5)
-    file.remove(x[i])
+    fs::file_delete(x[i])
   }
 }
 
+file_mtime = function(x) {
+  fs::file_info(x)$modification_time
+}
+
 writeRDS = function(object, file) {
-  file.remove.safely(file)
+  file_remove(file)
   saveRDS(object, file = file)
   waitForFile(file, 300)
   invisible(TRUE)
@@ -128,7 +132,7 @@ stri_trunc = function(str, length, append = "") {
 }
 
 Rscript = function() {
-  fp(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
+  fs::path(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
 }
 
 getSeed = function(start.seed, id) {
@@ -150,4 +154,18 @@ chintersect = function(x, y) {
 
 rnd_hash = function(prefix = "") {
   stri_join(prefix, digest(list(runif(1L), as.numeric(Sys.time()))))
+}
+
+now = function() {
+  if (isTRUE(getOption("batchtools.timestamps", FALSE)))
+    sprintf(" %s", strftime(Sys.time()))
+  else
+    ""
+}
+
+example_push_temp = function(i = 1L) {
+  base = fs::path(dirname(tempdir()), "batchtools-example")
+  dirs = if (i == 1L) fs::path(base, "reg") else fs::path(base, sprintf("reg%i", seq_len(i)))
+  fs::dir_delete(dirs[fs::dir_exists(dirs)])
+  fs::file_temp_push(dirs)
 }

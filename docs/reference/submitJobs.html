@@ -216,7 +216,7 @@ You have to do this manually via <code><a href='http://www.rdocumentation.org/pa
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>### Example 1: Using memory measurement</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af92aa4f70e' using cluster functions 'Interactive'</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg1' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Toy function which creates a large matrix and returns the column sums</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>n</span>, <span class='no'>p</span>) <span class='fu'>colMeans</span>(<span class='fu'>matrix</span>(<span class='fu'>runif</span>(<span class='no'>n</span>*<span class='no'>p</span>), <span class='no'>n</span>, <span class='no'>p</span>))
 
@@ -234,24 +234,24 @@ You have to do this manually via <code><a href='http://www.rdocumentation.org/pa
 <span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>measure.memory</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Submit jobs using the currently configured cluster functions</span>
-<span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='input'>
+<span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='input'>
 <span class='co'># Retrive information about memory, combine with parameters</span>
 <span class='no'>info</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='fu'><a href='getJobTable.html'>getJobStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>mem.used</span>)], <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
 <span class='fu'>print</span>(<span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='no'>info</span>))</div><div class='output co'>#&gt;    job.id mem.used     n     p
 #&gt;     &lt;int&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;
-#&gt; 1:      1    140.7 1e+04    10
-#&gt; 2:      2    145.3 1e+04    50
-#&gt; 3:      3    153.0 1e+05    10
-#&gt; 4:      4    213.7 1e+05    50</div><div class='input'>
+#&gt; 1:      1    142.2 1e+04    10
+#&gt; 2:      2    146.8 1e+04    50
+#&gt; 3:      3    154.5 1e+05    10
+#&gt; 4:      4    215.1 1e+05    50</div><div class='input'>
 <span class='co'># Combine job info with results -&gt; each job is aggregated using mean()</span>
 <span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)))</div><div class='output co'>#&gt;    job.id mem.used     n     p       res
 #&gt;     &lt;int&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;
-#&gt; 1:      1    140.7 1e+04    10 0.5010869
-#&gt; 2:      2    145.3 1e+04    50 0.4993332
-#&gt; 3:      3    153.0 1e+05    10 0.4996469
-#&gt; 4:      4    213.7 1e+05    50 0.5000530</div><div class='input'>
+#&gt; 1:      1    142.2 1e+04    10 0.5010869
+#&gt; 2:      2    146.8 1e+04    50 0.4993332
+#&gt; 3:      3    154.5 1e+05    10 0.4996469
+#&gt; 4:      4    215.1 1e+05    50 0.5000530</div><div class='input'>
 <span class='co'>### Example 2: Multicore execution on the slave</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af9ed7e0be' using cluster functions 'Interactive'</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg2' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Function which sleeps 10 seconds, i-times</span>
 <span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
   <span class='kw pkg'>parallelMap</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></span>(<span class='no'>Sys.sleep</span>, <span class='fu'>rep</span>(<span class='fl'>10</span>, <span class='no'>i</span>))
@@ -308,7 +308,7 @@ You have to do this manually via <code><a href='http://www.rdocumentation.org/pa
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

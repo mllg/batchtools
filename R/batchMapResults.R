@@ -19,6 +19,7 @@
 #' @export
 #' @family Results
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(2) }
 #' # Source registry: calculate squre of some numbers
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(function(x) list(square = x^2), x = 1:10, reg = tmp)

@@ -260,7 +260,7 @@
 <a class="sourceLine" id="cb7-4" data-line-number="4">  <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">mean</span>(d <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb7-5" data-line-number="5">}</a>
 <a class="sourceLine" id="cb7-6" data-line-number="6"><span class="kw">piApprox</span>(<span class="dv">1000</span>)</a></code></pre></div>
-<pre><code>## [1] 3.032</code></pre>
+<pre><code>## [1] 3.172</code></pre>
 <p>We now parallelize <code>piApprox()</code> with <code>batchtools</code>: We create 10 jobs, each doing a MC simulation with <span class="math inline">\(10^5\)</span> jobs. We use <a href="https://mllg.github.io/batchtools/reference/batchMap"><code><a href="../reference/batchMap.html">batchMap()</a></code></a> to define the jobs (note that this does not yet start the calculation):</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/batchMap.html">batchMap</a></span>(<span class="dt">fun =</span> piApprox, <span class="dt">n =</span> <span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>))</a></code></pre></div>
 <pre><code>## Adding 10 jobs ...</code></pre>
@@ -273,8 +273,18 @@
 <p>Note that a unique job ID is assigned to each job. These IDs can be used to restrict operations to subsets of jobs. To actually start the calculation, call <a href="https://mllg.github.io/batchtools/reference/submitJobs"><code><a href="../reference/submitJobs.html">submitJobs()</a></code></a>. The registry and the selected job IDs can be taken as arguments as well as an arbitrary list of resource requirements, which are to be handled by the cluster back end.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="../reference/submitJobs.html">submitJobs</a></span>(<span class="dt">resources =</span> <span class="kw">list</span>(<span class="dt">walltime =</span> <span class="dv">3600</span>, <span class="dt">memory =</span> <span class="dv">1024</span>))</a></code></pre></div>
 <pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 1 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 2 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 3 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 4 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 5 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 6 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 7 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 8 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 9 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 10 ...</code></pre>
 <p>In this example, a cap for the execution time (so-called walltime) and for the maximum memory requirements are set. The progress of the submitted jobs can be checked with <a href="https://mllg.github.io/batchtools/reference/getStatus"><code><a href="../reference/getStatus.html">getStatus()</a></code></a>.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="../reference/getStatus.html">getStatus</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw"><a href="../reference/getStatus.html">getStatus</a></span>()</a></code></pre></div>
 <pre><code>## Status for 10 jobs:
 ##   Submitted    : 10 (100.0%)
 ##   -- Queued    :  0 (  0.0%)
@@ -284,84 +294,84 @@
 ##   ---- Error   :  0 (  0.0%)
 ##   ---- Expired :  0 (  0.0%)</code></pre>
 <p>The resulting output includes the number of jobs in the registry, how many have been submitted, have started to execute on the batch system, are currently running, have successfully completed, and have terminated due to an R exception. After jobs have successfully terminated, we can load their results on the master. This can be done in a simple fashion by using either <a href="https://mllg.github.io/batchtools/reference/loadResult"><code><a href="../reference/loadResult.html">loadResult()</a></code></a>, which returns a single result exactly in the form it was calculated during mapping, or by using <a href="https://mllg.github.io/batchtools/reference/reduceResults"><code><a href="../reference/reduceResults.html">reduceResults()</a></code></a>, which is a version of <code>Reduce()</code> from the base package for registry objects.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="../reference/waitForJobs.html">waitForJobs</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="../reference/waitForJobs.html">waitForJobs</a></span>()</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">mean</span>(<span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, loadResult))</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">mean</span>(<span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, loadResult))</a></code></pre></div>
 <pre><code>## [1] 3.140652</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw"><a href="../reference/reduceResults.html">reduceResults</a></span>(<span class="cf">function</span>(x, y) x <span class="op">+</span><span class="st"> </span>y) <span class="op">/</span><span class="st"> </span><span class="dv">10</span></a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw"><a href="../reference/reduceResults.html">reduceResults</a></span>(<span class="cf">function</span>(x, y) x <span class="op">+</span><span class="st"> </span>y) <span class="op">/</span><span class="st"> </span><span class="dv">10</span></a></code></pre></div>
 <pre><code>## [1] 3.140652</code></pre>
 <p>If you are absolutely sure that your function works, you can take a shortcut and use <em>batchtools</em> in an <code>lapply</code> fashion using <a href="https://mllg.github.io/batchtools/reference/btlapply"><code><a href="../reference/btlapply.html">btlapply()</a></code></a>. This function creates a temporary registry (but you may also pass one yourself), calls <a href="https://mllg.github.io/batchtools/reference/reduceResultsList"><code><a href="../reference/batchMap.html">batchMap()</a></code></a>, wait for the jobs to terminate with <a href="https://mllg.github.io/batchtools/reference/waitForJobs"><code><a href="../reference/waitForJobs.html">waitForJobs()</a></code></a> and then uses <a href="https://mllg.github.io/batchtools/reference/reduceResultsList"><code><a href="../reference/reduceResultsList.html">reduceResultsList()</a></code></a> to return the results.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">res =<span class="st"> </span><span class="kw"><a href="../reference/btlapply.html">btlapply</a></span>(<span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>), piApprox)</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw">mean</span>(<span class="kw">unlist</span>(res))</a></code></pre></div>
-<pre><code>## [1] 3.13722</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">res =<span class="st"> </span><span class="kw"><a href="../reference/btlapply.html">btlapply</a></span>(<span class="kw">rep</span>(<span class="fl">1e5</span>, <span class="dv">10</span>), piApprox)</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw">mean</span>(<span class="kw">unlist</span>(res))</a></code></pre></div>
+<pre><code>## [1] 3.140728</code></pre>
 </section><section id="example-2-machine-learning" class="level1"><h1>Example 2: Machine Learning</h1>
 <p>We stick to a rather simple, but not unrealistic example to explain some further functionalities: Applying two classification learners to the famous iris data set (Anderson 1935), vary a few hyperparameters and evaluate the effect on the classification performance.</p>
 <p>First, we create a registry, the central meta-data object which records technical details and the setup of the experiments. We use an <a href="https://mllg.github.io/batchtools/reference/makeExperimentRegistry"><code>ExperimentRegistry</code></a> where the job definition is split into creating problems and algorithms. See the paper on <a href="http://www.jstatsoft.org/article/view/v064i11">BatchJobs and BatchExperiments</a> for a detailed explanation. Again, we use a temporary registry and make it the default registry.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">library</span>(batchtools)</a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">reg =<span class="st"> </span><span class="kw"><a href="../reference/makeExperimentRegistry.html">makeExperimentRegistry</a></span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw">library</span>(batchtools)</a>
+<a class="sourceLine" id="cb35-2" data-line-number="2">reg =<span class="st"> </span><span class="kw"><a href="../reference/makeExperimentRegistry.html">makeExperimentRegistry</a></span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</a></code></pre></div>
 <section id="problems-and-algorithms" class="level2"><h2>Problems and Algorithms</h2>
 <p>By adding a problem to the registry, we can define the data on which certain computational jobs shall work. This can be a matrix, data frame or array that always stays the same for all subsequent experiments. But it can also be of a more dynamic nature, e.g., subsamples of a dataset or random numbers drawn from a probability distribution . Therefore the function <a href="https://mllg.github.io/batchtools/reference/addProblem"><code><a href="../reference/addProblem.html">addProblem()</a></code></a> accepts static parts in its <code>data</code> argument, which is passed to the argument <code>fun</code> which generates a (possibly stochastic) problem instance. For <code>data</code>, any R object can be used. If only <code>data</code> is given, the generated instance is <code>data</code>. The argument <code>fun</code> has to be a function with the arguments <code>data</code> and <code>job</code> (and optionally other arbitrary parameters). The argument <code>job</code> is an object of type <a href="https://mllg.github.io/batchtools/reference/JobExperiment"><code>Job</code></a> which holds additional information about the job.</p>
 <p>We want to split the iris data set into a training set and test set. In this example we use use subsampling which just randomly takes a fraction of the observations as training set. We define a problem function which returns the indices of the respective training and test set for a split with <code>100 * ratio</code>% of the observations being in the test set:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">subsample =<span class="st"> </span><span class="cf">function</span>(data, job, ratio, ...) {</a>
-<a class="sourceLine" id="cb26-2" data-line-number="2">  n =<span class="st"> </span><span class="kw">nrow</span>(data)</a>
-<a class="sourceLine" id="cb26-3" data-line-number="3">  train =<span class="st"> </span><span class="kw">sample</span>(n, <span class="kw">floor</span>(n <span class="op">*</span><span class="st"> </span>ratio))</a>
-<a class="sourceLine" id="cb26-4" data-line-number="4">  test =<span class="st"> </span><span class="kw">setdiff</span>(<span class="kw">seq_len</span>(n), train)</a>
-<a class="sourceLine" id="cb26-5" data-line-number="5">  <span class="kw">list</span>(<span class="dt">test =</span> test, <span class="dt">train =</span> train)</a>
-<a class="sourceLine" id="cb26-6" data-line-number="6">}</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">subsample =<span class="st"> </span><span class="cf">function</span>(data, job, ratio, ...) {</a>
+<a class="sourceLine" id="cb36-2" data-line-number="2">  n =<span class="st"> </span><span class="kw">nrow</span>(data)</a>
+<a class="sourceLine" id="cb36-3" data-line-number="3">  train =<span class="st"> </span><span class="kw">sample</span>(n, <span class="kw">floor</span>(n <span class="op">*</span><span class="st"> </span>ratio))</a>
+<a class="sourceLine" id="cb36-4" data-line-number="4">  test =<span class="st"> </span><span class="kw">setdiff</span>(<span class="kw">seq_len</span>(n), train)</a>
+<a class="sourceLine" id="cb36-5" data-line-number="5">  <span class="kw">list</span>(<span class="dt">test =</span> test, <span class="dt">train =</span> train)</a>
+<a class="sourceLine" id="cb36-6" data-line-number="6">}</a></code></pre></div>
 <p><a href="https://mllg.github.io/batchtools/reference/addProblem"><code><a href="../reference/addProblem.html">addProblem()</a></code></a> files the problem to the file system and the problem gets recorded in the registry.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">data</span>(<span class="st">"iris"</span>, <span class="dt">package =</span> <span class="st">"datasets"</span>)</a>
-<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="kw"><a href="../reference/addProblem.html">addProblem</a></span>(<span class="dt">name =</span> <span class="st">"iris"</span>, <span class="dt">data =</span> iris, <span class="dt">fun =</span> subsample, <span class="dt">seed =</span> <span class="dv">42</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">data</span>(<span class="st">"iris"</span>, <span class="dt">package =</span> <span class="st">"datasets"</span>)</a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw"><a href="../reference/addProblem.html">addProblem</a></span>(<span class="dt">name =</span> <span class="st">"iris"</span>, <span class="dt">data =</span> iris, <span class="dt">fun =</span> subsample, <span class="dt">seed =</span> <span class="dv">42</span>)</a></code></pre></div>
 <pre><code>## Adding problem 'iris'</code></pre>
 <p>The function call will be evaluated at a later stage on the workers. In this process, the <code>data</code> part will be loaded and passed to the function. Note that we set a problem seed to synchronize the experiments in the sense that the same resampled training and test sets are used for the algorithm comparison in each distinct replication.</p>
 <p>The algorithms for the jobs are added to the registry in a similar manner. When using <a href="https://mllg.github.io/batchtools/reference/addAlgorithm"><code><a href="../reference/addAlgorithm.html">addAlgorithm()</a></code></a>, an identifier as well as the algorithm to apply to are required arguments. The algorithm must be given as a function with arguments <code>job</code>, <code>data</code> and <code>instance</code>. Further arbitrary arguments (e.g., hyperparameters or strategy parameters) may be defined analogously as for the function in <code>addProblem</code>. The objects passed to the function via <code>job</code> and <code>data</code> are here the same as above, while via <code>instance</code> the return value of the evaluated problem function is passed. The algorithm can return any R object which will automatically be stored on the file system for later retrieval. Firstly, we create an algorithm which applies a support vector machine:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">svm.wrapper =<span class="st"> </span><span class="cf">function</span>(data, job, instance, ...) {</a>
-<a class="sourceLine" id="cb29-2" data-line-number="2">  <span class="kw">library</span>(<span class="st">"e1071"</span>)</a>
-<a class="sourceLine" id="cb29-3" data-line-number="3">  mod =<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/e1071/topics/svm">svm</a></span>(Species <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> data[instance<span class="op">$</span>train, ], ...)</a>
-<a class="sourceLine" id="cb29-4" data-line-number="4">  pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> data[instance<span class="op">$</span>test, ], <span class="dt">type =</span> <span class="st">"class"</span>)</a>
-<a class="sourceLine" id="cb29-5" data-line-number="5">  <span class="kw">table</span>(data<span class="op">$</span>Species[instance<span class="op">$</span>test], pred)</a>
-<a class="sourceLine" id="cb29-6" data-line-number="6">}</a>
-<a class="sourceLine" id="cb29-7" data-line-number="7"><span class="kw"><a href="../reference/addAlgorithm.html">addAlgorithm</a></span>(<span class="dt">name =</span> <span class="st">"svm"</span>, <span class="dt">fun =</span> svm.wrapper)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">svm.wrapper =<span class="st"> </span><span class="cf">function</span>(data, job, instance, ...) {</a>
+<a class="sourceLine" id="cb39-2" data-line-number="2">  <span class="kw">library</span>(<span class="st">"e1071"</span>)</a>
+<a class="sourceLine" id="cb39-3" data-line-number="3">  mod =<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/e1071/topics/svm">svm</a></span>(Species <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> data[instance<span class="op">$</span>train, ], ...)</a>
+<a class="sourceLine" id="cb39-4" data-line-number="4">  pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> data[instance<span class="op">$</span>test, ], <span class="dt">type =</span> <span class="st">"class"</span>)</a>
+<a class="sourceLine" id="cb39-5" data-line-number="5">  <span class="kw">table</span>(data<span class="op">$</span>Species[instance<span class="op">$</span>test], pred)</a>
+<a class="sourceLine" id="cb39-6" data-line-number="6">}</a>
+<a class="sourceLine" id="cb39-7" data-line-number="7"><span class="kw"><a href="../reference/addAlgorithm.html">addAlgorithm</a></span>(<span class="dt">name =</span> <span class="st">"svm"</span>, <span class="dt">fun =</span> svm.wrapper)</a></code></pre></div>
 <pre><code>## Adding algorithm 'svm'</code></pre>
 <p>Secondly, a random forest of classification trees:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">forest.wrapper =<span class="st"> </span><span class="cf">function</span>(data, job, instance, ...) {</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">  <span class="kw">library</span>(<span class="st">"ranger"</span>)</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">  mod =<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ranger/topics/ranger">ranger</a></span>(Species <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> data[instance<span class="op">$</span>train, ], <span class="dt">write.forest =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb31-4" data-line-number="4">  pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">data =</span> data[instance<span class="op">$</span>test, ])</a>
-<a class="sourceLine" id="cb31-5" data-line-number="5">  <span class="kw">table</span>(data<span class="op">$</span>Species[instance<span class="op">$</span>test], pred<span class="op">$</span>predictions)</a>
-<a class="sourceLine" id="cb31-6" data-line-number="6">}</a>
-<a class="sourceLine" id="cb31-7" data-line-number="7"><span class="kw"><a href="../reference/addAlgorithm.html">addAlgorithm</a></span>(<span class="dt">name =</span> <span class="st">"forest"</span>, <span class="dt">fun =</span> forest.wrapper)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">forest.wrapper =<span class="st"> </span><span class="cf">function</span>(data, job, instance, ...) {</a>
+<a class="sourceLine" id="cb41-2" data-line-number="2">  <span class="kw">library</span>(<span class="st">"ranger"</span>)</a>
+<a class="sourceLine" id="cb41-3" data-line-number="3">  mod =<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ranger/topics/ranger">ranger</a></span>(Species <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> data[instance<span class="op">$</span>train, ], <span class="dt">write.forest =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb41-4" data-line-number="4">  pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">data =</span> data[instance<span class="op">$</span>test, ])</a>
+<a class="sourceLine" id="cb41-5" data-line-number="5">  <span class="kw">table</span>(data<span class="op">$</span>Species[instance<span class="op">$</span>test], pred<span class="op">$</span>predictions)</a>
+<a class="sourceLine" id="cb41-6" data-line-number="6">}</a>
+<a class="sourceLine" id="cb41-7" data-line-number="7"><span class="kw"><a href="../reference/addAlgorithm.html">addAlgorithm</a></span>(<span class="dt">name =</span> <span class="st">"forest"</span>, <span class="dt">fun =</span> forest.wrapper)</a></code></pre></div>
 <pre><code>## Adding algorithm 'forest'</code></pre>
 <p>Both algorithms return a confusion matrix for the predictions on the test set, which will later be used to calculate the misclassification rate.</p>
 <p>Note that using the <code>...</code> argument in the wrapper definitions allows us to circumvent naming specific design parameters for now. This is an advantage if we later want to extend the set of algorithm parameters in the experiment. The algorithms get recorded in the registry and the corresponding functions are stored on the file system.</p>
 <p>Defined problems and algorithms can be queried with:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">reg<span class="op">$</span>problems</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">reg<span class="op">$</span>problems</a></code></pre></div>
 <pre><code>## [1] "iris"</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">reg<span class="op">$</span>algorithms</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">reg<span class="op">$</span>algorithms</a></code></pre></div>
 <pre><code>## [1] "svm"    "forest"</code></pre>
 <p>The flow to define experiments is summarized in the following figure:</p>
 <p><img src="tikz_prob_algo_simple.png" width="1019"></p>
 </section><section id="creating-jobs" class="level2"><h2>Creating jobs</h2>
 <p><a href="https://mllg.github.io/batchtools/reference/addExperiments"><code><a href="../reference/addExperiments.html">addExperiments()</a></code></a> is used to parametrize the jobs and thereby define computational jobs. To do so, you have to pass named lists of parameters to <a href="https://mllg.github.io/batchtools/reference/addExperiments"><code><a href="../reference/addExperiments.html">addExperiments()</a></code></a>. The elements of the respective list (one for problems and one for algorithms) must be named after the problem or algorithm they refer to. The data frames contain parameter constellations for the problem or algorithm function where columns must have the same names as the target arguments. When the problem design and the algorithm design are combined in <a href="https://mllg.github.io/batchtools/reference/addExperiments"><code><a href="../reference/addExperiments.html">addExperiments()</a></code></a>, each combination of the parameter sets of the two designs defines a distinct job. How often each of these jobs should be computed can be determined with the argument <code>repls</code>.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="co"># problem design: try two values for the ratio parameter</span></a>
-<a class="sourceLine" id="cb37-2" data-line-number="2">pdes =<span class="st"> </span><span class="kw">list</span>(<span class="dt">iris =</span> <span class="kw">data.table</span>(<span class="dt">ratio =</span> <span class="kw">c</span>(<span class="fl">0.67</span>, <span class="fl">0.9</span>)))</a>
-<a class="sourceLine" id="cb37-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb37-4" data-line-number="4"><span class="co"># algorithm design: try combinations of kernel and epsilon exhaustively,</span></a>
-<a class="sourceLine" id="cb37-5" data-line-number="5"><span class="co"># try different number of trees for the forest</span></a>
-<a class="sourceLine" id="cb37-6" data-line-number="6">ades =<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb37-7" data-line-number="7">  <span class="dt">svm =</span> <span class="kw">CJ</span>(<span class="dt">kernel =</span> <span class="kw">c</span>(<span class="st">"linear"</span>, <span class="st">"polynomial"</span>, <span class="st">"radial"</span>), <span class="dt">epsilon =</span> <span class="kw">c</span>(<span class="fl">0.01</span>, <span class="fl">0.1</span>)),</a>
-<a class="sourceLine" id="cb37-8" data-line-number="8">  <span class="dt">forest =</span> <span class="kw">data.table</span>(<span class="dt">ntree =</span> <span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">500</span>, <span class="dv">1000</span>))</a>
-<a class="sourceLine" id="cb37-9" data-line-number="9">)</a>
-<a class="sourceLine" id="cb37-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb37-11" data-line-number="11"><span class="kw"><a href="../reference/addExperiments.html">addExperiments</a></span>(pdes, ades, <span class="dt">repls =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="co"># problem design: try two values for the ratio parameter</span></a>
+<a class="sourceLine" id="cb47-2" data-line-number="2">pdes =<span class="st"> </span><span class="kw">list</span>(<span class="dt">iris =</span> <span class="kw">data.table</span>(<span class="dt">ratio =</span> <span class="kw">c</span>(<span class="fl">0.67</span>, <span class="fl">0.9</span>)))</a>
+<a class="sourceLine" id="cb47-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb47-4" data-line-number="4"><span class="co"># algorithm design: try combinations of kernel and epsilon exhaustively,</span></a>
+<a class="sourceLine" id="cb47-5" data-line-number="5"><span class="co"># try different number of trees for the forest</span></a>
+<a class="sourceLine" id="cb47-6" data-line-number="6">ades =<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb47-7" data-line-number="7">  <span class="dt">svm =</span> <span class="kw">CJ</span>(<span class="dt">kernel =</span> <span class="kw">c</span>(<span class="st">"linear"</span>, <span class="st">"polynomial"</span>, <span class="st">"radial"</span>), <span class="dt">epsilon =</span> <span class="kw">c</span>(<span class="fl">0.01</span>, <span class="fl">0.1</span>)),</a>
+<a class="sourceLine" id="cb47-8" data-line-number="8">  <span class="dt">forest =</span> <span class="kw">data.table</span>(<span class="dt">ntree =</span> <span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">500</span>, <span class="dv">1000</span>))</a>
+<a class="sourceLine" id="cb47-9" data-line-number="9">)</a>
+<a class="sourceLine" id="cb47-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb47-11" data-line-number="11"><span class="kw"><a href="../reference/addExperiments.html">addExperiments</a></span>(pdes, ades, <span class="dt">repls =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## Adding 60 experiments ('iris'[2] x 'svm'[6] x repls[5]) ...</code></pre>
 <pre><code>## Adding 30 experiments ('iris'[2] x 'forest'[3] x repls[5]) ...</code></pre>
 <p>The jobs are now available in the registry with an individual job ID for each. The function <a href="https://mllg.github.io/batchtools/reference/summarizeExperiments"><code><a href="../reference/summarizeExperiments.html">summarizeExperiments()</a></code></a> returns a table which gives a quick overview over all defined experiments.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw"><a href="../reference/summarizeExperiments.html">summarizeExperiments</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="kw"><a href="../reference/summarizeExperiments.html">summarizeExperiments</a></span>()</a></code></pre></div>
 <pre><code>##    problem algorithm .count
 ##     &lt;char&gt;    &lt;char&gt;  &lt;int&gt;
 ## 1:    iris       svm     60
 ## 2:    iris    forest     30</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw"><a href="../reference/summarizeExperiments.html">summarizeExperiments</a></span>(<span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"problem"</span>, <span class="st">"algorithm"</span>, <span class="st">"ratio"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="kw"><a href="../reference/summarizeExperiments.html">summarizeExperiments</a></span>(<span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"problem"</span>, <span class="st">"algorithm"</span>, <span class="st">"ratio"</span>))</a></code></pre></div>
 <pre><code>##    problem algorithm ratio .count
 ##     &lt;char&gt;    &lt;char&gt; &lt;num&gt;  &lt;int&gt;
 ## 1:    iris       svm  0.67     30
@@ -371,27 +381,27 @@
 </section><section id="before-submitting" class="level2"><h2>Before Submitting</h2>
 <p>Before submitting all jobs to the batch system, we encourage you to test each algorithm individually. Or sometimes you want to submit only a subset of experiments because the jobs vastly differ in runtime. Another reoccurring task is the collection of results for only a subset of experiments. For all these use cases, <a href="https://mllg.github.io/batchtools/reference/findJobs"><code><a href="../reference/findJobs.html">findExperiments()</a></code></a> can be employed to conveniently select a particular subset of jobs. It returns the IDs of all experiments that match the given criteria. Your selection can depend on substring matches of problem or algorithm IDs using <code>prob.name</code> or <code>algo.name</code>, respectively. You can also pass R expressions, which will be evaluated in your problem parameter setting (<code>prob.pars</code>) or algorithm parameter setting (<code>algo.pars</code>). The expression is then expected to evaluate to a Boolean value. Furthermore, you can restrict the experiments to specific replication numbers.</p>
 <p>To illustrate <a href="https://mllg.github.io/batchtools/reference/findJobs"><code><a href="../reference/findJobs.html">findExperiments()</a></code></a>, we will select two experiments, one with a support vector machine and the other with a random forest and the parameter <code>ntree = 1000</code>. The selected experiment IDs are then passed to testJob.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">id1 =<span class="st"> </span><span class="kw">head</span>(<span class="kw"><a href="../reference/findJobs.html">findExperiments</a></span>(<span class="dt">algo.name =</span> <span class="st">"svm"</span>), <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb44-2" data-line-number="2"><span class="kw">print</span>(id1)</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1">id1 =<span class="st"> </span><span class="kw">head</span>(<span class="kw"><a href="../reference/findJobs.html">findExperiments</a></span>(<span class="dt">algo.name =</span> <span class="st">"svm"</span>), <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb54-2" data-line-number="2"><span class="kw">print</span>(id1)</a></code></pre></div>
 <pre><code>##    job.id
 ##     &lt;int&gt;
 ## 1:      1</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">id2 =<span class="st"> </span><span class="kw">head</span>(<span class="kw"><a href="../reference/findJobs.html">findExperiments</a></span>(<span class="dt">algo.name =</span> <span class="st">"forest"</span>, <span class="dt">algo.pars =</span> (ntree <span class="op">==</span><span class="st"> </span><span class="dv">1000</span>)), <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb46-2" data-line-number="2"><span class="kw">print</span>(id2)</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">id2 =<span class="st"> </span><span class="kw">head</span>(<span class="kw"><a href="../reference/findJobs.html">findExperiments</a></span>(<span class="dt">algo.name =</span> <span class="st">"forest"</span>, <span class="dt">algo.pars =</span> (ntree <span class="op">==</span><span class="st"> </span><span class="dv">1000</span>)), <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb56-2" data-line-number="2"><span class="kw">print</span>(id2)</a></code></pre></div>
 <pre><code>##    job.id
 ##     &lt;int&gt;
 ## 1:     71</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw"><a href="../reference/testJob.html">testJob</a></span>(<span class="dt">id =</span> id1)</a></code></pre></div>
-<pre><code>## Generating problem instance for problem 'iris' ...
-## Applying algorithm 'svm' on problem 'iris' ...</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="kw"><a href="../reference/testJob.html">testJob</a></span>(<span class="dt">id =</span> id1)</a></code></pre></div>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 1 (seed = 2) ...</code></pre>
 <pre><code>##             pred
 ##              setosa versicolor virginica
 ##   setosa         17          0         0
 ##   versicolor      0         16         2
 ##   virginica       0          0        15</code></pre>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw"><a href="../reference/testJob.html">testJob</a></span>(<span class="dt">id =</span> id2)</a></code></pre></div>
-<pre><code>## Generating problem instance for problem 'iris' ...
-## Applying algorithm 'forest' on problem 'iris' ...</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1"><span class="kw"><a href="../reference/testJob.html">testJob</a></span>(<span class="dt">id =</span> id2)</a></code></pre></div>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 71 (seed = 72) ...</code></pre>
 <pre><code>##             
 ##              setosa versicolor virginica
 ##   setosa         17          0         0
@@ -400,14 +410,194 @@
 <p>If something goes wrong, <code>batchtools</code> comes with a bunch of useful debugging utilities (see separate vignette on error handling). If everything turns out fine, we can proceed with the calculation.</p>
 </section><section id="submitting-and-collecting-results" class="level2"><h2>Submitting and Collecting Results</h2>
 <p>To submit the jobs, we call <a href="https://mllg.github.io/batchtools/reference/submitJobs"><code><a href="../reference/submitJobs.html">submitJobs()</a></code></a> and wait for all jobs to terminate using <a href="https://mllg.github.io/batchtools/reference/waitForJobs"><code><a href="../reference/waitForJobs.html">waitForJobs()</a></code></a>.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="kw"><a href="../reference/submitJobs.html">submitJobs</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="kw"><a href="../reference/submitJobs.html">submitJobs</a></span>()</a></code></pre></div>
 <pre><code>## Submitting 90 jobs in 90 chunks using cluster functions 'Interactive' ...</code></pre>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="kw"><a href="../reference/waitForJobs.html">waitForJobs</a></span>()</a></code></pre></div>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 1 (seed = 2) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 2 (seed = 3) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 3 (seed = 4) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 4 (seed = 5) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 5 (seed = 6) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 6 (seed = 7) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 7 (seed = 8) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 8 (seed = 9) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 9 (seed = 10) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 10 (seed = 11) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 11 (seed = 12) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 12 (seed = 13) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 13 (seed = 14) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 14 (seed = 15) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 15 (seed = 16) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 16 (seed = 17) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 17 (seed = 18) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 18 (seed = 19) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 19 (seed = 20) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 20 (seed = 21) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 21 (seed = 22) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 22 (seed = 23) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 23 (seed = 24) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 24 (seed = 25) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 25 (seed = 26) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 26 (seed = 27) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 27 (seed = 28) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 28 (seed = 29) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 29 (seed = 30) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 30 (seed = 31) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 31 (seed = 32) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 32 (seed = 33) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 33 (seed = 34) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 34 (seed = 35) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 35 (seed = 36) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 36 (seed = 37) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 37 (seed = 38) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 38 (seed = 39) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 39 (seed = 40) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 40 (seed = 41) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 41 (seed = 42) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 42 (seed = 43) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 43 (seed = 44) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 44 (seed = 45) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 45 (seed = 46) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 46 (seed = 47) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 47 (seed = 48) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 48 (seed = 49) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 49 (seed = 50) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 50 (seed = 51) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 51 (seed = 52) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 52 (seed = 53) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 53 (seed = 54) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 54 (seed = 55) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 55 (seed = 56) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 56 (seed = 57) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 57 (seed = 58) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 58 (seed = 59) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 59 (seed = 60) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'svm' on problem 'iris' for job 60 (seed = 61) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 61 (seed = 62) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 62 (seed = 63) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 63 (seed = 64) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 64 (seed = 65) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 65 (seed = 66) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 66 (seed = 67) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 67 (seed = 68) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 68 (seed = 69) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 69 (seed = 70) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 70 (seed = 71) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 71 (seed = 72) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 72 (seed = 73) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 73 (seed = 74) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 74 (seed = 75) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 75 (seed = 76) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 76 (seed = 77) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 77 (seed = 78) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 78 (seed = 79) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 79 (seed = 80) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 80 (seed = 81) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 81 (seed = 82) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 82 (seed = 83) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 83 (seed = 84) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 84 (seed = 85) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 85 (seed = 86) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 86 (seed = 87) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 87 (seed = 88) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 88 (seed = 89) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 89 (seed = 90) ...</code></pre>
+<pre><code>## ### [bt]: Generating problem instance for problem 'iris' ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'forest' on problem 'iris' for job 90 (seed = 91) ...</code></pre>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb248-1" data-line-number="1"><span class="kw"><a href="../reference/waitForJobs.html">waitForJobs</a></span>()</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>After jobs are finished, the results can be collected with <a href="https://mllg.github.io/batchtools/reference/reduceResultsList"><code><a href="../reference/reduceResultsList.html">reduceResultsDataTable()</a></code></a> where we directly extract the mean misclassification error:</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1">reduce =<span class="st"> </span><span class="cf">function</span>(res) <span class="kw">list</span>(<span class="dt">mce =</span> (<span class="kw">sum</span>(res) <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(res))) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(res))</a>
-<a class="sourceLine" id="cb58-2" data-line-number="2">results =<span class="st"> </span><span class="kw"><a href="../reference/unwrap.html">unwrap</a></span>(<span class="kw"><a href="../reference/reduceResultsList.html">reduceResultsDataTable</a></span>(<span class="dt">fun =</span> reduce))</a>
-<a class="sourceLine" id="cb58-3" data-line-number="3"><span class="kw">head</span>(results)</a></code></pre></div>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb250-1" data-line-number="1">reduce =<span class="st"> </span><span class="cf">function</span>(res) <span class="kw">list</span>(<span class="dt">mce =</span> (<span class="kw">sum</span>(res) <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(res))) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(res))</a>
+<a class="sourceLine" id="cb250-2" data-line-number="2">results =<span class="st"> </span><span class="kw"><a href="../reference/unwrap.html">unwrap</a></span>(<span class="kw"><a href="../reference/reduceResultsList.html">reduceResultsDataTable</a></span>(<span class="dt">fun =</span> reduce))</a>
+<a class="sourceLine" id="cb250-3" data-line-number="3"><span class="kw">head</span>(results)</a></code></pre></div>
 <pre><code>##    job.id   mce
 ##     &lt;int&gt; &lt;num&gt;
 ## 1:      1  0.04
@@ -417,9 +607,9 @@
 ## 5:      5  0.02
 ## 6:      6  0.04</code></pre>
 <p>Next, we merge the results table with the table of job parameters using one of the <a href="https://mllg.github.io/batchtools/reference/JoinTables">join helpers</a> provided by <code>batchtools</code> (here, we use an inner join):</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1">pars =<span class="st"> </span><span class="kw"><a href="../reference/unwrap.html">unwrap</a></span>(<span class="kw"><a href="../reference/getJobTable.html">getJobPars</a></span>())</a>
-<a class="sourceLine" id="cb60-2" data-line-number="2">tab =<span class="st"> </span><span class="kw"><a href="../reference/JoinTables.html">ijoin</a></span>(pars, results)</a>
-<a class="sourceLine" id="cb60-3" data-line-number="3"><span class="kw">head</span>(tab)</a></code></pre></div>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb252-1" data-line-number="1">pars =<span class="st"> </span><span class="kw"><a href="../reference/unwrap.html">unwrap</a></span>(<span class="kw"><a href="../reference/getJobTable.html">getJobPars</a></span>())</a>
+<a class="sourceLine" id="cb252-2" data-line-number="2">tab =<span class="st"> </span><span class="kw"><a href="../reference/JoinTables.html">ijoin</a></span>(pars, results)</a>
+<a class="sourceLine" id="cb252-3" data-line-number="3"><span class="kw">head</span>(tab)</a></code></pre></div>
 <pre><code>##    job.id problem algorithm ratio kernel epsilon ntree   mce
 ##     &lt;int&gt;  &lt;char&gt;    &lt;char&gt; &lt;num&gt; &lt;char&gt;   &lt;num&gt; &lt;num&gt; &lt;num&gt;
 ## 1:      1    iris       svm  0.67 linear    0.01    NA  0.04
@@ -429,8 +619,8 @@
 ## 5:      5    iris       svm  0.67 linear    0.01    NA  0.02
 ## 6:      6    iris       svm  0.67 linear    0.10    NA  0.04</code></pre>
 <p>We now aggregate the results group-wise. You can use <a href="https://cran.r-project.org/package=data.table"><code>data.table</code></a>, <code>base::aggregate()</code>, or the <a href="https://cran.r-project.org/package=dplyr"><code>dplyr</code></a> package for this purpose. Here, we use <a href="https://cran.r-project.org/package=data.table"><code>data.table</code></a> to subset the table to jobs where the ratio is <code>0.67</code> and group by algorithm the algorithm hyperparameters:</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1">tab[ratio <span class="op">==</span><span class="st"> </span><span class="fl">0.67</span>, <span class="kw">list</span>(<span class="dt">mmce =</span> <span class="kw">mean</span>(mce)),</a>
-<a class="sourceLine" id="cb62-2" data-line-number="2">  by =<span class="st"> </span><span class="kw">c</span>(<span class="st">"algorithm"</span>, <span class="st">"kernel"</span>, <span class="st">"epsilon"</span>, <span class="st">"ntree"</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb254-1" data-line-number="1">tab[ratio <span class="op">==</span><span class="st"> </span><span class="fl">0.67</span>, <span class="kw">list</span>(<span class="dt">mmce =</span> <span class="kw">mean</span>(mce)),</a>
+<a class="sourceLine" id="cb254-2" data-line-number="2">  by =<span class="st"> </span><span class="kw">c</span>(<span class="st">"algorithm"</span>, <span class="st">"kernel"</span>, <span class="st">"epsilon"</span>, <span class="st">"ntree"</span>)]</a></code></pre></div>
 <pre><code>##    algorithm     kernel epsilon ntree  mmce
 ##       &lt;char&gt;     &lt;char&gt;   &lt;num&gt; &lt;num&gt; &lt;num&gt;
 ## 1:       svm     linear    0.01    NA 0.032
@@ -446,30 +636,42 @@
 <p>In any large scale experiment many things can and will go wrong. The cluster might have an outage, jobs may run into resource limits or crash, subtle bugs in your code could be triggered or any other error condition might arise. In these situations it is important to quickly determine what went wrong and to recompute only the minimal number of required jobs.</p>
 <p>Therefore, before you submit anything you should use <a href="https://mllg.github.io/batchtools/reference/testJob"><code><a href="../reference/testJob.html">testJob()</a></code></a> to catch errors that are easy to spot because they are raised in many or all jobs. If <code>external</code> is set, this function runs the job without side effects in an independent R process on your local machine via <code>Rscript</code> similar as on the slave, redirects the output of the process to your R console, loads the job result and returns it. If you do not set <code>external</code>, the job is executed is in the currently running R session, with the drawback that you might be unable to catch missing variable declarations or missing package dependencies.</p>
 <p>By way of illustration here is a small example. First, we create a temporary registry.</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="kw">library</span>(batchtools)</a>
-<a class="sourceLine" id="cb64-2" data-line-number="2">reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistry.html">makeRegistry</a></span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb256-1" data-line-number="1"><span class="kw">library</span>(batchtools)</a>
+<a class="sourceLine" id="cb256-2" data-line-number="2">reg =<span class="st"> </span><span class="kw"><a href="../reference/makeRegistry.html">makeRegistry</a></span>(<span class="dt">file.dir =</span> <span class="ot">NA</span>, <span class="dt">seed =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p>Ten jobs are created, one will trow a warning and two of them will raise an exception.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1">flakeyFunction &lt;-<span class="st"> </span><span class="cf">function</span>(value) {</a>
-<a class="sourceLine" id="cb65-2" data-line-number="2">  <span class="cf">if</span> (value <span class="op">==</span><span class="st"> </span><span class="dv">5</span>) <span class="kw">warning</span>(<span class="st">"Just a simple warning"</span>)</a>
-<a class="sourceLine" id="cb65-3" data-line-number="3">  <span class="cf">if</span> (value <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">9</span>)) <span class="kw">stop</span>(<span class="st">"Ooops."</span>)</a>
-<a class="sourceLine" id="cb65-4" data-line-number="4">  value<span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb65-5" data-line-number="5">}</a>
-<a class="sourceLine" id="cb65-6" data-line-number="6"><span class="kw"><a href="../reference/batchMap.html">batchMap</a></span>(flakeyFunction, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb257-1" data-line-number="1">flakeyFunction &lt;-<span class="st"> </span><span class="cf">function</span>(value) {</a>
+<a class="sourceLine" id="cb257-2" data-line-number="2">  <span class="cf">if</span> (value <span class="op">==</span><span class="st"> </span><span class="dv">5</span>) <span class="kw">warning</span>(<span class="st">"Just a simple warning"</span>)</a>
+<a class="sourceLine" id="cb257-3" data-line-number="3">  <span class="cf">if</span> (value <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">9</span>)) <span class="kw">stop</span>(<span class="st">"Ooops."</span>)</a>
+<a class="sourceLine" id="cb257-4" data-line-number="4">  value<span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb257-5" data-line-number="5">}</a>
+<a class="sourceLine" id="cb257-6" data-line-number="6"><span class="kw"><a href="../reference/batchMap.html">batchMap</a></span>(flakeyFunction, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)</a></code></pre></div>
 <pre><code>## Adding 10 jobs ...</code></pre>
 <p>Now that the jobs are defined, we can test jobs independently:</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="kw"><a href="../reference/testJob.html">testJob</a></span>(<span class="dt">id =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb259-1" data-line-number="1"><span class="kw"><a href="../reference/testJob.html">testJob</a></span>(<span class="dt">id =</span> <span class="dv">1</span>)</a></code></pre></div>
+<pre><code>## ### [bt]: Setting seed to 1 ...</code></pre>
 <pre><code>## [1] 1</code></pre>
 <p>In this case, testing the job with ID = 1 provides the appropriate result but testing the job with ID = 2 leads to an error:</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1"><span class="kw">as.character</span>(<span class="kw">try</span>(<span class="kw"><a href="../reference/testJob.html">testJob</a></span>(<span class="dt">id =</span> <span class="dv">2</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb262-1" data-line-number="1"><span class="kw">as.character</span>(<span class="kw">try</span>(<span class="kw"><a href="../reference/testJob.html">testJob</a></span>(<span class="dt">id =</span> <span class="dv">2</span>)))</a></code></pre></div>
+<pre><code>## ### [bt]: Setting seed to 2 ...</code></pre>
 <pre><code>## [1] "Error in (function (value)  : Ooops.\n"</code></pre>
 <p>We ignore the error here, and just assume everything looks fine and submit all jobs.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="kw"><a href="../reference/submitJobs.html">submitJobs</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb265-1" data-line-number="1"><span class="kw"><a href="../reference/submitJobs.html">submitJobs</a></span>()</a></code></pre></div>
 <pre><code>## Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 1 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 2 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 3 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 4 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 5 ...</code></pre>
 <pre><code>## Warning in (function (value) : Just a simple warning</code></pre>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="kw"><a href="../reference/waitForJobs.html">waitForJobs</a></span>()</a></code></pre></div>
+<pre><code>## ### [bt]: Setting seed to 6 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 7 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 8 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 9 ...</code></pre>
+<pre><code>## ### [bt]: Setting seed to 10 ...</code></pre>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb278-1" data-line-number="1"><span class="kw"><a href="../reference/waitForJobs.html">waitForJobs</a></span>()</a></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
 <p>After you have submitted jobs and suspect that something is going wrong, the first thing to do is to run <a href="https://mllg.github.io/batchtools/reference/getStatus"><code><a href="../reference/getStatus.html">getStatus()</a></code></a> to display a summary of the current state of the system.</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1"><span class="kw"><a href="../reference/getStatus.html">getStatus</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" data-line-number="1"><span class="kw"><a href="../reference/getStatus.html">getStatus</a></span>()</a></code></pre></div>
 <pre><code>## Status for 10 jobs:
 ##   Submitted    : 10 (100.0%)
 ##   -- Queued    :  0 (  0.0%)
@@ -479,26 +681,26 @@
 ##   ---- Error   :  2 ( 20.0%)
 ##   ---- Expired :  0 (  0.0%)</code></pre>
 <p>The status message shows that two of the jobs could not be executed successfully. To get the IDs of all jobs that failed due to an error we can use <a href="https://mllg.github.io/batchtools/reference/findJobs"><code><a href="../reference/findJobs.html">findErrors()</a></code></a> and to retrieve the actual error message, we can use <a href="https://mllg.github.io/batchtools/reference/getErrorMessages"><code><a href="../reference/getErrorMessages.html">getErrorMessages()</a></code></a>.</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" data-line-number="1"><span class="kw"><a href="../reference/findJobs.html">findErrors</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb282-1" data-line-number="1"><span class="kw"><a href="../reference/findJobs.html">findErrors</a></span>()</a></code></pre></div>
 <pre><code>##    job.id
 ##     &lt;int&gt;
 ## 1:      2
 ## 2:      9</code></pre>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" data-line-number="1"><span class="kw"><a href="../reference/getErrorMessages.html">getErrorMessages</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb284-1" data-line-number="1"><span class="kw"><a href="../reference/getErrorMessages.html">getErrorMessages</a></span>()</a></code></pre></div>
 <pre><code>##    job.id terminated  error                              message
 ##     &lt;int&gt;     &lt;lgcl&gt; &lt;lgcl&gt;                               &lt;char&gt;
 ## 1:      2       TRUE   TRUE Error in (function (value)  : Ooops.
 ## 2:      9       TRUE   TRUE Error in (function (value)  : Ooops.</code></pre>
 <p>If we want to peek into the R log file of a job to see more context for the error we can use <a href="https://mllg.github.io/batchtools/reference/showLog"><code><a href="../reference/showLog.html">showLog()</a></code></a> which opens a pager or use <a href="https://mllg.github.io/batchtools/reference/showLog"><code><a href="../reference/showLog.html">getLog()</a></code></a> to get the log as character vector:</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" data-line-number="1"><span class="kw">tail</span>(<span class="kw"><a href="../reference/showLog.html">getLog</a></span>(<span class="dt">id =</span> <span class="dv">9</span>))</a></code></pre></div>
-<pre><code>## [1] "### [bt 2017-12-19 15:34:38]: Memory measurement disabled"                           
-## [2] "### [bt 2017-12-19 15:34:38]: Starting job [batchtools job.id=9]"                    
-## [3] "Error in (function (value)  : Ooops."                                                
-## [4] ""                                                                                    
-## [5] "### [bt 2017-12-19 15:34:38]: Job terminated with an exception [batchtools job.id=9]"
-## [6] "### [bt 2017-12-19 15:34:38]: Calculation finished!"</code></pre>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb286-1" data-line-number="1"><span class="kw">tail</span>(<span class="kw"><a href="../reference/showLog.html">getLog</a></span>(<span class="dt">id =</span> <span class="dv">9</span>))</a></code></pre></div>
+<pre><code>## [1] "### [bt]: Memory measurement disabled"                           
+## [2] "### [bt]: Starting job [batchtools job.id=9]"                    
+## [3] "Error in (function (value)  : Ooops."                            
+## [4] ""                                                                
+## [5] "### [bt]: Job terminated with an exception [batchtools job.id=9]"
+## [6] "### [bt]: Calculation finished!"</code></pre>
 <p>You can also grep for messages (output suppressed in this vignette for technical reasons):</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" data-line-number="1"><span class="kw"><a href="../reference/grepLogs.html">grepLogs</a></span>(<span class="dt">pattern =</span> <span class="st">"simple"</span>, <span class="dt">ignore.case =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb288-1" data-line-number="1"><span class="kw"><a href="../reference/grepLogs.html">grepLogs</a></span>(<span class="dt">pattern =</span> <span class="st">"simple"</span>, <span class="dt">ignore.case =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </section><section id="workflow" class="level1"><h1>Workflow</h1>
 <section id="on-the-local-system" class="level2"><h2>On the Local System</h2>
 <ol type="1">
@@ -573,7 +775,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

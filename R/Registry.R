@@ -108,6 +108,7 @@
 #' @family Registry
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' print(tmp)
 #'
@@ -134,7 +135,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   reg = new.env(parent = asNamespace("batchtools"))
   reg$file.dir = file.dir
-  reg$work.dir = npath(work.dir)
+  reg$work.dir = fs::path_norm(work.dir)
   reg$packages = packages
   reg$namespaces = namespaces
   reg$source = source
@@ -177,17 +178,16 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   setSystemConf(reg, conf.file)
 
   if (is.na(file.dir))
-    reg$file.dir = tempfile("registry", tmpdir = reg$temp.dir)
+    reg$file.dir = fs::file_temp("registry", tmp_dir = reg$temp.dir)
   "!DEBUG [makeRegistry]: Creating directories in '`reg$file.dir`'"
-  for (d in fp(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
-    dir.create(d, recursive = TRUE)
-  reg$file.dir = npath(reg$file.dir)
+  reg$file.dir = fs::path_norm(reg$file.dir)
+  fs::dir_create(fs::path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
 
   with_dir(reg$work.dir, loadRegistryDependencies(reg))
 
   class(reg) = "Registry"
   saveRegistry(reg)
-  reg$mtime = file.mtime(fp(reg$file.dir, "registry.rds"))
+  reg$mtime = file_mtime(fs::path(reg$file.dir, "registry.rds"))
   reg$hash = rnd_hash()
   info("Created registry in '%s' using cluster functions '%s'", reg$file.dir, reg$cluster.functions$name)
   if (make.default)
@@ -247,7 +247,7 @@ assertRegistry = function(reg, class = NULL, writeable = FALSE, sync = FALSE, ru
   assertFlag(sync)
   assertFlag(running.ok)
 
-  if (reg$writeable && !identical(reg$mtime, file.mtime(fp(reg$file.dir, "registry.rds")))) {
+  if (reg$writeable && !identical(reg$mtime, file_mtime(fs::path(reg$file.dir, "registry.rds")))) {
     warning("Registry has been altered since last read. Switching to read-only mode in this session.")
     reg$writeable = FALSE
   }
@@ -294,13 +294,13 @@ loadRegistryDependencies = function(x, must.work = FALSE) {
     }
   }
 
-  path = fp(x$file.dir, "exports")
+  path = fs::path(x$file.dir, "exports")
   fns = list.files(path, pattern = "\\.rds$")
   if (length(fns) > 0L) {
     ee = .GlobalEnv
     Map(function(name, fn) {
       assign(x = name, value = readRDS(fn), envir = ee)
-    }, name = unmangle(fns), fn = fp(path, fns))
+    }, name = unmangle(fns), fn = fs::path(path, fns))
   }
 
   invisible(TRUE)

@@ -20,6 +20,7 @@
 #' @seealso \code{\link{getStatus}} \code{\link{JoinTables}}
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(identity, i = 1:3, reg = tmp)
 #' ids = findNotSubmitted(reg = tmp)

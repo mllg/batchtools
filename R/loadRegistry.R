@@ -32,22 +32,22 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
 
   # read registry
   info("Reading registry in read-%s mode", ifelse(writeable, "write", "only"))
-  file.dir = npath(file.dir)
+  file.dir = fs::path_norm(file.dir)
   reg = readRegistry(file.dir)
 
   # re-allocate stuff which has not been serialized
   reg$file.dir = file.dir
   reg$writeable = writeable
-  reg$mtime = file.mtime(fp(reg$file.dir, "registry.rds"))
+  reg$mtime = file_mtime(fs::path(reg$file.dir, "registry.rds"))
   alloc.col(reg$status, ncol(reg$status))
   alloc.col(reg$defs, ncol(reg$defs))
   alloc.col(reg$resources, ncol(reg$resources))
   alloc.col(reg$tags, ncol(reg$tags))
-  if (!is.null(work.dir)) reg$work.dir = npath(work.dir)
+  if (!is.null(work.dir)) reg$work.dir = fs::path_norm(work.dir)
   updated = updateRegistry(reg = reg)
 
   # try to load dependencies relative to work.dir
-  if (dir.exists(reg$work.dir)) {
+  if (fs::dir_exists(reg$work.dir)) {
     with_dir(reg$work.dir, loadRegistryDependencies(reg))
   } else {
     warningf("The work.dir '%s' does not exist, jobs might fail to run on this system.", reg$work.dir)
@@ -65,20 +65,20 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
 }
 
 readRegistry = function(file.dir) {
-  fn.old = fp(file.dir, "registry.rds")
-  fn.new = fp(file.dir, "registry.new.rds")
+  fn.old = fs::path(file.dir, "registry.rds")
+  fn.new = fs::path(file.dir, "registry.new.rds")
 
-  if (file.exists(fn.new)) {
+  if (fs::file_exists(fn.new)) {
     reg = try(readRDS(fn.new), silent = TRUE)
     if (!is.error(reg)) {
-      file.rename(fn.new, fn.old)
+      fs::file_move(fn.new, fn.old)
       return(reg)
     } else {
       warning("Latest version of registry seems to be corrupted, trying backup ...")
     }
   }
 
-  if (file.exists(fn.old)) {
+  if (fs::file_exists(fn.old)) {
     reg = try(readRDS(fn.old), silent = TRUE)
     if (!is.error(reg))
       return(reg)

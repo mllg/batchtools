@@ -59,6 +59,7 @@ The realizations are cached for all slots except \dQuote{instance} (which might 
 Jobs and Experiments can be executed manually with \code{\link{execJob}}.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(function(x, y) x + y, x = 1:2, more.args = list(y = 99), reg = tmp)
 submitJobs(resources = list(foo = "bar"), reg = tmp)

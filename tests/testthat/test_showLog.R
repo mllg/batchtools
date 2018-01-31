@@ -10,7 +10,7 @@ test_that("showLog/getLog", {
   lines = getLog(id = 1, reg = reg)
   expect_character(lines, min.len = 3L, any.missing = FALSE)
   expect_equal(sum(stri_detect_fixed(lines, "GREPME")), 1L)
-  expect_true(any(stri_startswith_fixed(lines, "### [bt ")))
+  expect_true(any(stri_startswith_fixed(lines, "### [bt")))
   expect_identical(sum(stri_endswith_fixed(lines, "[batchtools job.id=1]")), 2L)
   expect_false(any(stri_endswith_fixed(lines, "[batchtools job.id=2]")))
 
@@ -19,7 +19,7 @@ test_that("showLog/getLog", {
 
   withr::with_options(list(pager = function(files, header, title, delete.file) files), {
     x = showLog(id = 2, reg = reg)
-    expect_equal(basename(x), "2.log")
+    expect_equal(fs::path_file(x), "2.log")
     expect_equal(sum(stri_detect_fixed(readLines(x), "GREPME")), 1L)
   })
 
@@ -34,8 +34,8 @@ test_that("empty log files", {
 
   # overwrite log file
   log.file = getLogFiles(reg, 1)
-  expect_true(file.remove(log.file))
-  expect_true(file.create(log.file))
+  fs::file_delete(log.file)
+  fs::file_create(log.file)
 
   x = readLog(data.table(job.id = 1), reg = reg)
   expect_data_table(x, ncol = 2, nrow = 0, index = "job.id")

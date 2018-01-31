@@ -74,6 +74,7 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
 #' @seealso \code{\link{estimateRuntimes}}
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(2) }
 #' ch = chunk(1:10, n.chunks = 2)
 #' table(ch)
 #'

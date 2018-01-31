@@ -33,13 +33,13 @@ test_that("parallelMap works with batchtools", {
   skip_if_not(packageVersion("parallelMap") >= "1.4")
   requireNamespace("parallelMap")
 
-  dir = reg$temp.dir %??% tempdir()
+  dir = reg$temp.dir %??% fs::path_temp()
   parallelMap::parallelStartBatchtools(storagedir = dir, show.info = FALSE)
   dir = getOption("parallelMap.bt.reg.filedir")
   res = parallelMap::parallelMap(function(x, y) x + y, x = 1:2, y = 1)
   parallelMap::parallelStop()
-  if (dir.exists(dir))
-    unlink(dir, recursive = TRUE)
+  if (fs::dir_exists(dir))
+    fs::dir_delete(dir)
   expect_equal(res, list(2, 3))
 })
 
