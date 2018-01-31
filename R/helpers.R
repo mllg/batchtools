@@ -40,7 +40,7 @@ file_mtime = function(x) {
 
 writeRDS = function(object, file) {
   file_remove(file)
-  saveRDS(object, file = file)
+  saveRDS(object, file = file, version = 2L)
   waitForFile(file, 300)
   invisible(TRUE)
 }

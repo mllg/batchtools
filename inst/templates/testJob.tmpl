@@ -5,7 +5,7 @@ jc = readRDS("<%= jc %>")
 setwd(jc$work.dir)
 batchtools:::loadRegistryDependencies(jc, must.work = TRUE)
 res = batchtools::execJob(jc)
-saveRDS(res, file = "<%= result %>")
+saveRDS(res, file = "<%= result %>", version = 2L)
 quit(save = "no", status = 0L)
 
 # vim: ft=r

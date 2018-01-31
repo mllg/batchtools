@@ -78,7 +78,7 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
         uri = getProblemURI(reg, id)
         p = readRDS(uri)
         p$cache = FALSE
-        saveRDS(p, file = uri)
+        saveRDS(p, file = uri, version = 2L)
       }
     }
   }
@@ -94,7 +94,7 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
       if (is.error(x))
         fs::file_delete(x)
       setnames(x, "memory", "mem.used")
-      saveRDS(x, file = fn)
+      saveRDS(x, file = fn, version = 2L)
     })
   }
 
