@@ -77,8 +77,8 @@ print.ExperimentRegistry = function(x, ...) {
   catf("  File dir  : %s", x$file.dir)
   catf("  Work dir  : %s", x$work.dir)
   catf("  Jobs      : %i", nrow(x$status))
-  catf("  Problems  : %i", nlevels(x$defs$problem))
-  catf("  Algorithms: %i", nlevels(x$defs$algorithm))
+  catf("  Problems  : %i", length(x$problems))
+  catf("  Algorithms: %i", length(x$algorithms))
   catf("  Seed      : %i", x$seed)
   catf("  Writeable : %s", x$writeable)
 }

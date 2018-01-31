@@ -97,6 +97,8 @@ checkTables = function(reg, ...) {
   expect_equal(key(reg$tags), "job.id")
 
   if (class(reg)[1L] == "ExperimentRegistry") {
+    expect_character(reg$problems, any.missing = FALSE, unique = TRUE)
+    expect_character(reg$algorithms, any.missing = FALSE, unique = TRUE)
     expect_integer(reg$status$repl, lower = 1L, any.missing = FALSE)
     expect_subset(reg$defs$problem, reg$problems)
     expect_subset(reg$defs$algorithm, reg$algorithms)

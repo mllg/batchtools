@@ -16,6 +16,21 @@ test_that("makeTestExperimentRegistry", {
   expect_is(reg$cluster.functions, "ClusterFunctions")
   expect_list(reg$default.resources, names = "strict")
   checkTables(reg, any.missing = FALSE, nrows = 0L)
-
+  expect_character(reg$problems, len = 0L)
+  expect_character(reg$algorithms, len = 0L)
   expect_output(print(reg), "Experiment Registry")
+})
+
+test_that("Printer works (#170)", {
+  reg = makeTestExperimentRegistry()
+  expect_character(reg$problems, len = 0L)
+  expect_character(reg$algorithms, len = 0L)
+  expect_output(print(reg), "Problems[[:space:]]*:[[:space:]]*0")
+  expect_output(print(reg), "Algorithms[[:space:]]*:[[:space:]]*0")
+  addProblem("iris", data = iris, reg = reg)
+  addAlgorithm("foo", fun = function(...) list(...), reg = reg)
+  expect_character(reg$problems, len = 1L, any.missing = FALSE)
+  expect_character(reg$algorithms, len = 1L, any.missing = FALSE)
+  expect_output(print(reg), "Problems[[:space:]]*:[[:space:]]*1")
+  expect_output(print(reg), "Algorithms[[:space:]]*:[[:space:]]*1")
 })
