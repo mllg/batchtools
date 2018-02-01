@@ -46,24 +46,21 @@ Worker = R6Class("Worker",
       if (nodename == "localhost") {
         self$script = system.file("bin", "linux-helper", package = "batchtools")
       } else {
-        args = c("-e", shQuote("message(system.file('bin/linux-helper', package = 'batchtools'))"))
-        self$script = tail(runOSCommand(Rscript(), args, nodename = nodename)$output, 1L)
+        args = c("-e", shQuote("'message(\"[bt] \", system.file(\"bin/linux-helper\", package = \"batchtools\"))'"))
+        res = runOSCommand(Rscript(), args, nodename = nodename)
+        self$script = private$filter_output(res)$output
       }
 
-      self$ncpus = ncpus %??% as.integer(self$run("number-of-cpus")$output)
+      self$ncpus = ncpus %??% as.integer(private$run("number-of-cpus")$output)
       self$max.load = max.load %??% self$ncpus
     },
 
-    run = function(args) {
-      runOSCommand(self$script, args, nodename = self$nodename)
-    },
-
     list = function(reg) {
-      stri_join(self$nodename, "#", stri_trim_both(self$run(c("list-jobs", reg$file.dir))$output))
+      stri_join(self$nodename, "#", stri_trim_both(private$run(c("list-jobs", reg$file.dir))$output))
     },
 
     start = function(reg, fn, outfile) {
-      self$run(c("start-job", fn, outfile))$output
+      private$run(c("start-job", fn, outfile))
     },
 
     kill = function(reg, batch.id) {
@@ -73,7 +70,7 @@ Worker = R6Class("Worker",
 
     update = function(reg) {
       "!DEBUG [Worker]: Updating Worker '`self$nodename`'"
-      res = self$run(c("status", reg$file.dir))
+      res = private$run(c("status", reg$file.dir))
       res = as.numeric(stri_split_regex(res$output, "\\s+")[[1L]])
       names(res) = c("load", "n.rprocs", "n.rprocs.50", "n.jobs")
       self$status = if (res["load"] > self$max.load) {
@@ -84,6 +81,18 @@ Worker = R6Class("Worker",
         "available"
       }
       return(res)
+    }
+  ),
+
+  private = list(
+    filter_output = function(res) {
+      res$output = res$output[stri_startswith_fixed(res$output, "[bt]")]
+      res$output = stri_replace_first_regex(res$output, "^\\[bt\\][[:space:]]*", "")
+      res
+    },
+
+    run = function(args) {
+      private$filter_output(runOSCommand(self$script, args, nodename = self$nodename))
     }
   )
 )
