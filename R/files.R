@@ -28,3 +28,30 @@ mangle = function(x) {
 unmangle = function(x) {
   base32_decode(stri_sub(x, to = -5L), use.padding = FALSE)
 }
+
+file_remove = function(x) {
+  fs::file_delete(x[fs::file_exists(x)])
+
+  while(any(i <- fs::file_exists(x))) {
+    Sys.sleep(0.5)
+    fs::file_delete(x[i])
+  }
+}
+
+path_real = function(path) {
+  if (fs::is_absolute_path(path))
+    return(fs::path_norm(path))
+  fs::path_real(path)
+}
+
+file_mtime = function(x) {
+  fs::file_info(x)$modification_time
+}
+
+writeRDS = function(object, file) {
+  file_remove(file)
+  saveRDS(object, file = file, version = 2L)
+  waitForFile(file, 300)
+  invisible(TRUE)
+}
+

@@ -180,18 +180,9 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   if (is.na(file.dir))
     reg$file.dir = fs::file_temp("registry", tmp_dir = reg$temp.dir)
   "!DEBUG [makeRegistry]: Creating directories in '`reg$file.dir`'"
-  
-  if (fs::is_absolute_path(reg$file.dir)) {
-    reg$file.dir = fs::path_norm(reg$file.dir)
-  } else {
-    reg$file.dir = fs::path_real(reg$file.dir)
-  }
-  
-  if (fs::is_absolute_path(reg$work.dir)) {
-    reg$work.dir = fs::path_norm(reg$work.dir)
-  } else {
-    reg$work.dir = fs::path_real(reg$work.dir)
-  }
+
+  reg$file.dir = path_real(reg$file.dir)
+  reg$work.dir = path_real(reg$work.dir)
 
   fs::dir_create(fs::path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
   with_dir(reg$work.dir, loadRegistryDependencies(reg))
