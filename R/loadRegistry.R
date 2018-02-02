@@ -32,7 +32,7 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
 
   # read registry
   info("Reading registry in read-%s mode", ifelse(writeable, "write", "only"))
-  file.dir = fs::path_norm(file.dir)
+  file.dir = fs::path_real(file.dir)
   reg = readRegistry(file.dir)
 
   # re-allocate stuff which has not been serialized
@@ -43,7 +43,8 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
   alloc.col(reg$defs, ncol(reg$defs))
   alloc.col(reg$resources, ncol(reg$resources))
   alloc.col(reg$tags, ncol(reg$tags))
-  if (!is.null(work.dir)) reg$work.dir = fs::path_norm(work.dir)
+  if (!is.null(work.dir))
+    reg$work.dir = path_real(work.dir)
   updated = updateRegistry(reg = reg)
 
   # try to load dependencies relative to work.dir

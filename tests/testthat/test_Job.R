@@ -65,7 +65,7 @@ test_that("External directory is created", {
   reg = makeTestExperimentRegistry()
   addProblem(reg = reg, "p1", fun = function(job, data, ...) list(data = data, ...))
   addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) {
-    saveRDS(job$id, file = fs::path(job$external.dir, sprintf("%s.rds", job$id)))
+    saveRDS(job$id, file = fs::path(job$external.dir, sprintf("%s.rds", job$id)), version = 2L)
     job$external.dir
   })
   ids = addExperiments(list(p1 = data.table(i = 1:3)), list(a1 = data.table()), reg = reg)

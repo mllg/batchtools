@@ -135,7 +135,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
 
   reg = new.env(parent = asNamespace("batchtools"))
   reg$file.dir = file.dir
-  reg$work.dir = fs::path_norm(work.dir)
+  reg$work.dir = work.dir
   reg$packages = packages
   reg$namespaces = namespaces
   reg$source = source
@@ -180,9 +180,12 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   if (is.na(file.dir))
     reg$file.dir = fs::file_temp("registry", tmp_dir = reg$temp.dir)
   "!DEBUG [makeRegistry]: Creating directories in '`reg$file.dir`'"
-  reg$file.dir = fs::path_norm(reg$file.dir)
-  fs::dir_create(fs::path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
 
+  fs::dir_create(c(reg$file.dir, reg$work.dir))
+  reg$file.dir = path_real(reg$file.dir)
+  reg$work.dir = path_real(reg$work.dir)
+
+  fs::dir_create(fs::path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
   with_dir(reg$work.dir, loadRegistryDependencies(reg))
 
   class(reg) = "Registry"

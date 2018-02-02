@@ -25,26 +25,6 @@ insert = function(x, y) {
   x[order(names2(x))]
 }
 
-file_remove = function(x) {
-  fs::file_delete(x[fs::file_exists(x)])
-
-  while(any(i <- fs::file_exists(x))) {
-    Sys.sleep(0.5)
-    fs::file_delete(x[i])
-  }
-}
-
-file_mtime = function(x) {
-  fs::file_info(x)$modification_time
-}
-
-writeRDS = function(object, file) {
-  file_remove(file)
-  saveRDS(object, file = file)
-  waitForFile(file, 300)
-  invisible(TRUE)
-}
-
 makeProgressBar = function(...) {
   if (!batchtools$debug && getOption("batchtools.verbose", TRUE) && getOption("batchtools.progress", TRUE) && getOption("width") >= 20L) {
     progress_bar$new(...)
