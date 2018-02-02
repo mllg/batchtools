@@ -181,6 +181,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
     reg$file.dir = fs::file_temp("registry", tmp_dir = reg$temp.dir)
   "!DEBUG [makeRegistry]: Creating directories in '`reg$file.dir`'"
 
+  fs::dir_create(c(reg$file.dir, reg$work.dir))
   reg$file.dir = path_real(reg$file.dir)
   reg$work.dir = path_real(reg$work.dir)
 
