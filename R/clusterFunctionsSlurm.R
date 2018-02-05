@@ -92,24 +92,30 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
   }
 
   listJobsQueued = function(reg) {
+    if (is.null(clusters) && !is.null(reg$default.resources$clusters))
+      clusters = reg$default.resources$clusters
     args = c("-h", "-o %i", "-u $USER", "-t PD",
-      sprintf("--clusters=%s", coalesce(clusters, reg$default.resources$clusters)),
-      sprintf("--partition=%s", coalesce(reg$default.resources$partition)))
+      sprintf("--clusters=%s", clusters),
+      sprintf("--partition=%s", reg$default.resources$partition))
     listJobs(reg, args)
   }
 
   listJobsRunning = function(reg) {
+    if (is.null(clusters) && !is.null(reg$default.resources$clusters))
+      clusters = reg$default.resources$clusters
     args = c("-h", "-o %i", "-u $USER", "-t R,S,CG",
-      sprintf("--clusters=%s", coalesce(clusters, reg$default.resources$clusters)),
-      sprintf("--partition=%s", coalesce(reg$default.resources$partition)))
+      sprintf("--clusters=%s", clusters),
+      sprintf("--partition=%s", reg$default.resources$partition))
     listJobs(reg, args)
   }
 
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-    cfKillJob(reg, "scancel", c(sprintf("--clusters=%s", coalesce(clusters, reg$default.resources$clusters)),
-      sprintf("--partition=%s", coalesce(reg$default.resources$partition)), batch.id), nodename = nodename)
+    if (is.null(clusters) && !is.null(reg$default.resources$clusters))
+      clusters = reg$default.resources$clusters
+    cfKillJob(reg, "scancel", c(sprintf("--clusters=%s", clusters),
+      sprintf("--partition=%s", reg$default.resources$partition), batch.id), nodename = nodename)
   }
 
   makeClusterFunctions(name = "Slurm", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,
