@@ -53,11 +53,11 @@ makeClusterFunctionsSGE = function(template = "sge", scheduler.latency = 1, fs.l
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c("-u $USER", "-s p"))
+    listJobs(reg, c(shQuote("-u $USER"), "-s p"))
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c("-u $USER", "-s rs"))
+    listJobs(reg, c(shQuote("-u $USER"), "-s rs"))
   }
 
   killJob = function(reg, batch.id) {
