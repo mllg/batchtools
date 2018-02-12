@@ -87,7 +87,7 @@ Worker = R6Class("Worker",
   private = list(
     filter_output = function(res) {
       res$output = res$output[stri_startswith_fixed(res$output, "[bt]")]
-      res$output = stri_replace_first_regex(res$output, "^\\[bt\\][[:space:]]*", "")
+      res$output = stri_trim_both(stri_sub(res$output, 5L))
       res
     },
 
