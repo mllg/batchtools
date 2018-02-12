@@ -27,7 +27,10 @@ test_that("cf ssh", {
 if (FALSE) {
   reg = makeTestRegistry()
   workers = list(Worker$new("129.217.207.53"), Worker$new("localhost", ncpus = 1))
+
   reg$cluster.functions = makeClusterFunctionsSSH(workers)
+  expect_string(workers[[1L]]$script)
+  expect_string(workers[[2L]]$script)
   expect_equal(workers[[1L]]$ncpus, 4L)
   expect_equal(workers[[2L]]$ncpus, 1L)
   fun = function(x) { Sys.sleep(x); is(x, "numeric") }

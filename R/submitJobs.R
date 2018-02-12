@@ -227,6 +227,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
     if (reg$cluster.functions$store.job.collection)
       writeRDS(jc, file = jc$uri)
 
+    # do we have to wait for jobs to get terminated before proceeding?
     if (!is.na(max.concurrent.jobs)) {
       # count chunks or job.id
       i = 1L
@@ -253,6 +254,10 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
       submit = reg$cluster.functions$submitJob(reg = reg, jc = jc)
 
       if (submit$status == 0L) {
+        if (!testString(submit$batch.id, na.ok = FALSE)) {
+          print(str(submit))
+          stopf("Cluster function did not return a valid batch.id")
+        }
         reg$status[ids.chunk,
           c("submitted", "started", "done",   "error",       "mem.used", "resource.id", "batch.id",      "log.file",      "job.hash") :=
           list(now,      NA_real_,  NA_real_, NA_character_, NA_real_,   res.id,        submit$batch.id, submit$log.file, jc$job.hash)]
