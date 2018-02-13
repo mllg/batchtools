@@ -49,6 +49,23 @@ The progress can be monitored with \code{\link{getStatus}}.
 If you a large number of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
 can significantly increase the performance of \code{submitJobs}.
 }
+\section{Resources}{
+
+You can pass arbitrary resources to \code{submitJobs()} which then are available in the cluster function template.
+Some resources' names are standardized and it is good practice to stick to the following nomenclature to avoid confusion:
+\describe{
+ \item{walltime:}{Upper time limit in seconds for jobs before they get killed by the scheduler.}
+ \item{memory:}{Memory limit in Mb. If jobs exceed this limit, they are usually killed by the scheduler.}
+ \item{ncpus:}{Number of (physical) CPUs to use on the slave.}
+ \item{omp.threads:}{Number of threads to use via OpenMP. Used to set environment variable \dQuote{OMP_NUM_THREADS}.}
+ \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}.}
+ \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
+ \item{chunks.as.array.jobs:}{Execute chunks as array jobs.}
+ \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}
+ \item{foreach.backend:}{Start a \pkg{foreach} backend on the slave.}
+}
+}
+
 \section{Chunking of Jobs}{
 
 Multiple jobs can be grouped (chunked) together to be executed sequentially on the batch system as a single batch job.
