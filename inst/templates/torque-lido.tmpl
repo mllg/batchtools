@@ -69,7 +69,7 @@ export TMPDIR=/scratch/${USER}-${PBS_JOBID}
 ## Set thread number of OMP and OpenBlas
 export OMP_NUM_THREADS=<%= resources$omp.threads %>
 export NUMEXPR_NUM_THREADS=<%= resources$blas.threads %>
-export OPENBLAS_NUM_THREADS=<%= resources$tblas.hreads %>
+export OPENBLAS_NUM_THREADS=<%= resources$blas.threads %>
 
 ## export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>
