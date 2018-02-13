@@ -62,9 +62,12 @@ can assist in grouping jobs.
 \section{Array Jobs}{
 
 If your cluster supports array jobs, you can set the resource \code{chunks.as.arrayjobs} to \code{TRUE} in order
-to execute chunks as job arrays. To do so, the job must be repeated \code{nrow(jobs)} times via the cluster functions template.
-The function \code{\link{doJobCollection}} (which is called on the slave) now retrieves the repetition number from the environment
-and restricts the computation to the respective job in the \code{\link{JobCollection}}.
+to execute chunks as job arrays on the cluster.
+For each chunk of size \code{n}, \pkg{batchtools} creates a \code{\link{JobCollection}} of (possibly heterogeneous) jobs which is
+submitted to the scheduler as a single array job with \code{n} repetitions.
+For each repetition, the \code{JobCollection} is first read from the file system, then subsetted to the \code{i}-th job using
+the environment variable \code{reg$cluster.functions$array.var} (depending on the cluster backend, defined automatically) and finally
+executed.
 }
 
 \section{Order of Submission}{
