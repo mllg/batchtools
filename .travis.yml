@@ -17,7 +17,6 @@ addons:
 r:
   - oldrel
   - release
-  - devel
 
 r_packages:
   - covr
