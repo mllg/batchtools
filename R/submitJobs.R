@@ -12,11 +12,11 @@
 #' You can pass arbitrary resources to \code{submitJobs()} which then are available in the cluster function template.
 #' Some resources' names are standardized and it is good practice to stick to the following nomenclature to avoid confusion:
 #' \describe{
-#'  \item{walltime:}{Upper time limit in seconds for jobs before they get killed by the scheduler.}
-#'  \item{memory:}{Memory limit in Mb. If jobs exceed this limit, they are usually killed by the scheduler.}
-#'  \item{ncpus:}{Number of (physical) CPUs to use on the slave.}
-#'  \item{omp.threads:}{Number of threads to use via OpenMP. Used to set environment variable \dQuote{OMP_NUM_THREADS}.}
-#'  \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}.}
+#'  \item{walltime:}{Upper time limit in seconds for jobs before they get killed by the scheduler. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+#'  \item{memory:}{Memory limit in Mb. If jobs exceed this limit, they are usually killed by the scheduler. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+#'  \item{ncpus:}{Number of (physical) CPUs to use on the slave. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+#'  \item{omp.threads:}{Number of threads to use via OpenMP. Used to set environment variable \dQuote{OMP_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+#'  \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
 #'  \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
 #'  \item{chunks.as.array.jobs:}{Execute chunks as array jobs.}
 #'  \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}
@@ -91,12 +91,11 @@
 #' @template ids
 #' @param resources [\code{named list}]\cr
 #'   Computational  resources for the jobs to submit. The actual elements of this list
-#'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the details.
-#'   In case you need to set individual job resources, \code{ids} may be provided as \code{data.frame} with the additional
-#'   column \dQuote{resources} (see example).
+#'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the section 'Resources'.
 #'   Default settings for a system can be set in the configuration file by defining the named list \code{default.resources}.
 #'   Note that these settings are merged by name, e.g. merging \code{list(walltime = 300)} into \code{list(walltime = 400, memory = 512)}
 #'   will result in \code{list(walltime = 300, memory = 512)}.
+#'   Same holds for individual job resources passed as additional column of \code{ids} (c.f. section 'Resources').
 #' @param sleep [\code{function(i)} | \code{numeric(1)}]\cr
 #'   Parameter to control the duration to sleep between temporary errors.
 #'   You can pass an absolute numeric value in seconds or a \code{function(i)} which returns the number of seconds to sleep in the \code{i}-th
@@ -178,12 +177,13 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
     assertFlag(resources$measure.memory)
   sleep = getSleepFunction(reg, sleep)
 
-  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk")
+  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = c("chunk", batchtools$resources$per.job))
   if (nrow(ids) == 0L)
     return(noIds())
 
   # handle chunks
-  if (hasName(ids, "chunk")) {
+  use.chunking = hasName(ids, "chunk") && anyDuplicated(ids, by = "chunk") > 0L
+  if (use.chunking) {
     ids$chunk = asInteger(ids$chunk, any.missing = FALSE)
     chunks = sort(unique(ids$chunk))
   } else {
@@ -221,17 +221,19 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
     }
   }
 
-  res.hash = digest(resources)
-  resource.hash = NULL
-  res.id = reg$resources[resource.hash == res.hash, "resource.id"]$resource.id
-  if (length(res.id) == 0L) {
-    res.id = auto_increment(reg$resources$resource.id)
-    reg$resources = rbind(reg$resources, data.table(resource.id = res.id, resource.hash = res.hash, resources = list(resources)))
-    setkeyv(reg$resources, "resource.id")
+  # handle job resources
+  per.job.resources = chintersect(names(ids), batchtools$resources$per.job)
+  if (length(per.job.resources) > 0L) {
+    if (use.chunking)
+      stopf("Combining per-job resources with chunking is not supported")
+    ids$resource.id = addResources(reg, .mapply(function(...) insert(resources, list(...)), ids[, per.job.resources, with = FALSE], MoreArgs = list()))
+    ids[, (per.job.resources) := NULL]
+  } else {
+    ids$resource.id = addResources(reg, list(resources))
   }
-  on.exit(saveRegistry(reg))
 
   info("Submitting %i jobs in %i chunks using cluster functions '%s' ...", nrow(ids), length(chunks), reg$cluster.functions$name)
+  on.exit(saveRegistry(reg))
 
   chunk = NULL
   runHook(reg, "pre.submit")
@@ -240,8 +242,8 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
   pb$tick(0, tokens = list(status = "Submitting"))
 
   for (ch in chunks) {
-    ids.chunk = ids[chunk == ch, "job.id"]
-    jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
+    ids.chunk = ids[chunk == ch, c("job.id", "resource.id")]
+    jc = makeJobCollection(ids.chunk, resources = reg$resources[ids.chunk, on = "resource.id"]$resources[[1L]], reg = reg)
     if (reg$cluster.functions$store.job.collection)
       writeRDS(jc, file = jc$uri)
 
@@ -277,8 +279,8 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
           stopf("Cluster function did not return a valid batch.id")
         }
         reg$status[ids.chunk,
-          c("submitted", "started", "done",   "error",       "mem.used", "resource.id", "batch.id",      "log.file",      "job.hash") :=
-          list(now,      NA_real_,  NA_real_, NA_character_, NA_real_,   res.id,        submit$batch.id, submit$log.file, jc$job.hash)]
+          c("submitted", "started", "done",   "error",       "mem.used", "resource.id",         "batch.id",      "log.file",      "job.hash") :=
+          list(now,      NA_real_,  NA_real_, NA_character_, NA_real_,   ids.chunk$resource.id, submit$batch.id, submit$log.file, jc$job.hash)]
         runHook(reg, "post.submit.job")
         break
       } else if (submit$status > 0L && submit$status < 100L) {
@@ -299,4 +301,25 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
 
   # return ids, registry is saved via on.exit()
   return(invisible(ids))
+}
+
+addResources = function(reg, resources) {
+  ai = function(tab, col) { # auto increment by reference
+    i = tab[is.na(get(col)), which = TRUE]
+    if (length(i) > 0L) {
+      ids = seq_along(i)
+      if (length(i) < nrow(tab))
+        ids = ids + max(tab[, max(col, na.rm = TRUE), with = FALSE][[1L]], na.rm = TRUE)
+      tab[i, (col) := ids]
+      setkeyv(tab, col)[]
+    }
+  }
+
+  tab = data.table(resources = resources, resource.hash = vcapply(resources, digest))
+  new.tab = unique(tab, by = "resource.hash")[!reg$resources, on = "resource.hash"]
+  if (nrow(new.tab)) {
+    reg$resources = rbindlist(list(reg$resources, new.tab), fill = TRUE)
+    ai(reg$resources, "resource.id")
+  }
+  reg$resources[tab, "resource.id", on = "resource.hash"][[1L]]
 }

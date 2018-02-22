@@ -17,12 +17,11 @@ Invalid ids are ignored.}
 
 \item{resources}{[\code{named list}]\cr
 Computational  resources for the jobs to submit. The actual elements of this list
-(e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the details.
-In case you need to set individual job resources, \code{ids} may be provided as \code{data.frame} with the additional
-column \dQuote{resources} (see example).
+(e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the section 'Resources'.
 Default settings for a system can be set in the configuration file by defining the named list \code{default.resources}.
 Note that these settings are merged by name, e.g. merging \code{list(walltime = 300)} into \code{list(walltime = 400, memory = 512)}
-will result in \code{list(walltime = 300, memory = 512)}.}
+will result in \code{list(walltime = 300, memory = 512)}.
+Same holds for individual job resources passed as additional column of \code{ids} (c.f. section 'Resources').}
 
 \item{sleep}{[\code{function(i)} | \code{numeric(1)}]\cr
 Parameter to control the duration to sleep between temporary errors.
@@ -54,11 +53,11 @@ can significantly increase the performance of \code{submitJobs}.
 You can pass arbitrary resources to \code{submitJobs()} which then are available in the cluster function template.
 Some resources' names are standardized and it is good practice to stick to the following nomenclature to avoid confusion:
 \describe{
- \item{walltime:}{Upper time limit in seconds for jobs before they get killed by the scheduler.}
- \item{memory:}{Memory limit in Mb. If jobs exceed this limit, they are usually killed by the scheduler.}
- \item{ncpus:}{Number of (physical) CPUs to use on the slave.}
- \item{omp.threads:}{Number of threads to use via OpenMP. Used to set environment variable \dQuote{OMP_NUM_THREADS}.}
- \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}.}
+ \item{walltime:}{Upper time limit in seconds for jobs before they get killed by the scheduler. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+ \item{memory:}{Memory limit in Mb. If jobs exceed this limit, they are usually killed by the scheduler. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+ \item{ncpus:}{Number of (physical) CPUs to use on the slave. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+ \item{omp.threads:}{Number of threads to use via OpenMP. Used to set environment variable \dQuote{OMP_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+ \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
  \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
  \item{chunks.as.array.jobs:}{Execute chunks as array jobs.}
  \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}

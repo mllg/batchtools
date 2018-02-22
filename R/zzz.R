@@ -47,6 +47,10 @@ batchtools$hooks = list(
   remote = c("pre.do.collection", "post.do.collection"),
   local  = c("pre.sync", "post.sync", "pre.submit.job", "post.submit.job", "pre.submit", "post.submit", "pre.kill", "post.kill")
 )
+batchtools$resources = list(
+  per.job = c("walltime", "memory", "ncpus", "omp.threads", "blas.threads"),
+  per.chunk = c("measure.memory", "chunks.as.arrayjobs", "pm.backend", "foreach.backend")
+)
 
 .onLoad = function(libname, pkgname) { # nocov start
   if (requireNamespace("debugme", quietly = TRUE) && "batchtools" %in% strsplit(Sys.getenv("DEBUGME"), ",", fixed = TRUE)[[1L]]) {

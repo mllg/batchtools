@@ -26,3 +26,22 @@ test_that("submitJobs", {
   # should be 2 chunks?
   expect_equal(uniqueN(reg$status$job.hash), 2)
 })
+
+test_that("submitJobs: per job resources", {
+  reg = makeTestRegistry()
+
+  fun = function(...) list(...)
+  ids = batchMap(fun, i = 1:3, reg = reg)
+  ids$walltime = as.integer(c(180, 120, 180))
+  ids$chunk = 1:3
+
+  submitAndWait(reg, ids = ids)
+
+  res = reg$resources
+  expect_data_table(res, nrow = 2)
+  expect_equal(uniqueN(res, by = "resource.hash"), 2L)
+  expect_set_equal(rbindlist(res$resources)$walltime, c(120L, 180L))
+
+  ids$chunk = 1L
+  expect_error(submitJobs(ids, reg = reg), "per-job")
+})

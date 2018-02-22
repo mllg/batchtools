@@ -88,6 +88,10 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
     }, id = names(designs), design = designs)
   }
 
+  increment = function(ids, n = 1L) {
+    if (length(ids) == 0L) seq_len(n) else max(ids) + seq_len(n)
+  }
+
   assertRegistry(reg, class = "ExperimentRegistry", writeable = TRUE)
   if (is.null(prob.designs)) {
     prob.designs = replicate(length(reg$problems), data.table(), simplify = FALSE)
@@ -147,7 +151,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
       # generate def ids for new experiments
       w = which(is.na(tab$def.id))
       if (length(w) > 0L) {
-        tab[w, "def.id" := auto_increment(reg$defs$def.id, length(w))]
+        tab[w, "def.id" := increment(reg$defs$def.id, length(w))]
         reg$defs = rbind(reg$defs, tab[w])
       }
 
@@ -158,7 +162,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
 
       if (nrow(tab) > 0L) {
         # rbind new status
-        tab$job.id = auto_increment(reg$status$job.id, nrow(tab))
+        tab$job.id = increment(reg$status$job.id, nrow(tab))
         reg$status = rbind(reg$status, tab, fill = TRUE)
       }
 
