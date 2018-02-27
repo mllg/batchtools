@@ -23,12 +23,16 @@ Function to apply.}
 Additional arguments passed to \code{fun} (\code{btlapply}) or vectors to map over (\code{btmapply}).}
 
 \item{resources}{[\code{named list}]\cr
-Computational  resources for the jobs to submit. The actual elements of this list
-(e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the section 'Resources'.
-Default settings for a system can be set in the configuration file by defining the named list \code{default.resources}.
-Note that these settings are merged by name, e.g. merging \code{list(walltime = 300)} into \code{list(walltime = 400, memory = 512)}
-will result in \code{list(walltime = 300, memory = 512)}.
-Same holds for individual job resources passed as additional column of \code{ids} (c.f. section 'Resources').}
+  Computational  resources for the jobs to submit. The actual elements of this list
+  (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the section 'Resources'.
+
+  The resources provided here will be merged with one of the following list by name:
+  \describe{
+  \item{(a)}{If there are no resources connected to the job: the named list \code{default.resources} which can be set in the configuration file.}
+  \item{(b)}{If there are resources connected to the job, either by manually calling \code{\link{setJobResources}} or as a result of a previous call to \code{submitJobs}: The resources as returned by \code{\link{getJobResources}}.}
+  }
+  The resources provided here have higher precedence. I.e., if you have set \code{list(walltime = 400, memory = 512)} as default resources and
+  call this function with the resources \code{list(walltime = 300)}, the resources \code{list(walltime = 300, memory = 512)} will be effectively used.}
 
 \item{n.chunks}{[\code{integer(1)}]\cr
 Passed to \code{\link{chunk}} before \code{\link{submitJobs}}.}

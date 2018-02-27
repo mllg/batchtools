@@ -12,6 +12,15 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, sync = TRUE, running.ok = FALSE)
   "!DEBUG [sweepRegistry]: Running sweepRegistry"
 
+  sweepResults(reg)
+  sweepLogs(reg)
+  sweepJobs(reg)
+  sweepResources(reg)
+  sweepTags(reg)
+  saveRegistry(reg)
+}
+
+sweepResults = function(reg) {
   submitted = reg$status[.findSubmitted(reg = reg), c("job.id", "job.hash")]
   obsolete = chsetdiff(
     list.files(dir(reg, "results"), full.names = TRUE),
@@ -21,7 +30,9 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
     info("Removing %i obsolete result files ...", length(obsolete))
     fs::file_delete(obsolete)
   }
+}
 
+sweepLogs = function(reg) {
   obsolete = chsetdiff(
     list.files(dir(reg, "logs"), full.names = TRUE),
     getLogFiles(reg, submitted)
@@ -30,7 +41,9 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
     info("Removing %i obsolete log files ...", length(obsolete))
     fs::file_delete(obsolete)
   }
+}
 
+sweepJobs = function(reg) {
   obsolete = list.files(dir(reg, "jobs"), pattern = "\\.rds", full.names = TRUE)
   if (length(obsolete)) {
     info("Removing %i obsolete job collection files ...", length(obsolete))
@@ -42,7 +55,9 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
     info("Removing %i job description files ...", length(obsolete))
     fs::file_delete(obsolete)
   }
+}
 
+sweepExternal = function(reg) {
   obsolete = chsetdiff(
     list.files(dir(reg, "external"), pattern = "^[0-9]+$", full.names = TRUE),
     getExternalDirs(reg, submitted)
@@ -51,18 +66,20 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
     info("Removing %i external directories of unsubmitted jobs ...", length(obsolete))
     fs::dir_delete(obsolete)
   }
+}
 
+sweepResources = function(reg) {
   obsolete = reg$resources[!reg$status, on = "resource.id", which = TRUE]
   if (length(obsolete)) {
     info("Removing %i resource specifications ...", length(obsolete))
     reg$resources = reg$resources[-obsolete]
   }
+}
 
+sweepTags = function(reg) {
   obsolete = reg$tags[!reg$status, on = "job.id", which = TRUE]
   if (length(obsolete)) {
     info("Removing %i tags ...", length(obsolete))
     reg$tags = reg$tags[-obsolete]
   }
-
-  saveRegistry(reg)
 }
