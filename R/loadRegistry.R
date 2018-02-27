@@ -32,7 +32,7 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
 
   # read registry
   info("Reading registry in read-%s mode", ifelse(writeable, "write", "only"))
-  file.dir = fs::path_real(file.dir)
+  file.dir = path_real(file.dir)
   reg = readRegistry(file.dir)
 
   # re-allocate stuff which has not been serialized
