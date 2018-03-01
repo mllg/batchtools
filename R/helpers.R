@@ -123,13 +123,11 @@ getSeed = function(start.seed, id) {
 }
 
 chsetdiff = function(x, y) {
-  # Note: assumes that x has no duplicates
-  x[chmatch(x, y, 0L) == 0L]
+  unique(if (length(x) || length(y)) x[chmatch(x, y, 0L) == 0L] else x)
 }
 
 chintersect = function(x, y) {
-  # Note: assumes that x has no duplicates
-  x[chmatch(y, x, 0L)]
+  unique(y[chmatch(x, y, 0L)])
 }
 
 rnd_hash = function(prefix = "") {

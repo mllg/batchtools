@@ -33,6 +33,7 @@ sweepResults = function(reg) {
 }
 
 sweepLogs = function(reg) {
+  submitted = reg$status[.findSubmitted(reg = reg), c("job.id", "job.hash")]
   obsolete = chsetdiff(
     list.files(dir(reg, "logs"), full.names = TRUE),
     getLogFiles(reg, submitted)
@@ -58,6 +59,7 @@ sweepJobs = function(reg) {
 }
 
 sweepExternal = function(reg) {
+  submitted = reg$status[.findSubmitted(reg = reg), c("job.id", "job.hash")]
   obsolete = chsetdiff(
     list.files(dir(reg, "external"), pattern = "^[0-9]+$", full.names = TRUE),
     getExternalDirs(reg, submitted)
