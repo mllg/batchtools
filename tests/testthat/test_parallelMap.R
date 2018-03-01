@@ -13,7 +13,7 @@ test_that("pm/multicore", {
   if (reg$cluster.functions$name %chin% c("Parallel", "Socket"))
     skip("Nested local parallelization not supported")
 
-  submitAndWait(reg, ids = ids, resources = list(pm.backend = "multicore", ncpus = 2))
+  submitAndWait(reg, ids = ids, resources = list(ncpus = 2), chunk.options = list(pm.backend = "multicore"))
   expect_equal(nrow(findDone(reg = reg)), 4L)
 })
 
@@ -24,7 +24,7 @@ test_that("pm/socket", {
   if (reg$cluster.functions$name %chin% c("Parallel", "Socket"))
     skip("Nested local parallelization not supported")
 
-  submitAndWait(reg, ids = ids, resources = list(pm.backend = "socket", ncpus = 2))
+  submitAndWait(reg, ids = ids, resources = list(ncpus = 2), chunk.options = list(pm.backend = "socket"))
   expect_equal(nrow(findDone(reg = reg)), 4L)
 })
 

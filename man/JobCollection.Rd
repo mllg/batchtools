@@ -5,7 +5,7 @@
 \alias{JobCollection}
 \title{JobCollection Constructor}
 \usage{
-makeJobCollection(ids = NULL, resources = list(),
+makeJobCollection(ids = NULL, resources = list(), chunk.options = list(),
   reg = getDefaultRegistry())
 }
 \arguments{

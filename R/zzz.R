@@ -49,7 +49,7 @@ batchtools$hooks = list(
 )
 batchtools$resources = list(
   per.job = c("walltime", "memory", "ncpus", "omp.threads", "blas.threads"),
-  per.chunk = c("measure.memory", "chunks.as.arrayjobs", "pm.backend", "foreach.backend")
+  per.chunk = c("measure.memory", "chunks.as.arrayjobs", "pm.backend", "foreach.backend", "pm.opts")
 )
 
 .onLoad = function(libname, pkgname) { # nocov start

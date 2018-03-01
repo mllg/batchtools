@@ -42,27 +42,28 @@
 #' jc = makeJobCollection(1:3, resources = list(foo = "bar"), reg = tmp)
 #' ls(jc)
 #' jc$resources
-makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
+makeJobCollection = function(ids = NULL, resources = list(), chunk.options = list(), reg = getDefaultRegistry()) {
   UseMethod("makeJobCollection", reg)
 }
 
-createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()) {
-  jc              = new.env(parent = emptyenv())
-  jc$jobs         = setkeyv(jobs, "job.id")
-  jc$job.hash     = rnd_hash("job")
-  jc$job.name     = if (anyMissing(jobs$job.name)) jc$job.hash else jobs$job.name[1L]
-  jc$file.dir     = reg$file.dir
-  jc$work.dir     = reg$work.dir
-  jc$seed         = reg$seed
-  jc$uri          = getJobFiles(reg, hash = jc$job.hash)
-  jc$log.file     = fs::path(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
-  jc$packages     = reg$packages
-  jc$namespaces   = reg$namespaces
-  jc$source       = reg$source
-  jc$load         = reg$load
-  jc$resources    = resources
-  jc$array.var    = reg$cluster.functions$array.var
-  jc$array.jobs   = isTRUE(resources$chunks.as.arrayjobs)
+createCollection = function(reg, jobs, resources = list(), chunk.options = list()) {
+  jc               = new.env(parent        = emptyenv())
+  jc$jobs          = setkeyv(jobs, "job.id")
+  jc$job.hash      = rnd_hash("job")
+  jc$job.name      = if (anyMissing(jobs$job.name)) jc$job.hash else jobs$job.name[1L]
+  jc$file.dir      = reg$file.dir
+  jc$work.dir      = reg$work.dir
+  jc$seed          = reg$seed
+  jc$uri           = getJobFiles(reg, hash = jc$job.hash)
+  jc$log.file      = fs::path(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
+  jc$packages      = reg$packages
+  jc$namespaces    = reg$namespaces
+  jc$source        = reg$source
+  jc$load          = reg$load
+  jc$resources     = resources
+  jc$array.var     = reg$cluster.functions$array.var
+  jc$array.jobs    = isTRUE(chunk.options$chunks.as.arrayjobs)
+  jc$chunk.options = chunk.options
 
   hooks = chintersect(names(reg$cluster.functions$hooks), batchtools$hooks$remote)
   if (length(hooks) > 0L)
@@ -71,14 +72,14 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
 }
 
 #' @export
-makeJobCollection.Registry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "job.name", "job.pars")), resources, reg)
+makeJobCollection.Registry = function(ids = NULL, resources = list(), chunk.options = list(), reg = getDefaultRegistry()) {
+  jc = createCollection(reg, mergedJobs(reg, convertIds(reg, ids), c("job.id", "job.name", "job.pars")), resources, chunk.options)
   setClasses(jc, "JobCollection")
 }
 
 #' @export
-makeJobCollection.ExperimentRegistry = function(ids = NULL, resources = list(), reg = getDefaultRegistry()) {
-  jc = createCollection(mergedJobs(reg, convertIds(reg, ids), c("job.id", "job.name", "problem", "algorithm", "prob.pars", "algo.pars", "repl")), resources, reg)
+makeJobCollection.ExperimentRegistry = function(ids = NULL, resources = list(), chunk.options = list(), reg = getDefaultRegistry()) {
+  jc = createCollection(reg, mergedJobs(reg, convertIds(reg, ids), c("job.id", "job.name", "problem", "algorithm", "prob.pars", "algo.pars", "repl")), resources, chunk.options)
   setClasses(jc, c("ExperimentCollection", "JobCollection"))
 }
 

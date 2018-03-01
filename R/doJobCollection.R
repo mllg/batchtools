@@ -87,10 +87,10 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     return(error("Error loading registry dependencies: %s", as.character(ok)))
 
   # setup inner parallelization with parallelMap
-  if (hasName(jc$resources, "pm.backend")) {
+  if (hasName(jc$chunk.options, "pm.backend")) {
     if (!requireNamespace("parallelMap", quietly = TRUE))
       return(error("parallelMap not installed"))
-    pm.opts = filterNull(insert(list(mode = jc$resources$pm.backend, cpus = jc$resources$ncpus, show.info = FALSE), jc$resources$pm.opts))
+    pm.opts = filterNull(insert(list(mode = jc$chunk.options$pm.backend, cpus = jc$resources$ncpus, show.info = FALSE), jc$chunk.options$pm.opts))
     do.call(parallelMap::parallelStart, pm.opts)
     on.exit(parallelMap::parallelStop(), add = TRUE)
     pm.opts = parallelMap::parallelGetOptions()$settings
@@ -98,10 +98,10 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   }
 
   # setup inner parallelization with foreach
-  if (hasName(jc$resources, "foreach.backend")) {
+  if (hasName(jc$chunk.options, "foreach.backend")) {
     if (!requireNamespace("foreach", quietly = TRUE))
       return(error("Package 'foreach' is not installed"))
-    backend = jc$resources$foreach.backend
+    backend = jc$chunk.options$foreach.backend
     ncpus = jc$resources$ncpus
 
     if (backend == "seq") {
@@ -123,7 +123,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   }
 
   # setup memory measurement
-  measure.memory = isTRUE(jc$resources$measure.memory)
+  measure.memory = isTRUE(jc$chunk.options$measure.memory)
   catf("### [bt%s]: Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"))
 
   # try to pre-fetch some objects from the file system

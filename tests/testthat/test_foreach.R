@@ -7,7 +7,7 @@ test_that("foreach/seq", {
     foreach(j = 1:i, .combine = c) %dopar% { j^2 }
   }
   ids = batchMap(fun, i = 1:2, reg = reg)
-  submitAndWait(reg, ids = ids, resources = list(foreach.backend = "seq", ncpus = 2))
+  submitAndWait(reg, ids = ids, resources = list(ncpus = 2), chunk.options = list(foreach.backend = "seq"))
   expect_equal(nrow(findDone(reg = reg)), 2L)
   expect_equal(reduceResultsList(reg = reg), list(1, c(1, 4)))
 })
@@ -24,7 +24,7 @@ test_that("foreach/multicore", {
   }
   ids = batchMap(fun, i = 1, reg = reg)
 
-  submitAndWait(reg, ids = ids, resources = list(foreach.backend = "parallel", ncpus = 2))
+  submitAndWait(reg, ids = ids, resources = list(ncpus = 2), chunk.options = list(foreach.backend = "parallel"))
   expect_equal(nrow(findDone(reg = reg)), 1L)
   status = getJobStatus(reg = reg)
   expect_true(status$time.running < 5.9)

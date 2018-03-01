@@ -2,7 +2,7 @@ context("sweepRegistry")
 
 test_that("sweepRegistry", {
   reg = makeTestRegistry()
-  array.jobs = isTRUE(reg$default.resources$chunks.as.arrayjobs)
+  array.jobs = isTRUE(reg$default.chunk.options$chunks.as.arrayjobs)
   batchMap(identity, 1, reg = reg)
 
   submitAndWait(reg, 1, resources = list(foo = 1))

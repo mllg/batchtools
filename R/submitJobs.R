@@ -17,10 +17,6 @@
 #'  \item{ncpus:}{Number of (physical) CPUs to use on the slave.}
 #'  \item{omp.threads:}{Number of threads to use via OpenMP. Used to set environment variable \dQuote{OMP_NUM_THREADS}.}
 #'  \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}.}
-#'  \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
-#'  \item{chunks.as.array.jobs:}{Execute chunks as array jobs.}
-#'  \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}
-#'  \item{foreach.backend:}{Start a \pkg{foreach} backend on the slave.}
 #' }
 #'
 #' @section Chunking of Jobs:
@@ -30,6 +26,12 @@
 #' All jobs with the same chunk number will be executed sequentially inside the same batch job.
 #' The utility functions \code{\link{chunk}}, \code{\link{binpack}} and \code{\link{lpt}}
 #' can assist in grouping jobs.
+#' \describe{
+#'  \item{chunks.as.array.jobs:}{Execute chunks as array jobs.}
+#'  \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}
+#'  \item{foreach.backend:}{Start a \pkg{foreach} backend on the slave.}
+#'  \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
+#' }
 #'
 #' @section Array Jobs:
 #' If your cluster supports array jobs, you can set the resource \code{chunks.as.arrayjobs} to \code{TRUE} in order
@@ -53,7 +55,7 @@
 #' If both are set, the setting via the resource takes precedence over the setting in the configuration.
 #'
 #' @section Measuring Memory:
-#' Setting the resource \code{measure.memory} to \code{TRUE} turns on memory measurement:
+#' Setting the chunk option \code{measure.memory} to \code{TRUE} turns on memory measurement:
 #' \code{\link[base]{gc}} is called  directly before and after the job and the difference is
 #' stored in the internal database. Note that this is just a rough estimate and does
 #' neither work reliably for external code like C/C++ nor in combination with threading.
@@ -124,11 +126,11 @@
 #' # Map function to create jobs
 #' ids = batchMap(fun, args = args, reg = tmp)
 #'
-#' # Set resources: enable memory measurement
-#' res = list(measure.memory = TRUE)
+#' # Set chunk options: enable memory measurement
+#' ch.opts = list(measure.memory = TRUE)
 #'
 #' # Submit jobs using the currently configured cluster functions
-#' submitJobs(ids, resources = res, reg = tmp)
+#' submitJobs(ids, chunk.options = ch.opts, reg = tmp)
 #'
 #' # Retrive information about memory, combine with parameters
 #' info = ijoin(getJobStatus(reg = tmp)[, .(job.id, mem.used)], getJobPars(reg = tmp))
@@ -165,20 +167,38 @@
 #' # There should also be a note in the log:
 #' grepLogs(pattern = "parallelMap", reg = tmp)
 #' }
-submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDefaultRegistry()) {
+submitJobs = function(ids = NULL, resources = list(), chunk.options = list(), sleep = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, sync = TRUE)
-  assertList(resources, names = "strict")
+
+
+  assertList(resources, names = "unique")
   resources = insert(reg$default.resources, resources)
-  if (hasName(resources, "pm.backend"))
-    assertChoice(resources$pm.backend, c("local", "multicore", "socket", "mpi"))
-  if (hasName(resources, "foreach.backend"))
-    assertChoice(resources$foreach.backend, c("seq", "parallel", "mpi"))
-  if (hasName(resources, "pm.opts"))
-    assertList(resources$pm.opts, names = "unique")
+  if (hasName(resources, "walltime"))
+    assertNumber(resources$walltime, lower = 0)
+  if (hasName(resources, "memory"))
+    assertNumber(resources$memory, lower = 0)
   if (hasName(resources, "ncpus"))
     assertCount(resources$ncpus, positive = TRUE)
-  if (hasName(resources, "measure.memory"))
-    assertFlag(resources$measure.memory)
+
+  # handle resources which should be chunk options:
+  for (opt in chintersect(names(resources), batchtools$resources$per.chunk)) {
+    warningf("Option '%s' must be provided in 'chunk.options', not in 'resources'", opt)
+    if (!hasName(chunk.options,opt))
+      chunk.options[[opt]] = resources[[opt]]
+    resources[[opt]] = NULL
+  }
+
+  assertList(chunk.options, names = "unique")
+  chunk.options = insert(reg$default.chunk.options, chunk.options)
+  if (hasName(chunk.options, "measure.memory"))
+    assertFlag(chunk.options$measure.memory)
+  if (hasName(resources, "pm.backend"))
+    assertChoice(chunk.options$pm.backend, c("local", "multicore", "socket", "mpi"))
+  if (hasName(resources, "pm.opts"))
+    assertList(chunk.options$pm.opts, names = "unique")
+  if (hasName(resources, "foreach.backend"))
+    assertChoice(chunk.options$foreach.backend, c("seq", "parallel", "mpi"))
+
   sleep = getSleepFunction(reg, sleep)
 
   ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk")
@@ -206,11 +226,11 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
 
   # handle chunks.as.arrayjobs
   chunks.as.arrayjobs = FALSE
-  if (hasName(resources, "chunks.as.arrayjobs")) {
-    assertFlag(resources$chunks.as.arrayjobs)
-    if (resources$chunks.as.arrayjobs) {
+  if (hasName(chunk.options, "chunks.as.arrayjobs")) {
+    assertFlag(chunk.options$chunks.as.arrayjobs)
+    if (chunk.options$chunks.as.arrayjobs) {
       if (is.na(reg$cluster.functions$array.var)) {
-        info("Ignoring resource 'chunks.as.arrayjobs', not supported by cluster functions '%s'", reg$cluster.functions$name)
+        info("Ignoring 'chunks.as.arrayjobs', not supported by cluster functions '%s'", reg$cluster.functions$name)
       } else {
         chunks.as.arrayjobs = TRUE
       }
@@ -239,7 +259,11 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
 
   for (ch in chunks) {
     ids.chunk = ids[chunk == ch, c("job.id", "resource.id")]
-    jc = makeJobCollection(ids.chunk, resources = reg$resources[ids.chunk, on = "resource.id"]$resources[[1L]], reg = reg)
+    jc = makeJobCollection(
+      ids.chunk,
+      resources = reg$resources[ids.chunk, on = "resource.id"]$resources[[1L]],
+      chunk.options = chunk.options,
+      reg = reg)
     if (reg$cluster.functions$store.job.collection)
       writeRDS(jc, file = jc$uri)
 

@@ -4,8 +4,8 @@
 \alias{submitJobs}
 \title{Submit Jobs to the Batch Systems}
 \usage{
-submitJobs(ids = NULL, resources = list(), sleep = NULL,
-  reg = getDefaultRegistry())
+submitJobs(ids = NULL, resources = list(), chunk.options = list(),
+  sleep = NULL, reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -62,10 +62,6 @@ Some resources' names are standardized and it is good practice to stick to the f
  \item{ncpus:}{Number of (physical) CPUs to use on the slave.}
  \item{omp.threads:}{Number of threads to use via OpenMP. Used to set environment variable \dQuote{OMP_NUM_THREADS}.}
  \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}.}
- \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
- \item{chunks.as.array.jobs:}{Execute chunks as array jobs.}
- \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}
- \item{foreach.backend:}{Start a \pkg{foreach} backend on the slave.}
 }
 }
 
@@ -77,6 +73,12 @@ To chunk jobs together, job ids must be provided as \code{data.frame} with colum
 All jobs with the same chunk number will be executed sequentially inside the same batch job.
 The utility functions \code{\link{chunk}}, \code{\link{binpack}} and \code{\link{lpt}}
 can assist in grouping jobs.
+\describe{
+ \item{chunks.as.array.jobs:}{Execute chunks as array jobs.}
+ \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}
+ \item{foreach.backend:}{Start a \pkg{foreach} backend on the slave.}
+ \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
+}
 }
 
 \section{Array Jobs}{
@@ -108,7 +110,7 @@ If both are set, the setting via the resource takes precedence over the setting 
 
 \section{Measuring Memory}{
 
-Setting the resource \code{measure.memory} to \code{TRUE} turns on memory measurement:
+Setting the chunk option \code{measure.memory} to \code{TRUE} turns on memory measurement:
 \code{\link[base]{gc}} is called  directly before and after the job and the difference is
 stored in the internal database. Note that this is just a rough estimate and does
 neither work reliably for external code like C/C++ nor in combination with threading.
@@ -156,11 +158,11 @@ print(args)
 # Map function to create jobs
 ids = batchMap(fun, args = args, reg = tmp)
 
-# Set resources: enable memory measurement
-res = list(measure.memory = TRUE)
+# Set chunk options: enable memory measurement
+ch.opts = list(measure.memory = TRUE)
 
 # Submit jobs using the currently configured cluster functions
-submitJobs(ids, resources = res, reg = tmp)
+submitJobs(ids, chunk.options = ch.opts, reg = tmp)
 
 # Retrive information about memory, combine with parameters
 info = ijoin(getJobStatus(reg = tmp)[, .(job.id, mem.used)], getJobPars(reg = tmp))
