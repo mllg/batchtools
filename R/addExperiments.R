@@ -146,7 +146,12 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
       tab$pars.hash = calculateHash(tab)
 
       # merge with already defined experiments to get def.ids
-      tab = merge(reg$defs[, !c("problem", "algorithm", "prob.pars", "algo.pars")], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
+      if (nrow(reg$defs) == 0L) {
+        # this is no optimization, but fixes an strange error on r-devel/windows for merging empty data.tables
+        tab$def.id = NA_integer_
+      } else {
+        tab = merge(reg$defs[, !c("problem", "algorithm", "prob.pars", "algo.pars")], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
+      }
 
       # generate def ids for new experiments
       w = which(is.na(tab$def.id))
