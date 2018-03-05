@@ -11,7 +11,7 @@ is_on_ci = function() {
 makeTestRegistry = function(file.dir = NA, make.default = FALSE, ...) {
   reg = makeRegistry(file.dir = file.dir, make.default = make.default, ...)
   fd = reg$file.dir
-  if (!is_on_ci())
+  if (identical(Sys.getenv("NOT_CRAN"), "true") && !is_on_ci())
     reg.finalizer(e = reg, f = function(reg) if (fs::dir_exists(fd)) fs::dir_delete(fd), onexit = TRUE)
   return(reg)
 }
