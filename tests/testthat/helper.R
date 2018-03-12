@@ -8,6 +8,17 @@ is_on_ci = function() {
   identical(Sys.getenv("APPVEYOR"), "True") || identical(Sys.getenv("TRAVIS"), "true")
 }
 
+getSysConf = function() {
+  conf.file = findConfFile()
+  if (length(conf.file)) {
+    ee = new.env()
+    sys.source(conf.file, envir = ee)
+    as.list(ee)
+  } else {
+    list()
+  }
+}
+
 makeTestRegistry = function(file.dir = NA, make.default = FALSE, ...) {
   reg = makeRegistry(file.dir = file.dir, make.default = make.default, ...)
   fd = reg$file.dir
