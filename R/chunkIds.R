@@ -70,6 +70,8 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
 #'   \code{lpt} tries to even out the sum of elements in each chunk.
 #'   If more chunks than necessary are requested, empty chunks are ignored.
 #'   Mutually exclusive with \code{chunks.size}.
+#' @param shuffle [\code{logical(1)}]\cr
+#'   Shuffles the groups. Default is \code{TRUE}.
 #' @return [\code{integer}] giving the chunk number for each element of \code{x}.
 #' @seealso \code{\link{estimateRuntimes}}
 #' @export
@@ -121,20 +123,26 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
 #' ids[, chunk := chunk(job.id, chunk.size = 5), by = "problem"]
 #' ids[, chunk := .GRP, by = c("problem", "chunk")]
 #' dcast(ids, chunk ~ problem)
-chunk = function(x, n.chunks = NULL, chunk.size = NULL) {
+chunk = function(x, n.chunks = NULL, chunk.size = NULL, shuffle = TRUE) {
   assertAtomicVector(x)
 
   if (!xor(is.null(n.chunks), is.null(chunk.size)))
     stop("You must provide either 'n.chunks' (x)or 'chunk.size'")
   assertCount(n.chunks, positive = TRUE, null.ok = TRUE)
   assertCount(chunk.size, positive = TRUE, null.ok = TRUE)
+  assertFlag(shuffle)
 
   n = length(x)
   if (n == 0L)
     return(integer(0L))
   if (is.null(n.chunks))
     n.chunks = (n %/% chunk.size + (n %% chunk.size > 0L))
-  sample(as.integer((seq.int(0L, n - 1L) %% min(n.chunks, n))) + 1L)
+  chunks = as.integer((seq.int(0L, n - 1L) %% min(n.chunks, n))) + 1L
+  if (shuffle)
+    chunks = sample(chunks)
+  else
+    chunks = sort(chunks)
+  return(chunks)
 }
 
 #' @rdname chunk
