@@ -84,7 +84,9 @@ test_that("findOnSystem", {
     ids = batchMap(reg = reg, Sys.sleep, c(10, 10))
     submitJobs(reg = reg, ids = s.chunk(ids))
     expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
-    expect_equal(findExpired(reg = reg), none)
+    expect_equal(findExpired(reg = reg), noIds())
+
+    # ensure that the registry is not removed before jobs have finished
     waitForJobs(reg = reg, sleep = 1)
   })
 })
