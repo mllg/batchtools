@@ -91,10 +91,12 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
     fns = list.files(dir(reg, "updates"), full.names = TRUE)
     updates = lapply(fns, function(fn) {
       x = try(readRDS(fn), silent = TRUE)
-      if (is.error(x))
+      if (is.error(x)) {
         fs::file_delete(x)
-      setnames(x, "memory", "mem.used")
-      saveRDS(x, file = fn, version = 2L)
+      } else {
+        setnames(x, "memory", "mem.used")
+        saveRDS(x, file = fn, version = 2L)
+      }
     })
   }
 
