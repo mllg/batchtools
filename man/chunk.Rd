@@ -6,7 +6,7 @@
 \alias{binpack}
 \title{Chunk Jobs for Sequential Execution}
 \usage{
-chunk(x, n.chunks = NULL, chunk.size = NULL)
+chunk(x, n.chunks = NULL, chunk.size = NULL, shuffle = TRUE)
 
 lpt(x, n.chunks = 1L)
 
@@ -29,6 +29,9 @@ Requested chunk size for each single chunk.
 For \code{chunk} this is the number of elements in \code{x}, for \code{binpack} the size
 is determined by the sum of values in \code{x}.
 Mutually exclusive with \code{n.chunks}.}
+
+\item{shuffle}{[\code{logical(1)}]\cr
+Shuffles the groups. Default is \code{TRUE}.}
 }
 \value{
 [\code{integer}] giving the chunk number for each element of \code{x}.
