@@ -9,7 +9,6 @@ is_on_ci = function() {
 }
 
 getSysConf = function() {
-<<<<<<< HEAD
   conf.file = findConfFile()
   if (length(conf.file)) {
     ee = new.env()
@@ -18,12 +17,6 @@ getSysConf = function() {
   } else {
     list()
   }
-=======
-  ee = new.env()
-  conf.file = findConfFile()
-  sys.source(conf.file, envir = ee)
-  as.list(ee)
->>>>>>> fixed test for lido3
 }
 
 makeTestRegistry = function(file.dir = NA, make.default = FALSE, ...) {
