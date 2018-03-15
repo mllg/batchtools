@@ -31,7 +31,7 @@ sync = function(reg) {
       mtime = fs::file_info(fn)$modification_time
       if (difftime(Sys.time(), mtime, units = "mins") > 60) {
         info("Removing unreadable update file '%s'", fn)
-        fs::file_remove(fn)
+        file_remove(fn)
       }
       return(NULL)
     }
