@@ -27,7 +27,15 @@ sync = function(reg) {
 
   updates = lapply(fns, function(fn) {
     x = try(readRDS(fn), silent = TRUE)
-    if (is.error(x)) NULL else x
+    if (is.error(x)) {
+      mtime = fs::file_info(fn)$modification_time
+      if (difftime(Sys.time(), mtime, units = "mins") > 60) {
+        info("Removing unreadable update file '%s'", fn)
+        fs::file_remove(fn)
+      }
+      return(NULL)
+    }
+    return(x)
   })
 
   failed = vlapply(updates, is.null)
