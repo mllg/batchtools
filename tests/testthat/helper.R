@@ -62,8 +62,8 @@ suppressAll = function (expr) {
 }
 
 checkTables = function(reg, ...) {
-  expect_string(reg$hash)
-  expect_posixct(reg$mtime, len = 1L)
+  checkmate::expect_string(reg$hash)
+  checkmate::expect_posixct(reg$mtime, len = 1L)
 
   if (class(reg)[1L] == "Registry") {
     cols = c("def.id",   "job.pars")
@@ -73,8 +73,8 @@ checkTables = function(reg, ...) {
     types = c("integer", "character", "list",      "character", "list",      "character")
   }
   expect_is(reg$defs, "data.table")
-  expect_data_table(reg$defs, ncols = length(cols), ...)
-  expect_set_equal(colnames(reg$defs), cols)
+  checkmate::expect_data_table(reg$defs, ncols = length(cols), ...)
+  checkmate::expect_set_equal(colnames(reg$defs), cols)
   expect_equal(as.character(reg$defs[, lapply(.SD, class), .SDcols = cols]), types)
   expect_equal(key(reg$defs), "def.id")
   expect_equal(anyDuplicated(reg$defs, by = "def.id"), 0L)
@@ -87,8 +87,8 @@ checkTables = function(reg, ...) {
     types = c("integer", "integer", "numeric",   "numeric", "numeric", "character", "numeric",  "integer",     "character", "character",  "character", "character", "integer")
   }
   expect_is(reg$status, "data.table")
-  expect_data_table(reg$status, ncols = length(cols), ...)
-  expect_set_equal(colnames(reg$status), cols)
+  checkmate::expect_data_table(reg$status, ncols = length(cols), ...)
+  checkmate::expect_set_equal(colnames(reg$status), cols)
   expect_equal(as.character(reg$status[, lapply(.SD, class), .SDcols = cols]), types)
   expect_equal(key(reg$status), "job.id")
   expect_equal(anyDuplicated(reg$status, by = "job.id"), 0L)
@@ -96,31 +96,31 @@ checkTables = function(reg, ...) {
 
   cols = c("resource.id", "resource.hash", "resources")
   types = c("integer", "character", "list")
-  expect_data_table(reg$resources, ncols = length(cols), ...)
-  expect_set_equal(colnames(reg$resources), cols)
+  checkmate::expect_data_table(reg$resources, ncols = length(cols), ...)
+  checkmate::expect_set_equal(colnames(reg$resources), cols)
   expect_equal(as.character(reg$resources[, lapply(.SD, class), .SDcols = cols]), types)
   expect_equal(key(reg$resources), "resource.id")
   expect_equal(anyDuplicated(reg$resources, by = "resource.id"), 0L)
 
   cols = c("job.id", "tag")
   types = c("integer", "character")
-  expect_data_table(reg$tags, ncols = length(cols), ...)
-  expect_set_equal(colnames(reg$tags), cols)
+  checkmate::expect_data_table(reg$tags, ncols = length(cols), ...)
+  checkmate::expect_set_equal(colnames(reg$tags), cols)
   expect_equal(as.character(reg$tags[, lapply(.SD, class), .SDcols = cols]), types)
   expect_equal(key(reg$tags), "job.id")
 
   if (class(reg)[1L] == "ExperimentRegistry") {
-    expect_character(reg$problems, any.missing = FALSE, unique = TRUE)
-    expect_character(reg$algorithms, any.missing = FALSE, unique = TRUE)
-    expect_integer(reg$status$repl, lower = 1L, any.missing = FALSE)
-    expect_subset(reg$defs$problem, reg$problems)
-    expect_subset(reg$defs$algorithm, reg$algorithms)
+    checkmate::expect_character(reg$problems, any.missing = FALSE, unique = TRUE)
+    checkmate::expect_character(reg$algorithms, any.missing = FALSE, unique = TRUE)
+    checkmate::expect_integer(reg$status$repl, lower = 1L, any.missing = FALSE)
+    checkmate::expect_subset(reg$defs$problem, reg$problems)
+    checkmate::expect_subset(reg$defs$algorithm, reg$algorithms)
   }
 
   expect_key_set_equal(reg$defs, reg$status, by = "def.id")
   expect_key_set_equal(reg$status[!is.na(resource.id)], reg$resources, by = "resource.id")
   if (nrow(reg$status) > 0L)
-    expect_data_table(ajoin(reg$tags, reg$status, by = "job.id"), nrow = 0)
+    checkmate::expect_data_table(ajoin(reg$tags, reg$status, by = "job.id"), nrow = 0)
   else
     expect_equal(nrow(reg$tags), 0)
 }
@@ -138,7 +138,7 @@ checkStatusIntegrity = function(reg) {
   #         1         1      1       0 -> 7  (done)
   #         1         1      1       1 -> 15 (error)
 
-  expect_subset(tab$code, c(0L, 1L, 3L, 7L, 15L), info = "Status Integrity")
+  checkmate::expect_subset(tab$code, c(0L, 1L, 3L, 7L, 15L), info = "Status Integrity")
 }
 
 expect_copied = function(x, y) {

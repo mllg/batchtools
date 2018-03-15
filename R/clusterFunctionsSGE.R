@@ -25,9 +25,11 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSGE = function(template = "sge", scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsSGE = function(template = "sge", list.queued =  c("-u $USER", "-s p"), list.running =  c("-u $USER", "-s rs"), scheduler.latency = 1, fs.latency = 65) { # nocov start
   template = findTemplateFile(template)
   template = cfReadBrewTemplate(template)
+  assertCharacter(list.running, any.missing = FALSE)
+  assertCharacter(list.running, any.missing = FALSE)
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
@@ -53,11 +55,11 @@ makeClusterFunctionsSGE = function(template = "sge", scheduler.latency = 1, fs.l
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c("-u $USER", "-s p"))
+    listJobs(reg, list.queued)
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c("-u $USER", "-s rs"))
+    listJobs(reg, list.running)
   }
 
   killJob = function(reg, batch.id) {

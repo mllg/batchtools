@@ -24,9 +24,11 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsOpenLava = function(template = "openlava", scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsOpenLava = function(template = "openlava", list.queued = c("-u $USER", "-w", "-p"), list.running = c("-u $USER", "-w", "-r"), scheduler.latency = 1, fs.latency = 65) { # nocov start
   template = findTemplateFile(template)
   template = cfReadBrewTemplate(template)
+  assertCharacter(list.running, any.missing = FALSE)
+  assertCharacter(list.running, any.missing = FALSE)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
   # when unfinished jobs are found, and 255 when no jobs are found,
@@ -59,11 +61,11 @@ makeClusterFunctionsOpenLava = function(template = "openlava", scheduler.latency
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c("-u $USER", "-w", "-p"))
+    listJobs(reg, list.queued)
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c("-u $USER", "-w", "-r"))
+    listJobs(reg, list.running)
   }
 
   killJob = function(reg, batch.id) {

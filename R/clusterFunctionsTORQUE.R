@@ -20,9 +20,11 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsTORQUE = function(template = "torque", list.queued = c("-u $USER", "-s QW"), list.running = c("-u $USER", "-s EHRT"), scheduler.latency = 1, fs.latency = 65) { # nocov start
   template = findTemplateFile(template)
   template = cfReadBrewTemplate(template, "##")
+  assertCharacter(list.running, any.missing = FALSE)
+  assertCharacter(list.running, any.missing = FALSE)
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
@@ -62,13 +64,11 @@ makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1
   }
 
   listJobsQueued = function(reg) {
-    args = c("-u $USER", "-s QW")
-    listJobs(reg, args)
+    listJobs(reg, list.queued)
   }
 
   listJobsRunning = function(reg) {
-    args = c("-u $USER", "-s EHRT")
-    listJobs(reg, args)
+    listJobs(reg,list.running)
   }
 
   makeClusterFunctions(name = "TORQUE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,

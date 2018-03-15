@@ -38,13 +38,15 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.jobs = TRUE, nodename = "localhost", scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.jobs = TRUE, nodename = "localhost", list.queued = c("-h", "-o %i", "-u $USER", "-t PD"), list.running = c("-h", "-o %i", "-u $USER", "-t R,S,CG"), scheduler.latency = 1, fs.latency = 65) { # nocov start
   if (!is.null(clusters))
     assertString(clusters, min.chars = 1L)
   assertFlag(array.jobs)
   assertString(nodename)
   template = findTemplateFile(template)
   template = cfReadBrewTemplate(template, "##")
+  assertCharacter(list.running, any.missing = FALSE)
+  assertCharacter(list.running, any.missing = FALSE)
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
@@ -92,13 +94,15 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
   }
 
   listJobsQueued = function(reg) {
-    args = c("-h", "-o %i", "-u $USER", "-t PD", sprintf("--clusters=%s", clusters))
-    listJobs(reg, args)
+    if (!is.null(clusters))
+      list.queued = c(list.queued, sprintf("--clusters=%s", clusters))
+    listJobs(reg, list.queued)
   }
 
   listJobsRunning = function(reg) {
-    args = c("-h", "-o %i", "-u $USER", "-t R,S,CG", sprintf("--clusters=%s", clusters))
-    listJobs(reg, args)
+    if (!is.null(clusters))
+      list.running = c(list.running, sprintf("--clusters=%s", clusters))
+    listJobs(reg, list.running)
   }
 
   killJob = function(reg, batch.id) {
