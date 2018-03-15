@@ -21,6 +21,10 @@
 #' @templateVar cf.name lsf
 #' @template template
 #' @inheritParams makeClusterFunctions
+#' @param list.queued [\code{character()}]\cr
+#'   Arguments passed to \code{bjobs} to list queued jobs.
+#' @param list.running [\code{character()}]\cr
+#'   Arguments passed to \code{bjobs} to list running jobs.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export

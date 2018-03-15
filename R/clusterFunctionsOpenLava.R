@@ -20,6 +20,10 @@
 #'
 #' @templateVar cf.name openlava
 #' @template template
+#' @param list.queued [\code{character()}]\cr
+#'   Arguments passed to \code{bsub} to list queued jobs.
+#' @param list.running [\code{character()}]\cr
+#'   Arguments passed to \code{bsub} to list running jobs.
 #' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions

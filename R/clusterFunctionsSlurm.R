@@ -34,6 +34,10 @@
 #'    \item{The absolute path to the \code{file.dir} are identical on the machines, or paths are provided relative to the
 #'      home directory.}
 #'  }
+#' @param list.queued [\code{character()}]\cr
+#'   Arguments passed to \code{squeue} to list queued jobs.
+#' @param list.running [\code{character()}]\cr
+#'   Arguments passed to \code{squeue} to list running jobs.
 #' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions

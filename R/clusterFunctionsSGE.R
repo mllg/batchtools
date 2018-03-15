@@ -21,6 +21,10 @@
 #'
 #' @templateVar cf.name sge
 #' @template template
+#' @param list.queued [\code{character()}]\cr
+#'   Arguments passed to \code{qsub} to list queued jobs.
+#' @param list.running [\code{character()}]\cr
+#'   Arguments passed to \code{qsub} to list running jobs.
 #' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
