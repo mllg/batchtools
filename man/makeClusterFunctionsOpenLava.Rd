@@ -4,8 +4,9 @@
 \alias{makeClusterFunctionsOpenLava}
 \title{ClusterFunctions for OpenLava}
 \usage{
-makeClusterFunctionsOpenLava(template = "openlava", scheduler.latency = 1,
-  fs.latency = 65)
+makeClusterFunctionsOpenLava(template = "openlava",
+  list.queued = c("-u $USER", "-w", "-p"), list.running = c("-u $USER",
+  "-w", "-r"), scheduler.latency = 1, fs.latency = 65)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -20,6 +21,12 @@ Either a path to a \pkg{brew} template file (with extension \dQuote{tmpl}), or a
 Here, the default for \code{template} is \dQuote{openlava}.
 Alternatively, the template itself can be provided directly as a string which is then passed to \pkg{brew}.
 The string must include at least on newline (\dQuote{\\n}) in this case.}
+
+\item{list.queued}{[\code{character()}]\cr
+Arguments passed to \code{bsub} to list queued jobs.}
+
+\item{list.running}{[\code{character()}]\cr
+Arguments passed to \code{bsub} to list running jobs.}
 
 \item{scheduler.latency}{[\code{numeric(1)}]\cr
 Time to sleep after important interactions with the scheduler to ensure a sane state.

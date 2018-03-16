@@ -5,8 +5,9 @@
 \title{ClusterFunctions for Slurm Systems}
 \usage{
 makeClusterFunctionsSlurm(template = "slurm", clusters = NULL,
-  array.jobs = TRUE, nodename = "localhost", scheduler.latency = 1,
-  fs.latency = 65)
+  array.jobs = TRUE, nodename = "localhost", list.queued = c("-h",
+  "-o \%i", "-u $USER", "-t PD"), list.running = c("-h", "-o \%i", "-u $USER",
+  "-t R,S,CG"), scheduler.latency = 1, fs.latency = 65)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -38,6 +39,12 @@ Nodename of the master. All commands are send via SSH to this host. Only works i
   \item{The absolute path to the \code{file.dir} are identical on the machines, or paths are provided relative to the
     home directory.}
 }}
+
+\item{list.queued}{[\code{character()}]\cr
+Arguments passed to \code{squeue} to list queued jobs.}
+
+\item{list.running}{[\code{character()}]\cr
+Arguments passed to \code{squeue} to list running jobs.}
 
 \item{scheduler.latency}{[\code{numeric(1)}]\cr
 Time to sleep after important interactions with the scheduler to ensure a sane state.

@@ -21,12 +21,18 @@
 #' @templateVar cf.name lsf
 #' @template template
 #' @inheritParams makeClusterFunctions
+#' @param list.queued [\code{character()}]\cr
+#'   Arguments passed to \code{bjobs} to list queued jobs.
+#' @param list.running [\code{character()}]\cr
+#'   Arguments passed to \code{bjobs} to list running jobs.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsLSF = function(template = "lsf", scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsLSF = function(template = "lsf", list.queued = c("-u $USER", "-w", "-p"), list.running =  c("-u $USER", "-w", "-r"), scheduler.latency = 1, fs.latency = 65) { # nocov start
   template = findTemplateFile(template)
   template = cfReadBrewTemplate(template)
+  assertCharacter(list.running, any.missing = FALSE)
+  assertCharacter(list.running, any.missing = FALSE)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
   # when unfinished jobs are found, and 255 when no jobs are found,
@@ -59,11 +65,11 @@ makeClusterFunctionsLSF = function(template = "lsf", scheduler.latency = 1, fs.l
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c("-u $USER", "-w", "-p"))
+    listJobs(reg, list.queued)
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c("-u $USER", "-w", "-r"))
+    listJobs(reg, list.running)
   }
 
   killJob = function(reg, batch.id) {

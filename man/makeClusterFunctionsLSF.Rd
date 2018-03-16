@@ -4,7 +4,8 @@
 \alias{makeClusterFunctionsLSF}
 \title{ClusterFunctions for LSF Systems}
 \usage{
-makeClusterFunctionsLSF(template = "lsf", scheduler.latency = 1,
+makeClusterFunctionsLSF(template = "lsf", list.queued = c("-u $USER", "-w",
+  "-p"), list.running = c("-u $USER", "-w", "-r"), scheduler.latency = 1,
   fs.latency = 65)
 }
 \arguments{
@@ -20,6 +21,12 @@ Either a path to a \pkg{brew} template file (with extension \dQuote{tmpl}), or a
 Here, the default for \code{template} is \dQuote{lsf}.
 Alternatively, the template itself can be provided directly as a string which is then passed to \pkg{brew}.
 The string must include at least on newline (\dQuote{\\n}) in this case.}
+
+\item{list.queued}{[\code{character()}]\cr
+Arguments passed to \code{bjobs} to list queued jobs.}
+
+\item{list.running}{[\code{character()}]\cr
+Arguments passed to \code{bjobs} to list running jobs.}
 
 \item{scheduler.latency}{[\code{numeric(1)}]\cr
 Time to sleep after important interactions with the scheduler to ensure a sane state.

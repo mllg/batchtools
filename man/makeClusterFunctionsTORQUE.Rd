@@ -4,7 +4,8 @@
 \alias{makeClusterFunctionsTORQUE}
 \title{ClusterFunctions for OpenPBS/TORQUE Systems}
 \usage{
-makeClusterFunctionsTORQUE(template = "torque", scheduler.latency = 1,
+makeClusterFunctionsTORQUE(template = "torque", list.queued = c("-u $USER",
+  "-s QW"), list.running = c("-u $USER", "-s EHRT"), scheduler.latency = 1,
   fs.latency = 65)
 }
 \arguments{
@@ -20,6 +21,12 @@ Either a path to a \pkg{brew} template file (with extension \dQuote{tmpl}), or a
 Here, the default for \code{template} is \dQuote{torque}.
 Alternatively, the template itself can be provided directly as a string which is then passed to \pkg{brew}.
 The string must include at least on newline (\dQuote{\\n}) in this case.}
+
+\item{list.queued}{[\code{character()}]\cr
+Arguments passed to \code{qsub} to list queued jobs.}
+
+\item{list.running}{[\code{character()}]\cr
+Arguments passed to \code{qsub} to list running jobs.}
 
 \item{scheduler.latency}{[\code{numeric(1)}]\cr
 Time to sleep after important interactions with the scheduler to ensure a sane state.
