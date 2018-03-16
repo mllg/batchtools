@@ -59,11 +59,11 @@ makeClusterFunctionsLSF = function(template = "lsf", scheduler.latency = 1, fs.l
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c("-u $USER", "-w", "-p"))
+    listJobs(reg, c(shQuote("-u $USER"), "-w", "-p"))
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c("-u $USER", "-w", "-r"))
+    listJobs(reg, c(shQuote("-u $USER"), "-w", "-r"))
   }
 
   killJob = function(reg, batch.id) {

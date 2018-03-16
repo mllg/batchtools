@@ -92,12 +92,12 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
   }
 
   listJobsQueued = function(reg) {
-    args = c("-h", "-o %i", "-u $USER", "-t PD", sprintf("--clusters=%s", clusters))
+    args = c("-h", "-o %i", shQuote("-u $USER"), "-t PD", sprintf("--clusters=%s", clusters))
     listJobs(reg, args)
   }
 
   listJobsRunning = function(reg) {
-    args = c("-h", "-o %i", "-u $USER", "-t R,S,CG", sprintf("--clusters=%s", clusters))
+    args = c("-h", "-o %i", shQuote("-u $USER"), "-t R,S,CG", sprintf("--clusters=%s", clusters))
     listJobs(reg, args)
   }
 

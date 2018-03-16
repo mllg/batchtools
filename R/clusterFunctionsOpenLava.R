@@ -59,11 +59,11 @@ makeClusterFunctionsOpenLava = function(template = "openlava", scheduler.latency
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c("-u $USER", "-w", "-p"))
+    listJobs(reg, c(shQuote("-u $USER"), "-w", "-p"))
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c("-u $USER", "-w", "-r"))
+    listJobs(reg, c(shQuote("-u $USER"), "-w", "-r"))
   }
 
   killJob = function(reg, batch.id) {

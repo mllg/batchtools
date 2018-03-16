@@ -62,12 +62,12 @@ makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1
   }
 
   listJobsQueued = function(reg) {
-    args = c("-u $USER", "-s QW")
+    args = c(shQuote("-u $USER"), "-s QW")
     listJobs(reg, args)
   }
 
   listJobsRunning = function(reg) {
-    args = c("-u $USER", "-s EHRT")
+    args = c(shQuote("-u $USER"), "-s EHRT")
     listJobs(reg, args)
   }
 
