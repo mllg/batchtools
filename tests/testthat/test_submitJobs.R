@@ -5,7 +5,8 @@ test_that("submitJobs", {
   fun = function(...) list(...)
   ids = batchMap(fun, i = 1:3, reg = reg)
 
-  submitAndWait(reg, 1:2, resources = list(foo = "bar"))
+  submitAndWait(reg, 1, resources = list(foo = "bar", cluster = "a"))
+  submitAndWait(reg, 2, resources = list(foo = "bar", cluster = "b"))
   checkTables(reg)
 
   expect_integer(reg$status[1:2, resource.id], any.missing = FALSE)
