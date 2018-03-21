@@ -18,13 +18,21 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Cluster Functions Helper to Write Job Description Files — cfBrewTemplate" />
+
+<meta property="og:description" content="This function is only intended for use in your own cluster functions implementation.
+Calls brew silently on your template, any error will lead to an exception. If debug mode is
+enabled (via environment variable &#8220;DEBUGME&#8221; set to &#8220;batchtools&#8221;),
+the file is stored at the same place as the corresponding
+job file in the &#8220;jobs&#8221;-subdir of your files directory, otherwise as tempfile on the local system." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +72,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +95,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Cluster Functions Helper to Write Job Description Files</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
     </div>
 
     
@@ -104,17 +113,17 @@ job file in the &#8220;jobs&#8221;-subdir of your files directory, otherwise as 
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]<br />
 Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
     </tr>
     <tr>
       <th>text</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 String ready to be brewed. See <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code> to read a template from the file system.</p></td>
     </tr>
     <tr>
       <th>jc</th>
-      <td><p>[<code><a href='JobCollection.html'>JobCollection</a>)</code>]
+      <td><p>[<code><a href='JobCollection.html'>JobCollection</a>)</code>]<br />
 Will be used as environment to brew the template file in. See <code><a href='JobCollection.html'>JobCollection</a></code> for a list of all
 available variables.</p></td>
     </tr>
@@ -162,3 +171,4 @@ available variables.</p></td>
 
   </body>
 </html>
+

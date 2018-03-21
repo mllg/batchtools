@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Create a SubmitJobResult — makeSubmitJobResult" />
+
+<meta property="og:description" content="This function is only intended for use in your own cluster functions implementation.
+Use this function in your implementation of makeClusterFunctions to create a return
+value for the submitJob function." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +70,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +93,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a SubmitJobResult</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
     </div>
 
     
@@ -103,26 +110,26 @@ value for the <code>submitJob</code> function.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>status</th>
-      <td><p>[<code>integer(1)</code>]
+      <td><p>[<code>integer(1)</code>]<br />
 Launch status of job. 0 means success, codes between 1 and 100 are temporary errors and any
 error greater than 100 is a permanent failure.</p></td>
     </tr>
     <tr>
       <th>batch.id</th>
-      <td><p>[<code>character()</code>]
+      <td><p>[<code>character()</code>]<br />
 Unique id of this job on batch system, as given by the batch system.
 Must be globally unique so that the job can be terminated using just this information.
 For array jobs, this may be a vector of length equal to the number of jobs in the array.</p></td>
     </tr>
     <tr>
       <th>log.file</th>
-      <td><p>[<code>character()</code>]
+      <td><p>[<code>character()</code>]<br />
 Log file. If <code>NA</code>, defaults to <code>[job.hash].log</code>.
 Some cluster functions set this for array jobs.</p></td>
     </tr>
     <tr>
       <th>msg</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Optional error message in case <code>status</code> is not equal to 0. Default is &#8220;OK&#8221;,
 &#8220;TEMPERROR&#8221;, &#8220;ERROR&#8221;, depending on <code>status</code>.</p></td>
     </tr>
@@ -171,3 +178,4 @@ Optional error message in case <code>status</code> is not equal to 0. Default is
 
   </body>
 </html>
+

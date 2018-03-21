@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Run OS Commands on Local or Remote Machines — runOSCommand" />
+
+<meta property="og:description" content="This is a helper function to run arbitrary OS commands on local or remote machines.
+The interface is similar to system2, but it always returns the exit status
+and the output." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +70,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +93,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Run OS Commands on Local or Remote Machines</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/runOSCommand.R'><code>R/runOSCommand.R</code></a></small>
     </div>
 
     
@@ -103,22 +110,22 @@ The interface is similar to <code><a href='http://www.rdocumentation.org/package
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>sys.cmd</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Command to run.</p></td>
     </tr>
     <tr>
       <th>sys.args</th>
-      <td><p>[<code>character</code>]
+      <td><p>[<code>character</code>]<br />
 Arguments for <code>sys.cmd</code>.</p></td>
     </tr>
     <tr>
       <th>stdin</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Argument passed to <code><a href='http://www.rdocumentation.org/packages/base/topics/system2'>system2</a></code>.</p></td>
     </tr>
     <tr>
       <th>nodename</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Name of the SSH node to run the command on. If set to &#8220;localhost&#8221; (default), the command
 is not piped through SSH.</p></td>
     </tr>
@@ -174,3 +181,4 @@ is not piped through SSH.</p></td>
 
   </body>
 </html>
+

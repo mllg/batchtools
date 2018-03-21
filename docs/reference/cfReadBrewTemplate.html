@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Cluster Functions Helper to Parse a Brew Template — cfReadBrewTemplate" />
+
+<meta property="og:description" content="This function is only intended for use in your own cluster functions implementation.
+This function is only intended for use in your own cluster functions implementation.
+Simply reads your template file and returns it as a character vector." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +70,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +93,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Cluster Functions Helper to Parse a Brew Template</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
     </div>
 
     
@@ -102,13 +109,13 @@ Simply reads your template file and returns it as a character vector.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>template</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Path to template file or single string (containing newlines) which is then passed
 to <code><a href='http://www.rdocumentation.org/packages/brew/topics/brew'>brew</a></code>.</p></td>
     </tr>
     <tr>
       <th>comment.string</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Ignore lines starting with this string.</p></td>
     </tr>
     </table>
@@ -155,3 +162,4 @@ Ignore lines starting with this string.</p></td>
 
   </body>
 </html>
+

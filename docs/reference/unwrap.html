@@ -18,13 +18,21 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Unwrap Nested Data Frames — unwrap" />
+
+<meta property="og:description" content="Some functions (e.g., getJobPars, getJobResources or reduceResultsDataTable
+return a data.table with columns of type list.
+These columns can be unnested/unwrapped with this function.
+The contents of these columns  will be transformed to a data.table and cbind-ed
+to the input data.frame x, replacing the original nested column." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +72,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +95,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Unwrap Nested Data Frames</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/unwrap.R'><code>R/unwrap.R</code></a></small>
     </div>
 
     
@@ -106,18 +115,18 @@ to the input data.frame <code>x</code>, replacing the original nested column.</p
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>[<code>data.frame</code> | <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]
+      <td><p>[<code>data.frame</code> | <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]<br />
 Data frame to flatten.</p></td>
     </tr>
     <tr>
       <th>cols</th>
-      <td><p>[<code>character</code>]
+      <td><p>[<code>character</code>]<br />
 Columns to consider for this operation. If set to <code>NULL</code> (default),
 will operate on all columns of type &#8220;list&#8221;.</p></td>
     </tr>
     <tr>
       <th>sep</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 If <code>NULL</code> (default), the column names of the additional columns will re-use the names
 of the nested <code>list</code>/<code>data.frame</code>.
 This may lead to name clashes.
@@ -180,3 +189,4 @@ The function <code>flatten</code> is discouraged to use for this reason in favor
 
   </body>
 </html>
+

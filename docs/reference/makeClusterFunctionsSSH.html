@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="ClusterFunctions for Remote SSH Execution — makeClusterFunctionsSSH" />
+
+<meta property="og:description" content="Jobs are spawned by starting multiple R sessions via Rscript over SSH.
+If the hostname of the Worker equals &#8220;localhost&#8221;,
+Rscript is called directly so that you do not need to have an SSH client installed." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +70,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +93,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>ClusterFunctions for Remote SSH Execution</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSSH.R'><code>R/clusterFunctionsSSH.R</code></a></small>
     </div>
 
     
@@ -102,12 +109,12 @@ If the hostname of the <code><a href='Worker.html'>Worker</a></code> equals &#82
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>workers</th>
-      <td><p>[<code>list</code> of <code><a href='Worker.html'>Worker</a></code>]
+      <td><p>[<code>list</code> of <code><a href='Worker.html'>Worker</a></code>]<br />
 List of Workers as constructed with <code><a href='Worker.html'>Worker</a></code>.</p></td>
     </tr>
     <tr>
       <th>fs.latency</th>
-      <td><p>[<code>numeric(1)</code>]
+      <td><p>[<code>numeric(1)</code>]<br />
 Expected maximum latency of the file system, in seconds.
 Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 access files and directories.
@@ -177,3 +184,4 @@ the communication with the nodes.</p>
 
   </body>
 </html>
+

@@ -18,13 +18,17 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Chunk Jobs for Sequential Execution — chunkIds" />
+
+<meta property="og:description" content="This function is deprecated in favor of the more flexible chunk, lpt and binpack." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +68,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +91,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Chunk Jobs for Sequential Execution</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/chunkIds.R'><code>R/chunkIds.R</code></a></small>
     </div>
 
     
@@ -101,7 +106,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>ids</th>
-      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]<br />
 A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
@@ -110,7 +115,7 @@ Invalid ids are ignored.</p></td>
     </tr>
     <tr>
       <th>n.chunks</th>
-      <td><p>[<code>integer(1)</code>]
+      <td><p>[<code>integer(1)</code>]<br />
 Requested number of chunks.
 The function <code>chunk</code> distributes the number of elements in <code>x</code> evenly while
 <code>lpt</code> tries to even out the sum of elements in each chunk.
@@ -119,7 +124,7 @@ Mutually exclusive with <code>chunks.size</code>.</p></td>
     </tr>
     <tr>
       <th>chunk.size</th>
-      <td><p>[<code>integer(1)</code>]
+      <td><p>[<code>integer(1)</code>]<br />
 Requested chunk size for each single chunk.
 For <code>chunk</code> this is the number of elements in <code>x</code>, for <code>binpack</code> the size
 is determined by the sum of values in <code>x</code>.
@@ -127,7 +132,7 @@ Mutually exclusive with <code>n.chunks</code>.</p></td>
     </tr>
     <tr>
       <th>group.by</th>
-      <td><p>[<code>character(0)</code>]
+      <td><p>[<code>character(0)</code>]<br />
 If <code>ids</code> is a <code>data.frame</code> with additional columns
 (in addition to the required column &#8220;job.id&#8221;), then the chunking is performed using
 subgroups defined by the columns set in <code>group.by</code>.
@@ -135,7 +140,7 @@ See example.</p></td>
     </tr>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]<br />
 Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
     </tr>
     </table>
@@ -177,3 +182,4 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
   </body>
 </html>
+

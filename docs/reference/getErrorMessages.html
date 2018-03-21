@@ -18,13 +18,17 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Retrieve Error Messages — getErrorMessages" />
+
+<meta property="og:description" content="Extracts error messages from the internal data base and returns them in a table." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +68,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +91,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Retrieve Error Messages</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/getErrorMessages.R'><code>R/getErrorMessages.R</code></a></small>
     </div>
 
     
@@ -101,7 +106,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>ids</th>
-      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]<br />
 A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
@@ -110,13 +115,13 @@ Invalid ids are ignored.</p></td>
     </tr>
     <tr>
       <th>missing.as.error</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 Treat missing results as errors? If <code>TRUE</code>, the error message &#8220;[not terminated]&#8221; is imputed
 for jobs which have not terminated. Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]<br />
 Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
     </tr>
     </table>
@@ -135,7 +140,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) <span class='kw'>if</span> (<span class='no'>i</span> <span class='kw'>==</span> <span class='fl'>3</span>) <span class='fu'>stop</span>(<span class='no'>i</span>) <span class='kw'>else</span> <span class='no'>i</span>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) <span class='kw'>if</span> (<span class='no'>i</span> <span class='kw'>==</span> <span class='fl'>3</span>) <span class='fu'>stop</span>(<span class='no'>i</span>) <span class='kw'>else</span> <span class='no'>i</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>fun</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>getErrorMessages</span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id terminated  error                     message
 #&gt;     &lt;int&gt;     &lt;lgcl&gt; &lt;lgcl&gt;                      &lt;char&gt;
 #&gt; 1:      1       TRUE  FALSE                          NA
@@ -179,3 +184,4 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
   </body>
 </html>
+

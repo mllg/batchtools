@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Cluster Functions Helper to Handle Unknown Errors — cfHandleUnknownSubmitError" />
+
+<meta property="og:description" content="This function is only intended for use in your own cluster functions implementation.
+Simply constructs a SubmitJobResult object with status code 101, NA as batch id and
+an informative error message containing the output of the OS command in output." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +70,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +93,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Cluster Functions Helper to Handle Unknown Errors</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
     </div>
 
     
@@ -102,17 +109,17 @@ an informative error message containing the output of the OS command in <code>ou
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>cmd</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 OS command used to submit the job, e.g. qsub.</p></td>
     </tr>
     <tr>
       <th>exit.code</th>
-      <td><p>[<code>integer(1)</code>]
+      <td><p>[<code>integer(1)</code>]<br />
 Exit code of the OS command, should not be 0.</p></td>
     </tr>
     <tr>
       <th>output</th>
-      <td><p>[<code>character</code>]
+      <td><p>[<code>character</code>]<br />
 Output of the OS command, hopefully an informative error message.
 If these are multiple lines in a vector, they are automatically joined.</p></td>
     </tr>
@@ -160,3 +167,4 @@ If these are multiple lines in a vector, they are automatically joined.</p></td>
 
   </body>
 </html>
+

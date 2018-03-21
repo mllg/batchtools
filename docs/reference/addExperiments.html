@@ -18,13 +18,21 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Add Experiments to the Registry — addExperiments" />
+
+<meta property="og:description" content="Adds experiments (parametrized combinations of problems with algorithms) to the registry and thereby defines batch jobs.
+If multiple problem designs or algorithm designs are provided, they are combined via the Cartesian product.
+E.g., if you have two problems p1 and p2 and three algorithms a1, a2 and a3,
+addExperiments creates experiments for all parameters for the combinations (p1, a1), (p1, a2),
+(p1, a3), (p2, a1), (p2, a2) and (p2, a3)." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +72,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +95,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add Experiments to the Registry</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/addExperiments.R'><code>R/addExperiments.R</code></a></small>
     </div>
 
     
@@ -105,26 +114,26 @@ E.g., if you have two problems <code>p1</code> and <code>p2</code> and three alg
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>prob.designs</th>
-      <td><p>[named list of <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]
+      <td><p>[named list of <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]<br />
 Named list of data frames (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>).
 The name must match the problem name while the column names correspond to parameters of the problem.
 If <code>NULL</code>, experiments for all defined problems without any parameters are added.</p></td>
     </tr>
     <tr>
       <th>algo.designs</th>
-      <td><p>[named list of <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> or <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]
+      <td><p>[named list of <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> or <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]<br />
 Named list of data frames (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>).
 The name must match the algorithm name while the column names correspond to parameters of the algorithm.
 If <code>NULL</code>, experiments for all defined algorithms without any parameters are added.</p></td>
     </tr>
     <tr>
       <th>repls</th>
-      <td><p>[<code>integer(1)</code>]
+      <td><p>[<code>integer(1)</code>]<br />
 Number of replications for each experiment.</p></td>
     </tr>
     <tr>
       <th>combine</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 How to combine the rows of a single problem design with the rows of a single algorithm design?
 Default is &#8220;crossprod&#8221; which combines each row of the problem design which each row of the algorithm design
 in a cross-product fashion. Set to &#8220;bind&#8221; to just <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code> the tables of
@@ -132,7 +141,7 @@ problem and algorithm designs where the shorter table is repeated if necessary.<
     </tr>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]
+      <td><p>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]<br />
 Registry. If not explicitly passed, uses the last created registry.</p></td>
     </tr>
     </table>
@@ -156,7 +165,7 @@ Therefore, this function will warn about factor variables if the following condi
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># add first problem</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>...</span>) <span class='fu'>rnorm</span>(<span class='no'>n</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>sd</span>)
 <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"rnorm"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'rnorm'</span></div><div class='input'>
@@ -279,3 +288,4 @@ Therefore, this function will warn about factor variables if the following condi
 
   </body>
 </html>
+

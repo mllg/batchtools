@@ -18,13 +18,33 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="ClusterFunctions for Docker — makeClusterFunctionsDocker" />
+
+<meta property="og:description" content="Cluster functions for Docker/Docker Swarm (https://docs.docker.com/swarm/).
+The submitJob function executes
+docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd].
+Arguments docker.args, image.args and image can be set on construction.
+The resources part takes the named resources ncpus and memory
+from submitJobs and maps them to the arguments --cpu-shares and --memory
+(in Megabytes). The resource threads is mapped to the environment variables &#8220;OMP_NUM_THREADS&#8221;
+and &#8220;OPENBLAS_NUM_THREADS&#8221;.
+To reliably identify jobs in the swarm, jobs are labeled with &#8220;batchtools=[job.hash]&#8221; and named
+using the current login name (label &#8220;user&#8221;) and the job hash (label &#8220;batchtools&#8221;).
+listJobsRunning uses docker [docker.args] ps --format={{.ID}} to filter for running jobs.
+killJobs uses docker [docker.args] kill [batch.id] to filter for running jobs.
+These cluster functions use a Hook to remove finished jobs before a new submit and every time the Registry
+is synchronized (using syncRegistry).
+This is currently required because docker does not remove terminated containers automatically.
+Use docker ps -a --filter 'label=batchtools' --filter 'status=exited' to identify and remove terminated
+containers manually (or usa a cron job)." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +84,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +107,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>ClusterFunctions for Docker</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsDocker.R'><code>R/clusterFunctionsDocker.R</code></a></small>
     </div>
 
     
@@ -99,11 +120,9 @@ from <code><a href='submitJobs.html'>submitJobs</a></code> and maps them to the 
 (in Megabytes). The resource <code>threads</code> is mapped to the environment variables &#8220;OMP_NUM_THREADS&#8221;
 and &#8220;OPENBLAS_NUM_THREADS&#8221;.
 To reliably identify jobs in the swarm, jobs are labeled with &#8220;batchtools=[job.hash]&#8221; and named
-using the current login name (label &#8220;user&#8221;) and the job hash (label &#8220;batchtools&#8221;).
-
-    <code>listJobsRunning</code> uses <code>docker [docker.args] ps --format={{.ID}}</code> to filter for running jobs.
-
-    <code>killJobs</code> uses <code>docker [docker.args] kill [batch.id]</code> to filter for running jobs.</p>
+using the current login name (label &#8220;user&#8221;) and the job hash (label &#8220;batchtools&#8221;).</p>
+<p><code>listJobsRunning</code> uses <code>docker [docker.args] ps --format={{.ID}}</code> to filter for running jobs.</p>
+<p><code>killJobs</code> uses <code>docker [docker.args] kill [batch.id]</code> to filter for running jobs.</p>
 <p>These cluster functions use a <a href='runHook.html'>Hook</a> to remove finished jobs before a new submit and every time the <a href='makeRegistry.html'>Registry</a>
 is synchronized (using <code><a href='syncRegistry.html'>syncRegistry</a></code>).
 This is currently required because docker does not remove terminated containers automatically.
@@ -119,28 +138,28 @@ containers manually (or usa a cron job).</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>image</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Name of the docker image to run.</p></td>
     </tr>
     <tr>
       <th>docker.args</th>
-      <td><p>[<code>character</code>]
+      <td><p>[<code>character</code>]<br />
 Additional arguments passed to &#8220;docker&#8221; *before* the command (&#8220;run&#8221;, &#8220;ps&#8221; or &#8220;kill&#8221;) to execute (e.g., the docker host).</p></td>
     </tr>
     <tr>
       <th>image.args</th>
-      <td><p>[<code>character</code>]
+      <td><p>[<code>character</code>]<br />
 Additional arguments passed to &#8220;docker run&#8221; (e.g., to define mounts or environment variables).</p></td>
     </tr>
     <tr>
       <th>scheduler.latency</th>
-      <td><p>[<code>numeric(1)</code>]
+      <td><p>[<code>numeric(1)</code>]<br />
 Time to sleep after important interactions with the scheduler to ensure a sane state.
 Currently only triggered after calling <code><a href='submitJobs.html'>submitJobs</a></code>.</p></td>
     </tr>
     <tr>
       <th>fs.latency</th>
-      <td><p>[<code>numeric(1)</code>]
+      <td><p>[<code>numeric(1)</code>]<br />
 Expected maximum latency of the file system, in seconds.
 Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 access files and directories.
@@ -194,3 +213,4 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
 
   </body>
 </html>
+

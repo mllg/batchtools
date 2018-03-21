@@ -18,13 +18,27 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Load a Registry from the File System — loadRegistry" />
+
+<meta property="og:description" content="Loads a registry from its file.dir.
+Multiple R sessions accessing the same registry simultaneously can lead to database inconsistencies.
+Here, it does not matter if the sessions run on the same system or different systems via a file system mount.
+If you just need to check on the status or peek into some preliminary results, you can load the registry in a
+read-only mode by setting writeable to FALSE.
+All operations that need to change the registry will raise an exception in this mode.
+Files communicated back by the computational nodes are parsed to update the registry in memory, but remain on the file system
+in order to be read and cleaned up by an R session with read-write access.
+A heuristic tries to detect if the registry has been altered in the background.
+However, you should not completely rely on it.
+Thus, set to writeable to TRUE if and only if you are absolutely sure other R processes are terminated." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +78,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +101,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Load a Registry from the File System</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/loadRegistry.R'><code>R/loadRegistry.R</code></a></small>
     </div>
 
     
@@ -111,7 +126,7 @@ Thus, set to <code>writeable</code> to <code>TRUE</code> if and only if you are 
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>file.dir</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
   Path where all files of the registry are saved.
   Default is directory &#8220;registry&#8221; in the current working directory.
   The provided path will get normalized unless it is given relative to the home directory
@@ -124,7 +139,7 @@ Thus, set to <code>writeable</code> to <code>TRUE</code> if and only if you are 
     </tr>
     <tr>
       <th>work.dir</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
   Working directory for R process for running jobs.
   Defaults to the working directory currently set during Registry construction (see <code><a href='http://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a></code>).
   <code>loadRegistry</code> uses the stored <code>work.dir</code>, but you may also explicitly overwrite it,
@@ -134,7 +149,7 @@ Thus, set to <code>writeable</code> to <code>TRUE</code> if and only if you are 
     </tr>
     <tr>
       <th>conf.file</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
   Path to a configuration file which is sourced while the registry is created.
   In the configuration file you can define how <span class="pkg">batchtools</span> interacts with the system via <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>.
   Separating the configuration of the underlying host system from the R code allows to easily move computation to another site.</p>
@@ -150,7 +165,7 @@ Thus, set to <code>writeable</code> to <code>TRUE</code> if and only if you are 
     </tr>
     <tr>
       <th>make.default</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 If set to <code>TRUE</code>, the created registry is saved inside the package
 namespace and acts as default registry. You might want to switch this
 off if you work with multiple registries simultaneously.
@@ -158,7 +173,7 @@ Default is <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>writeable</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 Loads the registry in read-write mode. Default is <code>FALSE</code>.</p></td>
     </tr>
     </table>
@@ -204,3 +219,4 @@ Loads the registry in read-write mode. Default is <code>FALSE</code>.</p></td>
 
   </body>
 </html>
+

@@ -18,13 +18,21 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="ClusterFunctions for Sequential Execution in the Running R Session — makeClusterFunctionsInteractive" />
+
+<meta property="og:description" content="All jobs are executed sequentially using the current R process in which submitJobs is called.
+Thus, submitJob blocks the session until the job has finished.
+The main use of this ClusterFunctions implementation is to test and debug programs on a local computer.
+Listing jobs returns an empty vector (as no jobs can be running when you call this)
+and killJob is not implemented for the same reasons." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +72,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +95,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>ClusterFunctions for Sequential Execution in the Running R Session</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsInteractive.R'><code>R/clusterFunctionsInteractive.R</code></a></small>
     </div>
 
     
@@ -105,21 +114,21 @@ and <code>killJob</code> is not implemented for the same reasons.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>external</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 If set to <code>TRUE</code>, jobs are started in a fresh R session instead of currently active but still
 waits for its termination.
 Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>write.logs</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 Sink the output to log files. Turning logging off can increase the speed of
 calculations but makes it very difficult to debug.
 Default is <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>fs.latency</th>
-      <td><p>[<code>numeric(1)</code>]
+      <td><p>[<code>numeric(1)</code>]<br />
 Expected maximum latency of the file system, in seconds.
 Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 access files and directories.
@@ -173,3 +182,4 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
 
   </body>
 </html>
+

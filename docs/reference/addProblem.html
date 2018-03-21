@@ -18,13 +18,25 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Define Problems for Experiments — addProblem" />
+
+<meta property="og:description" content="Problems may consist of up to two parts: A static, immutable part (data in addProblem)
+and a dynamic, stochastic part (fun in addProblem).
+For example, for statistical learning problems a data frame would be the static problem part while
+a resampling function would be the stochastic part which creates problem instance.
+This instance is then typically passed to a learning algorithm like a wrapper around a statistical model
+(fun in addAlgorithm).
+This function serialize all components to the file system and registers the problem in the ExperimentRegistry.
+removeProblem removes all jobs from the registry which depend on the specific problem.
+reg$problems holds the IDs of already defined problems." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +76,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +99,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Define Problems for Experiments</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Problem.R'><code>R/Problem.R</code></a></small>
     </div>
 
     
@@ -96,9 +109,8 @@ For example, for statistical learning problems a data frame would be the static 
 a resampling function would be the stochastic part which creates problem instance.
 This instance is then typically passed to a learning algorithm like a wrapper around a statistical model
 (<code>fun</code> in <code><a href='addAlgorithm.html'>addAlgorithm</a></code>).</p>
-<p>This function serialize all components to the file system and registers the problem in the <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>.
-
-    <code>removeProblem</code> removes all jobs from the registry which depend on the specific problem.
+<p>This function serialize all components to the file system and registers the problem in the <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>.</p>
+<p><code>removeProblem</code> removes all jobs from the registry which depend on the specific problem.
 <code>reg$problems</code> holds the IDs of already defined problems.</p>
     
 
@@ -112,17 +124,17 @@ This instance is then typically passed to a learning algorithm like a wrapper ar
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>name</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Unique identifier for the problem.</p></td>
     </tr>
     <tr>
       <th>data</th>
-      <td><p>[<code>ANY</code>]
+      <td><p>[<code>ANY</code>]<br />
 Static problem part. Default is <code>NULL</code>.</p></td>
     </tr>
     <tr>
       <th>fun</th>
-      <td><p>[<code>function</code>]
+      <td><p>[<code>function</code>]<br />
 The function defining the stochastic problem part.
 The static part is passed to this function with name &#8220;data&#8221; and the <code><a href='JobExperiment.html'>Job</a></code>/<code><a href='JobExperiment.html'>Experiment</a></code>
 is passed as &#8220;job&#8221;.
@@ -131,7 +143,7 @@ If you do not provide a function, it defaults to a function which just returns t
     </tr>
     <tr>
       <th>seed</th>
-      <td><p>[<code>integer(1)</code>]
+      <td><p>[<code>integer(1)</code>]<br />
 Start seed for this problem. This allows the &#8220;synchronization&#8221; of a stochastic
 problem across algorithms, so that different algorithms are evaluated on the same stochastic instance.
 If the problem seed is defined, the seeding mechanism works as follows:
@@ -145,7 +157,7 @@ different algorithms see different stochastic instances of the same problem.</p>
     </tr>
     <tr>
       <th>cache</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 If <code>TRUE</code> and <code>seed</code> is set, problem instances will be cached on the file system.
 This assumes that each problem instance is deterministic for each combination of hyperparameter setting
 and each replication number.
@@ -153,7 +165,7 @@ This feature is experimental.</p></td>
     </tr>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]
+      <td><p>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]<br />
 Registry. If not explicitly passed, uses the last created registry.</p></td>
     </tr>
     </table>
@@ -168,7 +180,7 @@ Registry. If not explicitly passed, uses the last created registry.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'>addProblem</span>(<span class='st'>"p1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='no'>data</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'p1'</span></div><div class='input'><span class='fu'>addProblem</span>(<span class='st'>"p2"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='no'>job</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'p2'</span></div><div class='input'><span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='st'>"a1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>) <span class='no'>instance</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'a1'</span></div><div class='input'><span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='kw'>repls</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 experiments ('p1'[1] x 'a1'[1] x repls[2]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 2 experiments ('p2'[1] x 'a1'[1] x repls[2]) ...</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'>addProblem</span>(<span class='st'>"p1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='no'>data</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'p1'</span></div><div class='input'><span class='fu'>addProblem</span>(<span class='st'>"p2"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='no'>job</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'p2'</span></div><div class='input'><span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='st'>"a1"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>) <span class='no'>instance</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'a1'</span></div><div class='input'><span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='kw'>repls</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 2 experiments ('p1'[1] x 'a1'[1] x repls[2]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 2 experiments ('p2'[1] x 'a1'[1] x repls[2]) ...</span></div><div class='input'>
 <span class='co'># List problems, algorithms and job parameters:</span>
 <span class='no'>tmp</span>$<span class='no'>problems</span></div><div class='output co'>#&gt; [1] "p1" "p2"</div><div class='input'><span class='no'>tmp</span>$<span class='no'>algorithms</span></div><div class='output co'>#&gt; [1] "a1"</div><div class='input'><span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id problem prob.pars algorithm algo.pars
 #&gt;     &lt;int&gt;  &lt;char&gt;    &lt;list&gt;    &lt;char&gt;    &lt;list&gt;
@@ -213,3 +225,4 @@ Registry. If not explicitly passed, uses the last created registry.</p></td>
 
   </body>
 </html>
+

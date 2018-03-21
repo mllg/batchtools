@@ -18,13 +18,20 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Kill Jobs — killJobs" />
+
+<meta property="og:description" content="Kill jobs which are currently running on the batch system.
+In case of an error when killing, the function tries - after a short sleep - to kill the remaining
+batch jobs again. If this fails three times for some jobs, the function gives up. Jobs that could be
+successfully killed are reset in the Registry." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +71,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +94,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Kill Jobs</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/killJobs.R'><code>R/killJobs.R</code></a></small>
     </div>
 
     
@@ -103,7 +111,7 @@ successfully killed are reset in the <a href='makeRegistry.html'>Registry</a>.</
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>ids</th>
-      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]<br />
 A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
@@ -112,7 +120,7 @@ Invalid ids are ignored.</p></td>
     </tr>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]<br />
 Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
     </tr>
     </table>
@@ -158,3 +166,4 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
   </body>
 </html>
+

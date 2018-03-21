@@ -18,13 +18,21 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Define Algorithms for Experiments — addAlgorithm" />
+
+<meta property="og:description" content="Algorithms are functions which get the codedata part as well as the problem instance (the return value of the
+function defined in Problem) and return an arbitrary R object.
+This function serializes all components to the file system and registers the algorithm in the ExperimentRegistry.
+removeAlgorithm removes all jobs from the registry which depend on the specific algorithm.
+reg$algorithms holds the IDs of already defined algorithms." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -64,7 +72,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,14 +95,14 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Define Algorithms for Experiments</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Algorithm.R'><code>R/Algorithm.R</code></a></small>
     </div>
 
     
     <p>Algorithms are functions which get the codedata part as well as the problem instance (the return value of the
 function defined in <code><a href='addProblem.html'>Problem</a></code>) and return an arbitrary R object.</p>
-<p>This function serializes all components to the file system and registers the algorithm in the <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>.
-
-    <code>removeAlgorithm</code> removes all jobs from the registry which depend on the specific algorithm.
+<p>This function serializes all components to the file system and registers the algorithm in the <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>.</p>
+<p><code>removeAlgorithm</code> removes all jobs from the registry which depend on the specific algorithm.
 <code>reg$algorithms</code> holds the IDs of already defined algorithms.</p>
     
 
@@ -107,12 +115,12 @@ function defined in <code><a href='addProblem.html'>Problem</a></code>) and retu
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>name</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Unique identifier for the algorithm.</p></td>
     </tr>
     <tr>
       <th>fun</th>
-      <td><p>[<code>function</code>]
+      <td><p>[<code>function</code>]<br />
   The algorithm function. The static problem part is passed as &#8220;data&#8221;, the generated
   problem instance is passed as &#8220;instance&#8221; and the <code><a href='JobExperiment.html'>Job</a></code>/<code><a href='JobExperiment.html'>Experiment</a></code> as &#8220;job&#8221;.
   Therefore, your function must have the formal arguments &#8220;job&#8221;, &#8220;data&#8221; and &#8220;instance&#8221; (or dots <code>...</code>).</p>
@@ -120,7 +128,7 @@ Unique identifier for the algorithm.</p></td>
     </tr>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]
+      <td><p>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]<br />
 Registry. If not explicitly passed, uses the last created registry.</p></td>
     </tr>
     </table>
@@ -162,3 +170,4 @@ Registry. If not explicitly passed, uses the last created registry.</p></td>
 
   </body>
 </html>
+
