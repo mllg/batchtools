@@ -33,6 +33,8 @@ termination of jobs or call reduceResultsList/reduceResults
 to collect partial results.
 The progress can be monitored with getStatus." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -55,8 +57,12 @@ The progress can be monitored with getStatus." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -66,7 +72,7 @@ The progress can be monitored with getStatus." />
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -109,7 +115,7 @@ The progress can be monitored with <code><a href='getStatus.html'>getStatus</a><
     <pre class="usage"><span class='fu'>submitJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>sleep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -261,22 +267,22 @@ You have to do this manually via <code><a href='http://www.rdocumentation.org/pa
 <span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>measure.memory</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Submit jobs using the currently configured cluster functions</span>
-<span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='input'>
+<span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='input'>
 <span class='co'># Retrive information about memory, combine with parameters</span>
 <span class='no'>info</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='fu'><a href='getJobTable.html'>getJobStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>mem.used</span>)], <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
 <span class='fu'>print</span>(<span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='no'>info</span>))</div><div class='output co'>#&gt;    job.id mem.used     n     p
 #&gt;     &lt;int&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;
-#&gt; 1:      1    143.0 1e+04    10
-#&gt; 2:      2    148.2 1e+04    50
-#&gt; 3:      3    155.8 1e+05    10
-#&gt; 4:      4    216.3 1e+05    50</div><div class='input'>
+#&gt; 1:      1    142.5 1e+04    10
+#&gt; 2:      2    148.3 1e+04    50
+#&gt; 3:      3    155.9 1e+05    10
+#&gt; 4:      4    216.5 1e+05    50</div><div class='input'>
 <span class='co'># Combine job info with results -&gt; each job is aggregated using mean()</span>
 <span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)))</div><div class='output co'>#&gt;    job.id mem.used     n     p       res
 #&gt;     &lt;int&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;
-#&gt; 1:      1    143.0 1e+04    10 0.5001465
-#&gt; 2:      2    148.2 1e+04    50 0.5002927
-#&gt; 3:      3    155.8 1e+05    10 0.4999191
-#&gt; 4:      4    216.3 1e+05    50 0.5000216</div><div class='input'>
+#&gt; 1:      1    142.5 1e+04    10 0.5001465
+#&gt; 2:      2    148.3 1e+04    50 0.5002927
+#&gt; 3:      3    155.9 1e+05    10 0.4999191
+#&gt; 4:      4    216.5 1e+05    50 0.5000216</div><div class='input'>
 <span class='co'>### Example 2: Multicore execution on the slave</span>
 <span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg2' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Function which sleeps 10 seconds, i-times</span>

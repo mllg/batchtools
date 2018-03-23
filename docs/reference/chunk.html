@@ -41,6 +41,8 @@ binpack splits x into a variable number of groups whose sum of elements do
 not exceed the upper limit provided by chunk.size.
 See examples of estimateRuntimes for an application of binpack and lpt." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -63,8 +65,12 @@ See examples of estimateRuntimes for an application of binpack and lpt." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -74,7 +80,7 @@ See examples of estimateRuntimes for an application of binpack and lpt." />
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -128,7 +134,7 @@ not exceed the upper limit provided by <code>chunk.size</code>.</p>
 
 <span class='fu'>binpack</span>(<span class='no'>x</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='no'>x</span>))</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -259,7 +265,7 @@ Shuffles the groups. Default is <code>TRUE</code>.</p></td>
 #&gt; 3:     2     6
 #&gt; 4:     1     7</div><div class='input'>
 <span class='co'>### Submit to batch system</span>
-<span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 25 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 6 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 8 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 9 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 10 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 22 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 23 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 24 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 14 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 16 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 17 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 20 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 25 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 7 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 12 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 15 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 18 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 5 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 11 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 13 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 19 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 21 ...</span></div><div class='input'>
+<span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 25 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='input'>
 <span class='co'># Grouped chunking</span>
 <span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg2' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob1"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; <span class='message'>Adding problem 'prob1'</span></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob2"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Titanic</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; <span class='message'>Adding problem 'prob2'</span></div><div class='input'><span class='no'>algo</span> <span class='kw'>=</span> <span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"algo"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>i</span>, <span class='no'>...</span>) <span class='no'>problem</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'algo'</span></div><div class='input'><span class='no'>prob.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>prob1</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(), <span class='kw'>prob2</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>))
 <span class='no'>algo.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>algo</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>))

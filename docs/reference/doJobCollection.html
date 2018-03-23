@@ -30,6 +30,8 @@
 <meta property="og:description" content="Executes every job in a JobCollection.
 This function is intended to be called on the slave." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -52,8 +54,12 @@ This function is intended to be called on the slave." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -63,7 +69,7 @@ This function is intended to be called on the slave." />
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -102,7 +108,7 @@ This function is intended to be called on the slave.</p>
 
     <pre class="usage"><span class='fu'>doJobCollection</span>(<span class='no'>jc</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -136,9 +142,13 @@ Do not set this if your scheduler redirects output to a log file.</p></td>
 #&gt; ### [bt]: Starting calculation of 2 jobs
 #&gt; ### [bt]: Setting working directory to '/Users/michel/Projekte/batchtools/docs/reference'
 #&gt; ### [bt]: Memory measurement disabled
-#&gt; ### [bt]: Starting job [batchtools job.id=1]</div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; 
+#&gt; ### [bt]: Starting job [batchtools job.id=1]
+#&gt; ### [bt]: Setting seed to 1 ...
+#&gt; 
 #&gt; ### [bt]: Job terminated successfully [batchtools job.id=1]
-#&gt; ### [bt]: Starting job [batchtools job.id=2]</div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; 
+#&gt; ### [bt]: Starting job [batchtools job.id=2]
+#&gt; ### [bt]: Setting seed to 2 ...
+#&gt; 
 #&gt; ### [bt]: Job terminated successfully [batchtools job.id=2]
 #&gt; ### [bt]: Calculation finished!</div></pre>
   </div>

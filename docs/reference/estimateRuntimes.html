@@ -34,6 +34,8 @@ The estimated remaining time is calculated in the print method.
 You may also pass n here to determine the number of parallel jobs which is then used
 in a simple Longest Processing Time (LPT) algorithm to give an estimate for the parallel runtime." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -56,8 +58,12 @@ in a simple Longest Processing Time (LPT) algorithm to give an estimate for the 
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -67,7 +73,7 @@ in a simple Longest Processing Time (LPT) algorithm to give an estimate for the 
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -113,7 +119,7 @@ in a simple Longest Processing Time (LPT) algorithm to give an estimate for the 
 <span class='co'># S3 method for RuntimeEstimate</span>
 <span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -170,7 +176,7 @@ Number of parallel jobs to assume for runtime estimation.</p></td>
 <span class='co'># Thus, we just sample some jobs from the registry while grouping by factor variables.</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='no'>tab</span>[, <span class='no'>.SD</span>[<span class='fu'>sample</span>(<span class='fu'>nrow</span>(<span class='no'>.SD</span>), <span class='fl'>5</span>)], <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"problem"</span>, <span class='st'>"algorithm"</span>, <span class='st'>"y"</span>)]
 <span class='fu'>setkeyv</span>(<span class='no'>ids</span>, <span class='st'>"job.id"</span>)
-<span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 50 jobs in 50 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 4 (seed = 5) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 16 (seed = 17) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 34 (seed = 35) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 41 (seed = 42) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 46 (seed = 47) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 48 (seed = 49) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 69 (seed = 70) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 85 (seed = 86) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 89 (seed = 90) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 94 (seed = 95) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 97 (seed = 98) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 98 (seed = 99) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 115 (seed = 116) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 117 (seed = 118) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 120 (seed = 121) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 145 (seed = 146) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 148 (seed = 149) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 156 (seed = 157) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 167 (seed = 168) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 187 (seed = 188) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 193 (seed = 194) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 220 (seed = 221) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 223 (seed = 224) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 227 (seed = 228) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'nrow' on problem 'iris' for job 246 (seed = 247) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 258 (seed = 259) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 270 (seed = 271) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 271 (seed = 272) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 275 (seed = 276) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 296 (seed = 297) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 315 (seed = 316) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 325 (seed = 326) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 352 (seed = 353) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 354 (seed = 355) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 358 (seed = 359) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 364 (seed = 365) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 370 (seed = 371) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 378 (seed = 379) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 388 (seed = 389) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 402 (seed = 403) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 411 (seed = 412) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 419 (seed = 420) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 432 (seed = 433) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 434 (seed = 435) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 436 (seed = 437) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 438 (seed = 439) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 447 (seed = 448) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 451 (seed = 452) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 454 (seed = 455) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'iris' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'ncol' on problem 'iris' for job 497 (seed = 498) ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 50 jobs in 50 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># We "simulate" some more realistic runtimes here to demonstrate the functionality:</span>
 <span class='co'># - Algorithm "ncol" is 5 times more expensive than "nrow"</span>
 <span class='co'># - x has no effect on the runtime</span>
@@ -183,10 +189,10 @@ Number of parallel jobs to assume for runtime estimation.</p></td>
 #&gt;   1:      1      1         NA         NA         NA     NA       NA          NA
 #&gt;   2:      2      2         NA         NA         NA     NA       NA          NA
 #&gt;   3:      3      3         NA         NA         NA     NA       NA          NA
-#&gt;   4:      4      4 1521642338 1521642338 1521642438     NA       NA           1
+#&gt;   4:      4      4 1521796108 1521796108 1521796208     NA       NA           1
 #&gt;  ---                                                                           
 #&gt; 496:    496    496         NA         NA         NA     NA       NA          NA
-#&gt; 497:    497    497 1521642340 1521642340 1521643840     NA       NA           1
+#&gt; 497:    497    497 1521796110 1521796110 1521797610     NA       NA           1
 #&gt; 498:    498    498         NA         NA         NA     NA       NA          NA
 #&gt; 499:    499    499         NA         NA         NA     NA       NA          NA
 #&gt; 500:    500    500         NA         NA         NA     NA       NA          NA
@@ -195,218 +201,218 @@ Number of parallel jobs to assume for runtime estimation.</p></td>
 #&gt;   1:            NA       NA                                  NA       NA     1
 #&gt;   2:            NA       NA                                  NA       NA     1
 #&gt;   3:            NA       NA                                  NA       NA     1
-#&gt;   4: cfInteractive       NA job6d0c221f37dee98263354ebec7c2d128       NA     1
+#&gt;   4: cfInteractive       NA job3dd73de2a199d4d2e7af96e104183530       NA     1
 #&gt;  ---                                                                          
 #&gt; 496:            NA       NA                                  NA       NA     1
-#&gt; 497: cfInteractive       NA joba097ebb20ece21a66ab9b4b2dade603f       NA     1
+#&gt; 497: cfInteractive       NA jobd8ea1d46e825a5997e01b9f9da8326bc       NA     1
 #&gt; 498:            NA       NA                                  NA       NA     1
 #&gt; 499:            NA       NA                                  NA       NA     1
 #&gt; 500:            NA       NA                                  NA       NA     1</div><div class='input'><span class='fu'><a href='JoinTables.html'>rjoin</a></span>(<span class='fu'><a href='JoinTables.html'>sjoin</a></span>(<span class='no'>tab</span>, <span class='no'>ids</span>), <span class='fu'><a href='getJobTable.html'>getJobStatus</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>c</span>(<span class='st'>"job.id"</span>, <span class='st'>"time.running"</span>)])</div><div class='output co'>#&gt;     job.id problem algorithm     x      y   time.running
 #&gt;      &lt;int&gt;  &lt;char&gt;    &lt;char&gt; &lt;int&gt; &lt;char&gt;     &lt;difftime&gt;
-#&gt;  1:      4    iris      nrow     1      d  100.0132 secs
-#&gt;  2:     16    iris      nrow     4      a 1100.0288 secs
-#&gt;  3:     34    iris      nrow     7      d  100.0128 secs
-#&gt;  4:     41    iris      nrow     9      a 1100.0080 secs
-#&gt;  5:     46    iris      nrow    10      a 1100.0084 secs
-#&gt;  6:     48    iris      nrow    10      c  100.0144 secs
-#&gt;  7:     69    iris      nrow    14      d  100.0083 secs
-#&gt;  8:     85    iris      nrow    17      e  100.0093 secs
-#&gt;  9:     89    iris      nrow    18      d  100.0084 secs
-#&gt; 10:     94    iris      nrow    19      d  100.0100 secs
-#&gt; 11:     97    iris      nrow    20      b 1100.0122 secs
-#&gt; 12:     98    iris      nrow    20      c  100.0081 secs
-#&gt; 13:    115    iris      nrow    23      e  100.0118 secs
-#&gt; 14:    117    iris      nrow    24      b 1100.0094 secs
-#&gt; 15:    120    iris      nrow    24      e  100.0114 secs
-#&gt; 16:    145    iris      nrow    29      e  100.0088 secs
-#&gt; 17:    148    iris      nrow    30      c  100.0103 secs
-#&gt; 18:    156    iris      nrow    32      a 1100.0152 secs
-#&gt; 19:    167    iris      nrow    34      b 1100.0096 secs
-#&gt; 20:    187    iris      nrow    38      b 1100.0094 secs
-#&gt; 21:    193    iris      nrow    39      c  100.0110 secs
-#&gt; 22:    220    iris      nrow    44      e  100.0082 secs
-#&gt; 23:    223    iris      nrow    45      c  100.0175 secs
-#&gt; 24:    227    iris      nrow    46      b 1100.0111 secs
-#&gt; 25:    246    iris      nrow    50      a 1100.0119 secs
-#&gt; 26:    258    iris      ncol     2      c  500.0101 secs
-#&gt; 27:    270    iris      ncol     4      e  500.0082 secs
-#&gt; 28:    271    iris      ncol     5      a 1500.0086 secs
-#&gt; 29:    275    iris      ncol     5      e  500.0085 secs
-#&gt; 30:    296    iris      ncol    10      a 1500.0083 secs
-#&gt; 31:    315    iris      ncol    13      e  500.0088 secs
-#&gt; 32:    325    iris      ncol    15      e  500.0119 secs
-#&gt; 33:    352    iris      ncol    21      b 1500.0099 secs
-#&gt; 34:    354    iris      ncol    21      d  500.0081 secs
-#&gt; 35:    358    iris      ncol    22      c  500.0091 secs
-#&gt; 36:    364    iris      ncol    23      d  500.0105 secs
-#&gt; 37:    370    iris      ncol    24      e  500.0117 secs
-#&gt; 38:    378    iris      ncol    26      c  500.0119 secs
-#&gt; 39:    388    iris      ncol    28      c  500.0084 secs
+#&gt;  1:      4    iris      nrow     1      d  100.0115 secs
+#&gt;  2:     16    iris      nrow     4      a 1100.0281 secs
+#&gt;  3:     34    iris      nrow     7      d  100.0109 secs
+#&gt;  4:     41    iris      nrow     9      a 1100.0070 secs
+#&gt;  5:     46    iris      nrow    10      a 1100.0110 secs
+#&gt;  6:     48    iris      nrow    10      c  100.0117 secs
+#&gt;  7:     69    iris      nrow    14      d  100.0067 secs
+#&gt;  8:     85    iris      nrow    17      e  100.0081 secs
+#&gt;  9:     89    iris      nrow    18      d  100.0070 secs
+#&gt; 10:     94    iris      nrow    19      d  100.0102 secs
+#&gt; 11:     97    iris      nrow    20      b 1100.0071 secs
+#&gt; 12:     98    iris      nrow    20      c  100.0120 secs
+#&gt; 13:    115    iris      nrow    23      e  100.0083 secs
+#&gt; 14:    117    iris      nrow    24      b 1100.0082 secs
+#&gt; 15:    120    iris      nrow    24      e  100.0090 secs
+#&gt; 16:    145    iris      nrow    29      e  100.0070 secs
+#&gt; 17:    148    iris      nrow    30      c  100.0099 secs
+#&gt; 18:    156    iris      nrow    32      a 1100.0076 secs
+#&gt; 19:    167    iris      nrow    34      b 1100.0083 secs
+#&gt; 20:    187    iris      nrow    38      b 1100.0082 secs
+#&gt; 21:    193    iris      nrow    39      c  100.0096 secs
+#&gt; 22:    220    iris      nrow    44      e  100.0069 secs
+#&gt; 23:    223    iris      nrow    45      c  100.0120 secs
+#&gt; 24:    227    iris      nrow    46      b 1100.0067 secs
+#&gt; 25:    246    iris      nrow    50      a 1100.0071 secs
+#&gt; 26:    258    iris      ncol     2      c  500.0090 secs
+#&gt; 27:    270    iris      ncol     4      e  500.0067 secs
+#&gt; 28:    271    iris      ncol     5      a 1500.0092 secs
+#&gt; 29:    275    iris      ncol     5      e  500.0103 secs
+#&gt; 30:    296    iris      ncol    10      a 1500.0078 secs
+#&gt; 31:    315    iris      ncol    13      e  500.0077 secs
+#&gt; 32:    325    iris      ncol    15      e  500.0086 secs
+#&gt; 33:    352    iris      ncol    21      b 1500.0089 secs
+#&gt; 34:    354    iris      ncol    21      d  500.0078 secs
+#&gt; 35:    358    iris      ncol    22      c  500.0097 secs
+#&gt; 36:    364    iris      ncol    23      d  500.0080 secs
+#&gt; 37:    370    iris      ncol    24      e  500.0092 secs
+#&gt; 38:    378    iris      ncol    26      c  500.0076 secs
+#&gt; 39:    388    iris      ncol    28      c  500.0101 secs
 #&gt; 40:    402    iris      ncol    31      b 1500.0081 secs
-#&gt; 41:    411    iris      ncol    33      a 1500.0082 secs
-#&gt; 42:    419    iris      ncol    34      d  500.0080 secs
-#&gt; 43:    432    iris      ncol    37      b 1500.0099 secs
-#&gt; 44:    434    iris      ncol    37      d  500.0104 secs
-#&gt; 45:    436    iris      ncol    38      a 1500.0112 secs
-#&gt; 46:    438    iris      ncol    38      c  500.0085 secs
-#&gt; 47:    447    iris      ncol    40      b 1500.0113 secs
-#&gt; 48:    451    iris      ncol    41      a 1500.0091 secs
-#&gt; 49:    454    iris      ncol    41      d  500.0107 secs
-#&gt; 50:    497    iris      ncol    50      b 1500.0119 secs
+#&gt; 41:    411    iris      ncol    33      a 1500.0100 secs
+#&gt; 42:    419    iris      ncol    34      d  500.0084 secs
+#&gt; 43:    432    iris      ncol    37      b 1500.0077 secs
+#&gt; 44:    434    iris      ncol    37      d  500.0082 secs
+#&gt; 45:    436    iris      ncol    38      a 1500.0092 secs
+#&gt; 46:    438    iris      ncol    38      c  500.0071 secs
+#&gt; 47:    447    iris      ncol    40      b 1500.0072 secs
+#&gt; 48:    451    iris      ncol    41      a 1500.0112 secs
+#&gt; 49:    454    iris      ncol    41      d  500.0073 secs
+#&gt; 50:    497    iris      ncol    50      b 1500.0070 secs
 #&gt;     job.id problem algorithm     x      y   time.running</div><div class='input'>
 <span class='co'># Estimate runtimes:</span>
 <span class='no'>est</span> <span class='kw'>=</span> <span class='fu'>estimateRuntimes</span>(<span class='no'>tab</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>print</span>(<span class='no'>est</span>)</div><div class='output co'>#&gt; Runtime Estimate for 500 jobs with 1 CPUs
 #&gt;   Done     : 0d 09h 43m 20.5s
-#&gt;   Remaining: 3d 16h 23m 10.7s
-#&gt;   Total    : 4d 02h 06m 31.2s</div><div class='input'><span class='fu'><a href='JoinTables.html'>rjoin</a></span>(<span class='no'>tab</span>, <span class='no'>est</span>$<span class='no'>runtimes</span>)</div><div class='output co'>#&gt;      job.id problem algorithm     x      y      type   runtime
+#&gt;   Remaining: 3d 16h 23m 21.0s
+#&gt;   Total    : 4d 02h 06m 41.5s</div><div class='input'><span class='fu'><a href='JoinTables.html'>rjoin</a></span>(<span class='no'>tab</span>, <span class='no'>est</span>$<span class='no'>runtimes</span>)</div><div class='output co'>#&gt;      job.id problem algorithm     x      y      type   runtime
 #&gt;       &lt;int&gt;  &lt;char&gt;    &lt;char&gt; &lt;int&gt; &lt;char&gt;    &lt;fctr&gt;     &lt;num&gt;
-#&gt;   1:      1    iris      nrow     1      a estimated 1042.7630
-#&gt;   2:      2    iris      nrow     1      b estimated 1042.5288
-#&gt;   3:      3    iris      nrow     1      c estimated  190.2161
-#&gt;   4:      4    iris      nrow     1      d  observed  100.0132
+#&gt;   1:      1    iris      nrow     1      a estimated 1043.1353
+#&gt;   2:      2    iris      nrow     1      b estimated 1042.6340
+#&gt;   3:      3    iris      nrow     1      c estimated  190.8529
+#&gt;   4:      4    iris      nrow     1      d  observed  100.0115
 #&gt;  ---                                                          
-#&gt; 496:    496    iris      ncol    50      a estimated 1398.7162
-#&gt; 497:    497    iris      ncol    50      b  observed 1500.0119
-#&gt; 498:    498    iris      ncol    50      c estimated  600.2321
-#&gt; 499:    499    iris      ncol    50      d estimated  577.6769
-#&gt; 500:    500    iris      ncol    50      e estimated  565.3525</div><div class='input'><span class='fu'>print</span>(<span class='no'>est</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; Runtime Estimate for 500 jobs with 10 CPUs
+#&gt; 496:    496    iris      ncol    50      a estimated 1396.1413
+#&gt; 497:    497    iris      ncol    50      b  observed 1500.0070
+#&gt; 498:    498    iris      ncol    50      c estimated  596.3900
+#&gt; 499:    499    iris      ncol    50      d estimated  572.4746
+#&gt; 500:    500    iris      ncol    50      e estimated  560.1503</div><div class='input'><span class='fu'>print</span>(<span class='no'>est</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; Runtime Estimate for 500 jobs with 10 CPUs
 #&gt;   Done     : 0d 09h 43m 20.5s
-#&gt;   Remaining: 3d 16h 23m 10.7s
-#&gt;   Parallel : 0d 08h 51m 28.0s
-#&gt;   Total    : 4d 02h 06m 31.2s</div><div class='input'>
+#&gt;   Remaining: 3d 16h 23m 21.0s
+#&gt;   Parallel : 0d 08h 51m 28.8s
+#&gt;   Total    : 4d 02h 06m 41.5s</div><div class='input'>
 <span class='co'># Submit jobs with longest runtime first:</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='no'>est</span>$<span class='no'>runtimes</span>[<span class='no'>type</span> <span class='kw'>==</span> <span class='st'>"estimated"</span>][<span class='fu'>order</span>(<span class='no'>runtime</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)]
 <span class='fu'>print</span>(<span class='no'>ids</span>)</div><div class='output co'>#&gt;      job.id      type   runtime
 #&gt;       &lt;int&gt;    &lt;fctr&gt;     &lt;num&gt;
-#&gt;   1:    446 estimated 1433.0659
-#&gt;   2:    456 estimated 1425.0759
-#&gt;   3:    431 estimated 1420.8725
-#&gt;   4:    441 estimated 1420.6791
+#&gt;   1:    446 estimated 1433.6250
+#&gt;   2:    456 estimated 1424.6351
+#&gt;   3:    431 estimated 1421.7917
+#&gt;   4:    426 estimated 1421.5517
 #&gt;  ---                           
-#&gt; 446:     90 estimated  135.5278
-#&gt; 447:     99 estimated  131.9226
-#&gt; 448:     74 estimated  130.6965
-#&gt; 449:     79 estimated  129.0520
-#&gt; 450:     84 estimated  125.9453</div><span class='co'># NOT RUN {</span>
+#&gt; 446:     90 estimated  135.5263
+#&gt; 447:     99 estimated  131.5583
+#&gt; 448:     74 estimated  129.9317
+#&gt; 449:     79 estimated  128.2873
+#&gt; 450:     84 estimated  125.5806</div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='co'># }</span><div class='input'>
 <span class='co'># Group jobs into chunks with runtime &lt; 1h</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='no'>est</span>$<span class='no'>runtimes</span>[<span class='no'>type</span> <span class='kw'>==</span> <span class='st'>"estimated"</span>]
 <span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'><a href='chunk.html'>binpack</a></span>(<span class='no'>runtime</span>, <span class='fl'>3600</span>)]</div><div class='output co'>#&gt;      job.id      type   runtime chunk
 #&gt;       &lt;int&gt;    &lt;fctr&gt;     &lt;num&gt; &lt;int&gt;
-#&gt;   1:      1 estimated 1042.7630    75
-#&gt;   2:      2 estimated 1042.5288    75
-#&gt;   3:      3 estimated  190.2161    71
-#&gt;   4:      5 estimated  194.7092    69
+#&gt;   1:      1 estimated 1043.1353    75
+#&gt;   2:      2 estimated 1042.6340    75
+#&gt;   3:      3 estimated  190.8529    71
+#&gt;   4:      5 estimated  195.5074     9
 #&gt;  ---                                 
-#&gt; 446:    495 estimated  565.3525    28
-#&gt; 447:    496 estimated 1398.7162    11
-#&gt; 448:    498 estimated  600.2321     5
-#&gt; 449:    499 estimated  577.6769    20
-#&gt; 450:    500 estimated  565.3525    29</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>)</div><div class='output co'>#&gt;      job.id      type   runtime chunk
+#&gt; 446:    495 estimated  560.1503    35
+#&gt; 447:    496 estimated 1396.1413    12
+#&gt; 448:    498 estimated  596.3900     6
+#&gt; 449:    499 estimated  572.4746    21
+#&gt; 450:    500 estimated  560.1503    36</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>)</div><div class='output co'>#&gt;      job.id      type   runtime chunk
 #&gt;       &lt;int&gt;    &lt;fctr&gt;     &lt;num&gt; &lt;int&gt;
-#&gt;   1:      1 estimated 1042.7630    75
-#&gt;   2:      2 estimated 1042.5288    75
-#&gt;   3:      3 estimated  190.2161    71
-#&gt;   4:      5 estimated  194.7092    69
+#&gt;   1:      1 estimated 1043.1353    75
+#&gt;   2:      2 estimated 1042.6340    75
+#&gt;   3:      3 estimated  190.8529    71
+#&gt;   4:      5 estimated  195.5074     9
 #&gt;  ---                                 
-#&gt; 446:    495 estimated  565.3525    28
-#&gt; 447:    496 estimated 1398.7162    11
-#&gt; 448:    498 estimated  600.2321     5
-#&gt; 449:    499 estimated  577.6769    20
-#&gt; 450:    500 estimated  565.3525    29</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>[, <span class='fu'>list</span>(<span class='kw'>runtime</span> <span class='kw'>=</span> <span class='fu'>sum</span>(<span class='no'>runtime</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>chunk</span>])</div><div class='output co'>#&gt;     chunk  runtime
+#&gt; 446:    495 estimated  560.1503    35
+#&gt; 447:    496 estimated 1396.1413    12
+#&gt; 448:    498 estimated  596.3900     6
+#&gt; 449:    499 estimated  572.4746    21
+#&gt; 450:    500 estimated  560.1503    36</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>[, <span class='fu'>list</span>(<span class='kw'>runtime</span> <span class='kw'>=</span> <span class='fu'>sum</span>(<span class='no'>runtime</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>chunk</span>])</div><div class='output co'>#&gt;     chunk  runtime
 #&gt;     &lt;int&gt;    &lt;num&gt;
-#&gt;  1:    75 3599.634
-#&gt;  2:    71 3526.596
-#&gt;  3:    69 3555.678
-#&gt;  4:    74 3598.490
-#&gt;  5:    70 3547.382
-#&gt;  6:    73 3481.064
-#&gt;  7:    44 3598.983
-#&gt;  8:    63 3598.639
-#&gt;  9:    64 3591.342
-#&gt; 10:    61 3599.632
-#&gt; 11:    54 3599.794
-#&gt; 12:    60 3598.456
-#&gt; 13:    11 3598.433
-#&gt; 14:    66 3575.416
-#&gt; 15:    12 3599.998
-#&gt; 16:    56 3599.357
-#&gt; 17:    58 3579.388
-#&gt; 18:    67 3572.117
-#&gt; 19:    48 3493.377
-#&gt; 20:    55 3599.610
-#&gt; 21:    65 3584.737
-#&gt; 22:    57 3583.530
-#&gt; 23:    72 3507.284
-#&gt; 24:     5 3599.728
-#&gt; 25:     9 3599.812
-#&gt; 26:    59 3599.546
-#&gt; 27:     8 3598.353
-#&gt; 28:     6 3599.869
-#&gt; 29:    42 3599.998
-#&gt; 30:    43 3595.108
-#&gt; 31:     2 3599.456
-#&gt; 32:     7 3595.887
-#&gt; 33:    76 3593.940
-#&gt; 34:    83 3559.835
-#&gt; 35:     4 3599.716
-#&gt; 36:    80 3487.133
-#&gt; 37:    81 3466.403
-#&gt; 38:    38 3599.211
-#&gt; 39:    82 3581.822
-#&gt; 40:    51 3596.527
-#&gt; 41:    41 3599.323
-#&gt; 42:    40 3599.856
-#&gt; 43:    37 3598.738
-#&gt; 44:    85 3511.181
-#&gt; 45:    52 3597.366
-#&gt; 46:     1 3598.435
-#&gt; 47:    79 3514.954
-#&gt; 48:    53 3599.106
-#&gt; 49:    68 3567.779
-#&gt; 50:     3 3599.286
-#&gt; 51:    39 3599.455
-#&gt; 52:    84 3547.831
-#&gt; 53:    78 3545.777
-#&gt; 54:    77 3560.818
-#&gt; 55:    36 3476.231
-#&gt; 56:    46 3520.416
-#&gt; 57:    50 3471.632
-#&gt; 58:    30 3503.415
-#&gt; 59:    16 3598.306
-#&gt; 60:    14 3599.257
-#&gt; 61:    49 3488.351
-#&gt; 62:    35 3479.562
-#&gt; 63:    45 3599.563
-#&gt; 64:    33 3486.125
-#&gt; 65:    34 3483.502
-#&gt; 66:    13 3598.647
-#&gt; 67:    47 3506.455
-#&gt; 68:    15 3599.217
-#&gt; 69:    62 3598.765
-#&gt; 70:    10 3599.863
-#&gt; 71:    17 3595.936
-#&gt; 72:    28 3520.109
-#&gt; 73:    31 3501.391
-#&gt; 74:    27 3521.868
-#&gt; 75:    29 3512.526
-#&gt; 76:    32 3495.982
-#&gt; 77:    20 3577.901
-#&gt; 78:    23 3561.676
-#&gt; 79:    26 3542.520
-#&gt; 80:    18 3588.465
-#&gt; 81:    21 3575.404
-#&gt; 82:    24 3551.578
-#&gt; 83:    19 3581.656
-#&gt; 84:    22 3564.861
-#&gt; 85:    25 3549.851
-#&gt; 86:    86 3584.037
-#&gt; 87:    90 1005.619
-#&gt; 88:    87 3565.369
-#&gt; 89:    88 3550.605
-#&gt; 90:    89 3532.826
+#&gt;  1:    75 3599.300
+#&gt;  2:    71 3532.549
+#&gt;  3:     9 3599.464
+#&gt;  4:    74 3599.323
+#&gt;  5:    70 3548.379
+#&gt;  6:     7 3599.944
+#&gt;  7:    44 3598.583
+#&gt;  8:    64 3596.812
+#&gt;  9:    61 3599.720
+#&gt; 10:    69 3557.232
+#&gt; 11:    54 3599.277
+#&gt; 12:    60 3596.218
+#&gt; 13:    56 3599.375
+#&gt; 14:    66 3580.744
+#&gt; 15:    51 3474.894
+#&gt; 16:    55 3599.865
+#&gt; 17:    58 3582.460
+#&gt; 18:    68 3571.211
+#&gt; 19:    49 3493.625
+#&gt; 20:    57 3592.257
+#&gt; 21:     8 3597.088
+#&gt; 22:    62 3599.961
+#&gt; 23:    72 3513.739
+#&gt; 24:    43 3592.660
+#&gt; 25:     5 3599.052
+#&gt; 26:    59 3579.823
+#&gt; 27:     4 3598.902
+#&gt; 28:    73 3482.661
+#&gt; 29:    78 3550.890
+#&gt; 30:     6 3597.690
+#&gt; 31:    77 3565.749
+#&gt; 32:    85 3514.238
+#&gt; 33:    53 3599.707
+#&gt; 34:    42 3599.734
+#&gt; 35:    41 3599.321
+#&gt; 36:    39 3599.329
+#&gt; 37:    82 3583.411
+#&gt; 38:     1 3599.048
+#&gt; 39:    80 3494.831
+#&gt; 40:    83 3563.280
+#&gt; 41:    37 3599.654
+#&gt; 42:    90 1271.974
+#&gt; 43:    52 3599.799
+#&gt; 44:    40 3599.960
+#&gt; 45:    81 3470.098
+#&gt; 46:    65 3586.757
+#&gt; 47:    67 3573.733
+#&gt; 48:     3 3598.243
+#&gt; 49:    76 3582.451
+#&gt; 50:     2 3599.591
+#&gt; 51:    79 3525.475
+#&gt; 52:    84 3547.442
+#&gt; 53:    63 3599.643
+#&gt; 54:    32 3488.498
+#&gt; 55:    13 3595.863
+#&gt; 56:    48 3501.245
+#&gt; 57:    50 3479.767
+#&gt; 58:    28 3513.630
+#&gt; 59:    30 3500.774
+#&gt; 60:    35 3481.031
+#&gt; 61:    38 3471.187
+#&gt; 62:    46 3517.254
+#&gt; 63:    33 3487.501
+#&gt; 64:    14 3599.622
+#&gt; 65:    45 3597.069
+#&gt; 66:    34 3485.333
+#&gt; 67:    36 3477.041
+#&gt; 68:    47 3506.486
+#&gt; 69:    12 3599.451
+#&gt; 70:    11 3598.856
+#&gt; 71:    10 3599.948
+#&gt; 72:    16 3599.690
+#&gt; 73:    17 3588.430
+#&gt; 74:    15 3598.620
+#&gt; 75:    29 3508.412
+#&gt; 76:    27 3519.659
+#&gt; 77:    31 3497.117
+#&gt; 78:    23 3555.930
+#&gt; 79:    20 3569.205
+#&gt; 80:    26 3539.969
+#&gt; 81:    21 3567.367
+#&gt; 82:    18 3585.755
+#&gt; 83:    24 3545.226
+#&gt; 84:    22 3557.271
+#&gt; 85:    19 3578.485
+#&gt; 86:    25 3543.665
+#&gt; 87:    86 3587.553
+#&gt; 88:    87 3568.405
+#&gt; 89:    88 3550.697
+#&gt; 90:    89 3531.835
 #&gt;     chunk  runtime</div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='co'># }</span><div class='input'>
@@ -414,27 +420,27 @@ Number of parallel jobs to assume for runtime estimation.</p></td>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='no'>est</span>$<span class='no'>runtimes</span>[<span class='no'>type</span> <span class='kw'>==</span> <span class='st'>"estimated"</span>]
 <span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'><a href='chunk.html'>lpt</a></span>(<span class='no'>runtime</span>, <span class='fl'>10</span>)]</div><div class='output co'>#&gt;      job.id      type   runtime chunk
 #&gt;       &lt;int&gt;    &lt;fctr&gt;     &lt;num&gt; &lt;int&gt;
-#&gt;   1:      1 estimated 1042.7630     7
-#&gt;   2:      2 estimated 1042.5288    10
-#&gt;   3:      3 estimated  190.2161     9
-#&gt;   4:      5 estimated  194.7092     1
+#&gt;   1:      1 estimated 1043.1353     8
+#&gt;   2:      2 estimated 1042.6340     6
+#&gt;   3:      3 estimated  190.8529     2
+#&gt;   4:      5 estimated  195.5074     8
 #&gt;  ---                                 
-#&gt; 446:    495 estimated  565.3525     6
-#&gt; 447:    496 estimated 1398.7162    10
-#&gt; 448:    498 estimated  600.2321     4
-#&gt; 449:    499 estimated  577.6769     6
-#&gt; 450:    500 estimated  565.3525     9</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>[, <span class='fu'>list</span>(<span class='kw'>runtime</span> <span class='kw'>=</span> <span class='fu'>sum</span>(<span class='no'>runtime</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>chunk</span>])</div><div class='output co'>#&gt;     chunk  runtime
+#&gt; 446:    495 estimated  560.1503     4
+#&gt; 447:    496 estimated 1396.1413     9
+#&gt; 448:    498 estimated  596.3900     5
+#&gt; 449:    499 estimated  572.4746     7
+#&gt; 450:    500 estimated  560.1503     7</div><div class='input'><span class='fu'>print</span>(<span class='no'>ids</span>[, <span class='fu'>list</span>(<span class='kw'>runtime</span> <span class='kw'>=</span> <span class='fu'>sum</span>(<span class='no'>runtime</span>)), <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>chunk</span>])</div><div class='output co'>#&gt;     chunk  runtime
 #&gt;     &lt;int&gt;    &lt;num&gt;
-#&gt;  1:     7 31882.73
-#&gt;  2:    10 31884.67
-#&gt;  3:     9 31754.67
-#&gt;  4:     1 31879.63
-#&gt;  5:     8 31754.51
-#&gt;  6:     4 31887.96
-#&gt;  7:     2 31753.71
-#&gt;  8:     3 31884.28
-#&gt;  9:     6 31753.85
-#&gt; 10:     5 31754.66</div></pre>
+#&gt;  1:     8 31755.20
+#&gt;  2:     6 31755.86
+#&gt;  3:     2 31880.62
+#&gt;  4:     4 31755.34
+#&gt;  5:    10 31884.81
+#&gt;  6:     3 31888.81
+#&gt;  7:     1 31885.55
+#&gt;  8:     5 31755.98
+#&gt;  9:     7 31883.20
+#&gt; 10:     9 31755.63</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

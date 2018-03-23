@@ -39,6 +39,8 @@ A heuristic tries to detect if the registry has been altered in the background.
 However, you should not completely rely on it.
 Thus, set to writeable to TRUE if and only if you are absolutely sure other R processes are terminated." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -61,8 +63,12 @@ Thus, set to writeable to TRUE if and only if you are absolutely sure other R pr
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -72,7 +78,7 @@ Thus, set to writeable to TRUE if and only if you are absolutely sure other R pr
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -121,7 +127,7 @@ Thus, set to <code>writeable</code> to <code>TRUE</code> if and only if you are 
     <pre class="usage"><span class='fu'>loadRegistry</span>(<span class='no'>file.dir</span>, <span class='kw'>work.dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.file</span> <span class='kw'>=</span> <span class='fu'>findConfFile</span>(),
   <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>writeable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>

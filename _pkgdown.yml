@@ -8,6 +8,7 @@ reference:
     contents:
       - Registry
       - ExperimentRegistry
+      - assertRegistry
       - loadRegistry
       - saveRegistry
       - syncRegistry
@@ -27,7 +28,9 @@ reference:
       - submitJobs
       - batchExport
       - waitForJobs
-      - chunkIds
+      - chunk
+      - lpt
+      - binpack
       - setJobNames
   - title: Query Job Information
     contents:

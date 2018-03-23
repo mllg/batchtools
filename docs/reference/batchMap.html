@@ -34,6 +34,8 @@ Results and partial results can be collected with reduceResultsList, reduceResul
 loadResult.
 For a synchronous Map-like execution, see btmapply." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -56,8 +58,12 @@ For a synchronous Map-like execution, see btmapply." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -67,7 +73,7 @@ For a synchronous Map-like execution, see btmapply." />
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -111,7 +117,7 @@ Results and partial results can be collected with <code><a href='reduceResultsLi
     <pre class="usage"><span class='fu'>batchMap</span>(<span class='no'>fun</span>, <span class='no'>...</span>, <span class='kw'>args</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>more.args</span> <span class='kw'>=</span> <span class='fu'>list</span>(),
   <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -174,7 +180,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt;  7:      7   &lt;list&gt;
 #&gt;  8:      8   &lt;list&gt;
 #&gt;  9:      9   &lt;list&gt;
-#&gt; 10:     10   &lt;list&gt;</div><div class='input'><span class='fu'><a href='testJob.html'>testJob</a></span>(<span class='fl'>6</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>) <span class='co'># 100 + 6^2 = 136</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 6 ...</span></div><div class='output co'>#&gt; [1] 136</div><div class='input'>
+#&gt; 10:     10   &lt;list&gt;</div><div class='input'><span class='fu'><a href='testJob.html'>testJob</a></span>(<span class='fl'>6</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>) <span class='co'># 100 + 6^2 = 136</span></div><div class='output co'>#&gt; ### [bt]: Setting seed to 6 ...</div><div class='output co'>#&gt; [1] 136</div><div class='input'>
 <span class='co'># vector recycling</span>
 <span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg2' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>...</span>) <span class='fu'>list</span>(<span class='no'>...</span>)
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'>batchMap</span>(<span class='no'>f</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>6</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 6 jobs ...</span></div><div class='input'><span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt;    job.id job.pars
@@ -196,7 +202,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt; 6:      6   &lt;list&gt;
 #&gt; 7:      7   &lt;list&gt;
 #&gt; 8:      8   &lt;list&gt;
-#&gt; 9:      9   &lt;list&gt;</div><div class='input'><span class='fu'><a href='testJob.html'>testJob</a></span>(<span class='fl'>6</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 6 ...</span></div><div class='output co'>#&gt; [1] "b 3"</div></pre>
+#&gt; 9:      9   &lt;list&gt;</div><div class='input'><span class='fu'><a href='testJob.html'>testJob</a></span>(<span class='fl'>6</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; ### [bt]: Setting seed to 6 ...</div><div class='output co'>#&gt; [1] "b 3"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

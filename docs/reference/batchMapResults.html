@@ -30,6 +30,8 @@
 <meta property="og:description" content="This function allows you to create new computational jobs (just like batchMap based on the results of
 a Registry." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -52,8 +54,12 @@ a Registry." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -63,7 +69,7 @@ a Registry." />
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -103,7 +109,7 @@ a <code><a href='makeRegistry.html'>Registry</a></code>.</p>
     <pre class="usage"><span class='fu'>batchMapResults</span>(<span class='no'>fun</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>more.args</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='no'>target</span>,
   <span class='kw'>source</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -156,10 +162,10 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Source registry: calculate squre of some numbers</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg1' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>list</span>(<span class='kw'>square</span> <span class='kw'>=</span> <span class='no'>x</span>^<span class='fl'>2</span>), <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 10 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 5 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 6 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 7 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 8 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 9 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 10 ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg1' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>list</span>(<span class='kw'>square</span> <span class='kw'>=</span> <span class='no'>x</span>^<span class='fl'>2</span>), <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 10 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># Target registry: map some results of first registry to calculate the square root</span>
 <span class='no'>target</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg2' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'>batchMapResults</span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>) <span class='fu'>list</span>(<span class='kw'>sqrt</span> <span class='kw'>=</span> <span class='fu'>sqrt</span>(<span class='no'>x</span>$<span class='no'>square</span>)), <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fl'>4</span>:<span class='fl'>8</span>,
-  <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>source</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>target</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 5 jobs in 5 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 5 ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>target</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+  <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>source</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>target</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 5 jobs in 5 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>target</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># Map old to new ids. First, get a table with results and parameters</span>
 <span class='no'>results</span> <span class='kw'>=</span> <span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='fu'><a href='JoinTables.html'>rjoin</a></span>(<span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>target</span>), <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>target</span>)))
 <span class='fu'>print</span>(<span class='no'>results</span>)</div><div class='output co'>#&gt;    job.id  ..id  sqrt

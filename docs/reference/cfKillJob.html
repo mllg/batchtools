@@ -32,6 +32,8 @@ Calls the OS command to kill a job via system like this: &#8220;cmd batch.job.id
 command returns an exit code &gt; 0, the command is repeated after a 1 second sleep
 max.tries-1 times. If the command failed in all tries, an error is generated." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -54,8 +56,12 @@ max.tries-1 times. If the command failed in all tries, an error is generated." /
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -65,7 +71,7 @@ max.tries-1 times. If the command failed in all tries, an error is generated." /
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -107,7 +113,7 @@ command returns an exit code &gt; 0, the command is repeated after a 1 second sl
     <pre class="usage"><span class='fu'>cfKillJob</span>(<span class='no'>reg</span>, <span class='no'>cmd</span>, <span class='kw'>args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>max.tries</span> <span class='kw'>=</span> <span class='fl'>3L</span>,
   <span class='kw'>nodename</span> <span class='kw'>=</span> <span class='st'>"localhost"</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>

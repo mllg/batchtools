@@ -203,6 +203,7 @@ piApprox = function(n) {
   d = sqrt(nums[, 1]^2 + nums[, 2]^2)
   4 * mean(d <= 1)
 }
+set.seed(42)
 piApprox(1000)
 ```
 We now parallelize `piApprox()` with `batchtools`: We create 10 jobs, each doing a MC simulation with $10^5$ jobs.

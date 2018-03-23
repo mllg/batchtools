@@ -34,6 +34,8 @@ The actual computation is started with submitJobs.
 Results and partial results can be collected with reduceResultsList, reduceResults or
 loadResult." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -56,8 +58,12 @@ loadResult." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -67,7 +73,7 @@ loadResult." />
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -111,7 +117,7 @@ Results and partial results can be collected with <code><a href='reduceResultsLi
     <pre class="usage"><span class='fu'>batchReduce</span>(<span class='no'>fun</span>, <span class='no'>xs</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>chunks</span> <span class='kw'>=</span> <span class='fu'>seq_along</span>(<span class='no'>xs</span>),
   <span class='kw'>more.args</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -162,7 +168,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
 <span class='co'># sum 20 numbers on each slave process, i.e. 5 jobs</span>
 <span class='no'>chunks</span> <span class='kw'>=</span> <span class='fu'><a href='chunk.html'>chunk</a></span>(<span class='no'>xs</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>5</span>)
-<span class='fu'>batchReduce</span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>f</span>, <span class='fl'>1</span>:<span class='fl'>100</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>chunks</span> <span class='kw'>=</span> <span class='no'>chunks</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 20 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 20 jobs in 20 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 5 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 6 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 7 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 8 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 9 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 10 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 11 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 12 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 13 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 14 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 15 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 16 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 17 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 18 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 19 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 20 ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='fu'>batchReduce</span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>f</span>, <span class='fl'>1</span>:<span class='fl'>100</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>chunks</span> <span class='kw'>=</span> <span class='no'>chunks</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 20 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 20 jobs in 20 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># now reduce one final time on master</span>
 <span class='fu'><a href='reduceResults.html'>reduceResults</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>aggr</span>, <span class='no'>job</span>, <span class='no'>res</span>) <span class='fu'>f</span>(<span class='no'>aggr</span>, <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] 5050</div></pre>
   </div>
