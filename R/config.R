@@ -3,20 +3,24 @@ findConfFile = function() {
   if (nzchar(x)) {
     x = fs::path(x, "batchtools.conf.R")
     if (fs::file_exists(x))
-      return(fs::path_real(x))
+      return(assertFileExists(fs::path_real(x), access = "r"))
   }
 
   x = "batchtools.conf.R"
-  if (fs::file_exists(x))
+  if (testFileExists(x, access = "r"))
     return(fs::path_real(x))
 
   x = fs::path(user_config_dir("batchtools", expand = FALSE), "config.R")
-  if (fs::file_exists(x))
+  if (testFileExists(x, access = "r"))
     return(x)
 
   x = fs::path("~", ".batchtools.conf.R")
-  if (fs::file_exists(x))
+  if (testFileExists(x, access = "r"))
     return(fs::path_real(x))
+
+  x = fs::path(site_config_dir("batchtools"), "config.R")
+  if (testFileExists(x, access = "r"))
+    return(x)
 
   return(character(0L))
 }
@@ -35,6 +39,6 @@ setSystemConf = function(reg, conf.file) {
     assertList(reg$default.resources, names = "unique")
     fs::dir_create(reg$temp.dir)
   } else {
-    info("No configuration file found")
+    info("No readable configuration file found")
   }
 }

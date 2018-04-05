@@ -25,7 +25,7 @@
 #' @importFrom digest digest
 #' @importFrom brew brew
 #' @importFrom progress progress_bar
-#' @importFrom rappdirs user_config_dir
+#' @importFrom rappdirs user_config_dir site_config_dir
 #' @importFrom stats runif predict pexp
 #' @importFrom base64url base32_encode base32_decode
 #' @importFrom withr with_dir with_seed local_options local_dir

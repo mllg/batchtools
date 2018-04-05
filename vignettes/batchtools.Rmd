@@ -203,6 +203,7 @@ piApprox = function(n) {
   d = sqrt(nums[, 1]^2 + nums[, 2]^2)
   4 * mean(d <= 1)
 }
+set.seed(42)
 piApprox(1000)
 ```
 We now parallelize `piApprox()` with `batchtools`: We create 10 jobs, each doing a MC simulation with $10^5$ jobs.
@@ -505,7 +506,7 @@ knitr::include_graphics("function_overview.png", auto_pdf = TRUE)
 Most users develop and prototype their experiments on a desktop box in their preferred IDE and later deploy to a large computing cluster.
 This can be done by prototyping locally ([`testJob()`](https://mllg.github.io/batchtools/reference/testJob) or submit subsets via [`submitJobs()`](https://mllg.github.io/batchtools/reference/submitJobs)).
 To deploy to the cluster, just copy the file directory (as reported by `reg$file.dir`) to the remote system.
-Next, log in on the cluster (typically via `ssh`), `cd` to the copied directory and call `loadRegistry("<file.dir.on.remote">, "<work.dir.on.remote>")`.
+Next, log in on the cluster (typically via `ssh`), `cd` to the copied directory and call `loadRegistry("<file.dir.on.remote">, "<work.dir.on.remote>", writeable = TRUE)`.
 This function will (a) source the local configuration file so that you can talk to the cluster (verify by checking the output of `reg$cluster.functions`) and (b) adjust the paths to the new system if argument `update.paths` is set.
 After loading the Registry, it is advised to test some jobs again with [`testJob()`](https://mllg.github.io/batchtools/reference/testJob) before submitting all of them with `submitJobs(resources = list())` (remember you now need to set resources!).
 After some jobs are finished, the `file.dir` can be copied back (do not merge with the previous directory!) and loaded again with [`loadRegistry()`](https://mllg.github.io/batchtools/reference/loadRegistry).

@@ -29,11 +29,10 @@ makeClusterFunctionsInteractive = function(external = FALSE, write.logs = TRUE, 
     assertClass(jc, "JobCollection")
     if (external) {
       runOSCommand(Rscript(), sprintf("-e \"batchtools::doJobCollection('%s', output = '%s')\"", jc$uri, jc$log.file))
-      makeSubmitJobResult(status = 0L, batch.id = "cfInteractive")
     } else {
       doJobCollection(jc, output = jc$log.file)
-      makeSubmitJobResult(status = 0L, batch.id = "cfInteractive")
     }
+    makeSubmitJobResult(status = 0L, batch.id = "cfInteractive")
   }
 
   makeClusterFunctions(name = "Interactive", submitJob = submitJob, store.job.collection = external, fs.latency = fs.latency)

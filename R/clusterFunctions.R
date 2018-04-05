@@ -295,32 +295,35 @@ findTemplateFile = function(name) {
     return(name)
 
   if (stri_endswith_fixed(name, ".tmpl")) {
-    assertFileExists(name, access = "r")
-    return(name)
+    return(assertFileExists(name, access = "r"))
   }
 
   x = Sys.getenv("R_BATCHTOOLS_SEARCH_PATH")
   if (nzchar(x)) {
     x = fs::path(x, sprintf("batchtools.%s.tmpl", name))
-    if (fs::file_exists(x))
+    if (testFileExists(x, access = "r"))
       return(fs::path_real(x))
   }
 
   x = sprintf("batchtools.%s.tmpl", name)
-  if (fs::file_exists(x))
+  if (testFileExists(x, access = "r"))
     return(fs::path_real(x))
 
   x = fs::path(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", name))
-  if (fs::file_exists(x))
+  if (testFileExists(x, access = "r"))
     return(x)
 
   x = fs::path("~", sprintf(".batchtools.%s.tmpl", name))
-  if (fs::file_exists(x))
+  if (testFileExists(x, access = "r"))
     return(fs::path_real(x))
 
-  x = system.file("templates", sprintf("%s.tmpl", name), package = "batchtools")
-  if (fs::file_exists(x))
+  x = fs::path(site_config_dir("batchtools"), sprintf("%s.tmpl", name))
+  if (testFileExists(x, access = "r"))
     return(x)
 
-  stopf("Argument 'template' (=\"%s\") must point to a template file or contain the template itself as string (containing at least one newline)", name)
+  x = system.file("templates", sprintf("%s.tmpl", name), package = "batchtools")
+  if (testFileExists(x, access = "r"))
+    return(x)
+
+  stopf("Argument 'template' (=\"%s\") must point to a readable template file or contain the template itself as string (containing at least one newline)", name)
 }

@@ -63,7 +63,7 @@ print.Status = function(x, ...) {
   fmt = sprintf("  %%-13s: %%%ii (%%5.1f%%%%)", stri_width(x$defined))
   pr = function(label, h) catf(fmt, label, h, h / x$defined * 100)
 
-  catf("Status for %i jobs:", x$defined)
+  catf("Status for %i jobs at %s:", x$defined, strftime(Sys.time()))
   pr("Submitted", x$submitted)
   pr("-- Queued", x$queued)
   pr("-- Started", x$started)

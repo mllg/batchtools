@@ -18,13 +18,31 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="ClusterFunctions for Slurm Systems — makeClusterFunctionsSlurm" />
+
+<meta property="og:description" content="Cluster functions for Slurm (http://slurm.schedmd.com/).
+Job files are created based on the brew template template.file. This
+file is processed with brew and then submitted to the queue using the
+sbatch command. Jobs are killed using the scancel command and
+the list of running jobs is retrieved using squeue. The user must
+have the appropriate privileges to submit, delete and list jobs on the
+cluster (this is usually the case).
+The template file can access all resources passed to submitJobs
+as well as all variables stored in the JobCollection.
+It is the template file's job to choose a queue for the job and handle the desired resource
+allocations.
+Note that you might have to specify the cluster name here if you do not want to use the default,
+otherwise the commands for listing and killing jobs will not work." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +65,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +80,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +109,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>ClusterFunctions for Slurm Systems</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSlurm.R'><code>R/clusterFunctionsSlurm.R</code></a></small>
     </div>
 
     
@@ -109,12 +132,12 @@ otherwise the commands for listing and killing jobs will not work.</p>
   <span class='kw'>array.jobs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>nodename</span> <span class='kw'>=</span> <span class='st'>"localhost"</span>, <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>template</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Either a path to a <span class="pkg">brew</span> template file (with extension &#8220;tmpl&#8221;), or a short descriptive name enabling the following heuristic for the file lookup:</p><ol>
 <li><p>&#8220;batchtools.[template].tmpl&#8221; in the path specified by the environment variable &#8220;R_BATCHTOOLS_SEARCH_PATH&#8221;.</p></li>
 <li><p>&#8220;batchtools.[template].tmpl&#8221; in the current working directory.</p></li>
@@ -127,19 +150,19 @@ The string must include at least on newline (&#8220;\n&#8221;) in this case.</p>
     </tr>
     <tr>
       <th>clusters</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.
 If only one cluster is present, this argument may be omitted.
 Note that you should not select the cluster in your template file via <code>#SBATCH --clusters</code>.</p></td>
     </tr>
     <tr>
       <th>array.jobs</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 If array jobs are disabled on the computing site, set to <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>nodename</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Nodename of the master. All commands are send via SSH to this host. Only works iff</p><ol>
 <li><p>Passwordless authentication (e.g., via SSH public key authentication) is set up.</p></li>
 <li><p>The file directory is shared across machines, e.g. mounted via SSHFS.</p></li>
@@ -149,13 +172,13 @@ Nodename of the master. All commands are send via SSH to this host. Only works i
     </tr>
     <tr>
       <th>scheduler.latency</th>
-      <td><p>[<code>numeric(1)</code>]
+      <td><p>[<code>numeric(1)</code>]<br />
 Time to sleep after important interactions with the scheduler to ensure a sane state.
 Currently only triggered after calling <code><a href='submitJobs.html'>submitJobs</a></code>.</p></td>
     </tr>
     <tr>
       <th>fs.latency</th>
-      <td><p>[<code>numeric(1)</code>]
+      <td><p>[<code>numeric(1)</code>]<br />
 Expected maximum latency of the file system, in seconds.
 Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 access files and directories.
@@ -209,3 +232,4 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
 
   </body>
 </html>
+

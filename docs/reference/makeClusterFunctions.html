@@ -18,13 +18,21 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="ClusterFunctions Constructor — makeClusterFunctions" />
+
+<meta property="og:description" content="This is the constructor used to create custom cluster functions.
+Note that some standard implementations for TORQUE, Slurm, LSF, SGE, etc. ship
+with the package." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +55,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +70,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +99,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>ClusterFunctions Constructor</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
     </div>
 
     
@@ -100,23 +113,23 @@ with the package.</p>
   <span class='kw'>store.job.collection</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>store.job.files</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>NA_real_</span>, <span class='kw'>hooks</span> <span class='kw'>=</span> <span class='fu'>list</span>())</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>name</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Name of cluster functions.</p></td>
     </tr>
     <tr>
       <th>submitJob</th>
-      <td><p>[<code>function(reg, jc, ...)</code>]
+      <td><p>[<code>function(reg, jc, ...)</code>]<br />
 Function to submit new jobs. Must return a <code><a href='makeSubmitJobResult.html'>SubmitJobResult</a></code> object.
 The arguments are <code>reg</code> (<code><a href='makeRegistry.html'>Registry</a></code>) and <code>jobs</code> (<code><a href='JobCollection.html'>JobCollection</a></code>).</p></td>
     </tr>
     <tr>
       <th>killJob</th>
-      <td><p>[<code>function(reg, batch.id)</code>]
+      <td><p>[<code>function(reg, batch.id)</code>]<br />
 Function to kill a job on the batch system. Make sure that you definitely kill the job! Return
 value is currently ignored. Must have the arguments <code>reg</code> (<code><a href='makeRegistry.html'>Registry</a></code>) and
 <code>batch.id</code> (<code>character(1)</code> as returned by <code>submitJob</code>).
@@ -125,7 +138,7 @@ Set <code>killJob</code> to <code>NULL</code> if killing jobs cannot be supporte
     </tr>
     <tr>
       <th>listJobsQueued</th>
-      <td><p>[<code>function(reg)</code>]
+      <td><p>[<code>function(reg)</code>]<br />
 List all queued jobs on the batch system for the current user.
 Must return an character vector of batch ids, same format as they
 are returned by <code>submitJob</code>.
@@ -133,7 +146,7 @@ Set <code>listJobsQueued</code> to <code>NULL</code> if listing of queued jobs i
     </tr>
     <tr>
       <th>listJobsRunning</th>
-      <td><p>[<code>function(reg)</code>]
+      <td><p>[<code>function(reg)</code>]<br />
 List all running jobs on the batch system for the current user.
 Must return an character vector of batch ids, same format as they
 are returned by <code>submitJob</code>. It does not matter if you return a few job ids too many (e.g.
@@ -143,32 +156,32 @@ Set <code>listJobsRunning</code> to <code>NULL</code> if listing of running jobs
     </tr>
     <tr>
       <th>array.var</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Name of the environment variable set by the scheduler to identify IDs of job arrays.
 Default is <code>NA</code> for no array support.</p></td>
     </tr>
     <tr>
       <th>store.job.collection</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 Flag to indicate that the cluster function implementation of <code>submitJob</code> can not directly handle <code><a href='JobCollection.html'>JobCollection</a></code> objects.
 If set to <code>FALSE</code>, the <code><a href='JobCollection.html'>JobCollection</a></code> is serialized to the file system before submitting the job.</p></td>
     </tr>
     <tr>
       <th>store.job.files</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 Flag to indicate that job files need to be stored in the file directory.
 If set to <code>FALSE</code> (default), the job file is created in a temporary directory, otherwise (or if the debug mode is enabled) in
 the subdirectory <code>jobs</code> of the <code>file.dir</code>.</p></td>
     </tr>
     <tr>
       <th>scheduler.latency</th>
-      <td><p>[<code>numeric(1)</code>]
+      <td><p>[<code>numeric(1)</code>]<br />
 Time to sleep after important interactions with the scheduler to ensure a sane state.
 Currently only triggered after calling <code><a href='submitJobs.html'>submitJobs</a></code>.</p></td>
     </tr>
     <tr>
       <th>fs.latency</th>
-      <td><p>[<code>numeric(1)</code>]
+      <td><p>[<code>numeric(1)</code>]<br />
 Expected maximum latency of the file system, in seconds.
 Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 access files and directories.
@@ -176,7 +189,7 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
     </tr>
     <tr>
       <th>hooks</th>
-      <td><p>[<code>list</code>]
+      <td><p>[<code>list</code>]<br />
 Named list of functions which will we called on certain events like &#8220;pre.submit&#8221; or &#8220;post.sync&#8221;.
 See <a href='runHook.html'>Hooks</a>.</p></td>
     </tr>
@@ -228,3 +241,4 @@ See <a href='runHook.html'>Hooks</a>.</p></td>
 
   </body>
 </html>
+

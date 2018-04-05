@@ -18,13 +18,16 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Function reference" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +50,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +65,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -86,10 +93,7 @@
       <div class="row">
   <div class="col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.9.8</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
     <div class="contents">
@@ -124,49 +128,55 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="makeRegistry.html">makeRegistry</a></code> </p>
+            <p><code><a href="makeRegistry.html">makeRegistry()</a></code> </p>
           </td>
           <td><p>Registry Constructor</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="makeExperimentRegistry.html">makeExperimentRegistry</a></code> </p>
+            <p><code><a href="makeExperimentRegistry.html">makeExperimentRegistry()</a></code> </p>
           </td>
           <td><p>ExperimentRegistry Constructor</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="loadRegistry.html">loadRegistry</a></code> </p>
+            <p><code><a href="assertRegistry.html">assertRegistry()</a></code> </p>
+          </td>
+          <td><p>assertRegistry</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="loadRegistry.html">loadRegistry()</a></code> </p>
           </td>
           <td><p>Load a Registry from the File System</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="saveRegistry.html">saveRegistry</a></code> </p>
+            <p><code><a href="saveRegistry.html">saveRegistry()</a></code> </p>
           </td>
           <td><p>Store the Registy to the File System</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="syncRegistry.html">syncRegistry</a></code> </p>
+            <p><code><a href="syncRegistry.html">syncRegistry()</a></code> </p>
           </td>
           <td><p>Synchronize the Registry</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="sweepRegistry.html">sweepRegistry</a></code> </p>
+            <p><code><a href="sweepRegistry.html">sweepRegistry()</a></code> </p>
           </td>
           <td><p>Check Consistency and Remove Obsolete Information</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="removeRegistry.html">removeRegistry</a></code> </p>
+            <p><code><a href="removeRegistry.html">removeRegistry()</a></code> </p>
           </td>
           <td><p>Remove a Registry from the File System</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="getDefaultRegistry.html">getDefaultRegistry</a></code> <code><a href="getDefaultRegistry.html">setDefaultRegistry</a></code> </p>
+            <p><code><a href="getDefaultRegistry.html">getDefaultRegistry()</a></code> <code><a href="getDefaultRegistry.html">setDefaultRegistry()</a></code> </p>
           </td>
           <td><p>Get and Set the Default Registry</p></td>
         </tr>
@@ -180,37 +190,37 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="batchMap.html">batchMap</a></code> </p>
+            <p><code><a href="batchMap.html">batchMap()</a></code> </p>
           </td>
           <td><p>Map Operation for Batch Systems</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="batchReduce.html">batchReduce</a></code> </p>
+            <p><code><a href="batchReduce.html">batchReduce()</a></code> </p>
           </td>
           <td><p>Reduce Operation for Batch Systems</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="batchMapResults.html">batchMapResults</a></code> </p>
+            <p><code><a href="batchMapResults.html">batchMapResults()</a></code> </p>
           </td>
           <td><p>Map Over Results to Create New Jobs</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="addProblem.html">addProblem</a></code> <code><a href="addProblem.html">removeProblems</a></code> </p>
+            <p><code><a href="addProblem.html">addProblem()</a></code> <code><a href="addProblem.html">removeProblems()</a></code> </p>
           </td>
           <td><p>Define Problems for Experiments</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="addAlgorithm.html">addAlgorithm</a></code> <code><a href="addAlgorithm.html">removeAlgorithms</a></code> </p>
+            <p><code><a href="addAlgorithm.html">addAlgorithm()</a></code> <code><a href="addAlgorithm.html">removeAlgorithms()</a></code> </p>
           </td>
           <td><p>Define Algorithms for Experiments</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="addExperiments.html">addExperiments</a></code> </p>
+            <p><code><a href="addExperiments.html">addExperiments()</a></code> </p>
           </td>
           <td><p>Add Experiments to the Registry</p></td>
         </tr>
@@ -224,31 +234,31 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="submitJobs.html">submitJobs</a></code> </p>
+            <p><code><a href="submitJobs.html">submitJobs()</a></code> </p>
           </td>
           <td><p>Submit Jobs to the Batch Systems</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="batchExport.html">batchExport</a></code> </p>
+            <p><code><a href="batchExport.html">batchExport()</a></code> </p>
           </td>
           <td><p>Export Objects to the Slaves</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="waitForJobs.html">waitForJobs</a></code> </p>
+            <p><code><a href="waitForJobs.html">waitForJobs()</a></code> </p>
           </td>
           <td><p>Wait for Termination of Jobs</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="chunkIds.html">chunkIds</a></code> </p>
+            <p><code><a href="chunk.html">chunk()</a></code> <code><a href="chunk.html">lpt()</a></code> <code><a href="chunk.html">binpack()</a></code> </p>
           </td>
           <td><p>Chunk Jobs for Sequential Execution</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="JobNames.html">setJobNames</a></code> <code><a href="JobNames.html">getJobNames</a></code> </p>
+            <p><code><a href="JobNames.html">setJobNames()</a></code> <code><a href="JobNames.html">getJobNames()</a></code> </p>
           </td>
           <td><p>Set and Retrieve Job Names</p></td>
         </tr>
@@ -262,25 +272,25 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="getStatus.html">getStatus</a></code> </p>
+            <p><code><a href="getStatus.html">getStatus()</a></code> </p>
           </td>
           <td><p>Summarize the Computational Status</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="findJobs.html">findJobs</a></code> <code><a href="findJobs.html">findExperiments</a></code> <code><a href="findJobs.html">findSubmitted</a></code> <code><a href="findJobs.html">findNotSubmitted</a></code> <code><a href="findJobs.html">findStarted</a></code> <code><a href="findJobs.html">findNotStarted</a></code> <code><a href="findJobs.html">findDone</a></code> <code><a href="findJobs.html">findNotDone</a></code> <code><a href="findJobs.html">findErrors</a></code> <code><a href="findJobs.html">findOnSystem</a></code> <code><a href="findJobs.html">findRunning</a></code> <code><a href="findJobs.html">findQueued</a></code> <code><a href="findJobs.html">findExpired</a></code> <code><a href="findJobs.html">findTagged</a></code> </p>
+            <p><code><a href="findJobs.html">findJobs()</a></code> <code><a href="findJobs.html">findExperiments()</a></code> <code><a href="findJobs.html">findSubmitted()</a></code> <code><a href="findJobs.html">findNotSubmitted()</a></code> <code><a href="findJobs.html">findStarted()</a></code> <code><a href="findJobs.html">findNotStarted()</a></code> <code><a href="findJobs.html">findDone()</a></code> <code><a href="findJobs.html">findNotDone()</a></code> <code><a href="findJobs.html">findErrors()</a></code> <code><a href="findJobs.html">findOnSystem()</a></code> <code><a href="findJobs.html">findRunning()</a></code> <code><a href="findJobs.html">findQueued()</a></code> <code><a href="findJobs.html">findExpired()</a></code> <code><a href="findJobs.html">findTagged()</a></code> </p>
           </td>
           <td><p>Find and Filter Jobs</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="getJobTable.html">getJobTable</a></code> <code><a href="getJobTable.html">getJobStatus</a></code> <code><a href="getJobTable.html">getJobResources</a></code> <code><a href="getJobTable.html">getJobPars</a></code> <code><a href="getJobTable.html">getJobTags</a></code> </p>
+            <p><code><a href="getJobTable.html">getJobTable()</a></code> <code><a href="getJobTable.html">getJobStatus()</a></code> <code><a href="getJobTable.html">getJobResources()</a></code> <code><a href="getJobTable.html">getJobPars()</a></code> <code><a href="getJobTable.html">getJobTags()</a></code> </p>
           </td>
           <td><p>Query Job Information</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="summarizeExperiments.html">summarizeExperiments</a></code> </p>
+            <p><code><a href="summarizeExperiments.html">summarizeExperiments()</a></code> </p>
           </td>
           <td><p>Quick Summary over Experiments</p></td>
         </tr>
@@ -294,25 +304,25 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="reduceResults.html">reduceResults</a></code> </p>
+            <p><code><a href="reduceResults.html">reduceResults()</a></code> </p>
           </td>
           <td><p>Reduce Results</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="reduceResultsList.html">reduceResultsList</a></code> <code><a href="reduceResultsList.html">reduceResultsDataTable</a></code> </p>
+            <p><code><a href="reduceResultsList.html">reduceResultsList()</a></code> <code><a href="reduceResultsList.html">reduceResultsDataTable()</a></code> </p>
           </td>
           <td><p>Apply Functions on Results</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="loadResult.html">loadResult</a></code> </p>
+            <p><code><a href="loadResult.html">loadResult()</a></code> </p>
           </td>
           <td><p>Load the Result of a Single Job</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="unwrap.html">unwrap</a></code> <code><a href="unwrap.html">flatten</a></code> </p>
+            <p><code><a href="unwrap.html">unwrap()</a></code> <code><a href="unwrap.html">flatten()</a></code> </p>
           </td>
           <td><p>Unwrap Nested Data Frames</p></td>
         </tr>
@@ -326,31 +336,31 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="resetJobs.html">resetJobs</a></code> </p>
+            <p><code><a href="resetJobs.html">resetJobs()</a></code> </p>
           </td>
           <td><p>Reset the Computational State of Jobs</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="testJob.html">testJob</a></code> </p>
+            <p><code><a href="testJob.html">testJob()</a></code> </p>
           </td>
           <td><p>Run Jobs Interactively</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="showLog.html">showLog</a></code> <code><a href="showLog.html">getLog</a></code> </p>
+            <p><code><a href="showLog.html">showLog()</a></code> <code><a href="showLog.html">getLog()</a></code> </p>
           </td>
           <td><p>Inspect Log Files</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="getErrorMessages.html">getErrorMessages</a></code> </p>
+            <p><code><a href="getErrorMessages.html">getErrorMessages()</a></code> </p>
           </td>
           <td><p>Retrieve Error Messages</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="grepLogs.html">grepLogs</a></code> </p>
+            <p><code><a href="grepLogs.html">grepLogs()</a></code> </p>
           </td>
           <td><p>Grep Log Files for a Pattern</p></td>
         </tr>
@@ -364,19 +374,19 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="killJobs.html">killJobs</a></code> </p>
+            <p><code><a href="killJobs.html">killJobs()</a></code> </p>
           </td>
           <td><p>Kill Jobs</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="clearRegistry.html">clearRegistry</a></code> </p>
+            <p><code><a href="clearRegistry.html">clearRegistry()</a></code> </p>
           </td>
           <td><p>Remove All Jobs</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="removeExperiments.html">removeExperiments</a></code> </p>
+            <p><code><a href="removeExperiments.html">removeExperiments()</a></code> </p>
           </td>
           <td><p>Remove Experiments</p></td>
         </tr>
@@ -390,13 +400,13 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="JobExperiment.html">makeJob</a></code> </p>
+            <p><code><a href="JobExperiment.html">makeJob()</a></code> </p>
           </td>
           <td><p>Jobs and Experiments</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="JobCollection.html">makeJobCollection</a></code> </p>
+            <p><code><a href="JobCollection.html">makeJobCollection()</a></code> </p>
           </td>
           <td><p>JobCollection Constructor</p></td>
         </tr>
@@ -410,103 +420,103 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="cfKillJob.html">cfKillJob</a></code> </p>
+            <p><code><a href="cfKillJob.html">cfKillJob()</a></code> </p>
           </td>
           <td><p>Cluster Functions Helper to Kill Batch Jobs</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="cfBrewTemplate.html">cfBrewTemplate</a></code> </p>
+            <p><code><a href="cfBrewTemplate.html">cfBrewTemplate()</a></code> </p>
           </td>
           <td><p>Cluster Functions Helper to Write Job Description Files</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="cfReadBrewTemplate.html">cfReadBrewTemplate</a></code> </p>
+            <p><code><a href="cfReadBrewTemplate.html">cfReadBrewTemplate()</a></code> </p>
           </td>
           <td><p>Cluster Functions Helper to Parse a Brew Template</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="cfHandleUnknownSubmitError.html">cfHandleUnknownSubmitError</a></code> </p>
+            <p><code><a href="cfHandleUnknownSubmitError.html">cfHandleUnknownSubmitError()</a></code> </p>
           </td>
           <td><p>Cluster Functions Helper to Handle Unknown Errors</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="makeClusterFunctions.html">makeClusterFunctions</a></code> </p>
+            <p><code><a href="makeClusterFunctions.html">makeClusterFunctions()</a></code> </p>
           </td>
           <td><p>ClusterFunctions Constructor</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="makeClusterFunctionsDocker.html">makeClusterFunctionsDocker</a></code> </p>
+            <p><code><a href="makeClusterFunctionsDocker.html">makeClusterFunctionsDocker()</a></code> </p>
           </td>
           <td><p>ClusterFunctions for Docker</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="makeClusterFunctionsInteractive.html">makeClusterFunctionsInteractive</a></code> </p>
+            <p><code><a href="makeClusterFunctionsInteractive.html">makeClusterFunctionsInteractive()</a></code> </p>
           </td>
           <td><p>ClusterFunctions for Sequential Execution in the Running R Session</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="makeClusterFunctionsLSF.html">makeClusterFunctionsLSF</a></code> </p>
+            <p><code><a href="makeClusterFunctionsLSF.html">makeClusterFunctionsLSF()</a></code> </p>
           </td>
           <td><p>ClusterFunctions for LSF Systems</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="makeClusterFunctionsMulticore.html">makeClusterFunctionsMulticore</a></code> </p>
+            <p><code><a href="makeClusterFunctionsMulticore.html">makeClusterFunctionsMulticore()</a></code> </p>
           </td>
           <td><p>ClusterFunctions for Parallel Multicore Execution</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="makeClusterFunctionsOpenLava.html">makeClusterFunctionsOpenLava</a></code> </p>
+            <p><code><a href="makeClusterFunctionsOpenLava.html">makeClusterFunctionsOpenLava()</a></code> </p>
           </td>
           <td><p>ClusterFunctions for OpenLava</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="makeClusterFunctionsSGE.html">makeClusterFunctionsSGE</a></code> </p>
+            <p><code><a href="makeClusterFunctionsSGE.html">makeClusterFunctionsSGE()</a></code> </p>
           </td>
           <td><p>ClusterFunctions for SGE Systems</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="makeClusterFunctionsSlurm.html">makeClusterFunctionsSlurm</a></code> </p>
-          </td>
-          <td><p>ClusterFunctions for Slurm Systems</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="makeClusterFunctionsSocket.html">makeClusterFunctionsSocket</a></code> </p>
-          </td>
-          <td><p>ClusterFunctions for Parallel Socket Execution</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="makeClusterFunctionsSSH.html">makeClusterFunctionsSSH</a></code> </p>
+            <p><code><a href="makeClusterFunctionsSSH.html">makeClusterFunctionsSSH()</a></code> </p>
           </td>
           <td><p>ClusterFunctions for Remote SSH Execution</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="makeClusterFunctionsTORQUE.html">makeClusterFunctionsTORQUE</a></code> </p>
+            <p><code><a href="makeClusterFunctionsSlurm.html">makeClusterFunctionsSlurm()</a></code> </p>
+          </td>
+          <td><p>ClusterFunctions for Slurm Systems</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="makeClusterFunctionsSocket.html">makeClusterFunctionsSocket()</a></code> </p>
+          </td>
+          <td><p>ClusterFunctions for Parallel Socket Execution</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="makeClusterFunctionsTORQUE.html">makeClusterFunctionsTORQUE()</a></code> </p>
           </td>
           <td><p>ClusterFunctions for OpenPBS/TORQUE Systems</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="makeSubmitJobResult.html">makeSubmitJobResult</a></code> </p>
+            <p><code><a href="makeSubmitJobResult.html">makeSubmitJobResult()</a></code> </p>
           </td>
           <td><p>Create a SubmitJobResult</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="runHook.html">runHook</a></code> </p>
+            <p><code><a href="runHook.html">runHook()</a></code> </p>
           </td>
           <td><p>Trigger Evaluation of Custom Function</p></td>
         </tr><tr>
@@ -526,43 +536,43 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="Tags.html">addJobTags</a></code> <code><a href="Tags.html">removeJobTags</a></code> <code><a href="Tags.html">getUsedJobTags</a></code> </p>
+            <p><code><a href="Tags.html">addJobTags()</a></code> <code><a href="Tags.html">removeJobTags()</a></code> <code><a href="Tags.html">getUsedJobTags()</a></code> </p>
           </td>
           <td><p>Add or Remove Job Tags</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="btlapply.html">btlapply</a></code> <code><a href="btlapply.html">btmapply</a></code> </p>
+            <p><code><a href="btlapply.html">btlapply()</a></code> <code><a href="btlapply.html">btmapply()</a></code> </p>
           </td>
           <td><p>Synchronous Apply Functions</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="JoinTables.html">ijoin</a></code> <code><a href="JoinTables.html">ljoin</a></code> <code><a href="JoinTables.html">rjoin</a></code> <code><a href="JoinTables.html">ojoin</a></code> <code><a href="JoinTables.html">sjoin</a></code> <code><a href="JoinTables.html">ajoin</a></code> <code><a href="JoinTables.html">ujoin</a></code> </p>
+            <p><code><a href="JoinTables.html">ijoin()</a></code> <code><a href="JoinTables.html">ljoin()</a></code> <code><a href="JoinTables.html">rjoin()</a></code> <code><a href="JoinTables.html">ojoin()</a></code> <code><a href="JoinTables.html">sjoin()</a></code> <code><a href="JoinTables.html">ajoin()</a></code> <code><a href="JoinTables.html">ujoin()</a></code> </p>
           </td>
           <td><p>Inner, Left, Right, Outer, Semi and Anti Join for Data Tables</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="runOSCommand.html">runOSCommand</a></code> </p>
+            <p><code><a href="runOSCommand.html">runOSCommand()</a></code> </p>
           </td>
           <td><p>Run OS Commands on Local or Remote Machines</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="execJob.html">execJob</a></code> </p>
+            <p><code><a href="execJob.html">execJob()</a></code> </p>
           </td>
           <td><p>Execute a Single Jobs</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="doJobCollection.html">doJobCollection</a></code> </p>
+            <p><code><a href="doJobCollection.html">doJobCollection()</a></code> </p>
           </td>
           <td><p>Execute Jobs of a JobCollection</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="estimateRuntimes.html">estimateRuntimes</a></code> <code><a href="estimateRuntimes.html">print</a></code> </p>
+            <p><code><a href="estimateRuntimes.html">estimateRuntimes()</a></code> <code><a href="estimateRuntimes.html">print(<i>&lt;RuntimeEstimate&gt;</i>)</a></code> </p>
           </td>
           <td><p>Estimate Remaining Runtimes</p></td>
         </tr>
@@ -603,3 +613,4 @@
 
   </body>
 </html>
+

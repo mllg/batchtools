@@ -18,13 +18,35 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Registry Constructor — makeRegistry" />
+
+<meta property="og:description" content="makeRegistry constructs the inter-communication object for all functions in batchtools.
+All communication transactions are processed via the file system:
+All information required to run a job is stored as JobCollection in a file in the
+a subdirectory of the file.dir directory.
+Each jobs stores its results as well as computational status information (start time, end time, error message, ...)
+also on the file system which is regular merged parsed by the master using syncRegistry.
+After integrating the new information into the Registry, the Registry is serialized to the file system via saveRegistry.
+Both syncRegistry and saveRegistry are called whenever required internally.
+Therefore it should be safe to quit the R session at any time.
+Work can later be resumed by calling loadRegistry which de-serializes the registry from
+the file system.
+The registry created last is saved in the package namespace (unless make.default is set to
+FALSE) and can be retrieved via getDefaultRegistry.
+Canceled jobs and jobs submitted multiple times may leave stray files behind.
+These can be swept using sweepRegistry.
+clearRegistry completely erases all jobs from a registry, including log files and results,
+and thus allows you to start over." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +69,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +84,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,6 +113,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Registry Constructor</h1>
+    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Registry.R'><code>R/Registry.R</code></a></small>
     </div>
 
     
@@ -114,12 +141,12 @@ and thus allows you to start over.</p>
   <span class='kw'>namespaces</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>source</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>),
   <span class='kw'>load</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>file.dir</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
   Path where all files of the registry are saved.
   Default is directory &#8220;registry&#8221; in the current working directory.
   The provided path will get normalized unless it is given relative to the home directory
@@ -132,7 +159,7 @@ and thus allows you to start over.</p>
     </tr>
     <tr>
       <th>work.dir</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
   Working directory for R process for running jobs.
   Defaults to the working directory currently set during Registry construction (see <code><a href='http://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a></code>).
   <code>loadRegistry</code> uses the stored <code>work.dir</code>, but you may also explicitly overwrite it,
@@ -142,7 +169,7 @@ and thus allows you to start over.</p>
     </tr>
     <tr>
       <th>conf.file</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
   Path to a configuration file which is sourced while the registry is created.
   In the configuration file you can define how <span class="pkg">batchtools</span> interacts with the system via <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code>.
   Separating the configuration of the underlying host system from the R code allows to easily move computation to another site.</p>
@@ -158,39 +185,39 @@ and thus allows you to start over.</p>
     </tr>
     <tr>
       <th>packages</th>
-      <td><p>[<code>character</code>]
+      <td><p>[<code>character</code>]<br />
 Packages that will always be loaded on each node.
 Uses <code><a href='http://www.rdocumentation.org/packages/base/topics/library'>require</a></code> internally.
 Default is <code>character(0)</code>.</p></td>
     </tr>
     <tr>
       <th>namespaces</th>
-      <td><p>[<code>character</code>]
+      <td><p>[<code>character</code>]<br />
 Same as <code>packages</code>, but the packages will not be attached.
 Uses <code><a href='http://www.rdocumentation.org/packages/base/topics/ns-load'>requireNamespace</a></code> internally.
 Default is <code>character(0)</code>.</p></td>
     </tr>
     <tr>
       <th>source</th>
-      <td><p>[<code>character</code>]
+      <td><p>[<code>character</code>]<br />
 Files which should be sourced on the slaves prior to executing a job.
 Calls <code><a href='http://www.rdocumentation.org/packages/base/topics/sys.source'>sys.source</a></code> using the <code><a href='http://www.rdocumentation.org/packages/base/topics/environment'>.GlobalEnv</a></code>.</p></td>
     </tr>
     <tr>
       <th>load</th>
-      <td><p>[<code>character</code>]
+      <td><p>[<code>character</code>]<br />
 Files which should be loaded on the slaves prior to executing a job.
 Calls <code><a href='http://www.rdocumentation.org/packages/base/topics/load'>load</a></code> using the <code><a href='http://www.rdocumentation.org/packages/base/topics/environment'>.GlobalEnv</a></code>.</p></td>
     </tr>
     <tr>
       <th>seed</th>
-      <td><p>[<code>integer(1)</code>]
+      <td><p>[<code>integer(1)</code>]<br />
 Start seed for jobs. Each job uses the (<code>seed</code> + <code>job.id</code>) as seed.
 Default is a random number in the range [1, <code>.Machine$integer.max/2</code>].</p></td>
     </tr>
     <tr>
       <th>make.default</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 If set to <code>TRUE</code>, the created registry is saved inside the package
 namespace and acts as default registry. You might want to switch this
 off if you work with multiple registries simultaneously.
@@ -237,12 +264,12 @@ Default is <code>TRUE</code>.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'>makeRegistry</span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Job Registry
 #&gt;   Backend  : Interactive
-#&gt;   File dir : /tmp/batchtools-example/reg
-#&gt;   Work dir : /home/lang/Projekte/batchtools/docs/reference
+#&gt;   File dir : /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg
+#&gt;   Work dir : /Users/michel/Projekte/batchtools/docs/reference
 #&gt;   Jobs     : 0
-#&gt;   Seed     : 12135
+#&gt;   Seed     : 32065
 #&gt;   Writeable: TRUE</div><div class='input'>
 <span class='co'># Set cluster functions to interactive mode and start jobs in external R sessions</span>
 <span class='no'>tmp</span>$<span class='no'>cluster.functions</span> <span class='kw'>=</span> <span class='fu'><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></span>(<span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
@@ -282,3 +309,4 @@ Default is <code>TRUE</code>.</p></td>
 
   </body>
 </html>
+
