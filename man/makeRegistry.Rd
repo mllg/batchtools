@@ -37,7 +37,7 @@ makeRegistry(file.dir = "registry", work.dir = getwd(),
   In the configuration file you can define how \pkg{batchtools} interacts with the system via \code{\link{ClusterFunctions}}.
   Separating the configuration of the underlying host system from the R code allows to easily move computation to another site.
 
-  The file lookup is implemented in \code{findConfFile} which returns the first file found of the following candidates:
+  The file lookup is implemented in the internal function \code{findConfFile} which returns the first file found of the following candidates:
   \enumerate{
    \item{File \dQuote{batchtools.conf.R} in the path specified by the environment variable \dQuote{R_BATCHTOOLS_SEARCH_PATH}.}
    \item{File \dQuote{batchtools.conf.R} in the current working directory.}
