@@ -38,8 +38,9 @@ loadRegistry(file.dir, work.dir = NULL, conf.file = findConfFile(),
   \enumerate{
    \item{File \dQuote{batchtools.conf.R} in the path specified by the environment variable \dQuote{R_BATCHTOOLS_SEARCH_PATH}.}
    \item{File \dQuote{batchtools.conf.R} in the current working directory.}
-   \item{File \dQuote{config.R} in the OS dependent user configuration directory as reported by via \code{rappdirs::user_config_dir("batchtools", expand = FALSE)} (e.g., on linux this usually resolves to \dQuote{~/.config/batchtools/config.R}).}
+   \item{File \dQuote{config.R} in the user configuration directory as reported by \code{rappdirs::user_config_dir("batchtools", expand = FALSE)} (depending on OS, e.g., on linux this usually resolves to \dQuote{~/.config/batchtools/config.R}).}
    \item{\dQuote{.batchtools.conf.R} in the home directory (\dQuote{~}).}
+   \item{\dQuote{config.R} in the site config directory as reported by \code{rappdirs::site_config_dir("batchtools")} (depending on OS). This file can be used for admins to set sane defaults for a computation site.}
   }
   Set to \code{character(0)} if you want to suppress reading any configuration file.
   If a configuration file is found, it gets sourced inside the environment of the registry after the defaults for all variables are set.

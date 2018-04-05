@@ -18,6 +18,10 @@ findConfFile = function() {
   if (fs::file_exists(x))
     return(fs::path_real(x))
 
+  x = fs::path(site_config_dir("batchtools"), "config.R")
+  if (fs::file_exists(x))
+    return(fs::path_real(x))
+
   return(character(0L))
 }
 
