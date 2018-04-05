@@ -95,12 +95,12 @@ makeClusterFunctionsSlurm = function(template = "slurm", array.jobs = TRUE, node
   }
 
   listJobsQueued = function(reg) {
-    args = c("--noheader", "--format=%i", "--user=$USER", "--states=PD")
+    args = c("--noheader", "--format=%i", shQuote("--user=$USER"), "--states=PD")
     listJobs(reg, args)
   }
 
   listJobsRunning = function(reg) {
-    args = c("--noheader", "--format=%i", "--user=$USER", "--states=R,S,CG")
+    args = c("--noheader", "--format=%i", shQuote("--user=$USER"), "--states=R,S,CG")
     listJobs(reg, args)
   }
 
