@@ -4,9 +4,8 @@
 \alias{makeClusterFunctionsSlurm}
 \title{ClusterFunctions for Slurm Systems}
 \usage{
-makeClusterFunctionsSlurm(template = "slurm", clusters = NULL,
-  array.jobs = TRUE, nodename = "localhost", scheduler.latency = 1,
-  fs.latency = 65)
+makeClusterFunctionsSlurm(template = "slurm", array.jobs = TRUE,
+  nodename = "localhost", scheduler.latency = 1, fs.latency = 65)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -21,11 +20,6 @@ Either a path to a \pkg{brew} template file (with extension \dQuote{tmpl}), or a
 Here, the default for \code{template} is \dQuote{slurm}.
 Alternatively, the template itself can be provided directly as a string which is then passed to \pkg{brew}.
 The string must include at least on newline (\dQuote{\\n}) in this case.}
-
-\item{clusters}{[\code{character(1)}]\cr
-If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.
-If only one cluster is present, this argument may be omitted.
-Note that you should not select the cluster in your template file via \code{#SBATCH --clusters}.}
 
 \item{array.jobs}{[\code{logical(1)}]\cr
 If array jobs are disabled on the computing site, set to \code{FALSE}.}

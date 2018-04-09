@@ -62,6 +62,7 @@ Some resources' names are standardized and it is good practice to stick to the f
  \item{chunks.as.array.jobs:}{Execute chunks as array jobs.}
  \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}
  \item{foreach.backend:}{Start a \pkg{foreach} backend on the slave.}
+ \item{clusters:}{Resource used for Slurm to select the set of clusters to run \code{sbatch}/\code{squeue}/\code{scancel} on.}
 }
 }
 
