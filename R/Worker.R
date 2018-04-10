@@ -46,7 +46,7 @@ Worker = R6Class("Worker",
       if (nodename == "localhost") {
         self$script = system.file("bin", "linux-helper", package = "batchtools")
       } else {
-        args = c("-e", shQuote("'message(\"[bt] \", system.file(\"bin/linux-helper\", package = \"batchtools\"))'"))
+        args = c("-e", "'message(\"[bt] \", system.file(\"bin/linux-helper\", package = \"batchtools\"))'")
         res = runOSCommand(Rscript(), args, nodename = nodename)
         self$script = private$filter_output(res)$output
       }
