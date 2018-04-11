@@ -21,6 +21,14 @@ Here, the default for \code{template} is \dQuote{sge}.
 Alternatively, the template itself can be provided directly as a string which is then passed to \pkg{brew}.
 The string must include at least on newline (\dQuote{\\n}) in this case.}
 
+\item{nodename}{[\code{character(1)}]\cr
+Nodename of the master host. All commands are send via SSH to this host. Only works iff
+\enumerate{
+  \item{Passwordless authentication (e.g., via SSH public key authentication) is set up.}
+  \item{The file directory is shared across machines, e.g. mounted via SSHFS.}
+  \item{Either the absolute path to the \code{file.dir} is identical on the machines, or paths are provided relative to the home directory. Symbolic links should work.}
+}}
+
 \item{scheduler.latency}{[\code{numeric(1)}]\cr
 Time to sleep after important interactions with the scheduler to ensure a sane state.
 Currently only triggered after calling \code{\link{submitJobs}}.}

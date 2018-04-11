@@ -22,6 +22,7 @@
 #' @templateVar cf.name sge
 #' @template template
 #' @inheritParams makeClusterFunctions
+#' @template nodename
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
