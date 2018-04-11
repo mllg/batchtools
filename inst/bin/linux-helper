@@ -34,10 +34,7 @@
 ##  list-jobs FILEDIR
 ##   Return the PIDs of running R jobs operating on $FILEDIR/jobs.
 
-### efficient [ -n `which [prog]` ]
-command_exists () {
-    hash "$1" 2> /dev/null;
-}
+echo "[bt] --BOF--"
 
 CMD="$1"; shift
 export LC_ALL=C ### Avoid any localization issues.
@@ -84,3 +81,5 @@ case $CMD in
         ;;
     *)
 esac
+
+echo "[bt] --EOF--"

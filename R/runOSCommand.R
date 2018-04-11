@@ -29,7 +29,8 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
   assertString(nodename, min.chars = 1L)
 
   if (!isLocalHost(nodename)) {
-    sys.args = c("-q", nodename, sys.cmd, sys.args)
+    command = shQuote(sprintf("%s %s", sys.cmd, stri_flatten(sys.args, " ")))
+    sys.args = c("-q", nodename, command)
     sys.cmd = "ssh"
   }
 

@@ -46,9 +46,10 @@ Worker = R6Class("Worker",
       if (nodename == "localhost") {
         self$script = system.file("bin", "linux-helper", package = "batchtools")
       } else {
-        args = c("-e", "'message(\"[bt] \", system.file(\"bin/linux-helper\", package = \"batchtools\"))'")
-        res = runOSCommand(Rscript(), args, nodename = nodename)
-        self$script = private$filter_output(res)$output
+        args = c("-e", shQuote("message(\"[bt] --BOF--\\n\", \"[bt] \", system.file(\"bin/linux-helper\", package = \"batchtools\"), \"\\n[bt] --EOF--\\n\")"))
+        res = runOSCommand("Rscript", args, nodename = nodename)
+        script = private$filter_output(res)$output
+        self$script = assertString(script, min.chars = 1L)
       }
 
       self$ncpus = ncpus %??% as.integer(private$run("number-of-cpus")$output)
@@ -86,8 +87,14 @@ Worker = R6Class("Worker",
 
   private = list(
     filter_output = function(res) {
-      res$output = res$output[stri_startswith_fixed(res$output, "[bt]")]
-      res$output = stri_trim_both(stri_sub(res$output, 5L))
+      output = stri_trim_both(res$output)
+      marker = stri_detect_regex(output, "^\\[bt\\] --[BE]OF--$")
+      if (sum(marker) != 2L) {
+        stopf("runOSCommand failed: Expected BOF+EOF markers for '%s %s', but got:\n %s",
+          res$sys.cmd, stri_flatten(res$sys.args, " "), stri_flatten(res$output, "\n"))
+      }
+      info = stri_startswith_fixed(output, "[bt]") & !marker
+      res$output = stri_trim_left(stri_sub(output[info], 5L))
       res
     },
 

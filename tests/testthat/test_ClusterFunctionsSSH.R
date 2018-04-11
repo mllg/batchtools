@@ -34,7 +34,7 @@ if (FALSE) {
   expect_equal(workers[[1L]]$ncpus, 4L)
   expect_equal(workers[[2L]]$ncpus, 1L)
   fun = function(x) { Sys.sleep(x); is(x, "numeric") }
-  ids = batchMap(fun, x = c(5, 5), reg = reg)
+  ids = batchMap(fun, x = 20 * c(1, 1), reg = reg)
   submitJobs(1:2, reg = reg)
   expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
   expect_true(killJobs(2, reg = reg)$killed)
