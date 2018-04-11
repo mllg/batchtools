@@ -4,8 +4,8 @@
 \alias{makeClusterFunctionsSGE}
 \title{ClusterFunctions for SGE Systems}
 \usage{
-makeClusterFunctionsSGE(template = "sge", scheduler.latency = 1,
-  fs.latency = 65)
+makeClusterFunctionsSGE(template = "sge", nodename = "localhost",
+  scheduler.latency = 1, fs.latency = 65)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
