@@ -137,3 +137,34 @@ test_that("clearRegistry", {
   expect_identical(batchMap(identity, 1:4, reg = reg), data.table(job.id = 1:4, key = "job.id"))
   expect_true(reg$foo)
 })
+
+test_that("read only mode", {
+  f = function(x) if (x == 3) stop(3) else x
+  reg = makeTestRegistry()
+  batchMap(f, 1:4, reg = reg)
+  submitAndWait(ids = 1:3, reg)
+
+  # simulate that job 4 has been started but is not terminated yet
+  jc = makeJobCollection(4L, reg = reg)
+  suppressAll({doJobCollection(jc,  jc$log.file)})
+  reg$status[job.id == 4L, job.hash := jc$job.hash]
+  saveRegistry(reg = reg)
+
+  reg = loadRegistry(reg$file.dir, writeable = FALSE)
+
+  # query status
+  expect_class(getStatus(reg = reg), "Status")
+  expect_data_table(findDone(reg = reg), nrow = 3)
+  expect_data_table(findErrors(reg = reg), nrow = 1)
+  expect_character(fs::dir_ls(fs::path(reg$file.dir, "updates")), len = 1L)
+
+  # load results
+  expect_identical(loadResult(1L, reg = reg), 1L)
+  expect_identical(reduceResultsList(reg = reg), as.list(c(1:2, 4L)))
+  expect_character(fs::dir_ls(fs::path(reg$file.dir, "updates")), len = 1L)
+
+  # inspect errors
+  expect_data_table(getErrorMessages(reg = reg), nrow = 1)
+  expect_character(getLog(3L, reg = reg))
+  expect_character(getLog(4L, reg = reg))
+})

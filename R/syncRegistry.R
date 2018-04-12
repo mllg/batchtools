@@ -9,11 +9,11 @@
 #' @family Registry
 #' @export
 syncRegistry = function(reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE)
-  if (sync(reg))
+  assertRegistry(reg)
+  altered = sync(reg)
+  if (altered)
     saveRegistry(reg)
-  else
-    invisible(FALSE)
+  altered
 }
 
 
@@ -30,8 +30,12 @@ sync = function(reg) {
     if (is.error(x)) {
       mtime = fs::file_info(fn)$modification_time
       if (difftime(Sys.time(), mtime, units = "mins") > 60) {
-        info("Removing unreadable update file '%s'", fn)
-        file_remove(fn)
+        if (reg$writeable) {
+          info("Removing unreadable update file '%s'", fn)
+          file_remove(fn)
+        } else {
+          info("Skipping unreadable update file '%s'", fn)
+        }
       }
       return(NULL)
     }
@@ -49,5 +53,5 @@ sync = function(reg) {
   }
 
   runHook(reg, "post.sync", updates = updates)
-  invisible(TRUE)
+  invisible(nrow(updates) > 0L)
 }

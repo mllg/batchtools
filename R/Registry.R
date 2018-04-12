@@ -226,7 +226,8 @@ print.Registry = function(x, ...) {
 #' @param writeable [\code{logical(1)}]\cr
 #'   Check if the registry is writeable.
 #' @param sync [\code{logical(1)}]\cr
-#'   Whether to sync the registry before writing.
+#'   Try to synchronize the registry by including pending results from the file system.
+#'   See \code{\link{syncRegistry}}.
 #' @param running.ok [\code{logical(1)}]\cr
 #'   If \code{FALSE} throw an error if jobs associated with the registry are currently running.
 #' @return \code{TRUE} invisibly.
@@ -259,14 +260,12 @@ assertRegistry = function(reg, class = NULL, writeable = FALSE, sync = FALSE, ru
   if (writeable && !reg$writeable)
     stop("Registry must be writeable")
 
-  if (sync && !reg$writeable)
-    stop("Registry must be writeable to be synced")
-
-  if ((sync || !running.ok) && sync(reg))
-    saveRegistry(reg)
-
   if (!running.ok && nrow(.findOnSystem(reg = reg)) > 0L)
     stop("This operation is not allowed while jobs are running on the system")
+
+  if (sync && sync(reg))
+    saveRegistry(reg)
+
   invisible(TRUE)
 }
 
