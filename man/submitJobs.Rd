@@ -57,6 +57,7 @@ Some resources' names are standardized and it is good practice to stick to the f
  \item{memory:}{Memory limit in Mb. If jobs exceed this limit, they are usually killed by the scheduler. Can be passed as additional column as part of \code{ids} to set per-job resources.}
  \item{ncpus:}{Number of (physical) CPUs to use on the slave. Can be passed as additional column as part of \code{ids} to set per-job resources.}
  \item{omp.threads:}{Number of threads to use via OpenMP. Used to set environment variable \dQuote{OMP_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+ \item{pp.size:}{Maximum size of the pointer protection stack, see \code{\link[base]{Memory}}.}
  \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
  \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
  \item{chunks.as.array.jobs:}{Execute chunks as array jobs.}
