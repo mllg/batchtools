@@ -1,3 +1,13 @@
+# batchtools 0.9.9
+
+* RDS files are explicitly stored in version 2 to ensure backward compatibility with R versions prior to 3.5.0.
+* Package `fs` is now used internally for all file system operations.
+* Support for per-site configuration files and templates to be set up by system administrators.
+* The print of `getStatus()` now includes a time stamp.
+* `chunk()` now optionally shuffles the ids before chunking.
+* Support for setting per-job resources in `submitJobs()`.
+* Example templates now include resources for `blas.threads` and `omp.threads`.
+
 # batchtools 0.9.8
 
 * Renamed column "memory" in the status table to "mem.used" to avoid name clashes with the resource specification.
