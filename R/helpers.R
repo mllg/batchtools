@@ -68,6 +68,11 @@ catf = function (..., con = "") {
   cat(stri_flatten(sprintf(...), "\n"), "\n", sep = "", file = con)
 }
 
+# formating message()
+messagef = function (..., con = "") {
+  message(sprintf(...))
+}
+
 # formating waring()
 warningf = function (...) {
   warning(simpleWarning(sprintf(...), call = sys.call(sys.parent())))
