@@ -117,6 +117,14 @@ test_that("loadRegistry after early node error still usable (#135)", {
   expect_string(getErrorMessages(reg = reg)$message, fixed = "not_existing_package")
 })
 
+test_that("syncRegistry skips broken update files)", {
+  reg = makeTestRegistry()
+  p = dir(reg, "updates")
+  fs::file_create(fs::path(p, "foo.rds"))
+  fs::dir_ls(p)
+  expect_message(syncRegistry(reg = reg), "Skipping")
+})
+
 test_that("clearRegistry", {
   reg = makeTestRegistry()
   reg$foo = TRUE

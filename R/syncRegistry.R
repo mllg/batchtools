@@ -28,14 +28,11 @@ sync = function(reg) {
   updates = lapply(fns, function(fn) {
     x = try(readRDS(fn), silent = TRUE)
     if (is.error(x)) {
-      mtime = fs::file_info(fn)$modification_time
-      if (difftime(Sys.time(), mtime, units = "mins") > 60) {
-        if (reg$writeable) {
-          info("Removing unreadable update file '%s'", fn)
-          file_remove(fn)
-        } else {
-          info("Skipping unreadable update file '%s'", fn)
-        }
+      if (reg$writeable && difftime(Sys.time(), fs::file_info(fn)$modification_time, units = "mins") > 60) {
+        info("Removing unreadable update file '%s'", fn)
+        file_remove(fn)
+      } else {
+        info("Skipping unreadable update file '%s'", fn)
       }
       return(NULL)
     }
