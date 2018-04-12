@@ -91,7 +91,7 @@ Worker = R6Class("Worker",
       marker = stri_detect_regex(output, "^\\[bt\\] --[BE]OF--$")
       if (sum(marker) != 2L) {
         stopf("runOSCommand failed: Expected BOF+EOF markers for '%s %s', but got:\n %s",
-          res$sys.cmd, stri_flatten(res$sys.args, " "), stri_flatten(res$output, "\n"))
+          res$sys.cmd, stri_flatten(res$sys.args, " "), stri_flatten(res$output, "\n") %??% "")
       }
       info = stri_startswith_fixed(output, "[bt]") & !marker
       res$output = stri_trim_left(stri_sub(output[info], 5L))
