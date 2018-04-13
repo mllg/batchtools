@@ -175,4 +175,32 @@ test_that("read only mode", {
   expect_data_table(getErrorMessages(reg = reg), nrow = 1)
   expect_character(getLog(3L, reg = reg))
   expect_character(getLog(4L, reg = reg))
+
+  # try to write
+  expect_error(sweepRegistry(reg = reg), "writeable")
+  expect_error(setJobNames(ids = 1L, reg = reg), "writeable")
+  expect_error(addJobTags(ids = 1L, "a", reg = reg), "writeable")
+  expect_error(resetJobs(reg = reg), "writeable")
+  expect_error(clearRegistry(reg = reg), "writeable")
+  expect_error(removeRegistry(reg = reg), "writeable")
+  expect_error(killJobs(reg = reg), "writeable")
+  expect_directory_exists(reg$file.dir)
+  expect_character(fs::dir_ls(fs::path(reg$file.dir, "updates")), len = 1L)
+
+  # same stuff for ExperimentRegistry
+  reg = makeTestExperimentRegistry()
+  addProblem("foo", data = 1, reg = reg)
+  addAlgorithm("bar", function(data, instance, ...) instance, reg = reg)
+  addExperiments(reg = reg)
+  reg$writeable = FALSE
+
+  expect_data_table(summarizeExperiments(reg = reg), nrow = 1L)
+  expect_data_table(findExperiments(reg = reg))
+
+  expect_error(addProblem("foo2", iris, reg = reg), "writeable")
+  expect_error(removeProblems("foo2", reg = reg), "writeable")
+  expect_error(addAlgorithm("bar2", function(data, instance, ...) instance, reg = reg), "writeable")
+  expect_error(removeAlgorithms("bar2", reg = reg), "writeable")
+  expect_error(addExperiments(reg = reg), "writeable")
+  expect_error(removeExperiments(1, reg = reg), "writeable")
 })
