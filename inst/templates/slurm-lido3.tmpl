@@ -47,6 +47,11 @@ module add <%= modules %>
 ## Export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>
 
+
+## Use /scratch on the node, TMPDIR is mounted as tmpfs
+export TMPDIR=/scratch/${USER}/${SLURM_JOBID}
+mkdir -p ${TMPDIR}
+
 ## Run R:
 ## we merge R output with stdout from SLURM, which gets then logged via --output option
 Rscript <%= cli.args -%> -e 'batchtools::doJobCollection("<%= uri %>")'
