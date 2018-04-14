@@ -63,17 +63,18 @@ Loads the registry in read-write mode. Default is \code{FALSE}.}
 Loads a registry from its \code{file.dir}.
 
 Multiple R sessions accessing the same registry simultaneously can lead to database inconsistencies.
-Here, it does not matter if the sessions run on the same system or different systems via a file system mount.
+This is especially dangerous if the same \code{file.dir} is accessed from multiple machines, e.g. via a mount.
 
-If you just need to check on the status or peek into some preliminary results, you can load the registry in a
-read-only mode by setting \code{writeable} to \code{FALSE}.
+If you just need to check on the status or peek into some preliminary results while another process is still submitting or waiting
+for pending results, you can load the registry in a read-only mode.
 All operations that need to change the registry will raise an exception in this mode.
-Files communicated back by the computational nodes are parsed to update the registry in memory, but remain on the file system
-in order to be read and cleaned up by an R session with read-write access.
+Files communicated back by the computational nodes are parsed to update the registry in memory while the registry on the file system remains unchanged.
 
-A heuristic tries to detect if the registry has been altered in the background.
-However, you should not completely rely on it.
-Thus, set to \code{writeable} to \code{TRUE} if and only if you are absolutely sure other R processes are terminated.
+A heuristic tries to detect if the registry has been altered in the background by an other process and in this case automatically restricts the current registry to read-only mode.
+However, you should rely on this heuristic to work flawlessly.
+Thus, set to \code{writeable} to \code{TRUE} if and only if you are absolutely sure that other state-changing processes are terminated.
+
+If you need write access, load the registry with \code{writeable} set to \code{TRUE}.
 }
 \seealso{
 Other Registry: \code{\link{clearRegistry}},

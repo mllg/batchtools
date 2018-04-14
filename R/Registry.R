@@ -253,12 +253,12 @@ assertRegistry = function(reg, class = NULL, writeable = FALSE, sync = FALSE, ru
   assertFlag(running.ok)
 
   if (reg$writeable && !identical(reg$mtime, file_mtime(fs::path(reg$file.dir, "registry.rds")))) {
-    warning("Registry has been altered since last read. Switching to read-only mode in this session.")
+    warning("Registry has been altered since last read. Switching to read-only mode in this session. See ?loadRegistry.")
     reg$writeable = FALSE
   }
 
   if (writeable && !reg$writeable)
-    stop("Registry must be writeable")
+    stop("Registry must be writeable. See ?loadRegistry.")
 
   if (!running.ok && nrow(.findOnSystem(reg = reg)) > 0L)
     stop("This operation is not allowed while jobs are running on the system")
