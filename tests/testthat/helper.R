@@ -21,19 +21,17 @@ getSysConf = function() {
 
 makeTestRegistry = function(file.dir = NA, make.default = FALSE, ...) {
   reg = makeRegistry(file.dir = file.dir, make.default = make.default, ...)
-  fd = reg$file.dir
   # cleanup registry directories if not a subdirectory of R's temp dir
   if ((is.na(file.dir) && !identical(reg$temp.dir, fs::path_temp())))
-    reg.finalizer(e = reg, f = function(reg) if (fs::dir_exists(fd)) fs::dir_delete(fd), onexit = TRUE)
+    reg.finalizer(e = reg, f = function(reg) if (fs::dir_exists(reg$file.dir)) fs::dir_delete(reg$file.dir), onexit = TRUE)
   return(reg)
 }
 
 makeTestExperimentRegistry = function(file.dir = NA, make.default = FALSE, ...) {
   reg = makeExperimentRegistry(file.dir = file.dir, make.default = make.default, ...)
-  fd = reg$file.dir
   # cleanup registry directories if not a subdirectory of R's temp dir
   if ((is.na(file.dir) && !identical(reg$temp.dir, fs::path_temp())))
-    reg.finalizer(e = reg, f = function(reg) if (fs::dir_exists(fd)) fs::dir_delete(fd), onexit = TRUE)
+    reg.finalizer(e = reg, f = function(reg) if (fs::dir_exists(reg$file.dir)) fs::dir_delete(reg$file.dir), onexit = TRUE)
   return(reg)
 }
 
