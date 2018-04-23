@@ -50,7 +50,7 @@ submitAndWait = function(reg, ids = NULL, ..., sleep = 1) {
     ids = s.chunk(ids)
   silent({
     ids = submitJobs(ids = ids, ..., reg = reg)
-    waitForJobs(ids, reg = reg, sleep = sleep)
+    waitForJobs(ids, expire.after = 10L, reg = reg, sleep = sleep)
   })
 }
 

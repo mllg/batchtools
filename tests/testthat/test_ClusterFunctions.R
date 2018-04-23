@@ -78,12 +78,12 @@ test_that("Special chars in directory names", {
   fs::dir_create(base.dir)
 
   file.dir = fs::path(base.dir, "test#some_frequently-used chars")
-  reg = makeTestRegistry()
+  reg = makeTestRegistry(file.dir = file.dir)
   batchMap(identity, 1:2, reg = reg)
   submitAndWait(reg = reg)
+  Sys.sleep(0.2)
   expect_equal(reduceResultsList(reg = reg), list(1L, 2L))
   expect_equal(testJob(1, external = FALSE, reg = reg), 1L)
-  fs::dir_delete(base.dir)
 })
 
 test_that("Export of environment variable DEBUGME", {

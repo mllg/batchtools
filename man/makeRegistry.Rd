@@ -125,6 +125,8 @@ Currently \pkg{batchtools} understands the following options set via the configu
   \item{\code{cluster.functions}:}{As returned by a constructor, e.g. \code{\link{makeClusterFunctionsSlurm}}.}
   \item{\code{default.resources}:}{List of resources to use. Will be overruled by resources specified via \code{\link{submitJobs}}.}
   \item{\code{temp.dir}:}{Path to directory to use for temporary registries.}
+  \item{\code{sleep}:}{Custom sleep function. See \code{\link{waitForJobs}}.}
+  \item{\code{expire.after}:}{Number of iterations before treating jobs as expired in \code{\link{waitForJobs}}.}
 }
 }
 \examples{

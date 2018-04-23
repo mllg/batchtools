@@ -3,7 +3,7 @@ context("addExperiments")
 test_that("addExperiments handles parameters correctly", {
   reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, x, y, ...) stopifnot(is.numeric(x) && is.character(y)), seed = 42)
-  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, a, b, ...) { print(str(a)); assertList(a, len = 1, names = "named"); assertDataFrame(b); } )
+  algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, a, b, ...) { print(str(a)); checkmate::assertList(a, len = 1, names = "named"); checkmate::assertDataFrame(b); } )
   prob.designs = list(p1 = data.table(x = 1:2, y = letters[1:2]))
   algo.designs = list(a1 = data.table(a = list(list(x = 1)), b = list(iris)))
   repls = 2
