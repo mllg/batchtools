@@ -7,6 +7,7 @@
 * `chunk()` now optionally shuffles the ids before chunking.
 * Support for setting per-job resources in `submitJobs()`.
 * Example templates now include resources for `blas.threads` and `omp.threads`.
+* Some bug fixes regarding read-only registries.
 
 # batchtools 0.9.8
 
