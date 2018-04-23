@@ -1,3 +1,9 @@
+# for package pulsar.
+# see https://github.com/zdk123/pulsar/issues/5
+fp = function(...) {
+  file.path(..., fsep = "/")
+}
+
 dir = function(reg, what) {
   fs::path(fs::path_expand(reg$file.dir), what)
 }
