@@ -30,6 +30,7 @@ makeClusterFunctionsSGE = function(template = "sge", nodename = "localhost", sch
   assertString(nodename)
   template = findTemplateFile(template)
   template = cfReadBrewTemplate(template)
+  quote = if (isLocalHost(nodename)) identity else shQuote
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
@@ -55,11 +56,11 @@ makeClusterFunctionsSGE = function(template = "sge", nodename = "localhost", sch
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c(shQuote("-u $USER"), "-s p"))
+    listJobs(reg, c(quote("-u $USER"), "-s p"))
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c(shQuote("-u $USER"), "-s rs"))
+    listJobs(reg, c(quote("-u $USER"), "-s rs"))
   }
 
   killJob = function(reg, batch.id) {

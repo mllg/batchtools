@@ -32,6 +32,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", array.jobs = TRUE, node
   assertString(nodename)
   template = findTemplateFile(template)
   template = cfReadBrewTemplate(template, "##")
+  quote = if (isLocalHost(nodename)) identity else shQuote
 
   getClusters = function(reg) {
     clusters = filterNull(lapply(reg$resources$resources, "[[", "cluster"))
@@ -76,6 +77,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", array.jobs = TRUE, node
 
   listJobs = function(reg, args) {
     assertRegistry(reg, writeable = FALSE)
+    args = c(args, "--noheader", "--format=%i")
     if (array.jobs)
       args = c(args, "-r")
     clusters = getClusters(reg)
@@ -88,12 +90,12 @@ makeClusterFunctionsSlurm = function(template = "slurm", array.jobs = TRUE, node
   }
 
   listJobsQueued = function(reg) {
-    args = c("--noheader", "--format=%i", shQuote("--user=$USER"), "--states=PD")
+    args = c(quote("--user=$USER"), "--states=PD")
     listJobs(reg, args)
   }
 
   listJobsRunning = function(reg) {
-    args = c("--noheader", "--format=%i", shQuote("--user=$USER"), "--states=R,S,CG")
+    args = c(quote("--user=$USER"), "--states=R,S,CG")
     listJobs(reg, args)
   }
 
