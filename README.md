@@ -1,6 +1,6 @@
 # batchtools
 
-[![JOSS Publicatoin](http://joss.theoj.org/papers/10.21105/joss.00135/status.svg)](http://dx.doi.org/10.21105/joss.00135)
+[![JOSS Publicatoin](http://joss.theoj.org/papers/10.21105/joss.00135/status.svg)](https://doi.org/10.21105/joss.00135)
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/batchtools)](https://cran.r-project.org/package=batchtools)
 [![Build Status](https://travis-ci.org/mllg/batchtools.svg?branch=master)](https://travis-ci.org/mllg/batchtools)
 [![Build Status](https://ci.appveyor.com/api/projects/status/ypp14tiiqfhnv92k/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/batchtools/branch/master)
@@ -39,11 +39,11 @@ The [vignette](https://mllg.github.io/batchtools/articles/batchtools.html#migrat
 * [NEWS](https://mllg.github.io/batchtools/news/)
 * [Function reference](https://mllg.github.io/batchtools/reference)
 * [Vignette](https://mllg.github.io/batchtools/articles/batchtools.html)
-* [JOSS Paper](http://dx.doi.org/10.21105/joss.00135): Short paper on batchtools. Please cite this if you use batchtools.
+* [JOSS Paper](https://doi.org/10.21105/joss.00135): Short paper on batchtools. Please cite this if you use batchtools.
 * [Paper on BatchJobs/BatchExperiments](http://www.jstatsoft.org/v64/i11): The described concept still holds for batchtools and most examples work analogously (see the [vignette](https://mllg.github.io/batchtools/articles/batchtools.html#migration) for differences between the packages).
 
 ## Citation
-Please cite the [JOSS paper](http://dx.doi.org/10.21105/joss.00135) using the following BibTeX entry:
+Please cite the [JOSS paper](https://doi.org/10.21105/joss.00135) using the following BibTeX entry:
 ```
 @article{,
   doi = {10.21105/joss.00135},
