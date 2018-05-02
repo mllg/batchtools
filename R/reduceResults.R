@@ -199,13 +199,13 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., missing.val, reg 
 
 .reduceResultsList = function(ids, fun = NULL, ..., missing.val, reg = getDefaultRegistry()) {
   if (is.null(fun)) {
-    worker = function(..res, ..job, ...) ..res
+    worker = function(.res, .job, ...) .res
   } else {
     fun = match.fun(fun)
     if ("job" %chin% names(formals(fun)))
-      worker = function(..res, ..job, ...) fun(..res, job = ..job, ...)
+      worker = function(.res, .job, ...) fun(.res, job = .job, ...)
     else
-      worker = function(..res, ..job, ...) fun(..res, ...)
+      worker = function(.res, .job, ...) fun(.res, ...)
   }
 
   results = vector("list", nrow(ids))

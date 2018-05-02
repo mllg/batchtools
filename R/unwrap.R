@@ -44,7 +44,7 @@ unwrap = function(x, cols = NULL, sep = NULL) {
   }
   assertString(sep, null.ok = TRUE)
 
-  res = data.table(..row = seq_row(x), key = "..row")
+  res = data.table(.row = seq_row(x), key = ".row")
   extra.cols = chsetdiff(names(x), cols)
   if (length(extra.cols))
     res = cbind(res, x[, extra.cols, with = FALSE])
@@ -52,33 +52,33 @@ unwrap = function(x, cols = NULL, sep = NULL) {
   for (col in cols) {
     xc = x[[col]]
 
-    new.cols = lapply(seq_along(xc), function(i) {
-      x = xc[[i]]
-      if (is.null(x))
-        return(list(..row = i))
-      x = lapply(x, function(x) if (!qtest(x, c("l", "d", "v1"))) list(x) else x)
-      na = which(is.na(names2(x)))
-      if (length(na) > 0L)
-        names(x)[na] = sprintf("%s.%i", col, seq_along(na))
-      x$..row = i
+    new.cols = lapply(xc, function(x) {
+      if (!is.null(x)) {
+        ii = !vlapply(x, qtest, c("l", "d", "v1")) # FIXME: add parameter `which` to qtestr
+        x[ii] = lapply(x[ii], list)
+        na = which(is.na(names2(x)))
+        if (length(na) > 0L)
+          names(x)[na] = sprintf("%s.%i", col, seq_along(na))
+      }
       x
     })
-    new.cols = rbindlist(new.cols, fill = TRUE)
+    new.cols = rbindlist(new.cols, fill = TRUE, idcol = ".row")
 
     if (ncol(new.cols) > 1L) {
-      if (nrow(new.cols) != nrow(x) || anyDuplicated(new.cols$..row) > 0L)
-        stop("Some rows are unsuitable for unnesting. Flattening leads to data duplication.")
-      new.cols$..row = NULL
-      if (!is.null(sep))
-        setnames(new.cols, names(new.cols), stri_paste(col, names(new.cols), sep = sep))
-      clash = chintersect(names(res), names(new.cols))
+      if (nrow(new.cols) > nrow(x) || anyDuplicated(new.cols, by = ".row") > 0L)
+        stopf("Some rows are unsuitable for unnesting. Unwrapping row in column '%s' leads to multiple rows", col)
+      if (!is.null(sep)) {
+        nn = setdiff(names(new.cols), ".row")
+        setnames(new.cols, nn, stri_paste(col, nn, sep = sep))
+      }
+      clash = chsetdiff(chintersect(names(res), names(new.cols)), ".row")
       if (length(clash) > 0L)
         stopf("Name clash while unwrapping data.table: Duplicated column names: %s", stri_flatten(clash, ", "))
-      res[, names(new.cols) := new.cols]
+      res = merge(res, new.cols, all.x = TRUE, by = ".row")
     }
   }
 
-  res[, "..row" := NULL]
+  res[, ".row" := NULL]
   kx = key(x)
   if (!is.null(kx) && all(kx %chin% names(res)))
     setkeyv(res, kx)

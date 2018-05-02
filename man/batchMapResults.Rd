@@ -38,15 +38,19 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 This function allows you to create new computational jobs (just like \code{\link{batchMap}} based on the results of
 a \code{\link{Registry}}.
 }
+\note{
+The URI to the result files in registry \code{source} is hard coded as parameter in the \code{target} registry.
+This means that \code{target} is currently not portable between systems for computation.
+}
 \examples{
 \dontshow{ batchtools:::example_push_temp(2) }
-# Source registry: calculate squre of some numbers
+# Source registry: calculate square of some numbers
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(function(x) list(square = x^2), x = 1:10, reg = tmp)
 submitJobs(reg = tmp)
 waitForJobs(reg = tmp)
 
-# Target registry: map some results of first registry to calculate the square root
+# Target registry: calculate the square root on results of first registry
 target = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMapResults(fun = function(x, y) list(sqrt = sqrt(x$square)), ids = 4:8,
   target = target, source = tmp)
@@ -57,8 +61,8 @@ waitForJobs(reg = target)
 results = unwrap(rjoin(getJobPars(reg = target), reduceResultsDataTable(reg = target)))
 print(results)
 
-# Parameter '..id' points to job.id in 'source'. Use a inner join to combine:
-ijoin(results, unwrap(reduceResultsDataTable(reg = tmp)), by = c("..id" = "job.id"))
+# Parameter '.id' points to job.id in 'source'. Use a inner join to combine:
+ijoin(results, unwrap(reduceResultsDataTable(reg = tmp)), by = c(".id" = "job.id"))
 }
 \seealso{
 Other Results: \code{\link{loadResult}},
