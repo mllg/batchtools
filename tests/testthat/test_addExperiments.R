@@ -41,6 +41,7 @@ test_that("addExperiments / user provided designs", {
   repls = 1
   ids = addExperiments(reg = reg, prob.designs = prob.designs, algo.designs = algo.designs, combine = "bind")
   expect_data_table(ids, nrow = 9, key = "job.id")
+  tab = getJobPars(reg = reg)
   pars = unwrap(getJobPars(reg = reg))
   expect_set_equal(pars$problem, "p1")
   expect_set_equal(pars$algorithm, c("a1", "a2"))

@@ -28,7 +28,7 @@ NeedsCompilation: yes
 ByteCompile: yes
 Depends:
     R (>= 3.0.0),
-    data.table (>= 1.10.4)
+    data.table (>= 1.11.2)
 Imports:
     backports (>= 1.1.2),
     base64url (>= 1.1),
