@@ -72,17 +72,15 @@ test_that("addExperiments / user provided designs", {
   })
 })
 
-if (FALSE) {
-  reg = makeTestExperimentRegistry()
-  addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
-  addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
-  addAlgorithm(reg = reg, "a2", fun = function(job, data, instance, ...) NULL)
-  prob.designs = list(p1 = data.table(x = 1:500))
-  algo.designs = list(a1 = data.table(y = 1:50), a2 = data.table(y = 1:20))
-  repls = 2
-  profvis::profvis(addExperiments(prob.designs, algo.designs = algo.designs, repls = repls, reg = reg))
-  ids = findExperiments(reg = reg)
-  profvis::profvis(submitJobs(ids = s.chunk(ids), reg = reg))
+# reg = makeTestExperimentRegistry()
+# addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
+# addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)
+# addAlgorithm(reg = reg, "a2", fun = function(job, data, instance, ...) NULL)
+# prob.designs = list(p1 = data.table(x = 1:500))
+# algo.designs = list(a1 = data.table(y = 1:50), a2 = data.table(y = 1:20))
+# repls = 2
+# profvis::profvis(addExperiments(prob.designs, algo.designs = algo.designs, repls = repls, reg = reg))
+# ids = findExperiments(reg = reg)
+# profvis::profvis(submitJobs(ids = s.chunk(ids), reg = reg))
 
-  profvis::profvis(unwrap(getJobPars(reg = reg)))
-}
+# profvis::profvis(unwrap(getJobPars(reg = reg)))

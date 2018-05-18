@@ -1,6 +1,6 @@
 Package: batchtools
 Title: Tools for Computation on Batch Systems
-Version: 0.9.9
+Version: 0.9.9-9000
 Authors@R: c(
     person("Michel", "Lang", NULL, "michellang@gmail.com",
       role = c("cre", "aut"), comment = c(ORCID = "0000-0001-9754-0393")),
@@ -50,6 +50,7 @@ Suggests:
     doMPI,
     e1071,
     foreach,
+    future,
     future.batchtools,
     knitr,
     parallelMap,
