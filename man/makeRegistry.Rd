@@ -37,7 +37,7 @@ makeRegistry(file.dir = "registry", work.dir = getwd(),
   In the configuration file you can define how \pkg{batchtools} interacts with the system via \code{\link{ClusterFunctions}}.
   Separating the configuration of the underlying host system from the R code allows to easily move computation to another site.
 
-  The file lookup is implemented in the internal function \code{findConfFile} which returns the first file found of the following candidates:
+  The file lookup is implemented in the internal (but exported) function \code{findConfFile} which returns the first file found of the following candidates:
   \enumerate{
    \item{File \dQuote{batchtools.conf.R} in the path specified by the environment variable \dQuote{R_BATCHTOOLS_SEARCH_PATH}.}
    \item{File \dQuote{batchtools.conf.R} in the current working directory.}
@@ -45,7 +45,7 @@ makeRegistry(file.dir = "registry", work.dir = getwd(),
    \item{\dQuote{.batchtools.conf.R} in the home directory (\dQuote{~}).}
    \item{\dQuote{config.R} in the site config directory as reported by \code{rappdirs::site_config_dir("batchtools")} (depending on OS). This file can be used for admins to set sane defaults for a computation site.}
   }
-  Set to \code{character(0)} if you want to suppress reading any configuration file.
+  Set to \code{NA} if you want to suppress reading any configuration file.
   If a configuration file is found, it gets sourced inside the environment of the registry after the defaults for all variables are set.
   Therefore you can set and overwrite slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources or \dQuote{max.concurrent.jobs} to
   limit the number of jobs allowed to run simultaneously on the system.}

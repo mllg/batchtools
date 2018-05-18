@@ -9,6 +9,7 @@ test_that("cf ssh", {
   if (reg$cluster.functions$name == "Interactive") {
     workers = list(Worker$new("localhost", ncpus = 2, max.load = 9999))
     reg$cluster.functions = makeClusterFunctionsSSH(workers)
+    saveRegistry(reg)
     fun = function(x) { Sys.sleep(x); is(x, "numeric") }
     ids = batchMap(fun, x = c(5, 5), reg = reg)
     silent({

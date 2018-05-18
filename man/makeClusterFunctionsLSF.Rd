@@ -16,10 +16,7 @@ Either a path to a \pkg{brew} template file (with extension \dQuote{tmpl}), or a
   \item \dQuote{[template].tmpl} in the user config directory (see \code{\link[rappdirs]{user_config_dir}}); on linux this is usually \dQuote{~/.config/batchtools/[template].tmpl}.
   \item \dQuote{.batchtools.[template].tmpl} in the home directory.
   \item \dQuote{[template].tmpl} in the package installation directory in the subfolder \dQuote{templates}.
-}
-Here, the default for \code{template} is \dQuote{lsf}.
-Alternatively, the template itself can be provided directly as a string which is then passed to \pkg{brew}.
-The string must include at least on newline (\dQuote{\\n}) in this case.}
+}}
 
 \item{scheduler.latency}{[\code{numeric(1)}]\cr
 Time to sleep after important interactions with the scheduler to ensure a sane state.

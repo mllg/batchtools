@@ -27,7 +27,7 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
   assertString(file.dir)
   assertDirectory(file.dir)
   assertString(work.dir, null.ok = TRUE)
-  assertCharacter(conf.file, any.missing = FALSE, max.len = 1L)
+  assertString(conf.file, na.ok = TRUE)
   assertFlag(make.default)
   assertFlag(writeable)
 

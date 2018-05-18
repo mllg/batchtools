@@ -18,7 +18,6 @@
 #' Note that you might have to specify the cluster name here if you do not want to use the default,
 #' otherwise the commands for listing and killing jobs will not work.
 #'
-#' @templateVar cf.name slurm
 #' @template template
 #' @param array.jobs [\code{logical(1)}]\cr
 #'  If array jobs are disabled on the computing site, set to \code{FALSE}.
@@ -31,6 +30,8 @@ makeClusterFunctionsSlurm = function(template = "slurm", array.jobs = TRUE, node
   assertFlag(array.jobs)
   assertString(nodename)
   template = findTemplateFile(template)
+  if (testScalarNA(template))
+    stopf("Argument 'template' (=\"%s\") must point to a readable template file", template)
   template = cfReadBrewTemplate(template, "##")
   quote = if (isLocalHost(nodename)) identity else shQuote
 

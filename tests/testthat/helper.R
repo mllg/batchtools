@@ -10,7 +10,7 @@ is_on_ci = function() {
 
 getSysConf = function() {
   conf.file = findConfFile()
-  if (length(conf.file)) {
+  if (!testScalarNA(conf.file)) {
     ee = new.env()
     sys.source(conf.file, envir = ee)
     as.list(ee)

@@ -1,3 +1,8 @@
+# batchtools 0.9.10
+
+* Exported functions `findConfFile()` and `findTemplateFile()`.
+* Dropped support for providing a template file directly as string. A valid file is now always required.
+
 # batchtools 0.9.9
 
 * RDS files are explicitly stored in version 2 to ensure backward compatibility with R versions prior to 3.5.0.

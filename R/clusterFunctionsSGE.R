@@ -19,7 +19,6 @@
 #' @note
 #' Array jobs are currently not supported.
 #'
-#' @templateVar cf.name sge
 #' @template template
 #' @inheritParams makeClusterFunctions
 #' @template nodename
@@ -29,6 +28,8 @@
 makeClusterFunctionsSGE = function(template = "sge", nodename = "localhost", scheduler.latency = 1, fs.latency = 65) { # nocov start
   assertString(nodename)
   template = findTemplateFile(template)
+  if (testScalarNA(template))
+    stopf("Argument 'template' (=\"%s\") must point to a readable template file", template)
   template = cfReadBrewTemplate(template)
   quote = if (isLocalHost(nodename)) identity else shQuote
 
