@@ -14,6 +14,7 @@ test_that("cf ssh", {
     ids = batchMap(fun, x = c(5, 5), reg = reg)
     silent({
       submitJobs(1:2, reg = reg)
+      Sys.sleep(0.2)
       expect_equal(findOnSystem(reg = reg), findJobs(reg = reg))
       expect_true(killJobs(2, reg = reg)$killed)
       expect_true(

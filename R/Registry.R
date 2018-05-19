@@ -185,8 +185,8 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   "!DEBUG [makeRegistry]: Creating directories in '`reg$file.dir`'"
 
   fs::dir_create(c(reg$file.dir, reg$work.dir))
-  reg$file.dir = path_real_if_relative(reg$file.dir)
-  reg$work.dir = path_real_if_relative(reg$work.dir)
+  reg$file.dir = fs::path_abs(reg$file.dir)
+  reg$work.dir = fs::path_abs(reg$work.dir)
 
   fs::dir_create(fs::path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
   with_dir(reg$work.dir, loadRegistryDependencies(reg))

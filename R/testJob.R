@@ -34,7 +34,7 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
   id = convertId(reg, id)
 
   if (external) {
-    td      = fs::path_real(fs::path_temp())
+    td      = fs::path_abs(fs::path_temp())
     fn.r    = fs::path(td, "batchtools-testJob.R")
     fn.jc   = fs::path(td, "batchtools-testJob.jc")
     fn.res  = fs::path(td, "batchtools-testJob.rds")

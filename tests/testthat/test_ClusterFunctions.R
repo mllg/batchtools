@@ -106,7 +106,7 @@ test_that("findTemplateFile", {
   fn = fs::path(d, "batchtools.slurm.tmpl")
   fs::file_create(fn)
   withr::with_envvar(list(R_BATCHTOOLS_SEARCH_PATH = d),
-    expect_equal(findTemplateFile("slurm"), fs::path_real(fn))
+    expect_equal(findTemplateFile("slurm"), fs::path_abs(fn))
   )
   fs::file_delete(fn)
 })
