@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Store the Registy to the File System — saveRegistry" />
 
 <meta property="og:description" content="Stores the registry on the file system in its &#8220;file.dir&#8221; (specified
@@ -58,7 +61,7 @@ This function is usually called internally whenever needed." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -89,6 +92,7 @@ This function is usually called internally whenever needed." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -96,19 +100,22 @@ This function is usually called internally whenever needed." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Store the Registy to the File System</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/saveRegistry.R'><code>R/saveRegistry.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/saveRegistry.R'><code>R/saveRegistry.R</code></a></small>
+    <div class="hidden name"><code>saveRegistry.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Stores the registry on the file system in its &#8220;file.dir&#8221; (specified
 for construction in <code><a href='makeRegistry.html'>makeRegistry</a></code>, can be accessed via
 <code>reg$file.dir</code>).
 This function is usually called internally whenever needed.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>saveRegistry</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
@@ -129,11 +136,11 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other Registry: <code><a href='clearRegistry.html'>clearRegistry</a></code>,
+    <div class='dont-index'><p>Other Registry: <code><a href='clearRegistry.html'>clearRegistry</a></code>,
   <code><a href='getDefaultRegistry.html'>getDefaultRegistry</a></code>,
   <code><a href='loadRegistry.html'>loadRegistry</a></code>, <code><a href='makeRegistry.html'>makeRegistry</a></code>,
   <code><a href='removeRegistry.html'>removeRegistry</a></code>,
-  <code><a href='sweepRegistry.html'>sweepRegistry</a></code>, <code><a href='syncRegistry.html'>syncRegistry</a></code></p>
+  <code><a href='sweepRegistry.html'>sweepRegistry</a></code>, <code><a href='syncRegistry.html'>syncRegistry</a></code></p></div>
     
 
   </div>
@@ -161,6 +168,8 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

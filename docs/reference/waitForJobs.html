@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Wait for Termination of Jobs — waitForJobs" />
 
 <meta property="og:description" content="This function simply waits until all jobs are terminated." />
@@ -55,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -86,6 +89,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -93,19 +97,22 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Wait for Termination of Jobs</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/waitForJobs.R'><code>R/waitForJobs.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/waitForJobs.R'><code>R/waitForJobs.R</code></a></small>
+    <div class="hidden name"><code>waitForJobs.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This function simply waits until all jobs are terminated.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>waitForJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sleep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fl'>604800</span>,
-  <span class='kw'>expire.after</span> <span class='kw'>=</span> <span class='fl'>3L</span>, <span class='kw'>stop.on.error</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>stop.on.expire</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>expire.after</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>stop.on.error</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>stop.on.expire</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -147,7 +154,9 @@ a job because the job has hit the walltime or request more memory than reserved.
 On the other hand, network file systems often require several seconds for new files to be found,
 which can lead to false positives in the detection heuristic.
 <code>waitForJobs</code> treats such jobs as expired after they have not been detected on the system
-for <code>expire.after</code> iterations (default 3 iterations).</p></td>
+for <code>expire.after</code> iterations.
+If not provided (<code>NULL</code>), tries to read the value from the configuration file (stored in <code>reg$expire.after</code>),
+and finally defaults to <code>3</code>.</p></td>
     </tr>
     <tr>
       <th>stop.on.error</th>
@@ -198,6 +207,8 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Export Objects to the Slaves — batchExport" />
 
 <meta property="og:description" content="Objects are saved in subdirectory &#8220;exports&#8221; of the
@@ -58,7 +61,7 @@ each time the registry is loaded or a job collection is executed." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -89,6 +92,7 @@ each time the registry is loaded or a job collection is executed." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -96,19 +100,22 @@ each time the registry is loaded or a job collection is executed." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Export Objects to the Slaves</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Export.R'><code>R/Export.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Export.R'><code>R/Export.R</code></a></small>
+    <div class="hidden name"><code>batchExport.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Objects are saved in subdirectory &#8220;exports&#8221; of the
 &#8220;file.dir&#8221; of <code>reg</code>.
 They are automatically loaded and placed in the global environment
 each time the registry is loaded or a job collection is executed.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>batchExport</span>(<span class='kw'>export</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>unexport</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>),
   <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
@@ -139,28 +146,21 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.batchtools.conf.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># list exports</span>
 <span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
-<span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt; Empty data.table (0 rows) of 2 cols: name,uri</div><div class='output co'>#&gt; NULL</div><div class='input'>
+<span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt; Empty data.table (0 rows) of 2 cols: name,uri</div><div class='input'>
 <span class='co'># add a job and required exports</span>
-<span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span> + <span class='no'>y</span> + <span class='no'>z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>export</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>99</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Exporting new objects: 'y','z' ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt;      name
-#&gt;    &lt;char&gt;
-#&gt; 1:      y
-#&gt; 2:      z
-#&gt;                                                                                       uri
-#&gt;                                                                                 &lt;fs_path&gt;
-#&gt; 1: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg/exports/PE.rds
-#&gt; 2: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg/exports/PI.rds</div><div class='input'>
-<span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>stopifnot</span>(<span class='fu'><a href='loadResult.html'>loadResult</a></span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>) <span class='kw'>==</span> <span class='fl'>101</span>)
+<span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>^<span class='fl'>2</span> + <span class='no'>y</span> + <span class='no'>z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>export</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>99</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Exporting new objects: 'y','z' ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt;      name                                        uri
+#&gt;    &lt;char&gt;                                  &lt;fs_path&gt;
+#&gt; 1:      y /tmp/batchtools-example/reg/exports/PE.rds
+#&gt; 2:      z /tmp/batchtools-example/reg/exports/PI.rds</div><div class='input'>
+<span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>stopifnot</span>(<span class='fu'><a href='loadResult.html'>loadResult</a></span>(<span class='fl'>1</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>) <span class='kw'>==</span> <span class='fl'>101</span>)
 
 <span class='co'># Un-export z</span>
-<span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>unexport</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Un-exporting exported objects: 'z' ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt;      name
-#&gt;    &lt;char&gt;
-#&gt; 1:      y
-#&gt;                                                                                       uri
-#&gt;                                                                                 &lt;fs_path&gt;
-#&gt; 1: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg/exports/PE.rds</div></pre>
+<span class='no'>exports</span> <span class='kw'>=</span> <span class='fu'>batchExport</span>(<span class='kw'>unexport</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Un-exporting exported objects: 'z' ...</span></div><div class='input'><span class='fu'>print</span>(<span class='no'>exports</span>)</div><div class='output co'>#&gt;      name                                        uri
+#&gt;    &lt;char&gt;                                  &lt;fs_path&gt;
+#&gt; 1:      y /tmp/batchtools-example/reg/exports/PE.rds</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -186,6 +186,8 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

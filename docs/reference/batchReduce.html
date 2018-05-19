@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Reduce Operation for Batch Systems — batchReduce" />
 
 <meta property="og:description" content="A parallel and asynchronous Reduce for batch systems.
@@ -60,7 +63,7 @@ loadResult." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -91,6 +94,7 @@ loadResult." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -98,13 +102,15 @@ loadResult." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Reduce Operation for Batch Systems</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/batchReduce.R'><code>R/batchReduce.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/batchReduce.R'><code>R/batchReduce.R</code></a></small>
+    <div class="hidden name"><code>batchReduce.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>A parallel and asynchronous <code><a href='http://www.rdocumentation.org/packages/base/topics/funprog'>Reduce</a></code> for batch systems.
 Note that this function only defines the computational jobs.
@@ -113,6 +119,7 @@ The actual computation is started with <code><a href='submitJobs.html'>submitJob
 Results and partial results can be collected with <code><a href='reduceResultsList.html'>reduceResultsList</a></code>, <code><a href='reduceResults.html'>reduceResults</a></code> or
 <code><a href='loadResult.html'>loadResult</a></code>.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>batchReduce</span>(<span class='no'>fun</span>, <span class='no'>xs</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>chunks</span> <span class='kw'>=</span> <span class='fu'>seq_along</span>(<span class='no'>xs</span>),
   <span class='kw'>more.args</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
@@ -158,17 +165,17 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='batchMap.html'>batchMap</a></code></p>
+    <div class='dont-index'><p><code><a href='batchMap.html'>batchMap</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># define function to reduce on slave, we want to sum a vector</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>xs</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>100</span>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.batchtools.conf.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>xs</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>100</span>
 <span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>aggr</span>, <span class='no'>x</span>) <span class='no'>aggr</span> + <span class='no'>x</span>
 
 <span class='co'># sum 20 numbers on each slave process, i.e. 5 jobs</span>
 <span class='no'>chunks</span> <span class='kw'>=</span> <span class='fu'><a href='chunk.html'>chunk</a></span>(<span class='no'>xs</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>5</span>)
-<span class='fu'>batchReduce</span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>f</span>, <span class='fl'>1</span>:<span class='fl'>100</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>chunks</span> <span class='kw'>=</span> <span class='no'>chunks</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 20 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 20 jobs in 20 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='fu'>batchReduce</span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>f</span>, <span class='fl'>1</span>:<span class='fl'>100</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>chunks</span> <span class='kw'>=</span> <span class='no'>chunks</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 20 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 20 jobs in 20 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 5 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 6 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 7 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 8 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 9 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 10 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 11 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [===========================&gt;-----------------------]  55% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 12 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [==============================&gt;--------------------]  60% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 13 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [================================&gt;------------------]  65% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 14 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [===================================&gt;---------------]  70% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 15 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [=====================================&gt;-------------]  75% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 16 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [========================================&gt;----------]  80% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 17 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [==========================================&gt;--------]  85% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 18 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [=============================================&gt;-----]  90% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 19 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [===============================================&gt;---]  95% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 20 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [===================================================] 100% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>                                                                              </span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># now reduce one final time on master</span>
 <span class='fu'><a href='reduceResults.html'>reduceResults</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>aggr</span>, <span class='no'>job</span>, <span class='no'>res</span>) <span class='fu'>f</span>(<span class='no'>aggr</span>, <span class='no'>res</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] 5050</div></pre>
   </div>
@@ -198,6 +205,8 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

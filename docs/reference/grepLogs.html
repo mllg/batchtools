@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Grep Log Files for a Pattern — grepLogs" />
 
 <meta property="og:description" content="Crawls through log files and reports jobs with lines matching the pattern.
@@ -56,7 +59,7 @@ See showLog for an example." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -87,6 +90,7 @@ See showLog for an example." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -94,17 +98,20 @@ See showLog for an example." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Grep Log Files for a Pattern</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Logs.R'><code>R/Logs.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Logs.R'><code>R/Logs.R</code></a></small>
+    <div class="hidden name"><code>grepLogs.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Crawls through log files and reports jobs with lines matching the <code>pattern</code>.
 See <code><a href='showLog.html'>showLog</a></code> for an example.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>grepLogs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>pattern</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
@@ -149,10 +156,10 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
+    <div class='dont-index'><p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
   <code><a href='getStatus.html'>getStatus</a></code>, <code><a href='killJobs.html'>killJobs</a></code>,
   <code><a href='resetJobs.html'>resetJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
-  <code><a href='testJob.html'>testJob</a></code></p>
+  <code><a href='testJob.html'>testJob</a></code></p></div>
     
 
   </div>
@@ -180,6 +187,8 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

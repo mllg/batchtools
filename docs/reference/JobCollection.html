@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="JobCollection Constructor — makeJobCollection" />
 
 <meta property="og:description" content="makeJobCollection takes multiple job ids and creates an object of class &#8220;JobCollection&#8221; which holds all
@@ -73,7 +76,7 @@ a collection. Thus all variables available inside the job can be used in the tem
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -104,6 +107,7 @@ a collection. Thus all variables available inside the job can be used in the tem
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -111,13 +115,15 @@ a collection. Thus all variables available inside the job can be used in the tem
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>JobCollection Constructor</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/JobCollection.R'><code>R/JobCollection.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/JobCollection.R'><code>R/JobCollection.R</code></a></small>
+    <div class="hidden name"><code>JobCollection.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p><code>makeJobCollection</code> takes multiple job ids and creates an object of class &#8220;JobCollection&#8221; which holds all
 necessary information for the calculation with <code><a href='doJobCollection.html'>doJobCollection</a></code>. It is implemented as an environment
@@ -139,6 +145,7 @@ with the following variables:</p><dl class='dl-horizontal'>
 </dl><p>If your <a href='makeClusterFunctions.html'>ClusterFunctions</a> uses a template, <code><a href='http://www.rdocumentation.org/packages/brew/topics/brew'>brew</a></code> will be executed in the environment of such
 a collection. Thus all variables available inside the job can be used in the template.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>makeJobCollection</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(),
   <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
@@ -173,11 +180,11 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other JobCollection: <code><a href='doJobCollection.html'>doJobCollection</a></code></p>
+    <div class='dont-index'><p>Other JobCollection: <code><a href='doJobCollection.html'>doJobCollection</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output co'>#&gt; <span class='message'>No configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"methods"</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.batchtools.conf.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 5 jobs ...</span></div><div class='input'>
 <span class='co'># resources are usually set in submitJobs()</span>
 <span class='no'>jc</span> <span class='kw'>=</span> <span class='fu'>makeJobCollection</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>foo</span> <span class='kw'>=</span> <span class='st'>"bar"</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'>ls</span>(<span class='no'>jc</span>)</div><div class='output co'>#&gt;  [1] "array.jobs" "array.var"  "file.dir"   "job.hash"   "job.name"  
@@ -212,6 +219,8 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

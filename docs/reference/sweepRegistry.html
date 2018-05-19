@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Check Consistency and Remove Obsolete Information — sweepRegistry" />
 
 <meta property="og:description" content="Canceled jobs and jobs submitted multiple times may leave stray files behind.
@@ -57,7 +60,7 @@ and redundant data base entries." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -88,6 +91,7 @@ and redundant data base entries." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -95,18 +99,21 @@ and redundant data base entries." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check Consistency and Remove Obsolete Information</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/sweepRegistry.R'><code>R/sweepRegistry.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/sweepRegistry.R'><code>R/sweepRegistry.R</code></a></small>
+    <div class="hidden name"><code>sweepRegistry.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Canceled jobs and jobs submitted multiple times may leave stray files behind.
 This function checks the registry for consistency and removes obsolete files
 and redundant data base entries.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>sweepRegistry</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
@@ -122,11 +129,11 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other Registry: <code><a href='clearRegistry.html'>clearRegistry</a></code>,
+    <div class='dont-index'><p>Other Registry: <code><a href='clearRegistry.html'>clearRegistry</a></code>,
   <code><a href='getDefaultRegistry.html'>getDefaultRegistry</a></code>,
   <code><a href='loadRegistry.html'>loadRegistry</a></code>, <code><a href='makeRegistry.html'>makeRegistry</a></code>,
   <code><a href='removeRegistry.html'>removeRegistry</a></code>, <code><a href='saveRegistry.html'>saveRegistry</a></code>,
-  <code><a href='syncRegistry.html'>syncRegistry</a></code></p>
+  <code><a href='syncRegistry.html'>syncRegistry</a></code></p></div>
     
 
   </div>
@@ -152,6 +159,8 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

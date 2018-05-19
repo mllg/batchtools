@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Define Algorithms for Experiments — addAlgorithm" />
 
 <meta property="og:description" content="Algorithms are functions which get the codedata part as well as the problem instance (the return value of the
@@ -59,7 +62,7 @@ reg$algorithms holds the IDs of already defined algorithms." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -90,6 +93,7 @@ reg$algorithms holds the IDs of already defined algorithms." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -97,13 +101,15 @@ reg$algorithms holds the IDs of already defined algorithms." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Define Algorithms for Experiments</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Algorithm.R'><code>R/Algorithm.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Algorithm.R'><code>R/Algorithm.R</code></a></small>
+    <div class="hidden name"><code>addAlgorithm.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Algorithms are functions which get the codedata part as well as the problem instance (the return value of the
 function defined in <code><a href='addProblem.html'>Problem</a></code>) and return an arbitrary R object.</p>
@@ -111,6 +117,7 @@ function defined in <code><a href='addProblem.html'>Problem</a></code>) and retu
 <p><code>removeAlgorithm</code> removes all jobs from the registry which depend on the specific algorithm.
 <code>reg$algorithms</code> holds the IDs of already defined algorithms.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>addAlgorithm</span>(<span class='no'>name</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())
 
@@ -145,7 +152,7 @@ Registry. If not explicitly passed, uses the last created registry.</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='addProblem.html'>Problem</a></code>, <code><a href='addExperiments.html'>addExperiments</a></code></p>
+    <div class='dont-index'><p><code><a href='addProblem.html'>Problem</a></code>, <code><a href='addExperiments.html'>addExperiments</a></code></p></div>
     
 
   </div>
@@ -173,6 +180,8 @@ Registry. If not explicitly passed, uses the last created registry.</p></td>
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

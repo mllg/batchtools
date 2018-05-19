@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="ClusterFunctions for Sequential Execution in the Running R Session — makeClusterFunctionsInteractive" />
 
 <meta property="og:description" content="All jobs are executed sequentially using the current R process in which submitJobs is called.
@@ -59,7 +62,7 @@ and killJob is not implemented for the same reasons." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -90,6 +93,7 @@ and killJob is not implemented for the same reasons." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -97,13 +101,15 @@ and killJob is not implemented for the same reasons." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>ClusterFunctions for Sequential Execution in the Running R Session</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsInteractive.R'><code>R/clusterFunctionsInteractive.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsInteractive.R'><code>R/clusterFunctionsInteractive.R</code></a></small>
+    <div class="hidden name"><code>makeClusterFunctionsInteractive.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>All jobs are executed sequentially using the current R process in which <code><a href='submitJobs.html'>submitJobs</a></code> is called.
 Thus, <code>submitJob</code> blocks the session until the job has finished.
@@ -111,6 +117,7 @@ The main use of this <code>ClusterFunctions</code> implementation is to test and
 <p>Listing jobs returns an empty vector (as no jobs can be running when you call this)
 and <code>killJob</code> is not implemented for the same reasons.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>makeClusterFunctionsInteractive</span>(<span class='kw'>external</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>write.logs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>NA_real_</span>)</pre>
@@ -148,7 +155,7 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+    <div class='dont-index'><p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
   <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
   <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
   <code><a href='makeClusterFunctionsOpenLava.html'>makeClusterFunctionsOpenLava</a></code>,
@@ -157,7 +164,7 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
   <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
   <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
   <code><a href='makeClusterFunctionsTORQUE.html'>makeClusterFunctionsTORQUE</a></code>,
-  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p>
+  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p></div>
     
 
   </div>
@@ -185,6 +192,8 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

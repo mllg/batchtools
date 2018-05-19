@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Remove Experiments — removeExperiments" />
 
 <meta property="og:description" content="Remove Experiments from an ExperimentRegistry.
@@ -58,7 +61,7 @@ Use with care while jobs are running." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -89,6 +92,7 @@ Use with care while jobs are running." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -96,19 +100,22 @@ Use with care while jobs are running." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Remove Experiments</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/removeExperiments.R'><code>R/removeExperiments.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/removeExperiments.R'><code>R/removeExperiments.R</code></a></small>
+    <div class="hidden name"><code>removeExperiments.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Remove Experiments from an <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>.
 This function automatically checks if any of the jobs to reset is either pending or running.
 However, if the implemented heuristic fails, this can lead to inconsistencies in the data base.
 Use with care while jobs are running.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>removeExperiments</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
@@ -137,8 +144,8 @@ Registry. If not explicitly passed, uses the last created registry.</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other Experiment: <code><a href='addExperiments.html'>addExperiments</a></code>,
-  <code><a href='summarizeExperiments.html'>summarizeExperiments</a></code></p>
+    <div class='dont-index'><p>Other Experiment: <code><a href='addExperiments.html'>addExperiments</a></code>,
+  <code><a href='summarizeExperiments.html'>summarizeExperiments</a></code></p></div>
     
 
   </div>
@@ -166,6 +173,8 @@ Registry. If not explicitly passed, uses the last created registry.</p></td>
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

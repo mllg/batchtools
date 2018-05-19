@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="ClusterFunctions for Parallel Socket Execution — makeClusterFunctionsSocket" />
 
 <meta property="og:description" content="Jobs are spawned asynchronously using the package snow." />
@@ -55,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -86,6 +89,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -93,16 +97,19 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>ClusterFunctions for Parallel Socket Execution</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSocket.R'><code>R/clusterFunctionsSocket.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSocket.R'><code>R/clusterFunctionsSocket.R</code></a></small>
+    <div class="hidden name"><code>makeClusterFunctionsSocket.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Jobs are spawned asynchronously using the package <span class="pkg">snow</span>.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>makeClusterFunctionsSocket</span>(<span class='kw'>ncpus</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>, <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
     
@@ -132,7 +139,7 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+    <div class='dont-index'><p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
   <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
   <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
   <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
@@ -141,7 +148,7 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
   <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>,
   <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
   <code><a href='makeClusterFunctionsTORQUE.html'>makeClusterFunctionsTORQUE</a></code>,
-  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p>
+  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p></div>
     
 
   </div>
@@ -169,6 +176,8 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

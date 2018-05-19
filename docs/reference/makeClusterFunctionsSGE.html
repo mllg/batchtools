@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="ClusterFunctions for SGE Systems — makeClusterFunctionsSGE" />
 
 <meta property="og:description" content="Cluster functions for Univa Grid Engine / Oracle Grid Engine /
@@ -66,7 +69,7 @@ allocations." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -97,6 +100,7 @@ allocations." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -104,13 +108,15 @@ allocations." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>ClusterFunctions for SGE Systems</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSGE.R'><code>R/clusterFunctionsSGE.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsSGE.R'><code>R/clusterFunctionsSGE.R</code></a></small>
+    <div class="hidden name"><code>makeClusterFunctionsSGE.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Cluster functions for Univa Grid Engine / Oracle Grid Engine /
 Sun Grid Engine (<a href='http://www.univa.com/'>http://www.univa.com/</a>).</p>
@@ -125,9 +131,10 @@ as well as all variables stored in the <code><a href='JobCollection.html'>JobCol
 It is the template file's job to choose a queue for the job and handle the desired resource
 allocations.</p>
     
+    </div>
 
-    <pre class="usage"><span class='fu'>makeClusterFunctionsSGE</span>(<span class='kw'>template</span> <span class='kw'>=</span> <span class='st'>"sge"</span>, <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
+    <pre class="usage"><span class='fu'>makeClusterFunctionsSGE</span>(<span class='kw'>template</span> <span class='kw'>=</span> <span class='st'>"sge"</span>, <span class='kw'>nodename</span> <span class='kw'>=</span> <span class='st'>"localhost"</span>,
+  <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,9 +148,16 @@ Either a path to a <span class="pkg">brew</span> template file (with extension &
 <li><p>&#8220;[template].tmpl&#8221; in the user config directory (see <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>user_config_dir</a></code>); on linux this is usually &#8220;~/.config/batchtools/[template].tmpl&#8221;.</p></li>
 <li><p>&#8220;.batchtools.[template].tmpl&#8221; in the home directory.</p></li>
 <li><p>&#8220;[template].tmpl&#8221; in the package installation directory in the subfolder &#8220;templates&#8221;.</p></li>
-</ol><p>Here, the default for <code>template</code> is &#8220;sge&#8221;.
-Alternatively, the template itself can be provided directly as a string which is then passed to <span class="pkg">brew</span>.
-The string must include at least on newline (&#8220;\n&#8221;) in this case.</p></td>
+</ol></td>
+    </tr>
+    <tr>
+      <th>nodename</th>
+      <td><p>[<code>character(1)</code>]<br />
+Nodename of the master host. All commands are send via SSH to this host. Only works iff</p><ol>
+<li><p>Passwordless authentication (e.g., via SSH public key authentication) is set up.</p></li>
+<li><p>The file directory is shared across machines, e.g. mounted via SSHFS.</p></li>
+<li><p>Either the absolute path to the <code>file.dir</code> is identical on the machines, or paths are provided relative to the home directory. Symbolic links should work.</p></li>
+</ol></td>
     </tr>
     <tr>
       <th>scheduler.latency</th>
@@ -171,7 +185,7 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+    <div class='dont-index'><p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
   <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
   <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
   <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
@@ -180,7 +194,7 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
   <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
   <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
   <code><a href='makeClusterFunctionsTORQUE.html'>makeClusterFunctionsTORQUE</a></code>,
-  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p>
+  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p></div>
     
 
   </div>
@@ -210,6 +224,8 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

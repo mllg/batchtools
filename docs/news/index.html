@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Changelog" />
 
 
@@ -52,7 +55,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -83,6 +86,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -90,15 +94,38 @@
       
       </header>
 
-      <div class="row">
-
-  <div class="col-md-9">
+<div class="row">
+  <div class="col-md-9 contents">
     <div class="page-header">
       <h1>Changelog <small></small></h1>
       <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="contents">
+    <div id="batchtools-0-9-10" class="section level1">
+<h1 class="page-header">
+<a href="#batchtools-0-9-10" class="anchor"></a>batchtools 0.9.10<small> Unreleased </small>
+</h1>
+<ul>
+<li>Exported functions <code><a href="../reference/findConfFile.html">findConfFile()</a></code> and <code><a href="../reference/findTemplateFile.html">findTemplateFile()</a></code>.</li>
+<li>Dropped support for providing a template file directly as string. A valid file is now always required.</li>
+</ul>
+</div>
+    <div id="batchtools-0-9-9" class="section level1">
+<h1 class="page-header">
+<a href="#batchtools-0-9-9" class="anchor"></a>batchtools 0.9.9<small> 2018-05-14 </small>
+</h1>
+<ul>
+<li>RDS files are explicitly stored in version 2 to ensure backward compatibility with R versions prior to 3.5.0.</li>
+<li>Package <code>fs</code> is now used internally for all file system operations.</li>
+<li>Support for per-site configuration files and templates to be set up by system administrators.</li>
+<li>The print of <code><a href="../reference/getStatus.html">getStatus()</a></code> now includes a time stamp.</li>
+<li>
+<code><a href="../reference/chunk.html">chunk()</a></code> now optionally shuffles the ids before chunking.</li>
+<li>Support for setting per-job resources in <code><a href="../reference/submitJobs.html">submitJobs()</a></code>.</li>
+<li>Example templates now include resources for <code>blas.threads</code> and <code>omp.threads</code>.</li>
+<li>Some bug fixes regarding read-only registries.</li>
+</ul>
+</div>
     <div id="batchtools-0-9-8" class="section level1">
 <h1 class="page-header">
 <a href="#batchtools-0-9-8" class="anchor"></a>batchtools 0.9.8<small> 2017-12-15 </small>
@@ -164,7 +191,7 @@
 <li>
 <code><a href="../reference/addExperiments.html">addExperiments()</a></code> now warns if a design is passed as <code>data.frame</code> with factor columns and <code>stringsAsFactors</code> is <code>TRUE</code>.</li>
 <li>Added functions <code><a href="../reference/JobNames.html">setJobNames()</a></code> and <code><a href="../reference/JobNames.html">getJobNames()</a></code> to control the name of jobs on batch systems. Templates should be adapted to use <code>job.name</code> instead of <code>job.hash</code> for naming.</li>
-<li>Argument <code>flatten</code> of <code><a href="../reference/getJobTable.html">getJobResources()</a></code>, <code><a href="../reference/getJobTable.html">getJobPars()</a></code> and <code><a href="../reference/getJobTable.html">getJobTable()</a></code> is deprecated and will be removed. Future versions of the functions will behave like <code>flatten</code> is set to <code>FALSE</code> explicitly. Single resources/parameters must be extracted manually (or with <code><a href="http://www.rdocumentation.org/packages/tidyr/topics/unnest">tidyr::unnest()</a></code>).</li>
+<li>Argument <code>flatten</code> of <code><a href="../reference/getJobTable.html">getJobResources()</a></code>, <code><a href="../reference/getJobTable.html">getJobPars()</a></code> and <code><a href="../reference/getJobTable.html">getJobTable()</a></code> is deprecated and will be removed. Future versions of the functions will behave like <code>flatten</code> is set to <code>FALSE</code> explicitly. Single resources/parameters must be extracted manually (or with <code>tidyr::unnest()</code>).</li>
 </ul>
 </div>
     <div id="batchtools-0-9-3" class="section level1">
@@ -220,13 +247,14 @@
 </h1>
 <p>Initial CRAN release. See the vignette for a brief comparison with <a href="https://cran.r-project.org/package=BatchJobs">BatchJobs</a>/<a href="https://cran.r-project.org/package=BatchExperiments">BatchExperiments</a>.</p>
 </div>
-    </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#batchtools-0-9-10">0.9.10</a></li>
+        <li><a href="#batchtools-0-9-9">0.9.9</a></li>
         <li><a href="#batchtools-0-9-8">0.9.8</a></li>
         <li><a href="#batchtools-0-9-7">0.9.7</a></li>
         <li><a href="#batchtools-0-9-6">0.9.6</a></li>
@@ -252,6 +280,8 @@
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

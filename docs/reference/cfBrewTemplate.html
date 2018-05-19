@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Cluster Functions Helper to Write Job Description Files — cfBrewTemplate" />
 
 <meta property="og:description" content="This function is only intended for use in your own cluster functions implementation.
@@ -59,7 +62,7 @@ job file in the &#8220;jobs&#8221;-subdir of your files directory, otherwise as 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -90,6 +93,7 @@ job file in the &#8220;jobs&#8221;-subdir of your files directory, otherwise as 
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -97,13 +101,15 @@ job file in the &#8220;jobs&#8221;-subdir of your files directory, otherwise as 
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Cluster Functions Helper to Write Job Description Files</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
+    <div class="hidden name"><code>cfBrewTemplate.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This function is only intended for use in your own cluster functions implementation.</p>
 <p>Calls brew silently on your template, any error will lead to an exception. If debug mode is
@@ -111,6 +117,7 @@ enabled (via environment variable &#8220;DEBUGME&#8221; set to &#8220;batchtools
 the file is stored at the same place as the corresponding
 job file in the &#8220;jobs&#8221;-subdir of your files directory, otherwise as <code>tempfile</code> on the local system.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>cfBrewTemplate</span>(<span class='no'>reg</span>, <span class='no'>text</span>, <span class='no'>jc</span>)</pre>
     
@@ -141,12 +148,12 @@ available variables.</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other ClusterFunctionsHelper: <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
+    <div class='dont-index'><p>Other ClusterFunctionsHelper: <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
   <code><a href='cfKillJob.html'>cfKillJob</a></code>,
   <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
   <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>,
   <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>,
-  <code><a href='runOSCommand.html'>runOSCommand</a></code></p>
+  <code><a href='runOSCommand.html'>runOSCommand</a></code></p></div>
     
 
   </div>
@@ -174,6 +181,8 @@ available variables.</p></td>
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

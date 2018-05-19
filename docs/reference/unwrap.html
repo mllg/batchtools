@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Unwrap Nested Data Frames — unwrap" />
 
 <meta property="og:description" content="Some functions (e.g., getJobPars, getJobResources or reduceResultsDataTable
@@ -59,7 +62,7 @@ to the input data.frame x, replacing the original nested column." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -90,6 +93,7 @@ to the input data.frame x, replacing the original nested column." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -97,13 +101,15 @@ to the input data.frame x, replacing the original nested column." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Unwrap Nested Data Frames</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/unwrap.R'><code>R/unwrap.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/unwrap.R'><code>R/unwrap.R</code></a></small>
+    <div class="hidden name"><code>unwrap.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Some functions (e.g., <code><a href='getJobTable.html'>getJobPars</a></code>, <code><a href='getJobTable.html'>getJobResources</a></code> or <code><a href='reduceResultsList.html'>reduceResultsDataTable</a></code>
 return a <code>data.table</code> with columns of type <code>list</code>.
@@ -111,6 +117,7 @@ These columns can be unnested/unwrapped with this function.
 The contents of these columns  will be transformed to a <code>data.table</code> and <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code>-ed
 to the input data.frame <code>x</code>, replacing the original nested column.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>unwrap</span>(<span class='no'>x</span>, <span class='kw'>cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
@@ -192,6 +199,8 @@ The function <code>flatten</code> is discouraged to use for this reason in favor
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

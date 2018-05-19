@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Cluster Functions Helper to Handle Unknown Errors — cfHandleUnknownSubmitError" />
 
 <meta property="og:description" content="This function is only intended for use in your own cluster functions implementation.
@@ -57,7 +60,7 @@ an informative error message containing the output of the OS command in output."
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -88,6 +91,7 @@ an informative error message containing the output of the OS command in output."
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -95,18 +99,21 @@ an informative error message containing the output of the OS command in output."
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Cluster Functions Helper to Handle Unknown Errors</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
+    <div class="hidden name"><code>cfHandleUnknownSubmitError.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This function is only intended for use in your own cluster functions implementation.</p>
 <p>Simply constructs a <code><a href='makeSubmitJobResult.html'>SubmitJobResult</a></code> object with status code 101, NA as batch id and
 an informative error message containing the output of the OS command in <code>output</code>.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>cfHandleUnknownSubmitError</span>(<span class='no'>cmd</span>, <span class='no'>exit.code</span>, <span class='no'>output</span>)</pre>
     
@@ -137,12 +144,12 @@ If these are multiple lines in a vector, they are automatically joined.</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
+    <div class='dont-index'><p>Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
   <code><a href='cfKillJob.html'>cfKillJob</a></code>,
   <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
   <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>,
   <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>,
-  <code><a href='runOSCommand.html'>runOSCommand</a></code></p>
+  <code><a href='runOSCommand.html'>runOSCommand</a></code></p></div>
     
 
   </div>
@@ -170,6 +177,8 @@ If these are multiple lines in a vector, they are automatically joined.</p></td>
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Trigger Evaluation of Custom Function — runHook" />
 
 <meta property="og:description" content="Hooks allow to trigger functions calls on specific events.
@@ -70,7 +73,7 @@ They can be specified via the ClusterFunctions and are triggered on the followin
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -101,6 +104,7 @@ They can be specified via the ClusterFunctions and are triggered on the followin
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -108,13 +112,15 @@ They can be specified via the ClusterFunctions and are triggered on the followin
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Trigger Evaluation of Custom Function</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Hooks.R'><code>R/Hooks.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Hooks.R'><code>R/Hooks.R</code></a></small>
+    <div class="hidden name"><code>runHook.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Hooks allow to trigger functions calls on specific events.
 They can be specified via the <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code> and are triggered on the following events:</p><dl class='dl-horizontal'>
@@ -133,6 +139,7 @@ They can be specified via the <code><a href='makeClusterFunctions.html'>ClusterF
   <dt><code>post.kill</code></dt><dd><p><code>function(reg, ids, ...)</code>: Run after jobs are killed. <code>ids</code> is the return value of <code><a href='killJobs.html'>killJobs</a></code>.</p></dd>
 </dl>
     
+    </div>
 
     <pre class="usage"><span class='fu'>runHook</span>(<span class='no'>obj</span>, <span class='no'>hook</span>, <span class='no'>...</span>)</pre>
     
@@ -188,6 +195,8 @@ See description.</p></td>
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

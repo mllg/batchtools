@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="ClusterFunctions Constructor — makeClusterFunctions" />
 
 <meta property="og:description" content="This is the constructor used to create custom cluster functions.
@@ -57,7 +60,7 @@ with the package." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
       </span>
     </div>
 
@@ -88,6 +91,7 @@ with the package." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -95,18 +99,21 @@ with the package." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>ClusterFunctions Constructor</h1>
-    <small>Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
+    <div class="hidden name"><code>makeClusterFunctions.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This is the constructor used to create <em>custom</em> cluster functions.
 Note that some standard implementations for TORQUE, Slurm, LSF, SGE, etc. ship
 with the package.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>makeClusterFunctions</span>(<span class='no'>name</span>, <span class='no'>submitJob</span>, <span class='kw'>killJob</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>listJobsQueued</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>listJobsRunning</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>array.var</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
@@ -197,7 +204,7 @@ See <a href='runHook.html'>Hooks</a>.</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+    <div class='dont-index'><p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
   <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
   <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
   <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
@@ -212,7 +219,7 @@ See <a href='runHook.html'>Hooks</a>.</p></td>
   <code><a href='cfKillJob.html'>cfKillJob</a></code>,
   <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
   <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>,
-  <code><a href='runOSCommand.html'>runOSCommand</a></code></p>
+  <code><a href='runOSCommand.html'>runOSCommand</a></code></p></div>
     
 
   </div>
@@ -238,6 +245,8 @@ See <a href='runHook.html'>Hooks</a>.</p></td>
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>
