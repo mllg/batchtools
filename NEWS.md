@@ -2,6 +2,7 @@
 
 * Exported functions `findConfFile()` and `findTemplateFile()`.
 * Dropped support for providing a template file directly as string. A valid file is now always required.
+* Fixed writing to `TMPDIR` instead of the R session's temporary directory.
 
 # batchtools 0.9.9
 
