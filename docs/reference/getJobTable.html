@@ -62,7 +62,7 @@ getJobTable returns all these tables joined." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">batchtools</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.9.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.10</span>
       </span>
     </div>
 
@@ -172,7 +172,7 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/michel/.batchtools.conf.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>) <span class='fu'>stop</span>(<span class='st'>"x must be &gt; 0"</span>) <span class='kw'>else</span> <span class='fu'>sqrt</span>(<span class='no'>x</span>)
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '~/.batchtools.conf.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='kw'>if</span> (<span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fl'>0</span>) <span class='fu'>stop</span>(<span class='st'>"x must be &gt; 0"</span>) <span class='kw'>else</span> <span class='fu'>sqrt</span>(<span class='no'>x</span>)
 <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>f</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 3 jobs ...</span></div><div class='input'><span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='st'>"tag1"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 <span class='fu'><a href='Tags.html'>addJobTags</a></span>(<span class='fl'>2</span>, <span class='st'>"tag2"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)
 
@@ -180,9 +180,9 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 <span class='fu'>getJobTable</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; Key: &lt;job.id&gt;
 #&gt;    job.id           submitted             started                done
 #&gt;     &lt;int&gt;              &lt;POSc&gt;              &lt;POSc&gt;              &lt;POSc&gt;
-#&gt; 1:      1 2018-05-19 22:12:28 2018-05-19 22:12:28 2018-05-19 22:12:28
-#&gt; 2:      2 2018-05-19 22:12:28 2018-05-19 22:12:28 2018-05-19 22:12:28
-#&gt; 3:      3 2018-05-19 22:12:28 2018-05-19 22:12:28 2018-05-19 22:12:28
+#&gt; 1:      1 2018-05-20 00:31:32 2018-05-20 00:31:32 2018-05-20 00:31:32
+#&gt; 2:      2 2018-05-20 00:31:32 2018-05-20 00:31:32 2018-05-20 00:31:32
+#&gt; 3:      3 2018-05-20 00:31:32 2018-05-20 00:31:32 2018-05-20 00:31:32
 #&gt;                                      error mem.used      batch.id log.file
 #&gt;                                     &lt;char&gt;    &lt;num&gt;        &lt;char&gt;   &lt;char&gt;
 #&gt; 1: Error in (function (x)  : x must be &gt; 0       NA cfInteractive     &lt;NA&gt;
@@ -190,14 +190,14 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 #&gt; 3:                                    &lt;NA&gt;       NA cfInteractive     &lt;NA&gt;
 #&gt;                               job.hash job.name      time.queued
 #&gt;                                 &lt;char&gt;   &lt;char&gt;       &lt;difftime&gt;
-#&gt; 1: jobcda5c5bbd4f630a141bd670937b29be5     &lt;NA&gt; 0.003000021 secs
-#&gt; 2: jobfa710f7bde545df3d19d6e69ccd43c4d     &lt;NA&gt; 0.003000021 secs
-#&gt; 3: jobebd08a9f4ba2e0551026fae24b1471ff     &lt;NA&gt; 0.003000021 secs
+#&gt; 1: jobb826272edd8328695409714e0be44c73     &lt;NA&gt; 0.003400087 secs
+#&gt; 2: job76ace4b00c14f6f8e4d72c41321217da     &lt;NA&gt; 0.003700018 secs
+#&gt; 3: job5227b3f4e41d809726d36cf3971fea25     &lt;NA&gt; 0.003499985 secs
 #&gt;        time.running job.pars resources      tags
 #&gt;          &lt;difftime&gt;   &lt;list&gt;    &lt;list&gt;    &lt;char&gt;
-#&gt; 1: 0.003200054 secs   &lt;list&gt;    &lt;list&gt;      tag1
-#&gt; 2: 0.003000021 secs   &lt;list&gt;    &lt;list&gt; tag1,tag2
-#&gt; 3: 0.003000021 secs   &lt;list&gt;    &lt;list&gt;      &lt;NA&gt;</div><div class='input'>
+#&gt; 1: 0.003599882 secs   &lt;list&gt;    &lt;list&gt;      tag1
+#&gt; 2: 0.003199816 secs   &lt;list&gt;    &lt;list&gt; tag1,tag2
+#&gt; 3: 0.003599882 secs   &lt;list&gt;    &lt;list&gt;      &lt;NA&gt;</div><div class='input'>
 <span class='co'># Job parameters:</span>
 <span class='fu'>getJobPars</span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; Key: &lt;job.id&gt;
 #&gt;    job.id job.pars
