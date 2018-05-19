@@ -40,7 +40,7 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
         "You can inspect results and errors, but cannot add, remove, submit or alter jobs in any way.",
         "If you need write-access, re-load the registry with `loadRegistry([...], writeable = TRUE)`."
     ))
-  file.dir = path_real(file.dir)
+  file.dir = path_real_if_relative(file.dir)
   reg = readRegistry(file.dir)
 
   # re-allocate stuff which has not been serialized
@@ -52,7 +52,7 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
   alloc.col(reg$resources, ncol(reg$resources))
   alloc.col(reg$tags, ncol(reg$tags))
   if (!is.null(work.dir))
-    reg$work.dir = path_real(work.dir)
+    reg$work.dir = path_real_if_relative(work.dir)
   updated = updateRegistry(reg = reg)
 
   # try to load dependencies relative to work.dir

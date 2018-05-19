@@ -44,7 +44,7 @@ file_remove = function(x) {
   }
 }
 
-path_real = function(path) {
+path_real_if_relative = function(path) {
   if (fs::is_absolute_path(path))
     return(fs::path_norm(path))
   fs::path_real(path)

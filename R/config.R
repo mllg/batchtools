@@ -16,24 +16,24 @@ findConfFile = function() {
   x = Sys.getenv("R_BATCHTOOLS_SEARCH_PATH")
   if (nzchar(x)) {
     x = fs::path(x, "batchtools.conf.R")
-    if (fs::file_exists(x))
-      return(assertFileExists(fs::path_real(x), access = "r"))
+    if (fs::file_access(x, "read"))
+      return(fs::path_abs(x))
   }
 
   x = "batchtools.conf.R"
-  if (testFileExists(x, access = "r"))
-    return(fs::path_real(x))
+  if (fs::file_access(x, "read"))
+    return(fs::path_abs(x))
 
   x = fs::path(user_config_dir("batchtools", expand = FALSE), "config.R")
-  if (testFileExists(x, access = "r"))
+  if (fs::file_access(x, "read"))
     return(x)
 
   x = fs::path("~", ".batchtools.conf.R")
-  if (testFileExists(x, access = "r"))
-    return(fs::path_real(x))
+  if (fs::file_access(x, "read"))
+    return(fs::path_abs(x))
 
   x = fs::path(site_config_dir("batchtools"), "config.R")
-  if (testFileExists(x, access = "r"))
+  if (fs::file_access(x, "read"))
     return(x)
 
   return(NA_character_)

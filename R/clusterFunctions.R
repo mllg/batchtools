@@ -295,34 +295,35 @@ findTemplateFile = function(template) {
   assertString(template, min.chars = 1L)
 
   if (stri_endswith_fixed(template, ".tmpl")) {
-    return(assertFileExists(template, access = "r"))
+    assertFileExists(template, access = "r")
+    return(fs::path_abs(template))
   }
 
   x = Sys.getenv("R_BATCHTOOLS_SEARCH_PATH")
   if (nzchar(x)) {
     x = fs::path(x, sprintf("batchtools.%s.tmpl", template))
-    if (testFileExists(x, access = "r"))
-      return(fs::path_real(x))
+    if (fs::file_access(x, "read"))
+      return(fs::path_abs(x))
   }
 
   x = sprintf("batchtools.%s.tmpl", template)
-  if (testFileExists(x, access = "r"))
-    return(fs::path_real(x))
+  if (fs::file_access(x, "read"))
+    return(fs::path_abs(x))
 
   x = fs::path(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", template))
-  if (testFileExists(x, access = "r"))
+  if (fs::file_access(x, "read"))
     return(x)
 
   x = fs::path("~", sprintf(".batchtools.%s.tmpl", template))
-  if (testFileExists(x, access = "r"))
-    return(fs::path_real(x))
+  if (fs::file_access(x, "read"))
+    return(fs::path_abs(x))
 
   x = fs::path(site_config_dir("batchtools"), sprintf("%s.tmpl", template))
-  if (testFileExists(x, access = "r"))
+  if (fs::file_access(x, "read"))
     return(x)
 
   x = system.file("templates", sprintf("%s.tmpl", template), package = "batchtools")
-  if (testFileExists(x, access = "r"))
+  if (fs::file_access(x, "read"))
     return(x)
 
   return(NA_character_)
