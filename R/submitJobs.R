@@ -19,7 +19,7 @@
 #'  \item{pp.size:}{Maximum size of the pointer protection stack, see \code{\link[base]{Memory}}.}
 #'  \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
 #'  \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
-#'  \item{chunks.as.array.jobs:}{Execute chunks as array jobs.}
+#'  \item{chunks.as.arrayjobs:}{Execute chunks as array jobs.}
 #'  \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}
 #'  \item{foreach.backend:}{Start a \pkg{foreach} backend on the slave.}
 #'  \item{clusters:}{Resource used for Slurm to select the set of clusters to run \code{sbatch}/\code{squeue}/\code{scancel} on.}

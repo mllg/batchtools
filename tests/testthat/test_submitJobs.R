@@ -45,13 +45,3 @@ test_that("per job resources", {
   ids$chunk = 1L
   expect_error(submitJobs(ids, reg = reg), "per-job")
 })
-
-test_that("chunks.as.arrayjobs is passed down", {
-  reg = makeTestRegistry()
-  fun = function(...) list(...)
-  ids = batchMap(fun, i = 1:3, reg = reg)
-  ids$chunk = 1L
-  submitJobs(ids, resources = resources, reg = reg)
-
-
-})
