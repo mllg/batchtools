@@ -1,3 +1,7 @@
+# batchtools 0.9.11
+
+* Removed deprecated function `chunkIds()`.
+
 # batchtools 0.9.10
 
 * Exported functions `findConfFile()` and `findTemplateFile()`.

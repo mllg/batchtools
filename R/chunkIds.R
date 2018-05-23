@@ -1,45 +1,8 @@
 #' @title Chunk Jobs for Sequential Execution
 #'
 #' @description
-#' This function is deprecated in favor of the more flexible \code{chunk}, \code{lpt} and \code{binpack}.
-#'
-#' @templateVar ids.default all
-#' @template ids
-#' @param group.by [\code{character(0)}]\cr
-#'   If \code{ids} is a \code{\link{data.frame}} with additional columns
-#'   (in addition to the required column \dQuote{job.id}), then the chunking is performed using
-#'   subgroups defined by the columns set in \code{group.by}.
-#'   See example.
-#' @inheritParams chunk
-#' @template reg
-#' @return [\code{\link[data.table]{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
-#' @seealso \code{\link{chunk}} \code{\link{binpack}} \code{\link{lpt}}
-#' @export
-chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = character(0L), reg = getDefaultRegistry()) {
-  .Deprecated("chunk", package = "batchtools")
-  assertRegistry(reg)
-  assertCharacter(group.by, any.missing = FALSE, min.chars = 1L)
-  ids = convertIds(reg, ids, default = allIds(reg), keep.extra = group.by)
-
-  if (length(group.by) > 0L) {
-    job.id = NULL
-    if (any(group.by %chnin% names(ids)))
-      stop("All columns to group by must be provided in the 'ids' table")
-    ids[, "chunk" := chunk(job.id, n.chunks = n.chunks, chunk.size = chunk.size), by = group.by]
-    ids[, "chunk" := .GRP, by = c(group.by, "chunk")]
-  } else {
-    ids[, "chunk" := chunk(job.id, n.chunks = n.chunks, chunk.size = chunk.size)]
-  }
-
-  return(ids[, c("job.id", "chunk")])
-}
-
-
-#' @title Chunk Jobs for Sequential Execution
-#'
-#' @description
 #' Jobs can be partitioned into \dQuote{chunks} to be executed sequentially on the computational nodes.
-#' Chunks are defined by providing a data frame with columns \dQuote{job.id} and \dQuote{chunk} (integer).
+#' Chunks are defined by providing a data frame with columns \dQuote{job.id} and \dQuote{chunk} (integer)
 #' to \code{\link{submitJobs}}.
 #' All jobs with the same chunk number will be grouped together on one node to form a single
 #' computational job.
