@@ -64,23 +64,23 @@ info = function(...) {
 }
 
 # formating cat()
-catf = function (..., con = "") {
+catf = function(..., con = "") {
   cat(stri_flatten(sprintf(...), "\n"), "\n", sep = "", file = con)
 }
 
 # formating message()
-messagef = function (..., con = "") {
+messagef = function(..., con = "") {
   message(sprintf(...))
 }
 
 # formating waring()
-warningf = function (...) {
+warningf = function(...) {
   warning(simpleWarning(sprintf(...), call = sys.call(sys.parent())))
 }
 
 # formating stop()
-stopf = function (...) {
-  stop(simpleError(sprintf(...), call = sys.call(sys.parent())))
+stopf = function(...) {
+  stop(simpleError(sprintf(...), call = NULL))
 }
 
 `%nin%` = function(x, y) {
