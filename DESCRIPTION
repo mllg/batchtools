@@ -1,11 +1,11 @@
 Package: batchtools
 Title: Tools for Computation on Batch Systems
-Version: 0.9.8
+Version: 0.9.10-9000
 Authors@R: c(
     person("Michel", "Lang", NULL, "michellang@gmail.com",
       role = c("cre", "aut"), comment = c(ORCID = "0000-0001-9754-0393")),
     person("Bernd", "Bischl", NULL, "bernd_bischl@gmx.de", role = "aut"),
-    person("Dirk", "Surmann", NULL, "surmann@statistik.tu-dortmund.de", 
+    person("Dirk", "Surmann", NULL, "surmann@statistik.tu-dortmund.de",
       role = "ctb", comment = c(ORCID = "0000-0003-0873-137X"))
     )
 Description: As a successor of the packages 'BatchJobs' and 'BatchExperiments',
@@ -28,14 +28,14 @@ NeedsCompilation: yes
 ByteCompile: yes
 Depends:
     R (>= 3.0.0),
-    data.table (>= 1.10.4)
+    data.table (>= 1.11.2)
 Imports:
     backports (>= 1.1.2),
     base64url (>= 1.1),
     brew,
     checkmate (>= 1.8.5),
     digest (>= 0.6.9),
-    fs (>= 1.1.0),
+    fs (>= 1.2.0),
     parallel,
     progress (>= 1.1.1),
     R6,
@@ -50,6 +50,7 @@ Suggests:
     doMPI,
     e1071,
     foreach,
+    future,
     future.batchtools,
     knitr,
     parallelMap,

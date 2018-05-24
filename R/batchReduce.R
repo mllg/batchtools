@@ -46,11 +46,11 @@ batchReduce = function(fun, xs, init = NULL, chunks = seq_along(xs), more.args =
   assertIntegerish(chunks, len = length(xs), any.missing = FALSE, lower = 0L)
   assertList(more.args, names = "strict")
 
-  more.args = c(more.args, list(..fun = fun, ..init = init))
+  more.args = c(more.args, list(.fun = fun, .init = init))
   batchMap(batchReduceWrapper, unname(split(xs, chunks)), more.args = more.args, reg = reg)
 }
 
-batchReduceWrapper = function(xs.block, ..fun, ..init, ...) {
-  fun = function(aggr, x) ..fun(aggr, x, ...)
-  Reduce(fun, xs.block, init = ..init)
+batchReduceWrapper = function(xs.block, .fun, .init, ...) {
+  fun = function(aggr, x) .fun(aggr, x, ...)
+  Reduce(fun, xs.block, init = .init)
 }

@@ -27,7 +27,7 @@ test_that("submitJobs", {
   expect_equal(uniqueN(reg$status$job.hash), 2)
 })
 
-test_that("submitJobs: per job resources", {
+test_that("per job resources", {
   reg = makeTestRegistry()
 
   fun = function(...) list(...)

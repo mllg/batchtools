@@ -7,6 +7,3 @@
 #'     \item \dQuote{.batchtools.[template].tmpl} in the home directory.
 #'     \item \dQuote{[template].tmpl} in the package installation directory in the subfolder \dQuote{templates}.
 #'   }
-#'   Here, the default for \code{template} is \dQuote{<%= cf.name %>}.
-#'   Alternatively, the template itself can be provided directly as a string which is then passed to \pkg{brew}.
-#'   The string must include at least on newline (\dQuote{\\n}) in this case.

@@ -20,7 +20,8 @@ E.g., if set to \dQuote{Registry}, a \code{\link{ExperimentRegistry}} would not 
 Check if the registry is writeable.}
 
 \item{sync}{[\code{logical(1)}]\cr
-Whether to sync the registry before writing.}
+Try to synchronize the registry by including pending results from the file system.
+See \code{\link{syncRegistry}}.}
 
 \item{running.ok}{[\code{logical(1)}]\cr
 If \code{FALSE} throw an error if jobs associated with the registry are currently running.}

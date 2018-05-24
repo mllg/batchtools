@@ -18,13 +18,26 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Unwrap Nested Data Frames — unwrap" />
+
+<meta property="og:description" content="Some functions (e.g., getJobPars, getJobResources or reduceResultsDataTable
+return a data.table with columns of type list.
+These columns can be unnested/unwrapped with this function.
+The contents of these columns  will be transformed to a data.table and cbind-ed
+to the input data.frame x, replacing the original nested column." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +60,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.10</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +75,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -76,6 +93,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,12 +101,15 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Unwrap Nested Data Frames</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/unwrap.R'><code>R/unwrap.R</code></a></small>
+    <div class="hidden name"><code>unwrap.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Some functions (e.g., <code><a href='getJobTable.html'>getJobPars</a></code>, <code><a href='getJobTable.html'>getJobResources</a></code> or <code><a href='reduceResultsList.html'>reduceResultsDataTable</a></code>
 return a <code>data.table</code> with columns of type <code>list</code>.
@@ -96,28 +117,29 @@ These columns can be unnested/unwrapped with this function.
 The contents of these columns  will be transformed to a <code>data.table</code> and <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code>-ed
 to the input data.frame <code>x</code>, replacing the original nested column.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>unwrap</span>(<span class='no'>x</span>, <span class='kw'>cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='fu'>flatten</span>(<span class='no'>x</span>, <span class='kw'>cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>[<code>data.frame</code> | <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]
+      <td><p>[<code>data.frame</code> | <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>]<br />
 Data frame to flatten.</p></td>
     </tr>
     <tr>
       <th>cols</th>
-      <td><p>[<code>character</code>]
+      <td><p>[<code>character</code>]<br />
 Columns to consider for this operation. If set to <code>NULL</code> (default),
 will operate on all columns of type &#8220;list&#8221;.</p></td>
     </tr>
     <tr>
       <th>sep</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 If <code>NULL</code> (default), the column names of the additional columns will re-use the names
 of the nested <code>list</code>/<code>data.frame</code>.
 This may lead to name clashes.
@@ -178,5 +200,8 @@ The function <code>flatten</code> is discouraged to use for this reason in favor
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

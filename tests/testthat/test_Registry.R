@@ -117,6 +117,14 @@ test_that("loadRegistry after early node error still usable (#135)", {
   expect_string(getErrorMessages(reg = reg)$message, fixed = "not_existing_package")
 })
 
+test_that("syncRegistry skips broken update files)", {
+  reg = makeTestRegistry()
+  p = dir(reg, "updates")
+  fs::file_create(fs::path(p, "foo.rds"))
+  fs::dir_ls(p)
+  expect_message(syncRegistry(reg = reg), "Skipping")
+})
+
 test_that("clearRegistry", {
   reg = makeTestRegistry()
   reg$foo = TRUE
@@ -136,4 +144,63 @@ test_that("clearRegistry", {
 
   expect_identical(batchMap(identity, 1:4, reg = reg), data.table(job.id = 1:4, key = "job.id"))
   expect_true(reg$foo)
+})
+
+test_that("read only mode", {
+  f = function(x) if (x == 3) stop(3) else x
+  reg = makeTestRegistry()
+  batchMap(f, 1:4, reg = reg)
+  submitAndWait(ids = 1:3, reg)
+
+  # simulate that job 4 has been started but is not terminated yet
+  jc = makeJobCollection(4L, reg = reg)
+  suppressAll({doJobCollection(jc,  jc$log.file)})
+  reg$status[job.id == 4L, job.hash := jc$job.hash]
+  saveRegistry(reg = reg)
+
+  reg = loadRegistry(reg$file.dir, writeable = FALSE)
+
+  # query status
+  expect_class(getStatus(reg = reg), "Status")
+  expect_data_table(findDone(reg = reg), nrow = 3)
+  expect_data_table(findErrors(reg = reg), nrow = 1)
+  expect_character(fs::dir_ls(fs::path(reg$file.dir, "updates")), len = 1L)
+
+  # load results
+  expect_identical(loadResult(1L, reg = reg), 1L)
+  expect_identical(reduceResultsList(reg = reg), as.list(c(1:2, 4L)))
+  expect_character(fs::dir_ls(fs::path(reg$file.dir, "updates")), len = 1L)
+
+  # inspect errors
+  expect_data_table(getErrorMessages(reg = reg), nrow = 1)
+  expect_character(getLog(3L, reg = reg))
+  expect_character(getLog(4L, reg = reg))
+
+  # try to write
+  expect_error(sweepRegistry(reg = reg), "writeable")
+  expect_error(setJobNames(ids = 1L, reg = reg), "writeable")
+  expect_error(addJobTags(ids = 1L, "a", reg = reg), "writeable")
+  expect_error(resetJobs(reg = reg), "writeable")
+  expect_error(clearRegistry(reg = reg), "writeable")
+  expect_error(removeRegistry(reg = reg), "writeable")
+  expect_error(killJobs(reg = reg), "writeable")
+  expect_directory_exists(reg$file.dir)
+  expect_character(fs::dir_ls(fs::path(reg$file.dir, "updates")), len = 1L)
+
+  # same stuff for ExperimentRegistry
+  reg = makeTestExperimentRegistry()
+  addProblem("foo", data = 1, reg = reg)
+  addAlgorithm("bar", function(data, instance, ...) instance, reg = reg)
+  addExperiments(reg = reg)
+  reg$writeable = FALSE
+
+  expect_data_table(summarizeExperiments(reg = reg), nrow = 1L)
+  expect_data_table(findExperiments(reg = reg))
+
+  expect_error(addProblem("foo2", iris, reg = reg), "writeable")
+  expect_error(removeProblems("foo2", reg = reg), "writeable")
+  expect_error(addAlgorithm("bar2", function(data, instance, ...) instance, reg = reg), "writeable")
+  expect_error(removeAlgorithms("bar2", reg = reg), "writeable")
+  expect_error(addExperiments(reg = reg), "writeable")
+  expect_error(removeExperiments(1, reg = reg), "writeable")
 })

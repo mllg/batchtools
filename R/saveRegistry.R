@@ -14,7 +14,7 @@
 saveRegistry = function(reg = getDefaultRegistry()) {
   if (!reg$writeable) {
     "!DEBUG [saveRegistry]: Skipping saveRegistry (read-only)"
-    return(invisible(FALSE))
+    return(FALSE)
   }
 
   "!DEBUG [saveRegistry]: Saving Registry"
@@ -27,5 +27,5 @@ saveRegistry = function(reg = getDefaultRegistry()) {
   writeRDS(ee, file = fn[1L])
   fs::file_move(fn[1L], fn[2L])
   reg$mtime = file_mtime(fn[2L])
-  invisible(TRUE)
+  return(TRUE)
 }

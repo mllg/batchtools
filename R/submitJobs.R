@@ -16,11 +16,13 @@
 #'  \item{memory:}{Memory limit in Mb. If jobs exceed this limit, they are usually killed by the scheduler. Can be passed as additional column as part of \code{ids} to set per-job resources.}
 #'  \item{ncpus:}{Number of (physical) CPUs to use on the slave. Can be passed as additional column as part of \code{ids} to set per-job resources.}
 #'  \item{omp.threads:}{Number of threads to use via OpenMP. Used to set environment variable \dQuote{OMP_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+#'  \item{pp.size:}{Maximum size of the pointer protection stack, see \code{\link[base]{Memory}}.}
 #'  \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
 #'  \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
-#'  \item{chunks.as.array.jobs:}{Execute chunks as array jobs.}
+#'  \item{chunks.as.arrayjobs:}{Execute chunks as array jobs.}
 #'  \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}
 #'  \item{foreach.backend:}{Start a \pkg{foreach} backend on the slave.}
+#'  \item{clusters:}{Resource used for Slurm to select the set of clusters to run \code{sbatch}/\code{squeue}/\code{scancel} on.}
 #' }
 #'
 #' @section Chunking of Jobs:
@@ -274,9 +276,8 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
       submit = reg$cluster.functions$submitJob(reg = reg, jc = jc)
 
       if (submit$status == 0L) {
-        if (!testString(submit$batch.id, na.ok = FALSE)) {
-          print(str(submit))
-          stopf("Cluster function did not return a valid batch.id")
+        if (!testCharacter(submit$batch.id, any.missing = FALSE, min.len = 1L)) {
+          stopf("Cluster function did not return valid batch ids:\n%s", stri_flatten(capture.output(str(submit$batch.id)), "\n"))
         }
         reg$status[ids.chunk,
           c("submitted", "started", "done",   "error",       "mem.used", "resource.id",         "batch.id",      "log.file",      "job.hash") :=

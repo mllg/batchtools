@@ -8,8 +8,7 @@ cfReadBrewTemplate(template, comment.string = NA_character_)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
-Path to template file or single string (containing newlines) which is then passed
-to \code{\link[brew]{brew}}.}
+Path to template file which is then passed to \code{\link[brew]{brew}}.}
 
 \item{comment.string}{[\code{character(1)}]\cr
 Ignore lines starting with this string.}

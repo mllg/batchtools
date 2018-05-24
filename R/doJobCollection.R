@@ -125,6 +125,9 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   # setup memory measurement
   measure.memory = isTRUE(jc$resources$measure.memory)
   catf("### [bt%s]: Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"))
+  if (measure.memory) {
+    memory.mult = c(if (.Machine$sizeof.pointer == 4L) 28L else 56L, 8L)
+  }
 
   # try to pre-fetch some objects from the file system
   reader = RDSReader$new(n.jobs > 1L)
@@ -141,7 +144,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     if (measure.memory) {
       gc(reset = TRUE)
       result = try(execJob(job))
-      update$mem.used = sum(gc()[, 6L])
+      update$mem.used = sum(gc()[, 6L] * memory.mult)
     } else {
       result = try(execJob(job))
     }

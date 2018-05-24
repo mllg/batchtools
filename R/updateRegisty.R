@@ -84,18 +84,26 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
   }
 
   if (reg$version < "0.9.7-9002") {
-    info("Renaming memory column in data base")
-    setnames(reg$status, "memory", "mem.used")
+    if (hasName(reg$status, "memory")) {
+      info("Renaming memory column in data base")
+      setnames(reg$status, "memory", "mem.used")
+    }
 
-    info("Renaming memory column in update files")
     fns = list.files(dir(reg, "updates"), full.names = TRUE)
-    updates = lapply(fns, function(fn) {
-      x = try(readRDS(fn), silent = TRUE)
-      if (is.error(x))
-        fs::file_delete(x)
-      setnames(x, "memory", "mem.used")
-      saveRDS(x, file = fn, version = 2L)
-    })
+    if (length(fns) > 0L) {
+      info("Renaming memory column in update files")
+      updates = lapply(fns, function(fn) {
+        x = try(readRDS(fn), silent = TRUE)
+        if (is.error(x)) {
+          fs::file_delete(x)
+        } else {
+          if (hasName(x, "memory")) {
+            setnames(x, "memory", "mem.used")
+            saveRDS(x, file = fn, version = 2L)
+          }
+        }
+      })
+    }
   }
 
   reg$version = pv

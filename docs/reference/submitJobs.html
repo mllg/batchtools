@@ -18,13 +18,26 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Submit Jobs to the Batch Systems — submitJobs" />
+
+<meta property="og:description" content="Submits defined jobs to the batch system.
+After submitting the jobs, you can use waitForJobs to wait for the
+termination of jobs or call reduceResultsList/reduceResults
+to collect partial results.
+The progress can be monitored with getStatus." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +60,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.10</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +75,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -76,6 +93,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,12 +101,15 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Submit Jobs to the Batch Systems</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/submitJobs.R'><code>R/submitJobs.R</code></a></small>
+    <div class="hidden name"><code>submitJobs.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Submits defined jobs to the batch system.</p>
 <p>After submitting the jobs, you can use <code><a href='waitForJobs.html'>waitForJobs</a></code> to wait for the
@@ -96,16 +117,17 @@ termination of jobs or call <code><a href='reduceResultsList.html'>reduceResults
 to collect partial results.
 The progress can be monitored with <code><a href='getStatus.html'>getStatus</a></code>.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>submitJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>sleep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>ids</th>
-      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]<br />
 A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
@@ -114,18 +136,17 @@ Invalid ids are ignored.</p></td>
     </tr>
     <tr>
       <th>resources</th>
-      <td><p>[<code>named list</code>]
+      <td><p>[<code>named list</code>]<br />
 Computational  resources for the jobs to submit. The actual elements of this list
-(e.g. something like &#8220;walltime&#8221; or &#8220;nodes&#8221;) depend on your template file, exceptions are outlined in the details.
-In case you need to set individual job resources, <code>ids</code> may be provided as <code>data.frame</code> with the additional
-column &#8220;resources&#8221; (see example).
+(e.g. something like &#8220;walltime&#8221; or &#8220;nodes&#8221;) depend on your template file, exceptions are outlined in the section 'Resources'.
 Default settings for a system can be set in the configuration file by defining the named list <code>default.resources</code>.
 Note that these settings are merged by name, e.g. merging <code>list(walltime = 300)</code> into <code>list(walltime = 400, memory = 512)</code>
-will result in <code>list(walltime = 300, memory = 512)</code>.</p></td>
+will result in <code>list(walltime = 300, memory = 512)</code>.
+Same holds for individual job resources passed as additional column of <code>ids</code> (c.f. section 'Resources').</p></td>
     </tr>
     <tr>
       <th>sleep</th>
-      <td><p>[<code>function(i)</code> | <code>numeric(1)</code>]
+      <td><p>[<code>function(i)</code> | <code>numeric(1)</code>]<br />
 Parameter to control the duration to sleep between temporary errors.
 You can pass an absolute numeric value in seconds or a <code>function(i)</code> which returns the number of seconds to sleep in the <code>i</code>-th
 iteration between temporary errors.
@@ -134,7 +155,7 @@ a function with exponential backoff between 5 and 120 seconds.</p></td>
     </tr>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]<br />
 Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
     </tr>
     </table>
@@ -147,6 +168,24 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 
     <p>If you a large number of jobs, disabling the progress bar (<code>options(batchtools.progress = FALSE)</code>)
 can significantly increase the performance of <code>submitJobs</code>.</p>
+    
+    <h2 class="hasAnchor" id="resources"><a class="anchor" href="#resources"></a>Resources</h2>
+
+    
+    <p>You can pass arbitrary resources to <code>submitJobs()</code> which then are available in the cluster function template.
+Some resources' names are standardized and it is good practice to stick to the following nomenclature to avoid confusion:</p><dl class='dl-horizontal'>
+ <dt>walltime:</dt><dd><p>Upper time limit in seconds for jobs before they get killed by the scheduler. Can be passed as additional column as part of <code>ids</code> to set per-job resources.</p></dd>
+ <dt>memory:</dt><dd><p>Memory limit in Mb. If jobs exceed this limit, they are usually killed by the scheduler. Can be passed as additional column as part of <code>ids</code> to set per-job resources.</p></dd>
+ <dt>ncpus:</dt><dd><p>Number of (physical) CPUs to use on the slave. Can be passed as additional column as part of <code>ids</code> to set per-job resources.</p></dd>
+ <dt>omp.threads:</dt><dd><p>Number of threads to use via OpenMP. Used to set environment variable &#8220;OMP_NUM_THREADS&#8221;. Can be passed as additional column as part of <code>ids</code> to set per-job resources.</p></dd>
+ <dt>pp.size:</dt><dd><p>Maximum size of the pointer protection stack, see <code><a href='http://www.rdocumentation.org/packages/base/topics/Memory'>Memory</a></code>.</p></dd>
+ <dt>blas.threads:</dt><dd><p>Number of threads to use for the BLAS backend. Used to set environment variables &#8220;MKL_NUM_THREADS&#8221; and &#8220;OPENBLAS_NUM_THREADS&#8221;. Can be passed as additional column as part of <code>ids</code> to set per-job resources.</p></dd>
+ <dt>measure.memory:</dt><dd><p>Enable memory measurement for jobs. Comes with a small runtime overhead.</p></dd>
+ <dt>chunks.as.array.jobs:</dt><dd><p>Execute chunks as array jobs.</p></dd>
+ <dt>pm.backend:</dt><dd><p>Start a <span class="pkg">parallelMap</span> backend on the slave.</p></dd>
+ <dt>foreach.backend:</dt><dd><p>Start a <span class="pkg">foreach</span> backend on the slave.</p></dd>
+ <dt>clusters:</dt><dd><p>Resource used for Slurm to select the set of clusters to run <code>sbatch</code>/<code>squeue</code>/<code>scancel</code> on.</p></dd>
+</dl>
     
     <h2 class="hasAnchor" id="chunking-of-jobs"><a class="anchor" href="#chunking-of-jobs"></a>Chunking of Jobs</h2>
 
@@ -162,9 +201,12 @@ can assist in grouping jobs.</p>
 
     
     <p>If your cluster supports array jobs, you can set the resource <code>chunks.as.arrayjobs</code> to <code>TRUE</code> in order
-to execute chunks as job arrays. To do so, the job must be repeated <code>nrow(jobs)</code> times via the cluster functions template.
-The function <code><a href='doJobCollection.html'>doJobCollection</a></code> (which is called on the slave) now retrieves the repetition number from the environment
-and restricts the computation to the respective job in the <code><a href='JobCollection.html'>JobCollection</a></code>.</p>
+to execute chunks as job arrays on the cluster.
+For each chunk of size <code>n</code>, <span class="pkg">batchtools</span> creates a <code><a href='JobCollection.html'>JobCollection</a></code> of (possibly heterogeneous) jobs which is
+submitted to the scheduler as a single array job with <code>n</code> repetitions.
+For each repetition, the <code>JobCollection</code> is first read from the file system, then subsetted to the <code>i</code>-th job using
+the environment variable <code>reg$cluster.functions$array.var</code> (depending on the cluster backend, defined automatically) and finally
+executed.</p>
     
     <h2 class="hasAnchor" id="order-of-submission"><a class="anchor" href="#order-of-submission"></a>Order of Submission</h2>
 
@@ -216,13 +258,14 @@ You have to do this manually via <code><a href='http://www.rdocumentation.org/pa
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>### Example 1: Using memory measurement</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg1' using cluster functions 'Interactive'</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '~/.batchtools.conf.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg1' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Toy function which creates a large matrix and returns the column sums</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>n</span>, <span class='no'>p</span>) <span class='fu'>colMeans</span>(<span class='fu'>matrix</span>(<span class='fu'>runif</span>(<span class='no'>n</span>*<span class='no'>p</span>), <span class='no'>n</span>, <span class='no'>p</span>))
 
 <span class='co'># Arguments to fun:</span>
 <span class='no'>args</span> <span class='kw'>=</span> <span class='fu'>CJ</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1e4</span>, <span class='fl'>1e5</span>), <span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>10</span>, <span class='fl'>50</span>)) <span class='co'># like expand.grid()</span>
-<span class='fu'>print</span>(<span class='no'>args</span>)</div><div class='output co'>#&gt;        n     p
+<span class='fu'>print</span>(<span class='no'>args</span>)</div><div class='output co'>#&gt; Key: &lt;n, p&gt;
+#&gt;        n     p
 #&gt;    &lt;num&gt; &lt;num&gt;
 #&gt; 1: 1e+04    10
 #&gt; 2: 1e+04    50
@@ -234,24 +277,26 @@ You have to do this manually via <code><a href='http://www.rdocumentation.org/pa
 <span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>measure.memory</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Submit jobs using the currently configured cluster functions</span>
-<span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='input'>
+<span class='fu'>submitJobs</span>(<span class='no'>ids</span>, <span class='kw'>resources</span> <span class='kw'>=</span> <span class='no'>res</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 4 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [============&gt;--------------------------------------]  25% eta:  1s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [=========================&gt;-------------------------]  50% eta:  1s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [=====================================&gt;-------------]  75% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>Submitting [===================================================] 100% eta:  0s</span></div><div class='output co'>#&gt; <span class='message'>                                                                              </span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='input'>
 <span class='co'># Retrive information about memory, combine with parameters</span>
 <span class='no'>info</span> <span class='kw'>=</span> <span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='fu'><a href='getJobTable.html'>getJobStatus</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>mem.used</span>)], <span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))
-<span class='fu'>print</span>(<span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='no'>info</span>))</div><div class='output co'>#&gt;    job.id mem.used     n     p
+<span class='fu'>print</span>(<span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='no'>info</span>))</div><div class='output co'>#&gt; Key: &lt;job.id&gt;
+#&gt;    job.id mem.used     n     p
 #&gt;     &lt;int&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;
-#&gt; 1:      1    142.2 1e+04    10
-#&gt; 2:      2    146.8 1e+04    50
-#&gt; 3:      3    154.5 1e+05    10
-#&gt; 4:      4    215.1 1e+05    50</div><div class='input'>
+#&gt; 1:      1    160.1 1e+04    10
+#&gt; 2:      2    163.2 1e+04    50
+#&gt; 3:      3    170.9 1e+05    10
+#&gt; 4:      4    231.4 1e+05    50</div><div class='input'>
 <span class='co'># Combine job info with results -&gt; each job is aggregated using mean()</span>
-<span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)))</div><div class='output co'>#&gt;    job.id mem.used     n     p       res
+<span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='fu'><a href='JoinTables.html'>ijoin</a></span>(<span class='no'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span>(<span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>res</span>) <span class='fu'>list</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>res</span>)), <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)))</div><div class='output co'>#&gt; Key: &lt;job.id&gt;
+#&gt;    job.id mem.used     n     p       res
 #&gt;     &lt;int&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;
-#&gt; 1:      1    142.2 1e+04    10 0.5010869
-#&gt; 2:      2    146.8 1e+04    50 0.4993332
-#&gt; 3:      3    154.5 1e+05    10 0.4996469
-#&gt; 4:      4    215.1 1e+05    50 0.5000530</div><div class='input'>
+#&gt; 1:      1    160.1 1e+04    10 0.5001465
+#&gt; 2:      2    163.2 1e+04    50 0.5002927
+#&gt; 3:      3    170.9 1e+05    10 0.4999191
+#&gt; 4:      4    231.4 1e+05    50 0.5000216</div><div class='input'>
 <span class='co'>### Example 2: Multicore execution on the slave</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg2' using cluster functions 'Interactive'</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '~/.batchtools.conf.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg2' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># Function which sleeps 10 seconds, i-times</span>
 <span class='no'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
   <span class='kw pkg'>parallelMap</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/parallelMap/topics/parallelMap'>parallelMap</a></span>(<span class='no'>Sys.sleep</span>, <span class='fu'>rep</span>(<span class='fl'>10</span>, <span class='no'>i</span>))
@@ -284,6 +329,8 @@ You have to do this manually via <code><a href='http://www.rdocumentation.org/pa
 
       <li><a href="#note">Note</a></li>
 
+      <li><a href="#resources">Resources</a></li>
+
       <li><a href="#chunking-of-jobs">Chunking of Jobs</a></li>
 
       <li><a href="#array-jobs">Array Jobs</a></li>
@@ -314,5 +361,8 @@ You have to do this manually via <code><a href='http://www.rdocumentation.org/pa
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

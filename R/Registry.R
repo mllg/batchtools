@@ -27,6 +27,8 @@
 #'   \item{\code{cluster.functions}:}{As returned by a constructor, e.g. \code{\link{makeClusterFunctionsSlurm}}.}
 #'   \item{\code{default.resources}:}{List of resources to use. Will be overruled by resources specified via \code{\link{submitJobs}}.}
 #'   \item{\code{temp.dir}:}{Path to directory to use for temporary registries.}
+#'   \item{\code{sleep}:}{Custom sleep function. See \code{\link{waitForJobs}}.}
+#'   \item{\code{expire.after}:}{Number of iterations before treating jobs as expired in \code{\link{waitForJobs}}.}
 #' }
 #'
 #' @param file.dir [\code{character(1)}]\cr
@@ -53,14 +55,15 @@
 #'   In the configuration file you can define how \pkg{batchtools} interacts with the system via \code{\link{ClusterFunctions}}.
 #'   Separating the configuration of the underlying host system from the R code allows to easily move computation to another site.
 #'
-#'   The file lookup is implemented in \code{findConfFile} which returns the first file found of the following candidates:
+#'   The file lookup is implemented in the internal (but exported) function \code{findConfFile} which returns the first file found of the following candidates:
 #'   \enumerate{
 #'    \item{File \dQuote{batchtools.conf.R} in the path specified by the environment variable \dQuote{R_BATCHTOOLS_SEARCH_PATH}.}
 #'    \item{File \dQuote{batchtools.conf.R} in the current working directory.}
-#'    \item{File \dQuote{config.R} in the OS dependent user configuration directory as reported by via \code{rappdirs::user_config_dir("batchtools", expand = FALSE)} (e.g., on linux this usually resolves to \dQuote{~/.config/batchtools/config.R}).}
+#'    \item{File \dQuote{config.R} in the user configuration directory as reported by \code{rappdirs::user_config_dir("batchtools", expand = FALSE)} (depending on OS, e.g., on linux this usually resolves to \dQuote{~/.config/batchtools/config.R}).}
 #'    \item{\dQuote{.batchtools.conf.R} in the home directory (\dQuote{~}).}
+#'    \item{\dQuote{config.R} in the site config directory as reported by \code{rappdirs::site_config_dir("batchtools")} (depending on OS). This file can be used for admins to set sane defaults for a computation site.}
 #'   }
-#'   Set to \code{character(0)} if you want to suppress reading any configuration file.
+#'   Set to \code{NA} if you want to suppress reading any configuration file.
 #'   If a configuration file is found, it gets sourced inside the environment of the registry after the defaults for all variables are set.
 #'   Therefore you can set and overwrite slots, e.g. \code{default.resources = list(walltime = 3600)} to set default resources or \dQuote{max.concurrent.jobs} to
 #'   limit the number of jobs allowed to run simultaneously on the system.
@@ -125,7 +128,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
     assertPathForOutput(file.dir, overwrite = FALSE)
   assertString(work.dir)
   assertDirectoryExists(work.dir, access = "r")
-  assertCharacter(conf.file, any.missing = FALSE, max.len = 1L)
+  assertString(conf.file, na.ok = TRUE)
   assertCharacter(packages, any.missing = FALSE, min.chars = 1L)
   assertCharacter(namespaces, any.missing = FALSE, min.chars = 1L)
   assertCharacter(source, any.missing = FALSE, min.chars = 1L)
@@ -182,8 +185,8 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   "!DEBUG [makeRegistry]: Creating directories in '`reg$file.dir`'"
 
   fs::dir_create(c(reg$file.dir, reg$work.dir))
-  reg$file.dir = path_real(reg$file.dir)
-  reg$work.dir = path_real(reg$work.dir)
+  reg$file.dir = fs::path_abs(reg$file.dir)
+  reg$work.dir = fs::path_abs(reg$work.dir)
 
   fs::dir_create(fs::path(reg$file.dir, c("jobs", "results", "updates", "logs", "exports", "external")))
   with_dir(reg$work.dir, loadRegistryDependencies(reg))
@@ -225,7 +228,8 @@ print.Registry = function(x, ...) {
 #' @param writeable [\code{logical(1)}]\cr
 #'   Check if the registry is writeable.
 #' @param sync [\code{logical(1)}]\cr
-#'   Whether to sync the registry before writing.
+#'   Try to synchronize the registry by including pending results from the file system.
+#'   See \code{\link{syncRegistry}}.
 #' @param running.ok [\code{logical(1)}]\cr
 #'   If \code{FALSE} throw an error if jobs associated with the registry are currently running.
 #' @return \code{TRUE} invisibly.
@@ -251,21 +255,19 @@ assertRegistry = function(reg, class = NULL, writeable = FALSE, sync = FALSE, ru
   assertFlag(running.ok)
 
   if (reg$writeable && !identical(reg$mtime, file_mtime(fs::path(reg$file.dir, "registry.rds")))) {
-    warning("Registry has been altered since last read. Switching to read-only mode in this session.")
+    warning("Registry has been altered since last read. Switching to read-only mode in this session. See ?loadRegistry.")
     reg$writeable = FALSE
   }
 
   if (writeable && !reg$writeable)
-    stop("Registry must be writeable")
-
-  if (sync && !reg$writeable)
-    stop("Registry must be writeable to be synced")
-
-  if ((sync || !running.ok) && sync(reg))
-    saveRegistry(reg)
+    stop("Registry must be writeable. See ?loadRegistry.")
 
   if (!running.ok && nrow(.findOnSystem(reg = reg)) > 0L)
     stop("This operation is not allowed while jobs are running on the system")
+
+  if (sync && sync(reg))
+    saveRegistry(reg)
+
   invisible(TRUE)
 }
 

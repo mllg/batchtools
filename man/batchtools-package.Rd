@@ -45,7 +45,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Dirk Surmann \email{surmann@statistik.tu-dortmund.de} [contributor]
+  \item Dirk Surmann \email{surmann@statistik.tu-dortmund.de} (0000-0003-0873-137X) [contributor]
 }
 
 }

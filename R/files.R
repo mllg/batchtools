@@ -1,3 +1,9 @@
+# for package pulsar.
+# see https://github.com/zdk123/pulsar/issues/5
+fp = function(...) {
+  file.path(..., fsep = "/")
+}
+
 dir = function(reg, what) {
   fs::path(fs::path_expand(reg$file.dir), what)
 }
@@ -36,12 +42,6 @@ file_remove = function(x) {
     Sys.sleep(0.5)
     fs::file_delete(x[i])
   }
-}
-
-path_real = function(path) {
-  if (fs::is_absolute_path(path))
-    return(fs::path_norm(path))
-  fs::path_real(path)
 }
 
 file_mtime = function(x) {

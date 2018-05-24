@@ -18,13 +18,34 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Chunk Jobs for Sequential Execution — chunk" />
+
+<meta property="og:description" content="Jobs can be partitioned into &#8220;chunks&#8221; to be executed sequentially on the computational nodes.
+Chunks are defined by providing a data frame with columns &#8220;job.id&#8221; and &#8220;chunk&#8221; (integer).
+to submitJobs.
+All jobs with the same chunk number will be grouped together on one node to form a single
+computational job.
+The function chunk simply splits x into either a fixed number of groups, or
+into a variable number of groups with a fixed number of maximum elements.
+The function lpt also groups x into a fixed number of chunks,
+but uses the actual values of x in a greedy &#8220;Longest Processing Time&#8221; algorithm.
+As a result, the maximum sum of elements in minimized.
+binpack splits x into a variable number of groups whose sum of elements do
+not exceed the upper limit provided by chunk.size.
+See examples of estimateRuntimes for an application of binpack and lpt." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +68,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.10</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +83,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -76,6 +101,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,12 +109,15 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Chunk Jobs for Sequential Execution</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/chunkIds.R'><code>R/chunkIds.R</code></a></small>
+    <div class="hidden name"><code>chunk.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Jobs can be partitioned into &#8220;chunks&#8221; to be executed sequentially on the computational nodes.
 Chunks are defined by providing a data frame with columns &#8220;job.id&#8221; and &#8220;chunk&#8221; (integer).
@@ -99,31 +128,31 @@ computational job.</p>
 into a variable number of groups with a fixed number of maximum elements.</p>
 <p>The function <code>lpt</code> also groups <code>x</code> into a fixed number of chunks,
 but uses the actual values of <code>x</code> in a greedy &#8220;Longest Processing Time&#8221; algorithm.
-As a result, the maximum sum of elements in minimized.
-
-    <code>binpack</code> splits <code>x</code> into a variable number of groups whose sum of elements do
+As a result, the maximum sum of elements in minimized.</p>
+<p><code>binpack</code> splits <code>x</code> into a variable number of groups whose sum of elements do
 not exceed the upper limit provided by <code>chunk.size</code>.</p>
 <p>See examples of <code><a href='estimateRuntimes.html'>estimateRuntimes</a></code> for an application of <code>binpack</code> and <code>lpt</code>.</p>
     
+    </div>
 
-    <pre class="usage"><span class='fu'>chunk</span>(<span class='no'>x</span>, <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>chunk</span>(<span class='no'>x</span>, <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>shuffle</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>lpt</span>(<span class='no'>x</span>, <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='fl'>1L</span>)
 
 <span class='fu'>binpack</span>(<span class='no'>x</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='no'>x</span>))</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>[<code>numeric</code>]
+      <td><p>[<code>numeric</code>]<br />
 For <code>chunk</code> an atomic vector (usually the <code>job.id</code>).
 For <code>binpack</code> and <code>lpt</code>, the weights to group.</p></td>
     </tr>
     <tr>
       <th>n.chunks</th>
-      <td><p>[<code>integer(1)</code>]
+      <td><p>[<code>integer(1)</code>]<br />
 Requested number of chunks.
 The function <code>chunk</code> distributes the number of elements in <code>x</code> evenly while
 <code>lpt</code> tries to even out the sum of elements in each chunk.
@@ -132,11 +161,16 @@ Mutually exclusive with <code>chunks.size</code>.</p></td>
     </tr>
     <tr>
       <th>chunk.size</th>
-      <td><p>[<code>integer(1)</code>]
+      <td><p>[<code>integer(1)</code>]<br />
 Requested chunk size for each single chunk.
 For <code>chunk</code> this is the number of elements in <code>x</code>, for <code>binpack</code> the size
 is determined by the sum of values in <code>x</code>.
 Mutually exclusive with <code>n.chunks</code>.</p></td>
+    </tr>
+    <tr>
+      <th>shuffle</th>
+      <td><p>[<code>logical(1)</code>]<br />
+Shuffles the groups. Default is <code>TRUE</code>.</p></td>
     </tr>
     </table>
     
@@ -146,7 +180,7 @@ Mutually exclusive with <code>n.chunks</code>.</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='estimateRuntimes.html'>estimateRuntimes</a></code></p>
+    <div class='dont-index'><p><code><a href='estimateRuntimes.html'>estimateRuntimes</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -169,9 +203,10 @@ Mutually exclusive with <code>n.chunks</code>.</p></td>
 <span class='fu'>sapply</span>(<span class='fu'>split</span>(<span class='no'>x</span>, <span class='no'>ch</span>), <span class='no'>sum</span>)</div><div class='output co'>#&gt;         1         2         3         4         5         6 
 #&gt; 0.9446753 0.9699941 0.8983897 0.9263065 0.8307960 0.9449773 </div><div class='input'>
 <span class='co'># Job chunking</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg1' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>25</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 25 jobs ...</span></div><div class='input'>
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '~/.batchtools.conf.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg1' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='batchMap.html'>batchMap</a></span>(<span class='no'>identity</span>, <span class='fl'>1</span>:<span class='fl'>25</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 25 jobs ...</span></div><div class='input'>
 <span class='co'>### Group into chunks with 10 jobs each</span>
-<span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'>chunk</span>(<span class='no'>job.id</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>10</span>)]</div><div class='output co'>#&gt;     job.id chunk
+<span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'>chunk</span>(<span class='no'>job.id</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>10</span>)]</div><div class='output co'>#&gt; Key: &lt;job.id&gt;
+#&gt;     job.id chunk
 #&gt;      &lt;int&gt; &lt;int&gt;
 #&gt;  1:      1     2
 #&gt;  2:      2     3
@@ -204,7 +239,8 @@ Mutually exclusive with <code>n.chunks</code>.</p></td>
 #&gt; 2:     3     8
 #&gt; 3:     1     9</div><div class='input'>
 <span class='co'>### Group into 4 chunks</span>
-<span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'>chunk</span>(<span class='no'>job.id</span>, <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='fl'>4</span>)]</div><div class='output co'>#&gt;     job.id chunk
+<span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'>chunk</span>(<span class='no'>job.id</span>, <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='fl'>4</span>)]</div><div class='output co'>#&gt; Key: &lt;job.id&gt;
+#&gt;     job.id chunk
 #&gt;      &lt;int&gt; &lt;int&gt;
 #&gt;  1:      1     3
 #&gt;  2:      2     4
@@ -240,13 +276,14 @@ Mutually exclusive with <code>n.chunks</code>.</p></td>
 <span class='co'>### Submit to batch system</span>
 <span class='fu'><a href='submitJobs.html'>submitJobs</a></span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='no'>ids</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Submitting 25 jobs in 4 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 6 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 8 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 9 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 10 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 22 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 23 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 24 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 4 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 14 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 16 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 17 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 20 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 25 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 1 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 3 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 7 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 12 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 15 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 18 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 2 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 5 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 11 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 13 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 19 ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Setting seed to 21 ...</span></div><div class='input'>
 <span class='co'># Grouped chunking</span>
-<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg2' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob1"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; <span class='message'>Adding problem 'prob1'</span></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob2"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Titanic</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; <span class='message'>Adding problem 'prob2'</span></div><div class='input'><span class='no'>algo</span> <span class='kw'>=</span> <span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"algo"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>i</span>, <span class='no'>...</span>) <span class='no'>problem</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'algo'</span></div><div class='input'><span class='no'>prob.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>prob1</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(), <span class='kw'>prob2</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>))
+<span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '~/.batchtools.conf.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg2' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob1"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; <span class='message'>Adding problem 'prob1'</span></div><div class='input'><span class='no'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"prob2"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Titanic</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>) <span class='fu'>nrow</span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; <span class='message'>Adding problem 'prob2'</span></div><div class='input'><span class='no'>algo</span> <span class='kw'>=</span> <span class='fu'><a href='addAlgorithm.html'>addAlgorithm</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>, <span class='st'>"algo"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>instance</span>, <span class='no'>i</span>, <span class='no'>...</span>) <span class='no'>problem</span>)</div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'algo'</span></div><div class='input'><span class='no'>prob.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>prob1</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(), <span class='kw'>prob2</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>))
 <span class='no'>algo.designs</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>algo</span> <span class='kw'>=</span> <span class='fu'>data.table</span>(<span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>))
 <span class='fu'><a href='addExperiments.html'>addExperiments</a></span>(<span class='no'>prob.designs</span>, <span class='no'>algo.designs</span>, <span class='kw'>repls</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding 9 experiments ('prob1'[1] x 'algo'[3] x repls[3]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 18 experiments ('prob2'[2] x 'algo'[3] x repls[3]) ...</span></div><div class='input'>
 <span class='co'>### Group into chunks of 5 jobs, but do not put multiple problems into the same chunk</span>
 <span class='co'># -&gt; only one problem has to be loaded per chunk, and only once because it is cached</span>
 <span class='no'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='getJobTable.html'>getJobTable</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)[, <span class='fu'>.</span>(<span class='no'>job.id</span>, <span class='no'>problem</span>, <span class='no'>algorithm</span>)]
-<span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'>chunk</span>(<span class='no'>job.id</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>5</span>), <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"problem"</span>]</div><div class='output co'>#&gt;     job.id problem algorithm chunk
+<span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='fu'>chunk</span>(<span class='no'>job.id</span>, <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>5</span>), <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"problem"</span>]</div><div class='output co'>#&gt; Key: &lt;job.id&gt;
+#&gt;     job.id problem algorithm chunk
 #&gt;      &lt;int&gt;  &lt;char&gt;    &lt;char&gt; &lt;int&gt;
 #&gt;  1:      1   prob1      algo     1
 #&gt;  2:      2   prob1      algo     2
@@ -275,7 +312,8 @@ Mutually exclusive with <code>n.chunks</code>.</p></td>
 #&gt; 25:     25   prob2      algo     1
 #&gt; 26:     26   prob2      algo     4
 #&gt; 27:     27   prob2      algo     4
-#&gt;     job.id problem algorithm chunk</div><div class='input'><span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='no'>.GRP</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"problem"</span>, <span class='st'>"chunk"</span>)]</div><div class='output co'>#&gt;     job.id problem algorithm chunk
+#&gt;     job.id problem algorithm chunk</div><div class='input'><span class='no'>ids</span>[, <span class='no'>chunk</span> <span class='kw'>:=</span> <span class='no'>.GRP</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"problem"</span>, <span class='st'>"chunk"</span>)]</div><div class='output co'>#&gt; Key: &lt;job.id&gt;
+#&gt;     job.id problem algorithm chunk
 #&gt;      &lt;int&gt;  &lt;char&gt;    &lt;char&gt; &lt;int&gt;
 #&gt;  1:      1   prob1      algo     1
 #&gt;  2:      2   prob1      algo     2
@@ -304,7 +342,8 @@ Mutually exclusive with <code>n.chunks</code>.</p></td>
 #&gt; 25:     25   prob2      algo     3
 #&gt; 26:     26   prob2      algo     6
 #&gt; 27:     27   prob2      algo     6
-#&gt;     job.id problem algorithm chunk</div><div class='input'><span class='fu'>dcast</span>(<span class='no'>ids</span>, <span class='no'>chunk</span> ~ <span class='no'>problem</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'chunk' as value column. Use 'value.var' to override</span></div><div class='output co'>#&gt; <span class='message'>Aggregate function missing, defaulting to 'length'</span></div><div class='output co'>#&gt;    chunk prob1 prob2
+#&gt;     job.id problem algorithm chunk</div><div class='input'><span class='fu'>dcast</span>(<span class='no'>ids</span>, <span class='no'>chunk</span> ~ <span class='no'>problem</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'chunk' as value column. Use 'value.var' to override</span></div><div class='output co'>#&gt; <span class='message'>Aggregate function missing, defaulting to 'length'</span></div><div class='output co'>#&gt; Key: &lt;chunk&gt;
+#&gt;    chunk prob1 prob2
 #&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;
 #&gt; 1:     1     5     0
 #&gt; 2:     2     4     0
@@ -340,5 +379,8 @@ Mutually exclusive with <code>n.chunks</code>.</p></td>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

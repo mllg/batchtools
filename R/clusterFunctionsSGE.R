@@ -19,22 +19,26 @@
 #' @note
 #' Array jobs are currently not supported.
 #'
-#' @templateVar cf.name sge
 #' @template template
 #' @inheritParams makeClusterFunctions
+#' @template nodename
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSGE = function(template = "sge", scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsSGE = function(template = "sge", nodename = "localhost", scheduler.latency = 1, fs.latency = 65) { # nocov start
+  assertString(nodename)
   template = findTemplateFile(template)
+  if (testScalarNA(template))
+    stopf("Argument 'template' (=\"%s\") must point to a readable template file", template)
   template = cfReadBrewTemplate(template)
+  quote = if (isLocalHost(nodename)) identity else shQuote
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
 
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("qsub", shQuote(outfile))
+    res = runOSCommand("qsub", outfile, nodename = nodename)
 
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
@@ -46,24 +50,24 @@ makeClusterFunctionsSGE = function(template = "sge", scheduler.latency = 1, fs.l
 
   listJobs = function(reg, args) {
     assertRegistry(reg, writeable = FALSE)
-    res = runOSCommand("qstat", args)
+    res = runOSCommand("qstat", args, nodename = nodename)
     if (res$exit.code > 0L)
       OSError("Listing of jobs failed", res)
     stri_extract_first_regex(tail(res$output, -2L), "\\d+")
   }
 
   listJobsQueued = function(reg) {
-    listJobs(reg, c("-u $USER", "-s p"))
+    listJobs(reg, c(quote("-u $USER"), "-s p"))
   }
 
   listJobsRunning = function(reg) {
-    listJobs(reg, c("-u $USER", "-s rs"))
+    listJobs(reg, c(quote("-u $USER"), "-s rs"))
   }
 
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-    cfKillJob(reg, "qdel", batch.id)
+    cfKillJob(reg, "qdel", batch.id, nodename = nodename)
   }
 
   makeClusterFunctions(name = "SGE", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,

@@ -141,21 +141,15 @@ print.SubmitJobResult = function(x, ...) {
 #' Simply reads your template file and returns it as a character vector.
 #'
 #' @param template [\code{character(1)}]\cr
-#'   Path to template file or single string (containing newlines) which is then passed
-#'   to \code{\link[brew]{brew}}.
+#'   Path to template file which is then passed to \code{\link[brew]{brew}}.
 #' @param comment.string [\code{character(1)}]\cr
 #'   Ignore lines starting with this string.
 #' @return [\code{character}].
 #' @family ClusterFunctionsHelper
 #' @export
 cfReadBrewTemplate = function(template, comment.string = NA_character_) {
-  if (stri_detect_fixed(template, "\n")) {
-    "!DEBUG [cfReadBrewTemplate]: Parsing template from string"
-    lines = stri_trim_both(stri_split_lines(template)[[1L]])
-  } else {
-    "!DEBUG [cfReadBrewTemplate]: Parsing template file '`template`'"
-    lines = stri_trim_both(readLines(template))
-  }
+  "!DEBUG [cfReadBrewTemplate]: Parsing template file '`template`'"
+  lines = stri_trim_both(readLines(template))
 
   lines = lines[!stri_isempty(lines)]
   if (!is.na(comment.string))
@@ -288,39 +282,49 @@ getBatchIds = function(reg, status = "all") {
   tab[batch.id %in% reg$status$batch.id]
 }
 
-findTemplateFile = function(name) {
-  assertString(name, min.chars = 1L)
 
-  if (stri_detect_fixed(name, "\n"))
-    return(name)
+#' @title Find a batchtools Template File
+#'
+#' @description
+#' This functions returns the path to a template file on the file system.
+#' @template template
+#' @return [\code{character}] Path to the file or \code{NA} if no template template file was found.
+#' @keywords internal
+#' @export
+findTemplateFile = function(template) {
+  assertString(template, min.chars = 1L)
 
-  if (stri_endswith_fixed(name, ".tmpl")) {
-    assertFileExists(name, access = "r")
-    return(name)
+  if (stri_endswith_fixed(template, ".tmpl")) {
+    assertFileExists(template, access = "r")
+    return(fs::path_abs(template))
   }
 
   x = Sys.getenv("R_BATCHTOOLS_SEARCH_PATH")
   if (nzchar(x)) {
-    x = fs::path(x, sprintf("batchtools.%s.tmpl", name))
-    if (fs::file_exists(x))
-      return(fs::path_real(x))
+    x = fs::path(x, sprintf("batchtools.%s.tmpl", template))
+    if (fs::file_access(x, "read"))
+      return(fs::path_abs(x))
   }
 
-  x = sprintf("batchtools.%s.tmpl", name)
-  if (fs::file_exists(x))
-    return(fs::path_real(x))
+  x = sprintf("batchtools.%s.tmpl", template)
+  if (fs::file_access(x, "read"))
+    return(fs::path_abs(x))
 
-  x = fs::path(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", name))
-  if (fs::file_exists(x))
+  x = fs::path(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", template))
+  if (fs::file_access(x, "read"))
     return(x)
 
-  x = fs::path("~", sprintf(".batchtools.%s.tmpl", name))
-  if (fs::file_exists(x))
-    return(fs::path_real(x))
+  x = fs::path("~", sprintf(".batchtools.%s.tmpl", template))
+  if (fs::file_access(x, "read"))
+    return(fs::path_abs(x))
 
-  x = system.file("templates", sprintf("%s.tmpl", name), package = "batchtools")
-  if (fs::file_exists(x))
+  x = fs::path(site_config_dir("batchtools"), sprintf("%s.tmpl", template))
+  if (fs::file_access(x, "read"))
     return(x)
 
-  stopf("Argument 'template' (=\"%s\") must point to a template file or contain the template itself as string (containing at least one newline)", name)
+  x = system.file("templates", sprintf("%s.tmpl", template), package = "batchtools")
+  if (fs::file_access(x, "read"))
+    return(x)
+
+  return(NA_character_)
 }

@@ -64,18 +64,23 @@ info = function(...) {
 }
 
 # formating cat()
-catf = function (..., con = "") {
+catf = function(..., con = "") {
   cat(stri_flatten(sprintf(...), "\n"), "\n", sep = "", file = con)
 }
 
+# formating message()
+messagef = function(..., con = "") {
+  message(sprintf(...))
+}
+
 # formating waring()
-warningf = function (...) {
+warningf = function(...) {
   warning(simpleWarning(sprintf(...), call = sys.call(sys.parent())))
 }
 
 # formating stop()
-stopf = function (...) {
-  stop(simpleError(sprintf(...), call = sys.call(sys.parent())))
+stopf = function(...) {
+  stop(simpleError(sprintf(...), call = NULL))
 }
 
 `%nin%` = function(x, y) {
@@ -144,8 +149,10 @@ now = function() {
 }
 
 example_push_temp = function(i = 1L) {
-  base = fs::path(dirname(tempdir()), "batchtools-example")
-  dirs = if (i == 1L) fs::path(base, "reg") else fs::path(base, sprintf("reg%i", seq_len(i)))
-  fs::dir_delete(dirs[fs::dir_exists(dirs)])
-  fs::file_temp_push(dirs)
+  if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
+    base = fs::path(dirname(tempdir()), "batchtools-example")
+    dirs = if (i == 1L) fs::path(base, "reg") else fs::path(base, sprintf("reg%i", seq_len(i)))
+    fs::dir_delete(dirs[fs::dir_exists(dirs)])
+    fs::file_temp_push(dirs)
+  }
 }

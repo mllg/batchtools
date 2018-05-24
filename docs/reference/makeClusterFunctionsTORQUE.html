@@ -18,13 +18,31 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="ClusterFunctions for OpenPBS/TORQUE Systems — makeClusterFunctionsTORQUE" />
+
+<meta property="og:description" content="Cluster functions for TORQUE/PBS (http://www.adaptivecomputing.com/products/open-source/torque/).
+Job files are created based on the brew template template.file. This file is processed
+with brew and then submitted to the queue using the qsub command. Jobs are killed using
+the qdel command and the list of running jobs is retrieved using qselect. The user
+must have the appropriate privileges to submit, delete and list jobs on the cluster (this is
+usually the case).
+The template file can access all resources passed to submitJobs
+as well as all variables stored in the JobCollection.
+It is the template file's job to choose a queue for the job and handle the desired resource
+allocations." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +65,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.10</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +80,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -76,6 +98,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,12 +106,15 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>ClusterFunctions for OpenPBS/TORQUE Systems</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctionsTORQUE.R'><code>R/clusterFunctionsTORQUE.R</code></a></small>
+    <div class="hidden name"><code>makeClusterFunctionsTORQUE.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Cluster functions for TORQUE/PBS (<a href='http://www.adaptivecomputing.com/products/open-source/torque/'>http://www.adaptivecomputing.com/products/open-source/torque/</a>).</p>
 <p>Job files are created based on the brew template <code>template.file</code>. This file is processed
@@ -101,35 +127,34 @@ as well as all variables stored in the <code><a href='JobCollection.html'>JobCol
 It is the template file's job to choose a queue for the job and handle the desired resource
 allocations.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>makeClusterFunctionsTORQUE</span>(<span class='kw'>template</span> <span class='kw'>=</span> <span class='st'>"torque"</span>, <span class='kw'>scheduler.latency</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>fs.latency</span> <span class='kw'>=</span> <span class='fl'>65</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>template</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Either a path to a <span class="pkg">brew</span> template file (with extension &#8220;tmpl&#8221;), or a short descriptive name enabling the following heuristic for the file lookup:</p><ol>
 <li><p>&#8220;batchtools.[template].tmpl&#8221; in the path specified by the environment variable &#8220;R_BATCHTOOLS_SEARCH_PATH&#8221;.</p></li>
 <li><p>&#8220;batchtools.[template].tmpl&#8221; in the current working directory.</p></li>
 <li><p>&#8220;[template].tmpl&#8221; in the user config directory (see <code><a href='http://www.rdocumentation.org/packages/rappdirs/topics/user_data_dir'>user_config_dir</a></code>); on linux this is usually &#8220;~/.config/batchtools/[template].tmpl&#8221;.</p></li>
 <li><p>&#8220;.batchtools.[template].tmpl&#8221; in the home directory.</p></li>
 <li><p>&#8220;[template].tmpl&#8221; in the package installation directory in the subfolder &#8220;templates&#8221;.</p></li>
-</ol><p>Here, the default for <code>template</code> is &#8220;torque&#8221;.
-Alternatively, the template itself can be provided directly as a string which is then passed to <span class="pkg">brew</span>.
-The string must include at least on newline (&#8220;\n&#8221;) in this case.</p></td>
+</ol></td>
     </tr>
     <tr>
       <th>scheduler.latency</th>
-      <td><p>[<code>numeric(1)</code>]
+      <td><p>[<code>numeric(1)</code>]<br />
 Time to sleep after important interactions with the scheduler to ensure a sane state.
 Currently only triggered after calling <code><a href='submitJobs.html'>submitJobs</a></code>.</p></td>
     </tr>
     <tr>
       <th>fs.latency</th>
-      <td><p>[<code>numeric(1)</code>]
+      <td><p>[<code>numeric(1)</code>]<br />
 Expected maximum latency of the file system, in seconds.
 Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 access files and directories.
@@ -143,7 +168,7 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
+    <div class='dont-index'><p>Other ClusterFunctions: <code><a href='makeClusterFunctionsDocker.html'>makeClusterFunctionsDocker</a></code>,
   <code><a href='makeClusterFunctionsInteractive.html'>makeClusterFunctionsInteractive</a></code>,
   <code><a href='makeClusterFunctionsLSF.html'>makeClusterFunctionsLSF</a></code>,
   <code><a href='makeClusterFunctionsMulticore.html'>makeClusterFunctionsMulticore</a></code>,
@@ -152,7 +177,7 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
   <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>,
   <code><a href='makeClusterFunctionsSlurm.html'>makeClusterFunctionsSlurm</a></code>,
   <code><a href='makeClusterFunctionsSocket.html'>makeClusterFunctionsSocket</a></code>,
-  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p>
+  <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code></p></div>
     
 
   </div>
@@ -181,5 +206,8 @@ Usually safe to set to <code>NA</code> to disable the heuristic, e.g. if you are
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

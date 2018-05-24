@@ -38,7 +38,7 @@ Shuffles the groups. Default is \code{TRUE}.}
 }
 \description{
 Jobs can be partitioned into \dQuote{chunks} to be executed sequentially on the computational nodes.
-Chunks are defined by providing a data frame with columns \dQuote{job.id} and \dQuote{chunk} (integer).
+Chunks are defined by providing a data frame with columns \dQuote{job.id} and \dQuote{chunk} (integer)
 to \code{\link{submitJobs}}.
 All jobs with the same chunk number will be grouped together on one node to form a single
 computational job.

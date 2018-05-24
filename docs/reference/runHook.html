@@ -18,13 +18,37 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Trigger Evaluation of Custom Function — runHook" />
+
+<meta property="og:description" content="Hooks allow to trigger functions calls on specific events.
+They can be specified via the ClusterFunctions and are triggered on the following events:
+  pre.syncfunction(reg, fns, ...): Run before synchronizing the registry on the master. fn is the character vector of paths to the update files.
+  post.syncfunction(reg, updates, ...): Run after synchronizing the registry on the master. updates is the data.table of processed updates.
+  pre.submit.jobfunction(reg, ...): Run before a job is successfully submitted to the scheduler on the master.
+  post.submit.jobfunction(reg, ...): Run after a job is successfully submitted to the scheduler on the master.
+  pre.submitfunction(reg, ...): Run before any job is submitted to the scheduler.
+  post.submitfunction(reg, ...): Run after a jobs are submitted to the schedule.
+  pre.do.collectionfunction(reg, cache, ...): Run before starting the job collection on the slave.
+    cache is an internal cache object.
+  post.do.collectionfunction(reg, updates, cache, ...): Run after all jobs in the chunk are terminated on the slave.
+    updates is a data.table of updates which will be merged with the Registry by the master.
+    cache is an internal cache object.
+  pre.killfunction(reg, ids, ...): Run before any job is killed.
+  post.killfunction(reg, ids, ...): Run after jobs are killed. ids is the return value of killJobs.
+" />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +71,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.10</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +86,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -76,6 +104,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,12 +112,15 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Trigger Evaluation of Custom Function</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Hooks.R'><code>R/Hooks.R</code></a></small>
+    <div class="hidden name"><code>runHook.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Hooks allow to trigger functions calls on specific events.
 They can be specified via the <code><a href='makeClusterFunctions.html'>ClusterFunctions</a></code> and are triggered on the following events:</p><dl class='dl-horizontal'>
@@ -107,27 +139,28 @@ They can be specified via the <code><a href='makeClusterFunctions.html'>ClusterF
   <dt><code>post.kill</code></dt><dd><p><code>function(reg, ids, ...)</code>: Run after jobs are killed. <code>ids</code> is the return value of <code><a href='killJobs.html'>killJobs</a></code>.</p></dd>
 </dl>
     
+    </div>
 
     <pre class="usage"><span class='fu'>runHook</span>(<span class='no'>obj</span>, <span class='no'>hook</span>, <span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>obj</th>
-      <td><p>[<a href='makeRegistry.html'>Registry</a> | <a href='JobCollection.html'>JobCollection</a>]
+      <td><p>[<a href='makeRegistry.html'>Registry</a> | <a href='JobCollection.html'>JobCollection</a>]<br />
 Registry which contains the <a href='makeClusterFunctions.html'>ClusterFunctions</a> with element &#8220;hooks&#8221;
 or a <a href='JobCollection.html'>JobCollection</a> which holds the subset of functions which are executed
 remotely.</p></td>
     </tr>
     <tr>
       <th>hook</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 ID of the hook as string.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>[ANY]
+      <td><p>[ANY]<br />
 Additional arguments passed to the function referenced by <code>hook</code>.
 See description.</p></td>
     </tr>
@@ -163,5 +196,8 @@ See description.</p></td>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

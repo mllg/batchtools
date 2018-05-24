@@ -18,13 +18,25 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Cluster Functions Helper to Kill Batch Jobs — cfKillJob" />
+
+<meta property="og:description" content="This function is only intended for use in your own cluster functions implementation.
+Calls the OS command to kill a job via system like this: &#8220;cmd batch.job.id&#8221;. If the
+command returns an exit code &gt; 0, the command is repeated after a 1 second sleep
+max.tries-1 times. If the command failed in all tries, an error is generated." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +59,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.10</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +74,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -76,6 +92,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,49 +100,53 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Cluster Functions Helper to Kill Batch Jobs</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
+    <div class="hidden name"><code>cfKillJob.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This function is only intended for use in your own cluster functions implementation.</p>
 <p>Calls the OS command to kill a job via <code><a href='http://www.rdocumentation.org/packages/base/topics/system'>system</a></code> like this: &#8220;cmd batch.job.id&#8221;. If the
 command returns an exit code &gt; 0, the command is repeated after a 1 second sleep
 <code>max.tries-1</code> times. If the command failed in all tries, an error is generated.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>cfKillJob</span>(<span class='no'>reg</span>, <span class='no'>cmd</span>, <span class='kw'>args</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0L</span>), <span class='kw'>max.tries</span> <span class='kw'>=</span> <span class='fl'>3L</span>,
   <span class='kw'>nodename</span> <span class='kw'>=</span> <span class='st'>"localhost"</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]<br />
 Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
     </tr>
     <tr>
       <th>cmd</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 OS command, e.g. &#8220;qdel&#8221;.</p></td>
     </tr>
     <tr>
       <th>args</th>
-      <td><p>[<code>character</code>]
+      <td><p>[<code>character</code>]<br />
 Arguments to <code>cmd</code>, including the batch id.</p></td>
     </tr>
     <tr>
       <th>max.tries</th>
-      <td><p>[<code>integer(1)</code>]
+      <td><p>[<code>integer(1)</code>]<br />
 Number of total times to try execute the OS command in cases of failures.
 Default is <code>3</code>.</p></td>
     </tr>
     <tr>
       <th>nodename</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Name of the SSH node to run the command on. If set to &#8220;localhost&#8221; (default), the command
 is not piped through SSH.</p></td>
     </tr>
@@ -137,12 +158,12 @@ is not piped through SSH.</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
+    <div class='dont-index'><p>Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
   <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
   <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>,
   <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>,
   <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>,
-  <code><a href='runOSCommand.html'>runOSCommand</a></code></p>
+  <code><a href='runOSCommand.html'>runOSCommand</a></code></p></div>
     
 
   </div>
@@ -171,5 +192,8 @@ is not piped through SSH.</p></td>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

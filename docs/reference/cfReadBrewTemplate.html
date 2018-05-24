@@ -18,13 +18,24 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Cluster Functions Helper to Parse a Brew Template — cfReadBrewTemplate" />
+
+<meta property="og:description" content="This function is only intended for use in your own cluster functions implementation.
+This function is only intended for use in your own cluster functions implementation.
+Simply reads your template file and returns it as a character vector." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +58,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.10</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +73,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -76,6 +91,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,32 +99,35 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Cluster Functions Helper to Parse a Brew Template</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/clusterFunctions.R'><code>R/clusterFunctions.R</code></a></small>
+    <div class="hidden name"><code>cfReadBrewTemplate.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This function is only intended for use in your own cluster functions implementation.</p>
 <p>This function is only intended for use in your own cluster functions implementation.
 Simply reads your template file and returns it as a character vector.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>cfReadBrewTemplate</span>(<span class='no'>template</span>, <span class='kw'>comment.string</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>template</th>
-      <td><p>[<code>character(1)</code>]
-Path to template file or single string (containing newlines) which is then passed
-to <code><a href='http://www.rdocumentation.org/packages/brew/topics/brew'>brew</a></code>.</p></td>
+      <td><p>[<code>character(1)</code>]<br />
+Path to template file which is then passed to <code><a href='http://www.rdocumentation.org/packages/brew/topics/brew'>brew</a></code>.</p></td>
     </tr>
     <tr>
       <th>comment.string</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 Ignore lines starting with this string.</p></td>
     </tr>
     </table>
@@ -119,12 +138,12 @@ Ignore lines starting with this string.</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
+    <div class='dont-index'><p>Other ClusterFunctionsHelper: <code><a href='cfBrewTemplate.html'>cfBrewTemplate</a></code>,
   <code><a href='cfHandleUnknownSubmitError.html'>cfHandleUnknownSubmitError</a></code>,
   <code><a href='cfKillJob.html'>cfKillJob</a></code>,
   <code><a href='makeClusterFunctions.html'>makeClusterFunctions</a></code>,
   <code><a href='makeSubmitJobResult.html'>makeSubmitJobResult</a></code>,
-  <code><a href='runOSCommand.html'>runOSCommand</a></code></p>
+  <code><a href='runOSCommand.html'>runOSCommand</a></code></p></div>
     
 
   </div>
@@ -153,5 +172,8 @@ Ignore lines starting with this string.</p></td>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

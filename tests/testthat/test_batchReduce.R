@@ -6,7 +6,7 @@ test_that("batchReduce", {
   ids = batchReduce(function(aggr, x) aggr+x, xs, init = 0, chunks = chunk(seq_along(xs), n.chunks = 10), reg = reg)
   expect_data_table(ids, nrow = 10, key = "job.id")
 
-  submitAndWait(reg = reg)
+  submitAndWait(ids = ids, reg = reg)
   y = reduceResults(fun = function(aggr, job, res) aggr+res, init = 0, reg = reg)
   expect_equal(y, sum(1:20))
 })
