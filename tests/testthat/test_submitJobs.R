@@ -27,7 +27,7 @@ test_that("submitJobs", {
   expect_equal(uniqueN(reg$status$job.hash), 2)
 })
 
-test_that("submitJobs: per job resources", {
+test_that("per job resources", {
   reg = makeTestRegistry()
 
   fun = function(...) list(...)
@@ -44,4 +44,14 @@ test_that("submitJobs: per job resources", {
 
   ids$chunk = 1L
   expect_error(submitJobs(ids, reg = reg), "per-job")
+})
+
+test_that("chunks.as.arrayjobs is passed down", {
+  reg = makeTestRegistry()
+  fun = function(...) list(...)
+  ids = batchMap(fun, i = 1:3, reg = reg)
+  ids$chunk = 1L
+  submitJobs(ids, resources = resources, reg = reg)
+
+
 })

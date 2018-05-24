@@ -276,9 +276,8 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
       submit = reg$cluster.functions$submitJob(reg = reg, jc = jc)
 
       if (submit$status == 0L) {
-        if (!testString(submit$batch.id, na.ok = FALSE)) {
-          print(str(submit))
-          stopf("Cluster function did not return a valid batch.id")
+        if (!testCharacter(submit$batch.id, any.missing = FALSE, min.len = 1L)) {
+          stopf("Cluster function did not return valid batch ids:\n%s", stri_flatten(capture.output(str(submit$batch.id)), "\n"))
         }
         reg$status[ids.chunk,
           c("submitted", "started", "done",   "error",       "mem.used", "resource.id",         "batch.id",      "log.file",      "job.hash") :=

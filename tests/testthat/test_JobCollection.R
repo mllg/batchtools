@@ -62,3 +62,11 @@ test_that("makeJobCollection.ExperimentCollection", {
 
   expect_is(jc, "ExperimentCollection")
 })
+
+test_that("chunks.as.arrayjobs is stored", {
+  reg = makeTestRegistry(file.dir = NA, make.default = FALSE)
+  ids = batchMap(identity, 1:2, reg = reg)
+  resources = list(chunks.as.arrayjobs = TRUE)
+  jc = makeJobCollection(ids, resources = resources, reg = reg)
+  expect_true(jc$array.jobs)
+})
