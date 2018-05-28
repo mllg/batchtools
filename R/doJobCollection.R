@@ -155,7 +155,8 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
       update$error = stri_trunc(stri_trim_both(as.character(result)), 500L, " [truncated]")
     } else {
       catf("\n### [bt%s]: Job terminated successfully [batchtools job.id=%i]", now(), id)
-      writeRDS(result, file = getResultFiles(jc, id))
+      saveResult(jc, id, result)
+      # writeRDS(result, file = getResultFiles(jc, id))
     }
     buf$add(i, update)
     buf$flush(jc)

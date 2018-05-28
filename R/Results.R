@@ -233,3 +233,30 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., missing.val, reg 
   }
   return(results)
 }
+
+saveResult = function(jc, id, result, multiple.result.files = FALSE) {
+  base = dir(reg, "results")
+  if (isTRUE(jc$resources$multiple.result.files)) {
+    if (testList(result, names = "strict")) {
+      Map(writeRDS, object = result, file = fs::path(base, sprintf("%i_%s.rds", id, names(result))))
+      result = setClasses(names(result), "multiple.result.files")
+    } else {
+      warning("Ignoring multiple.result.files. Result is not a properly named list.")
+    }
+  }
+  saveRDS(result, fs::path(base, sprintf("%i.rds", id)))
+}
+
+readResult = function(reg, id) {
+  base = dir(reg, "results")
+  result = readRDS(fs::path(base, sprintf("%i.rds", id)))
+  # TODO: Do we need sharding? :(
+  if (inherits(result, "multiple.result.files")) {
+    ee = new.env(parent = emptyenv())
+    for (item in result) {
+      delayedAssign(item, readRDS(fs::path(base, sprintf("%i_%s.rds", id, item))), assign.env = ee)
+    }
+    return(ee)
+  }
+  return(result)
+}
