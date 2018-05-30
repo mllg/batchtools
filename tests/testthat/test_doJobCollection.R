@@ -33,7 +33,8 @@ test_that("doJobCollection does not swallow warning messages", {
   fun = function(x) warning("GREPME")
   batchMap(fun, 1, reg = reg)
   submitAndWait(reg, 1)
-  expect_data_table(grepLogs(pattern = "GREPME", reg = reg), nrow = 1)
+  expect_data_table(findErrors(reg = reg), nrow = 0L)
+  expect_data_table(grepLogs(pattern = "GREPME", reg = reg), nrow = 1L)
 })
 
 test_that("doJobCollection signals slave errors", {
