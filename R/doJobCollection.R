@@ -30,8 +30,12 @@ doJobCollection = function(jc, output = NULL) {
 doJobCollection.character = function(jc, output = NULL) {
   obj = readRDS(jc)
   force(obj)
-  if (!batchtools$debug && !obj$array.jobs)
+  if (!batchtools$debug && !obj$array.jobs) {
     fs::file_delete(jc)
+    job = fs::path_ext_set(jc, "job")
+    if (fs::file_exists(job))
+      fs::file_delete(job)
+  }
   doJobCollection.JobCollection(obj, output = output)
 }
 
