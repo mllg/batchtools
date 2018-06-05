@@ -20,7 +20,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsInteractive = function(external = FALSE, write.logs = TRUE, fs.latency = NA_real_) {
+makeClusterFunctionsInteractive = function(external = FALSE, write.logs = TRUE, fs.latency = 0) {
   assertFlag(external)
   assertFlag(write.logs)
 

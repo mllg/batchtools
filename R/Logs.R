@@ -1,7 +1,7 @@
 #' @useDynLib batchtools fill_gaps
 readLog = function(id, missing.as.empty = FALSE, reg = getDefaultRegistry()) {
   log.file = getLogFiles(reg, id)
-  if (is.na(log.file) || !fs::file_exists(log.file)) {
+  if (is.na(log.file) || !waitForFile(log.file, timeout = reg$cluster.functions$fs.latency, must.work = FALSE)) {
     if (missing.as.empty)
       return(data.table(job.id = integer(0L), lines = character(0L)))
     stopf("Log file '%s' for job with id %i not available", log.file, id$job.id)

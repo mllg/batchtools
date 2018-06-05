@@ -45,7 +45,7 @@
 #'   Expected maximum latency of the file system, in seconds.
 #'   Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 #'   access files and directories.
-#'   Usually safe to set to \code{NA} to disable the heuristic, e.g. if you are working on a local file system.
+#'   Usually safe to set to \code{0} to disable the heuristic, e.g. if you are working on a local file system.
 #' @param hooks [\code{list}]\cr
 #'   Named list of functions which will we called on certain events like \dQuote{pre.submit} or \dQuote{post.sync}.
 #'   See \link{Hooks}.
@@ -55,7 +55,7 @@
 #' @family ClusterFunctionsHelper
 makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL,
   array.var = NA_character_, store.job.collection = FALSE, store.job.files = FALSE, scheduler.latency = 0,
-  fs.latency = NA_real_, hooks = list()) {
+  fs.latency = 0, hooks = list()) {
   assertList(hooks, types = "function", names = "unique")
   assertSubset(names(hooks), unlist(batchtools$hooks, use.names = FALSE))
 
@@ -69,7 +69,7 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
       store.job.collection = assertFlag(store.job.collection),
       store.job.files = assertFlag(store.job.files),
       scheduler.latency = assertNumber(scheduler.latency, lower = 0),
-      fs.latency = assertNumber(fs.latency, lower = 0, na.ok = TRUE),
+      fs.latency = assertNumber(fs.latency, lower = 0),
       hooks = hooks),
     "ClusterFunctions")
 }
@@ -179,10 +179,7 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 #' @export
 cfBrewTemplate = function(reg, text, jc) {
   assertString(text)
-
-  path = dir(reg, "jobs")
-  fn = sprintf("%s.job", jc$job.hash)
-  outfile = fs::path(path, fn)
+  outfile = fs::path(dir(reg, "jobs"), sprintf("%s.job", jc$job.hash))
 
   parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
@@ -191,7 +188,7 @@ cfBrewTemplate = function(reg, text, jc) {
   z = try(brew(text = text, output = outfile, envir = jc), silent = TRUE)
   if (is.error(z))
     stopf("Error brewing template: %s", as.character(z))
-  waitForFiles(path, fn, reg$cluster.functions$scheduler.latency)
+  waitForFile(outfile, reg$cluster.functions$fs.latency)
   return(outfile)
 }
 

@@ -39,6 +39,14 @@
 #'   one job terminated with an exception or expired.
 #' @export
 waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after = NULL, stop.on.error = FALSE, stop.on.expire = FALSE, reg = getDefaultRegistry()) {
+  waitForResults = function(ids) {
+    waitForFiles(
+      fs::path(reg$file.dir, "results"),
+      sprintf("%i.rds", .findDone(reg, ids)$job.id),
+      reg$cluster.functions$fs.latency
+    )
+  }
+
   assertRegistry(reg, sync = TRUE)
   assertNumber(timeout, lower = 0)
   assertFlag(stop.on.error)
@@ -71,7 +79,7 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
     if (ids[!(terminated) & expire.counter <= expire.after, .N] == 0L) {
       "!DEBUG [waitForJobs]: All jobs terminated"
       pb$update(1)
-      waitForResults(reg, ids)
+      waitForResults(ids)
       return(nrow(.findDone(reg, ids)) == nrow(ids))
     }
 
@@ -94,7 +102,7 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
     if (stop.on.expire && ids[!(terminated) & expire.counter > expire.after, .N] > 0L) {
       warning("Jobs disappeared from the system")
       pb$update(1)
-      waitForResults(reg, ids)
+      waitForResults(ids)
       return(FALSE)
     }
 
@@ -111,4 +119,3 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
       saveRegistry(reg)
   }
 }
-

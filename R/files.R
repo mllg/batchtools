@@ -54,4 +54,3 @@ writeRDS = function(object, file) {
   waitForFile(file, 300)
   invisible(TRUE)
 }
-

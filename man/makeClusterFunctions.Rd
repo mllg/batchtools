@@ -8,7 +8,7 @@
 makeClusterFunctions(name, submitJob, killJob = NULL, listJobsQueued = NULL,
   listJobsRunning = NULL, array.var = NA_character_,
   store.job.collection = FALSE, store.job.files = FALSE,
-  scheduler.latency = 0, fs.latency = NA_real_, hooks = list())
+  scheduler.latency = 0, fs.latency = 0, hooks = list())
 }
 \arguments{
 \item{name}{[\code{character(1)}]\cr
@@ -60,7 +60,7 @@ Currently only triggered after calling \code{\link{submitJobs}}.}
 Expected maximum latency of the file system, in seconds.
 Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 access files and directories.
-Usually safe to set to \code{NA} to disable the heuristic, e.g. if you are working on a local file system.}
+Usually safe to set to \code{0} to disable the heuristic, e.g. if you are working on a local file system.}
 
 \item{hooks}{[\code{list}]\cr
 Named list of functions which will we called on certain events like \dQuote{pre.submit} or \dQuote{post.sync}.
