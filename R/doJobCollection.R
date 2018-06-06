@@ -52,7 +52,9 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   }
 
   # signal warnings immediately
-  local_options(list(warn = 1L))
+  opts = options("warn")
+  options(warn = 1L)
+  on.exit(options(opts))
 
   # setup output connection
   if (!is.null(output)) {
