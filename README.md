@@ -25,6 +25,9 @@ For the development version, use [devtools](https://cran.r-project.org/package=d
 devtools::install_github("mllg/batchtools")
 ```
 
+Next, you need to setup `batchtools` for your HPC (it will run sequentially otherwise).
+See the [vignette](https://mllg.github.io/batchtools/articles/batchtools.html#setup) for instructions.
+
 ## Why batchtools?
 The development of [BatchJobs](https://github.com/tudo-r/BatchJobs/) and [BatchExperiments](https://github.com/tudo-r/Batchexperiments) is discontinued for the following reasons:
 
