@@ -124,3 +124,4 @@ results = unwrap(reduceResultsDataTable(ids, fun = function(res) list(res = res)
 tab = ljoin(pars, results)
 tab[, list(mres = mean(res)), by = c("n", "algorithm")]
 }
+\concept{Registry Experiment}

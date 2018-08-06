@@ -47,3 +47,4 @@ Other debug: \code{\link{getErrorMessages}},
   \code{\link{killJobs}}, \code{\link{resetJobs}},
   \code{\link{showLog}}
 }
+\concept{debug}

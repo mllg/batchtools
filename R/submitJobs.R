@@ -108,8 +108,37 @@
 #' @return [\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 #' @export
 #' @examples
-#' \dontshow{ batchtools:::example_push_temp(2) }
-#' ### Example 1: Using memory measurement
+#' \dontshow{ batchtools:::example_push_temp(3) }
+#' ### Example 1: Submit subsets of jobs
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#'
+#' # toy function which fails if x is even and an input file does not exists
+#' fun = function(x, fn) if (x %% 2 == 0 && !file.exists(fn)) stop("file not found") else x
+#'
+#' # define jobs via batchMap
+#' fn = tempfile()
+#' ids = batchMap(fun, 1:20, reg = tmp, fn = fn)
+#'
+#' # submit some jobs
+#' ids = 1:10
+#' submitJobs(ids, reg = tmp)
+#' waitForJobs(ids, reg = tmp)
+#' getStatus(reg = tmp)
+#'
+#' # create the required file and re-submit failed jobs
+#' file.create(fn)
+#' submitJobs(findErrors(ids, reg = tmp), reg = tmp)
+#' getStatus(reg = tmp)
+#'
+#' # submit remaining jobs which have not yet been submitted
+#' ids = findNotSubmitted(reg = tmp)
+#' submitJobs(ids, reg = tmp)
+#' getStatus(reg = tmp)
+#'
+#' # collect results
+#' reduceResultsList(reg = tmp)
+#'
+#' ### Example 2: Using memory measurement
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #'
 #' # Toy function which creates a large matrix and returns the column sums
@@ -135,7 +164,7 @@
 #' # Combine job info with results -> each job is aggregated using mean()
 #' unwrap(ijoin(info, reduceResultsDataTable(fun = function(res) list(res = mean(res)), reg = tmp)))
 #'
-#' ### Example 2: Multicore execution on the slave
+#' ### Example 3: Multicore execution on the slave
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #'
 #' # Function which sleeps 10 seconds, i-times

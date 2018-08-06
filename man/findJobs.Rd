@@ -46,7 +46,8 @@ findQueued(ids = NULL, reg = getDefaultRegistry())
 
 findExpired(ids = NULL, reg = getDefaultRegistry())
 
-findTagged(tags = character(0L), ids = NULL, reg = getDefaultRegistry())
+findTagged(tags = character(0L), ids = NULL,
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{expr}{[\code{expression}]\cr

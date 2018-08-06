@@ -91,3 +91,4 @@ Reduce(comb, res)
 Other Results: \code{\link{batchMapResults}},
   \code{\link{loadResult}}, \code{\link{reduceResultsList}}
 }
+\concept{Results}

@@ -32,3 +32,4 @@ See \code{\link{ExperimentRegistry}} for an example.
 Other Experiment: \code{\link{addExperiments}},
   \code{\link{removeExperiments}}
 }
+\concept{Experiment}

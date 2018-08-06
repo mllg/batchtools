@@ -45,3 +45,4 @@ Other debug: \code{\link{getStatus}},
   \code{\link{resetJobs}}, \code{\link{showLog}},
   \code{\link{testJob}}
 }
+\concept{debug}

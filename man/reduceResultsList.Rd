@@ -102,3 +102,4 @@ unwrap(res, sep = ".")
 Other Results: \code{\link{batchMapResults}},
   \code{\link{loadResult}}, \code{\link{reduceResults}}
 }
+\concept{Results}

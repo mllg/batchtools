@@ -69,3 +69,4 @@ Other Results: \code{\link{loadResult}},
   \code{\link{reduceResultsList}},
   \code{\link{reduceResults}}
 }
+\concept{Results}

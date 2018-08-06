@@ -4,8 +4,8 @@
 \alias{makeClusterFunctionsOpenLava}
 \title{ClusterFunctions for OpenLava}
 \usage{
-makeClusterFunctionsOpenLava(template = "openlava", scheduler.latency = 1,
-  fs.latency = 65)
+makeClusterFunctionsOpenLava(template = "openlava",
+  scheduler.latency = 1, fs.latency = 65)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -61,3 +61,4 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsTORQUE}},
   \code{\link{makeClusterFunctions}}
 }
+\concept{ClusterFunctions}

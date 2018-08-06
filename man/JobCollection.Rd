@@ -61,3 +61,4 @@ jc$resources
 \seealso{
 Other JobCollection: \code{\link{doJobCollection}}
 }
+\concept{JobCollection}

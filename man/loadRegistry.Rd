@@ -83,3 +83,4 @@ Other Registry: \code{\link{clearRegistry}},
   \code{\link{saveRegistry}}, \code{\link{sweepRegistry}},
   \code{\link{syncRegistry}}
 }
+\concept{Registry}

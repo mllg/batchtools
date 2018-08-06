@@ -65,3 +65,4 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsTORQUE}},
   \code{\link{makeClusterFunctions}}
 }
+\concept{ClusterFunctions}

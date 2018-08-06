@@ -6,8 +6,8 @@
 \alias{removeProblems}
 \title{Define Problems for Experiments}
 \usage{
-addProblem(name, data = NULL, fun = NULL, seed = NULL, cache = FALSE,
-  reg = getDefaultRegistry())
+addProblem(name, data = NULL, fun = NULL, seed = NULL,
+  cache = FALSE, reg = getDefaultRegistry())
 
 removeProblems(name, reg = getDefaultRegistry())
 }
