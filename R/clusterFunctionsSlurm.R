@@ -85,8 +85,15 @@ makeClusterFunctionsSlurm = function(template = "slurm", array.jobs = TRUE, node
     if (length(clusters))
       args = c(args, sprintf("--clusters=%s", clusters))
     res = runOSCommand("squeue", args, nodename = nodename)
-    if (res$exit.code > 0L)
+
+    if (res$exit.code > 0L) {
+      if (any(stri_detect_fixed(res$output, "Socket timed out on send/recv operation"))) {
+        warning("Command 'squeue' timed out. Returning a superset of queued/running jobs")
+        return(reg$status[.findNotDone(reg, .findSubmitted(reg)), "batch.id"][["batch.id"]])
+      }
+
       OSError("Listing of jobs failed", res)
+    }
     if (length(clusters)) tail(res$output, -1L) else res$output
   }
 
