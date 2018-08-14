@@ -96,7 +96,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", array.jobs = TRUE, node
   }
 
   listJobsRunning = function(reg) {
-    args = c(quote("--user=$USER"), "--states=R,S,CG")
+    args = c(quote("--user=$USER"), "--states=R,S,CG,RD,RF,RH,RQ")
     listJobs(reg, args)
   }
 
