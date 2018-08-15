@@ -254,7 +254,7 @@ assertRegistry = function(reg, class = NULL, writeable = FALSE, sync = FALSE, ru
   assertFlag(sync)
   assertFlag(running.ok)
 
-  if (reg$writeable && !identical(reg$mtime, file_mtime(fs::path(reg$file.dir, "registry.rds")))) {
+  if (reg$writeable && file_mtime(fs::path(reg$file.dir, "registry.rds")) > reg$mtime + 1) {
     warning("Registry has been altered since last read. Switching to read-only mode in this session. See ?loadRegistry.")
     reg$writeable = FALSE
   }

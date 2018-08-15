@@ -51,7 +51,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", array.jobs = TRUE, node
       jc$log.file = stri_join(jc$log.file, "_%a")
     }
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("sbatch", outfile, nodename = nodename)
+    res = runOSCommand("sbatch", shQuote(outfile), nodename = nodename)
     output = stri_flatten(stri_trim_both(res$output), "\n")
 
     if (res$exit.code > 0L) {
@@ -96,7 +96,7 @@ makeClusterFunctionsSlurm = function(template = "slurm", array.jobs = TRUE, node
   }
 
   listJobsRunning = function(reg) {
-    args = c(quote("--user=$USER"), "--states=R,S,CG,RD,RF,RH,RQ")
+    args = c(quote("--user=$USER"), "--states=R,S,CG")
     listJobs(reg, args)
   }
 

@@ -38,7 +38,7 @@ makeClusterFunctionsSGE = function(template = "sge", nodename = "localhost", sch
     assertClass(jc, "JobCollection")
 
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("qsub", outfile, nodename = nodename)
+    res = runOSCommand("qsub", shQuote(outfile), nodename = nodename)
 
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
