@@ -1,6 +1,6 @@
 Package: batchtools
 Title: Tools for Computation on Batch Systems
-Version: 0.9.10-9000
+Version: 0.9.11
 Authors@R: c(
     person("Michel", "Lang", NULL, "michellang@gmail.com",
       role = c("cre", "aut"), comment = c(ORCID = "0000-0001-9754-0393")),
@@ -11,7 +11,7 @@ Authors@R: c(
 Description: As a successor of the packages 'BatchJobs' and 'BatchExperiments',
     this package provides a parallel implementation of the Map function for high
     performance computing systems managed by schedulers 'IBM Spectrum LSF'
-    (<http://www-03.ibm.com/systems/spectrum-computing/products/lsf/>),
+    (<https://www.ibm.com/us-en/marketplace/hpc-workload-management>),
     'OpenLava' (<http://www.openlava.org/>), 'Univa Grid Engine'/'Oracle Grid
     Engine' (<http://www.univa.com/>), 'Slurm' (<http://slurm.schedmd.com/>),
     'TORQUE/PBS'

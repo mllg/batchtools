@@ -50,7 +50,7 @@ print(tab)
 str(tab)
 }
 \seealso{
-\code{\link{findJobs}}<`3`>
+\code{\link{findJobs}}
 
 Other debug: \code{\link{getErrorMessages}},
   \code{\link{grepLogs}}, \code{\link{killJobs}},

@@ -2,6 +2,8 @@
 
 * Removed deprecated function `chunkIds()`.
 * New default for argument `fs.timeout` in the cluster function constructor is `0` (was `NA` before).
+* Fixed a unit test for OSX.
+* Improved stability and documentation.
 
 # batchtools 0.9.10
 
