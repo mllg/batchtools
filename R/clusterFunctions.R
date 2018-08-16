@@ -275,7 +275,9 @@ getBatchIds = function(reg, status = "all") {
       tab = rbind(tab, data.table(batch.id = unique(x), status = "queued"))
   }
 
-  tab[batch.id %in% reg$status$batch.id]
+  submitted = done = batch.id = NULL
+  batch.ids = reg$status[!is.na(submitted) & is.na(done) & !is.na(batch.id), unique(batch.id)]
+  tab[batch.id %in% batch.ids]
 }
 
 

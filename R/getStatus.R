@@ -21,7 +21,7 @@
 #' @template ids
 #' @template reg
 #' @return [\code{\link[data.table]{data.table}}] (with class \dQuote{Status} for printing).
-#' @seealso \code{\link{findJobs}}<`3`>
+#' @seealso \code{\link{findJobs}}
 #' @export
 #' @family debug
 #' @examples

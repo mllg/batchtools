@@ -235,7 +235,7 @@ findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {
   .findOnSystem(reg, convertIds(reg, ids))
 }
 
-.findOnSystem = function(reg, ids = NULL, status = "all", cols = "job.id", batch.ids = getBatchIds(reg, status = status)) {
+.findOnSystem = function(reg, ids = NULL, cols = "job.id", batch.ids = getBatchIds(reg, status = "all")) {
   if (length(batch.ids) == 0L)
     return(noIds())
   submitted = done = batch.id = NULL
