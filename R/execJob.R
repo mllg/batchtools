@@ -35,7 +35,8 @@ execJob.Job = function(job) {
   opts = options("error")
   options(error = function(e) traceback(2L))
   on.exit(options(opts))
-  messagef("### [bt%s]: Setting seed to %i ...", now(), job$id, job$seed)
+  # this needs to be cat, message outputs to stderr which R cannot capture properly
+  catf("### [bt%s]: Setting seed to %i ...", now(), job$seed)
   if (".job" %chin% names(formals(job$fun))) {
     with_seed(job$seed, do.call(job$fun, c(job$pars, list(.job = job)), envir = .GlobalEnv))
   } else {
@@ -48,12 +49,14 @@ execJob.Experiment = function(job) {
   opts = options("error")
   options(error = function(e) traceback(2L))
   on.exit(options(opts))
-  messagef("### [bt%s]: Generating problem instance for problem '%s' ...", now(), job$prob.name)
+  # this needs to be cat, message outputs to stderr which R cannot capture properly
+  catf("### [bt%s]: Generating problem instance for problem '%s' ...", now(), job$prob.name)
   instance = job$instance
   force(instance)
   job$allow.access.to.instance = FALSE
 
   wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, instance = instance, ...)
-  messagef("### [bt%s]: Applying algorithm '%s' on problem '%s' for job %i (seed = %i) ...", now(), job$algo.name, job$prob.name, job$id, job$seed)
+  # this needs to be cat, message outputs to stderr which R cannot capture properly
+  catf("### [bt%s]: Applying algorithm '%s' on problem '%s' for job %i (seed = %i) ...", now(), job$algo.name, job$prob.name, job$id, job$seed)
   with_seed(job$seed, do.call(wrapper, job$algo.pars, envir = .GlobalEnv))
 }
