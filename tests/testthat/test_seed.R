@@ -8,14 +8,14 @@ test_that("with_seed", {
   x.next = runif(5)
 
   set.seed(42)
-  y.1 = with_seed(1, runif(5))
+  y.1 = withr::with_seed(1, runif(5))
   y.42 = runif(5)
   y.next = runif(5)
 
   expect_identical(x.1, y.1)
   expect_identical(x.42, y.42)
   expect_identical(x.next, y.next)
-  expect_error(with_seed(1, print(state)))
+  expect_error(withr::with_seed(1, print(state)))
 })
 
 test_that("Problem and Algorithm seed", {
