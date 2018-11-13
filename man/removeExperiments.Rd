@@ -30,3 +30,4 @@ Use with care while jobs are running.
 Other Experiment: \code{\link{addExperiments}},
   \code{\link{summarizeExperiments}}
 }
+\concept{Experiment}

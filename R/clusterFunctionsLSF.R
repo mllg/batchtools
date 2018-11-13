@@ -1,7 +1,7 @@
 #' @title ClusterFunctions for LSF Systems
 #'
 #' @description
-#' Cluster functions for LSF (\url{http://www-03.ibm.com/systems/spectrum-computing/products/lsf/}).
+#' Cluster functions for LSF (\url{https://www.ibm.com/us-en/marketplace/hpc-workload-management}).
 #'
 #' Job files are created based on the brew template \code{template.file}. This
 #' file is processed with brew and then submitted to the queue using the
@@ -18,7 +18,6 @@
 #' @note
 #' Array jobs are currently not supported.
 #'
-#' @templateVar cf.name lsf
 #' @template template
 #' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
@@ -26,6 +25,8 @@
 #' @export
 makeClusterFunctionsLSF = function(template = "lsf", scheduler.latency = 1, fs.latency = 65) { # nocov start
   template = findTemplateFile(template)
+  if (testScalarNA(template))
+    stopf("Argument 'template' (=\"%s\") must point to a readable template file or contain the template itself as string (containing at least one newline)", template)
   template = cfReadBrewTemplate(template)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only

@@ -42,7 +42,7 @@ makeClusterFunctionsSSH = function(workers, fs.latency = 65) { # nocov start
       if (is.error(pid)) {
         makeSubmitJobResult(status = 101L, batch.id = NA_character_, msg = "Submit failed.")
       } else {
-        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s#%s", worker$nodename, pid))
+        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s#%s", worker$nodename, pid$output))
       }
     } else {
       makeSubmitJobResult(status = 1L, batch.id = NA_character_, msg = sprintf("Busy: %s", workers[[1L]]$status))

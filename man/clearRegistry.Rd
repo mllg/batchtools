@@ -19,3 +19,4 @@ Other Registry: \code{\link{getDefaultRegistry}},
   \code{\link{removeRegistry}}, \code{\link{saveRegistry}},
   \code{\link{sweepRegistry}}, \code{\link{syncRegistry}}
 }
+\concept{Registry}

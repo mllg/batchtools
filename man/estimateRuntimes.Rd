@@ -45,6 +45,7 @@ You may also pass \code{n} here to determine the number of parallel jobs which i
 in a simple Longest Processing Time (LPT) algorithm to give an estimate for the parallel runtime.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 # Create a simple toy registry
 set.seed(1)
 tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE, seed = 1)

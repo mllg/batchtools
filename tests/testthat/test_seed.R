@@ -8,14 +8,14 @@ test_that("with_seed", {
   x.next = runif(5)
 
   set.seed(42)
-  y.1 = with_seed(1, runif(5))
+  y.1 = withr::with_seed(1, runif(5))
   y.42 = runif(5)
   y.next = runif(5)
 
   expect_identical(x.1, y.1)
   expect_identical(x.42, y.42)
   expect_identical(x.next, y.next)
-  expect_error(with_seed(1, print(state)))
+  expect_error(withr::with_seed(1, print(state)))
 })
 
 test_that("Problem and Algorithm seed", {
@@ -56,4 +56,33 @@ test_that("Problem and Algorithm seed", {
   })
   expect_numeric(results$instance, unique = TRUE)
   expect_numeric(results$res, unique = TRUE)
+})
+
+test_that("Seed is correctly reported (#203)", {
+  reg = makeTestRegistry(seed = 1)
+  batchMap(function(x, .job) list(seed = .job$seed), x = 1:3, reg = reg)
+  submitAndWait(reg)
+  res = unwrap(reduceResultsDataTable(reg = reg))
+  expect_data_table(res, nrow = 3, ncol = 2)
+  expect_identical(res$seed, 2:4)
+
+  expect_true(any(stri_detect_fixed(getLog(1, reg = reg), "Setting seed to 2")))
+  expect_true(any(stri_detect_fixed(getLog(2, reg = reg), "Setting seed to 3")))
+  expect_true(any(stri_detect_fixed(getLog(3, reg = reg), "Setting seed to 4")))
+
+
+  reg = makeTestExperimentRegistry(seed = 1)
+  addProblem(reg = reg, "p1", fun = function(job, ...) job$seed, seed = 100L)
+  addAlgorithm(reg = reg, "a1", fun = function(job, instance, ...) list(instance = instance, seed = job$seed))
+  ids = addExperiments(repls = 2, reg = reg)
+  getStatus(reg = reg)
+  submitAndWait(reg)
+
+  res = unwrap(reduceResultsDataTable(reg = reg))
+  expect_data_table(res, nrow = 2, ncol = 3)
+  expect_identical(res$instance, 2:3)
+  expect_identical(res$seed, 2:3)
+
+  expect_true(any(stri_detect_fixed(getLog(1, reg = reg), "seed = 2")))
+  expect_true(any(stri_detect_fixed(getLog(2, reg = reg), "seed = 3")))
 })

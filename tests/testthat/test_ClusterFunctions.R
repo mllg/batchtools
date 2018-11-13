@@ -9,16 +9,18 @@ test_that("clusterFunctions constructor", {
   }
   reg = makeTestRegistry()
   check(reg$cluster.functions)
+  fn = fs::path(fs::path_temp(), "dummy.tmpl")
+  writeLines("foo", fn)
   check(makeClusterFunctionsInteractive())
-  check(makeClusterFunctionsSGE(template = "foo\n"))
-  check(makeClusterFunctionsTORQUE(template = "foo\n"))
-  check(makeClusterFunctionsSlurm(template = "foo\n"))
-  check(makeClusterFunctionsOpenLava(template = "foo\n"))
-  check(makeClusterFunctionsLSF(template = "foo\n"))
+  check(makeClusterFunctionsSGE(template = fn))
+  check(makeClusterFunctionsTORQUE(template = fn))
+  check(makeClusterFunctionsSlurm(template = fn))
+  check(makeClusterFunctionsOpenLava(template = fn))
+  check(makeClusterFunctionsLSF(template = fn))
   check(makeClusterFunctionsTORQUE("torque-lido"))
   check(makeClusterFunctionsSlurm("slurm-dortmund"))
   check(makeClusterFunctionsDocker("image"))
-  expect_error(makeClusterFunctionsLSF(), "point to a template file")
+  expect_error(makeClusterFunctionsLSF(), "point to a readable template file")
 
   skip_on_os(c("windows", "solaris")) # system2 is broken on solaris
     check(makeClusterFunctionsSSH(workers = list(Worker$new(nodename = "localhost", ncpus = 1L))))
@@ -48,7 +50,7 @@ test_that("submitJobResult", {
 })
 
 test_that("brew", {
-  fn = tempfile()
+  fn = fs::file_temp()
   lines = c("####", " ", "!!!", "foo=<%= job.hash %>")
   writeLines(lines, fn)
 
@@ -69,21 +71,21 @@ test_that("brew", {
   brewed = readLines(fn)
   expect_equal(brewed[1], "!!!")
   expect_equal(brewed[2], sprintf("foo=%s", jc$job.hash))
-  file.remove(fn)
+  fs::file_delete(fn)
 })
 
 test_that("Special chars in directory names", {
   reg = makeTestRegistry()
-  base.dir = tempfile(pattern = "test", tmpdir = dirname(reg$file.dir))
-  dir.create(base.dir, recursive = TRUE)
+  base.dir = fs::file_temp(pattern = "test", tmp_dir = fs::path_dir(reg$file.dir))
+  fs::dir_create(base.dir)
 
-  file.dir = fp(base.dir, "test#some_frequently-used chars")
-  reg = makeTestRegistry()
+  file.dir = fs::path(base.dir, "test#some_frequently-used chars")
+  reg = makeTestRegistry(file.dir = file.dir)
   batchMap(identity, 1:2, reg = reg)
   submitAndWait(reg = reg)
+  Sys.sleep(0.2)
   expect_equal(reduceResultsList(reg = reg), list(1L, 2L))
-  expect_equal(testJob(1, external = TRUE, reg = reg), 1L)
-  unlink(base.dir, recursive = TRUE)
+  expect_equal(testJob(1, external = FALSE, reg = reg), 1L)
 })
 
 test_that("Export of environment variable DEBUGME", {
@@ -100,11 +102,11 @@ test_that("Export of environment variable DEBUGME", {
 })
 
 test_that("findTemplateFile", {
-  d = tempdir()
-  fn = fp(d, "batchtools.slurm.tmpl")
-  file.create(fn)
+  d = fs::path_temp()
+  fn = fs::path(d, "batchtools.slurm.tmpl")
+  fs::file_create(fn)
   withr::with_envvar(list(R_BATCHTOOLS_SEARCH_PATH = d),
-    expect_equal(findTemplateFile("slurm"), normalizePath(fn, winslash = "/"))
+    expect_equal(findTemplateFile("slurm"), fs::path_abs(fn))
   )
-  file.remove(fn)
+  fs::file_delete(fn)
 })

@@ -18,13 +18,25 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Kill Jobs — killJobs" />
+
+<meta property="og:description" content="Kill jobs which are currently running on the batch system.
+In case of an error when killing, the function tries - after a short sleep - to kill the remaining
+batch jobs again. If this fails three times for some jobs, the function gives up. Jobs that could be
+successfully killed are reset in the Registry." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +59,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.10</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +74,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -76,6 +92,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,27 +100,31 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Kill Jobs</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/killJobs.R'><code>R/killJobs.R</code></a></small>
+    <div class="hidden name"><code>killJobs.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Kill jobs which are currently running on the batch system.</p>
 <p>In case of an error when killing, the function tries - after a short sleep - to kill the remaining
 batch jobs again. If this fails three times for some jobs, the function gives up. Jobs that could be
 successfully killed are reset in the <a href='makeRegistry.html'>Registry</a>.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>killJobs</span>(<span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>ids</th>
-      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]
+      <td><p>[<code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>integer</code>]<br />
 A <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>)
 with a column named &#8220;job.id&#8221;.
 Alternatively, you may also pass a vector of integerish job ids.
@@ -112,7 +133,7 @@ Invalid ids are ignored.</p></td>
     </tr>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]<br />
 Registry. If not explicitly passed, uses the default registry (see <code><a href='getDefaultRegistry.html'>setDefaultRegistry</a></code>).</p></td>
     </tr>
     </table>
@@ -124,10 +145,10 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
+    <div class='dont-index'><p>Other debug: <code><a href='getErrorMessages.html'>getErrorMessages</a></code>,
   <code><a href='getStatus.html'>getStatus</a></code>, <code><a href='grepLogs.html'>grepLogs</a></code>,
   <code><a href='resetJobs.html'>resetJobs</a></code>, <code><a href='showLog.html'>showLog</a></code>,
-  <code><a href='testJob.html'>testJob</a></code></p>
+  <code><a href='testJob.html'>testJob</a></code></p></div>
     
 
   </div>
@@ -150,11 +171,14 @@ Registry. If not explicitly passed, uses the default registry (see <code><a href
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

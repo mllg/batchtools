@@ -30,6 +30,7 @@
 #' @export
 #' @seealso \code{\link{batchReduce}}
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(3) }
 #' # example using "..." and more.args
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' f = function(x, y) x^2 + y
@@ -78,9 +79,9 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
     return(noIds())
   info("Adding %i jobs ...", nrow(ddd))
 
-  writeRDS(fun, file = fp(reg$file.dir, "user.function.rds"))
+  writeRDS(fun, file = fs::path(reg$file.dir, "user.function.rds"))
   if (length(more.args) > 0L)
-    writeRDS(more.args, file = fp(reg$file.dir, "more.args.rds"))
+    writeRDS(more.args, file = fs::path(reg$file.dir, "more.args.rds"))
   ids = seq_row(ddd)
 
   reg$defs = data.table(

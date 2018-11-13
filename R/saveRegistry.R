@@ -14,20 +14,18 @@
 saveRegistry = function(reg = getDefaultRegistry()) {
   if (!reg$writeable) {
     "!DEBUG [saveRegistry]: Skipping saveRegistry (read-only)"
-    return(invisible(FALSE))
+    return(FALSE)
   }
 
   "!DEBUG [saveRegistry]: Saving Registry"
   reg$hash = rnd_hash()
-  fn = fp(reg$file.dir, c("registry.new.rds", "registry.rds"))
+  fn = fs::path(reg$file.dir, c("registry.new.rds", "registry.rds"))
   ee = new.env(parent = asNamespace("batchtools"))
   exclude = c("cluster.functions", "default.resources", "temp.dir", "mtime", "writeable")
   list2env(mget(chsetdiff(ls(reg), exclude), reg), ee)
   class(ee) = class(reg)
   writeRDS(ee, file = fn[1L])
-  ok = file.rename(fn[1L], fn[2L])
-  if (!ok)
-    stop("Renaming of '%s' -> '%s' failed", fn[1L], fn[2L])
-  reg$mtime = file.mtime(fn[2L])
-  invisible(TRUE)
+  fs::file_move(fn[1L], fn[2L])
+  reg$mtime = file_mtime(fn[2L])
+  return(TRUE)
 }

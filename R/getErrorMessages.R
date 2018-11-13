@@ -14,6 +14,7 @@
 #' @family debug
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' fun = function(i) if (i == 3) stop(i) else i
 #' ids = batchMap(fun, i = 1:5, reg = tmp)

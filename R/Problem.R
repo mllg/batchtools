@@ -45,6 +45,7 @@
 #' @seealso \code{\link{Algorithm}}, \code{\link{addExperiments}}
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #' addProblem("p1", fun = function(job, data) data, reg = tmp)
 #' addProblem("p2", fun = function(job, data) job, reg = tmp)
@@ -85,10 +86,10 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, cache = FALSE,
   writeRDS(prob, file = getProblemURI(reg, name))
   reg$problems = union(reg$problems, name)
   cache.dir = getProblemCacheDir(reg, name)
-  if (dir.exists(cache.dir))
-    unlink(cache.dir, recursive = TRUE)
+  if (fs::dir_exists(cache.dir))
+    fs::dir_delete(cache.dir)
   if (cache)
-    dir.create(cache.dir, recursive = TRUE)
+    fs::dir_create(cache.dir)
   saveRegistry(reg)
   invisible(prob)
 }
@@ -106,11 +107,13 @@ removeProblems = function(name, reg = getDefaultRegistry()) {
     job.ids = filter(def.ids, reg$status, "job.id")
 
     info("Removing Problem '%s' and %i corresponding jobs ...", nn, nrow(job.ids))
-    file.remove.safely(getProblemURI(reg, nn))
+    file_remove(getProblemURI(reg, nn))
     reg$defs = reg$defs[!def.ids]
     reg$status = reg$status[!job.ids]
     reg$problems = chsetdiff(reg$problems, nn)
-    unlink(getProblemCacheDir(reg, nn), recursive = TRUE)
+    cache = getProblemCacheDir(reg, nn)
+    if (fs::dir_exists(cache))
+      fs::dir_delete(cache)
   }
 
   sweepRegistry(reg)
@@ -118,13 +121,13 @@ removeProblems = function(name, reg = getDefaultRegistry()) {
 }
 
 getProblemURI = function(reg, name) {
-  fp(dir(reg, "problems"), mangle(name))
+  fs::path(dir(reg, "problems"), mangle(name))
 }
 
 getProblemCacheDir = function(reg, name) {
-  fp(dir(reg, "cache"), "problems", base32_encode(name, use.padding = FALSE))
+  fs::path(dir(reg, "cache"), "problems", base32_encode(name, use.padding = FALSE))
 }
 
 getProblemCacheURI = function(job) {
-  fp(getProblemCacheDir(job, job$prob.name), sprintf("%s.rds", digest(list(job$prob.name, job$prob.pars, job$repl))))
+  fs::path(getProblemCacheDir(job, job$prob.name), sprintf("%s.rds", digest(list(job$prob.name, job$prob.pars, job$repl))))
 }

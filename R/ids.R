@@ -68,7 +68,10 @@ convertId = function(reg, id) {
 }
 
 filter = function(x, y, cols) {
-  if (is.null(y))
-    return(x[, cols, with = missing(cols)])
+  if (is.null(y)) {
+    if (missing(cols))
+      return(x)
+    return(x[, cols, with = FALSE])
+  }
   return(x[y, cols, on = key(x), nomatch = 0L, with = missing(cols)])
 }

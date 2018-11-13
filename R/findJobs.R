@@ -20,6 +20,7 @@
 #' @seealso \code{\link{getStatus}} \code{\link{JoinTables}}
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(identity, i = 1:3, reg = tmp)
 #' ids = findNotSubmitted(reg = tmp)
@@ -234,7 +235,7 @@ findOnSystem = function(ids = NULL, reg = getDefaultRegistry()) {
   .findOnSystem(reg, convertIds(reg, ids))
 }
 
-.findOnSystem = function(reg, ids = NULL, status = "all", cols = "job.id", batch.ids = getBatchIds(reg, status = status)) {
+.findOnSystem = function(reg, ids = NULL, cols = "job.id", batch.ids = getBatchIds(reg, status = "all")) {
   if (length(batch.ids) == 0L)
     return(noIds())
   submitted = done = batch.id = NULL

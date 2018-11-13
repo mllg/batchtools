@@ -14,7 +14,7 @@ if (backend == "mpi") {
 }
 
 # relative paths are not handled well by Slurm
-log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
+log.file = fs::path_expand(log.file)
 -%>
 
 #SBATCH --job-name=<%= job.name %>
@@ -32,6 +32,10 @@ export TMPDIR=/tmp/${USER}-${SLURM_JOBID}
 
 ## Export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>
+
+<%= sprintf("export OMP_NUM_THREADS=%i", resources$omp.threads) -%>
+<%= sprintf("export OPENBLAS_NUM_THREADS=%i", resources$blas.threads) -%>
+<%= sprintf("export MKL_NUM_THREADS=%i", resources$blas.threads) -%>
 
 source /etc/profile
 <%= cmd %> -e 'batchtools::doJobCollection("<%= uri %>")'

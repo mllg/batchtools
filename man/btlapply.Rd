@@ -8,9 +8,9 @@
 btlapply(X, fun, ..., resources = list(), n.chunks = NULL,
   chunk.size = NULL, reg = makeRegistry(file.dir = NA))
 
-btmapply(fun, ..., more.args = list(), simplify = FALSE, use.names = TRUE,
-  resources = list(), n.chunks = NULL, chunk.size = NULL,
-  reg = makeRegistry(file.dir = NA))
+btmapply(fun, ..., more.args = list(), simplify = FALSE,
+  use.names = TRUE, resources = list(), n.chunks = NULL,
+  chunk.size = NULL, reg = makeRegistry(file.dir = NA))
 }
 \arguments{
 \item{X}{[\code{\link[base]{vector}}]\cr
@@ -24,12 +24,11 @@ Additional arguments passed to \code{fun} (\code{btlapply}) or vectors to map ov
 
 \item{resources}{[\code{named list}]\cr
 Computational  resources for the jobs to submit. The actual elements of this list
-(e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the details.
-In case you need to set individual job resources, \code{ids} may be provided as \code{data.frame} with the additional
-column \dQuote{resources} (see example).
+(e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the section 'Resources'.
 Default settings for a system can be set in the configuration file by defining the named list \code{default.resources}.
 Note that these settings are merged by name, e.g. merging \code{list(walltime = 300)} into \code{list(walltime = 400, memory = 512)}
-will result in \code{list(walltime = 300, memory = 512)}.}
+will result in \code{list(walltime = 300, memory = 512)}.
+Same holds for individual job resources passed as additional column of \code{ids} (c.f. section 'Resources').}
 
 \item{n.chunks}{[\code{integer(1)}]\cr
 Passed to \code{\link{chunk}} before \code{\link{submitJobs}}.}
@@ -66,6 +65,7 @@ on batch system. If some jobs fail, you have to retrieve partial results from th
 registry directory yourself.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 btlapply(1:3, function(x) x^2)
 btmapply(function(x, y, z) x + y + z, x = 1:3, y = 1:3, more.args = list(z = 1), simplify = TRUE)
 }

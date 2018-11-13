@@ -21,10 +21,11 @@
 #' @template ids
 #' @template reg
 #' @return [\code{\link[data.table]{data.table}}] (with class \dQuote{Status} for printing).
-#' @seealso \code{\link{findJobs}}<`3`>
+#' @seealso \code{\link{findJobs}}
 #' @export
 #' @family debug
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' fun = function(i) if (i == 3) stop(i) else i
 #' ids = batchMap(fun, i = 1:5, reg = tmp)
@@ -62,7 +63,7 @@ print.Status = function(x, ...) {
   fmt = sprintf("  %%-13s: %%%ii (%%5.1f%%%%)", stri_width(x$defined))
   pr = function(label, h) catf(fmt, label, h, h / x$defined * 100)
 
-  catf("Status for %i jobs:", x$defined)
+  catf("Status for %i jobs at %s:", x$defined, strftime(Sys.time()))
   pr("Submitted", x$submitted)
   pr("-- Queued", x$queued)
   pr("-- Started", x$started)

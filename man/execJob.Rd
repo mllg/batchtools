@@ -18,6 +18,7 @@ Executes a single job (as created by \code{\link{makeJob}}) and returns
 its result. Also works for Experiments.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(identity, 1:2, reg = tmp)
 job = makeJob(1, reg = tmp)

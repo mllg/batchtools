@@ -22,5 +22,9 @@
 ## Export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>
 
+<%= sprintf("export OMP_NUM_THREADS=%i", resources$omp.threads) -%>
+<%= sprintf("export OPENBLAS_NUM_THREADS=%i", resources$blas.threads) -%>
+<%= sprintf("export MKL_NUM_THREADS=%i", resources$blas.threads) -%>
+
 Rscript -e 'batchtools::doJobCollection("<%= uri %>")'
 exit 0

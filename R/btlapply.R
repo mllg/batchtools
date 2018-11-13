@@ -30,6 +30,7 @@
 #' @return [\code{list}] List with the results of the function call.
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' btlapply(1:3, function(x) x^2)
 #' btmapply(function(x, y, z) x + y + z, x = 1:3, y = 1:3, more.args = list(z = 1), simplify = TRUE)
 btlapply = function(X, fun, ..., resources = list(), n.chunks = NULL, chunk.size = NULL, reg = makeRegistry(file.dir = NA)) {

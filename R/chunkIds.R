@@ -1,45 +1,8 @@
 #' @title Chunk Jobs for Sequential Execution
 #'
 #' @description
-#' This function is deprecated in favor of the more flexible \code{chunk}, \code{lpt} and \code{binpack}.
-#'
-#' @templateVar ids.default all
-#' @template ids
-#' @param group.by [\code{character(0)}]\cr
-#'   If \code{ids} is a \code{\link{data.frame}} with additional columns
-#'   (in addition to the required column \dQuote{job.id}), then the chunking is performed using
-#'   subgroups defined by the columns set in \code{group.by}.
-#'   See example.
-#' @inheritParams chunk
-#' @template reg
-#' @return [\code{\link[data.table]{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
-#' @seealso \code{\link{chunk}} \code{\link{binpack}} \code{\link{lpt}}
-#' @export
-chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = character(0L), reg = getDefaultRegistry()) {
-  .Deprecated("chunk", package = "batchtools")
-  assertRegistry(reg)
-  assertCharacter(group.by, any.missing = FALSE, min.chars = 1L)
-  ids = convertIds(reg, ids, default = allIds(reg), keep.extra = group.by)
-
-  if (length(group.by) > 0L) {
-    job.id = NULL
-    if (any(group.by %chnin% names(ids)))
-      stop("All columns to group by must be provided in the 'ids' table")
-    ids[, "chunk" := chunk(job.id, n.chunks = n.chunks, chunk.size = chunk.size), by = group.by]
-    ids[, "chunk" := .GRP, by = c(group.by, "chunk")]
-  } else {
-    ids[, "chunk" := chunk(job.id, n.chunks = n.chunks, chunk.size = chunk.size)]
-  }
-
-  return(ids[, c("job.id", "chunk")])
-}
-
-
-#' @title Chunk Jobs for Sequential Execution
-#'
-#' @description
 #' Jobs can be partitioned into \dQuote{chunks} to be executed sequentially on the computational nodes.
-#' Chunks are defined by providing a data frame with columns \dQuote{job.id} and \dQuote{chunk} (integer).
+#' Chunks are defined by providing a data frame with columns \dQuote{job.id} and \dQuote{chunk} (integer)
 #' to \code{\link{submitJobs}}.
 #' All jobs with the same chunk number will be grouped together on one node to form a single
 #' computational job.
@@ -70,10 +33,13 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
 #'   \code{lpt} tries to even out the sum of elements in each chunk.
 #'   If more chunks than necessary are requested, empty chunks are ignored.
 #'   Mutually exclusive with \code{chunks.size}.
+#' @param shuffle [\code{logical(1)}]\cr
+#'   Shuffles the groups. Default is \code{TRUE}.
 #' @return [\code{integer}] giving the chunk number for each element of \code{x}.
 #' @seealso \code{\link{estimateRuntimes}}
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(2) }
 #' ch = chunk(1:10, n.chunks = 2)
 #' table(ch)
 #'
@@ -120,20 +86,26 @@ chunkIds = function(ids = NULL, n.chunks = NULL, chunk.size = NULL, group.by = c
 #' ids[, chunk := chunk(job.id, chunk.size = 5), by = "problem"]
 #' ids[, chunk := .GRP, by = c("problem", "chunk")]
 #' dcast(ids, chunk ~ problem)
-chunk = function(x, n.chunks = NULL, chunk.size = NULL) {
+chunk = function(x, n.chunks = NULL, chunk.size = NULL, shuffle = TRUE) {
   assertAtomicVector(x)
 
   if (!xor(is.null(n.chunks), is.null(chunk.size)))
     stop("You must provide either 'n.chunks' (x)or 'chunk.size'")
   assertCount(n.chunks, positive = TRUE, null.ok = TRUE)
   assertCount(chunk.size, positive = TRUE, null.ok = TRUE)
+  assertFlag(shuffle)
 
   n = length(x)
   if (n == 0L)
     return(integer(0L))
   if (is.null(n.chunks))
     n.chunks = (n %/% chunk.size + (n %% chunk.size > 0L))
-  sample(as.integer((seq.int(0L, n - 1L) %% min(n.chunks, n))) + 1L)
+  chunks = as.integer((seq.int(0L, n - 1L) %% min(n.chunks, n))) + 1L
+  if (shuffle)
+    chunks = sample(chunks)
+  else
+    chunks = sort(chunks)
+  return(chunks)
 }
 
 #' @rdname chunk

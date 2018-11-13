@@ -17,12 +17,11 @@ Invalid ids are ignored.}
 
 \item{resources}{[\code{named list}]\cr
 Computational  resources for the jobs to submit. The actual elements of this list
-(e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the details.
-In case you need to set individual job resources, \code{ids} may be provided as \code{data.frame} with the additional
-column \dQuote{resources} (see example).
+(e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the section 'Resources'.
 Default settings for a system can be set in the configuration file by defining the named list \code{default.resources}.
 Note that these settings are merged by name, e.g. merging \code{list(walltime = 300)} into \code{list(walltime = 400, memory = 512)}
-will result in \code{list(walltime = 300, memory = 512)}.}
+will result in \code{list(walltime = 300, memory = 512)}.
+Same holds for individual job resources passed as additional column of \code{ids} (c.f. section 'Resources').}
 
 \item{sleep}{[\code{function(i)} | \code{numeric(1)}]\cr
 Parameter to control the duration to sleep between temporary errors.
@@ -49,6 +48,25 @@ The progress can be monitored with \code{\link{getStatus}}.
 If you a large number of jobs, disabling the progress bar (\code{options(batchtools.progress = FALSE)})
 can significantly increase the performance of \code{submitJobs}.
 }
+\section{Resources}{
+
+You can pass arbitrary resources to \code{submitJobs()} which then are available in the cluster function template.
+Some resources' names are standardized and it is good practice to stick to the following nomenclature to avoid confusion:
+\describe{
+ \item{walltime:}{Upper time limit in seconds for jobs before they get killed by the scheduler. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+ \item{memory:}{Memory limit in Mb. If jobs exceed this limit, they are usually killed by the scheduler. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+ \item{ncpus:}{Number of (physical) CPUs to use on the slave. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+ \item{omp.threads:}{Number of threads to use via OpenMP. Used to set environment variable \dQuote{OMP_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+ \item{pp.size:}{Maximum size of the pointer protection stack, see \code{\link[base]{Memory}}.}
+ \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+ \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
+ \item{chunks.as.arrayjobs:}{Execute chunks as array jobs.}
+ \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}
+ \item{foreach.backend:}{Start a \pkg{foreach} backend on the slave.}
+ \item{clusters:}{Resource used for Slurm to select the set of clusters to run \code{sbatch}/\code{squeue}/\code{scancel} on.}
+}
+}
+
 \section{Chunking of Jobs}{
 
 Multiple jobs can be grouped (chunked) together to be executed sequentially on the batch system as a single batch job.
@@ -62,9 +80,12 @@ can assist in grouping jobs.
 \section{Array Jobs}{
 
 If your cluster supports array jobs, you can set the resource \code{chunks.as.arrayjobs} to \code{TRUE} in order
-to execute chunks as job arrays. To do so, the job must be repeated \code{nrow(jobs)} times via the cluster functions template.
-The function \code{\link{doJobCollection}} (which is called on the slave) now retrieves the repetition number from the environment
-and restricts the computation to the respective job in the \code{\link{JobCollection}}.
+to execute chunks as job arrays on the cluster.
+For each chunk of size \code{n}, \pkg{batchtools} creates a \code{\link{JobCollection}} of (possibly heterogeneous) jobs which is
+submitted to the scheduler as a single array job with \code{n} repetitions.
+For each repetition, the \code{JobCollection} is first read from the file system, then subsetted to the \code{i}-th job using
+the environment variable \code{reg$cluster.functions$array.var} (depending on the cluster backend, defined automatically) and finally
+executed.
 }
 
 \section{Order of Submission}{
@@ -119,7 +140,37 @@ You have to do this manually via \code{\link[base]{library}} or let the registry
 }
 
 \examples{
-### Example 1: Using memory measurement
+\dontshow{ batchtools:::example_push_temp(3) }
+### Example 1: Submit subsets of jobs
+tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+
+# toy function which fails if x is even and an input file does not exists
+fun = function(x, fn) if (x \%\% 2 == 0 && !file.exists(fn)) stop("file not found") else x
+
+# define jobs via batchMap
+fn = tempfile()
+ids = batchMap(fun, 1:20, reg = tmp, fn = fn)
+
+# submit some jobs
+ids = 1:10
+submitJobs(ids, reg = tmp)
+waitForJobs(ids, reg = tmp)
+getStatus(reg = tmp)
+
+# create the required file and re-submit failed jobs
+file.create(fn)
+submitJobs(findErrors(ids, reg = tmp), reg = tmp)
+getStatus(reg = tmp)
+
+# submit remaining jobs which have not yet been submitted
+ids = findNotSubmitted(reg = tmp)
+submitJobs(ids, reg = tmp)
+getStatus(reg = tmp)
+
+# collect results
+reduceResultsList(reg = tmp)
+
+### Example 2: Using memory measurement
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 
 # Toy function which creates a large matrix and returns the column sums
@@ -145,7 +196,7 @@ print(unwrap(info))
 # Combine job info with results -> each job is aggregated using mean()
 unwrap(ijoin(info, reduceResultsDataTable(fun = function(res) list(res = mean(res)), reg = tmp)))
 
-### Example 2: Multicore execution on the slave
+### Example 3: Multicore execution on the slave
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 
 # Function which sleeps 10 seconds, i-times

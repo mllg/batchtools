@@ -8,6 +8,23 @@
 #' to collect partial results.
 #' The progress can be monitored with \code{\link{getStatus}}.
 #'
+#' @section Resources:
+#' You can pass arbitrary resources to \code{submitJobs()} which then are available in the cluster function template.
+#' Some resources' names are standardized and it is good practice to stick to the following nomenclature to avoid confusion:
+#' \describe{
+#'  \item{walltime:}{Upper time limit in seconds for jobs before they get killed by the scheduler. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+#'  \item{memory:}{Memory limit in Mb. If jobs exceed this limit, they are usually killed by the scheduler. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+#'  \item{ncpus:}{Number of (physical) CPUs to use on the slave. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+#'  \item{omp.threads:}{Number of threads to use via OpenMP. Used to set environment variable \dQuote{OMP_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+#'  \item{pp.size:}{Maximum size of the pointer protection stack, see \code{\link[base]{Memory}}.}
+#'  \item{blas.threads:}{Number of threads to use for the BLAS backend. Used to set environment variables \dQuote{MKL_NUM_THREADS} and \dQuote{OPENBLAS_NUM_THREADS}. Can be passed as additional column as part of \code{ids} to set per-job resources.}
+#'  \item{measure.memory:}{Enable memory measurement for jobs. Comes with a small runtime overhead.}
+#'  \item{chunks.as.arrayjobs:}{Execute chunks as array jobs.}
+#'  \item{pm.backend:}{Start a \pkg{parallelMap} backend on the slave.}
+#'  \item{foreach.backend:}{Start a \pkg{foreach} backend on the slave.}
+#'  \item{clusters:}{Resource used for Slurm to select the set of clusters to run \code{sbatch}/\code{squeue}/\code{scancel} on.}
+#' }
+#'
 #' @section Chunking of Jobs:
 #' Multiple jobs can be grouped (chunked) together to be executed sequentially on the batch system as a single batch job.
 #' This is especially useful to avoid overburding the scheduler by submitting thousands of jobs simultaneously.
@@ -18,9 +35,12 @@
 #'
 #' @section Array Jobs:
 #' If your cluster supports array jobs, you can set the resource \code{chunks.as.arrayjobs} to \code{TRUE} in order
-#' to execute chunks as job arrays. To do so, the job must be repeated \code{nrow(jobs)} times via the cluster functions template.
-#' The function \code{\link{doJobCollection}} (which is called on the slave) now retrieves the repetition number from the environment
-#' and restricts the computation to the respective job in the \code{\link{JobCollection}}.
+#' to execute chunks as job arrays on the cluster.
+#' For each chunk of size \code{n}, \pkg{batchtools} creates a \code{\link{JobCollection}} of (possibly heterogeneous) jobs which is
+#' submitted to the scheduler as a single array job with \code{n} repetitions.
+#' For each repetition, the \code{JobCollection} is first read from the file system, then subsetted to the \code{i}-th job using
+#' the environment variable \code{reg$cluster.functions$array.var} (depending on the cluster backend, defined automatically) and finally
+#' executed.
 #'
 #' @section Order of Submission:
 #' Jobs are submitted in the order of chunks, i.e. jobs which have chunk number
@@ -73,12 +93,11 @@
 #' @template ids
 #' @param resources [\code{named list}]\cr
 #'   Computational  resources for the jobs to submit. The actual elements of this list
-#'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the details.
-#'   In case you need to set individual job resources, \code{ids} may be provided as \code{data.frame} with the additional
-#'   column \dQuote{resources} (see example).
+#'   (e.g. something like \dQuote{walltime} or \dQuote{nodes}) depend on your template file, exceptions are outlined in the section 'Resources'.
 #'   Default settings for a system can be set in the configuration file by defining the named list \code{default.resources}.
 #'   Note that these settings are merged by name, e.g. merging \code{list(walltime = 300)} into \code{list(walltime = 400, memory = 512)}
 #'   will result in \code{list(walltime = 300, memory = 512)}.
+#'   Same holds for individual job resources passed as additional column of \code{ids} (c.f. section 'Resources').
 #' @param sleep [\code{function(i)} | \code{numeric(1)}]\cr
 #'   Parameter to control the duration to sleep between temporary errors.
 #'   You can pass an absolute numeric value in seconds or a \code{function(i)} which returns the number of seconds to sleep in the \code{i}-th
@@ -89,7 +108,37 @@
 #' @return [\code{\link{data.table}}] with columns \dQuote{job.id} and \dQuote{chunk}.
 #' @export
 #' @examples
-#' ### Example 1: Using memory measurement
+#' \dontshow{ batchtools:::example_push_temp(3) }
+#' ### Example 1: Submit subsets of jobs
+#' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
+#'
+#' # toy function which fails if x is even and an input file does not exists
+#' fun = function(x, fn) if (x %% 2 == 0 && !file.exists(fn)) stop("file not found") else x
+#'
+#' # define jobs via batchMap
+#' fn = tempfile()
+#' ids = batchMap(fun, 1:20, reg = tmp, fn = fn)
+#'
+#' # submit some jobs
+#' ids = 1:10
+#' submitJobs(ids, reg = tmp)
+#' waitForJobs(ids, reg = tmp)
+#' getStatus(reg = tmp)
+#'
+#' # create the required file and re-submit failed jobs
+#' file.create(fn)
+#' submitJobs(findErrors(ids, reg = tmp), reg = tmp)
+#' getStatus(reg = tmp)
+#'
+#' # submit remaining jobs which have not yet been submitted
+#' ids = findNotSubmitted(reg = tmp)
+#' submitJobs(ids, reg = tmp)
+#' getStatus(reg = tmp)
+#'
+#' # collect results
+#' reduceResultsList(reg = tmp)
+#'
+#' ### Example 2: Using memory measurement
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #'
 #' # Toy function which creates a large matrix and returns the column sums
@@ -115,7 +164,7 @@
 #' # Combine job info with results -> each job is aggregated using mean()
 #' unwrap(ijoin(info, reduceResultsDataTable(fun = function(res) list(res = mean(res)), reg = tmp)))
 #'
-#' ### Example 2: Multicore execution on the slave
+#' ### Example 3: Multicore execution on the slave
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #'
 #' # Function which sleeps 10 seconds, i-times
@@ -159,12 +208,13 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
     assertFlag(resources$measure.memory)
   sleep = getSleepFunction(reg, sleep)
 
-  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = "chunk")
+  ids = convertIds(reg, ids, default = .findNotSubmitted(reg = reg), keep.extra = c("chunk", batchtools$resources$per.job))
   if (nrow(ids) == 0L)
     return(noIds())
 
   # handle chunks
-  if (hasName(ids, "chunk")) {
+  use.chunking = hasName(ids, "chunk") && anyDuplicated(ids, by = "chunk") > 0L
+  if (use.chunking) {
     ids$chunk = asInteger(ids$chunk, any.missing = FALSE)
     chunks = sort(unique(ids$chunk))
   } else {
@@ -202,17 +252,19 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
     }
   }
 
-  res.hash = digest(resources)
-  resource.hash = NULL
-  res.id = reg$resources[resource.hash == res.hash, "resource.id"]$resource.id
-  if (length(res.id) == 0L) {
-    res.id = auto_increment(reg$resources$resource.id)
-    reg$resources = rbind(reg$resources, data.table(resource.id = res.id, resource.hash = res.hash, resources = list(resources)))
-    setkeyv(reg$resources, "resource.id")
+  # handle job resources
+  per.job.resources = chintersect(names(ids), batchtools$resources$per.job)
+  if (length(per.job.resources) > 0L) {
+    if (use.chunking)
+      stopf("Combining per-job resources with chunking is not supported")
+    ids$resource.id = addResources(reg, .mapply(function(...) insert(resources, list(...)), ids[, per.job.resources, with = FALSE], MoreArgs = list()))
+    ids[, (per.job.resources) := NULL]
+  } else {
+    ids$resource.id = addResources(reg, list(resources))
   }
-  on.exit(saveRegistry(reg))
 
   info("Submitting %i jobs in %i chunks using cluster functions '%s' ...", nrow(ids), length(chunks), reg$cluster.functions$name)
+  on.exit(saveRegistry(reg))
 
   chunk = NULL
   runHook(reg, "pre.submit")
@@ -221,11 +273,12 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
   pb$tick(0, tokens = list(status = "Submitting"))
 
   for (ch in chunks) {
-    ids.chunk = ids[chunk == ch, "job.id"]
-    jc = makeJobCollection(ids.chunk, resources = resources, reg = reg)
+    ids.chunk = ids[chunk == ch, c("job.id", "resource.id")]
+    jc = makeJobCollection(ids.chunk, resources = reg$resources[ids.chunk, on = "resource.id"]$resources[[1L]], reg = reg)
     if (reg$cluster.functions$store.job.collection)
       writeRDS(jc, file = jc$uri)
 
+    # do we have to wait for jobs to get terminated before proceeding?
     if (!is.na(max.concurrent.jobs)) {
       # count chunks or job.id
       i = 1L
@@ -243,7 +296,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
 
     # remove old result files
     fns = getResultFiles(reg, ids.chunk)
-    file.remove.safely(fns)
+    file_remove(fns)
 
     i = 1L
     repeat {
@@ -252,9 +305,12 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
       submit = reg$cluster.functions$submitJob(reg = reg, jc = jc)
 
       if (submit$status == 0L) {
+        if (!testCharacter(submit$batch.id, any.missing = FALSE, min.len = 1L)) {
+          stopf("Cluster function did not return valid batch ids:\n%s", stri_flatten(capture.output(str(submit$batch.id)), "\n"))
+        }
         reg$status[ids.chunk,
-          c("submitted", "started", "done",   "error",       "mem.used", "resource.id", "batch.id",      "log.file",      "job.hash") :=
-          list(now,      NA_real_,  NA_real_, NA_character_, NA_real_,   res.id,        submit$batch.id, submit$log.file, jc$job.hash)]
+          c("submitted", "started", "done",   "error",       "mem.used", "resource.id",         "batch.id",      "log.file",      "job.hash") :=
+          list(now,      NA_real_,  NA_real_, NA_character_, NA_real_,   ids.chunk$resource.id, submit$batch.id, submit$log.file, jc$job.hash)]
         runHook(reg, "post.submit.job")
         break
       } else if (submit$status > 0L && submit$status < 100L) {
@@ -275,4 +331,25 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
 
   # return ids, registry is saved via on.exit()
   return(invisible(ids))
+}
+
+addResources = function(reg, resources) {
+  ai = function(tab, col) { # auto increment by reference
+    i = tab[is.na(get(col)), which = TRUE]
+    if (length(i) > 0L) {
+      ids = seq_along(i)
+      if (length(i) < nrow(tab))
+        ids = ids + max(tab[, max(col, na.rm = TRUE), with = FALSE][[1L]], na.rm = TRUE)
+      tab[i, (col) := ids]
+      setkeyv(tab, col)[]
+    }
+  }
+
+  tab = data.table(resources = resources, resource.hash = vcapply(resources, digest))
+  new.tab = unique(tab, by = "resource.hash")[!reg$resources, on = "resource.hash"]
+  if (nrow(new.tab)) {
+    reg$resources = rbindlist(list(reg$resources, new.tab), fill = TRUE)
+    ai(reg$resources, "resource.id")
+  }
+  reg$resources[tab, "resource.id", on = "resource.hash"][[1L]]
 }

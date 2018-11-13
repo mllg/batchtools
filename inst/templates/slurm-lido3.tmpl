@@ -1,0 +1,57 @@
+#!/bin/bash
+
+## Job Resource Interface Definition
+##
+## ncpus [integer(1)]:        Number of required cpus per task,
+##                            Set larger than 1 if you want to further parallelize
+##                            with multicore/parallel within each task.
+## walltime [integer(1)]:     Walltime for this job, in minutes.
+##                            Must be at least 1 minute.
+## memory   [integer(1)]:     Memory in megabytes for each cpu.
+##                            Must be at least 100 (when I tried lower values my
+##                            jobs did not start at all).
+##
+## Default resources can be set in your .batchtools.conf.R by defining the variable
+## 'default.resources' as a named list.
+
+<%
+
+# queue
+walltime = asInt(resources$walltime, lower = 1L, upper = 31L * 24L * 60L * 60L)
+memory = asInt(resources$memory, lower = 100L, upper = 1024L * 1024L)
+walltimes = c(2L, 8L, 48L, 672L) * 3600L
+queue = c("short", "med", "long", "ultralong")[wf(walltime <= walltimes)]
+ncpus = if (!is.null(resources$ncpus)) ncpus = assertInt(resources$ncpus, lower = 1L) else 1L
+
+# modules
+modules = paste(resources$modules, resources$R)
+
+# cli args
+cli.args = ""
+if (!is.null(resources$pp.size))
+    cli.args = sprintf("--max-ppsize=%i", assertInt(pp.size, upper = 500000L))
+-%>
+
+#SBATCH --job-name=<%= job.name %>
+#SBATCH --output=<%= log.file %>
+#SBATCH --error=<%= log.file %>
+#SBATCH --time=<%= ceiling(walltime / 60L) %>
+#SBATCH --partition=<%= queue %>
+#SBATCH --cpus-per-task=<%= ncpus %>
+#SBATCH --mem-per-cpu=<%= memory %>
+<%= if (array.jobs) sprintf("#SBATCH --array=1-%i", nrow(jobs)) else "" %>
+
+## Initialize work environment like
+module add <%= modules %>
+
+## Export value of DEBUGME environemnt var to slave
+export DEBUGME=<%= Sys.getenv("DEBUGME") %>
+
+
+## Use /scratch on the node, TMPDIR is mounted as tmpfs
+export TMPDIR=/scratch/${USER}/${SLURM_JOBID}
+mkdir -p ${TMPDIR}
+
+## Run R:
+## we merge R output with stdout from SLURM, which gets then logged via --output option
+Rscript <%= cli.args -%> -e 'batchtools::doJobCollection("<%= uri %>")'

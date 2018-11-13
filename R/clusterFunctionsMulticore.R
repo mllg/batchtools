@@ -77,14 +77,14 @@ Multicore = R6Class("Multicore",
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsMulticore = function(ncpus = NA_integer_, fs.latency = NA_real_) {
+makeClusterFunctionsMulticore = function(ncpus = NA_integer_, fs.latency = 0) {
   if (testOS("windows"))
     stop("ClusterFunctionsMulticore do not support Windows. Use makeClusterFunctionsSocket instead.")
-  ncpus = asCount(ncpus, na.ok = TRUE, positive = TRUE)
   if (is.na(ncpus)) {
-    ncpus = max(getOption("mc.cores", parallel::detectCores()), 1L, na.rm = TRUE)
+    ncpus = max(as.numeric(getOption("mc.cores")), parallel::detectCores(), 1L, na.rm = TRUE)
     info("Auto-detected %i CPUs", ncpus)
   }
+  ncpus = asCount(ncpus, na.ok = FALSE, positive = TRUE)
   p = Multicore$new(ncpus)
 
   submitJob = function(reg, jc) {

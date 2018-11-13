@@ -1,3 +1,27 @@
+# batchtools 0.9.11
+
+* Removed deprecated function `chunkIds()`.
+* New default for argument `fs.timeout` in the cluster function constructor is `0` (was `NA` before).
+* Fixed a unit test for OSX.
+* Improved stability and documentation.
+
+# batchtools 0.9.10
+
+* Exported functions `findConfFile()` and `findTemplateFile()`.
+* Dropped support for providing a template file directly as string. A valid file is now always required.
+* Fixed writing to `TMPDIR` instead of the R session's temporary directory.
+
+# batchtools 0.9.9
+
+* RDS files are explicitly stored in version 2 to ensure backward compatibility with R versions prior to 3.5.0.
+* Package `fs` is now used internally for all file system operations.
+* Support for per-site configuration files and templates to be set up by system administrators.
+* The print of `getStatus()` now includes a time stamp.
+* `chunk()` now optionally shuffles the ids before chunking.
+* Support for setting per-job resources in `submitJobs()`.
+* Example templates now include resources for `blas.threads` and `omp.threads`.
+* Some bug fixes regarding read-only registries.
+
 # batchtools 0.9.8
 
 * Renamed column "memory" in the status table to "mem.used" to avoid name clashes with the resource specification.

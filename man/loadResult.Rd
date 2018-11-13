@@ -25,3 +25,4 @@ Other Results: \code{\link{batchMapResults}},
   \code{\link{reduceResultsList}},
   \code{\link{reduceResults}}
 }
+\concept{Results}

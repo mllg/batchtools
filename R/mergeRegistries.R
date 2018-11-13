@@ -20,6 +20,7 @@
 # @return [\code{\link{Registry}}].
 # @export
 # @examples
+# \dontshow{ batchtools:::example_push_temp(2) }
 # target = makeRegistry(NA, make.default = FALSE)
 # batchMap(identity, 1:10, reg = target)
 # td = tempdir()
@@ -34,7 +35,7 @@
 mergeRegistries = function(source, target = getDefaultRegistry()) {
   assertRegistry(source, writeable = TRUE, sync = TRUE, running.ok = FALSE)
   assertRegistry(target, writeable = TRUE, sync = TRUE, running.ok = FALSE)
-  if (normalizePath(source$file.dir, winslash = "/") == normalizePath(target$file.dir, winslash = "/"))
+  if (fs::path_real(source$file.dir) == fs::path_real(target$file.dir))
     stop("You must provide two different registries (using different file directories")
   hash = function(x) unlist(.mapply(function(...) digest(list(...)), x[, !"def.id"], list()))
 
@@ -53,28 +54,23 @@ mergeRegistries = function(source, target = getDefaultRegistry()) {
   status = status[tmp, nomatch = 0L, on = c("def.id", "hash")]
   info("Merging %i jobs ...", nrow(status))
 
-  info("Copying results ...")
-  file.copy(
-    from = getResultFiles(source, status),
-    to = getResultFiles(target, status)
-  )
+  src = getResultFiles(source, status)
+  dst = fs::path(dir(target, "results"), fs::path_file(src))
+  info("Copying %i result files ...", length(src))
+  fs::file_copy(src, dst, overwrite = TRUE)
 
-  info("Copying logs ...")
-  file.copy(
-    from = getLogFiles(source, status),
-    to = getLogFiles(target, status)
-  )
+  src = getLogFiles(source, status)
+  dst = fs::path(dir(target, "logs"), fs::path_file(src))
+  info("Copying %i log files ...", length(src))
+  fs::file_copy(src, dst, overwrite = TRUE)
 
-  ext.dirs = chintersect(list.files(dir(source, "external")), as.character(status$job.id))
+  ext.dirs = as.integer(chintersect(list.files(dir(source, "external")), as.character(status$job.id)))
   if (length(ext.dirs) > 0L) {
-    info("Copying external directories ...")
-    target.dirs = getExternalDirs(target, ext.dirs)
-    lapply(target.dirs[!dir.exists(target.dirs)], dir.create)
-    file.copy(
-      from = getExternalDirs(source, ext.dirs),
-      to = rep.int(dir(target, "external"), length(ext.dirs)),
-      recursive = TRUE
-    )
+    src = getExternalDirs(source, ext.dirs)
+    dst = getExternalDirs(target, ext.dirs)
+    info("Copying %i external directories ...", length(ext.dirs))
+    fs::dir_delete(dst[fs::dir_exists(dst)])
+    fs::dir_copy(src, fs::path_dir(dst))
   }
 
   target$status = ujoin(target$status, status, by = "job.id")

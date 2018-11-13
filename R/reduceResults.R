@@ -31,6 +31,7 @@
 #' @family Results
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(function(a, b) list(sum = a+b, prod = a*b), a = 1:3, b = 1:3, reg = tmp)
 #' submitJobs(reg = tmp)
@@ -132,6 +133,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' @family Results
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(2) }
 #' ### Example 1 - reduceResultsList
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(function(x) x^2, x = 1:10, reg = tmp)
@@ -197,13 +199,13 @@ reduceResultsDataTable = function(ids = NULL, fun = NULL, ..., missing.val, reg 
 
 .reduceResultsList = function(ids, fun = NULL, ..., missing.val, reg = getDefaultRegistry()) {
   if (is.null(fun)) {
-    worker = function(..res, ..job, ...) ..res
+    worker = function(.res, .job, ...) .res
   } else {
     fun = match.fun(fun)
     if ("job" %chin% names(formals(fun)))
-      worker = function(..res, ..job, ...) fun(..res, job = ..job, ...)
+      worker = function(.res, .job, ...) fun(.res, job = .job, ...)
     else
-      worker = function(..res, ..job, ...) fun(..res, ...)
+      worker = function(.res, .job, ...) fun(.res, ...)
   }
 
   results = vector("list", nrow(ids))

@@ -48,8 +48,9 @@ makeClusterFunctionsDocker = function(image, docker.args = character(0L), image.
 
     cmd = c("docker", docker.args, "run", "--detach=true", image.args,
       sprintf("-e DEBUGME='%s'", Sys.getenv("DEBUGME")),
-      sprintf("-e OMP_NUM_THREADS=%i", jc$resources$threads %??% 1L),
-      sprintf("-e OPENBLAS_NUM_THREADS=%i", jc$resources$threads %??% 1L),
+      sprintf("-e OMP_NUM_THREADS=%i", jc$resources$omp.threads %??% jc$resources$threads),
+      sprintf("-e OPENBLAS_NUM_THREADS=%i", jc$resources$blas.threads %??% jc$resources$threads),
+      sprintf("-e MKL_NUM_THREADS=%i", jc$resources$blas.threads %??% jc$resources$threads),
       sprintf("-c %i", jc$resources$ncpus),
       sprintf("-m %im", jc$resources$memory),
       sprintf("--memory-swap %im", jc$resources$memory),

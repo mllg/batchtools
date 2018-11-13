@@ -18,13 +18,24 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="assertRegistry — assertRegistry" />
+
+<meta property="og:description" content="Assert that a given object is a batchtools registry.
+Additionally can sync the registry, check if it is writeable, or check if jobs are running.
+If any check fails, throws an error indicting the reason for the failure." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +58,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.10</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +73,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -76,6 +91,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,49 +99,54 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>assertRegistry</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/Registry.R'><code>R/Registry.R</code></a></small>
+    <div class="hidden name"><code>assertRegistry.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Assert that a given object is a <code>batchtools</code> registry.
 Additionally can sync the registry, check if it is writeable, or check if jobs are running.
 If any check fails, throws an error indicting the reason for the failure.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>assertRegistry</span>(<span class='no'>reg</span>, <span class='kw'>class</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>writeable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>sync</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>running.ok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]
+      <td><p>[<code><a href='makeRegistry.html'>Registry</a></code>]<br />
 The object asserted to be a <code>Registry</code>.</p></td>
     </tr>
     <tr>
       <th>class</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 If <code>NULL</code> (default), <code>reg</code> must only inherit from class &#8220;Registry&#8221;.
 Otherwise check that <code>reg</code> is of class <code>class</code>.
 E.g., if set to &#8220;Registry&#8221;, a <code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code> would not pass.</p></td>
     </tr>
     <tr>
       <th>writeable</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 Check if the registry is writeable.</p></td>
     </tr>
     <tr>
       <th>sync</th>
-      <td><p>[<code>logical(1)</code>]
-Whether to sync the registry before writing.</p></td>
+      <td><p>[<code>logical(1)</code>]<br />
+Try to synchronize the registry by including pending results from the file system.
+See <code><a href='syncRegistry.html'>syncRegistry</a></code>.</p></td>
     </tr>
     <tr>
       <th>running.ok</th>
-      <td><p>[<code>logical(1)</code>]
+      <td><p>[<code>logical(1)</code>]<br />
 If <code>FALSE</code> throw an error if jobs associated with the registry are currently running.</p></td>
     </tr>
     </table>
@@ -153,11 +174,14 @@ If <code>FALSE</code> throw an error if jobs associated with the registry are cu
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

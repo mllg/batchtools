@@ -14,7 +14,6 @@
 #' It is the template file's job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
-#' @templateVar cf.name torque
 #' @template template
 #' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
@@ -22,6 +21,8 @@
 #' @export
 makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1, fs.latency = 65) { # nocov start
   template = findTemplateFile(template)
+  if (testScalarNA(template))
+    stopf("Argument 'template' (=\"%s\") must point to a readable template", template)
   template = cfReadBrewTemplate(template, "##")
 
   submitJob = function(reg, jc) {
@@ -40,7 +41,7 @@ makeClusterFunctionsTORQUE = function(template = "torque", scheduler.latency = 1
     }
 
     if (jc$array.jobs) {
-      logs = sprintf("%s-%i", basename(jc$log.file), seq_row(jc$jobs))
+      logs = sprintf("%s-%i", fs::path_file(jc$log.file), seq_row(jc$jobs))
       makeSubmitJobResult(status = 0L, batch.id = stri_replace_first_fixed(output, "[]", stri_paste("[", seq_row(jc$jobs), "]")), log.file = logs)
     } else {
       makeSubmitJobResult(status = 0L, batch.id = output)

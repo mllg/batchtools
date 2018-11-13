@@ -7,19 +7,19 @@ test_that("sweepRegistry", {
 
   submitAndWait(reg, 1, resources = list(foo = 1))
   submitAndWait(reg, 1, resources = list(foo = 2))
-  writeRDS(makeJobCollection(1, reg = reg), fp(reg$file.dir, "jobs", "test.rds"))
+  writeRDS(makeJobCollection(1, reg = reg), fs::path(reg$file.dir, "jobs", "test.rds"))
 
   expect_data_table(reg$resources, nrow = 2)
   expect_character(list.files(dir(reg, "logs")), len = 2L)
-  expect_character(list.files(fp(reg$file.dir, "jobs"), pattern = "\\.rds$"), len = 1L + (array.jobs && reg$cluster.functions$store.job.collection) * 2L)
-  expect_character(list.files(fp(reg$file.dir, "jobs"), pattern = "\\.job$"), len = (batchtools$debug && array.jobs) * 2L)
+  expect_character(list.files(fs::path(reg$file.dir, "jobs"), pattern = "\\.rds$"), len = 1L + (array.jobs && reg$cluster.functions$store.job.collection) * 2L)
+  expect_character(list.files(fs::path(reg$file.dir, "jobs"), pattern = "\\.job$"), len = (batchtools$debug && array.jobs) * 2L)
 
   expect_true(sweepRegistry(reg))
 
   expect_data_table(reg$resources, nrow = 1)
   expect_character(list.files(dir(reg, "logs")), len = 1L)
   if (reg$cluster.functions$store.job.collection)
-    expect_character(list.files(fp(reg$file.dir, "jobs")), len = 0L)
+    expect_character(list.files(fs::path(reg$file.dir, "jobs")), len = 0L)
   checkTables(reg)
 
 
@@ -36,8 +36,9 @@ test_that("sweepRegistry", {
 })
 
 test_that("relative paths work (#113)", {
-  skip_if_not(identical(Sys.getenv("R_EXPENSIVE_EXAMPLE_OK"), "1"))
-  fd = sprintf("~/batchtools-test-%s", basename(tempfile("")))
+  skip_on_cran()
+  skip_if_not(is.null(getSysConf()$temp.dir)) # we are probably on a system where home is not shared
+  fd = sprintf("~/batchtools-test-%s", fs::path_file(fs::file_temp("")))
   reg = makeTestExperimentRegistry(file.dir = fd)
 
   problems = list("a", "b")
@@ -67,7 +68,7 @@ test_that("relative paths work (#113)", {
   expect_character(getLog(ids.rep1[1], reg = reg), min.len = 1, any.missing = FALSE)
   expect_list(reduceResultsList(ids = ids.rep1, reg = reg), len = 18)
 
-  unlink(fd, recursive = TRUE)
-
   checkTables(reg)
+
+  fs::dir_delete(fs::path_expand(fd))
 })

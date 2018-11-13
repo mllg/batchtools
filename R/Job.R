@@ -21,9 +21,7 @@ BaseJob = R6Class("BaseJob", cloneable = FALSE,
     },
 
     external.dir = function() {
-      path = fp(self$file.dir, "external", self$id)
-      dir.create(path, recursive = TRUE, showWarnings = FALSE)
-      path
+      fs::dir_create(fs::path(self$file.dir, "external", self$id))
     }
   )
 )
@@ -38,10 +36,10 @@ Job = R6Class("Job", cloneable = FALSE, inherit = BaseJob,
   ),
   active = list(
     fun = function() {
-      self$reader$get(fp(self$file.dir, "user.function.rds"))
+      self$reader$get(fs::path(self$file.dir, "user.function.rds"))
     },
     pars = function() {
-      c(self$job.pars, self$reader$get(fp(self$file.dir, "more.args.rds")))
+      c(self$job.pars, self$reader$get(fs::path(self$file.dir, "more.args.rds")))
     }
   )
 )
@@ -80,7 +78,7 @@ Experiment = R6Class("Experiment", cloneable = FALSE, inherit = BaseJob,
       p = self$problem
       if (p$cache) {
         cache.file = getProblemCacheURI(self)
-        if (file.exists(cache.file)) {
+        if (fs::file_exists(cache.file)) {
           result = try(readRDS(cache.file))
           if (!inherits(result, "try-error"))
             return(result)
@@ -143,6 +141,7 @@ Experiment = R6Class("Experiment", cloneable = FALSE, inherit = BaseJob,
 #' @rdname JobExperiment
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(function(x, y) x + y, x = 1:2, more.args = list(y = 99), reg = tmp)
 #' submitJobs(resources = list(foo = "bar"), reg = tmp)

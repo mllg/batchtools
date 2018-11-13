@@ -36,6 +36,7 @@
 #' @export
 #' @family Experiment
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #'
 #' # add first problem
@@ -85,6 +86,10 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
         stopf("%s design %s contains reserved keyword '%s'", type, id, keywords[i])
       design
     }, id = names(designs), design = designs)
+  }
+
+  increment = function(ids, n = 1L) {
+    if (length(ids) == 0L) seq_len(n) else max(ids) + seq_len(n)
   }
 
   assertRegistry(reg, class = "ExperimentRegistry", writeable = TRUE)
@@ -141,12 +146,17 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
       tab$pars.hash = calculateHash(tab)
 
       # merge with already defined experiments to get def.ids
-      tab = merge(reg$defs[, !c("problem", "algorithm", "prob.pars", "algo.pars")], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
+      if (nrow(reg$defs) == 0L) {
+        # this is no optimization, but fixes an strange error on r-devel/windows for merging empty data.tables
+        tab$def.id = NA_integer_
+      } else {
+        tab = merge(reg$defs[, !c("problem", "algorithm", "prob.pars", "algo.pars")], tab, by = "pars.hash", all.x = FALSE, all.y = TRUE, sort = FALSE)
+      }
 
       # generate def ids for new experiments
       w = which(is.na(tab$def.id))
       if (length(w) > 0L) {
-        tab[w, "def.id" := auto_increment(reg$defs$def.id, length(w))]
+        tab[w, "def.id" := increment(reg$defs$def.id, length(w))]
         reg$defs = rbind(reg$defs, tab[w])
       }
 
@@ -157,7 +167,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
 
       if (nrow(tab) > 0L) {
         # rbind new status
-        tab$job.id = auto_increment(reg$status$job.id, nrow(tab))
+        tab$job.id = increment(reg$status$job.id, nrow(tab))
         reg$status = rbind(reg$status, tab, fill = TRUE)
       }
 

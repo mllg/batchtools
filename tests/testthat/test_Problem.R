@@ -10,7 +10,7 @@ test_that("addProblem / removeProblem", {
   expect_null(prob$seed)
   expect_file(getProblemURI(reg, prob$name))
   expect_false(prob$cache)
-  expect_false(dir.exists(getProblemCacheDir(reg, "p1")))
+  expect_false(fs::dir_exists(getProblemCacheDir(reg, "p1")))
 
   prob = addProblem(reg = reg, "p2", fun = function(...) NULL, seed = 42, cache = TRUE)
   expect_is(prob, "Problem")
@@ -32,13 +32,13 @@ test_that("addProblem / removeProblem", {
   expect_directory_exists(getProblemCacheDir(reg, "p2"))
   expect_integer(reg$status$job.id, len = 2L)
   expect_set_equal("p2", reg$problems)
-  expect_false(file.exists(getProblemURI(reg, "p1")))
-  expect_true(file.exists(getProblemURI(reg, "p2")))
+  expect_false(fs::file_exists(getProblemURI(reg, "p1")))
+  expect_true(fs::file_exists(getProblemURI(reg, "p2")))
   expect_set_equal(getJobPars(reg = reg)$problem, "p2")
   checkTables(reg)
 
   removeProblems(reg = reg, "p2")
-  expect_false(dir.exists(getProblemCacheDir(reg, "p2")))
+  expect_false(fs::dir_exists(getProblemCacheDir(reg, "p2")))
 })
 
 

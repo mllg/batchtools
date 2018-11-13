@@ -9,11 +9,11 @@
 #' @family Registry
 #' @export
 syncRegistry = function(reg = getDefaultRegistry()) {
-  assertRegistry(reg, writeable = TRUE)
-  if (sync(reg))
+  assertRegistry(reg)
+  altered = sync(reg)
+  if (altered)
     saveRegistry(reg)
-  else
-    invisible(FALSE)
+  altered
 }
 
 
@@ -27,7 +27,16 @@ sync = function(reg) {
 
   updates = lapply(fns, function(fn) {
     x = try(readRDS(fn), silent = TRUE)
-    if (is.error(x)) NULL else x
+    if (is.error(x)) {
+      if (reg$writeable && difftime(Sys.time(), fs::file_info(fn)$modification_time, units = "mins") > 60) {
+        info("Removing unreadable update file '%s'", fn)
+        file_remove(fn)
+      } else {
+        info("Skipping unreadable update file '%s'", fn)
+      }
+      return(NULL)
+    }
+    return(x)
   })
 
   failed = vlapply(updates, is.null)
@@ -37,9 +46,9 @@ sync = function(reg) {
     expr = quote(`:=`(started = i.started, done = i.done, error = i.error, mem.used = i.mem.used))
     reg$status[updates, eval(expr), on = "job.id"]
     if (reg$writeable)
-      file.remove.safely(fns[!failed])
+      file_remove(fns[!failed])
   }
 
   runHook(reg, "post.sync", updates = updates)
-  invisible(TRUE)
+  invisible(nrow(updates) > 0L)
 }

@@ -12,11 +12,14 @@ For bug reports and feature requests please use the tracker:
 \section{Package options}{
 
 \describe{
+  \item{\code{batchtools.verbose}}{
+    Verbosity. Set to \code{FALSE} to suppress info messages and progress bars.
+  }
   \item{\code{batchtools.progress}}{
     Progress bars. Set to \code{FALSE} to disable them.
   }
-  \item{\code{batchtools.verbose}}{
-    Verbosity. Set to \code{FALSE} to suppress info messages and progress bars.
+  \item{\code{batchtools.timestamps}}{
+    Add time stamps to log output. Set to \code{FALSE} to disable them.
   }
 }
 Furthermore, you may enable a debug mode using the \pkg{debugme} package by
@@ -42,7 +45,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Dirk Surmann \email{surmann@statistik.tu-dortmund.de} [contributor]
+  \item Dirk Surmann \email{surmann@statistik.tu-dortmund.de} (0000-0003-0873-137X) [contributor]
 }
 
 }

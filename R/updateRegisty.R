@@ -25,12 +25,12 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
 
   if (reg$version < "0.9.1-9001") {
     ### hotfix for base32 encoding of exports
-    fns = list.files(fp(reg$file.dir, "exports"), pattern = "\\.rds$", all.files = TRUE, no.. = TRUE)
+    fns = list.files(fs::path(reg$file.dir, "exports"), pattern = "\\.rds$", all.files = TRUE, no.. = TRUE)
     if (length(fns)) {
       info("Renaming export files")
-      file.rename(
-        fp(reg$file.dir, fns),
-        fp(reg$file.dir, mangle(stri_sub(fns, to = -5L)))
+      fs::file_move(
+        fs::path(reg$file.dir, fns),
+        fs::path(reg$file.dir, mangle(stri_sub(fns, to = -5L)))
       )
     }
   }
@@ -41,9 +41,9 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
     getAlgorithmIds = function(reg) levels(reg$defs$algorithm)
 
     for (prob in getProblemIds(reg))
-      file.rename(fp(reg$file.dir, "problems", sprintf("%s.rds", digest(prob))), getProblemURI(reg, prob))
+      fs::file_move(fs::path(reg$file.dir, "problems", sprintf("%s.rds", digest(prob))), getProblemURI(reg, prob))
     for (algo in getAlgorithmIds(reg))
-      file.rename(fp(reg$file.dir, "algorithms", sprintf("%s.rds", digest(algo))), getAlgorithmURI(reg, algo))
+      fs::file_move(fs::path(reg$file.dir, "algorithms", sprintf("%s.rds", digest(algo))), getAlgorithmURI(reg, algo))
   }
 
   if (reg$version < "0.9.4-9001") {
@@ -78,25 +78,32 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
         uri = getProblemURI(reg, id)
         p = readRDS(uri)
         p$cache = FALSE
-        saveRDS(p, file = uri)
+        saveRDS(p, file = uri, version = 2L)
       }
     }
   }
 
   if (reg$version < "0.9.7-9002") {
-    info("Renaming memory column in data base")
-    setnames(reg$status, "memory", "mem.used")
+    if (hasName(reg$status, "memory")) {
+      info("Renaming memory column in data base")
+      setnames(reg$status, "memory", "mem.used")
+    }
 
-    info("Renaming memory column in update files")
     fns = list.files(dir(reg, "updates"), full.names = TRUE)
-    updates = lapply(fns, function(fn) {
-      x = try(readRDS(fn), silent = TRUE)
-      if (is.error(x))
-        file.remove(x)
-      if ("memory" %in% names(x))
-        setnames(x, "memory", "mem.used")
-      saveRDS(x, file = fn)
-    })
+    if (length(fns) > 0L) {
+      info("Renaming memory column in update files")
+      updates = lapply(fns, function(fn) {
+        x = try(readRDS(fn), silent = TRUE)
+        if (is.error(x)) {
+          fs::file_delete(x)
+        } else {
+          if (hasName(x, "memory")) {
+            setnames(x, "memory", "mem.used")
+            saveRDS(x, file = fn, version = 2L)
+          }
+        }
+      })
+    }
   }
 
   reg$version = pv

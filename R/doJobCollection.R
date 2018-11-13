@@ -16,6 +16,7 @@
 #' @family JobCollection
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(identity, 1:2, reg = tmp)
 #' jc = makeJobCollection(1:2, reg = tmp)
@@ -29,27 +30,31 @@ doJobCollection = function(jc, output = NULL) {
 doJobCollection.character = function(jc, output = NULL) {
   obj = readRDS(jc)
   force(obj)
-  if (!batchtools$debug && !obj$array.jobs)
-    file.remove(jc)
+  if (!batchtools$debug && !obj$array.jobs) {
+    fs::file_delete(jc)
+    job = fs::path_ext_set(jc, "job")
+    if (fs::file_exists(job))
+      fs::file_delete(job)
+  }
   doJobCollection.JobCollection(obj, output = output)
 }
 
 
 #' @export
 doJobCollection.JobCollection = function(jc, output = NULL) {
-  now = function() strftime(Sys.time())
-
   error = function(msg, ...) {
     now = ustamp()
     updates = data.table(job.id = jc$jobs$job.id, started = now, done = now,
       error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),
       mem.used = NA_real_, key = "job.id")
-    writeRDS(updates, file = fp(jc$file.dir, "updates", sprintf("%s.rds", jc$job.hash)))
+    writeRDS(updates, file = fs::path(jc$file.dir, "updates", sprintf("%s.rds", jc$job.hash)))
     invisible(NULL)
   }
 
   # signal warnings immediately
-  local_options(list(warn = 1L))
+  opts = options("warn")
+  options(warn = 1L)
+  on.exit(options(opts))
 
   # setup output connection
   if (!is.null(output)) {
@@ -72,12 +77,12 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
   # say hi
   n.jobs = nrow(jc$jobs)
   s = now()
-  catf("### [bt %s]: This is batchtools v%s", s, packageVersion("batchtools"))
-  catf("### [bt %s]: Starting calculation of %i jobs", s, n.jobs)
-  catf("### [bt %s]: Setting working directory to '%s'", s, jc$work.dir)
+  catf("### [bt%s]: This is batchtools v%s", s, packageVersion("batchtools"))
+  catf("### [bt%s]: Starting calculation of %i jobs", s, n.jobs)
+  catf("### [bt%s]: Setting working directory to '%s'", s, jc$work.dir)
 
   # set work dir
-  if (!dir.exists(jc$work.dir))
+  if (!fs::dir_exists(jc$work.dir))
     return(error("Work dir does not exist"))
   local_dir(jc$work.dir)
 
@@ -95,7 +100,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     do.call(parallelMap::parallelStart, pm.opts)
     on.exit(parallelMap::parallelStop(), add = TRUE)
     pm.opts = parallelMap::parallelGetOptions()$settings
-    catf("### [bt %s]: Using %i CPUs for parallelMap/%s on level '%s'", s, pm.opts$cpus, pm.opts$mode, if (is.na(pm.opts$level)) "default" else pm.opts$level)
+    catf("### [bt%s]: Using %i CPUs for parallelMap/%s on level '%s'", s, pm.opts$cpus, pm.opts$mode, if (is.na(pm.opts$level)) "default" else pm.opts$level)
   }
 
   # setup inner parallelization with foreach
@@ -120,12 +125,15 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     } else {
       return(error("Unknwon foreach backend: '%s'", backend))
     }
-    catf("### [bt %s]: Using %i CPUs for foreach/%s", s, ncpus, backend)
+    catf("### [bt%s]: Using %i CPUs for foreach/%s", s, ncpus, backend)
   }
 
   # setup memory measurement
   measure.memory = isTRUE(jc$resources$measure.memory)
-  catf("### [bt %s]: Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"))
+  catf("### [bt%s]: Memory measurement %s", s, ifelse(measure.memory, "enabled", "disabled"))
+  if (measure.memory) {
+    memory.mult = c(if (.Machine$sizeof.pointer == 4L) 28L else 56L, 8L)
+  }
 
   # try to pre-fetch some objects from the file system
   reader = RDSReader$new(n.jobs > 1L)
@@ -138,21 +146,21 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     id = job$id
 
     update = list(started = ustamp(), done = NA_integer_, error = NA_character_, mem.used = NA_real_)
-    catf("### [bt %s]: Starting job [batchtools job.id=%i]", now(), id)
+    catf("### [bt%s]: Starting job [batchtools job.id=%i]", now(), id)
     if (measure.memory) {
       gc(reset = TRUE)
       result = try(execJob(job))
-      update$mem.used = sum(gc()[, 6L])
+      update$mem.used = sum(gc()[, 6L] * memory.mult)
     } else {
       result = try(execJob(job))
     }
     update$done = ustamp()
 
     if (is.error(result)) {
-      catf("\n### [bt %s]: Job terminated with an exception [batchtools job.id=%i]", now(), id)
+      catf("\n### [bt%s]: Job terminated with an exception [batchtools job.id=%i]", now(), id)
       update$error = stri_trunc(stri_trim_both(as.character(result)), 500L, " [truncated]")
     } else {
-      catf("\n### [bt %s]: Job terminated successfully [batchtools job.id=%i]", now(), id)
+      catf("\n### [bt%s]: Job terminated successfully [batchtools job.id=%i]", now(), id)
       writeRDS(result, file = getResultFiles(jc, id))
     }
     buf$add(i, update)
@@ -161,7 +169,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
 
   runHook(jc, "post.do.collection", updates = buf$updates, reader = reader)
   buf$save(jc)
-  catf("### [bt %s]: Calculation finished!", now())
+  catf("### [bt%s]: Calculation finished!", now())
 
   invisible(jc$job.hash)
 }
@@ -185,7 +193,7 @@ UpdateBuffer = R6Class("UpdateBuffer",
       i = self$updates[!is.na(started) & (!written), which = TRUE]
       if (length(i) > 0L) {
         first.id = self$updates$job.id[i[1L]]
-        writeRDS(self$updates[i, !"written"], file = fp(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, first.id)))
+        writeRDS(self$updates[i, !"written"], file = fs::path(jc$file.dir, "updates", sprintf("%s-%i.rds", jc$job.hash, first.id)))
         set(self$updates, i, "written", TRUE)
       }
     },

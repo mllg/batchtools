@@ -14,6 +14,7 @@
 #' @export
 #' @family Registry Experiment
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeExperimentRegistry(file.dir = NA, make.default = FALSE)
 #'
 #' # Definde one problem, two algorithms and add them with some parameters:
@@ -52,8 +53,7 @@ makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), con
   reg = makeRegistry(file.dir = file.dir, work.dir = work.dir, conf.file = conf.file,
     packages = packages, namespaces = namespaces, source = source, load = load, seed = seed, make.default = make.default)
 
-  dir.create(fp(reg$file.dir, "problems"))
-  dir.create(fp(reg$file.dir, "algorithms"))
+  fs::dir_create(fs::path(reg$file.dir, c("problems", "algorithms")))
 
   reg$problems       = character(0L)
   reg$algorithms     = character(0L)
@@ -77,8 +77,8 @@ print.ExperimentRegistry = function(x, ...) {
   catf("  File dir  : %s", x$file.dir)
   catf("  Work dir  : %s", x$work.dir)
   catf("  Jobs      : %i", nrow(x$status))
-  catf("  Problems  : %i", nlevels(x$defs$problem))
-  catf("  Algorithms: %i", nlevels(x$defs$algorithm))
+  catf("  Problems  : %i", length(x$problems))
+  catf("  Algorithms: %i", length(x$algorithms))
   catf("  Seed      : %i", x$seed)
   catf("  Writeable : %s", x$writeable)
 }

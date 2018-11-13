@@ -45,7 +45,7 @@
 #'   Expected maximum latency of the file system, in seconds.
 #'   Set to a positive number for network file systems like NFS which enables more robust (but also more expensive) mechanisms to
 #'   access files and directories.
-#'   Usually safe to set to \code{NA} to disable the heuristic, e.g. if you are working on a local file system.
+#'   Usually safe to set to \code{0} to disable the heuristic, e.g. if you are working on a local file system.
 #' @param hooks [\code{list}]\cr
 #'   Named list of functions which will we called on certain events like \dQuote{pre.submit} or \dQuote{post.sync}.
 #'   See \link{Hooks}.
@@ -55,7 +55,7 @@
 #' @family ClusterFunctionsHelper
 makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued = NULL, listJobsRunning = NULL,
   array.var = NA_character_, store.job.collection = FALSE, store.job.files = FALSE, scheduler.latency = 0,
-  fs.latency = NA_real_, hooks = list()) {
+  fs.latency = 0, hooks = list()) {
   assertList(hooks, types = "function", names = "unique")
   assertSubset(names(hooks), unlist(batchtools$hooks, use.names = FALSE))
 
@@ -69,7 +69,7 @@ makeClusterFunctions = function(name, submitJob, killJob = NULL, listJobsQueued 
       store.job.collection = assertFlag(store.job.collection),
       store.job.files = assertFlag(store.job.files),
       scheduler.latency = assertNumber(scheduler.latency, lower = 0),
-      fs.latency = assertNumber(fs.latency, lower = 0, na.ok = TRUE),
+      fs.latency = assertNumber(fs.latency, lower = 0),
       hooks = hooks),
     "ClusterFunctions")
 }
@@ -141,21 +141,15 @@ print.SubmitJobResult = function(x, ...) {
 #' Simply reads your template file and returns it as a character vector.
 #'
 #' @param template [\code{character(1)}]\cr
-#'   Path to template file or single string (containing newlines) which is then passed
-#'   to \code{\link[brew]{brew}}.
+#'   Path to template file which is then passed to \code{\link[brew]{brew}}.
 #' @param comment.string [\code{character(1)}]\cr
 #'   Ignore lines starting with this string.
 #' @return [\code{character}].
 #' @family ClusterFunctionsHelper
 #' @export
 cfReadBrewTemplate = function(template, comment.string = NA_character_) {
-  if (stri_detect_fixed(template, "\n")) {
-    "!DEBUG [cfReadBrewTemplate]: Parsing template from string"
-    lines = stri_trim_both(stri_split_lines(template)[[1L]])
-  } else {
-    "!DEBUG [cfReadBrewTemplate]: Parsing template file '`template`'"
-    lines = stri_trim_both(readLines(template))
-  }
+  "!DEBUG [cfReadBrewTemplate]: Parsing template file '`template`'"
+  lines = stri_trim_both(readLines(template))
 
   lines = lines[!stri_isempty(lines)]
   if (!is.na(comment.string))
@@ -170,10 +164,9 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 #' @description
 #' This function is only intended for use in your own cluster functions implementation.
 #'
-#' Calls brew silently on your template, any error will lead to an exception. If debug mode is
-#' enabled (via environment variable \dQuote{DEBUGME} set to \dQuote{batchtools}),
-#' the file is stored at the same place as the corresponding
-#' job file in the \dQuote{jobs}-subdir of your files directory, otherwise as \code{\link{tempfile}} on the local system.
+#' Calls brew silently on your template, any error will lead to an exception.
+#' The file is stored at the same place as the corresponding job file in the \dQuote{jobs}-subdir
+#' of your files directory.
 #'
 #' @template reg
 #' @param text [\code{character(1)}]\cr
@@ -186,10 +179,7 @@ cfReadBrewTemplate = function(template, comment.string = NA_character_) {
 #' @export
 cfBrewTemplate = function(reg, text, jc) {
   assertString(text)
-
-  path = if (batchtools$debug || reg$cluster.functions$store.job.files) fp(reg$file.dir, "jobs") else tempdir()
-  fn = sprintf("%s.job", jc$job.hash)
-  outfile = fp(path, fn)
+  outfile = fs::path(dir(reg, "jobs"), sprintf("%s.job", jc$job.hash))
 
   parent.env(jc) = asNamespace("batchtools")
   on.exit(parent.env(jc) <- emptyenv())
@@ -198,7 +188,7 @@ cfBrewTemplate = function(reg, text, jc) {
   z = try(brew(text = text, output = outfile, envir = jc), silent = TRUE)
   if (is.error(z))
     stopf("Error brewing template: %s", as.character(z))
-  waitForFiles(path, fn, reg$cluster.functions$scheduler.latency)
+  waitForFile(outfile, reg$cluster.functions$fs.latency)
   return(outfile)
 }
 
@@ -285,42 +275,54 @@ getBatchIds = function(reg, status = "all") {
       tab = rbind(tab, data.table(batch.id = unique(x), status = "queued"))
   }
 
-  tab[batch.id %in% reg$status$batch.id]
+  submitted = done = batch.id = NULL
+  batch.ids = reg$status[!is.na(submitted) & is.na(done) & !is.na(batch.id), unique(batch.id)]
+  tab[batch.id %in% batch.ids]
 }
 
-findTemplateFile = function(name) {
-  assertString(name, min.chars = 1L)
 
-  if (stri_detect_fixed(name, "\n"))
-    return(name)
+#' @title Find a batchtools Template File
+#'
+#' @description
+#' This functions returns the path to a template file on the file system.
+#' @template template
+#' @return [\code{character}] Path to the file or \code{NA} if no template template file was found.
+#' @keywords internal
+#' @export
+findTemplateFile = function(template) {
+  assertString(template, min.chars = 1L)
 
-  if (stri_endswith_fixed(name, ".tmpl")) {
-    assertFileExists(name, access = "r")
-    return(name)
+  if (stri_endswith_fixed(template, ".tmpl")) {
+    assertFileExists(template, access = "r")
+    return(fs::path_abs(template))
   }
 
   x = Sys.getenv("R_BATCHTOOLS_SEARCH_PATH")
   if (nzchar(x)) {
-    x = fp(x, sprintf("batchtools.%s.tmpl", name))
-    if (file.exists(x))
-      return(normalizePath(x, winslash = "/"))
+    x = fs::path(x, sprintf("batchtools.%s.tmpl", template))
+    if (fs::file_access(x, "read"))
+      return(fs::path_abs(x))
   }
 
-  x = sprintf("batchtools.%s.tmpl", name)
-  if (file.exists(x))
-    return(normalizePath(x, winslash = "/"))
+  x = sprintf("batchtools.%s.tmpl", template)
+  if (fs::file_access(x, "read"))
+    return(fs::path_abs(x))
 
-  x = fp(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", name))
-  if (file.exists(x))
+  x = fs::path(user_config_dir("batchtools", expand = FALSE), sprintf("%s.tmpl", template))
+  if (fs::file_access(x, "read"))
     return(x)
 
-  x = fp("~", sprintf(".batchtools.%s.tmpl", name))
-  if (file.exists(x))
-    return(normalizePath(x, winslash = "/"))
+  x = fs::path("~", sprintf(".batchtools.%s.tmpl", template))
+  if (fs::file_access(x, "read"))
+    return(fs::path_abs(x))
 
-  x = system.file("templates", sprintf("%s.tmpl", name), package = "batchtools")
-  if (file.exists(x))
+  x = fs::path(site_config_dir("batchtools"), sprintf("%s.tmpl", template))
+  if (fs::file_access(x, "read"))
     return(x)
 
-  stopf("Argument 'template' (=\"%s\") must point to a template file or contain the template itself as string (containing at least one newline)", name)
+  x = system.file("templates", sprintf("%s.tmpl", template), package = "batchtools")
+  if (fs::file_access(x, "read"))
+    return(x)
+
+  return(NA_character_)
 }

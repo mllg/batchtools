@@ -44,3 +44,4 @@ Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
   \code{\link{makeClusterFunctions}},
   \code{\link{runOSCommand}}
 }
+\concept{ClusterFunctionsHelper}

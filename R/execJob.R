@@ -9,6 +9,7 @@
 #' @return Result of the job.
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 #' batchMap(identity, 1:2, reg = tmp)
 #' job = makeJob(1, reg = tmp)
@@ -31,8 +32,11 @@ execJob.JobCollection = function(job) {
 
 #' @export
 execJob.Job = function(job) {
-  local_options(list(error = function(e) traceback(2L)))
-  catf("Starting job %i (seed = %i) ...", job$id, job$seed)
+  opts = options("error")
+  options(error = function(e) traceback(2L))
+  on.exit(options(opts))
+  # this needs to be cat, message outputs to stderr which R cannot capture properly
+  catf("### [bt%s]: Setting seed to %i ...", now(), job$seed)
   if (".job" %chin% names(formals(job$fun))) {
     with_seed(job$seed, do.call(job$fun, c(job$pars, list(.job = job)), envir = .GlobalEnv))
   } else {
@@ -42,13 +46,17 @@ execJob.Job = function(job) {
 
 #' @export
 execJob.Experiment = function(job) {
-  local_options(list(error = function(e) traceback(2L)))
-  catf("Generating problem instance for problem '%s' ...", job$prob.name)
+  opts = options("error")
+  options(error = function(e) traceback(2L))
+  on.exit(options(opts))
+  # this needs to be cat, message outputs to stderr which R cannot capture properly
+  catf("### [bt%s]: Generating problem instance for problem '%s' ...", now(), job$prob.name)
   instance = job$instance
   force(instance)
   job$allow.access.to.instance = FALSE
 
   wrapper = function(...) job$algorithm$fun(job = job, data = job$problem$data, instance = instance, ...)
-  catf("Applying algorithm '%s' on problem '%s' for job %i (seed = %i) ...", job$algo.name, job$prob.name, job$id, job$seed)
+  # this needs to be cat, message outputs to stderr which R cannot capture properly
+  catf("### [bt%s]: Applying algorithm '%s' on problem '%s' for job %i (seed = %i) ...", now(), job$algo.name, job$prob.name, job$id, job$seed)
   with_seed(job$seed, do.call(wrapper, job$algo.pars, envir = .GlobalEnv))
 }

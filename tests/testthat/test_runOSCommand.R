@@ -23,11 +23,11 @@ test_that("command not found", {
 test_that("stdin", {
   skip_on_os(c("windows", "solaris")) # system2 is broken on solaris
 
-  tf = tempfile()
+  tf = fs::file_temp()
   lines = letters
   writeLines(letters, con = tf)
   res = runOSCommand("cat", stdin = tf)
   expect_identical(res$exit.code, 0L)
   expect_identical(res$output, letters)
-  unlink(tf)
+  fs::file_delete(tf)
 })

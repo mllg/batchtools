@@ -1,26 +1,26 @@
 context("grepLogs")
 
 silent({
-reg = makeTestRegistry()
-ids = batchMap(reg = reg, function(x) {
-  if (x == 1) {
-    print("FOOBAR: AAA")
-  } else if (x == 2) {
-    cat("FOOBAR: BBB")
-  } else {
-    if (identical(Sys.getenv("TESTTHAT"), "true")) {
-      # testthat uses muffle restarts which breaks our internal
-      # sink() somehow.
-      # https://github.com/r-lib/testthat/issues/460
-      cat("FOOBAR: CCC", file = stderr())
+  reg = makeTestRegistry()
+  ids = batchMap(reg = reg, function(x) {
+    if (x == 1) {
+      print("FOOBAR: AAA")
+    } else if (x == 2) {
+      cat("FOOBAR: BBB")
     } else {
-      message("FOOBAR: CCC")
+      if (identical(Sys.getenv("TESTTHAT"), "true")) {
+        # testthat uses muffle restarts which breaks our internal
+        # sink() somehow.
+        # https://github.com/r-lib/testthat/issues/460
+        cat("FOOBAR: CCC", file = stderr())
+      } else {
+        message("FOOBAR: CCC")
+      }
     }
-  }
-  invisible(NULL)
-}, x = 1:5)
-ids$chunk = as.integer(c(1, 1, 2, 3, 4))
-submitAndWait(reg, ids[1:4])
+    invisible(NULL)
+  }, x = 1:5)
+  ids$chunk = as.integer(c(1, 1, 2, 3, 4))
+  submitAndWait(reg, ids[1:4])
 })
 
 test_that("grepLogs", {

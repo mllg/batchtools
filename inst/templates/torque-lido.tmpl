@@ -66,10 +66,9 @@ module add <%= modules %>
 mkdir /scratch/${USER}-${PBS_JOBID}
 export TMPDIR=/scratch/${USER}-${PBS_JOBID}
 
-## Set thread number of OMP and OpenBlas
-export OMP_NUM_THREADS=<%= resources$omp.threads %>
-export NUMEXPR_NUM_THREADS=<%= resources$blas.threads %>
-export OPENBLAS_NUM_THREADS=<%= resources$tblas.hreads %>
+<%= sprintf("export OMP_NUM_THREADS=%i", resources$omp.threads) -%>
+<%= sprintf("export OPENBLAS_NUM_THREADS=%i", resources$blas.threads) -%>
+<%= sprintf("export MKL_NUM_THREADS=%i", resources$blas.threads) -%>
 
 ## export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>

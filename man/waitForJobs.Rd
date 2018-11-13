@@ -5,7 +5,7 @@
 \title{Wait for Termination of Jobs}
 \usage{
 waitForJobs(ids = NULL, sleep = NULL, timeout = 604800,
-  expire.after = 3L, stop.on.error = FALSE, stop.on.expire = FALSE,
+  expire.after = NULL, stop.on.error = FALSE, stop.on.expire = FALSE,
   reg = getDefaultRegistry())
 }
 \arguments{
@@ -37,7 +37,9 @@ a job because the job has hit the walltime or request more memory than reserved.
 On the other hand, network file systems often require several seconds for new files to be found,
 which can lead to false positives in the detection heuristic.
 \code{waitForJobs} treats such jobs as expired after they have not been detected on the system
-for \code{expire.after} iterations (default 3 iterations).}
+for \code{expire.after} iterations.
+If not provided (\code{NULL}), tries to read the value from the configuration file (stored in \code{reg$expire.after}),
+and finally defaults to \code{3}.}
 
 \item{stop.on.error}{[\code{logical(1)}]\cr
 Immediately cancel if a job terminates with an error? Default is

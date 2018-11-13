@@ -25,22 +25,6 @@ insert = function(x, y) {
   x[order(names2(x))]
 }
 
-file.remove.safely = function(x) {
-  file.remove(x[file.exists(x)])
-
-  while(any(i <- file.exists(x))) {
-    Sys.sleep(0.5)
-    file.remove(x[i])
-  }
-}
-
-writeRDS = function(object, file) {
-  file.remove.safely(file)
-  saveRDS(object, file = file)
-  waitForFile(file, 300)
-  invisible(TRUE)
-}
-
 makeProgressBar = function(...) {
   if (!batchtools$debug && getOption("batchtools.verbose", TRUE) && getOption("batchtools.progress", TRUE) && getOption("width") >= 20L) {
     progress_bar$new(...)
@@ -80,18 +64,23 @@ info = function(...) {
 }
 
 # formating cat()
-catf = function (..., con = "") {
+catf = function(..., con = "") {
   cat(stri_flatten(sprintf(...), "\n"), "\n", sep = "", file = con)
 }
 
+# formating message()
+messagef = function(..., con = "") {
+  message(sprintf(...))
+}
+
 # formating waring()
-warningf = function (...) {
+warningf = function(...) {
   warning(simpleWarning(sprintf(...), call = sys.call(sys.parent())))
 }
 
 # formating stop()
-stopf = function (...) {
-  stop(simpleError(sprintf(...), call = sys.call(sys.parent())))
+stopf = function(...) {
+  stop(simpleError(sprintf(...), call = NULL))
 }
 
 `%nin%` = function(x, y) {
@@ -128,7 +117,7 @@ stri_trunc = function(str, length, append = "") {
 }
 
 Rscript = function() {
-  fp(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
+  fs::path(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
 }
 
 getSeed = function(start.seed, id) {
@@ -150,4 +139,20 @@ chintersect = function(x, y) {
 
 rnd_hash = function(prefix = "") {
   stri_join(prefix, digest(list(runif(1L), as.numeric(Sys.time()))))
+}
+
+now = function() {
+  if (isTRUE(getOption("batchtools.timestamps", FALSE)))
+    sprintf(" %s", strftime(Sys.time()))
+  else
+    ""
+}
+
+example_push_temp = function(i = 1L) {
+  if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
+    base = fs::path(dirname(tempdir()), "batchtools-example")
+    dirs = if (i == 1L) fs::path(base, "reg") else fs::path(base, sprintf("reg%i", seq_len(i)))
+    fs::dir_delete(dirs[fs::dir_exists(dirs)])
+    fs::file_temp_push(dirs)
+  }
 }

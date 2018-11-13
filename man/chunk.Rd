@@ -6,7 +6,7 @@
 \alias{binpack}
 \title{Chunk Jobs for Sequential Execution}
 \usage{
-chunk(x, n.chunks = NULL, chunk.size = NULL)
+chunk(x, n.chunks = NULL, chunk.size = NULL, shuffle = TRUE)
 
 lpt(x, n.chunks = 1L)
 
@@ -29,13 +29,16 @@ Requested chunk size for each single chunk.
 For \code{chunk} this is the number of elements in \code{x}, for \code{binpack} the size
 is determined by the sum of values in \code{x}.
 Mutually exclusive with \code{n.chunks}.}
+
+\item{shuffle}{[\code{logical(1)}]\cr
+Shuffles the groups. Default is \code{TRUE}.}
 }
 \value{
 [\code{integer}] giving the chunk number for each element of \code{x}.
 }
 \description{
 Jobs can be partitioned into \dQuote{chunks} to be executed sequentially on the computational nodes.
-Chunks are defined by providing a data frame with columns \dQuote{job.id} and \dQuote{chunk} (integer).
+Chunks are defined by providing a data frame with columns \dQuote{job.id} and \dQuote{chunk} (integer)
 to \code{\link{submitJobs}}.
 All jobs with the same chunk number will be grouped together on one node to form a single
 computational job.
@@ -53,6 +56,7 @@ not exceed the upper limit provided by \code{chunk.size}.
 See examples of \code{\link{estimateRuntimes}} for an application of \code{binpack} and \code{lpt}.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(2) }
 ch = chunk(1:10, n.chunks = 2)
 table(ch)
 

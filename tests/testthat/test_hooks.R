@@ -6,19 +6,19 @@ test_that("hooks", {
     skip("Hooks already defined by Cluster Functions")
   reg$cluster.functions$hooks = insert(reg$cluster.functions$hooks, list(
     "pre.do.collection" = function(jc, ...) cat(jc$job.hash, "\n", sep = ""),
-    "post.sync" = function(reg, ...) cat("post.syn", file = fp(reg$file.dir, "post.sync.txt"))
+    "post.sync" = function(reg, ...) cat("post.syn", file = fs::path(reg$file.dir, "post.sync.txt"))
   ))
 
   jc = makeJobCollection(1, reg = reg)
   expect_function(jc$hooks$pre.do.collection, args = "jc")
 
-  fn.ps = fp(reg$file.dir, "post.sync.txt")
-  expect_false(file.exists(fn.ps))
+  fn.ps = fs::path(reg$file.dir, "post.sync.txt")
+  expect_false(fs::file_exists(fn.ps))
 
   batchMap(identity, 1, reg = reg)
   submitAndWait(reg, 1)
   syncRegistry(reg = reg)
-  expect_true(file.exists(fn.ps))
+  expect_true(fs::file_exists(fn.ps))
 
   lines = getLog(1, reg = reg)
   expect_true(reg$status[1]$job.hash %chin% lines)

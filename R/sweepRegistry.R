@@ -19,7 +19,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   )
   if (length(obsolete)) {
     info("Removing %i obsolete result files ...", length(obsolete))
-    file.remove(obsolete)
+    fs::file_delete(obsolete)
   }
 
   obsolete = chsetdiff(
@@ -28,19 +28,19 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   )
   if (length(obsolete)) {
     info("Removing %i obsolete log files ...", length(obsolete))
-    file.remove(obsolete)
+    fs::file_delete(obsolete)
   }
 
   obsolete = list.files(dir(reg, "jobs"), pattern = "\\.rds", full.names = TRUE)
   if (length(obsolete)) {
     info("Removing %i obsolete job collection files ...", length(obsolete))
-    file.remove(obsolete)
+    fs::file_delete(obsolete)
   }
 
   obsolete = list.files(dir(reg, "jobs"), pattern = "\\.job$", full.names = TRUE)
   if (length(obsolete)) {
     info("Removing %i job description files ...", length(obsolete))
-    file.remove(obsolete)
+    fs::file_delete(obsolete)
   }
 
   obsolete = chsetdiff(
@@ -49,7 +49,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   )
   if (length(obsolete)) {
     info("Removing %i external directories of unsubmitted jobs ...", length(obsolete))
-    unlink(obsolete, recursive = TRUE)
+    fs::dir_delete(obsolete)
   }
 
   obsolete = reg$resources[!reg$status, on = "resource.id", which = TRUE]

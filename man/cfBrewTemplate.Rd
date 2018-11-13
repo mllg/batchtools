@@ -23,10 +23,9 @@ available variables.}
 \description{
 This function is only intended for use in your own cluster functions implementation.
 
-Calls brew silently on your template, any error will lead to an exception. If debug mode is
-enabled (via environment variable \dQuote{DEBUGME} set to \dQuote{batchtools}),
-the file is stored at the same place as the corresponding
-job file in the \dQuote{jobs}-subdir of your files directory, otherwise as \code{\link{tempfile}} on the local system.
+Calls brew silently on your template, any error will lead to an exception.
+The file is stored at the same place as the corresponding job file in the \dQuote{jobs}-subdir
+of your files directory.
 }
 \seealso{
 Other ClusterFunctionsHelper: \code{\link{cfHandleUnknownSubmitError}},
@@ -36,3 +35,4 @@ Other ClusterFunctionsHelper: \code{\link{cfHandleUnknownSubmitError}},
   \code{\link{makeSubmitJobResult}},
   \code{\link{runOSCommand}}
 }
+\concept{ClusterFunctionsHelper}

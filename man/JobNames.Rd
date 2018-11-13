@@ -35,6 +35,7 @@ the job hash is used as job name.
 Individual job names can be accessed via \code{jobs$job.name}.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 ids = batchMap(identity, 1:10, reg = tmp)
 setJobNames(ids, letters[1:nrow(ids)], reg = tmp)

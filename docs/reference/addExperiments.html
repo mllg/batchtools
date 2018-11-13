@@ -18,13 +18,26 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Add Experiments to the Registry — addExperiments" />
+
+<meta property="og:description" content="Adds experiments (parametrized combinations of problems with algorithms) to the registry and thereby defines batch jobs.
+If multiple problem designs or algorithm designs are provided, they are combined via the Cartesian product.
+E.g., if you have two problems p1 and p2 and three algorithms a1, a2 and a3,
+addExperiments creates experiments for all parameters for the combinations (p1, a1), (p1, a2),
+(p1, a3), (p2, a1), (p2, a2) and (p2, a3)." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +60,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">batchtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">batchtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.10</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,13 +75,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/batchtools.html">Get Started</a>
+  <a href="../articles/batchtools.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -76,6 +93,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,12 +101,15 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add Experiments to the Registry</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mllg/batchtools/blob/master/R/addExperiments.R'><code>R/addExperiments.R</code></a></small>
+    <div class="hidden name"><code>addExperiments.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Adds experiments (parametrized combinations of problems with algorithms) to the registry and thereby defines batch jobs.</p>
 <p>If multiple problem designs or algorithm designs are provided, they are combined via the Cartesian product.
@@ -96,35 +117,36 @@ E.g., if you have two problems <code>p1</code> and <code>p2</code> and three alg
 <code>addExperiments</code> creates experiments for all parameters for the combinations <code>(p1, a1)</code>, <code>(p1, a2)</code>,
 <code>(p1, a3)</code>, <code>(p2, a1)</code>, <code>(p2, a2)</code> and <code>(p2, a3)</code>.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>addExperiments</span>(<span class='kw'>prob.designs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>algo.designs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>repls</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
   <span class='kw'>combine</span> <span class='kw'>=</span> <span class='st'>"crossprod"</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='fu'><a href='getDefaultRegistry.html'>getDefaultRegistry</a></span>())</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>prob.designs</th>
-      <td><p>[named list of <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]
+      <td><p>[named list of <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]<br />
 Named list of data frames (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>).
 The name must match the problem name while the column names correspond to parameters of the problem.
 If <code>NULL</code>, experiments for all defined problems without any parameters are added.</p></td>
     </tr>
     <tr>
       <th>algo.designs</th>
-      <td><p>[named list of <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> or <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]
+      <td><p>[named list of <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> or <code><a href='http://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code>]<br />
 Named list of data frames (or <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code>).
 The name must match the algorithm name while the column names correspond to parameters of the algorithm.
 If <code>NULL</code>, experiments for all defined algorithms without any parameters are added.</p></td>
     </tr>
     <tr>
       <th>repls</th>
-      <td><p>[<code>integer(1)</code>]
+      <td><p>[<code>integer(1)</code>]<br />
 Number of replications for each experiment.</p></td>
     </tr>
     <tr>
       <th>combine</th>
-      <td><p>[<code>character(1)</code>]
+      <td><p>[<code>character(1)</code>]<br />
 How to combine the rows of a single problem design with the rows of a single algorithm design?
 Default is &#8220;crossprod&#8221; which combines each row of the problem design which each row of the algorithm design
 in a cross-product fashion. Set to &#8220;bind&#8221; to just <code><a href='http://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></code> the tables of
@@ -132,7 +154,7 @@ problem and algorithm designs where the shorter table is repeated if necessary.<
     </tr>
     <tr>
       <th>reg</th>
-      <td><p>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]
+      <td><p>[<code><a href='makeExperimentRegistry.html'>ExperimentRegistry</a></code>]<br />
 Registry. If not explicitly passed, uses the last created registry.</p></td>
     </tr>
     </table>
@@ -151,12 +173,12 @@ Therefore, this function will warn about factor variables if the following condi
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other Experiment: <code><a href='removeExperiments.html'>removeExperiments</a></code>,
-  <code><a href='summarizeExperiments.html'>summarizeExperiments</a></code></p>
+    <div class='dont-index'><p>Other Experiment: <code><a href='removeExperiments.html'>removeExperiments</a></code>,
+  <code><a href='summarizeExperiments.html'>summarizeExperiments</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '/home/lang/.config/batchtools/config.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/scratch/registry5af93b4fcf6e' using cluster functions 'Interactive'</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>=</span> <span class='fu'><a href='makeExperimentRegistry.html'>makeExperimentRegistry</a></span>(<span class='kw'>file.dir</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>make.default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Sourcing configuration file '~/.batchtools.conf.R' ...</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg' using cluster functions 'Interactive'</span></div><div class='input'>
 <span class='co'># add first problem</span>
 <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>job</span>, <span class='no'>data</span>, <span class='no'>n</span>, <span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>...</span>) <span class='fu'>rnorm</span>(<span class='no'>n</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>sd</span>)
 <span class='fu'><a href='addProblem.html'>addProblem</a></span>(<span class='st'>"rnorm"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding problem 'rnorm'</span></div><div class='input'>
@@ -184,7 +206,8 @@ Therefore, this function will warn about factor variables if the following condi
 #&gt; 1:   rnorm   average     30
 #&gt; 2:   rnorm deviation     15
 #&gt; 3:    rexp   average     10
-#&gt; 4:    rexp deviation      5</div><div class='input'><span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt;     job.id problem algorithm     n  mean    sd lambda method
+#&gt; 4:    rexp deviation      5</div><div class='input'><span class='fu'><a href='unwrap.html'>unwrap</a></span>(<span class='fu'><a href='getJobTable.html'>getJobPars</a></span>(<span class='kw'>reg</span> <span class='kw'>=</span> <span class='no'>tmp</span>))</div><div class='output co'>#&gt; Key: &lt;job.id&gt;
+#&gt;     job.id problem algorithm     n  mean    sd lambda method
 #&gt;      &lt;int&gt;  &lt;char&gt;    &lt;char&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt; &lt;char&gt;
 #&gt;  1:      1   rnorm   average   100    -1     1     NA   mean
 #&gt;  2:      2   rnorm   average   100    -1     1     NA median
@@ -216,21 +239,21 @@ Therefore, this function will warn about factor variables if the following condi
 #&gt; 28:     28   rnorm   average   100     1     4     NA median
 #&gt; 29:     29   rnorm   average   100     1     5     NA   mean
 #&gt; 30:     30   rnorm   average   100     1     5     NA median
-#&gt; 31:     31   rnorm deviation   100    -1     1     NA     NA
-#&gt; 32:     32   rnorm deviation   100    -1     2     NA     NA
-#&gt; 33:     33   rnorm deviation   100    -1     3     NA     NA
-#&gt; 34:     34   rnorm deviation   100    -1     4     NA     NA
-#&gt; 35:     35   rnorm deviation   100    -1     5     NA     NA
-#&gt; 36:     36   rnorm deviation   100     0     1     NA     NA
-#&gt; 37:     37   rnorm deviation   100     0     2     NA     NA
-#&gt; 38:     38   rnorm deviation   100     0     3     NA     NA
-#&gt; 39:     39   rnorm deviation   100     0     4     NA     NA
-#&gt; 40:     40   rnorm deviation   100     0     5     NA     NA
-#&gt; 41:     41   rnorm deviation   100     1     1     NA     NA
-#&gt; 42:     42   rnorm deviation   100     1     2     NA     NA
-#&gt; 43:     43   rnorm deviation   100     1     3     NA     NA
-#&gt; 44:     44   rnorm deviation   100     1     4     NA     NA
-#&gt; 45:     45   rnorm deviation   100     1     5     NA     NA
+#&gt; 31:     31   rnorm deviation   100    -1     1     NA   &lt;NA&gt;
+#&gt; 32:     32   rnorm deviation   100    -1     2     NA   &lt;NA&gt;
+#&gt; 33:     33   rnorm deviation   100    -1     3     NA   &lt;NA&gt;
+#&gt; 34:     34   rnorm deviation   100    -1     4     NA   &lt;NA&gt;
+#&gt; 35:     35   rnorm deviation   100    -1     5     NA   &lt;NA&gt;
+#&gt; 36:     36   rnorm deviation   100     0     1     NA   &lt;NA&gt;
+#&gt; 37:     37   rnorm deviation   100     0     2     NA   &lt;NA&gt;
+#&gt; 38:     38   rnorm deviation   100     0     3     NA   &lt;NA&gt;
+#&gt; 39:     39   rnorm deviation   100     0     4     NA   &lt;NA&gt;
+#&gt; 40:     40   rnorm deviation   100     0     5     NA   &lt;NA&gt;
+#&gt; 41:     41   rnorm deviation   100     1     1     NA   &lt;NA&gt;
+#&gt; 42:     42   rnorm deviation   100     1     2     NA   &lt;NA&gt;
+#&gt; 43:     43   rnorm deviation   100     1     3     NA   &lt;NA&gt;
+#&gt; 44:     44   rnorm deviation   100     1     4     NA   &lt;NA&gt;
+#&gt; 45:     45   rnorm deviation   100     1     5     NA   &lt;NA&gt;
 #&gt; 46:     46    rexp   average   100    NA    NA      1   mean
 #&gt; 47:     47    rexp   average   100    NA    NA      1 median
 #&gt; 48:     48    rexp   average   100    NA    NA      2   mean
@@ -241,11 +264,11 @@ Therefore, this function will warn about factor variables if the following condi
 #&gt; 53:     53    rexp   average   100    NA    NA      4 median
 #&gt; 54:     54    rexp   average   100    NA    NA      5   mean
 #&gt; 55:     55    rexp   average   100    NA    NA      5 median
-#&gt; 56:     56    rexp deviation   100    NA    NA      1     NA
-#&gt; 57:     57    rexp deviation   100    NA    NA      2     NA
-#&gt; 58:     58    rexp deviation   100    NA    NA      3     NA
-#&gt; 59:     59    rexp deviation   100    NA    NA      4     NA
-#&gt; 60:     60    rexp deviation   100    NA    NA      5     NA
+#&gt; 56:     56    rexp deviation   100    NA    NA      1   &lt;NA&gt;
+#&gt; 57:     57    rexp deviation   100    NA    NA      2   &lt;NA&gt;
+#&gt; 58:     58    rexp deviation   100    NA    NA      3   &lt;NA&gt;
+#&gt; 59:     59    rexp deviation   100    NA    NA      4   &lt;NA&gt;
+#&gt; 60:     60    rexp deviation   100    NA    NA      5   &lt;NA&gt;
 #&gt;     job.id problem algorithm     n  mean    sd lambda method</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -271,11 +294,14 @@ Therefore, this function will warn about factor variables if the following condi
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

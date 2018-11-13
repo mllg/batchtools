@@ -18,41 +18,36 @@
 #' Note that you might have to specify the cluster name here if you do not want to use the default,
 #' otherwise the commands for listing and killing jobs will not work.
 #'
-#' @templateVar cf.name slurm
 #' @template template
-#' @param clusters [\code{character(1)}]\cr
-#'  If multiple clusters are managed by one Slurm system, the name of one cluster has to be specified.
-#'  If only one cluster is present, this argument may be omitted.
-#'  Note that you should not select the cluster in your template file via \code{#SBATCH --clusters}.
 #' @param array.jobs [\code{logical(1)}]\cr
 #'  If array jobs are disabled on the computing site, set to \code{FALSE}.
-#' @param nodename [\code{character(1)}]\cr
-#'  Nodename of the master. All commands are send via SSH to this host. Only works iff
-#'  \enumerate{
-#'    \item{Passwordless authentication (e.g., via SSH public key authentication) is set up.}
-#'    \item{The file directory is shared across machines, e.g. mounted via SSHFS.}
-#'    \item{The absolute path to the \code{file.dir} are identical on the machines, or paths are provided relative to the
-#'      home directory.}
-#'  }
+#' @template nodename
 #' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.jobs = TRUE, nodename = "localhost", scheduler.latency = 1, fs.latency = 65) { # nocov start
-  if (!is.null(clusters))
-    assertString(clusters, min.chars = 1L)
+makeClusterFunctionsSlurm = function(template = "slurm", array.jobs = TRUE, nodename = "localhost", scheduler.latency = 1, fs.latency = 65) { # nocov start
   assertFlag(array.jobs)
   assertString(nodename)
   template = findTemplateFile(template)
+  if (testScalarNA(template))
+    stopf("Argument 'template' (=\"%s\") must point to a readable template file", template)
   template = cfReadBrewTemplate(template, "##")
+  quote = if (isLocalHost(nodename)) identity else shQuote
+
+  getClusters = function(reg) {
+    clusters = filterNull(lapply(reg$resources$resources, "[[", "cluster"))
+    if (length(clusters))
+      return(stri_flatten(unique(as.character(clusters)), ","))
+    return(character(0L))
+  }
 
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
 
-    jc$clusters = clusters
     if (jc$array.jobs) {
-      logs = sprintf("%s_%i", basename(jc$log.file), seq_row(jc$jobs))
+      logs = sprintf("%s_%i", fs::path_file(jc$log.file), seq_row(jc$jobs))
       jc$log.file = stri_join(jc$log.file, "_%a")
     }
     outfile = cfBrewTemplate(reg, template, jc)
@@ -83,28 +78,32 @@ makeClusterFunctionsSlurm = function(template = "slurm", clusters = NULL, array.
 
   listJobs = function(reg, args) {
     assertRegistry(reg, writeable = FALSE)
+    args = c(args, "--noheader", "--format=%i")
     if (array.jobs)
       args = c(args, "-r")
+    clusters = getClusters(reg)
+    if (length(clusters))
+      args = c(args, sprintf("--clusters=%s", clusters))
     res = runOSCommand("squeue", args, nodename = nodename)
     if (res$exit.code > 0L)
       OSError("Listing of jobs failed", res)
-    if (!is.null(clusters)) tail(res$output, -1L) else res$output
+    if (length(clusters)) tail(res$output, -1L) else res$output
   }
 
   listJobsQueued = function(reg) {
-    args = c("-h", "-o %i", "-u $USER", "-t PD", sprintf("--clusters=%s", clusters))
+    args = c(quote("--user=$USER"), "--states=PD")
     listJobs(reg, args)
   }
 
   listJobsRunning = function(reg) {
-    args = c("-h", "-o %i", "-u $USER", "-t R,S,CG", sprintf("--clusters=%s", clusters))
+    args = c(quote("--user=$USER"), "--states=R,S,CG")
     listJobs(reg, args)
   }
 
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-    cfKillJob(reg, "scancel", c(sprintf("--clusters=%s", clusters), batch.id), nodename = nodename)
+    cfKillJob(reg, "scancel", c(sprintf("--clusters=%s", getClusters(reg)), batch.id), nodename = nodename)
   }
 
   makeClusterFunctions(name = "Slurm", submitJob = submitJob, killJob = killJob, listJobsRunning = listJobsRunning,

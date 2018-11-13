@@ -34,10 +34,7 @@
 ##  list-jobs FILEDIR
 ##   Return the PIDs of running R jobs operating on $FILEDIR/jobs.
 
-### efficient [ -n `which [prog]` ]
-command_exists () {
-    hash "$1" 2> /dev/null;
-}
+echo "[bt] --BOF--"
 
 CMD="$1"; shift
 export LC_ALL=C ### Avoid any localization issues.
@@ -46,14 +43,15 @@ shopt -s nocasematch ### Case insensitive regular expressions
 case $CMD in
     number-of-cpus)
         if [[ `uname` =~ "Linux" ]]; then
-          cat /proc/cpuinfo | grep '^processor' | wc -l
+          NCPU=`cat /proc/cpuinfo | grep '^processor' | wc -l`
         else ## darwin
-          sysctl -n hw.ncpu
+          NCPU=`sysctl -n hw.ncpu`
         fi
+        echo "[bt]" $NCPU
         ;;
     start-job)
         Rscript -e "batchtools::doJobCollection('$1')" > "$2" 2>&1 &
-        echo $!
+        echo "[bt]" $!
         ;;
     kill-job)
         kill -TERM $1 > /dev/null 2> /dev/null
@@ -75,11 +73,13 @@ case $CMD in
           {rprocs++}
           $1 > 50.0 {rprocs_50++}
           $0 ~ j {njobs++}
-          END {print sysload " " rprocs " " rprocs_50 " " njobs}'
+          END {print "[bt] " sysload " " rprocs " " rprocs_50 " " njobs}'
         ;;
     list-jobs)
         JOBDIR="$1/jobs"
-        ps -e -ww -o pid= -o ucomm= -o command= | awk -v j=$JOBDIR '$2 == "R" && $0 ~ j { print $1 }'
+        ps -e -ww -o pid= -o ucomm= -o command= | awk -v j=$JOBDIR '$2 == "R" && $0 ~ j { print "[bt] " $1 }'
         ;;
     *)
 esac
+
+echo "[bt] --EOF--"

@@ -24,7 +24,9 @@
 #'   On the other hand, network file systems often require several seconds for new files to be found,
 #'   which can lead to false positives in the detection heuristic.
 #'   \code{waitForJobs} treats such jobs as expired after they have not been detected on the system
-#'   for \code{expire.after} iterations (default 3 iterations).
+#'   for \code{expire.after} iterations.
+#'   If not provided (\code{NULL}), tries to read the value from the configuration file (stored in \code{reg$expire.after}),
+#'   and finally defaults to \code{3}.
 #' @param stop.on.error [\code{logical(1)}]\cr
 #'   Immediately cancel if a job terminates with an error? Default is
 #'   \code{FALSE}.
@@ -36,12 +38,20 @@
 #'   successfully and \code{FALSE} if either the timeout is reached or at least
 #'   one job terminated with an exception or expired.
 #' @export
-waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after = 3L, stop.on.error = FALSE, stop.on.expire = FALSE, reg = getDefaultRegistry()) {
+waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after = NULL, stop.on.error = FALSE, stop.on.expire = FALSE, reg = getDefaultRegistry()) {
+  waitForResults = function(ids) {
+    waitForFiles(
+      fs::path(reg$file.dir, "results"),
+      sprintf("%i.rds", .findDone(reg, ids)$job.id),
+      reg$cluster.functions$fs.latency
+    )
+  }
+
   assertRegistry(reg, sync = TRUE)
   assertNumber(timeout, lower = 0)
-  assertCount(expire.after, positive = TRUE)
   assertFlag(stop.on.error)
   assertFlag(stop.on.expire)
+  expire.after = assertCount(expire.after, positive = TRUE, null.ok = TRUE) %??% reg$expire.after %??% 3L
   sleep = getSleepFunction(reg, sleep)
   ids = convertIds(reg, ids, default = .findSubmitted(reg = reg))
 
@@ -69,7 +79,7 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
     if (ids[!(terminated) & expire.counter <= expire.after, .N] == 0L) {
       "!DEBUG [waitForJobs]: All jobs terminated"
       pb$update(1)
-      waitForResults(reg, ids)
+      waitForResults(ids)
       return(nrow(.findDone(reg, ids)) == nrow(ids))
     }
 
@@ -92,7 +102,7 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
     if (stop.on.expire && ids[!(terminated) & expire.counter > expire.after, .N] > 0L) {
       warning("Jobs disappeared from the system")
       pb$update(1)
-      waitForResults(reg, ids)
+      waitForResults(ids)
       return(FALSE)
     }
 
@@ -109,4 +119,3 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
       saveRegistry(reg)
   }
 }
-

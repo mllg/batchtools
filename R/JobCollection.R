@@ -34,6 +34,7 @@
 #' @rdname JobCollection
 #' @export
 #' @examples
+#' \dontshow{ batchtools:::example_push_temp(1) }
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE, packages = "methods")
 #' batchMap(identity, 1:5, reg = tmp)
 #'
@@ -54,7 +55,7 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$work.dir     = reg$work.dir
   jc$seed         = reg$seed
   jc$uri          = getJobFiles(reg, hash = jc$job.hash)
-  jc$log.file     = fp(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
+  jc$log.file     = fs::path(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
   jc$packages     = reg$packages
   jc$namespaces   = reg$namespaces
   jc$source       = reg$source

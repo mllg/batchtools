@@ -1,16 +1,17 @@
 Package: batchtools
 Title: Tools for Computation on Batch Systems
-Version: 0.9.8
+Version: 0.9.11
 Authors@R: c(
     person("Michel", "Lang", NULL, "michellang@gmail.com",
       role = c("cre", "aut"), comment = c(ORCID = "0000-0001-9754-0393")),
     person("Bernd", "Bischl", NULL, "bernd_bischl@gmx.de", role = "aut"),
-    person("Dirk", "Surmann", NULL, "surmann@statistik.tu-dortmund.de", role = "ctb")
+    person("Dirk", "Surmann", NULL, "surmann@statistik.tu-dortmund.de",
+      role = "ctb", comment = c(ORCID = "0000-0003-0873-137X"))
     )
 Description: As a successor of the packages 'BatchJobs' and 'BatchExperiments',
     this package provides a parallel implementation of the Map function for high
     performance computing systems managed by schedulers 'IBM Spectrum LSF'
-    (<http://www-03.ibm.com/systems/spectrum-computing/products/lsf/>),
+    (<https://www.ibm.com/us-en/marketplace/hpc-workload-management>),
     'OpenLava' (<http://www.openlava.org/>), 'Univa Grid Engine'/'Oracle Grid
     Engine' (<http://www.univa.com/>), 'Slurm' (<http://slurm.schedmd.com/>),
     'TORQUE/PBS'
@@ -25,15 +26,17 @@ URL: https://github.com/mllg/batchtools
 BugReports: https://github.com/mllg/batchtools/issues
 NeedsCompilation: yes
 ByteCompile: yes
+Encoding: UTF-8
 Depends:
     R (>= 3.0.0),
-    data.table (>= 1.10.4)
+    data.table (>= 1.11.2)
 Imports:
     backports (>= 1.1.2),
     base64url (>= 1.1),
     brew,
     checkmate (>= 1.8.5),
     digest (>= 0.6.9),
+    fs (>= 1.2.0),
     parallel,
     progress (>= 1.1.1),
     R6,
@@ -50,6 +53,7 @@ Suggests:
     jsonlite,
     RCurl,
     foreach,
+    future,
     future.batchtools,
     knitr,
     parallelMap,
@@ -60,4 +64,4 @@ Suggests:
     testthat,
     tibble
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

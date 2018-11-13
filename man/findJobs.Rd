@@ -46,7 +46,8 @@ findQueued(ids = NULL, reg = getDefaultRegistry())
 
 findExpired(ids = NULL, reg = getDefaultRegistry())
 
-findTagged(tags = character(0L), ids = NULL, reg = getDefaultRegistry())
+findTagged(tags = character(0L), ids = NULL,
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{expr}{[\code{expression}]\cr
@@ -105,6 +106,7 @@ and may report misleading results, depending on the state of the system and the 
 See \code{\link{JoinTables}} for convenient set operations (unions, intersects, differences) on tables with job ids.
 }
 \examples{
+\dontshow{ batchtools:::example_push_temp(1) }
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 batchMap(identity, i = 1:3, reg = tmp)
 ids = findNotSubmitted(reg = tmp)
