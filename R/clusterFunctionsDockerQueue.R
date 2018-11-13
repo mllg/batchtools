@@ -91,15 +91,16 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
+    this.batch.id = batch.id
     df.queued = dfJobsQueued(reg)
-    if (batch.id %in% df.queued$batch.id) {
-      id = df.queued[get(batch.id) == batch.id]$schedule.id
+    if (this.batch.id %in% df.queued$batch.id) {
+      id = df.queued[batch.id == this.batch.id]$schedule.id
       curl.res = runOSCommand("curl", c("-XDELETE", "-k", "-s", curl.args, sprintf("%s/jobs/%i/delete", docker.scheduler.url, id)))
       success = stri_startswith_fixed(curl.res$output, "Successfully deleted")
     } else {
       df.running = dfJobsRunning(reg)
-      if (batch.id %in% df.running$batch.id) {
-        docker.id = df.running[get(batch.id) == batch.id]$docker.id
+      if (this.batch.id %in% df.running$batch.id) {
+        docker.id = df.running[batch.id == this.batch.id]$docker.id
         success = cfKillJob(reg, "docker", c(docker.args, "kill", docker.id))
       } else {
         success = FALSE
