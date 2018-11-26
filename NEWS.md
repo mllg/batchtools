@@ -4,6 +4,7 @@
 * New default for argument `fs.timeout` in the cluster function constructor is `0` (was `NA` before).
 * Fixed a unit test for OSX.
 * Improved stability and documentation.
+* Fixed memory usage calculation.
 
 # batchtools 0.9.10
 
