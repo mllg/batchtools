@@ -146,6 +146,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   reg$seed = seed
   reg$writeable = TRUE
   reg$version = packageVersion("batchtools")
+  reg$sharding = TRUE
 
   reg$defs = data.table(
     def.id    = integer(0L),
