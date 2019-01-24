@@ -33,8 +33,13 @@ makeClusterFunctionsDockerQueue = function(image, docker.args = character(0L), i
     assertIntegerish(jc$resources$memory, lower = 1L, any.missing = FALSE, .var.name = "resources$memory")
     timeout = if (is.null(jc$resources$walltime)) character(0L) else sprintf("timeout %i", asInt(jc$resources$walltime, lower = 0L))
 
+    # https://sfb876.tu-dortmund.de/sfbwiki/Wiki.jsp?page=Cluster
+    jc$resources$nodetype = jc$resources$nodetype %??% "==~cpu"
+    assertChoice(jc$resources$nodetype, c("==phi", "==~cpu", "!=phi"), null.ok = TRUE)
+
     batch.id = sprintf("%s-bt_%s", user, jc$job.hash)
     cmd = c("docker", docker.args, "create", "--label queue", "--label rm", image.args,
+      sprintf("-e constraint:nodetype%s", jc$resources$nodetype),
       sprintf("-e DEBUGME='%s'", Sys.getenv("DEBUGME")),
       sprintf("-e OMP_NUM_THREADS=%i", jc$resources$threads %??% 1L),
       sprintf("-e OPENBLAS_NUM_THREADS=%i", jc$resources$threads %??% 1L),
