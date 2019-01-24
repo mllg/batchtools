@@ -150,7 +150,7 @@ doJobCollection.JobCollection = function(jc, output = NULL) {
     if (measure.memory) {
       gc(reset = TRUE)
       result = try(execJob(job))
-      update$mem.used = sum(gc()[, 6L] * memory.mult)
+      update$mem.used = sum(gc()[, 1L] * memory.mult) / 1000000L
     } else {
       result = try(execJob(job))
     }
