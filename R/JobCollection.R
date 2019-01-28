@@ -47,15 +47,17 @@ makeJobCollection = function(ids = NULL, resources = list(), reg = getDefaultReg
 }
 
 createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()) {
+  hash = rnd_hash("job")
+  shard = if(isTRUE(reg$sharding)) stri_sub(hash, 4L, 5L) else ""
   jc              = new.env(parent = emptyenv())
   jc$jobs         = setkeyv(jobs, "job.id")
-  jc$job.hash     = rnd_hash("job")
-  jc$job.name     = if (anyMissing(jobs$job.name)) jc$job.hash else jobs$job.name[1L]
+  jc$job.hash     = hash
+  jc$job.name     = if (anyMissing(jobs$job.name)) hash else jobs$job.name[1L]
   jc$file.dir     = reg$file.dir
   jc$work.dir     = reg$work.dir
   jc$seed         = reg$seed
-  jc$uri          = getJobFiles(reg, hash = jc$job.hash)
-  jc$log.file     = fs::path(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
+  jc$uri          = getJobFiles(reg, hash = hash)
+  jc$log.file     = fs::path(reg$file.dir, "logs", shard, sprintf("%s.log", hash))
   jc$packages     = reg$packages
   jc$namespaces   = reg$namespaces
   jc$source       = reg$source
@@ -68,6 +70,9 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   hooks = chintersect(names(reg$cluster.functions$hooks), batchtools$hooks$remote)
   if (length(hooks) > 0L)
     jc$hooks = reg$cluster.functions$hooks[hooks]
+
+  fs::dir_create(fs::path_dir(jc$log.file))
+
   return(jc)
 }
 
