@@ -26,7 +26,7 @@ log.file = fs::path_expand(log.file)
 #SBATCH --job-name=<%= job.name %>
 #SBATCH --output=<%= log.file %>
 #SBATCH --error=<%= log.file %>
-#SBATCH --time=<%= ceiling(resources$walltime / 60) %>
+#SBATCH --time=<%= ceiling(resources$walltime) %>
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=<%= resources$ncpus %>
 #SBATCH --mem-per-cpu=<%= resources$memory %>
