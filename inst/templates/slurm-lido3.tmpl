@@ -5,7 +5,7 @@
 ## ncpus [integer(1)]:        Number of required cpus per task,
 ##                            Set larger than 1 if you want to further parallelize
 ##                            with multicore/parallel within each task.
-## walltime [integer(1)]:     Walltime for this job, in minutes.
+## walltime [integer(1)]:     Walltime for this job, in seconds.
 ##                            Must be at least 1 minute.
 ## memory   [integer(1)]:     Memory in megabytes for each cpu.
 ##                            Must be at least 100 (when I tried lower values my
@@ -17,7 +17,7 @@
 <%
 
 # queue
-walltime = asInt(resources$walltime, lower = 1L, upper = 31L * 24L * 60L * 60L)
+walltime = asInt(resources$walltime, lower = 60L, upper = 31L * 24L * 60L * 60L)
 memory = asInt(resources$memory, lower = 100L, upper = 1024L * 1024L)
 walltimes = c(2L, 8L, 48L, 672L) * 3600L
 queue = c("short", "med", "long", "ultralong")[wf(walltime <= walltimes)]
