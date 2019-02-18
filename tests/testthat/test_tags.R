@@ -3,6 +3,10 @@ context("Tags")
 test_that("tags work", {
   reg = makeTestRegistry()
   batchMap(identity, 1:10, reg = reg)
+  expect_equal(getUsedJobTags(reg = reg), character())
+  expect_data_table(findTagged(tag = "foo", reg = reg), nrow = 0, ncol = 1)
+  expect_data_table(removeJobTags(reg = reg, tags = "foo"), nrow = 0, ncol = 1)
+
   expect_data_table(addJobTags(1:4, "walltime", reg = reg), nrow = 4, key = "job.id")
   expect_data_table(addJobTags(3:7, "broken", reg = reg), nrow = 5, key = "job.id")
   expect_set_equal(getUsedJobTags(reg = reg), c("walltime", "broken"))
