@@ -10,11 +10,11 @@
 #'   \item{\code{post.submit.job}}{\code{function(reg, ...)}: Run after a job is successfully submitted to the scheduler on the master.}
 #'   \item{\code{pre.submit}}{\code{function(reg, ...)}: Run before any job is submitted to the scheduler.}
 #'   \item{\code{post.submit}}{\code{function(reg, ...)}: Run after a jobs are submitted to the schedule.}
-#'   \item{\code{pre.do.collection}}{\code{function(reg, cache, ...)}: Run before starting the job collection on the slave.
-#'     \code{cache} is an internal cache object.}
-#'   \item{\code{post.do.collection}}{\code{function(reg, updates, cache, ...)}: Run after all jobs in the chunk are terminated on the slave.
+#'   \item{\code{pre.do.collection}}{\code{function(reg, reader, ...)}: Run before starting the job collection on the slave.
+#'     \code{reader} is an internal cache object.}
+#'   \item{\code{post.do.collection}}{\code{function(reg, updates, reader, ...)}: Run after all jobs in the chunk are terminated on the slave.
 #'     \code{updates} is a \code{\link{data.table}} of updates which will be merged with the \code{\link{Registry}} by the master.
-#'     \code{cache} is an internal cache object.}
+#'     \code{reader} is an internal cache object.}
 #'   \item{\code{pre.kill}}{\code{function(reg, ids, ...)}: Run before any job is killed.}
 #'   \item{\code{post.kill}}{\code{function(reg, ids, ...)}: Run after jobs are killed. \code{ids} is the return value of \code{\link{killJobs}}.}
 #' }
