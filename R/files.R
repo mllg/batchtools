@@ -26,8 +26,9 @@ getLogFiles = function(reg, ids) {
   tab[is.na(log.file) & !is.na(job.hash), log.file := sprintf("%s.log", job.hash)]
 
   tab[!is.na(log.file),
-    fs::path(dir(reg, "logs"), if(isTRUE(reg$sharding)) stri_sub(job.hash, 4L, 5L) else "", log.file)
+    log.file := fs::path(dir(reg, "logs"), if(isTRUE(reg$sharding)) stri_sub(job.hash, 4L, 5L) else "", log.file)
   ]
+  tab$log.file
 }
 
 getJobFiles = function(reg, hash) {

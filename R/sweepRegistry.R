@@ -11,10 +11,10 @@
 sweepRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg, writeable = TRUE, sync = TRUE, running.ok = FALSE)
   "!DEBUG [sweepRegistry]: Running sweepRegistry"
-
   submitted = reg$status[.findSubmitted(reg = reg), c("job.id", "job.hash")]
+
   obsolete = chsetdiff(
-    list.files(dir(reg, "results"), full.names = TRUE),
+    fs::dir_ls(dir(reg, "results"), all = TRUE, recursive = TRUE, type = "file"),
     getResultFiles(reg, submitted)
   )
   if (length(obsolete)) {
@@ -23,7 +23,7 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
   }
 
   obsolete = chsetdiff(
-    list.files(dir(reg, "logs"), full.names = TRUE),
+    fs::dir_ls(dir(reg, "logs"), all = TRUE, recursive = TRUE, type = "file"),
     getLogFiles(reg, submitted)
   )
   if (length(obsolete)) {
@@ -31,20 +31,20 @@ sweepRegistry = function(reg = getDefaultRegistry()) {
     fs::file_delete(obsolete)
   }
 
-  obsolete = list.files(dir(reg, "jobs"), pattern = "\\.rds", full.names = TRUE)
+  obsolete = fs::dir_ls(dir(reg, "jobs"), all = TRUE, glob = "*.rds", type = "file")
   if (length(obsolete)) {
     info("Removing %i obsolete job collection files ...", length(obsolete))
     fs::file_delete(obsolete)
   }
 
-  obsolete = list.files(dir(reg, "jobs"), pattern = "\\.job$", full.names = TRUE)
+  obsolete = fs::dir_ls(dir(reg, "jobs"), all = TRUE, glob = "*.job", type = "file")
   if (length(obsolete)) {
     info("Removing %i job description files ...", length(obsolete))
     fs::file_delete(obsolete)
   }
 
   obsolete = chsetdiff(
-    list.files(dir(reg, "external"), pattern = "^[0-9]+$", full.names = TRUE),
+    fs::dir_ls(dir(reg, "external"), type = "directory"),
     getExternalDirs(reg, submitted)
   )
   if (length(obsolete)) {

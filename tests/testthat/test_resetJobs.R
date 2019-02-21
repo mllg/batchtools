@@ -15,9 +15,10 @@ test_that("resetJobs", {
   expect_file_exists(getResultFiles(reg, 1))
   expect_equal(unname(fs::dir_exists(fs::path(reg$file.dir, "external", 1:3))), c(TRUE, FALSE, TRUE))
 
+  fn = getResultFiles(reg, 1)
   resetJobs(1, reg = reg)
   expect_true(all.equal(before$status[1], reg$status[1]))
-  expect_false(fs::file_exists(getResultFiles(reg, 1)))
+  expect_false(fs::file_exists(fn))
   expect_true(fs::file_exists(getResultFiles(reg, 3)))
   expect_file_exists(getLogFiles(reg, 3))
   expect_equal(unname(fs::dir_exists(fs::path(reg$file.dir, "external", 1:3))), c(FALSE, FALSE, TRUE))

@@ -1,6 +1,23 @@
 # use list.files() here as this seems to trick the nfs cache
 # see https://github.com/mllg/batchtools/issues/85
-waitForFiles = function(path, fns, timeout = 0) {
+waitForFiles = function(fns, timeout = 0) {
+  waitForPath = function(path, fns) {
+    fns = chsetdiff(fns, list.files(path, all.files = TRUE))
+    if (length(fns) == 0L)
+      return(TRUE)
+
+    timeout = timeout + Sys.time()
+    repeat {
+      Sys.sleep(0.5)
+      fns = chsetdiff(fns, list.files(path, all.files = TRUE))
+      if (length(fns) == 0L)
+        return(TRUE)
+      if (Sys.time() > timeout)
+        stopf("Timeout while waiting for %i files, e.g. '%s'", length(fns), fns[1L])
+    }
+  }
+  assert_character(fns, any.missing = FALSE)
+
   if (timeout == 0)
     return(TRUE)
 
@@ -9,19 +26,9 @@ waitForFiles = function(path, fns, timeout = 0) {
     return(TRUE)
 
   "!DEBUG [waitForFiles]: `length(fns)` files not found via 'file.exists()'"
-  fns = chsetdiff(fns, list.files(path, all.files = TRUE))
-  if (length(fns) == 0L)
-    return(TRUE)
-
-  timeout = timeout + Sys.time()
-  repeat {
-    Sys.sleep(0.5)
-    fns = chsetdiff(fns, list.files(path, all.files = TRUE))
-    if (length(fns) == 0L)
-      return(TRUE)
-    if (Sys.time() > timeout)
-      stopf("Timeout while waiting for %i files, e.g. '%s'", length(fns), fns[1L])
-  }
+  p = data.table(path = fs::path_dir(fns), fn = fs::path_file(fns))
+  p[, waitForPath(path, fn), by = "path"]
+  invisible(TRUE)
 }
 
 waitForFile = function(fn, timeout = 0, must.work = TRUE) {

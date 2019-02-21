@@ -136,9 +136,9 @@ test_that("clearRegistry", {
   clearRegistry(reg)
   checkTables(reg, nrow = 0L)
 
-  expect_identical(list.files(dir(reg, "jobs")), character(0))
-  expect_identical(list.files(dir(reg, "logs")), character(0))
-  expect_identical(list.files(dir(reg, "results")), character(0))
+  expect_character(fs::dir_ls(dir(reg, "jobs"), type = "file", recursive = TRUE), len = 0)
+  expect_character(fs::dir_ls(dir(reg, "logs"), type = "file", recursive = TRUE), len = 0)
+  expect_identical(fs::dir_ls(dir(reg, "results")), character(0))
   expect_identical(list.files(dir(reg, "updates")), character(0))
   expect_false(fs::file_exists(fs::path(reg$file.dir, "user.function.rds")))
 

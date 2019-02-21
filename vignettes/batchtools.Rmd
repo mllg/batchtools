@@ -393,7 +393,7 @@ If everything turns out fine, we can proceed with the calculation.
 ## Submitting and Collecting Results
 
 To submit the jobs, we call [`submitJobs()`](https://mllg.github.io/batchtools/reference/submitJobs) and wait for all jobs to terminate using [`waitForJobs()`](https://mllg.github.io/batchtools/reference/waitForJobs).
-```{r}
+```{r, R.options=list(batchtools.verbose=FALSE)}
 submitJobs()
 waitForJobs()
 ```

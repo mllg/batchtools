@@ -41,8 +41,7 @@
 waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after = NULL, stop.on.error = FALSE, stop.on.expire = FALSE, reg = getDefaultRegistry()) {
   waitForResults = function(ids) {
     waitForFiles(
-      fs::path(reg$file.dir, "results"),
-      sprintf("%i.rds", .findDone(reg, ids)$job.id),
+      getResultFiles(reg, .findDone(reg, ids)$job.id),
       reg$cluster.functions$fs.latency
     )
   }

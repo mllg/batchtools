@@ -23,8 +23,6 @@ removeExperiments = function(ids = NULL, reg = getDefaultRegistry()) {
     info("Removing %i job definitions ...", length(i))
     reg$defs = reg$defs[-i]
   }
-  fns = getResultFiles(reg, ids)
-  file_remove(fns)
 
   sweepRegistry(reg)
   invisible(ids)

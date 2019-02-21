@@ -52,7 +52,7 @@ findJobs = function(expr, ids = NULL, reg = getDefaultRegistry()) {
   ee = parent.frame()
   fun = function(pars) eval(expr, pars, enclos = ee)
   job.pars = NULL
-  setkeyv(mergedJobs(reg, ids, c("job.id", "job.pars"))[vlapply(job.pars, fun), "job.id"], "job.id")
+  setkeyv(mergedJobs(reg, ids, c("job.id", "job.pars"))[vlapply(job.pars, fun), "job.id"], "job.id")[]
 }
 
 #' @export
