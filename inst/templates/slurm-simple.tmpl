@@ -8,8 +8,8 @@
 ## ncpus [integer(1)]:        Number of required cpus per task,
 ##                            Set larger than 1 if you want to further parallelize
 ##                            with multicore/parallel within each task.
-## walltime [integer(1)]:     Walltime for this job, in minutes.
-##                            Must be at least 1 minute.
+## walltime [integer(1)]:     Walltime for this job, in seconds.
+##                            Must be at least 60 seconds for Slurm to work properly.
 ## memory   [integer(1)]:     Memory in megabytes for each cpu.
 ##                            Must be at least 100 (when I tried lower values my
 ##                            jobs did not start at all).
