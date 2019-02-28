@@ -83,7 +83,5 @@ removeJobTags = function(ids = NULL, tags, reg = getDefaultRegistry()) {
 getUsedJobTags = function(ids = NULL, reg = getDefaultRegistry()) {
   assertRegistry(reg)
   ids = convertIds(reg, ids)
-
-  tag = NULL
-  filter(reg$tags, ids)[, unique(tag), on = "job.id", nomatch = 0L]
+  unique(filter(reg$tags, ids), by = "tag")$tag
 }

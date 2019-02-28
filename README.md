@@ -64,6 +64,7 @@ Please cite the [JOSS paper](https://doi.org/10.21105/joss.00135) using the foll
 
 ## Related Software
 * The [High Performance Computing Task View](https://cran.r-project.org/view=HighPerformanceComputing) lists the most relevant packages for scientific computing with R.
+* [clustermq](https://cran.r-project.org/package=clustermq) is a similar approach which also supports multiple schedulers. Uses the ZeroMQ network protocol for communication, and shines if you have millions of fast jobs.
 * [batch](https://cran.r-project.org/package=batch) assists in splitting and submitting jobs to LSF and MOSIX clusters.
 * [flowr](https://cran.r-project.org/package=flowr) supports LSF, Slurm, TORQUE and Moab and provides a scatter-gather approach to define computational jobs.
 * [future.batchtools](https://cran.r-project.org/package=future.batchtools) implements `batchtools` as backend for [future](https://cran.r-project.org/package=future.batchtools).
