@@ -55,13 +55,15 @@ mergeRegistries = function(source, target = getDefaultRegistry()) {
   info("Merging %i jobs ...", nrow(status))
 
   src = getResultFiles(source, status)
-  dst = fs::path(dir(target, "results"), fs::path_file(src))
+  dst = fs::path(target$file.dir, fs::path_rel(src, start = source$file.dir))
   info("Copying %i result files ...", length(src))
+  fs::dir_create(fs::path_dir(dst))
   fs::file_copy(src, dst, overwrite = TRUE)
 
   src = getLogFiles(source, status)
-  dst = fs::path(dir(target, "logs"), fs::path_file(src))
+  dst = fs::path(target$file.dir, fs::path_rel(src, start = source$file.dir))
   info("Copying %i log files ...", length(src))
+  fs::dir_create(fs::path_dir(dst))
   fs::file_copy(src, dst, overwrite = TRUE)
 
   ext.dirs = as.integer(chintersect(list.files(dir(source, "external")), as.character(status$job.id)))

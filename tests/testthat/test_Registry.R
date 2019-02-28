@@ -138,8 +138,8 @@ test_that("clearRegistry", {
 
   expect_character(fs::dir_ls(dir(reg, "jobs"), type = "file", recursive = TRUE), len = 0)
   expect_character(fs::dir_ls(dir(reg, "logs"), type = "file", recursive = TRUE), len = 0)
-  expect_identical(fs::dir_ls(dir(reg, "results")), character(0))
-  expect_identical(list.files(dir(reg, "updates")), character(0))
+  expect_character(fs::dir_ls(dir(reg, "results"), type = "file", recursive = TRUE), len = 0)
+  expect_character(fs::dir_ls(dir(reg, "updates")), len = 0)
   expect_false(fs::file_exists(fs::path(reg$file.dir, "user.function.rds")))
 
   expect_identical(batchMap(identity, 1:4, reg = reg), data.table(job.id = 1:4, key = "job.id"))
