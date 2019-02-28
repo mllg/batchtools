@@ -7,21 +7,20 @@ test_that("sweepRegistry", {
 
   submitAndWait(reg, 1, resources = list(foo = 1))
   submitAndWait(reg, 1, resources = list(foo = 2))
-  writeRDS(makeJobCollection(1, reg = reg), fs::path(reg$file.dir, "jobs", "test.rds"))
 
   expect_data_table(reg$resources, nrow = 2)
-  expect_character(list.files(dir(reg, "logs")), len = 2L)
-  expect_character(list.files(fs::path(reg$file.dir, "jobs"), pattern = "\\.rds$"), len = 1L + (array.jobs && reg$cluster.functions$store.job.collection) * 2L)
-  expect_character(list.files(fs::path(reg$file.dir, "jobs"), pattern = "\\.job$"), len = (batchtools$debug && array.jobs) * 2L)
+  expect_character(fs::dir_ls(dir(reg, "logs"), recursive = TRUE, type = "file"), len = 2L)
+  writeRDS(makeJobCollection(1, reg = reg), fs::path(reg$file.dir, "jobs", "test.rds"))
+  expect_character(fs::dir_ls(dir(reg, "jobs"), glob = "*.rds", recursive = TRUE), len = 1L + (array.jobs && reg$cluster.functions$store.job.collection) * 2L)
+  expect_character(fs::dir_ls(dir(reg, "jobs"), glob = "*.job"), len = (batchtools$debug && array.jobs) * 2L)
 
   expect_true(sweepRegistry(reg))
 
   expect_data_table(reg$resources, nrow = 1)
-  expect_character(list.files(dir(reg, "logs")), len = 1L)
+  expect_character(fs::dir_ls(dir(reg, "logs"), recursive = TRUE, type = "file"), len = 1L)
   if (reg$cluster.functions$store.job.collection)
     expect_character(list.files(fs::path(reg$file.dir, "jobs")), len = 0L)
   checkTables(reg)
-
 
   reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, ...) nrow(data))
