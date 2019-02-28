@@ -37,5 +37,6 @@ test_that("traceback works in external session", {
     g(x)
   }
   batchMap(f, 1, reg = reg)
+  testJob(1, external = TRUE, reg = reg)
   expect_output(expect_error(testJob(1, external = TRUE, reg = reg), "external=FALSE"), "findme")
 })

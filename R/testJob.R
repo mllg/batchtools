@@ -39,13 +39,13 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
     fn.jc   = fs::path(td, "batchtools-testJob.jc")
     fn.res  = fs::path(td, "batchtools-testJob.rds")
 
-    writeRDS(makeJobCollection(id, reg = reg), file = fn.jc)
+    jc = makeJobCollection(id, reg = reg)
+    writeRDS(jc, file = fn.jc)
     brew(file = system.file(fs::path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE),
       output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))
 
     res = runOSCommand(Rscript(), fn.r)
 
-    writeLines(res$output)
     if (res$exit.code == 0L)
       return(readRDS(fn.res))
     stopf("testJob() failed for job with id=%i. To properly debug, re-run with external=FALSE", id$job.id)
