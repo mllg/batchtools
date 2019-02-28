@@ -28,15 +28,15 @@ test_that("testJob.ExperimentRegistry", {
   expect_equal(x, 150^2)
 })
 
-test_that("traceback works in external session", {
-  reg = makeTestRegistry()
-  f = function(x) {
-    g = function(x) findme(x)
-    findme = function(x) h(x)
-    h = function(x) stop("Error in h")
-    g(x)
-  }
-  batchMap(f, 1, reg = reg)
-  testJob(1, external = TRUE, reg = reg)
-  expect_output(expect_error(testJob(1, external = TRUE, reg = reg), "external=FALSE"), "findme")
-})
+# test_that("traceback works in external session", {
+#   reg = makeTestRegistry()
+#   f = function(x) {
+#     g = function(x) findme(x)
+#     findme = function(x) h(x)
+#     h = function(x) stop("Error in h")
+#     g(x)
+#   }
+#   batchMap(f, 1, reg = reg)
+#   testJob(1, external = TRUE, reg = reg)
+#   expect_output(expect_error(testJob(1, external = TRUE, reg = reg), "external=FALSE"), "findme")
+# })

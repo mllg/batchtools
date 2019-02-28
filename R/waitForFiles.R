@@ -27,7 +27,7 @@ waitForFiles = function(fns, timeout = 0) {
 
   "!DEBUG [waitForFiles]: `length(fns)` files not found via 'file.exists()'"
   p = data.table(path = fs::path_dir(fns), fn = fs::path_file(fns))
-  p[, waitForPath(path, fn), by = "path"]
+  p[, waitForPath(get("path"), get("fn")), by = "path"]
   invisible(TRUE)
 }
 
