@@ -106,6 +106,10 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
     }
   }
 
+  if (reg$version < "0.9.11-9000") {
+    reg$sharding = FALSE
+  }
+
   reg$version = pv
   return(TRUE)
 } # nocov end

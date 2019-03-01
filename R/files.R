@@ -9,13 +9,13 @@ getResultFiles = function(x, ids) {
 getResultFiles.Registry = function(x, ids) {
   ids = if (is.atomic(ids)) ids else ids$job.id
   hash = x$status[list(ids), "job.hash", with = FALSE][[1L]]
-  shard = if(isTRUE(x$sharding)) stri_sub(hash, 4L, 5L) else ""
+  shard = if(x$sharding) stri_sub(hash, 4L, 5L) else ""
   fs::path(dir(x, "results"), shard, sprintf("%i.rds", ids))
 }
 
 getResultFiles.JobCollection = function(x, ids) {
   ids = if (is.atomic(ids)) ids else ids$job.id
-  shard = if(isTRUE(x$sharding)) stri_sub(x$job.hash, 4L, 5L) else ""
+  shard = if(x$sharding) stri_sub(x$job.hash, 4L, 5L) else ""
   fs::path(dir(x, "results"), shard, sprintf("%i.rds", ids))
 }
 
@@ -26,13 +26,13 @@ getLogFiles = function(reg, ids) {
   tab[is.na(log.file) & !is.na(job.hash), log.file := sprintf("%s.log", job.hash)]
 
   tab[!is.na(log.file),
-    log.file := fs::path(dir(reg, "logs"), if(isTRUE(reg$sharding)) stri_sub(job.hash, 4L, 5L) else "", log.file)
+    log.file := fs::path(dir(reg, "logs"), if(reg$sharding) stri_sub(job.hash, 4L, 5L) else "", log.file)
   ]
   tab$log.file
 }
 
 getJobFiles = function(reg, hash) {
-  shard = if(isTRUE(reg$sharding)) stri_sub(hash, 4L, 5L) else ""
+  shard = if(reg$sharding) stri_sub(hash, 4L, 5L) else ""
   fs::path(reg$file.dir, "jobs", shard, sprintf("%s.rds", hash))
 }
 
