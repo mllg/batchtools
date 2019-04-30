@@ -4,6 +4,8 @@ library("checkmate")
 library("stringi")
 requireNamespace("withr")
 
+options(datatable.rbindlist.check="error")
+
 is_on_ci = function() {
   identical(Sys.getenv("APPVEYOR"), "True") || identical(Sys.getenv("TRAVIS"), "true")
 }

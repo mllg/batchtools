@@ -348,7 +348,7 @@ addResources = function(reg, resources) {
   tab = data.table(resources = resources, resource.hash = vcapply(resources, digest))
   new.tab = unique(tab, by = "resource.hash")[!reg$resources, on = "resource.hash"]
   if (nrow(new.tab)) {
-    reg$resources = rbindlist(list(reg$resources, new.tab), fill = TRUE)
+    reg$resources = rbindlist(list(reg$resources, new.tab), fill = TRUE, use.names = TRUE)
     ai(reg$resources, "resource.id")
   }
   reg$resources[tab, "resource.id", on = "resource.hash"][[1L]]
