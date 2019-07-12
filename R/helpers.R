@@ -121,10 +121,11 @@ Rscript = function() {
 }
 
 getSeed = function(start.seed, id) {
-  if (id > .Machine$integer.max - start.seed)
-    start.seed - .Machine$integer.max + id
-  else
-    start.seed + id
+  return (start.seed)
+  #if (id > .Machine$integer.max - start.seed)
+  #  start.seed - .Machine$integer.max + id
+  #else
+  #  start.seed + id
 }
 
 chsetdiff = function(x, y) {
