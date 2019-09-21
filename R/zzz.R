@@ -20,7 +20,7 @@
 #' @import utils
 #' @import checkmate
 #' @import stringi
-#' @importFrom data.table alloc.col as.data.table data.table chmatch CJ copy data.table is.data.table key rbindlist set setattr setkey setkeyv setnames setorderv uniqueN
+#' @importFrom data.table %chin% alloc.col as.data.table data.table chmatch CJ copy data.table is.data.table key rbindlist set setattr setkey setkeyv setnames setorderv uniqueN
 #' @importFrom R6 R6Class
 #' @importFrom digest digest
 #' @importFrom brew brew
@@ -30,6 +30,9 @@
 #' @importFrom base64url base32_encode base32_decode
 #' @importFrom withr with_dir with_seed local_options local_dir
 "_PACKAGE"
+
+.BY = .N = .SD = NULL
+`:=` = function(...) NULL
 
 batchtools = new.env(parent = emptyenv())
 batchtools$debug = FALSE

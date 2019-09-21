@@ -145,7 +145,7 @@
 #' fun = function(n, p) colMeans(matrix(runif(n*p), n, p))
 #'
 #' # Arguments to fun:
-#' args = CJ(n = c(1e4, 1e5), p = c(10, 50)) # like expand.grid()
+#' args = data.table::CJ(n = c(1e4, 1e5), p = c(10, 50)) # like expand.grid()
 #' print(args)
 #'
 #' # Map function to create jobs
