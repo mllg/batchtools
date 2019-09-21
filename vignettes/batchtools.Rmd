@@ -13,6 +13,7 @@ vignette: >
 
 ```{r,include = FALSE, cache = FALSE}
 library(batchtools)
+library(data.table) # for %chin%, data.table
 options(batchtools.progress = FALSE, datatable.print.class = TRUE, batchtools.timestamps = FALSE)
 if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
   tmp_dir = fs::path(dirname(tempdir()), "batchtools-vignette")
@@ -527,4 +528,3 @@ This approach is totally viable as long as some general rules are followed:
 6. Avoid accessing the `file.dir` with multiple sessions simultaneously.
    This includes accessing the registry via a mount!
    Simultaneous access may lead to inconsistencies and missing results.
-

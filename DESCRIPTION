@@ -28,13 +28,13 @@ NeedsCompilation: yes
 ByteCompile: yes
 Encoding: UTF-8
 Depends:
-    R (>= 3.0.0),
-    data.table (>= 1.11.2)
+    R (>= 3.0.0)
 Imports:
     backports (>= 1.1.2),
     base64url (>= 1.1),
     brew,
     checkmate (>= 1.8.5),
+    data.table (>= 1.11.2),
     digest (>= 0.6.9),
     fs (>= 1.2.0),
     parallel,

@@ -6,3 +6,6 @@
 /vignettes/*.pdf
 /.Rproj.user
 /batchtools.Rproj
+*.tar.gz
+*.Rcheck
+
