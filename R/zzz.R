@@ -19,8 +19,8 @@
 #' loading \pkg{batchtools}.
 #' @import utils
 #' @import checkmate
-#' @import data.table
 #' @import stringi
+#' @importFrom data.table alloc.col as.data.table data.table chmatch CJ copy data.table is.data.table key rbindlist set setattr setkey setkeyv setnames setorderv uniqueN
 #' @importFrom R6 R6Class
 #' @importFrom digest digest
 #' @importFrom brew brew
