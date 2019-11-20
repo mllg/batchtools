@@ -57,6 +57,9 @@ isLocalHost = function(nodename) {
 }
 
 OSError = function(msg, res) {
-  stopf("%s (exit code %i);\ncmd: '%s'\noutput:\n%s",
-    msg, res$exit.code, stri_flatten(c(res$sys.cmd, res$sys.args), collapse = " "), stri_flatten(res$output, "\n"))
+  cmd = stri_flatten(c(res$sys.cmd, res$sys.args), collapse = " ") %??% NA_character_
+  exit.code = res$exit.code %??% NA_integer_
+  output = stri_flatten(res$output, "\n") %??% ""
+
+  stopf("%s (exit code %i);\ncmd: '%s'\noutput:\n%s", msg, exit.code, cmd, output)
 }
