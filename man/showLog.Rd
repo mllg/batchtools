@@ -46,9 +46,12 @@ showLog(ids[1], reg = tmp)
 grepLogs(pattern = "warning", ignore.case = TRUE, reg = tmp)
 }
 \seealso{
-Other debug: \code{\link{getErrorMessages}},
-  \code{\link{getStatus}}, \code{\link{grepLogs}},
-  \code{\link{killJobs}}, \code{\link{resetJobs}},
-  \code{\link{testJob}}
+Other debug: 
+\code{\link{getErrorMessages}()},
+\code{\link{getStatus}()},
+\code{\link{grepLogs}()},
+\code{\link{killJobs}()},
+\code{\link{resetJobs}()},
+\code{\link{testJob}()}
 }
 \concept{debug}

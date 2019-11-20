@@ -16,10 +16,13 @@ This function checks the registry for consistency and removes obsolete files
 and redundant data base entries.
 }
 \seealso{
-Other Registry: \code{\link{clearRegistry}},
-  \code{\link{getDefaultRegistry}},
-  \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
-  \code{\link{removeRegistry}}, \code{\link{saveRegistry}},
-  \code{\link{syncRegistry}}
+Other Registry: 
+\code{\link{clearRegistry}()},
+\code{\link{getDefaultRegistry}()},
+\code{\link{loadRegistry}()},
+\code{\link{makeRegistry}()},
+\code{\link{removeRegistry}()},
+\code{\link{saveRegistry}()},
+\code{\link{syncRegistry}()}
 }
 \concept{Registry}

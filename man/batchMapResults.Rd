@@ -4,8 +4,14 @@
 \alias{batchMapResults}
 \title{Map Over Results to Create New Jobs}
 \usage{
-batchMapResults(fun, ids = NULL, ..., more.args = list(), target,
-  source = getDefaultRegistry())
+batchMapResults(
+  fun,
+  ids = NULL,
+  ...,
+  more.args = list(),
+  target,
+  source = getDefaultRegistry()
+)
 }
 \arguments{
 \item{fun}{[\code{function}]\cr
@@ -65,8 +71,9 @@ print(results)
 ijoin(results, unwrap(reduceResultsDataTable(reg = tmp)), by = c(".id" = "job.id"))
 }
 \seealso{
-Other Results: \code{\link{loadResult}},
-  \code{\link{reduceResultsList}},
-  \code{\link{reduceResults}}
+Other Results: 
+\code{\link{loadResult}()},
+\code{\link{reduceResultsList}()},
+\code{\link{reduceResults}()}
 }
 \concept{Results}

@@ -19,9 +19,13 @@ stops with an exception if none is set). \code{setDefaultRegistry} sets
 a registry as default.
 }
 \seealso{
-Other Registry: \code{\link{clearRegistry}},
-  \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
-  \code{\link{removeRegistry}}, \code{\link{saveRegistry}},
-  \code{\link{sweepRegistry}}, \code{\link{syncRegistry}}
+Other Registry: 
+\code{\link{clearRegistry}()},
+\code{\link{loadRegistry}()},
+\code{\link{makeRegistry}()},
+\code{\link{removeRegistry}()},
+\code{\link{saveRegistry}()},
+\code{\link{sweepRegistry}()},
+\code{\link{syncRegistry}()}
 }
 \concept{Registry}

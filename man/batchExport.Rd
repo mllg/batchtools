@@ -4,8 +4,11 @@
 \alias{batchExport}
 \title{Export Objects to the Slaves}
 \usage{
-batchExport(export = list(), unexport = character(0L),
-  reg = getDefaultRegistry())
+batchExport(
+  export = list(),
+  unexport = character(0L),
+  reg = getDefaultRegistry()
+)
 }
 \arguments{
 \item{export}{[\code{list}]\cr

@@ -5,8 +5,12 @@
 \alias{SubmitJobResult}
 \title{Create a SubmitJobResult}
 \usage{
-makeSubmitJobResult(status, batch.id, log.file = NA_character_,
-  msg = NA_character_)
+makeSubmitJobResult(
+  status,
+  batch.id,
+  log.file = NA_character_,
+  msg = NA_character_
+)
 }
 \arguments{
 \item{status}{[\code{integer(1)}]\cr
@@ -37,11 +41,12 @@ Use this function in your implementation of \code{\link{makeClusterFunctions}} t
 value for the \code{submitJob} function.
 }
 \seealso{
-Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
-  \code{\link{cfHandleUnknownSubmitError}},
-  \code{\link{cfKillJob}},
-  \code{\link{cfReadBrewTemplate}},
-  \code{\link{makeClusterFunctions}},
-  \code{\link{runOSCommand}}
+Other ClusterFunctionsHelper: 
+\code{\link{cfBrewTemplate}()},
+\code{\link{cfHandleUnknownSubmitError}()},
+\code{\link{cfKillJob}()},
+\code{\link{cfReadBrewTemplate}()},
+\code{\link{makeClusterFunctions}()},
+\code{\link{runOSCommand}()}
 }
 \concept{ClusterFunctionsHelper}

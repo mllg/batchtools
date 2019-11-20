@@ -26,15 +26,16 @@ Jobs are spawned asynchronously using the functions \code{mcparallel} and \code{
 Does not work on Windows, use \code{\link{makeClusterFunctionsSocket}} instead.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
-  \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLSF}},
-  \code{\link{makeClusterFunctionsOpenLava}},
-  \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctionsSlurm}},
-  \code{\link{makeClusterFunctionsSocket}},
-  \code{\link{makeClusterFunctionsTORQUE}},
-  \code{\link{makeClusterFunctions}}
+Other ClusterFunctions: 
+\code{\link{makeClusterFunctionsDocker}()},
+\code{\link{makeClusterFunctionsInteractive}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsOpenLava}()},
+\code{\link{makeClusterFunctionsSGE}()},
+\code{\link{makeClusterFunctionsSSH}()},
+\code{\link{makeClusterFunctionsSlurm}()},
+\code{\link{makeClusterFunctionsSocket}()},
+\code{\link{makeClusterFunctionsTORQUE}()},
+\code{\link{makeClusterFunctions}()}
 }
 \concept{ClusterFunctions}

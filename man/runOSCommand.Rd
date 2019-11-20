@@ -4,8 +4,12 @@
 \alias{runOSCommand}
 \title{Run OS Commands on Local or Remote Machines}
 \usage{
-runOSCommand(sys.cmd, sys.args = character(0L), stdin = "",
-  nodename = "localhost")
+runOSCommand(
+  sys.cmd,
+  sys.args = character(0L),
+  stdin = "",
+  nodename = "localhost"
+)
 }
 \arguments{
 \item{sys.cmd}{[\code{character(1)}]\cr
@@ -37,11 +41,12 @@ runOSCommand("notfound")
 }
 }
 \seealso{
-Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
-  \code{\link{cfHandleUnknownSubmitError}},
-  \code{\link{cfKillJob}},
-  \code{\link{cfReadBrewTemplate}},
-  \code{\link{makeClusterFunctions}},
-  \code{\link{makeSubmitJobResult}}
+Other ClusterFunctionsHelper: 
+\code{\link{cfBrewTemplate}()},
+\code{\link{cfHandleUnknownSubmitError}()},
+\code{\link{cfKillJob}()},
+\code{\link{cfReadBrewTemplate}()},
+\code{\link{makeClusterFunctions}()},
+\code{\link{makeSubmitJobResult}()}
 }
 \concept{ClusterFunctionsHelper}

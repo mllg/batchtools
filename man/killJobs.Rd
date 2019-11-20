@@ -29,9 +29,12 @@ batch jobs again. If this fails three times for some jobs, the function gives up
 successfully killed are reset in the \link{Registry}.
 }
 \seealso{
-Other debug: \code{\link{getErrorMessages}},
-  \code{\link{getStatus}}, \code{\link{grepLogs}},
-  \code{\link{resetJobs}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+Other debug: 
+\code{\link{getErrorMessages}()},
+\code{\link{getStatus}()},
+\code{\link{grepLogs}()},
+\code{\link{resetJobs}()},
+\code{\link{showLog}()},
+\code{\link{testJob}()}
 }
 \concept{debug}
