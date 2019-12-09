@@ -1,5 +1,5 @@
 dist: trusty
-sudo: false
+sudo: true
 language: r
 cache: packages
 
@@ -13,6 +13,7 @@ addons:
     packages:
       - libopenmpi-dev
       - openmpi-bin
+      - slurm-llnl 
 
 r:
   - oldrel
@@ -23,5 +24,17 @@ r_packages:
   - covr
   - Rmpi
 
+script:
+  - sudo cp inst/conf/slurm.conf /etc/slurm-llnl
+  - cp batchtools.conf.R tests/testthat
+  - sudo service munge start
+  - sudo /etc/init.d/slurmctld restart
+  - sudo /etc/init.d/slurmd restart
+  - sinfo
+  - R CMD build .
+  - R CMD check *tar.gz
+
 after_success:
   - if [[ "${TRAVIS_R_VERSION_STRING}" == "release" ]]; then Rscript -e 'covr::coveralls()'; fi
+
+  
