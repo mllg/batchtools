@@ -19,7 +19,7 @@
 
 <%
 # relative paths are not handled well by Slurm
-log.file = fs::path_expand(log.file)
+log.file = shQuote(fs::path_expand(log.file))
 -%>
 
 

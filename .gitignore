@@ -1,3 +1,5 @@
+.Rhistory
+*~
 .DS_Store
 /inst/doc
 /src/*.so

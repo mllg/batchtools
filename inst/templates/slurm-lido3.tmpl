@@ -16,6 +16,9 @@
 
 <%
 
+# relative paths are not handled well by Slurm
+log.file = shQuote(fs::path_expand(log.file))
+
 # queue
 walltime = asInt(resources$walltime, lower = 60L, upper = 31L * 24L * 60L * 60L)
 memory = asInt(resources$memory, lower = 100L, upper = 1024L * 1024L)
