@@ -1,3 +1,10 @@
+# batchtools 0.9.12
+
+* Moved `data.table` from `Depends` to `Imports`.
+  User scripts might need to explicitly attach `data.table` via `library()` now.
+* Fixes for `ClusterFunctionsMulticore`.
+* Removed a workaround for `system2()` for R-devel (to be released as R-4.0.0).
+
 # batchtools 0.9.11
 
 * Removed deprecated function `chunkIds()`.
