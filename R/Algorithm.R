@@ -35,7 +35,7 @@ addAlgorithm = function(name, fun = NULL, reg = getDefaultRegistry())  {
 
   info("Adding algorithm '%s'", name)
   algo = setClasses(list(fun = fun, name = name), "Algorithm")
-  writeRDS(algo, file = getAlgorithmURI(reg, name))
+  writeRDS(algo, file = getAlgorithmURI(reg, name), compress = reg$compress)
   reg$algorithms = union(reg$algorithms, name)
   saveRegistry(reg)
   invisible(algo)

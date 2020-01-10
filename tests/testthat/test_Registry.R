@@ -204,3 +204,20 @@ test_that("read only mode", {
   expect_error(addExperiments(reg = reg), "writeable")
   expect_error(removeExperiments(1, reg = reg), "writeable")
 })
+
+test_that("xz compression", {
+  fn = fs::file_temp("conf")
+  writeLines(con = fn, "compress = \"xz\"")
+  reg = makeTestRegistry(conf.file = fn)
+  expect_identical(reg$compress, "xz")
+  fd = file(dir(reg, "registry.rds"), "r")
+  expect_identical(summary(fd)$class, "xzfile")
+  close(fd)
+
+  batchMap(identity, 1:3, reg = reg)
+  submitAndWait(reg)
+
+  fd = file(getResultFiles(reg, 1), "r")
+  expect_identical(summary(fd)$class, "xzfile")
+  close(fd)
+})

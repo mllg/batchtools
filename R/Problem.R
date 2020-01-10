@@ -83,7 +83,7 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, cache = FALSE,
 
   info("Adding problem '%s'", name)
   prob = setClasses(list(name = name, seed = seed, cache = cache, data = data, fun = fun), "Problem")
-  writeRDS(prob, file = getProblemURI(reg, name))
+  writeRDS(prob, file = getProblemURI(reg, name), compress = reg$compress)
   reg$problems = union(reg$problems, name)
   cache.dir = getProblemCacheDir(reg, name)
   if (fs::dir_exists(cache.dir))

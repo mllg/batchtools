@@ -276,7 +276,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
     ids.chunk = ids[chunk == ch, c("job.id", "resource.id")]
     jc = makeJobCollection(ids.chunk, resources = reg$resources[ids.chunk, on = "resource.id"]$resources[[1L]], reg = reg)
     if (reg$cluster.functions$store.job.collection)
-      writeRDS(jc, file = jc$uri)
+      writeRDS(jc, file = jc$uri, compress = jc$compress)
 
     # do we have to wait for jobs to get terminated before proceeding?
     if (!is.na(max.concurrent.jobs)) {

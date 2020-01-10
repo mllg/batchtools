@@ -52,14 +52,16 @@ Experiment = R6Class("Experiment", cloneable = FALSE, inherit = BaseJob,
     algo.name = NULL,
     prob.pars = NULL,
     algo.pars = NULL,
+    compress = NULL,
     allow.access.to.instance = TRUE,
-    initialize = function(file.dir, reader, id, prob.pars, algo.pars, repl, seed, resources, prob.name, algo.name) {
+    initialize = function(file.dir, reader, id, prob.pars, algo.pars, repl, seed, resources, prob.name, algo.name, compress = "gzip") {
       super$initialize(file.dir, reader, id,seed, resources)
       self$repl = repl
       self$prob.name = as.character(prob.name)
       self$prob.pars = prob.pars
       self$algo.name = as.character(algo.name)
       self$algo.pars = algo.pars
+      self$compress  = compress
     }
   ),
   active = list(
@@ -88,7 +90,7 @@ Experiment = R6Class("Experiment", cloneable = FALSE, inherit = BaseJob,
       wrapper = function(...) p$fun(job = self, data = p$data, ...)
       result = with_seed(seed, do.call(wrapper, self$prob.pars, envir = .GlobalEnv))
       if (p$cache)
-        writeRDS(result, file = cache.file)
+        writeRDS(result, file = cache.file, compress = self$compress)
       return(result)
     }
   )
@@ -190,5 +192,5 @@ getJob.ExperimentCollection = function(jc, i, reader = RDSReader$new(FALSE)) {
   row = jc$jobs[i]
   Experiment$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, prob.pars = row$prob.pars[[1L]],
     algo.pars = row$algo.pars[[1L]], seed = getSeed(jc$seed, row$job.id), repl = row$repl,
-    resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm)
+    resources = jc$resources, prob.name = row$problem, algo.name = row$algorithm, compress = jc$compress)
 }

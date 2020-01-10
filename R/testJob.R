@@ -39,7 +39,7 @@ testJob = function(id, external = FALSE, reg = getDefaultRegistry()) {
     fn.jc   = fs::path(td, "batchtools-testJob.jc")
     fn.res  = fs::path(td, "batchtools-testJob.rds")
 
-    writeRDS(makeJobCollection(id, reg = reg), file = fn.jc)
+    writeRDS(makeJobCollection(id, reg = reg), file = fn.jc, compress = reg$compress)
     brew(file = system.file(fs::path("templates", "testJob.tmpl"), package = "batchtools", mustWork = TRUE),
       output = fn.r, envir = list2env(list(jc = fn.jc, result = fn.res)))
 

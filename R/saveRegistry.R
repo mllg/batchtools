@@ -24,7 +24,7 @@ saveRegistry = function(reg = getDefaultRegistry()) {
   exclude = c("cluster.functions", "default.resources", "temp.dir", "mtime", "writeable")
   list2env(mget(chsetdiff(ls(reg), exclude), reg), ee)
   class(ee) = class(reg)
-  writeRDS(ee, file = fn[1L])
+  writeRDS(ee, file = fn[1L], compress = reg$compress)
   fs::file_move(fn[1L], fn[2L])
   reg$mtime = file_mtime(fn[2L])
   return(TRUE)

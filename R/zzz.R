@@ -31,8 +31,8 @@
 #' @importFrom withr with_dir with_seed local_options local_dir
 "_PACKAGE"
 
-.BY = .N = .SD = NULL
-`:=` = function(...) NULL
+# .BY = .N = .SD = NULL
+# `:=` = function(...) NULL
 
 batchtools = new.env(parent = emptyenv())
 batchtools$debug = FALSE
@@ -47,6 +47,7 @@ batchtools$resources = list(
 )
 
 .onLoad = function(libname, pkgname) { # nocov start
+  globalVariables(c(".BY", ".N", ".SD", ":="), package = "batchtools")
   if (requireNamespace("debugme", quietly = TRUE) && "batchtools" %in% strsplit(Sys.getenv("DEBUGME"), ",", fixed = TRUE)[[1L]]) {
     debugme::debugme()
     batchtools$debug = TRUE

@@ -106,6 +106,10 @@ updateRegistry = function(reg = getDefaultRegistry()) { # nocov start
     }
   }
 
+  if (is.null(reg$compress)) {
+    reg$compress = "gzip"
+  }
+
   reg$version = pv
   return(TRUE)
 } # nocov end
