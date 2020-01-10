@@ -4,6 +4,7 @@
   User scripts might need to explicitly attach `data.table` via `library()` now.
 * Fixes for `ClusterFunctionsMulticore`.
 * Removed a workaround for `system2()` for R-devel (to be released as R-4.0.0).
+* New configuration option `compress` to select the compression algorithm (passed down to `saveRDS()`).
 
 # batchtools 0.9.11
 
