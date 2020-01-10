@@ -4,8 +4,13 @@
 \alias{assertRegistry}
 \title{assertRegistry}
 \usage{
-assertRegistry(reg, class = NULL, writeable = FALSE, sync = FALSE,
-  running.ok = TRUE)
+assertRegistry(
+  reg,
+  class = NULL,
+  writeable = FALSE,
+  sync = FALSE,
+  running.ok = TRUE
+)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr

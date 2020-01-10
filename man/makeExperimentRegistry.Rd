@@ -5,10 +5,17 @@
 \alias{ExperimentRegistry}
 \title{ExperimentRegistry Constructor}
 \usage{
-makeExperimentRegistry(file.dir = "registry", work.dir = getwd(),
-  conf.file = findConfFile(), packages = character(0L),
-  namespaces = character(0L), source = character(0L),
-  load = character(0L), seed = NULL, make.default = TRUE)
+makeExperimentRegistry(
+  file.dir = "registry",
+  work.dir = getwd(),
+  conf.file = findConfFile(),
+  packages = character(0L),
+  namespaces = character(0L),
+  source = character(0L),
+  load = character(0L),
+  seed = NULL,
+  make.default = TRUE
+)
 }
 \arguments{
 \item{file.dir}{[\code{character(1)}]\cr

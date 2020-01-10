@@ -4,8 +4,13 @@
 \alias{makeClusterFunctionsSlurm}
 \title{ClusterFunctions for Slurm Systems}
 \usage{
-makeClusterFunctionsSlurm(template = "slurm", array.jobs = TRUE,
-  nodename = "localhost", scheduler.latency = 1, fs.latency = 65)
+makeClusterFunctionsSlurm(
+  template = "slurm",
+  array.jobs = TRUE,
+  nodename = "localhost",
+  scheduler.latency = 1,
+  fs.latency = 65
+)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -61,15 +66,16 @@ Note that you might have to specify the cluster name here if you do not want to 
 otherwise the commands for listing and killing jobs will not work.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
-  \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLSF}},
-  \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsOpenLava}},
-  \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctionsSocket}},
-  \code{\link{makeClusterFunctionsTORQUE}},
-  \code{\link{makeClusterFunctions}}
+Other ClusterFunctions: 
+\code{\link{makeClusterFunctionsDocker}()},
+\code{\link{makeClusterFunctionsInteractive}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsMulticore}()},
+\code{\link{makeClusterFunctionsOpenLava}()},
+\code{\link{makeClusterFunctionsSGE}()},
+\code{\link{makeClusterFunctionsSSH}()},
+\code{\link{makeClusterFunctionsSocket}()},
+\code{\link{makeClusterFunctionsTORQUE}()},
+\code{\link{makeClusterFunctions}()}
 }
 \concept{ClusterFunctions}

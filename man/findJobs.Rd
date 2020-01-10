@@ -19,10 +19,17 @@
 \usage{
 findJobs(expr, ids = NULL, reg = getDefaultRegistry())
 
-findExperiments(ids = NULL, prob.name = NA_character_,
-  prob.pattern = NA_character_, algo.name = NA_character_,
-  algo.pattern = NA_character_, prob.pars, algo.pars, repls = NULL,
-  reg = getDefaultRegistry())
+findExperiments(
+  ids = NULL,
+  prob.name = NA_character_,
+  prob.pattern = NA_character_,
+  algo.name = NA_character_,
+  algo.pattern = NA_character_,
+  prob.pars,
+  algo.pars,
+  repls = NULL,
+  reg = getDefaultRegistry()
+)
 
 findSubmitted(ids = NULL, reg = getDefaultRegistry())
 
@@ -46,8 +53,7 @@ findQueued(ids = NULL, reg = getDefaultRegistry())
 
 findExpired(ids = NULL, reg = getDefaultRegistry())
 
-findTagged(tags = character(0L), ids = NULL,
-  reg = getDefaultRegistry())
+findTagged(tags = character(0L), ids = NULL, reg = getDefaultRegistry())
 }
 \arguments{
 \item{expr}{[\code{expression}]\cr

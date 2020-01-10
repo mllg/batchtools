@@ -18,10 +18,13 @@ Parses update files written by the slaves to the file system and updates the
 internal data base.
 }
 \seealso{
-Other Registry: \code{\link{clearRegistry}},
-  \code{\link{getDefaultRegistry}},
-  \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
-  \code{\link{removeRegistry}}, \code{\link{saveRegistry}},
-  \code{\link{sweepRegistry}}
+Other Registry: 
+\code{\link{clearRegistry}()},
+\code{\link{getDefaultRegistry}()},
+\code{\link{loadRegistry}()},
+\code{\link{makeRegistry}()},
+\code{\link{removeRegistry}()},
+\code{\link{saveRegistry}()},
+\code{\link{sweepRegistry}()}
 }
 \concept{Registry}

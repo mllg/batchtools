@@ -21,10 +21,13 @@ for construction in \code{\link{makeRegistry}}, can be accessed via
 This function is usually called internally whenever needed.
 }
 \seealso{
-Other Registry: \code{\link{clearRegistry}},
-  \code{\link{getDefaultRegistry}},
-  \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
-  \code{\link{removeRegistry}},
-  \code{\link{sweepRegistry}}, \code{\link{syncRegistry}}
+Other Registry: 
+\code{\link{clearRegistry}()},
+\code{\link{getDefaultRegistry}()},
+\code{\link{loadRegistry}()},
+\code{\link{makeRegistry}()},
+\code{\link{removeRegistry}()},
+\code{\link{sweepRegistry}()},
+\code{\link{syncRegistry}()}
 }
 \concept{Registry}

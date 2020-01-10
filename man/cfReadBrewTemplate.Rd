@@ -23,11 +23,12 @@ This function is only intended for use in your own cluster functions implementat
 Simply reads your template file and returns it as a character vector.
 }
 \seealso{
-Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
-  \code{\link{cfHandleUnknownSubmitError}},
-  \code{\link{cfKillJob}},
-  \code{\link{makeClusterFunctions}},
-  \code{\link{makeSubmitJobResult}},
-  \code{\link{runOSCommand}}
+Other ClusterFunctionsHelper: 
+\code{\link{cfBrewTemplate}()},
+\code{\link{cfHandleUnknownSubmitError}()},
+\code{\link{cfKillJob}()},
+\code{\link{makeClusterFunctions}()},
+\code{\link{makeSubmitJobResult}()},
+\code{\link{runOSCommand}()}
 }
 \concept{ClusterFunctionsHelper}

@@ -60,7 +60,7 @@ Multicore = R6Class("Multicore",
           break
         pids = as.integer(names(res))
         self$jobs[pid %in% pids, count := count + 1L]
-        self$jobs = self$jobs[count <= 1L]
+        self$jobs = self$jobs[count < 1L]
       }
     }
   )

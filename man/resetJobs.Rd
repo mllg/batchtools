@@ -28,9 +28,12 @@ However, if the implemented heuristic fails, this can lead to inconsistencies in
 Use with care while jobs are running.
 }
 \seealso{
-Other debug: \code{\link{getErrorMessages}},
-  \code{\link{getStatus}}, \code{\link{grepLogs}},
-  \code{\link{killJobs}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+Other debug: 
+\code{\link{getErrorMessages}()},
+\code{\link{getStatus}()},
+\code{\link{grepLogs}()},
+\code{\link{killJobs}()},
+\code{\link{showLog}()},
+\code{\link{testJob}()}
 }
 \concept{debug}
