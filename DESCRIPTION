@@ -15,8 +15,8 @@ Description: As a successor of the packages 'BatchJobs' and 'BatchExperiments',
     'OpenLava' (<http://www.openlava.org/>), 'Univa Grid Engine'/'Oracle Grid
     Engine' (<http://www.univa.com/>), 'Slurm' (<http://slurm.schedmd.com/>),
     'TORQUE/PBS'
-    (<http://www.adaptivecomputing.com/products/open-source/torque/>), or
-    'Docker Swarm' (<https://docs.docker.com/swarm/>).
+    (<https://adaptivecomputing.com/cherry-services/torque-resource-manager/>),
+    or 'Docker Swarm' (<https://docs.docker.com/swarm/>).
     A multicore and socket mode allow the parallelization on a local machines,
     and multiple machines can be hooked up via SSH to create a makeshift
     cluster. Moreover, the package provides an abstraction mechanism to define
