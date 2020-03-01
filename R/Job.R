@@ -170,10 +170,14 @@ makeJob.Registry = function(id, reader = NULL, reg = getDefaultRegistry()) {
 }
 
 #' @export
-makeJob.ExperimentRegistry = function(id, reader = NULL, reg = getDefaultRegistry()) {
+#' add reproducible argument
+makeJob.ExperimentRegistry = function(id, reader = NULL, reg = getDefaultRegistry(), reprod = NULL) {
   row = mergedJobs(reg, convertId(reg, id), c("job.id", "problem", "prob.pars", "algorithm", "algo.pars", "repl", "resource.id"))
+  if(is.null(reprod)) {
+    reprod = FALSE
+  }
   resources = reg$resources[row, "resources", on = "resource.id", nomatch = NA]$resources[[1L]] %??% list()
-  Experiment$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, prob.pars = row$prob.pars[[1L]], algo.pars = row$algo.pars[[1L]], seed = getSeed(reg$seed, row$job.id),
+  Experiment$new(file.dir = reg$file.dir, reader %??% RDSReader$new(FALSE), id = row$job.id, prob.pars = row$prob.pars[[1L]], algo.pars = row$algo.pars[[1L]], seed = getSeed(reg$seed, row$job.id, reprod),
     repl = row$repl, resources = resources, prob.name = row$problem, algo.name = row$algorithm)
 }
 
