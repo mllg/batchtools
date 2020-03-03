@@ -84,7 +84,19 @@ Experiment = R6Class("Experiment", cloneable = FALSE, inherit = BaseJob,
             return(result)
         }
       }
-      seed = if (is.null(p$seed)) self$seed else getSeed(p$seed, self$repl - 1L)
+      seed = if(p$fix.seed) {
+        if(is.null(p$seed)) {
+          self$seed
+        } else {
+          getSeed(p$seed, self$repl - 1L, p$fix.seed)
+        }
+      } else {
+        if(is.null(p$seed)) {
+          getSeed(self$seed, self$repl - 1L)
+        } else {
+          getSeed(p$seed, self$repl - 1L)
+        }
+      }
       wrapper = function(...) p$fun(job = self, data = p$data, ...)
       result = with_seed(seed, do.call(wrapper, self$prob.pars, envir = .GlobalEnv))
       if (p$cache)
