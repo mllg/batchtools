@@ -13,6 +13,7 @@
 #'  \item{resources:}{Named list of of specified computational resources.}
 #'  \item{uri}{Location of the job description file (saved with \code{link[base]{saveRDS}} on the file system.}
 #'  \item{seed}{\code{integer(1)} Seed of the \link{Registry}.}
+#'  \item{fix.seed}{\code{logical(1)} Fix.seed of the \link{Registry}.}
 #'  \item{packages}{\code{character} with required packages to load via \code{\link[base]{require}}.}
 #'  \item{namespaces}{code{character} with required packages to load via \code{\link[base]{requireNamespace}}.}
 #'  \item{source}{\code{character} with list of files to source before execution.}
@@ -54,6 +55,7 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$file.dir     = reg$file.dir
   jc$work.dir     = reg$work.dir
   jc$seed         = reg$seed
+  jc$fix.seed     = reg$fix.seed
   jc$uri          = getJobFiles(reg, hash = jc$job.hash)
   jc$log.file     = fs::path(reg$file.dir, "logs", sprintf("%s.log", jc$job.hash))
   jc$packages     = reg$packages

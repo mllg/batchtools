@@ -40,7 +40,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Bernd Bischl \email{bernd_bischl@gmx.de}
+  \item Bernd Bischl \email{bernd_bischl@gmx.net}
 }
 
 Other contributors:

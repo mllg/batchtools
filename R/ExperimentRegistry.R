@@ -48,10 +48,10 @@
 #' tab = ljoin(pars, results)
 #' tab[, list(mres = mean(res)), by = c("n", "algorithm")]
 makeExperimentRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = findConfFile(), packages = character(0L), namespaces = character(0L),
-  source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
+  source = character(0L), load = character(0L), seed = NULL, fix.seed = FALSE, make.default = TRUE) {
 
   reg = makeRegistry(file.dir = file.dir, work.dir = work.dir, conf.file = conf.file,
-    packages = packages, namespaces = namespaces, source = source, load = load, seed = seed, make.default = make.default)
+    packages = packages, namespaces = namespaces, source = source, load = load, seed = seed, fix.seed = fix.seed, make.default = make.default)
 
   fs::dir_create(fs::path(reg$file.dir, c("problems", "algorithms")))
 

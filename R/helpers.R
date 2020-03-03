@@ -120,14 +120,14 @@ Rscript = function() {
   fs::path(R.home("bin"), ifelse(testOS("windows"), "Rscript.exe", "Rscript"))
 }
 
-getSeed = function(start.seed, id, reprod) {
-  if(reprod) {
-    start.seed
-  } else {
+getSeed = function(start.seed, id, fix.seed = FALSE) {
+  if(!fix.seed) {
     if (id > .Machine$integer.max - start.seed)
       start.seed - .Machine$integer.max + id
     else
       start.seed + id
+  } else {
+    start.seed
   }
 }
 

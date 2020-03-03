@@ -85,4 +85,33 @@ test_that("Seed is correctly reported (#203)", {
 
   expect_true(any(stri_detect_fixed(getLog(1, reg = reg), "seed = 2")))
   expect_true(any(stri_detect_fixed(getLog(2, reg = reg), "seed = 3")))
+  
+  
+  reg = makeTestRegistry(seed = 1, fix.seed = TRUE)
+  batchMap(function(x, .job) list(seed = .job$seed), x = 1:3, reg = reg)
+  submitAndWait(reg)
+  res = unwrap(reduceResultsDataTable(reg = reg))
+  expect_data_table(res, nrow = 3, ncol = 2)
+  expect_identical(res$seed, rep.int(1L, 3))
+  
+  expect_true(any(stri_detect_fixed(getLog(1, reg = reg), "Setting seed to 1")))
+  expect_true(any(stri_detect_fixed(getLog(2, reg = reg), "Setting seed to 1")))
+  expect_true(any(stri_detect_fixed(getLog(3, reg = reg), "Setting seed to 1")))
+  
+  
+  reg = makeTestExperimentRegistry(seed = 1, fix.seed = TRUE)
+  addProblem(reg = reg, "p1", fun = function(job, ...) job$seed, seed = 100L)
+  addAlgorithm(reg = reg, "a1", fun = function(job, instance, ...) list(instance = instance, seed = job$seed))
+  ids = addExperiments(repls = 2, reg = reg)
+  getStatus(reg = reg)
+  submitAndWait(reg)
+  
+  res = unwrap(reduceResultsDataTable(reg = reg))
+  expect_data_table(res, nrow = 2, ncol = 3)
+  expect_identical(res$instance, rep.int(1L, 2))
+  expect_identical(res$seed, rep.int(1L, 2))
+  
+  expect_true(any(stri_detect_fixed(getLog(1, reg = reg), "seed = 1")))
+  expect_true(any(stri_detect_fixed(getLog(2, reg = reg), "seed = 1")))
+  
 })
