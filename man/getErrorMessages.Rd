@@ -4,8 +4,11 @@
 \alias{getErrorMessages}
 \title{Retrieve Error Messages}
 \usage{
-getErrorMessages(ids = NULL, missing.as.error = FALSE,
-  reg = getDefaultRegistry())
+getErrorMessages(
+  ids = NULL,
+  missing.as.error = FALSE,
+  reg = getDefaultRegistry()
+)
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -40,9 +43,12 @@ getErrorMessages(ids, reg = tmp)
 getErrorMessages(ids, missing.as.error = TRUE, reg = tmp)
 }
 \seealso{
-Other debug: \code{\link{getStatus}},
-  \code{\link{grepLogs}}, \code{\link{killJobs}},
-  \code{\link{resetJobs}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+Other debug: 
+\code{\link{getStatus}()},
+\code{\link{grepLogs}()},
+\code{\link{killJobs}()},
+\code{\link{resetJobs}()},
+\code{\link{showLog}()},
+\code{\link{testJob}()}
 }
 \concept{debug}

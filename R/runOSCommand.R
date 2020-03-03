@@ -29,7 +29,10 @@ runOSCommand = function(sys.cmd, sys.args = character(0L), stdin = "", nodename 
   assertString(nodename, min.chars = 1L)
 
   if (!isLocalHost(nodename)) {
-    command = shQuote(sprintf("%s %s", sys.cmd, stri_flatten(sys.args, " ")))
+    command = sprintf("%s %s", sys.cmd, stri_flatten(sys.args, " "))
+    if (getRversion() < "4.0.0") {
+      command = shQuote(command)
+    }
     command = stri_replace_all_fixed(command, "\\$", "$")
     sys.args = c("-q", nodename, command)
     sys.cmd = "ssh"
@@ -57,6 +60,9 @@ isLocalHost = function(nodename) {
 }
 
 OSError = function(msg, res) {
-  stopf("%s (exit code %i);\ncmd: '%s'\noutput:\n%s",
-    msg, res$exit.code, stri_flatten(c(res$sys.cmd, res$sys.args), collapse = " "), stri_flatten(res$output, "\n"))
+  cmd = stri_flatten(c(res$sys.cmd, res$sys.args), collapse = " ") %??% NA_character_
+  exit.code = res$exit.code %??% NA_integer_
+  output = stri_flatten(res$output, "\n") %??% ""
+
+  stopf("%s (exit code %i);\ncmd: '%s'\noutput:\n%s", msg, exit.code, cmd, output)
 }

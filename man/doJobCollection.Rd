@@ -32,6 +32,7 @@ jc = makeJobCollection(1:2, reg = tmp)
 doJobCollection(jc)
 }
 \seealso{
-Other JobCollection: \code{\link{makeJobCollection}}
+Other JobCollection: 
+\code{\link{makeJobCollection}()}
 }
 \concept{JobCollection}

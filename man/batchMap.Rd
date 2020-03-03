@@ -4,8 +4,13 @@
 \alias{batchMap}
 \title{Map Operation for Batch Systems}
 \usage{
-batchMap(fun, ..., args = list(), more.args = list(),
-  reg = getDefaultRegistry())
+batchMap(
+  fun,
+  ...,
+  args = list(),
+  more.args = list(),
+  reg = getDefaultRegistry()
+)
 }
 \arguments{
 \item{fun}{[\code{function}]\cr
@@ -62,7 +67,7 @@ getJobPars(reg = tmp)
 
 # example for an expand.grid()-like operation on parameters
 tmp = makeRegistry(file.dir = NA, make.default = FALSE)
-ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), reg = tmp)
+ids = batchMap(paste, args = data.table::CJ(x = letters[1:3], y = 1:3), reg = tmp)
 getJobPars(reg = tmp)
 testJob(6, reg = tmp)
 }

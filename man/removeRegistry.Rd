@@ -28,10 +28,13 @@ tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 removeRegistry(0, tmp)
 }
 \seealso{
-Other Registry: \code{\link{clearRegistry}},
-  \code{\link{getDefaultRegistry}},
-  \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
-  \code{\link{saveRegistry}}, \code{\link{sweepRegistry}},
-  \code{\link{syncRegistry}}
+Other Registry: 
+\code{\link{clearRegistry}()},
+\code{\link{getDefaultRegistry}()},
+\code{\link{loadRegistry}()},
+\code{\link{makeRegistry}()},
+\code{\link{saveRegistry}()},
+\code{\link{sweepRegistry}()},
+\code{\link{syncRegistry}()}
 }
 \concept{Registry}

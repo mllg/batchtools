@@ -29,6 +29,7 @@
 #'   \item{\code{temp.dir}:}{Path to directory to use for temporary registries.}
 #'   \item{\code{sleep}:}{Custom sleep function. See \code{\link{waitForJobs}}.}
 #'   \item{\code{expire.after}:}{Number of iterations before treating jobs as expired in \code{\link{waitForJobs}}.}
+#'   \item{\code{compress}:}{Compression algorithm to use via \code{\link{saveRDS}}.}
 #' }
 #'
 #' @param file.dir [\code{character(1)}]\cr

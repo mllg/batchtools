@@ -4,8 +4,11 @@
 \alias{makeClusterFunctionsOpenLava}
 \title{ClusterFunctions for OpenLava}
 \usage{
-makeClusterFunctionsOpenLava(template = "openlava",
-  scheduler.latency = 1, fs.latency = 65)
+makeClusterFunctionsOpenLava(
+  template = "openlava",
+  scheduler.latency = 1,
+  fs.latency = 65
+)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -50,15 +53,16 @@ allocations.
 Array jobs are currently not supported.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
-  \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLSF}},
-  \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctionsSlurm}},
-  \code{\link{makeClusterFunctionsSocket}},
-  \code{\link{makeClusterFunctionsTORQUE}},
-  \code{\link{makeClusterFunctions}}
+Other ClusterFunctions: 
+\code{\link{makeClusterFunctionsDocker}()},
+\code{\link{makeClusterFunctionsInteractive}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsMulticore}()},
+\code{\link{makeClusterFunctionsSGE}()},
+\code{\link{makeClusterFunctionsSSH}()},
+\code{\link{makeClusterFunctionsSlurm}()},
+\code{\link{makeClusterFunctionsSocket}()},
+\code{\link{makeClusterFunctionsTORQUE}()},
+\code{\link{makeClusterFunctions}()}
 }
 \concept{ClusterFunctions}

@@ -22,7 +22,7 @@
 #'   fun = function(job, data, n, mean, sd, ...) rnorm(n, mean = mean, sd = sd))
 #' addAlgorithm(reg = tmp, "a1", fun = function(job, data, instance, ...) mean(instance))
 #' addAlgorithm(reg = tmp, "a2", fun = function(job, data, instance, ...) median(instance))
-#' ids = addExperiments(reg = tmp, list(p1 = CJ(n = c(50, 100), mean = -2:2, sd = 1:4)))
+#' ids = addExperiments(reg = tmp, list(p1 = data.table::CJ(n = c(50, 100), mean = -2:2, sd = 1:4)))
 #'
 #' # Overview over defined experiments:
 #' tmp$problems

@@ -1,6 +1,6 @@
 Package: batchtools
 Title: Tools for Computation on Batch Systems
-Version: 0.9.11
+Version: 0.9.12
 Authors@R: c(
     person("Michel", "Lang", NULL, "michellang@gmail.com",
       role = c("cre", "aut"), comment = c(ORCID = "0000-0001-9754-0393")),
@@ -15,8 +15,8 @@ Description: As a successor of the packages 'BatchJobs' and 'BatchExperiments',
     'OpenLava' (<http://www.openlava.org/>), 'Univa Grid Engine'/'Oracle Grid
     Engine' (<http://www.univa.com/>), 'Slurm' (<http://slurm.schedmd.com/>),
     'TORQUE/PBS'
-    (<http://www.adaptivecomputing.com/products/open-source/torque/>), or
-    'Docker Swarm' (<https://docs.docker.com/swarm/>).
+    (<https://adaptivecomputing.com/cherry-services/torque-resource-manager/>),
+    or 'Docker Swarm' (<https://docs.docker.com/swarm/>).
     A multicore and socket mode allow the parallelization on a local machines,
     and multiple machines can be hooked up via SSH to create a makeshift
     cluster. Moreover, the package provides an abstraction mechanism to define
@@ -28,13 +28,13 @@ NeedsCompilation: yes
 ByteCompile: yes
 Encoding: UTF-8
 Depends:
-    R (>= 3.0.0),
-    data.table (>= 1.11.2)
+    R (>= 3.0.0)
 Imports:
     backports (>= 1.1.2),
     base64url (>= 1.1),
     brew,
     checkmate (>= 1.8.5),
+    data.table (>= 1.11.2),
     digest (>= 0.6.9),
     fs (>= 1.2.0),
     parallel,
@@ -62,4 +62,5 @@ Suggests:
     testthat,
     tibble
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+Roxygen: list(r6 = FALSE)
+RoxygenNote: 7.0.2

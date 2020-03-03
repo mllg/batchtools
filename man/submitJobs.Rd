@@ -4,8 +4,12 @@
 \alias{submitJobs}
 \title{Submit Jobs to the Batch Systems}
 \usage{
-submitJobs(ids = NULL, resources = list(), sleep = NULL,
-  reg = getDefaultRegistry())
+submitJobs(
+  ids = NULL,
+  resources = list(),
+  sleep = NULL,
+  reg = getDefaultRegistry()
+)
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -177,7 +181,7 @@ tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 fun = function(n, p) colMeans(matrix(runif(n*p), n, p))
 
 # Arguments to fun:
-args = CJ(n = c(1e4, 1e5), p = c(10, 50)) # like expand.grid()
+args = data.table::CJ(n = c(1e4, 1e5), p = c(10, 50)) # like expand.grid()
 print(args)
 
 # Map function to create jobs

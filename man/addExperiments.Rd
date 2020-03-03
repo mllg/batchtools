@@ -4,8 +4,13 @@
 \alias{addExperiments}
 \title{Add Experiments to the Registry}
 \usage{
-addExperiments(prob.designs = NULL, algo.designs = NULL, repls = 1L,
-  combine = "crossprod", reg = getDefaultRegistry())
+addExperiments(
+  prob.designs = NULL,
+  algo.designs = NULL,
+  repls = 1L,
+  combine = "crossprod",
+  reg = getDefaultRegistry()
+)
 }
 \arguments{
 \item{prob.designs}{[named list of \code{\link[base]{data.frame}}]\cr
@@ -70,6 +75,7 @@ fun = function(instance, ...) sd(instance)
 addAlgorithm("deviation", fun = fun, reg = tmp)
 
 # define problem and algorithm designs
+library(data.table)
 prob.designs = algo.designs = list()
 prob.designs$rnorm = CJ(n = 100, mean = -1:1, sd = 1:5)
 prob.designs$rexp = data.table(n = 100, lambda = 1:5)
@@ -84,7 +90,8 @@ summarizeExperiments(reg = tmp)
 unwrap(getJobPars(reg = tmp))
 }
 \seealso{
-Other Experiment: \code{\link{removeExperiments}},
-  \code{\link{summarizeExperiments}}
+Other Experiment: 
+\code{\link{removeExperiments}()},
+\code{\link{summarizeExperiments}()}
 }
 \concept{Experiment}

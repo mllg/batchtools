@@ -43,6 +43,7 @@ setSystemConf = function(reg, conf.file) {
   reg$cluster.functions = makeClusterFunctionsInteractive()
   reg$default.resources = list()
   reg$temp.dir = fs::path_temp()
+  reg$compress = "gzip"
 
   if (!is.na(conf.file)) {
     assertString(conf.file)

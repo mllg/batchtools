@@ -4,8 +4,11 @@
 \alias{makeClusterFunctionsTORQUE}
 \title{ClusterFunctions for OpenPBS/TORQUE Systems}
 \usage{
-makeClusterFunctionsTORQUE(template = "torque", scheduler.latency = 1,
-  fs.latency = 65)
+makeClusterFunctionsTORQUE(
+  template = "torque",
+  scheduler.latency = 1,
+  fs.latency = 65
+)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -32,7 +35,7 @@ Usually safe to set to \code{0} to disable the heuristic, e.g. if you are workin
 [\code{\link{ClusterFunctions}}].
 }
 \description{
-Cluster functions for TORQUE/PBS (\url{http://www.adaptivecomputing.com/products/open-source/torque/}).
+Cluster functions for TORQUE/PBS (\url{https://adaptivecomputing.com/cherry-services/torque-resource-manager/}).
 
 Job files are created based on the brew template \code{template.file}. This file is processed
 with brew and then submitted to the queue using the \code{qsub} command. Jobs are killed using
@@ -46,15 +49,16 @@ It is the template file's job to choose a queue for the job and handle the desir
 allocations.
 }
 \seealso{
-Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
-  \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLSF}},
-  \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsOpenLava}},
-  \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctionsSlurm}},
-  \code{\link{makeClusterFunctionsSocket}},
-  \code{\link{makeClusterFunctions}}
+Other ClusterFunctions: 
+\code{\link{makeClusterFunctionsDocker}()},
+\code{\link{makeClusterFunctionsInteractive}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsMulticore}()},
+\code{\link{makeClusterFunctionsOpenLava}()},
+\code{\link{makeClusterFunctionsSGE}()},
+\code{\link{makeClusterFunctionsSSH}()},
+\code{\link{makeClusterFunctionsSlurm}()},
+\code{\link{makeClusterFunctionsSocket}()},
+\code{\link{makeClusterFunctions}()}
 }
 \concept{ClusterFunctions}

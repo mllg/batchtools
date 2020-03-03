@@ -4,8 +4,14 @@
 \alias{batchReduce}
 \title{Reduce Operation for Batch Systems}
 \usage{
-batchReduce(fun, xs, init = NULL, chunks = seq_along(xs),
-  more.args = list(), reg = getDefaultRegistry())
+batchReduce(
+  fun,
+  xs,
+  init = NULL,
+  chunks = seq_along(xs),
+  more.args = list(),
+  reg = getDefaultRegistry()
+)
 }
 \arguments{
 \item{fun}{[\code{function(aggr, x, ...)}]\cr

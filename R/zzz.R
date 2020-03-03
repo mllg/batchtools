@@ -19,8 +19,8 @@
 #' loading \pkg{batchtools}.
 #' @import utils
 #' @import checkmate
-#' @import data.table
 #' @import stringi
+#' @import data.table
 #' @importFrom R6 R6Class
 #' @importFrom digest digest
 #' @importFrom brew brew

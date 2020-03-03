@@ -46,7 +46,7 @@
 #'
 #' # example for an expand.grid()-like operation on parameters
 #' tmp = makeRegistry(file.dir = NA, make.default = FALSE)
-#' ids = batchMap(paste, args = CJ(x = letters[1:3], y = 1:3), reg = tmp)
+#' ids = batchMap(paste, args = data.table::CJ(x = letters[1:3], y = 1:3), reg = tmp)
 #' getJobPars(reg = tmp)
 #' testJob(6, reg = tmp)
 batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaultRegistry()) {
@@ -79,9 +79,9 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
     return(noIds())
   info("Adding %i jobs ...", nrow(ddd))
 
-  writeRDS(fun, file = fs::path(reg$file.dir, "user.function.rds"))
+  writeRDS(fun, file = fs::path(reg$file.dir, "user.function.rds"), compress = reg$compress)
   if (length(more.args) > 0L)
-    writeRDS(more.args, file = fs::path(reg$file.dir, "more.args.rds"))
+    writeRDS(more.args, file = fs::path(reg$file.dir, "more.args.rds"), compress = reg$compress)
   ids = seq_row(ddd)
 
   reg$defs = data.table(

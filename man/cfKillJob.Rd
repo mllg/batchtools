@@ -4,8 +4,13 @@
 \alias{cfKillJob}
 \title{Cluster Functions Helper to Kill Batch Jobs}
 \usage{
-cfKillJob(reg, cmd, args = character(0L), max.tries = 3L,
-  nodename = "localhost")
+cfKillJob(
+  reg,
+  cmd,
+  args = character(0L),
+  max.tries = 3L,
+  nodename = "localhost"
+)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -36,11 +41,12 @@ command returns an exit code > 0, the command is repeated after a 1 second sleep
 \code{max.tries-1} times. If the command failed in all tries, an error is generated.
 }
 \seealso{
-Other ClusterFunctionsHelper: \code{\link{cfBrewTemplate}},
-  \code{\link{cfHandleUnknownSubmitError}},
-  \code{\link{cfReadBrewTemplate}},
-  \code{\link{makeClusterFunctions}},
-  \code{\link{makeSubmitJobResult}},
-  \code{\link{runOSCommand}}
+Other ClusterFunctionsHelper: 
+\code{\link{cfBrewTemplate}()},
+\code{\link{cfHandleUnknownSubmitError}()},
+\code{\link{cfReadBrewTemplate}()},
+\code{\link{makeClusterFunctions}()},
+\code{\link{makeSubmitJobResult}()},
+\code{\link{runOSCommand}()}
 }
 \concept{ClusterFunctionsHelper}

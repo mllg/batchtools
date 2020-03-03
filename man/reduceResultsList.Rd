@@ -5,11 +5,21 @@
 \alias{reduceResultsDataTable}
 \title{Apply Functions on Results}
 \usage{
-reduceResultsList(ids = NULL, fun = NULL, ..., missing.val,
-  reg = getDefaultRegistry())
+reduceResultsList(
+  ids = NULL,
+  fun = NULL,
+  ...,
+  missing.val,
+  reg = getDefaultRegistry()
+)
 
-reduceResultsDataTable(ids = NULL, fun = NULL, ..., missing.val,
-  reg = getDefaultRegistry())
+reduceResultsDataTable(
+  ids = NULL,
+  fun = NULL,
+  ...,
+  missing.val,
+  reg = getDefaultRegistry()
+)
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -79,6 +89,7 @@ fun = function(instance, ...) sd(instance)
 addAlgorithm("deviation", fun = fun, reg = tmp)
 
 # define problem and algorithm designs
+library(data.table)
 prob.designs = algo.designs = list()
 prob.designs$rnorm = CJ(n = 100, mean = -1:1, sd = 1:5)
 prob.designs$rexp = data.table(n = 100, lambda = 1:5)
@@ -99,7 +110,9 @@ unwrap(res, sep = ".")
 \seealso{
 \code{\link{reduceResults}}
 
-Other Results: \code{\link{batchMapResults}},
-  \code{\link{loadResult}}, \code{\link{reduceResults}}
+Other Results: 
+\code{\link{batchMapResults}()},
+\code{\link{loadResult}()},
+\code{\link{reduceResults}()}
 }
 \concept{Results}

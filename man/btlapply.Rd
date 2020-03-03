@@ -5,12 +5,27 @@
 \alias{btmapply}
 \title{Synchronous Apply Functions}
 \usage{
-btlapply(X, fun, ..., resources = list(), n.chunks = NULL,
-  chunk.size = NULL, reg = makeRegistry(file.dir = NA))
+btlapply(
+  X,
+  fun,
+  ...,
+  resources = list(),
+  n.chunks = NULL,
+  chunk.size = NULL,
+  reg = makeRegistry(file.dir = NA)
+)
 
-btmapply(fun, ..., more.args = list(), simplify = FALSE,
-  use.names = TRUE, resources = list(), n.chunks = NULL,
-  chunk.size = NULL, reg = makeRegistry(file.dir = NA))
+btmapply(
+  fun,
+  ...,
+  more.args = list(),
+  simplify = FALSE,
+  use.names = TRUE,
+  resources = list(),
+  n.chunks = NULL,
+  chunk.size = NULL,
+  reg = makeRegistry(file.dir = NA)
+)
 }
 \arguments{
 \item{X}{[\code{\link[base]{vector}}]\cr
