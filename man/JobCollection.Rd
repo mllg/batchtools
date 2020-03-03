@@ -5,7 +5,8 @@
 \alias{JobCollection}
 \title{JobCollection Constructor}
 \usage{
-makeJobCollection(ids = NULL, resources = list(), reg = getDefaultRegistry())
+makeJobCollection(ids = NULL, resources = list(),
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -59,7 +60,6 @@ ls(jc)
 jc$resources
 }
 \seealso{
-Other JobCollection: 
-\code{\link{doJobCollection}()}
+Other JobCollection: \code{\link{doJobCollection}}
 }
 \concept{JobCollection}

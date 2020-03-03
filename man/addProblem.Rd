@@ -6,15 +6,8 @@
 \alias{removeProblems}
 \title{Define Problems for Experiments}
 \usage{
-addProblem(
-  name,
-  data = NULL,
-  fun = NULL,
-  seed = NULL,
-	fix.seed = FALSE,
-  cache = FALSE,
-  reg = getDefaultRegistry()
-)
+addProblem(name, data = NULL, fun = NULL, seed = NULL,
+  fix.seed = FALSE, cache = FALSE, reg = getDefaultRegistry())
 
 removeProblems(name, reg = getDefaultRegistry())
 }
@@ -47,14 +40,14 @@ different algorithms see different stochastic instances of the same problem.}
 \item{fix.seed}{[\code{logical(1)}]\cr
 Fix.seed for this problem. This allows to set the same seed for all problem instances so that
 all algorithms are evaluated on the same stochastic instance. There are four cases for fix.seed and seed:
-(1) If fix.seed is TRUE and \link{seed} is specified, then all stochastic instances are the same 
-and are set to \link{seed}.
-(2)If fix.seed is TRUE and \link{seed} is not specified, then all stochastic instances are the same
+(1) If fix.seed is TRUE and \code{seed} is specified, then all stochastic instances are the same 
+and are set to \code{seed}.
+(2)If fix.seed is TRUE and \code{seed} is not specified, then all stochastic instances are the same
 and are set to registry seed. 
-(3)If fix.seed is FALSE (default) and \link{seed} is specified, then the seeding strategy is the same 
-as described in \link{seed}. 
-(4)If fix.seed is FALSE (default) and \link{seed} is not specified, then the seeding strategy is the same 
-as described in \link{seed}.}
+(3)If fix.seed is FALSE (default) and \code{seed} is specified, then the seeding strategy is the same 
+as described in \code{seed}. 
+(4)If fix.seed is FALSE (default) and \code{seed} is not specified, then the seeding strategy is the same 
+as described in \code{seed}.}
 
 \item{cache}{[\code{logical(1)}]\cr
 If \code{TRUE} and \code{seed} is set, problem instances will be cached on the file system.

@@ -4,11 +4,8 @@
 \alias{summarizeExperiments}
 \title{Quick Summary over Experiments}
 \usage{
-summarizeExperiments(
-  ids = NULL,
-  by = c("problem", "algorithm"),
-  reg = getDefaultRegistry()
-)
+summarizeExperiments(ids = NULL, by = c("problem", "algorithm"),
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -32,8 +29,7 @@ Returns a frequency table of defined experiments.
 See \code{\link{ExperimentRegistry}} for an example.
 }
 \seealso{
-Other Experiment: 
-\code{\link{addExperiments}()},
-\code{\link{removeExperiments}()}
+Other Experiment: \code{\link{addExperiments}},
+  \code{\link{removeExperiments}}
 }
 \concept{Experiment}

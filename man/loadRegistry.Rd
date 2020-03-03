@@ -4,13 +4,8 @@
 \alias{loadRegistry}
 \title{Load a Registry from the File System}
 \usage{
-loadRegistry(
-  file.dir,
-  work.dir = NULL,
-  conf.file = findConfFile(),
-  make.default = TRUE,
-  writeable = FALSE
-)
+loadRegistry(file.dir, work.dir = NULL, conf.file = findConfFile(),
+  make.default = TRUE, writeable = FALSE)
 }
 \arguments{
 \item{file.dir}{[\code{character(1)}]\cr
@@ -82,13 +77,10 @@ Thus, set to \code{writeable} to \code{TRUE} if and only if you are absolutely s
 If you need write access, load the registry with \code{writeable} set to \code{TRUE}.
 }
 \seealso{
-Other Registry: 
-\code{\link{clearRegistry}()},
-\code{\link{getDefaultRegistry}()},
-\code{\link{makeRegistry}()},
-\code{\link{removeRegistry}()},
-\code{\link{saveRegistry}()},
-\code{\link{sweepRegistry}()},
-\code{\link{syncRegistry}()}
+Other Registry: \code{\link{clearRegistry}},
+  \code{\link{getDefaultRegistry}},
+  \code{\link{makeRegistry}}, \code{\link{removeRegistry}},
+  \code{\link{saveRegistry}}, \code{\link{sweepRegistry}},
+  \code{\link{syncRegistry}}
 }
 \concept{Registry}

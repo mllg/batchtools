@@ -4,12 +4,8 @@
 \alias{submitJobs}
 \title{Submit Jobs to the Batch Systems}
 \usage{
-submitJobs(
-  ids = NULL,
-  resources = list(),
-  sleep = NULL,
-  reg = getDefaultRegistry()
-)
+submitJobs(ids = NULL, resources = list(), sleep = NULL,
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr

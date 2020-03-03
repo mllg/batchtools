@@ -88,9 +88,7 @@ res = reduceResultsList(reg = tmp)
 Reduce(comb, res)
 }
 \seealso{
-Other Results: 
-\code{\link{batchMapResults}()},
-\code{\link{loadResult}()},
-\code{\link{reduceResultsList}()}
+Other Results: \code{\link{batchMapResults}},
+  \code{\link{loadResult}}, \code{\link{reduceResultsList}}
 }
 \concept{Results}

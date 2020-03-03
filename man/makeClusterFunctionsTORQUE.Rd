@@ -4,11 +4,8 @@
 \alias{makeClusterFunctionsTORQUE}
 \title{ClusterFunctions for OpenPBS/TORQUE Systems}
 \usage{
-makeClusterFunctionsTORQUE(
-  template = "torque",
-  scheduler.latency = 1,
-  fs.latency = 65
-)
+makeClusterFunctionsTORQUE(template = "torque", scheduler.latency = 1,
+  fs.latency = 65)
 }
 \arguments{
 \item{template}{[\code{character(1)}]\cr
@@ -49,16 +46,15 @@ It is the template file's job to choose a queue for the job and handle the desir
 allocations.
 }
 \seealso{
-Other ClusterFunctions: 
-\code{\link{makeClusterFunctionsDocker}()},
-\code{\link{makeClusterFunctionsInteractive}()},
-\code{\link{makeClusterFunctionsLSF}()},
-\code{\link{makeClusterFunctionsMulticore}()},
-\code{\link{makeClusterFunctionsOpenLava}()},
-\code{\link{makeClusterFunctionsSGE}()},
-\code{\link{makeClusterFunctionsSSH}()},
-\code{\link{makeClusterFunctionsSlurm}()},
-\code{\link{makeClusterFunctionsSocket}()},
-\code{\link{makeClusterFunctions}()}
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDocker}},
+  \code{\link{makeClusterFunctionsInteractive}},
+  \code{\link{makeClusterFunctionsLSF}},
+  \code{\link{makeClusterFunctionsMulticore}},
+  \code{\link{makeClusterFunctionsOpenLava}},
+  \code{\link{makeClusterFunctionsSGE}},
+  \code{\link{makeClusterFunctionsSSH}},
+  \code{\link{makeClusterFunctionsSlurm}},
+  \code{\link{makeClusterFunctionsSocket}},
+  \code{\link{makeClusterFunctions}}
 }
 \concept{ClusterFunctions}

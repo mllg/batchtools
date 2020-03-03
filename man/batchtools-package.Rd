@@ -36,7 +36,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Michel Lang \email{michellang@gmail.com} (\href{https://orcid.org/0000-0001-9754-0393}{ORCID})
+\strong{Maintainer}: Michel Lang \email{michellang@gmail.com} (0000-0001-9754-0393)
 
 Authors:
 \itemize{
@@ -45,7 +45,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Dirk Surmann \email{surmann@statistik.tu-dortmund.de} (\href{https://orcid.org/0000-0003-0873-137X}{ORCID}) [contributor]
+  \item Dirk Surmann \email{surmann@statistik.tu-dortmund.de} (0000-0003-0873-137X) [contributor]
 }
 
 }

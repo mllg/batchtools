@@ -4,13 +4,8 @@
 \alias{addExperiments}
 \title{Add Experiments to the Registry}
 \usage{
-addExperiments(
-  prob.designs = NULL,
-  algo.designs = NULL,
-  repls = 1L,
-  combine = "crossprod",
-  reg = getDefaultRegistry()
-)
+addExperiments(prob.designs = NULL, algo.designs = NULL, repls = 1L,
+  combine = "crossprod", reg = getDefaultRegistry())
 }
 \arguments{
 \item{prob.designs}{[named list of \code{\link[base]{data.frame}}]\cr
@@ -90,8 +85,7 @@ summarizeExperiments(reg = tmp)
 unwrap(getJobPars(reg = tmp))
 }
 \seealso{
-Other Experiment: 
-\code{\link{removeExperiments}()},
-\code{\link{summarizeExperiments}()}
+Other Experiment: \code{\link{removeExperiments}},
+  \code{\link{summarizeExperiments}}
 }
 \concept{Experiment}
