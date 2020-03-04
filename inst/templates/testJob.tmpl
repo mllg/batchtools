@@ -1,7 +1,7 @@
 options(warn = 1L)
 Sys.setenv(DEBUGME = "<%= Sys.getenv('DEBUGME') %>")
 requireNamespace("batchtools", quietly = TRUE)
-jc = readRDS("<%= jc %>")
+jc = force(readRDS("<%= jc %>"))
 setwd(jc$work.dir)
 batchtools:::loadRegistryDependencies(jc, must.work = TRUE)
 res = batchtools::execJob(jc)

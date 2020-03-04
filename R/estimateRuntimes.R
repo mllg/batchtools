@@ -130,7 +130,9 @@ print.RuntimeEstimate = function(x, n = 1L, ...) {
     catf("  Remaining: %s", ps(remaining, nc = nc))
     if (n >= 2L) {
       rt = x$runtimes[type == "estimated"]$runtime
-      catf("  Parallel : %s", ps(max(vnapply(split(rt, lpt(rt, n)), sum)), nc = nc))
+      bins = lpt(rt, n)
+      bins = vnapply(split(rt, bins), sum)
+      catf("  Parallel : %s", ps(max(bins), nc = nc))
     }
   }
   catf("  Total    : %s", ps(total, nc = nc))
