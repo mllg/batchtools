@@ -47,9 +47,10 @@ E.g., if you have two problems \code{p1} and \code{p2} and three algorithms \cod
 \code{(p1, a3)}, \code{(p2, a1)}, \code{(p2, a2)} and \code{(p2, a3)}.
 }
 \note{
-R's \code{data.frame} converts character vectors to factors by default which frequently resulted in problems using \code{addExperiments}.
+R's \code{data.frame} converts character vectors to factors by default in R versions prior to 4.0.0 which frequently resulted in problems using \code{addExperiments}.
 Therefore, this function will warn about factor variables if the following conditions hold:
 \enumerate{
+  \item R version is < 4.0.0
   \item The design is passed as a \code{data.frame}, not a \code{\link[data.table]{data.table}} or \code{\link[tibble]{tibble}}.
   \item The option \dQuote{stringsAsFactors} is not set or set to \code{TRUE}.
 }
