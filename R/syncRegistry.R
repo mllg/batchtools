@@ -10,10 +10,12 @@
 #' @export
 syncRegistry = function(reg = getDefaultRegistry()) {
   assertRegistry(reg)
-  altered = sync(reg)
-  if (altered)
+  merged = sync(reg)
+  if (length(merged)) {
     saveRegistry(reg)
-  altered
+    file_remove(merged)
+  }
+  length(merged) > 0L
 }
 
 
@@ -21,7 +23,7 @@ sync = function(reg) {
   "!DEBUG [syncRegistry]: Triggered syncRegistry"
   fns = list.files(dir(reg, "updates"), full.names = TRUE)
   if (length(fns) == 0L)
-    return(invisible(FALSE))
+    return(character())
 
   runHook(reg, "pre.sync", fns = fns)
 
@@ -45,10 +47,8 @@ sync = function(reg) {
   if (nrow(updates) > 0L) {
     expr = quote(`:=`(started = i.started, done = i.done, error = i.error, mem.used = i.mem.used))
     reg$status[updates, eval(expr), on = "job.id"]
-    if (reg$writeable)
-      file_remove(fns[!failed])
   }
 
   runHook(reg, "post.sync", updates = updates)
-  invisible(nrow(updates) > 0L)
+  if (reg$writeable) fns[!failed] else character()
 }
