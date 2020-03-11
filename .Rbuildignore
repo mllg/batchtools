@@ -4,8 +4,9 @@
 \.swp$
 ^\.ignore$
 ^\.editorconfig$
-^\.github$
+^\.travis\.yml$
 ^man-roxygen$
+^appveyor\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^docs$
