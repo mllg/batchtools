@@ -5,17 +5,11 @@
 \alias{ExperimentRegistry}
 \title{ExperimentRegistry Constructor}
 \usage{
-makeExperimentRegistry(
-  file.dir = "registry",
-  work.dir = getwd(),
-  conf.file = findConfFile(),
-  packages = character(0L),
-  namespaces = character(0L),
-  source = character(0L),
-  load = character(0L),
-  seed = NULL,
-  make.default = TRUE
-)
+makeExperimentRegistry(file.dir = "registry", work.dir = getwd(),
+  conf.file = findConfFile(), packages = character(0L),
+  namespaces = character(0L), source = character(0L),
+  load = character(0L), seed = NULL, fix.seed = FALSE,
+  make.default = TRUE)
 }
 \arguments{
 \item{file.dir}{[\code{character(1)}]\cr
@@ -76,8 +70,12 @@ Files which should be loaded on the slaves prior to executing a job.
 Calls \code{\link[base]{load}} using the \code{\link[base]{.GlobalEnv}}.}
 
 \item{seed}{[\code{integer(1)}]\cr
-Start seed for jobs. Each job uses the (\code{seed} + \code{job.id}) as seed.
+Start seed for jobs. Each job uses the (\code{seed} + \code{job.id}) as seed, if fix.seed is FALSE. 
 Default is a random integer between 1 and 32768}
+
+\item{fix.seed}{[\code{logical(1)}]\cr
+Fix seed for jobs. If set to TRUE, each job uses the same seed.
+Default is FALSE, which means each job uses the (\code{seed} + \code{job.id}) as seed.}
 
 \item{make.default}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, the created registry is saved inside the package

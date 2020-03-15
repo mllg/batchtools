@@ -5,21 +5,11 @@
 \alias{reduceResultsDataTable}
 \title{Apply Functions on Results}
 \usage{
-reduceResultsList(
-  ids = NULL,
-  fun = NULL,
-  ...,
-  missing.val,
-  reg = getDefaultRegistry()
-)
+reduceResultsList(ids = NULL, fun = NULL, ..., missing.val,
+  reg = getDefaultRegistry())
 
-reduceResultsDataTable(
-  ids = NULL,
-  fun = NULL,
-  ...,
-  missing.val,
-  reg = getDefaultRegistry()
-)
+reduceResultsDataTable(ids = NULL, fun = NULL, ..., missing.val,
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -110,9 +100,7 @@ unwrap(res, sep = ".")
 \seealso{
 \code{\link{reduceResults}}
 
-Other Results: 
-\code{\link{batchMapResults}()},
-\code{\link{loadResult}()},
-\code{\link{reduceResults}()}
+Other Results: \code{\link{batchMapResults}},
+  \code{\link{loadResult}}, \code{\link{reduceResults}}
 }
 \concept{Results}

@@ -34,6 +34,17 @@
 #'   see \code{\link{ExperimentRegistry}}.
 #'   If \code{seed} is set to \code{NULL} (default), the job seed is used to instantiate the problem and
 #'   different algorithms see different stochastic instances of the same problem.
+#' @param fix.seed [\code{logical(1)}]\cr
+#'   Fix.seed for this problem. This allows to set the same seed for all problem instances so that
+#'   all algorithms are evaluated on the same stochastic instance. There are four cases for fix.seed and seed:
+#'   (1) If fix.seed is TRUE and \code{seed} is specified, then all stochastic instances are the same 
+#'   and are set to \code{seed}.
+#'   (2)If fix.seed is TRUE and \code{seed} is not specified, then all stochastic instances are the same
+#'   and are set to registry seed. 
+#'   (3)If fix.seed is FALSE (default) and \code{seed} is specified, then the seeding strategy is the same 
+#'   as described in \code{seed}. 
+#'   (4)If fix.seed is FALSE (default) and \code{seed} is not specified, then the seeding strategy is the same 
+#'   as described in \code{seed}. 
 #' @param cache [\code{logical(1)}]\cr
 #'   If \code{TRUE} and \code{seed} is set, problem instances will be cached on the file system.
 #'   This assumes that each problem instance is deterministic for each combination of hyperparameter setting
@@ -64,7 +75,7 @@
 #' tmp$problems
 #' tmp$algorithms
 #' getJobPars(reg = tmp)
-addProblem = function(name, data = NULL, fun = NULL, seed = NULL, cache = FALSE, reg = getDefaultRegistry()) {
+addProblem = function(name, data = NULL, fun = NULL, seed = NULL, fix.seed = FALSE, cache = FALSE, reg = getDefaultRegistry()) {
   assertRegistry(reg, class = "ExperimentRegistry", writeable = TRUE)
   assertString(name, min.chars = 1L)
   if (!stri_detect_regex(name, "^[[:alnum:]_.-]+$"))
@@ -82,7 +93,7 @@ addProblem = function(name, data = NULL, fun = NULL, seed = NULL, cache = FALSE,
   }
 
   info("Adding problem '%s'", name)
-  prob = setClasses(list(name = name, seed = seed, cache = cache, data = data, fun = fun), "Problem")
+  prob = setClasses(list(name = name, seed = seed, fix.seed = fix.seed, cache = cache, data = data, fun = fun), "Problem")
   writeRDS(prob, file = getProblemURI(reg, name), compress = reg$compress)
   reg$problems = union(reg$problems, name)
   cache.dir = getProblemCacheDir(reg, name)

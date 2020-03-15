@@ -83,8 +83,11 @@
 #'   Files which should be loaded on the slaves prior to executing a job.
 #'   Calls \code{\link[base]{load}} using the \code{\link[base]{.GlobalEnv}}.
 #' @param seed [\code{integer(1)}]\cr
-#'   Start seed for jobs. Each job uses the (\code{seed} + \code{job.id}) as seed.
+#'   Start seed for jobs. Each job uses the (\code{seed} + \code{job.id}) as seed, if fix.seed is FALSE. 
 #'   Default is a random integer between 1 and 32768
+#' @param fix.seed [\code{logical(1)}]\cr
+#'   Fix seed for jobs. If set to TRUE, each job uses the same seed.
+#'   Default is FALSE, which means each job uses the (\code{seed} + \code{job.id}) as seed.
 #' @param make.default [\code{logical(1)}]\cr
 #'   If set to \code{TRUE}, the created registry is saved inside the package
 #'   namespace and acts as default registry. You might want to switch this
@@ -98,6 +101,7 @@
 #'     \item{\code{packages} [character()]:}{Packages to load on the slaves.}
 #'     \item{\code{namespaces} [character()]:}{Namespaces to load on the slaves.}
 #'     \item{\code{seed} [integer(1)]:}{Registry seed. Before each job is executed, the seed \code{seed + job.id} is set.}
+#'     \item{\code{fix.seed} [logical(1)]:}{Fix seed. Determine if to use the same seed for all computational jobs.}
 #'     \item{\code{cluster.functions} [cluster.functions]:}{Usually set in your \code{conf.file}. Set via a call to \code{\link{makeClusterFunctions}}. See example.}
 #'     \item{\code{default.resources} [named list()]:}{Usually set in your \code{conf.file}. Named list of default resources.}
 #'     \item{\code{max.concurrent.jobs} [integer(1)]:}{Usually set in your \code{conf.file}. Maximum number of concurrent jobs for a single user and current registry on the system.
@@ -123,7 +127,7 @@
 #' tmp$packages = c("MASS")
 #' saveRegistry(reg = tmp)
 makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = findConfFile(), packages = character(0L), namespaces = character(0L),
-  source = character(0L), load = character(0L), seed = NULL, make.default = TRUE) {
+  source = character(0L), load = character(0L), seed = NULL, fix.seed = FALSE, make.default = TRUE) {
   assertString(file.dir, na.ok = TRUE)
   if (!is.na(file.dir))
     assertPathForOutput(file.dir, overwrite = FALSE)
@@ -145,6 +149,7 @@ makeRegistry = function(file.dir = "registry", work.dir = getwd(), conf.file = f
   reg$source = source
   reg$load = load
   reg$seed = seed
+  reg$fix.seed = fix.seed
   reg$writeable = TRUE
   reg$version = packageVersion("batchtools")
 

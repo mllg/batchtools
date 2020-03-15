@@ -5,6 +5,9 @@
 \alias{Worker}
 \title{Create a Linux-Worker}
 \format{An \code{\link{R6Class}} generator object}
+\usage{
+Worker
+}
 \value{
 [\code{\link{Worker}}].
 }
@@ -40,3 +43,4 @@
 Worker$new("localhost", ncpus = 4)
 }
 }
+\keyword{datasets}

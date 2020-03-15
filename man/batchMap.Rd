@@ -4,13 +4,8 @@
 \alias{batchMap}
 \title{Map Operation for Batch Systems}
 \usage{
-batchMap(
-  fun,
-  ...,
-  args = list(),
-  more.args = list(),
-  reg = getDefaultRegistry()
-)
+batchMap(fun, ..., args = list(), more.args = list(),
+  reg = getDefaultRegistry())
 }
 \arguments{
 \item{fun}{[\code{function}]\cr

@@ -5,17 +5,11 @@
 \alias{Registry}
 \title{Registry Constructor}
 \usage{
-makeRegistry(
-  file.dir = "registry",
-  work.dir = getwd(),
-  conf.file = findConfFile(),
-  packages = character(0L),
-  namespaces = character(0L),
-  source = character(0L),
-  load = character(0L),
-  seed = NULL,
-  make.default = TRUE
-)
+makeRegistry(file.dir = "registry", work.dir = getwd(),
+  conf.file = findConfFile(), packages = character(0L),
+  namespaces = character(0L), source = character(0L),
+  load = character(0L), seed = NULL, fix.seed = FALSE,
+  make.default = TRUE)
 }
 \arguments{
 \item{file.dir}{[\code{character(1)}]\cr
@@ -76,8 +70,12 @@ Files which should be loaded on the slaves prior to executing a job.
 Calls \code{\link[base]{load}} using the \code{\link[base]{.GlobalEnv}}.}
 
 \item{seed}{[\code{integer(1)}]\cr
-Start seed for jobs. Each job uses the (\code{seed} + \code{job.id}) as seed.
+Start seed for jobs. Each job uses the (\code{seed} + \code{job.id}) as seed, if fix.seed is FALSE. 
 Default is a random integer between 1 and 32768}
+
+\item{fix.seed}{[\code{logical(1)}]\cr
+Fix seed for jobs. If set to TRUE, each job uses the same seed.
+Default is FALSE, which means each job uses the (\code{seed} + \code{job.id}) as seed.}
 
 \item{make.default}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, the created registry is saved inside the package
@@ -94,6 +92,7 @@ Default is \code{TRUE}.}
     \item{\code{packages} [character()]:}{Packages to load on the slaves.}
     \item{\code{namespaces} [character()]:}{Namespaces to load on the slaves.}
     \item{\code{seed} [integer(1)]:}{Registry seed. Before each job is executed, the seed \code{seed + job.id} is set.}
+    \item{\code{fix.seed} [logical(1)]:}{Fix seed. Determine if to use the same seed for all computational jobs.}
     \item{\code{cluster.functions} [cluster.functions]:}{Usually set in your \code{conf.file}. Set via a call to \code{\link{makeClusterFunctions}}. See example.}
     \item{\code{default.resources} [named list()]:}{Usually set in your \code{conf.file}. Named list of default resources.}
     \item{\code{max.concurrent.jobs} [integer(1)]:}{Usually set in your \code{conf.file}. Maximum number of concurrent jobs for a single user and current registry on the system.
@@ -150,13 +149,10 @@ tmp$packages = c("MASS")
 saveRegistry(reg = tmp)
 }
 \seealso{
-Other Registry: 
-\code{\link{clearRegistry}()},
-\code{\link{getDefaultRegistry}()},
-\code{\link{loadRegistry}()},
-\code{\link{removeRegistry}()},
-\code{\link{saveRegistry}()},
-\code{\link{sweepRegistry}()},
-\code{\link{syncRegistry}()}
+Other Registry: \code{\link{clearRegistry}},
+  \code{\link{getDefaultRegistry}},
+  \code{\link{loadRegistry}}, \code{\link{removeRegistry}},
+  \code{\link{saveRegistry}}, \code{\link{sweepRegistry}},
+  \code{\link{syncRegistry}}
 }
 \concept{Registry}
