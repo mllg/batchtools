@@ -1,3 +1,7 @@
+# batchtools 0.9.13
+
+* Mainenance release for R-4.0.0.
+
 # batchtools 0.9.12
 
 * Moved `data.table` from `Depends` to `Imports`.
