@@ -32,14 +32,15 @@
 #' addProblem(name = "iris", data = iris, fun = function(data, ...) nrow(data), reg = tmp)
 #' addAlgorithm(name = "nrow", function(instance, ...) nrow(instance), reg = tmp)
 #' addAlgorithm(name = "ncol", function(instance, ...) ncol(instance), reg = tmp)
-#' addExperiments(algo.designs = list(nrow = CJ(x = 1:50, y = letters[1:5])), reg = tmp)
-#' addExperiments(algo.designs = list(ncol = CJ(x = 1:50, y = letters[1:5])), reg = tmp)
+#' addExperiments(algo.designs = list(nrow = data.table::CJ(x = 1:50, y = letters[1:5])), reg = tmp)
+#' addExperiments(algo.designs = list(ncol = data.table::CJ(x = 1:50, y = letters[1:5])), reg = tmp)
 #'
 #' # We use the job parameters to predict runtimes
 #' tab = unwrap(getJobPars(reg = tmp))
 #'
 #' # First we need to submit some jobs so that the forest can train on some data.
 #' # Thus, we just sample some jobs from the registry while grouping by factor variables.
+#' library(data.table)
 #' ids = tab[, .SD[sample(nrow(.SD), 5)], by = c("problem", "algorithm", "y")]
 #' setkeyv(ids, "job.id")
 #' submitJobs(ids, reg = tmp)
@@ -129,7 +130,9 @@ print.RuntimeEstimate = function(x, n = 1L, ...) {
     catf("  Remaining: %s", ps(remaining, nc = nc))
     if (n >= 2L) {
       rt = x$runtimes[type == "estimated"]$runtime
-      catf("  Parallel : %s", ps(max(vnapply(split(rt, lpt(rt, n)), sum)), nc = nc))
+      bins = lpt(rt, n)
+      bins = vnapply(split(rt, bins), sum)
+      catf("  Parallel : %s", ps(max(bins), nc = nc))
     }
   }
   catf("  Total    : %s", ps(total, nc = nc))

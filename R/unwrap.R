@@ -25,7 +25,7 @@
 #' @return [\code{\link{data.table}}].
 #' @export
 #' @examples
-#' x = data.table(
+#' x = data.table::data.table(
 #'   id = 1:3,
 #'   values = list(list(a = 1, b = 3), list(a = 2, b = 2), list(a = 3))
 #' )
@@ -62,7 +62,7 @@ unwrap = function(x, cols = NULL, sep = NULL) {
       }
       x
     })
-    new.cols = rbindlist(new.cols, fill = TRUE, idcol = ".row")
+    new.cols = rbindlist(new.cols, fill = TRUE, idcol = ".row", use.names = TRUE)
 
     if (ncol(new.cols) > 1L) {
       if (nrow(new.cols) > nrow(x) || anyDuplicated(new.cols, by = ".row") > 0L)

@@ -4,8 +4,11 @@
 \alias{makeClusterFunctionsInteractive}
 \title{ClusterFunctions for Sequential Execution in the Running R Session}
 \usage{
-makeClusterFunctionsInteractive(external = FALSE, write.logs = TRUE,
-  fs.latency = 0)
+makeClusterFunctionsInteractive(
+  external = FALSE,
+  write.logs = TRUE,
+  fs.latency = 0
+)
 }
 \arguments{
 \item{external}{[\code{logical(1)}]\cr
@@ -36,6 +39,7 @@ Listing jobs returns an empty vector (as no jobs can be running when you call th
 and \code{killJob} is not implemented for the same reasons.
 }
 \seealso{
+<<<<<<< HEAD
 Other ClusterFunctions: \code{\link{makeClusterFunctionsDockerQueue}},
   \code{\link{makeClusterFunctionsDocker}},
   \code{\link{makeClusterFunctionsLSF}},
@@ -47,5 +51,18 @@ Other ClusterFunctions: \code{\link{makeClusterFunctionsDockerQueue}},
   \code{\link{makeClusterFunctionsSocket}},
   \code{\link{makeClusterFunctionsTORQUE}},
   \code{\link{makeClusterFunctions}}
+=======
+Other ClusterFunctions: 
+\code{\link{makeClusterFunctionsDocker}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsMulticore}()},
+\code{\link{makeClusterFunctionsOpenLava}()},
+\code{\link{makeClusterFunctionsSGE}()},
+\code{\link{makeClusterFunctionsSSH}()},
+\code{\link{makeClusterFunctionsSlurm}()},
+\code{\link{makeClusterFunctionsSocket}()},
+\code{\link{makeClusterFunctionsTORQUE}()},
+\code{\link{makeClusterFunctions}()}
+>>>>>>> master
 }
 \concept{ClusterFunctions}

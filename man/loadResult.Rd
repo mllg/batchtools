@@ -21,8 +21,9 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 Loads the result of a single job.
 }
 \seealso{
-Other Results: \code{\link{batchMapResults}},
-  \code{\link{reduceResultsList}},
-  \code{\link{reduceResults}}
+Other Results: 
+\code{\link{batchMapResults}()},
+\code{\link{reduceResultsList}()},
+\code{\link{reduceResults}()}
 }
 \concept{Results}

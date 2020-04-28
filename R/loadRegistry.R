@@ -68,8 +68,11 @@ loadRegistry = function(file.dir, work.dir = NULL, conf.file = findConfFile(), m
   if (make.default)
     batchtools$default.registry = reg
 
-  if (sync(reg = reg) || updated)
+  merged = sync(reg = reg)
+  if (length(merged) || updated) {
     saveRegistry(reg)
+    file_remove(merged)
+  }
   return(reg)
 }
 

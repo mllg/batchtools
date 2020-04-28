@@ -48,7 +48,7 @@ batchExport = function(export = list(), unexport = character(0L), reg = getDefau
       info("Exporting new objects: '%s' ...", stri_flatten(nn[!found], "','"))
     if (any(found))
       info("Overwriting previously exported object: '%s'", stri_flatten(nn[found], "','"))
-    Map(writeRDS, object = export, file = fn)
+    Map(writeRDS, object = export, file = fn, compress = reg$compress)
   }
 
   if (length(unexport) > 0L) {

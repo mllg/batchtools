@@ -1,3 +1,15 @@
+# batchtools 0.9.13
+
+* Mainenance release for R-4.0.0.
+
+# batchtools 0.9.12
+
+* Moved `data.table` from `Depends` to `Imports`.
+  User scripts might need to explicitly attach `data.table` via `library()` now.
+* Fixes for `ClusterFunctionsMulticore`.
+* Removed a workaround for `system2()` for R-devel (to be released as R-4.0.0).
+* New configuration option `compress` to select the compression algorithm (passed down to `saveRDS()`).
+
 # batchtools 0.9.11
 
 * Removed deprecated function `chunkIds()`.

@@ -29,6 +29,7 @@
 #'   \item{\code{temp.dir}:}{Path to directory to use for temporary registries.}
 #'   \item{\code{sleep}:}{Custom sleep function. See \code{\link{waitForJobs}}.}
 #'   \item{\code{expire.after}:}{Number of iterations before treating jobs as expired in \code{\link{waitForJobs}}.}
+#'   \item{\code{compress}:}{Compression algorithm to use via \code{\link{saveRDS}}.}
 #' }
 #'
 #' @param file.dir [\code{character(1)}]\cr
@@ -265,8 +266,13 @@ assertRegistry = function(reg, class = NULL, writeable = FALSE, sync = FALSE, ru
   if (!running.ok && nrow(.findOnSystem(reg = reg)) > 0L)
     stop("This operation is not allowed while jobs are running on the system")
 
-  if (sync && sync(reg))
-    saveRegistry(reg)
+  if (sync) {
+    merged = sync(reg)
+    if (length(merged)) {
+      saveRegistry(reg)
+      file_remove(merged)
+    }
+  }
 
   invisible(TRUE)
 }

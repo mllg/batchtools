@@ -39,20 +39,20 @@ test_that("Problem and Algorithm seed", {
   set.seed(45); a3 = runif(1)
   silent({
     ids = findExperiments(algo.name = "a1", prob.name = "p1", reg = reg)
-    results = rbindlist(reduceResultsList(ids, reg = reg))
+    results = rbindlist(reduceResultsList(ids, reg = reg), use.names = TRUE)
   })
   expect_true(all(results$instance == c(p1, p2, p3)))
   expect_true(all(results$res == c(a1, a2, a3)))
 
   silent({
     ids = findExperiments(prob.name = "p1", repl = 2, reg = reg)
-    results = rbindlist(reduceResultsList(ids, reg = reg))
+    results = rbindlist(reduceResultsList(ids, reg = reg), use.names = TRUE)
   })
   expect_true(all(results$instance == p2))
 
   silent({
     ids = findExperiments(prob.name = "p2", reg = reg)
-    results = rbindlist(reduceResultsList(ids, reg = reg))
+    results = rbindlist(reduceResultsList(ids, reg = reg), use.names = TRUE)
   })
   expect_numeric(results$instance, unique = TRUE)
   expect_numeric(results$res, unique = TRUE)

@@ -63,6 +63,7 @@ createCollection = function(jobs, resources = list(), reg = getDefaultRegistry()
   jc$resources    = resources
   jc$array.var    = reg$cluster.functions$array.var
   jc$array.jobs   = isTRUE(resources$chunks.as.arrayjobs)
+  jc$compress     = reg$compress
 
   hooks = chintersect(names(reg$cluster.functions$hooks), batchtools$hooks$remote)
   if (length(hooks) > 0L)

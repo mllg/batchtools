@@ -115,7 +115,10 @@ waitForJobs = function(ids = NULL, sleep = NULL, timeout = 604800, expire.after 
       return(FALSE)
     }
 
-    if (suppressMessages(sync(reg = reg)))
+    merged = suppressMessages(sync(reg = reg))
+    if (length(merged)) {
       saveRegistry(reg)
+      file_remove(merged)
+    }
   }
 }

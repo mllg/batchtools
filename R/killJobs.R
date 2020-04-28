@@ -48,10 +48,11 @@ killJobs = function(ids = NULL, reg = getDefaultRegistry()) {
     warningf("Could not kill %i jobs", sum(!tab$killed))
 
   # reset killed jobs
-  sync(reg = reg)
+  merged = sync(reg = reg)
   cols = c("submitted", "started", "done", "error", "mem.used", "resource.id", "batch.id", "log.file", "job.hash")
   reg$status[tab[tab$killed], (cols) := list(NA_real_, NA_real_, NA_real_, NA_character_, NA_real_, NA_integer_, NA_character_, NA_character_, NA_character_)]
   saveRegistry(reg)
+  file_remove(merged)
 
   tab = setkeyv(tab[, c("job.id", "batch.id", "killed")], "job.id")
   Sys.sleep(reg$cluster.functions$scheduler.latency)

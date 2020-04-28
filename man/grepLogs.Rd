@@ -4,8 +4,13 @@
 \alias{grepLogs}
 \title{Grep Log Files for a Pattern}
 \usage{
-grepLogs(ids = NULL, pattern, ignore.case = FALSE, fixed = FALSE,
-  reg = getDefaultRegistry())
+grepLogs(
+  ids = NULL,
+  pattern,
+  ignore.case = FALSE,
+  fixed = FALSE,
+  reg = getDefaultRegistry()
+)
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr
@@ -35,9 +40,12 @@ Crawls through log files and reports jobs with lines matching the \code{pattern}
 See \code{\link{showLog}} for an example.
 }
 \seealso{
-Other debug: \code{\link{getErrorMessages}},
-  \code{\link{getStatus}}, \code{\link{killJobs}},
-  \code{\link{resetJobs}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+Other debug: 
+\code{\link{getErrorMessages}()},
+\code{\link{getStatus}()},
+\code{\link{killJobs}()},
+\code{\link{resetJobs}()},
+\code{\link{showLog}()},
+\code{\link{testJob}()}
 }
 \concept{debug}

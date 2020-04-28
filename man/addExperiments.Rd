@@ -4,8 +4,13 @@
 \alias{addExperiments}
 \title{Add Experiments to the Registry}
 \usage{
-addExperiments(prob.designs = NULL, algo.designs = NULL, repls = 1L,
-  combine = "crossprod", reg = getDefaultRegistry())
+addExperiments(
+  prob.designs = NULL,
+  algo.designs = NULL,
+  repls = 1L,
+  combine = "crossprod",
+  reg = getDefaultRegistry()
+)
 }
 \arguments{
 \item{prob.designs}{[named list of \code{\link[base]{data.frame}}]\cr
@@ -42,9 +47,10 @@ E.g., if you have two problems \code{p1} and \code{p2} and three algorithms \cod
 \code{(p1, a3)}, \code{(p2, a1)}, \code{(p2, a2)} and \code{(p2, a3)}.
 }
 \note{
-R's \code{data.frame} converts character vectors to factors by default which frequently resulted in problems using \code{addExperiments}.
+R's \code{data.frame} converts character vectors to factors by default in R versions prior to 4.0.0 which frequently resulted in problems using \code{addExperiments}.
 Therefore, this function will warn about factor variables if the following conditions hold:
 \enumerate{
+  \item R version is < 4.0.0
   \item The design is passed as a \code{data.frame}, not a \code{\link[data.table]{data.table}} or \code{\link[tibble]{tibble}}.
   \item The option \dQuote{stringsAsFactors} is not set or set to \code{TRUE}.
 }
@@ -70,6 +76,7 @@ fun = function(instance, ...) sd(instance)
 addAlgorithm("deviation", fun = fun, reg = tmp)
 
 # define problem and algorithm designs
+library(data.table)
 prob.designs = algo.designs = list()
 prob.designs$rnorm = CJ(n = 100, mean = -1:1, sd = 1:5)
 prob.designs$rexp = data.table(n = 100, lambda = 1:5)
@@ -84,7 +91,8 @@ summarizeExperiments(reg = tmp)
 unwrap(getJobPars(reg = tmp))
 }
 \seealso{
-Other Experiment: \code{\link{removeExperiments}},
-  \code{\link{summarizeExperiments}}
+Other Experiment: 
+\code{\link{removeExperiments}()},
+\code{\link{summarizeExperiments}()}
 }
 \concept{Experiment}

@@ -161,6 +161,7 @@ reduceResults = function(fun, ids = NULL, init, ..., reg = getDefaultRegistry())
 #' addAlgorithm("deviation", fun = fun, reg = tmp)
 #'
 #' # define problem and algorithm designs
+#' library(data.table)
 #' prob.designs = algo.designs = list()
 #' prob.designs$rnorm = CJ(n = 100, mean = -1:1, sd = 1:5)
 #' prob.designs$rexp = data.table(n = 100, lambda = 1:5)

@@ -42,9 +42,9 @@ file_mtime = function(x) {
   fs::file_info(x)$modification_time
 }
 
-writeRDS = function(object, file) {
+writeRDS = function(object, file, compress = "gzip") {
   file_remove(file)
-  saveRDS(object, file = file, version = 2L)
+  saveRDS(object, file = file, version = 2L, compress = compress)
   waitForFile(file, 300)
   invisible(TRUE)
 }

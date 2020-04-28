@@ -14,9 +14,13 @@ Registry. If not explicitly passed, uses the default registry (see \code{\link{s
 Removes all jobs from a registry and calls \code{\link{sweepRegistry}}.
 }
 \seealso{
-Other Registry: \code{\link{getDefaultRegistry}},
-  \code{\link{loadRegistry}}, \code{\link{makeRegistry}},
-  \code{\link{removeRegistry}}, \code{\link{saveRegistry}},
-  \code{\link{sweepRegistry}}, \code{\link{syncRegistry}}
+Other Registry: 
+\code{\link{getDefaultRegistry}()},
+\code{\link{loadRegistry}()},
+\code{\link{makeRegistry}()},
+\code{\link{removeRegistry}()},
+\code{\link{saveRegistry}()},
+\code{\link{sweepRegistry}()},
+\code{\link{syncRegistry}()}
 }
 \concept{Registry}

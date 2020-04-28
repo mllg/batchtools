@@ -145,7 +145,7 @@
 #' fun = function(n, p) colMeans(matrix(runif(n*p), n, p))
 #'
 #' # Arguments to fun:
-#' args = CJ(n = c(1e4, 1e5), p = c(10, 50)) # like expand.grid()
+#' args = data.table::CJ(n = c(1e4, 1e5), p = c(10, 50)) # like expand.grid()
 #' print(args)
 #'
 #' # Map function to create jobs
@@ -276,7 +276,7 @@ submitJobs = function(ids = NULL, resources = list(), sleep = NULL, reg = getDef
     ids.chunk = ids[chunk == ch, c("job.id", "resource.id")]
     jc = makeJobCollection(ids.chunk, resources = reg$resources[ids.chunk, on = "resource.id"]$resources[[1L]], reg = reg)
     if (reg$cluster.functions$store.job.collection)
-      writeRDS(jc, file = jc$uri)
+      writeRDS(jc, file = jc$uri, compress = jc$compress)
 
     # do we have to wait for jobs to get terminated before proceeding?
     if (!is.na(max.concurrent.jobs)) {
@@ -348,7 +348,7 @@ addResources = function(reg, resources) {
   tab = data.table(resources = resources, resource.hash = vcapply(resources, digest))
   new.tab = unique(tab, by = "resource.hash")[!reg$resources, on = "resource.hash"]
   if (nrow(new.tab)) {
-    reg$resources = rbindlist(list(reg$resources, new.tab), fill = TRUE)
+    reg$resources = rbindlist(list(reg$resources, new.tab), fill = TRUE, use.names = TRUE)
     ai(reg$resources, "resource.id")
   }
   reg$resources[tab, "resource.id", on = "resource.hash"][[1L]]

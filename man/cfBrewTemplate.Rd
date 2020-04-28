@@ -28,11 +28,12 @@ The file is stored at the same place as the corresponding job file in the \dQuot
 of your files directory.
 }
 \seealso{
-Other ClusterFunctionsHelper: \code{\link{cfHandleUnknownSubmitError}},
-  \code{\link{cfKillJob}},
-  \code{\link{cfReadBrewTemplate}},
-  \code{\link{makeClusterFunctions}},
-  \code{\link{makeSubmitJobResult}},
-  \code{\link{runOSCommand}}
+Other ClusterFunctionsHelper: 
+\code{\link{cfHandleUnknownSubmitError}()},
+\code{\link{cfKillJob}()},
+\code{\link{cfReadBrewTemplate}()},
+\code{\link{makeClusterFunctions}()},
+\code{\link{makeSubmitJobResult}()},
+\code{\link{runOSCommand}()}
 }
 \concept{ClusterFunctionsHelper}

@@ -4,9 +4,15 @@
 \alias{waitForJobs}
 \title{Wait for Termination of Jobs}
 \usage{
-waitForJobs(ids = NULL, sleep = NULL, timeout = 604800,
-  expire.after = NULL, stop.on.error = FALSE, stop.on.expire = FALSE,
-  reg = getDefaultRegistry())
+waitForJobs(
+  ids = NULL,
+  sleep = NULL,
+  timeout = 604800,
+  expire.after = NULL,
+  stop.on.error = FALSE,
+  stop.on.expire = FALSE,
+  reg = getDefaultRegistry()
+)
 }
 \arguments{
 \item{ids}{[\code{\link[base]{data.frame}} or \code{integer}]\cr

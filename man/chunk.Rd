@@ -78,6 +78,7 @@ tmp = makeRegistry(file.dir = NA, make.default = FALSE)
 ids = batchMap(identity, 1:25, reg = tmp)
 
 ### Group into chunks with 10 jobs each
+library(data.table)
 ids[, chunk := chunk(job.id, chunk.size = 10)]
 print(ids[, .N, by = chunk])
 
