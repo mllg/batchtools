@@ -9,7 +9,7 @@
 #' will be used.
 #' After all jobs are terminated (see \code{\link{waitForJobs}}), the results are collected and returned as a list.
 #'
-#' Note that these functions are one suitable for short and fail-safe operations
+#' Note that these functions are only suitable for short and fail-safe operations
 #' on batch system. If some jobs fail, you have to retrieve partial results from the
 #' registry directory yourself.
 #'
