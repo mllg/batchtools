@@ -310,7 +310,7 @@ loadRegistryDependencies = function(x, must.work = FALSE) {
   if (length(fns) > 0L) {
     ee = .GlobalEnv
     Map(function(name, fn) {
-      assign(x = name, value = readRDS(fn), envir = ee)
+      delayedAssign(x = name, value = readRDS(fn), assign.env = ee)
     }, name = unmangle(fns), fn = fs::path(path, fns))
   }
 
