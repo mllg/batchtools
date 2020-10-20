@@ -498,7 +498,7 @@ grepLogs(pattern = "simple", ignore.case = TRUE)
    Run jobs in the currently running session with [`testJob()`](https://mllg.github.io/batchtools/reference/testJob) to get a `traceback()`.
 6. Collect (partial) results. [`loadResult()`](https://mllg.github.io/batchtools/reference/loadResult) retrieves a single result from the file system.
    [`reduceResults()`](https://mllg.github.io/batchtools/reference/reduceResults) mimics `Reduce()` and allows to apply a function to many files in an iterative fashion.
-   [`reduceResultsList()`](https://mllg.github.io/batchtools/reference/reduceResultsList) and [`reduceResultsDataTable()`](https://mllg.github.io/batchtools/reference/reduceResultsDataTable) collect results into a `list` or `data.table`, respectively.
+   [`reduceResultsList()`](https://mllg.github.io/batchtools/reference/reduceResultsList) and [`reduceResultsDataTable()`](https://mllg.github.io/batchtools/reference/reduceResultsList) collect results into a `list` or `data.table`, respectively.
 
 ```{r,echo=FALSE}
 knitr::include_graphics("function_overview.png", auto_pdf = TRUE)
