@@ -39,3 +39,12 @@ test_that("batchMap", {
   expect_data_table(ids, nrow = 9, key = "job.id")
   expect_equivalent(unwrap(getJobPars(reg = reg))[, c("a", "b")], cj)
 })
+
+test_that("batchMap with unnamed more.args (#267)", {
+  reg = makeTestRegistry()
+  fun = function(...) list(...)
+  ids = batchMap(fun, 1:3, more.args = list(j = 1L, 5L), reg = reg)
+  expect_equal(readRDS(fs::path(reg$file.dir, "more.args.rds")), list(j = 1L, 5L))
+  submitAndWait(reg)
+  expect_equal(loadResult(1, reg), list(1L, j = 1L, 5L))
+})

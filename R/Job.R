@@ -183,11 +183,13 @@ getJob = function(jc, i, reader = NULL) {
   UseMethod("getJob")
 }
 
+#' @export
 getJob.JobCollection = function(jc, i, reader = RDSReader$new(FALSE)) {
   row = jc$jobs[i]
   Job$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, job.pars = row$job.pars[[1L]], seed = getSeed(jc$seed, row$job.id), resources = jc$resources)
 }
 
+#' @export
 getJob.ExperimentCollection = function(jc, i, reader = RDSReader$new(FALSE)) {
   row = jc$jobs[i]
   Experiment$new(file.dir = jc$file.dir, reader = reader, id = row$job.id, prob.pars = row$prob.pars[[1L]],

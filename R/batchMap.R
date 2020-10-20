@@ -62,7 +62,7 @@ batchMap = function(fun, ..., args = list(), more.args = list(), reg = getDefaul
     stop("Registry must be empty")
   assertFunction(fun)
   assert(checkList(args), checkDataFrame(args))
-  assertList(more.args, names = "strict")
+  assertList(more.args)
 
   if (length(args) > 0L) {
     if (...length() > 0L)
