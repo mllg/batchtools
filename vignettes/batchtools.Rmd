@@ -255,7 +255,7 @@ We stick to a rather simple, but not unrealistic example to explain some further
 
 First, we create a registry, the central meta-data object which records technical details and the setup of the experiments.
 We use an [`ExperimentRegistry`](https://mllg.github.io/batchtools/reference/makeExperimentRegistry) where the job definition is split into creating problems and algorithms.
-See the paper on [BatchJobs and BatchExperiments](http://www.jstatsoft.org/article/view/v064i11) for a detailed explanation.
+See the paper on [BatchJobs and BatchExperiments](https://www.jstatsoft.org/article/view/v064i11) for a detailed explanation.
 Again, we use a temporary registry and make it the default registry.
 ```{r, message = FALSE}
 library(batchtools)

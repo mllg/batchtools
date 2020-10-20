@@ -43,7 +43,7 @@ The [vignette](https://mllg.github.io/batchtools/articles/batchtools.html#migrat
 * [Function reference](https://mllg.github.io/batchtools/reference/)
 * [Vignette](https://mllg.github.io/batchtools/articles/batchtools.html)
 * [JOSS Paper](https://doi.org/10.21105/joss.00135): Short paper on batchtools. Please cite this if you use batchtools.
-* [Paper on BatchJobs/BatchExperiments](http://www.jstatsoft.org/v64/i11): The described concept still holds for batchtools and most examples work analogously (see the [vignette](https://mllg.github.io/batchtools/articles/batchtools.html#migration) for differences between the packages).
+* [Paper on BatchJobs/BatchExperiments](https://www.jstatsoft.org/v64/i11): The described concept still holds for batchtools and most examples work analogously (see the [vignette](https://mllg.github.io/batchtools/articles/batchtools.html#migration) for differences between the packages).
 
 ## Citation
 Please cite the [JOSS paper](https://doi.org/10.21105/joss.00135) using the following BibTeX entry:
