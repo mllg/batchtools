@@ -32,7 +32,7 @@ It provides an implementation of a Map-like operation to define and asynchronous
 * Local (blocking) execution in the current `R` session or in an externally spawned `R` process (intended for debugging and prototyping)
 * Local (non-blocking) parallel execution using `parallel`'s multicore backend [@R] or [`snow`](https://cran.r-project.org/package=snow)'s socket mode [@snow].
 * Execution on loosely connected machines using SSH (including basic resource usage control).
-* [Docker Swarm](https://docs.docker.com/swarm/)
+* [Docker Swarm](https://docs.docker.com/engine/swarm/)
 * [IBM Spectrum LSF](http://www-03.ibm.com/systems/spectrum-computing/products/lsf/)
 * [OpenLava](http://www.openlava.org/)
 * [Univa Grid Engine](http://www.univa.com/) (formerly Oracle Grind Engine and Sun Grid Engine)

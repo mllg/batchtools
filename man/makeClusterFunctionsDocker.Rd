@@ -36,7 +36,7 @@ Usually safe to set to \code{0} to disable the heuristic, e.g. if you are workin
 [\code{\link{ClusterFunctions}}].
 }
 \description{
-Cluster functions for Docker/Docker Swarm (\url{https://docs.docker.com/swarm/}).
+Cluster functions for Docker/Docker Swarm (\url{https://docs.docker.com/engine/swarm/}).
 
 The \code{submitJob} function executes
 \code{docker [docker.args] run --detach=true [image.args] [resources] [image] [cmd]}.

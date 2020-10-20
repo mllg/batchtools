@@ -35,7 +35,7 @@ Usually safe to set to \code{0} to disable the heuristic, e.g. if you are workin
 [\code{\link{ClusterFunctions}}].
 }
 \description{
-Cluster functions for LSF (\url{https://www.ibm.com/us-en/marketplace/hpc-workload-management}).
+Cluster functions for LSF (\url{https://www.ibm.com/products/hpc-workload-management}).
 
 Job files are created based on the brew template \code{template.file}. This
 file is processed with brew and then submitted to the queue using the
