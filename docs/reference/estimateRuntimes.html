@@ -222,7 +222,7 @@ Number of parallel jobs to assume for runtime estimation.</p></td>
 #&gt; 496:    496    496         NA         NA         NA  &lt;NA&gt;       NA          NA
 #&gt; 497:    497    497         NA         NA         NA  &lt;NA&gt;       NA          NA
 #&gt; 498:    498    498         NA         NA         NA  &lt;NA&gt;       NA          NA
-#&gt; 499:    499    499 1603197327 1603197327 1603197827  &lt;NA&gt;       NA           1
+#&gt; 499:    499    499 1603265964 1603265964 1603266464  &lt;NA&gt;       NA           1
 #&gt; 500:    500    500         NA         NA         NA  &lt;NA&gt;       NA          NA
 #&gt;           batch.id log.file                            job.hash job.name repl
 #&gt;   1:          &lt;NA&gt;     &lt;NA&gt;                                &lt;NA&gt;     &lt;NA&gt;    1
@@ -234,99 +234,99 @@ Number of parallel jobs to assume for runtime estimation.</p></td>
 #&gt; 496:          &lt;NA&gt;     &lt;NA&gt;                                &lt;NA&gt;     &lt;NA&gt;    1
 #&gt; 497:          &lt;NA&gt;     &lt;NA&gt;                                &lt;NA&gt;     &lt;NA&gt;    1
 #&gt; 498:          &lt;NA&gt;     &lt;NA&gt;                                &lt;NA&gt;     &lt;NA&gt;    1
-#&gt; 499: cfInteractive     &lt;NA&gt; job7c4bbe21691c77d776b738c39a54fd28     &lt;NA&gt;    1
+#&gt; 499: cfInteractive     &lt;NA&gt; joba17949c0e00e62405c8465e973297f1c     &lt;NA&gt;    1
 #&gt; 500:          &lt;NA&gt;     &lt;NA&gt;                                &lt;NA&gt;     &lt;NA&gt;    1</div><div class='input'><span class='fu'><a href='JoinTables.html'>rjoin</a></span><span class='op'>(</span><span class='fu'><a href='JoinTables.html'>sjoin</a></span><span class='op'>(</span><span class='va'>tab</span>, <span class='va'>ids</span><span class='op'>)</span>, <span class='fu'><a href='getJobTable.html'>getJobStatus</a></span><span class='op'>(</span><span class='va'>ids</span>, reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"job.id"</span>, <span class='st'>"time.running"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     job.id problem algorithm  x y   time.running
-#&gt;  1:     32    iris      nrow  7 b 1100.0049 secs
-#&gt;  2:     42    iris      nrow  9 b 1100.0046 secs
-#&gt;  3:     47    iris      nrow 10 b 1100.0046 secs
-#&gt;  4:     66    iris      nrow 14 a 1100.0055 secs
-#&gt;  5:     73    iris      nrow 15 c  100.0065 secs
-#&gt;  6:     75    iris      nrow 15 e  100.0099 secs
-#&gt;  7:     86    iris      nrow 18 a 1100.0058 secs
-#&gt;  8:    100    iris      nrow 20 e  100.0060 secs
-#&gt;  9:    101    iris      nrow 21 a 1100.0049 secs
-#&gt; 10:    103    iris      nrow 21 c  100.0046 secs
-#&gt; 11:    123    iris      nrow 25 c  100.0042 secs
-#&gt; 12:    125    iris      nrow 25 e  100.0059 secs
-#&gt; 13:    161    iris      nrow 33 a 1100.0059 secs
-#&gt; 14:    165    iris      nrow 33 e  100.0110 secs
-#&gt; 15:    169    iris      nrow 34 d  100.0049 secs
-#&gt; 16:    183    iris      nrow 37 c  100.0058 secs
-#&gt; 17:    184    iris      nrow 37 d  100.0058 secs
-#&gt; 18:    203    iris      nrow 41 c  100.0051 secs
-#&gt; 19:    207    iris      nrow 42 b 1100.0050 secs
-#&gt; 20:    209    iris      nrow 42 d  100.0049 secs
-#&gt; 21:    220    iris      nrow 44 e  100.0052 secs
-#&gt; 22:    227    iris      nrow 46 b 1100.0054 secs
-#&gt; 23:    229    iris      nrow 46 d  100.0068 secs
-#&gt; 24:    231    iris      nrow 47 a 1100.0059 secs
-#&gt; 25:    244    iris      nrow 49 d  100.0057 secs
-#&gt; 26:    260    iris      ncol  2 e  500.0053 secs
-#&gt; 27:    276    iris      ncol  6 a 1500.0050 secs
-#&gt; 28:    278    iris      ncol  6 c  500.0066 secs
-#&gt; 29:    279    iris      ncol  6 d  500.0054 secs
-#&gt; 30:    296    iris      ncol 10 a 1500.0066 secs
-#&gt; 31:    320    iris      ncol 14 e  500.0052 secs
-#&gt; 32:    340    iris      ncol 18 e  500.0046 secs
-#&gt; 33:    347    iris      ncol 20 b 1500.0046 secs
-#&gt; 34:    363    iris      ncol 23 c  500.0061 secs
-#&gt; 35:    369    iris      ncol 24 d  500.0062 secs
-#&gt; 36:    373    iris      ncol 25 c  500.0063 secs
-#&gt; 37:    387    iris      ncol 28 b 1500.0051 secs
-#&gt; 38:    410    iris      ncol 32 e  500.0055 secs
-#&gt; 39:    421    iris      ncol 35 a 1500.0070 secs
-#&gt; 40:    436    iris      ncol 38 a 1500.0054 secs
-#&gt; 41:    444    iris      ncol 39 d  500.0056 secs
-#&gt; 42:    448    iris      ncol 40 c  500.0055 secs
-#&gt; 43:    456    iris      ncol 42 a 1500.0059 secs
-#&gt; 44:    459    iris      ncol 42 d  500.0058 secs
-#&gt; 45:    467    iris      ncol 44 b 1500.0053 secs
-#&gt; 46:    468    iris      ncol 44 c  500.0057 secs
-#&gt; 47:    475    iris      ncol 45 e  500.0070 secs
-#&gt; 48:    482    iris      ncol 47 b 1500.0070 secs
-#&gt; 49:    492    iris      ncol 49 b 1500.0061 secs
-#&gt; 50:    499    iris      ncol 50 d  500.0059 secs
+#&gt;  1:     32    iris      nrow  7 b 1100.0026 secs
+#&gt;  2:     42    iris      nrow  9 b 1100.0024 secs
+#&gt;  3:     47    iris      nrow 10 b 1100.0023 secs
+#&gt;  4:     66    iris      nrow 14 a 1100.0052 secs
+#&gt;  5:     73    iris      nrow 15 c  100.0023 secs
+#&gt;  6:     75    iris      nrow 15 e  100.0024 secs
+#&gt;  7:     86    iris      nrow 18 a 1100.0025 secs
+#&gt;  8:    100    iris      nrow 20 e  100.0026 secs
+#&gt;  9:    101    iris      nrow 21 a 1100.0024 secs
+#&gt; 10:    103    iris      nrow 21 c  100.0024 secs
+#&gt; 11:    123    iris      nrow 25 c  100.0024 secs
+#&gt; 12:    125    iris      nrow 25 e  100.0028 secs
+#&gt; 13:    161    iris      nrow 33 a 1100.0026 secs
+#&gt; 14:    165    iris      nrow 33 e  100.0026 secs
+#&gt; 15:    169    iris      nrow 34 d  100.0026 secs
+#&gt; 16:    183    iris      nrow 37 c  100.0027 secs
+#&gt; 17:    184    iris      nrow 37 d  100.0027 secs
+#&gt; 18:    203    iris      nrow 41 c  100.0036 secs
+#&gt; 19:    207    iris      nrow 42 b 1100.0024 secs
+#&gt; 20:    209    iris      nrow 42 d  100.0029 secs
+#&gt; 21:    220    iris      nrow 44 e  100.0023 secs
+#&gt; 22:    227    iris      nrow 46 b 1100.0024 secs
+#&gt; 23:    229    iris      nrow 46 d  100.0023 secs
+#&gt; 24:    231    iris      nrow 47 a 1100.0023 secs
+#&gt; 25:    244    iris      nrow 49 d  100.0022 secs
+#&gt; 26:    260    iris      ncol  2 e  500.0024 secs
+#&gt; 27:    276    iris      ncol  6 a 1500.0025 secs
+#&gt; 28:    278    iris      ncol  6 c  500.0025 secs
+#&gt; 29:    279    iris      ncol  6 d  500.0024 secs
+#&gt; 30:    296    iris      ncol 10 a 1500.0025 secs
+#&gt; 31:    320    iris      ncol 14 e  500.0023 secs
+#&gt; 32:    340    iris      ncol 18 e  500.0023 secs
+#&gt; 33:    347    iris      ncol 20 b 1500.0023 secs
+#&gt; 34:    363    iris      ncol 23 c  500.0023 secs
+#&gt; 35:    369    iris      ncol 24 d  500.0023 secs
+#&gt; 36:    373    iris      ncol 25 c  500.0025 secs
+#&gt; 37:    387    iris      ncol 28 b 1500.0023 secs
+#&gt; 38:    410    iris      ncol 32 e  500.0024 secs
+#&gt; 39:    421    iris      ncol 35 a 1500.0024 secs
+#&gt; 40:    436    iris      ncol 38 a 1500.0024 secs
+#&gt; 41:    444    iris      ncol 39 d  500.0022 secs
+#&gt; 42:    448    iris      ncol 40 c  500.0022 secs
+#&gt; 43:    456    iris      ncol 42 a 1500.0023 secs
+#&gt; 44:    459    iris      ncol 42 d  500.0023 secs
+#&gt; 45:    467    iris      ncol 44 b 1500.0023 secs
+#&gt; 46:    468    iris      ncol 44 c  500.0023 secs
+#&gt; 47:    475    iris      ncol 45 e  500.0024 secs
+#&gt; 48:    482    iris      ncol 47 b 1500.0023 secs
+#&gt; 49:    492    iris      ncol 49 b 1500.0023 secs
+#&gt; 50:    499    iris      ncol 50 d  500.0023 secs
 #&gt;     job.id problem algorithm  x y   time.running</div><div class='input'>
 <span class='co'># Estimate runtimes:</span>
 <span class='va'>est</span> <span class='op'>=</span> <span class='fu'>estimateRuntimes</span><span class='op'>(</span><span class='va'>tab</span>, reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>est</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Runtime Estimate for 500 jobs with 1 CPUs
-#&gt;   Done     : 0d 09h 43m 20.3s
-#&gt;   Remaining: 3d 17h 34m 34.9s
-#&gt;   Total    : 4d 03h 17m 55.2s</div><div class='input'><span class='fu'><a href='JoinTables.html'>rjoin</a></span><span class='op'>(</span><span class='va'>tab</span>, <span class='va'>est</span><span class='op'>$</span><span class='va'>runtimes</span><span class='op'>)</span>
+#&gt;   Done     : 0d 09h 43m 20.1s
+#&gt;   Remaining: 3d 17h 37m 8.0s
+#&gt;   Total    : 4d 03h 20m 28.1s</div><div class='input'><span class='fu'><a href='JoinTables.html'>rjoin</a></span><span class='op'>(</span><span class='va'>tab</span>, <span class='va'>est</span><span class='op'>$</span><span class='va'>runtimes</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      job.id problem algorithm  x y      type   runtime
-#&gt;   1:      1    iris      nrow  1 a estimated 1103.4590
-#&gt;   2:      2    iris      nrow  1 b estimated 1087.2531
-#&gt;   3:      3    iris      nrow  1 c estimated  338.3327
-#&gt;   4:      4    iris      nrow  1 d estimated  318.0785
-#&gt;   5:      5    iris      nrow  1 e estimated  317.7231
+#&gt;   1:      1    iris      nrow  1 a estimated 1107.0568
+#&gt;   2:      2    iris      nrow  1 b estimated 1090.8508
+#&gt;   3:      3    iris      nrow  1 c estimated  338.2092
+#&gt;   4:      4    iris      nrow  1 d estimated  318.6349
+#&gt;   5:      5    iris      nrow  1 e estimated  317.3189
 #&gt;  ---                                                  
-#&gt; 496:    496    iris      ncol 50 a estimated 1387.5999
-#&gt; 497:    497    iris      ncol 50 b estimated 1394.6896
-#&gt; 498:    498    iris      ncol 50 c estimated  618.0633
-#&gt; 499:    499    iris      ncol 50 d  observed  500.0059
-#&gt; 500:    500    iris      ncol 50 e estimated  578.6555</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>est</span>, n <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+#&gt; 496:    496    iris      ncol 50 a estimated 1381.9162
+#&gt; 497:    497    iris      ncol 50 b estimated 1389.1659
+#&gt; 498:    498    iris      ncol 50 c estimated  614.0596
+#&gt; 499:    499    iris      ncol 50 d  observed  500.0023
+#&gt; 500:    500    iris      ncol 50 e estimated  574.7851</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>est</span>, n <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Runtime Estimate for 500 jobs with 10 CPUs
-#&gt;   Done     : 0d 09h 43m 20.3s
-#&gt;   Remaining: 3d 17h 34m 34.9s
-#&gt;   Parallel : 0d 08h 58m 10.3s
-#&gt;   Total    : 4d 03h 17m 55.2s</div><div class='input'>
+#&gt;   Done     : 0d 09h 43m 20.1s
+#&gt;   Remaining: 3d 17h 37m 8.0s
+#&gt;   Parallel : 0d 08h 58m 21.4s
+#&gt;   Total    : 4d 03h 20m 28.1s</div><div class='input'>
 <span class='co'># Submit jobs with longest runtime first:</span>
 <span class='va'>ids</span> <span class='op'>=</span> <span class='va'>est</span><span class='op'>$</span><span class='va'>runtimes</span><span class='op'>[</span><span class='va'>type</span> <span class='op'>==</span> <span class='st'>"estimated"</span><span class='op'>]</span><span class='op'>[</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setorder.html'>order</a></span><span class='op'>(</span><span class='va'>runtime</span>, decreasing <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>]</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ids</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      job.id      type   runtime
-#&gt;   1:    466 estimated 1422.9803
-#&gt;   2:    461 estimated 1419.5870
-#&gt;   3:    472 estimated 1415.9535
-#&gt;   4:    462 estimated 1415.6001
-#&gt;   5:    457 estimated 1414.8001
+#&gt;   1:    466 estimated 1420.0934
+#&gt;   2:    461 estimated 1418.7001
+#&gt;   3:    462 estimated 1415.5134
+#&gt;   4:    457 estimated 1414.7134
+#&gt;   5:    487 estimated 1413.4847
 #&gt;  ---                           
-#&gt; 446:    204 estimated  132.6668
-#&gt; 447:    185 estimated  132.3737
-#&gt; 448:    189 estimated  131.9505
-#&gt; 449:    174 estimated  131.3331
-#&gt; 450:    179 estimated  130.1864</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+#&gt; 446:    194 estimated  133.0456
+#&gt; 447:    185 estimated  133.0030
+#&gt; 448:    204 estimated  131.6954
+#&gt; 449:    174 estimated  131.5901
+#&gt; 450:    179 estimated  130.4434</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='fu'><a href='submitJobs.html'>submitJobs</a></span><span class='op'>(</span><span class='va'>ids</span>, reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -334,121 +334,121 @@ Number of parallel jobs to assume for runtime estimation.</p></td>
 <span class='va'>ids</span> <span class='op'>=</span> <span class='va'>est</span><span class='op'>$</span><span class='va'>runtimes</span><span class='op'>[</span><span class='va'>type</span> <span class='op'>==</span> <span class='st'>"estimated"</span><span class='op'>]</span>
 <span class='va'>ids</span><span class='op'>[</span>, <span class='va'>chunk</span> <span class='op'>:=</span> <span class='fu'><a href='chunk.html'>binpack</a></span><span class='op'>(</span><span class='va'>runtime</span>, <span class='fl'>3600</span><span class='op'>)</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;      job.id      type   runtime chunk
-#&gt;   1:      1 estimated 1103.4590    48
-#&gt;   2:      2 estimated 1087.2531    52
-#&gt;   3:      3 estimated  338.3327    36
-#&gt;   4:      4 estimated  318.0785    33
-#&gt;   5:      5 estimated  317.7231    70
+#&gt;   1:      1 estimated 1107.0568    47
+#&gt;   2:      2 estimated 1090.8508    51
+#&gt;   3:      3 estimated  338.2092    37
+#&gt;   4:      4 estimated  318.6349    33
+#&gt;   5:      5 estimated  317.3189    70
 #&gt;  ---                                 
-#&gt; 446:    495 estimated  584.3901    15
-#&gt; 447:    496 estimated 1387.5999    18
-#&gt; 448:    497 estimated 1394.6896    13
-#&gt; 449:    498 estimated  618.0633     4
-#&gt; 450:    500 estimated  578.6555    20</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ids</span><span class='op'>)</span>
+#&gt; 446:    495 estimated  581.7197    17
+#&gt; 447:    496 estimated 1381.9162    20
+#&gt; 448:    497 estimated 1389.1659    15
+#&gt; 449:    498 estimated  614.0596     4
+#&gt; 450:    500 estimated  574.7851    26</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ids</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      job.id      type   runtime chunk
-#&gt;   1:      1 estimated 1103.4590    48
-#&gt;   2:      2 estimated 1087.2531    52
-#&gt;   3:      3 estimated  338.3327    36
-#&gt;   4:      4 estimated  318.0785    33
-#&gt;   5:      5 estimated  317.7231    70
+#&gt;   1:      1 estimated 1107.0568    47
+#&gt;   2:      2 estimated 1090.8508    51
+#&gt;   3:      3 estimated  338.2092    37
+#&gt;   4:      4 estimated  318.6349    33
+#&gt;   5:      5 estimated  317.3189    70
 #&gt;  ---                                 
-#&gt; 446:    495 estimated  584.3901    15
-#&gt; 447:    496 estimated 1387.5999    18
-#&gt; 448:    497 estimated 1394.6896    13
-#&gt; 449:    498 estimated  618.0633     4
-#&gt; 450:    500 estimated  578.6555    20</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ids</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>runtime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>runtime</span><span class='op'>)</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='va'>chunk</span><span class='op'>]</span><span class='op'>)</span>
+#&gt; 446:    495 estimated  581.7197    17
+#&gt; 447:    496 estimated 1381.9162    20
+#&gt; 448:    497 estimated 1389.1659    15
+#&gt; 449:    498 estimated  614.0596     4
+#&gt; 450:    500 estimated  574.7851    26</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ids</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>runtime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>runtime</span><span class='op'>)</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='va'>chunk</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     chunk  runtime
-#&gt;  1:    48 3485.338
-#&gt;  2:    52 3598.644
-#&gt;  3:    36 3599.459
-#&gt;  4:    33 3596.494
-#&gt;  5:    70 3490.925
-#&gt;  6:    49 3479.219
-#&gt;  7:    37 3595.168
-#&gt;  8:    51 3596.367
-#&gt;  9:    71 3488.611
-#&gt; 10:    53 3599.742
-#&gt; 11:    68 3496.038
-#&gt; 12:    72 3485.351
-#&gt; 13:    54 3589.155
-#&gt; 14:    69 3494.538
-#&gt; 15:    73 3478.069
-#&gt; 16:    46 3516.899
-#&gt; 17:    50 3599.762
-#&gt; 18:    42 3572.213
-#&gt; 19:    64 3516.755
-#&gt; 20:    66 3506.507
-#&gt; 21:    43 3569.239
-#&gt; 22:    65 3512.215
-#&gt; 23:    67 3505.174
-#&gt; 24:    41 3581.446
-#&gt; 25:    59 3537.144
-#&gt; 26:    60 3532.235
-#&gt; 27:    47 3493.115
-#&gt; 28:    38 3599.214
-#&gt; 29:    35 3599.986
-#&gt; 30:    40 3589.694
-#&gt; 31:    57 3561.085
-#&gt; 32:    58 3546.237
-#&gt; 33:    39 3594.115
-#&gt; 34:    55 3581.046
-#&gt; 35:    56 3570.053
-#&gt; 36:    44 3534.662
-#&gt; 37:    61 3522.996
-#&gt; 38:    34 3598.099
-#&gt; 39:    45 3533.418
-#&gt; 40:    63 3518.338
-#&gt; 41:    62 3521.086
-#&gt; 42:    27 3597.000
-#&gt; 43:    26 3586.504
-#&gt; 44:    24 3596.226
-#&gt; 45:    25 3597.570
-#&gt; 46:    23 3597.820
-#&gt; 47:    29 3567.933
-#&gt; 48:    75 3599.097
-#&gt; 49:    20 3522.443
-#&gt; 50:    74 3474.955
-#&gt; 51:     8 3591.306
-#&gt; 52:    21 3515.784
-#&gt; 53:    11 3565.927
-#&gt; 54:     7 3592.927
-#&gt; 55:    12 3563.426
-#&gt; 56:     5 3593.237
-#&gt; 57:     6 3598.126
-#&gt; 58:    32 3599.468
-#&gt; 59:    10 3579.486
-#&gt; 60:    80 3481.959
-#&gt; 61:    82 3598.299
-#&gt; 62:    83 3597.802
-#&gt; 63:     4 3598.686
-#&gt; 64:    79 3493.361
-#&gt; 65:    81 3474.061
-#&gt; 66:    76 3587.729
-#&gt; 67:    87 3564.202
-#&gt; 68:    89 3546.702
-#&gt; 69:    91 2158.021
-#&gt; 70:    78 3506.583
-#&gt; 71:    88 3554.982
-#&gt; 72:    77 3523.895
-#&gt; 73:    85 3580.521
-#&gt; 74:     3 3599.219
-#&gt; 75:    90 3522.918
-#&gt; 76:    84 3586.090
-#&gt; 77:    86 3572.917
-#&gt; 78:     2 3599.764
-#&gt; 79:     1 3599.763
-#&gt; 80:     9 3587.324
-#&gt; 81:    30 3560.138
-#&gt; 82:    13 3599.521
-#&gt; 83:    14 3598.014
-#&gt; 84:    22 3598.040
-#&gt; 85:    19 3574.641
-#&gt; 86:    17 3585.269
-#&gt; 87:    31 3546.246
-#&gt; 88:    18 3581.006
-#&gt; 89:    28 3574.646
-#&gt; 90:    16 3598.238
-#&gt; 91:    15 3599.249
+#&gt;  1:    47 3493.187
+#&gt;  2:    51 3593.783
+#&gt;  3:    37 3598.573
+#&gt;  4:    33 3599.900
+#&gt;  5:    70 3493.489
+#&gt;  6:    53 3598.723
+#&gt;  7:    71 3491.366
+#&gt;  8:    48 3491.841
+#&gt;  9:    52 3597.483
+#&gt; 10:    54 3587.877
+#&gt; 11:    68 3499.779
+#&gt; 12:    72 3489.223
+#&gt; 13:    55 3583.526
+#&gt; 14:    69 3496.272
+#&gt; 15:    73 3483.829
+#&gt; 16:    46 3519.591
+#&gt; 17:    50 3599.943
+#&gt; 18:    38 3597.396
+#&gt; 19:    65 3512.646
+#&gt; 20:    43 3571.763
+#&gt; 21:    62 3522.617
+#&gt; 22:    66 3511.003
+#&gt; 23:    39 3599.908
+#&gt; 24:    35 3599.575
+#&gt; 25:    61 3533.407
+#&gt; 26:    40 3598.645
+#&gt; 27:    56 3571.361
+#&gt; 28:    57 3565.133
+#&gt; 29:    49 3481.931
+#&gt; 30:    42 3583.160
+#&gt; 31:    58 3555.775
+#&gt; 32:    60 3535.954
+#&gt; 33:    41 3588.180
+#&gt; 34:    36 3599.425
+#&gt; 35:    59 3545.174
+#&gt; 36:    44 3541.279
+#&gt; 37:    34 3599.586
+#&gt; 38:    64 3514.492
+#&gt; 39:    45 3540.479
+#&gt; 40:    63 3517.610
+#&gt; 41:    67 3507.819
+#&gt; 42:    27 3598.911
+#&gt; 43:    24 3599.823
+#&gt; 44:    25 3590.607
+#&gt; 45:    26 3598.511
+#&gt; 46:    23 3599.593
+#&gt; 47:    28 3573.496
+#&gt; 48:    75 3599.916
+#&gt; 49:    12 3559.937
+#&gt; 50:    74 3474.824
+#&gt; 51:     8 3593.188
+#&gt; 52:    20 3521.159
+#&gt; 53:    31 3599.784
+#&gt; 54:     7 3595.855
+#&gt; 55:     5 3594.254
+#&gt; 56:    11 3563.352
+#&gt; 57:    10 3575.839
+#&gt; 58:     6 3599.450
+#&gt; 59:    32 3598.576
+#&gt; 60:    80 3492.129
+#&gt; 61:    82 3471.066
+#&gt; 62:    83 3599.780
+#&gt; 63:    79 3501.372
+#&gt; 64:    76 3593.842
+#&gt; 65:    85 3588.259
+#&gt; 66:    89 3553.760
+#&gt; 67:    91 2151.522
+#&gt; 68:    81 3481.753
+#&gt; 69:    78 3513.014
+#&gt; 70:    87 3570.795
+#&gt; 71:    88 3563.106
+#&gt; 72:    77 3529.443
+#&gt; 73:     3 3599.295
+#&gt; 74:    86 3578.904
+#&gt; 75:    90 3529.605
+#&gt; 76:     2 3599.210
+#&gt; 77:    84 3596.381
+#&gt; 78:     1 3599.788
+#&gt; 79:     4 3595.377
+#&gt; 80:     9 3583.777
+#&gt; 81:    29 3558.408
+#&gt; 82:    18 3572.866
+#&gt; 83:    15 3583.955
+#&gt; 84:    21 3599.004
+#&gt; 85:    19 3567.117
+#&gt; 86:    16 3582.283
+#&gt; 87:    30 3550.130
+#&gt; 88:    17 3578.532
+#&gt; 89:    22 3599.427
+#&gt; 90:    13 3599.265
+#&gt; 91:    14 3595.019
 #&gt;     chunk  runtime</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='fu'><a href='submitJobs.html'>submitJobs</a></span><span class='op'>(</span><span class='va'>ids</span>, reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span>
 <span class='op'>}</span>
@@ -457,28 +457,28 @@ Number of parallel jobs to assume for runtime estimation.</p></td>
 <span class='va'>ids</span> <span class='op'>=</span> <span class='va'>est</span><span class='op'>$</span><span class='va'>runtimes</span><span class='op'>[</span><span class='va'>type</span> <span class='op'>==</span> <span class='st'>"estimated"</span><span class='op'>]</span>
 <span class='va'>ids</span><span class='op'>[</span>, <span class='va'>chunk</span> <span class='op'>:=</span> <span class='fu'><a href='chunk.html'>lpt</a></span><span class='op'>(</span><span class='va'>runtime</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;      job.id      type   runtime chunk
-#&gt;   1:      1 estimated 1103.4590     7
-#&gt;   2:      2 estimated 1087.2531     5
-#&gt;   3:      3 estimated  338.3327     9
-#&gt;   4:      4 estimated  318.0785     3
-#&gt;   5:      5 estimated  317.7231     5
+#&gt;   1:      1 estimated 1107.0568     4
+#&gt;   2:      2 estimated 1090.8508     9
+#&gt;   3:      3 estimated  338.2092     4
+#&gt;   4:      4 estimated  318.6349     8
+#&gt;   5:      5 estimated  317.3189     6
 #&gt;  ---                                 
-#&gt; 446:    495 estimated  584.3901    10
-#&gt; 447:    496 estimated 1387.5999     6
-#&gt; 448:    497 estimated 1394.6896     6
-#&gt; 449:    498 estimated  618.0633     8
-#&gt; 450:    500 estimated  578.6555     9</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ids</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>runtime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>runtime</span><span class='op'>)</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='va'>chunk</span><span class='op'>]</span><span class='op'>)</span>
+#&gt; 446:    495 estimated  581.7197     2
+#&gt; 447:    496 estimated 1381.9162     9
+#&gt; 448:    497 estimated 1389.1659     2
+#&gt; 449:    498 estimated  614.0596     2
+#&gt; 450:    500 estimated  574.7851     1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ids</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>runtime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>runtime</span><span class='op'>)</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='va'>chunk</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     chunk  runtime
-#&gt;  1:     7 32290.29
-#&gt;  2:     5 32288.78
-#&gt;  3:     9 32212.48
-#&gt;  4:     3 32215.25
-#&gt;  5:     8 32271.77
-#&gt;  6:     4 32212.70
-#&gt;  7:     2 32210.72
-#&gt;  8:     1 32289.79
-#&gt;  9:     6 32271.49
-#&gt; 10:    10 32211.62</div></pre>
+#&gt;  1:     4 32227.40
+#&gt;  2:     9 32226.68
+#&gt;  3:     8 32231.22
+#&gt;  4:     6 32293.22
+#&gt;  5:     1 32226.47
+#&gt;  6:     3 32292.92
+#&gt;  7:    10 32227.16
+#&gt;  8:     5 32301.32
+#&gt;  9:     2 32301.36
+#&gt; 10:     7 32300.22</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

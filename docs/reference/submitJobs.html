@@ -293,7 +293,7 @@ You have to do this manually via <code><a href='https://rdrr.io/r/base/library.h
 #&gt; Error in (function (x, fn)  : file not found
 #&gt; Error in (function (x, fn)  : file not found</div><div class='input'><span class='fu'><a href='waitForJobs.html'>waitForJobs</a></span><span class='op'>(</span><span class='va'>ids</span>, reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='getStatus.html'>getStatus</a></span><span class='op'>(</span>reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Status for 20 jobs at 2020-10-20 14:35:46:
+</div><div class='output co'>#&gt; Status for 20 jobs at 2020-10-21 09:39:31:
 #&gt;   Submitted    : 10 ( 50.0%)
 #&gt;   -- Queued    :  0 (  0.0%)
 #&gt;   -- Started   : 10 ( 50.0%)
@@ -305,7 +305,7 @@ You have to do this manually via <code><a href='https://rdrr.io/r/base/library.h
 <span class='fu'><a href='https://rdrr.io/r/base/files.html'>file.create</a></span><span class='op'>(</span><span class='va'>fn</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>submitJobs</span><span class='op'>(</span><span class='fu'><a href='findJobs.html'>findErrors</a></span><span class='op'>(</span><span class='va'>ids</span>, reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span>, reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Submitting 5 jobs in 5 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='getStatus.html'>getStatus</a></span><span class='op'>(</span>reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Status for 20 jobs at 2020-10-20 14:35:46:
+</div><div class='output co'>#&gt; Status for 20 jobs at 2020-10-21 09:39:31:
 #&gt;   Submitted    : 10 ( 50.0%)
 #&gt;   -- Queued    :  0 (  0.0%)
 #&gt;   -- Started   : 10 ( 50.0%)
@@ -317,7 +317,7 @@ You have to do this manually via <code><a href='https://rdrr.io/r/base/library.h
 <span class='va'>ids</span> <span class='op'>=</span> <span class='fu'><a href='findJobs.html'>findNotSubmitted</a></span><span class='op'>(</span>reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span>
 <span class='fu'>submitJobs</span><span class='op'>(</span><span class='va'>ids</span>, reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Submitting 10 jobs in 10 chunks using cluster functions 'Interactive' ...</span></div><div class='input'><span class='fu'><a href='getStatus.html'>getStatus</a></span><span class='op'>(</span>reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Status for 20 jobs at 2020-10-20 14:35:46:
+</div><div class='output co'>#&gt; Status for 20 jobs at 2020-10-21 09:39:31:
 #&gt;   Submitted    : 20 (100.0%)
 #&gt;   -- Queued    :  0 (  0.0%)
 #&gt;   -- Started   : 20 (100.0%)
@@ -414,17 +414,17 @@ You have to do this manually via <code><a href='https://rdrr.io/r/base/library.h
 <span class='va'>info</span> <span class='op'>=</span> <span class='fu'><a href='JoinTables.html'>ijoin</a></span><span class='op'>(</span><span class='fu'><a href='getJobTable.html'>getJobStatus</a></span><span class='op'>(</span>reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>job.id</span>, <span class='va'>mem.used</span><span class='op'>)</span><span class='op'>]</span>, <span class='fu'><a href='getJobTable.html'>getJobPars</a></span><span class='op'>(</span>reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='unwrap.html'>unwrap</a></span><span class='op'>(</span><span class='va'>info</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    job.id mem.used     n  p
-#&gt; 1:      1 143.8795 1e+04 10
-#&gt; 2:      2 143.8806 1e+04 50
-#&gt; 3:      3 143.8808 1e+05 10
-#&gt; 4:      4 143.8815 1e+05 50</div><div class='input'>
+#&gt; 1:      1 145.3133 1e+04 10
+#&gt; 2:      2 145.3144 1e+04 50
+#&gt; 3:      3 145.3146 1e+05 10
+#&gt; 4:      4 145.3153 1e+05 50</div><div class='input'>
 <span class='co'># Combine job info with results -&gt; each job is aggregated using mean()</span>
 <span class='fu'><a href='unwrap.html'>unwrap</a></span><span class='op'>(</span><span class='fu'><a href='JoinTables.html'>ijoin</a></span><span class='op'>(</span><span class='va'>info</span>, <span class='fu'><a href='reduceResultsList.html'>reduceResultsDataTable</a></span><span class='op'>(</span>fun <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>res <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span><span class='op'>)</span>, reg <span class='op'>=</span> <span class='va'>tmp</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    job.id mem.used     n  p       res
-#&gt; 1:      1 143.8795 1e+04 10 0.5005778
-#&gt; 2:      2 143.8806 1e+04 50 0.4992527
-#&gt; 3:      3 143.8808 1e+05 10 0.5000026
-#&gt; 4:      4 143.8815 1e+05 50 0.4999301</div><div class='input'>
+#&gt; 1:      1 145.3133 1e+04 10 0.5005778
+#&gt; 2:      2 145.3144 1e+04 50 0.4992527
+#&gt; 3:      3 145.3146 1e+05 10 0.5000026
+#&gt; 4:      4 145.3153 1e+05 50 0.4999301</div><div class='input'>
 <span class='co'>### Example 3: Multicore execution on the slave</span>
 <span class='va'>tmp</span> <span class='op'>=</span> <span class='fu'><a href='makeRegistry.html'>makeRegistry</a></span><span class='op'>(</span>file.dir <span class='op'>=</span> <span class='cn'>NA</span>, make.default <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>No readable configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in '/tmp/batchtools-example/reg3' using cluster functions 'Interactive'</span></div><div class='input'>

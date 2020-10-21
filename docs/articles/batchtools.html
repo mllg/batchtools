@@ -334,7 +334,7 @@
 <p>In this example, a cap for the execution time (so-called walltime) and for the maximum memory requirements are set. The progress of the submitted jobs can be checked with <a href="https://mllg.github.io/batchtools/reference/getStatus"><code>getStatus()</code></a>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit">
 <span class="fu"><a href="../reference/getStatus.html">getStatus</a></span><span class="op">(</span><span class="op">)</span></pre></div>
-<pre><code>## Status for 10 jobs at 2020-10-20 14:35:59:
+<pre><code>## Status for 10 jobs at 2020-10-21 09:39:36:
 ##   Submitted    : 10 (100.0%)
 ##   -- Queued    :  0 (  0.0%)
 ##   -- Started   : 10 (100.0%)
@@ -362,7 +362,7 @@
 <h1 class="hasAnchor">
 <a href="#example-2-machine-learning" class="anchor"></a>Example 2: Machine Learning</h1>
 <p>We stick to a rather simple, but not unrealistic example to explain some further functionalities: Applying two classification learners to the famous iris data set (Anderson 1935), vary a few hyperparameters and evaluate the effect on the classification performance.</p>
-<p>First, we create a registry, the central meta-data object which records technical details and the setup of the experiments. We use an <a href="https://mllg.github.io/batchtools/reference/makeExperimentRegistry"><code>ExperimentRegistry</code></a> where the job definition is split into creating problems and algorithms. See the paper on <a href="http://www.jstatsoft.org/article/view/v064i11">BatchJobs and BatchExperiments</a> for a detailed explanation. Again, we use a temporary registry and make it the default registry.</p>
+<p>First, we create a registry, the central meta-data object which records technical details and the setup of the experiments. We use an <a href="https://mllg.github.io/batchtools/reference/makeExperimentRegistry"><code>ExperimentRegistry</code></a> where the job definition is split into creating problems and algorithms. See the paper on <a href="https://www.jstatsoft.org/article/view/v064i11">BatchJobs and BatchExperiments</a> for a detailed explanation. Again, we use a temporary registry and make it the default registry.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mllg/batchtools">batchtools</a></span><span class="op">)</span>
 <span class="va">reg</span> <span class="op">=</span> <span class="fu"><a href="../reference/makeExperimentRegistry.html">makeExperimentRegistry</a></span><span class="op">(</span>file.dir <span class="op">=</span> <span class="cn">NA</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></pre></div>
@@ -582,7 +582,7 @@
 <p>After you have submitted jobs and suspect that something is going wrong, the first thing to do is to run <a href="https://mllg.github.io/batchtools/reference/getStatus"><code>getStatus()</code></a> to display a summary of the current state of the system.</p>
 <div class="sourceCode" id="cb80"><pre class="downlit">
 <span class="fu"><a href="../reference/getStatus.html">getStatus</a></span><span class="op">(</span><span class="op">)</span></pre></div>
-<pre><code>## Status for 10 jobs at 2020-10-20 14:36:12:
+<pre><code>## Status for 10 jobs at 2020-10-21 09:39:40:
 ##   Submitted    : 10 (100.0%)
 ##   -- Queued    :  0 (  0.0%)
 ##   -- Started   : 10 (100.0%)
@@ -628,7 +628,7 @@
 <li>If required, query the data base for job ids depending on their status, parameters or tags (see <a href="https://mllg.github.io/batchtools/reference/findJobs"><code>findJobs()</code></a>). The returned tables can easily be combined in a set-like fashion with data base verbs: union (<a href="https://mllg.github.io/batchtools/reference/JoinTables"><code>ojoin()</code></a> for outer join), intersect (<a href="https://mllg.github.io/batchtools/reference/JoinTables"><code>ijoin()</code></a> for inner join), difference (<a href="https://mllg.github.io/batchtools/reference/JoinTables"><code>ajoin()</code></a> for anti join).</li>
 <li>Submit jobs with <a href="https://mllg.github.io/batchtools/reference/submitJobs"><code>submitJobs()</code></a>. You can specify job resources here. If you have thousands of fast terminating jobs, you want to <a href="https://mllg.github.io/batchtools/reference/chunk"><code>chunk()</code></a> them first. If some jobs already terminated, you can estimate the runtimes with <a href="https://mllg.github.io/batchtools/reference/estimateRuntimes"><code>estimateRuntimes()</code></a> and chunk jobs into heterogeneous groups with <a href="https://mllg.github.io/batchtools/reference/chunk"><code>lpt()</code></a> and <a href="https://mllg.github.io/batchtools/reference/chunk"><code>binpack()</code></a>.</li>
 <li>Monitor jobs. <a href="https://mllg.github.io/batchtools/reference/getStatus"><code>getStatus()</code></a> gives a summarizing overview. Use <a href="https://mllg.github.io/batchtools/reference/showLog"><code>showLog()</code></a> and <a href="https://mllg.github.io/batchtools/reference/grepLogs"><code>grepLogs()</code></a> to investigate log file. Run jobs in the currently running session with <a href="https://mllg.github.io/batchtools/reference/testJob"><code>testJob()</code></a> to get a <code><a href="https://rdrr.io/r/base/traceback.html">traceback()</a></code>.</li>
-<li>Collect (partial) results. <a href="https://mllg.github.io/batchtools/reference/loadResult"><code>loadResult()</code></a> retrieves a single result from the file system. <a href="https://mllg.github.io/batchtools/reference/reduceResults"><code>reduceResults()</code></a> mimics <code><a href="https://rdrr.io/r/base/funprog.html">Reduce()</a></code> and allows to apply a function to many files in an iterative fashion. <a href="https://mllg.github.io/batchtools/reference/reduceResultsList"><code>reduceResultsList()</code></a> and <a href="https://mllg.github.io/batchtools/reference/reduceResultsDataTable"><code>reduceResultsDataTable()</code></a> collect results into a <code>list</code> or <code>data.table</code>, respectively.</li>
+<li>Collect (partial) results. <a href="https://mllg.github.io/batchtools/reference/loadResult"><code>loadResult()</code></a> retrieves a single result from the file system. <a href="https://mllg.github.io/batchtools/reference/reduceResults"><code>reduceResults()</code></a> mimics <code><a href="https://rdrr.io/r/base/funprog.html">Reduce()</a></code> and allows to apply a function to many files in an iterative fashion. <a href="https://mllg.github.io/batchtools/reference/reduceResultsList"><code>reduceResultsList()</code></a> and <a href="https://mllg.github.io/batchtools/reference/reduceResultsList"><code>reduceResultsDataTable()</code></a> collect results into a <code>list</code> or <code>data.table</code>, respectively.</li>
 </ol>
 <p><img src="function_overview.png" width="1304"></p>
 </div>
