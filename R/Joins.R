@@ -4,7 +4,7 @@
 #' @description
 #' These helper functions perform join operations on data tables.
 #' Most of them are basically one-liners.
-#' See \url{http://rpubs.com/ronasta/join_data_tables} for a overview of join operations in
+#' See \url{https://rpubs.com/ronasta/join_data_tables} for a overview of join operations in
 #' data table or alternatively \pkg{dplyr}'s vignette on two table verbs.
 #'
 #' @param x [\code{\link{data.frame}}]\cr

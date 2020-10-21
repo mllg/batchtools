@@ -33,11 +33,11 @@ It provides an implementation of a Map-like operation to define and asynchronous
 * Local (non-blocking) parallel execution using `parallel`'s multicore backend [@R] or [`snow`](https://cran.r-project.org/package=snow)'s socket mode [@snow].
 * Execution on loosely connected machines using SSH (including basic resource usage control).
 * [Docker Swarm](https://docs.docker.com/engine/swarm/)
-* [IBM Spectrum LSF](http://www-03.ibm.com/systems/spectrum-computing/products/lsf/)
-* [OpenLava](http://www.openlava.org/)
-* [Univa Grid Engine](http://www.univa.com/) (formerly Oracle Grind Engine and Sun Grid Engine)
-* [Slurm Workload Manager](http://slurm.schedmd.com/)
-* [TORQUE/PBS Resource Manager](http://www.adaptivecomputing.com/products/open-source/torque/)
+* [IBM Spectrum LSF](https://www.ibm.com/products/hpc-workload-management)
+* [OpenLava](https://www.openlava.org/)
+* [Univa Grid Engine](https://www.univa.com/) (formerly Oracle Grind Engine and Sun Grid Engine)
+* [Slurm Workload Manager](https://slurm.schedmd.com/)
+* [TORQUE/PBS Resource Manager](https://adaptivecomputing.com/cherry-services/moab-hpc/)
 
 Extensibility and user customization are important features as configuration on high-performance computing clusters is often heavily tailored towards very specific requirements or special hardware.
 Hence, the interaction with the schedulers uses a template engine for improved flexibility.

@@ -2,7 +2,7 @@
 #'
 #' @description
 #' Cluster functions for Univa Grid Engine / Oracle Grid Engine /
-#' Sun Grid Engine (\url{http://www.univa.com/}).
+#' Sun Grid Engine (\url{https://www.univa.com/}).
 #'
 #' Job files are created based on the brew template \code{template}. This
 #' file is processed with brew and then submitted to the queue using the

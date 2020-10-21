@@ -1,7 +1,7 @@
 #' @title ClusterFunctions for Slurm Systems
 #'
 #' @description
-#' Cluster functions for Slurm (\url{http://slurm.schedmd.com/}).
+#' Cluster functions for Slurm (\url{https://slurm.schedmd.com/}).
 #'
 #' Job files are created based on the brew template \code{template.file}. This
 #' file is processed with brew and then submitted to the queue using the

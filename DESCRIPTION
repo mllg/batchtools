@@ -12,8 +12,8 @@ Description: As a successor of the packages 'BatchJobs' and 'BatchExperiments',
     this package provides a parallel implementation of the Map function for high
     performance computing systems managed by schedulers 'IBM Spectrum LSF'
     (<https://www.ibm.com/products/hpc-workload-management>),
-    'OpenLava' (<http://www.openlava.org/>), 'Univa Grid Engine'/'Oracle Grid
-    Engine' (<http://www.univa.com/>), 'Slurm' (<http://slurm.schedmd.com/>),
+    'OpenLava' (<https://www.openlava.org/>), 'Univa Grid Engine'/'Oracle Grid
+    Engine' (<https://www.univa.com/>), 'Slurm' (<https://slurm.schedmd.com/>),
     'TORQUE/PBS'
     (<https://adaptivecomputing.com/cherry-services/torque-resource-manager/>),
     or 'Docker Swarm' (<https://docs.docker.com/engine/swarm/>).
