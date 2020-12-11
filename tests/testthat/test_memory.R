@@ -2,7 +2,7 @@ context("measure memory")
 
 test_that("memory measurements work", {
   skip_on_os("windows")
-  skip_on_travis()
+  skip_on_ci()
   skip_on_cran()
 
   reg = makeTestRegistry()
