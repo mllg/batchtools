@@ -6,7 +6,8 @@ test_that("batchMap", {
   ids = batchMap(fun, i = 1:3, more.args = list(x = 1), reg = reg)
   expect_data_table(ids, any.missing = FALSE, ncols = 1L, nrow = 3L, key = "job.id")
   expect_equal(ids$job.id, 1:3)
-  expect_equal(readRDS(fs::path(reg$file.dir, "user.function.rds")), fun)
+  if (getRversion() < "4.1.0")
+    expect_equal(readRDS(fs::path(reg$file.dir, "user.function.rds")), fun)
   expect_equal(readRDS(fs::path(reg$file.dir, "more.args.rds")), list(x = 1))
 
   checkTables(reg)

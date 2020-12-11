@@ -37,6 +37,7 @@ test_that("sweepRegistry", {
 
 test_that("relative paths work (#113)", {
   skip_on_cran()
+  skip_on_os("windows")
   skip_if_not(is.null(getSysConf()$temp.dir)) # we are probably on a system where home is not shared
   fd = sprintf("~/batchtools-test-%s", fs::path_file(fs::file_temp("")))
   reg = makeTestExperimentRegistry(file.dir = fd)
