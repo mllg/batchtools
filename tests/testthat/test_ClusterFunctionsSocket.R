@@ -2,7 +2,7 @@ context("cf socket")
 
 test_that("cf socket", {
   skip_if_not_installed("snow")
-  # skip_on_travis()
+  # skip_on_ci()
 
   reg = makeTestRegistry()
   reg$cluster.functions = makeClusterFunctionsSocket(2)
