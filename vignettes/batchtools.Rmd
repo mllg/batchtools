@@ -1,7 +1,7 @@
 ---
 title: "batchtools"
 output:
-  pdf_document:
+  html_document:
     toc: true
 urlcolor: blue
 linkcolor: blue
