@@ -1,5 +1,3 @@
-context("count")
-
 test_that("count", {
   expect_identical(count(1:3), 3L)
   expect_identical(count(integer(0L)), 0L)

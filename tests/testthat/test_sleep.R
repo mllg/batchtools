@@ -1,5 +1,3 @@
-context("getSleepFunction")
-
 test_that("getSleepFunction", {
   reg = makeTestRegistry()
   f = getSleepFunction(reg, NULL)

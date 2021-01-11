@@ -1,5 +1,3 @@
-context("sweepRegistry")
-
 test_that("sweepRegistry", {
   reg = makeTestRegistry()
   array.jobs = isTRUE(reg$default.resources$chunks.as.arrayjobs)

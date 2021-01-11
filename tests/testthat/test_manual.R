@@ -1,5 +1,3 @@
-context("manual expensive tests")
-
 test_that("rscimark", {
   skip("manual test")
 

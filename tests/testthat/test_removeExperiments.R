@@ -1,5 +1,3 @@
-context("removeExperiments")
-
 test_that("removeExperiments", {
   reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) nrow(data), seed = 42)

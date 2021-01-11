@@ -1,5 +1,3 @@
-context("Tags")
-
 test_that("tags work", {
   reg = makeTestRegistry()
   batchMap(identity, 1:10, reg = reg)

@@ -1,5 +1,3 @@
-context("clusterFunctions")
-
 test_that("clusterFunctions constructor", {
   check = function(cf) {
     expect_is(cf, "ClusterFunctions")

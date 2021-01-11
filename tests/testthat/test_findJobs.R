@@ -1,5 +1,3 @@
-context("findJobs")
-
 none = noIds()
 
 test_that("find[Status]", {

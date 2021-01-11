@@ -1,5 +1,3 @@
-context("runOSCommand")
-
 test_that("runOSCommand", {
   skip_on_os(c("windows", "solaris")) # system2 is broken on solaris
   x = runOSCommand("ls", find.package("batchtools"))

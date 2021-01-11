@@ -1,5 +1,3 @@
-context("convertIds helper")
-
 test_that("convertIds", {
   reg = makeTestRegistry()
   batchMap(identity, 1:10, reg = reg)

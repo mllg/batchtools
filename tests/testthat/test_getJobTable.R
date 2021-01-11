@@ -1,5 +1,3 @@
-context("getJobTable")
-
 test_that("getJobTable.Registry", {
   reg = makeTestRegistry()
   fun = function(i, j) i + j

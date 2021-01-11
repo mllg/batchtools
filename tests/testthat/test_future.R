@@ -1,5 +1,3 @@
-context("future.batchtools")
-
 test_that("futures work", {
   skip_if_not_installed("future.batchtools")
   path = Sys.getenv("R_FUTURE_CACHE_PATH")

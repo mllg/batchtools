@@ -1,5 +1,3 @@
-context("summarizeExperiments")
-
 test_that("summarizeExperiments", {
   reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data) nrow(data), seed = 42)

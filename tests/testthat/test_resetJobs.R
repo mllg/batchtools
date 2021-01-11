@@ -1,5 +1,3 @@
-context("resetJobs")
-
 test_that("resetJobs", {
   reg = makeTestRegistry()
   f = function(x, .job) if (x == 2) stop(2) else .job$external.dir

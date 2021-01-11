@@ -1,5 +1,3 @@
-context("cf multicore")
-
 test_that("cf multicore", {
   skip_on_os("windows")
 

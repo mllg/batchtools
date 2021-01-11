@@ -1,5 +1,3 @@
-context("addAlgorithm")
-
 test_that("addAlgorithm", {
   reg = makeTestExperimentRegistry()
   algo = addAlgorithm(reg = reg, "a1", fun = function(job, data, instance, ...) NULL)

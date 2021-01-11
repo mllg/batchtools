@@ -1,5 +1,3 @@
-context("findConfFile")
-
 test_that("findConfFile", {
   d = fs::path_real(fs::path_temp())
   fn = fs::path(d, "batchtools.conf.R")

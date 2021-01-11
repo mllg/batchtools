@@ -1,5 +1,3 @@
-context("getStatus")
-
 test_that("getStatus", {
   reg = makeTestRegistry()
   fun = function(i) if (i == 4) stop("4!") else i

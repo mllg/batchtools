@@ -1,5 +1,3 @@
-context("chunk")
-
 test_that("chunk", {
   x = 1:10; n.chunks = 2
   expect_integer(chunk(x, n.chunks = n.chunks), len = length(x), lower = 1, upper = n.chunks, any.missing = FALSE)
@@ -24,7 +22,7 @@ test_that("chunk", {
 
   expect_equal(chunk(numeric(0), chunk.size = 1), integer(0))
   expect_equal(chunk(numeric(0), n.chunks = 1), integer(0))
-  
+
   x = 1:10; n.chunks = 2
   res = c(rep(1, 5), rep(2, 5))
   expect_equal(chunk(x, n.chunks = n.chunks, shuffle = FALSE), res)

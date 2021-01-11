@@ -1,5 +1,3 @@
-context("batchReduce")
-
 test_that("batchReduce", {
   reg = makeTestRegistry()
   xs = 1:20

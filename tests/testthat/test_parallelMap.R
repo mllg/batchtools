@@ -1,5 +1,3 @@
-context("parallelMap")
-
 silent({
   reg = makeTestRegistry()
   fun = function(i) { fun = function(i) i^2; parallelMap::parallelMap(fun, 1:i)}

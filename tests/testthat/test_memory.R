@@ -1,5 +1,3 @@
-context("measure memory")
-
 test_that("memory measurements work", {
   skip_on_os("windows")
   skip_on_ci()

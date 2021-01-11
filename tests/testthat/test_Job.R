@@ -1,5 +1,3 @@
-context("Job")
-
 test_that("Job", {
   reg = makeTestRegistry()
   fun = function(...) list(...)

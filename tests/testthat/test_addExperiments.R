@@ -1,5 +1,3 @@
-context("addExperiments")
-
 test_that("addExperiments handles parameters correctly", {
   reg = makeTestExperimentRegistry()
   prob = addProblem(reg = reg, "p1", data = iris, fun = function(job, data, x, y, ...) stopifnot(is.numeric(x) && is.character(y)), seed = 42)

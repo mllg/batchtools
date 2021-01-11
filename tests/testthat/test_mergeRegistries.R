@@ -1,5 +1,3 @@
-context("mergeRegistries")
-
 test_that("mergeRegistries", {
   target = makeTestRegistry()
   f = function(.job, x) { if (x %in% c(2, 7)) fs::file_create(fs::path(.job$external.dir, "foo")); x^2 }

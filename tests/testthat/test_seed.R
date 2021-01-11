@@ -1,5 +1,3 @@
-context("Seeds")
-
 test_that("with_seed", {
   set.seed(1)
   x.1 = runif(5)

@@ -1,5 +1,3 @@
-context("cf ssh")
-
 test_that("cf ssh", {
   skip_on_os("windows")
   skip_on_ci()

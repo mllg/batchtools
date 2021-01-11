@@ -1,5 +1,3 @@
-context("removeRegistry")
-
 test_that("removeRegistry", {
   reg = makeTestRegistry()
   expect_directory_exists(reg$file.dir)

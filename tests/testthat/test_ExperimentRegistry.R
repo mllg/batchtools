@@ -1,5 +1,3 @@
-context("ExperimentRegistry")
-
 test_that("makeTestExperimentRegistry", {
   reg = makeTestExperimentRegistry()
   expect_is(reg, "Registry")

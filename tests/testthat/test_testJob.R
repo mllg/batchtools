@@ -1,5 +1,3 @@
-context("testJob")
-
 test_that("testJob", {
   reg = makeTestRegistry()
   f = function(x) if (x %% 2 == 0) stop("foo") else x^2

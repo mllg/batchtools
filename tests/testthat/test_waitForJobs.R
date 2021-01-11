@@ -1,5 +1,3 @@
-context("waitForJobs")
-
 test_that("waitForJobs", {
   reg = makeTestRegistry()
   fun = function(x) if (x == 2) stop(x) else x

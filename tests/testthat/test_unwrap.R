@@ -1,5 +1,3 @@
-context("unwrap")
-
 test_that("unwrap behaves", {
   x = data.table(
     id = 1:3,

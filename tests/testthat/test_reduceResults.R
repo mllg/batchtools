@@ -1,5 +1,3 @@
-context("reduceResults")
-
 suppressMessages({
   reg = makeTestRegistry()
   fun = function(...) list(...)
@@ -165,4 +163,3 @@ test_that("reduceResultsDataTable/unwrap objects", {
     expect_list(tab$result, types = "data.frame", names = "unnamed")
   })
 })
-

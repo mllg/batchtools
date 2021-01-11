@@ -1,5 +1,3 @@
-context("grepLogs")
-
 silent({
   reg = makeTestRegistry()
   ids = batchMap(reg = reg, function(x) {

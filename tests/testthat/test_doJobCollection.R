@@ -1,5 +1,3 @@
-context("doJobCollection")
-
 test_that("doJobCollection handles bulky log output", {
   N = 1e5
   reg = makeTestRegistry()

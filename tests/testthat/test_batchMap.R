@@ -1,5 +1,3 @@
-context("batchMap")
-
 test_that("batchMap", {
   reg = makeTestRegistry()
   fun = function(...) list(...)

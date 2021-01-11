@@ -1,5 +1,3 @@
-context("getErrorMessages")
-
 test_that("getErrorMessages", {
   reg = makeTestRegistry()
   fun = function(i) if (i == 3) stop("foobar") else i

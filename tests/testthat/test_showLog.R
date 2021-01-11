@@ -1,5 +1,3 @@
-context("showLog/getLog")
-
 test_that("showLog/getLog", {
   reg = makeTestRegistry()
   batchMap(function(x) print("GREPME"), 1:2, reg = reg)

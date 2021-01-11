@@ -1,5 +1,3 @@
-context("joins")
-
 test_that("joins", {
   reg = makeTestRegistry()
   batchMap(identity, x = 1:6, reg = reg)

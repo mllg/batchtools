@@ -1,5 +1,3 @@
-context("hooks")
-
 test_that("hooks", {
   reg = makeTestRegistry()
   if (!is.null(reg$cluster.functions$hooks$pre.do.collection) || !is.null(reg$cluster.functions$hooks$post.sync))

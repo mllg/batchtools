@@ -1,5 +1,3 @@
-context("killJobs")
-
 test_that("killJobs", {
   reg = makeTestRegistry()
   if (is.null(reg$cluster.functions$killJob))

@@ -1,5 +1,3 @@
-context("Export")
-
 test_that("export works", {
   reg = makeTestRegistry()
   x = batchExport(list(exported_obj = 42L), reg = reg)

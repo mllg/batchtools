@@ -1,5 +1,3 @@
-context("estimateRuntimes")
-
 test_that("estimateRuntimes", {
   reg = makeTestExperimentRegistry()
   addProblem(name = "iris", data = iris, fun = function(data, ...) nrow(data), reg = reg)

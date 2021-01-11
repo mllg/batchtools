@@ -1,5 +1,3 @@
-context("btlapply")
-
 test_that("btlapply", {
   reg = makeTestRegistry()
   fun = function(x, y) x^y
