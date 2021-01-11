@@ -1,3 +1,7 @@
+# batchtools 0.9.15
+
+* Maintenance update.
+
 # batchtools 0.9.14
 
 * `batchMap()` now supports unnamed `more.args`.
