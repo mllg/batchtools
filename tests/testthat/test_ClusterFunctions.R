@@ -18,6 +18,7 @@ test_that("clusterFunctions constructor", {
   check(makeClusterFunctionsTORQUE("torque-lido"))
   check(makeClusterFunctionsSlurm("slurm-dortmund"))
   check(makeClusterFunctionsDocker("image"))
+  check(makeClusterFunctionsDockerQueue("image"))
   expect_error(makeClusterFunctionsLSF(), "point to a readable template file")
 
   skip_on_os(c("windows", "solaris")) # system2 is broken on solaris

@@ -25,6 +25,19 @@ Usually safe to set to \code{0} to disable the heuristic, e.g. if you are workin
 Jobs are spawned asynchronously using the package \pkg{snow}.
 }
 \seealso{
+<<<<<<< HEAD
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDockerQueue}},
+  \code{\link{makeClusterFunctionsDocker}},
+  \code{\link{makeClusterFunctionsInteractive}},
+  \code{\link{makeClusterFunctionsLSF}},
+  \code{\link{makeClusterFunctionsMulticore}},
+  \code{\link{makeClusterFunctionsOpenLava}},
+  \code{\link{makeClusterFunctionsSGE}},
+  \code{\link{makeClusterFunctionsSSH}},
+  \code{\link{makeClusterFunctionsSlurm}},
+  \code{\link{makeClusterFunctionsTORQUE}},
+  \code{\link{makeClusterFunctions}}
+=======
 Other ClusterFunctions: 
 \code{\link{makeClusterFunctionsDocker}()},
 \code{\link{makeClusterFunctionsInteractive}()},
@@ -36,5 +49,6 @@ Other ClusterFunctions:
 \code{\link{makeClusterFunctionsSlurm}()},
 \code{\link{makeClusterFunctionsTORQUE}()},
 \code{\link{makeClusterFunctions}()}
+>>>>>>> master
 }
 \concept{ClusterFunctions}

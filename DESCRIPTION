@@ -50,6 +50,8 @@ Suggests:
     doParallel,
     doMPI,
     e1071,
+    jsonlite,
+    RCurl,
     foreach,
     future,
     future.batchtools,
