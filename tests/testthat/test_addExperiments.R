@@ -36,7 +36,6 @@ test_that("addExperiments / user provided designs", {
   addAlgorithm(reg = reg, "a2", fun = function(...) ncol(data))
   prob.designs = list(p1 = data.table(a = 1, b = 2:4))
   algo.designs = list(a1 = data.table(c = 3:8), a2 = data.table())
-  repls = 1
   ids = addExperiments(reg = reg, prob.designs = prob.designs, algo.designs = algo.designs, combine = "bind")
   expect_data_table(ids, nrow = 9, key = "job.id")
   tab = getJobPars(reg = reg)

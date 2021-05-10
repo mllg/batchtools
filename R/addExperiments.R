@@ -25,8 +25,9 @@
 #'   Named list of data frames (or \code{\link[data.table]{data.table}}).
 #'   The name must match the algorithm name while the column names correspond to parameters of the algorithm.
 #'   If \code{NULL}, experiments for all defined algorithms without any parameters are added.
-#' @param repls [\code{integer(1)}]\cr
-#'   Number of replications for each experiment.
+#' @param repls [\code{integer()}]\cr
+#'   Number of replications for each problem design in `prob.designs` (automatically replicated to
+#'   the correct length).
 #' @param combine [\code{character(1)}]\cr
 #'   How to combine the rows of a single problem design with the rows of a single algorithm design?
 #'   Default is \dQuote{crossprod} which combines each row of the problem design which each row of the algorithm design
@@ -111,7 +112,8 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
     assertSubset(names(algo.designs), reg$algorithms)
     algo.designs = convertDesigns("Algorithm", algo.designs, c("job", "data", "instance"))
   }
-  repls = asCount(repls)
+  repls = asInteger(repls, lower = 1L, any.missing = FALSE)
+  repls = rep_len(repls, length(prob.designs))
   assertChoice(combine, c("crossprod", "bind"))
 
   all.ids = integer(0L)
@@ -120,6 +122,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
     pn = names(prob.designs)[i]
     pd = prob.designs[[i]]
     n.pd = max(nrow(pd), 1L)
+    repl = repls[i]
 
     for (j in seq_along(algo.designs)) {
       an = names(algo.designs)[j]
@@ -127,13 +130,14 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
       n.ad = max(nrow(ad), 1L)
 
       if (combine == "crossprod") {
-        n.jobs = n.pd * n.ad * repls
-        info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
+        n.jobs = n.pd * n.ad * repl
+        info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repl)
         idx = CJ(.i = seq_len(n.pd), .j = seq_len(n.ad))
       } else {
-        n.jobs = max(n.pd, n.ad) * repls
-        info("Adding %i experiments (('%s'[%i] | '%s'[%i]) x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls)
-        idx = data.table(.i = rep_len(seq_len(n.pd), n.jobs), .j = rep_len(seq_len(n.ad), n.jobs))
+        recycle = max(n.pd, n.ad)
+        n.jobs = recycle * repl
+        info("Adding %i experiments (('%s'[%i] | '%s'[%i]) x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repl)
+        idx = data.table(.i = rep_len(seq_len(n.pd), recycle), .j = rep_len(seq_len(n.ad), recycle))
       }
 
       # create temp tab with prob name, algo name and pars as list
@@ -163,7 +167,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
       }
 
       # create rows in status table for new defs and each repl and filter for defined
-      tab = CJ(def.id = tab$def.id, repl = seq_len(repls))[!reg$status, on = c("def.id", "repl")]
+      tab = CJ(def.id = tab$def.id, repl = seq_len(repl))[!reg$status, on = c("def.id", "repl")]
       if (nrow(tab) < n.jobs)
         info("Skipping %i duplicated experiments ...", n.jobs - nrow(tab))
 

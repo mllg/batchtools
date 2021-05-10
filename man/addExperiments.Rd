@@ -23,8 +23,9 @@ Named list of data frames (or \code{\link[data.table]{data.table}}).
 The name must match the algorithm name while the column names correspond to parameters of the algorithm.
 If \code{NULL}, experiments for all defined algorithms without any parameters are added.}
 
-\item{repls}{[\code{integer(1)}]\cr
-Number of replications for each experiment.}
+\item{repls}{[\code{integer()}]\cr
+Number of replications for each problem design in `prob.designs` (automatically replicated to
+the correct length).}
 
 \item{combine}{[\code{character(1)}]\cr
 How to combine the rows of a single problem design with the rows of a single algorithm design?
