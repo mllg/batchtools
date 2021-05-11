@@ -122,7 +122,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
     pn = names(prob.designs)[i]
     pd = prob.designs[[i]]
     n.pd = max(nrow(pd), 1L)
-    repl = repls[i]
+    repls_cur = repls[i]
 
     for (j in seq_along(algo.designs)) {
       an = names(algo.designs)[j]
@@ -130,13 +130,13 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
       n.ad = max(nrow(ad), 1L)
 
       if (combine == "crossprod") {
-        n.jobs = n.pd * n.ad * repl
-        info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repl)
+        n.jobs = n.pd * n.ad * repls_cur
+        info("Adding %i experiments ('%s'[%i] x '%s'[%i] x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls_cur)
         idx = CJ(.i = seq_len(n.pd), .j = seq_len(n.ad))
       } else {
         recycle = max(n.pd, n.ad)
-        n.jobs = recycle * repl
-        info("Adding %i experiments (('%s'[%i] | '%s'[%i]) x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repl)
+        n.jobs = recycle * repls_cur
+        info("Adding %i experiments (('%s'[%i] | '%s'[%i]) x repls[%i]) ...", n.jobs, pn, n.pd, an, n.ad, repls_cur)
         idx = data.table(.i = rep_len(seq_len(n.pd), recycle), .j = rep_len(seq_len(n.ad), recycle))
       }
 
@@ -167,7 +167,7 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
       }
 
       # create rows in status table for new defs and each repl and filter for defined
-      tab = CJ(def.id = tab$def.id, repl = seq_len(repl))[!reg$status, on = c("def.id", "repl")]
+      tab = CJ(def.id = tab$def.id, repl = seq_len(repls_cur))[!reg$status, on = c("def.id", "repl")]
       if (nrow(tab) < n.jobs)
         info("Skipping %i duplicated experiments ...", n.jobs - nrow(tab))
 
