@@ -181,9 +181,11 @@ addExperiments = function(prob.designs = NULL, algo.designs = NULL, repls = 1L, 
     }
   }
 
-  setkeyv(reg$defs, "def.id")
-  setkeyv(reg$status, "job.id")
-  saveRegistry(reg)
+  if (length(all.ids)) {
+    setkeyv(reg$defs, "def.id")
+    setkeyv(reg$status, "job.id")
+    saveRegistry(reg)
+  }
   invisible(data.table(job.id = all.ids, key = "job.id"))
 }
 
