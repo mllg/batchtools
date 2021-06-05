@@ -31,13 +31,14 @@ waitForFile = function(fn, timeout = 0, must.work = TRUE) {
   "!DEBUG [waitForFile]: `fn` not found via 'file.exists()'"
   timeout = timeout + Sys.time()
   path = fs::path_dir(fn)
+  fn = fs::path_file(fn)
   repeat {
     Sys.sleep(0.5)
     if (fn %chin% list.files(path, all.files = TRUE))
       return(TRUE)
     if (Sys.time() > timeout) {
       if (must.work)
-        stopf("Timeout while waiting for file '%s'", fn)
+        stopf("Timeout while waiting for file '%s'", file.path(path, fn))
       return(FALSE)
     }
   }
