@@ -28,6 +28,18 @@ doJobCollection = function(jc, output = NULL) {
 
 #' @export
 doJobCollection.character = function(jc, output = NULL) {
+  error = function(msg, ...) {
+    now = ustamp()
+    updates = data.table(job.id = jc$jobs$job.id, started = now, done = now,
+      error = stri_trunc(stri_trim_both(sprintf(msg, ...)), 500L, " [truncated]"),
+      mem.used = NA_real_, key = "job.id")
+    writeRDS(updates, file = fs::path(jc$file.dir, "updates", sprintf("%s.rds", jc$job.hash)), compress = jc$compress)
+    invisible(NULL)
+  }
+  # jc does not exist if the job has been requeued by the backend.
+  if (!fs::file.exists(jc))
+    return(error("File %s is not available. Was this job Requeued?\nAs a workaround, try passing chunks.as.arrayjobs=TRUE in resources.", jc))
+
   obj = readRDS(jc)
   force(obj)
   if (!batchtools$debug && !obj$array.jobs) {
