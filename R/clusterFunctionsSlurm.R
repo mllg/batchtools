@@ -90,15 +90,25 @@ makeClusterFunctionsSlurm = function(template = "slurm", array.jobs = TRUE, node
     if (length(clusters)) tail(res$output, -1L) else res$output
   }
 
+
+  # Full List of Slurm job state codes:
+  # https://slurm.schedmd.com/squeue.html
+  # BF,CA,CD,CF,CG,DL,F,NF,OOM,PD,PR,R,RD,RF,RH,RS,RV,SI,SE,SO,ST,S,TO
+  # Querying by RD (RESV_DEL_HOLD) status throwing error on slurm v20.11.4
+  
+
   listJobsQueued = function(reg) {
-    args = c(quote("--user=$USER"), "--states=PD")
+    args = c(quote("--user=$USER"), "--states=PD,CF,RF,RH,RQ,SE")
     listJobs(reg, args)
   }
 
   listJobsRunning = function(reg) {
-    args = c(quote("--user=$USER"), "--states=R,S,CG")
+    args = c(quote("--user=$USER"), "--states=R,S,CG,RS,SI,SO,ST")
     listJobs(reg, args)
   }
+
+  # Slurm job state codes that will result in an expired status:
+  # BF,CA,CD,DL,F,NF,OOM,PR,RV,TO,RD
 
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)

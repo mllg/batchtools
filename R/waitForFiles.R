@@ -33,7 +33,7 @@ waitForFile = function(fn, timeout = 0, must.work = TRUE) {
   path = fs::path_dir(fn)
   repeat {
     Sys.sleep(0.5)
-    if (fn %chin% list.files(path, all.files = TRUE))
+    if (basename(fn) %chin% list.files(path, all.files = TRUE))
       return(TRUE)
     if (Sys.time() > timeout) {
       if (must.work)
