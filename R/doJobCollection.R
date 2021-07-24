@@ -28,6 +28,10 @@ doJobCollection = function(jc, output = NULL) {
 
 #' @export
 doJobCollection.character = function(jc, output = NULL) {
+  # jc does not exist if the job has been requeued by the backend.
+  if (!fs::file.exists(jc))
+    return(error("File %s is not available. Was this job Requeued?\nAs a workaround, try passing chunks.as.arrayjobs=TRUE in resources.", jc))
+
   obj = readRDS(jc)
   force(obj)
   if (!batchtools$debug && !obj$array.jobs) {
