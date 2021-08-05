@@ -77,7 +77,9 @@ Calls \code{\link[base]{load}} using the \code{\link[base]{.GlobalEnv}}.}
 
 \item{seed}{[\code{integer(1)}]\cr
 Start seed for jobs. Each job uses the (\code{seed} + \code{job.id}) as seed.
-Default is a random integer between 1 and 32768}
+Default is a random integer between 1 and 32768.
+Note that there is an additional seeding mechanism to synchronize instantiation of
+\code{\link{Problem}}s in a \code{\link{ExperimentRegistry}}.}
 
 \item{make.default}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, the created registry is saved inside the package
