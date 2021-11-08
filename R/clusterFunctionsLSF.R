@@ -23,7 +23,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsLSF = function(template = "lsf", scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsLSF = function(template = "lsf", nodename = "localhost", scheduler.latency = 1, fs.latency = 65) { # nocov start
   template = findTemplateFile(template)
   if (testScalarNA(template))
     stopf("Argument 'template' (=\"%s\") must point to a readable template file or contain the template itself as string (containing at least one newline)", template)
@@ -38,7 +38,7 @@ makeClusterFunctionsLSF = function(template = "lsf", scheduler.latency = 1, fs.l
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
     outfile = cfBrewTemplate(reg, template, jc)
-    res = runOSCommand("bsub", stdin = outfile)
+    res = runOSCommand("bsub", stdin = outfile, nodename = nodename)
 
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)
@@ -50,7 +50,7 @@ makeClusterFunctionsLSF = function(template = "lsf", scheduler.latency = 1, fs.l
 
   listJobs = function(reg, args) {
     assertRegistry(reg, writeable = FALSE)
-    res = runOSCommand("bjobs", args)
+    res = runOSCommand("bjobs", args, nodename = nodename)
     if (res$exit.code > 0L) {
       if (res$exit.code == 255L || any(stri_detect_regex(res$output, "No (unfinished|pending|running) job found")))
         return(character(0L))
