@@ -23,11 +23,14 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
 #' @export
-makeClusterFunctionsLSF = function(template = "lsf", nodename = "localhost", scheduler.latency = 1, fs.latency = 65) { # nocov start
+makeClusterFunctionsLSF = function(template = "lsf", array.jobs=TRUE, nodename = "localhost", scheduler.latency = 1, fs.latency = 65) { # nocov start
+  assertFlag(array.jobs)
+  assertString(nodename)
   template = findTemplateFile(template)
   if (testScalarNA(template))
     stopf("Argument 'template' (=\"%s\") must point to a readable template file or contain the template itself as string (containing at least one newline)", template)
-  template = cfReadBrewTemplate(template)
+  template = cfReadBrewTemplate(template, '##')
+  quote = if (isLocalHost(nodename)) identity else shQuote
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
   # when unfinished jobs are found, and 255 when no jobs are found,
@@ -37,14 +40,25 @@ makeClusterFunctionsLSF = function(template = "lsf", nodename = "localhost", sch
   submitJob = function(reg, jc) {
     assertRegistry(reg, writeable = TRUE)
     assertClass(jc, "JobCollection")
+    if (jc$array.jobs) {
+      logs = sprintf("%s_%i", fs::path_file(jc$log.file), seq_row(jc$jobs))
+      jc$log.file = stri_join(jc$log.file, "_%j")
+    }
     outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("bsub", stdin = outfile, nodename = nodename)
+    output = stri_flatten(stri_trim_both(res$output), "\n")
 
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)
     } else {
       batch.id = stri_extract_first_regex(stri_flatten(res$output, " "), "\\d+")
-      makeSubmitJobResult(status = 0L, batch.id = batch.id)
+      if (jc$array.jobs) {
+        if (!array.jobs)
+          stop("Array jobs not supported by cluster function")
+        makeSubmitJobResult(status = 0L, batch.id = sprintf("%s_%i", batch.id, seq_row(jc$jobs)), log.file = logs)
+      } else {
+        makeSubmitJobResult(status = 0L, batch.id = batch.id)
+      }
     }
   }
 
