@@ -15,10 +15,10 @@
 #' It is the template file's job to choose a queue for the job and handle the desired resource
 #' allocations.
 #'
-#' @note
-#' Array jobs are currently not supported.
-#'
 #' @template template
+#' @param array.jobs [\code{logical(1)}]\cr
+#'  If array jobs are disabled on the computing site, set to \code{FALSE}.
+#' @template nodename
 #' @inheritParams makeClusterFunctions
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family ClusterFunctions
@@ -84,7 +84,7 @@ makeClusterFunctionsLSF = function(template = "lsf", array.jobs=TRUE, nodename =
   killJob = function(reg, batch.id) {
     assertRegistry(reg, writeable = TRUE)
     assertString(batch.id)
-    cfKillJob(reg, "bkill", batch.id)
+    cfKillJob(reg, "bkill", batch.id, nodename = nodename)
   }
 
   makeClusterFunctions(name = "LSF", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
