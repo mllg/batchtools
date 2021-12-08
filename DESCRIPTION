@@ -63,4 +63,4 @@ Suggests:
     tibble
 VignetteBuilder: knitr
 Roxygen: list(r6 = FALSE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
