@@ -87,6 +87,6 @@ makeClusterFunctionsLSF = function(template = "lsf", array.jobs=TRUE, nodename =
     cfKillJob(reg, "bkill", batch.id, nodename = nodename)
   }
 
-  makeClusterFunctions(name = "LSF", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued,
+  makeClusterFunctions(name = "LSF", submitJob = submitJob, killJob = killJob, listJobsQueued = listJobsQueued, array.var = "LSB_JOBINDEX",
     listJobsRunning = listJobsRunning, store.job.collection = TRUE, scheduler.latency = scheduler.latency, fs.latency = fs.latency)
 } # nocov end
