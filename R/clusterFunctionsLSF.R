@@ -42,7 +42,7 @@ makeClusterFunctionsLSF = function(template = "lsf", array.jobs=TRUE, nodename =
     assertClass(jc, "JobCollection")
     if (jc$array.jobs) {
       logs = sprintf("%s_%i", fs::path_file(jc$log.file), seq_row(jc$jobs))
-      jc$log.file = stri_join(jc$log.file, "_%j")
+      jc$log.file = stri_join(jc$log.file, "_%I")
     }
     outfile = cfBrewTemplate(reg, template, jc)
     res = runOSCommand("bsub", stdin = outfile, nodename = nodename)
