@@ -2,9 +2,9 @@
 
 citHeader("To cite BatchJobs, BatchExperiments or batchtools in publications use:")
 
-citEntry(entry = "Article",
+bibentry("Article",
   title        = "batchtools: Tools for R to work on batch systems",
-  author       = personList(as.person("Michel Lang"),
+  author       = c(as.person("Michel Lang"),
                    as.person("Bernd Bischl"),
                    as.person("Dirk Surmann")),
   journal      = "The Journal of Open Source Software",
@@ -20,9 +20,9 @@ citEntry(entry = "Article",
         "URL https://doi.org/10.21105/joss.00135.")
 )
 
-citEntry(entry = "Article",
+bibentry("Article",
   title        = "{BatchJobs} and {BatchExperiments}: Abstraction Mechanisms for Using {R} in Batch Environments",
-  author       = personList(as.person("Bernd Bischl"),
+  author       = c(as.person("Bernd Bischl"),
                    as.person("Michel Lang"),
                    as.person("Olaf Mersmann"),
                    as.person("J{\\\"o}rg Rahnenf{\\\"u}hrer"),
