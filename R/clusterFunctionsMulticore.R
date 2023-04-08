@@ -32,7 +32,7 @@ Multicore = R6Class("Multicore",
     initialize = function(ncpus) {
       self$jobs = data.table(pid = integer(0L), count = integer(0L))
       self$ncpus = ncpus
-      reg.finalizer(self, function(e) mccollect(self$procs$pid, timeout = 1), onexit = FALSE)
+      reg.finalizer(self, function(e) mccollect(self$jobs$pid, timeout = 1), onexit = FALSE)
     },
 
     spawn = function(jc) {
