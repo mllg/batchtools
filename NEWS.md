@@ -1,3 +1,7 @@
+# batchtools 0.9.17
+
+* Fixed a bug in the finalizer of `ClusterFunctionsMulticore`.
+
 # batchtools 0.9.16
 
 * Fixed a bug in `addExperiments()` in combination with combination method `"bind"` and repls > 1 where experiments have been duplicated.
