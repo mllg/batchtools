@@ -66,6 +66,19 @@ Note that you might have to specify the cluster name here if you do not want to 
 otherwise the commands for listing and killing jobs will not work.
 }
 \seealso{
+<<<<<<< HEAD
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDockerQueue}},
+  \code{\link{makeClusterFunctionsDocker}},
+  \code{\link{makeClusterFunctionsInteractive}},
+  \code{\link{makeClusterFunctionsLSF}},
+  \code{\link{makeClusterFunctionsMulticore}},
+  \code{\link{makeClusterFunctionsOpenLava}},
+  \code{\link{makeClusterFunctionsSGE}},
+  \code{\link{makeClusterFunctionsSSH}},
+  \code{\link{makeClusterFunctionsSocket}},
+  \code{\link{makeClusterFunctionsTORQUE}},
+  \code{\link{makeClusterFunctions}}
+=======
 Other ClusterFunctions: 
 \code{\link{makeClusterFunctionsDocker}()},
 \code{\link{makeClusterFunctionsInteractive}()},
@@ -77,5 +90,6 @@ Other ClusterFunctions:
 \code{\link{makeClusterFunctionsSocket}()},
 \code{\link{makeClusterFunctionsTORQUE}()},
 \code{\link{makeClusterFunctions}()}
+>>>>>>> master
 }
 \concept{ClusterFunctions}

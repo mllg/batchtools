@@ -59,6 +59,19 @@ Use \code{docker ps -a --filter 'label=batchtools' --filter 'status=exited'} to 
 containers manually (or usa a cron job).
 }
 \seealso{
+<<<<<<< HEAD
+Other ClusterFunctions: \code{\link{makeClusterFunctionsDockerQueue}},
+  \code{\link{makeClusterFunctionsInteractive}},
+  \code{\link{makeClusterFunctionsLSF}},
+  \code{\link{makeClusterFunctionsMulticore}},
+  \code{\link{makeClusterFunctionsOpenLava}},
+  \code{\link{makeClusterFunctionsSGE}},
+  \code{\link{makeClusterFunctionsSSH}},
+  \code{\link{makeClusterFunctionsSlurm}},
+  \code{\link{makeClusterFunctionsSocket}},
+  \code{\link{makeClusterFunctionsTORQUE}},
+  \code{\link{makeClusterFunctions}}
+=======
 Other ClusterFunctions: 
 \code{\link{makeClusterFunctionsInteractive}()},
 \code{\link{makeClusterFunctionsLSF}()},
@@ -70,5 +83,6 @@ Other ClusterFunctions:
 \code{\link{makeClusterFunctionsSocket}()},
 \code{\link{makeClusterFunctionsTORQUE}()},
 \code{\link{makeClusterFunctions}()}
+>>>>>>> master
 }
 \concept{ClusterFunctions}
